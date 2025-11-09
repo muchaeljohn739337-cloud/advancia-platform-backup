@@ -63,7 +63,7 @@ export function rateLimit(options: RateLimitOptions) {
 /**
  * Clean up expired entries periodically
  */
-setInterval(() => {
+const cleanupInterval = setInterval(() => {
   const now = Date.now();
   const keysToDelete: string[] = [];
   
@@ -75,6 +75,11 @@ setInterval(() => {
   
   keysToDelete.forEach(key => requestCounts.delete(key));
 }, 60000); // Clean up every minute
+
+// Don't run cleanup in test environment
+if (process.env.NODE_ENV === 'test') {
+  cleanupInterval.unref();
+}
 
 /**
  * Input validation middleware

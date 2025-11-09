@@ -25,4 +25,6 @@ module.exports = {
   maxWorkers: 1,
   // Force exit after tests complete
   forceExit: true,
+  // Detect open handles (async operations that prevent Jest from exiting)
+  detectOpenHandles: true,
 };

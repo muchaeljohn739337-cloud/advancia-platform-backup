@@ -45,7 +45,7 @@ router.post("/revoke", requireAdmin, async (req, res) => {
 });
 
 // Clean up expired sessions periodically
-setInterval(() => {
+const sessionCleanupInterval = setInterval(() => {
   Object.entries(activeSessions).forEach(([token, session]) => {
     try {
       jwt.verify(token, process.env.JWT_SECRET!);
@@ -54,5 +54,10 @@ setInterval(() => {
     }
   });
 }, 3600000); // every 1 hour
+
+// Don't run cleanup in test environment
+if (process.env.NODE_ENV === 'test') {
+  sessionCleanupInterval.unref();
+}
 
 export default router;

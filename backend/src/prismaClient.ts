@@ -34,7 +34,10 @@ const connectWithRetry = async () => {
   while (retries > 0) {
     try {
       await prisma.$connect();
-      console.log("✅ Prisma connected successfully");
+      // Only log in non-test environments to avoid Jest warnings
+      if (process.env.NODE_ENV !== 'test') {
+        console.log("✅ Prisma connected successfully");
+      }
       break;
     } catch (error) {
       retries--;
