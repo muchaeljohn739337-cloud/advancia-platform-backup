@@ -117,6 +117,21 @@ Notes and safety
  - The `GH_ADMIN_PAT` token must be stored securely and only used by repo admins. The `Apply Branch Protection` workflow is manual and requires that secret to be present.
  - The `render-auto-deploy.yml` workflow will fail if `RENDER_API_KEY` or the `RENDER_SERVICE_ID` placeholder are not set. Replace the placeholder or set the secret and update the workflow if you want to avoid manual edits.
 
+## Deploy approval / environment notes
+
+- The `.github/workflows/render-auto-deploy.yml` workflow in this repo uses the GitHub Environment named `production`.
+- Configure `production` (Settings -> Environments -> production) and require reviewers/approvals for deployments to production. This ensures a human approves a deploy after CI checks pass.
+- Make sure the following repo secrets are set before triggering production deploys:
+  - `RENDER_API_KEY` — Render API key
+  - `RENDER_SERVICE_ID` — Render backend service id
+
+Recommended flow:
+1. Run CI (typecheck/build/test) on PRs and require these checks in branch protection.
+2. After merge to `main`, the `render-auto-deploy.yml` workflow will be available to run and will pause for `production` environment approval (if configured).
+3. After a reviewer approves, the workflow posts to Render's deploy API using the stored secrets.
+
+This provides a safe, human-approved production deploy path while keeping CI as the automated gate.
+
 ## Example
 ```
 DATABASE_URL=postgres://user:pass@host:5432/db_adva

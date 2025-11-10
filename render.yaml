@@ -5,7 +5,7 @@ services:
     plan: free
     region: oregon
     rootDir: backend
-    autoDeploy: true
+  autoDeploy: false
     buildCommand: npm ci && npx prisma generate && npx prisma migrate deploy && npm run build
     startCommand: npm start
     envVars:
@@ -43,7 +43,7 @@ services:
     plan: free
     region: virginia
     rootDir: frontend
-    autoDeploy: true
+  autoDeploy: false
     buildCommand: npm ci && npm run build
     startCommand: npm start
     envVars:
