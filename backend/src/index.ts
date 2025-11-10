@@ -14,6 +14,7 @@ import { setSocketIO as setNotificationSocket } from "./services/notificationSer
 import { setTransactionSocketIO } from "./routes/transactions";
 import prisma from "./prismaClient";
 import paymentsRouter from "./routes/payments";
+import paymentsEnhancedRouter from "./routes/paymentsEnhanced";
 import debitCardRouter, { setDebitCardSocketIO } from "./routes/debitCard";
 import medbedsRouter, { setMedbedsSocketIO } from "./routes/medbeds";
 import supportRouter, { setSupportSocketIO } from "./routes/support";
@@ -107,6 +108,7 @@ app.use("/api", healthRouter);
 
 // Regular routes
 app.use("/api/payments", paymentsRouter);
+app.use("/api/payments", authenticateToken, paymentsEnhancedRouter); // Enhanced payment features
 app.use("/api/debit-card", debitCardRouter);
 app.use("/api/medbeds", medbedsRouter);
 app.use("/api/support", supportRouter);
