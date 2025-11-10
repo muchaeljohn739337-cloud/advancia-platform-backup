@@ -117,6 +117,31 @@ Notes and safety
  - The `GH_ADMIN_PAT` token must be stored securely and only used by repo admins. The `Apply Branch Protection` workflow is manual and requires that secret to be present.
  - The `render-auto-deploy.yml` workflow will fail if `RENDER_API_KEY` or the `RENDER_SERVICE_ID` placeholder are not set. Replace the placeholder or set the secret and update the workflow if you want to avoid manual edits.
 
+## Backup & migration schedule, monitoring, and integration tests
+
+- `backup-and-migrate.yml` now supports:
+  - Manual dispatch, plus a scheduled nightly backup at 03:00 UTC (cron: '0 3 * * *').
+  - Automatic upload of a DB backup artifact named `db-backup`.
+  - Triggers the Render migration job and polls until completion.
+  - Posts a Slack notification (if `SLACK_WEBHOOK_URL` repo secret is configured) on success or failure.
+  - Exposes the Render `run_id` as a job output for debugging.
+
+- Repository secrets to add for this workflow (if you want to enable schedule and notifications):
+  - `DATABASE_URL` (used to create the pg_dump backup from the GH Action runner) — only valid if the runner has network access to the DB
+  - `RENDER_API_KEY`
+  - `RENDER_SERVICE_ID`
+  - `RENDER_MIGRATION_JOB_ID`
+  - `SLACK_WEBHOOK_URL` (optional, for Slack notifications)
+
+- If your Postgres instance is private to Render and not reachable from a public GitHub runner, prefer using a Render 'backup' job instead and update `backup-and-migrate.yml` to trigger that job (I can add a variant).
+
+- `integration-tests.yml` added: this runs database-backed integration tests on PRs (and manual runs). The workflow uses a local Postgres service and runs `npm run test:integration` in `backend`.
+
+If you'd like, I can:
+- Add a scheduled daily cron to run backups with a longer retention policy and push to S3.
+- Add a Render-based backup option for private DBs.
+- Wire Slack notifications to mention a channel or ping users on failures.
+
 ## Deploy approval / environment notes
 
 - The `.github/workflows/render-auto-deploy.yml` workflow in this repo uses the GitHub Environment named `production`.

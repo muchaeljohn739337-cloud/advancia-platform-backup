@@ -1,0 +1,62 @@
+name: Integration Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Wait for Postgres to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if pg_isready -h localhost -p 5432; then
+              echo 'Postgres ready'
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Postgres not ready after timeout'
+          exit 1
+
+      - name: Set test env
+        run: |
+          echo "DATABASE_URL=postgresql://test:test@localhost:5432/testdb" >> $GITHUB_ENV
+          echo "JWT_SECRET=test-jwt-secret" >> $GITHUB_ENV
+
+      - name: Run integration tests
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+          JWT_SECRET: ${{ env.JWT_SECRET }}
+        run: |
+          cd backend
+          npm run prisma:generate || true
+          npm run prisma:migrate --if-present || true
+          npm run test:integration
