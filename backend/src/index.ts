@@ -36,6 +36,7 @@ import marketingRouter from "./routes/marketing";
 import subscribersRouter from "./routes/subscribers";
 import securityLevelRouter from "./routes/securityLevel";
 import ipBlocksRouter from "./routes/ipBlocks";
+import tokenRefreshRouter from "./routes/tokenRefresh";
 import authAdminRouter, {
   setBroadcastSessions as setAuthBroadcast,
 } from "./routes/authAdmin";
@@ -107,6 +108,9 @@ app.use("/api", rateLimit({ windowMs: 60_000, maxRequests: 300 }));
 
 // Health check endpoint (critical for production monitoring)
 app.use("/api", healthRouter);
+
+// Auth routes (public)
+app.use("/api/auth", tokenRefreshRouter); // Token refresh endpoint
 
 // Regular routes
 app.use("/api/payments", paymentsRouter);

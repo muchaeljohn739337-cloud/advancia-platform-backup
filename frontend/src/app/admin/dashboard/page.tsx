@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import AdminNav from "@/components/AdminNav";
+import { adminApi } from "@/lib/api";
 import {
   Users,
   DollarSign,
@@ -14,7 +15,8 @@ import {
 export default function AdminDashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<Record<string, unknown> | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,17 +25,18 @@ export default function AdminDashboard() {
       return;
     }
 
-    fetch("http://localhost:4000/api/admin/dashboard/stats", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setStats(data);
+    // Use the new API client with auto-refresh
+    adminApi.getDashboardStats()
+      .then((response) => {
+        setStats(response.data);
+        setError(null);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error("Failed to fetch dashboard stats:", err);
+        setError("Failed to load dashboard statistics");
+        setLoading(false);
+      });
   }, [router]);
 
   if (loading) {
