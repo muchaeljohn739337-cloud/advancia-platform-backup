@@ -58,6 +58,65 @@ Add a health check for your service on Render:
 - Use strong random values for `JWT_SECRET` and `REFRESH_TOKEN_SECRET` and store them securely in Render environment.
 - Rotate secrets periodically.
 
+## Runbook: configure GitHub and Render for CI/CD (practical steps)
+
+This runbook contains the exact steps you can run to finish the account-level configuration after the repository contains the automation files (`render.yaml`, workflows, and scripts).
+
+1) Find your Render backend service ID
+  - Open your service in Render and copy the service id from the URL. It looks like a UUID in the dashboard URL or from the API.
+
+2) Add required GitHub repository secrets
+  - Required repo secrets:
+    - `RENDER_API_KEY` — A Render API key (from Render dashboard: Account -> API Keys -> Create Service or API key)
+    - `RENDER_SERVICE_ID` — (optional) your service id; you can also store this in the workflow as a secret or replace the placeholder directly in `.github/workflows/render-auto-deploy.yml`
+    - `GH_ADMIN_PAT` — Personal Access Token for applying branch protection via the `Apply Branch Protection` workflow (only if you will use that workflow). The PAT needs `repo` scope.
+
+  - Quick CLI method (recommended): use the GitHub CLI (`gh`) from your workstation:
+
+```bash
+# set secrets (interactive)
+gh secret set RENDER_API_KEY --body "$(cat ~/secrets/render_api_key.txt)"
+gh secret set GH_ADMIN_PAT --body "$(cat ~/secrets/gh_admin_pat.txt)"
+# Optional: store service id
+gh secret set RENDER_SERVICE_ID --body "your-render-service-id"
+```
+
+  - If you don't have `gh`, use the GitHub UI: Settings -> Secrets -> Actions -> New repository secret.
+
+3) Configure Render environment
+  - In Render dashboard, open your backend service -> Environment -> Add the environment variables listed in this README (DATABASE_URL, JWT_SECRET, STRIPE_SECRET_KEY, RESEND_API_KEY, etc.). You can use the `render.env.template` in the repo as a copy/paste starter.
+
+4) Run pre-deploy checks locally (optional but recommended)
+
+```bash
+cd backend
+npm ci
+npm run build:ci   # build type-check warnings shown but not failing
+npm run test       # runs unit & integration tests
+```
+
+5) Trigger auto-deploy (via workflow) or manually run the deploy script
+  - The repository contains `.github/workflows/render-auto-deploy.yml`. That workflow will POST to Render's deploy API using `RENDER_API_KEY` and the `RENDER_SERVICE_ID` placeholder.
+  - Alternatively, you can trigger deploys locally using the helper script:
+
+```bash
+export RENDER_API_KEY="<your-key>"
+export RENDER_SERVICE_ID="<your-service-id>"
+./scripts/trigger-render-deploy.sh
+```
+
+6) Apply branch protection to require the pre-deploy checks
+  - Option A (recommended): run the `Apply Branch Protection` workflow from GitHub Actions UI (Repository -> Actions -> Apply Branch Protection -> Run workflow). You can pass comma-separated check names.
+  - Option B (CLI): Use `gh workflow run` to trigger `apply-branch-protection.yml` if you prefer.
+
+7) Verify
+  - Confirm `main` branch protection includes the status checks you want (Settings -> Branches -> main protection rule).
+  - Make a test PR and confirm the pre-deploy checks run. Merge only after the checks pass.
+
+Notes and safety
+ - The `GH_ADMIN_PAT` token must be stored securely and only used by repo admins. The `Apply Branch Protection` workflow is manual and requires that secret to be present.
+ - The `render-auto-deploy.yml` workflow will fail if `RENDER_API_KEY` or the `RENDER_SERVICE_ID` placeholder are not set. Replace the placeholder or set the secret and update the workflow if you want to avoid manual edits.
+
 ## Example
 ```
 DATABASE_URL=postgres://user:pass@host:5432/db_adva
