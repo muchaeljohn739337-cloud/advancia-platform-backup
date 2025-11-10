@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import sgMail from '@sendgrid/mail';
+import { Resend } from 'resend';
 
-// Initialize SendGrid
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,24 +16,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email via SendGrid
-    const msg = {
+    // Send email via Resend
+    const { data, error } = await resend.emails.send({
+      from: from || 'Advancia Pay <noreply@advanciapayledger.com>',
       to: Array.isArray(to) ? to : [to],
-      from: from || {
-        email: 'noreply@advanciapayledger.com',
-        name: 'Advancia Pay'
-      },
       subject: subject,
-      html: html,
-      text: text || html?.replace(/<[^>]*>/g, ''), // Strip HTML tags for text fallback
-    };
+      html: html || text,
+      text: text,
+    });
 
-    const response = await sgMail.send(msg);
+    if (error) {
+      return NextResponse.json(
+        { error: error.message || 'Failed to send email' },
+        { status: 400 }
+      );
+    }
 
     return NextResponse.json({ 
       success: true, 
-      messageId: response[0].headers['x-message-id'],
-      message: 'Email sent successfully via SendGrid' 
+      id: data?.id,
+      message: 'Email sent successfully via Resend' 
     });
   } catch (error: unknown) {
     console.error('Email send error:', error);
@@ -50,13 +52,15 @@ export async function POST(request: NextRequest) {
 
 // Optional: GET endpoint to check if email service is configured
 export async function GET() {
-  const isConfigured = !!(process.env.SENDGRID_API_KEY && process.env.SENDGRID_API_KEY.startsWith('SG.'));
+  const isConfigured = !!process.env.RESEND_API_KEY && 
+                       process.env.RESEND_API_KEY !== 're_placeholder';
   
   return NextResponse.json({
-    status: isConfigured ? 'ready' : 'not_configured',
-    provider: 'SendGrid',
+    status: isConfigured ? 'ready' : 'pending_activation',
+    provider: 'Resend',
     message: isConfigured 
-      ? 'Email service is configured and ready (SendGrid)'
-      : 'SENDGRID_API_KEY not configured',
+      ? 'Email service is configured and ready (Resend)'
+      : 'Resend account pending activation - will work once API key is updated',
+    dnsConfigured: true,
   });
 }
