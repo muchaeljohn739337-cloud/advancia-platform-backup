@@ -36,7 +36,7 @@ export default function VerifySignupPage() {
         setStatus("error");
         setMessage(data.error || "Verification failed");
       }
-    } catch (error) {
+    } catch {
       setStatus("error");
       setMessage("Network error. Please try again.");
     }

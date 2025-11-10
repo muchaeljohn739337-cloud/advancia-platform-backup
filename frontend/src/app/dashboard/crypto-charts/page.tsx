@@ -295,7 +295,7 @@ export default function CryptoChartsPage() {
                       {swapPreview && (
                         <div className="mt-2 space-y-1 text-sm">
                           <div className="font-semibold text-purple-600">
-                            You'll receive: {swapPreview.toAmount.toFixed(6)} {swapForm.toSymbol}
+                            You&apos;ll receive: {swapPreview.toAmount.toFixed(6)} {swapForm.toSymbol}
                           </div>
                           <div className="text-gray-600">
                             Rate: 1 {swapForm.fromSymbol} = {swapPreview.rate.toFixed(6)} {swapForm.toSymbol}
