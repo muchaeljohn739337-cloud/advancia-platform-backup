@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface AdminRouteGuardProps {
@@ -13,19 +13,27 @@ interface AdminRouteGuardProps {
  */
 export default function AdminRouteGuard({ children }: AdminRouteGuardProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     const checkAdminAccess = async () => {
+      // Allow access to login page without checking
+      if (pathname === '/admin/login') {
+        setIsAuthorized(true);
+        setIsChecking(false);
+        return;
+      }
+
       try {
         // Check if user is logged in
         const token = localStorage.getItem('token');
         const userEmail = localStorage.getItem('userEmail');
 
         if (!token || !userEmail) {
-          // Not logged in - redirect to login
-          router.push('/auth/login');
+          // Not logged in - redirect to admin login
+          router.push('/admin/login');
           return;
         }
 
@@ -58,7 +66,7 @@ export default function AdminRouteGuard({ children }: AdminRouteGuardProps) {
     };
 
     checkAdminAccess();
-  }, [router]);
+  }, [router, pathname]);
 
   // Show loading while checking
   if (isChecking) {

@@ -110,8 +110,10 @@ export default function AdminLoginPage() {
       }
 
       // Store tokens and redirect
-      localStorage.setItem("adminToken", data.accessToken);
-      localStorage.setItem("adminRefreshToken", data.refreshToken);
+      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userRole", "ADMIN");
       router.push("/admin/sessions");
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -198,18 +200,17 @@ export default function AdminLoginPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number
+                Phone Number <span className="text-gray-400 text-xs">(optional in development)</span>
               </label>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="+15551234567"
-                required
+                placeholder="+1234567890 (optional)"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Include country code (e.g., +1 for USA)
+                OTP will appear in server console logs (development mode)
               </p>
             </div>
 

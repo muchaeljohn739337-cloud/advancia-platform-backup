@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { io, Socket } from "socket.io-client";
-import { ensureToken, logout } from "@/utils/auth";
+import { ensureToken } from "@/utils/auth";
 import adminApi from "@/lib/adminApi";
+import AdminNav from "@/components/AdminNav";
 
 interface SessionInfo {
   email: string;
@@ -79,18 +80,14 @@ export default function SessionManager() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <AdminNav />
+      <div className="p-8">
+        <div className="max-w-4xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-white">
             🧠 Active Admin Sessions
           </h1>
-          <button
-            onClick={() => logout(router)}
-            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
-          >
-            Logout
-          </button>
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-6">
@@ -138,6 +135,7 @@ export default function SessionManager() {
           >
             ← Back to Subscribers
           </button>
+        </div>
         </div>
       </div>
     </div>
