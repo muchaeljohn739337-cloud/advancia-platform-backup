@@ -50,6 +50,7 @@ import userApprovalRouter from "./routes/userApproval";
 import cryptomusRouter from "./routes/cryptomus";
 import emailRouter from "./routes/email"; // Email templates router
 import emailTestRouter from "./routes/email-test"; // Email testing endpoints
+import webhooksRouter from "./routes/webhooks"; // Resend webhook handlers
 import { activityLogger } from "./middleware/activityLogger";
 import { rateLimit, validateInput } from "./middleware/security";
 import { handleStripeWebhook, setPaymentsSocketIO } from "./routes/payments";
@@ -132,6 +133,7 @@ app.use("/api/invoices", invoicesRouter);
 app.use("/api/emails", emailsRouter);
 app.use("/api/email", emailRouter); // New email templates endpoint
 app.use("/api", emailTestRouter); // Email testing endpoints
+app.use("/api/webhooks", webhooksRouter); // Resend webhook handlers
 app.use("/api/rewards", rewardsRouter);
 app.use("/api/auth/2fa", twoFactorRouter);
 app.use("/api/health-readings", healthReadingsRouter);

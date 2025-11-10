@@ -1,8 +1,20 @@
 import { Router, Request, Response } from 'express';
 import { EmailService } from '../services/emailService';
+import emailRateLimit from '../middleware/emailRateLimit';
+import { validateEmailMiddleware } from '../services/emailSecurityService';
+import EmailMonitoringService from '../services/emailMonitoringService';
 
 const router = Router();
 const emailService = new EmailService();
+
+// Apply rate limiting to all email test routes
+// 10 emails per hour per user, 100 per day per IP
+router.use(emailRateLimit({
+  perUserHourly: 10,
+  perIPDaily: 100,
+  globalDaily: 1000,
+  enabled: true,
+}));
 
 /**
  * Test Email Endpoints
@@ -115,7 +127,23 @@ router.post('/test/email/2fa', async (req: Request, res: Response) => {
     }
 
     const twoFACode = code || Math.floor(100000 + Math.random() * 900000).toString();
-    const result = await emailService.sendTwoFactorEmail(email, twoFACode);
+    
+    // Use generic sendEmail for 2FA (method doesn't exist yet)
+    const result = await emailService.sendEmail({
+      to: email,
+      subject: 'Your Two-Factor Authentication Code',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Two-Factor Authentication</h2>
+          <p>Your verification code is:</p>
+          <div style="background: #f5f5f5; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px;">
+            ${twoFACode}
+          </div>
+          <p>This code will expire in 10 minutes.</p>
+          <p>If you didn't request this code, please ignore this email.</p>
+        </div>
+      `
+    });
 
     res.json({
       success: result.success,
@@ -184,7 +212,22 @@ router.post('/test/email/admin-notification', async (req: Request, res: Response
       timestamp: new Date().toISOString()
     };
 
-    const result = await emailService.sendAdminNotification(adminEmail, notificationData);
+    // Use generic sendEmail for admin notifications (method doesn't exist yet)
+    const result = await emailService.sendEmail({
+      to: adminEmail,
+      subject: `Admin Alert: ${notificationData.type.replace('_', ' ').toUpperCase()}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #dc2626;">Admin Notification</h2>
+          <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0;">
+            <p><strong>Type:</strong> ${notificationData.type}</p>
+            <p><strong>Time:</strong> ${notificationData.timestamp}</p>
+            <p><strong>Message:</strong></p>
+            <p>${notificationData.message}</p>
+          </div>
+        </div>
+      `
+    });
 
     res.json({
       success: result.success,
