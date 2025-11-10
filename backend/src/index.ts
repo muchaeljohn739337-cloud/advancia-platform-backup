@@ -144,9 +144,7 @@ app.use("/api/withdrawals", withdrawalsRouter);
 app.use("/api/oal", oalRouter);
 app.use("/api/tokens", tokensRouter);
 app.use("/api/tokens", authenticateToken, tokensEnhancedRouter); // Enhanced token features
-// TEMP DISABLED - Missing Prisma models (cryptoWallet, User.referredBy field)
-// app.use("/api/gamification", authenticateToken, gamificationRouter); // Rewards & achievements
-// app.use("/api/crypto", authenticateToken, cryptoEnhancedRouter); // Crypto charts & swap
+app.use("/api/crypto", authenticateToken, cryptoEnhancedRouter); // Crypto charts & swap (RE-ENABLED)
 app.use("/api/invoices", invoicesRouter);
 app.use("/api/emails", emailsRouter);
 app.use("/api/email", emailRouter); // New email templates endpoint

@@ -50,6 +50,7 @@ model User {
   stripeCustomerId  String?            @unique
   RPAWorkflow       RPAWorkflow[]
   cryptoWithdrawals CryptoWithdrawal[]
+  cryptoWallets     CryptoWallet[]
   emailLogs         EmailLog[]
   invoices          Invoice[]
   medBedsBookings   MedBedsBooking[]
@@ -305,6 +306,22 @@ model CryptoOrder {
   @@index([cryptoType])
   @@index([createdAt])
   @@map("crypto_orders")
+}
+
+model CryptoWallet {
+  id        String   @id @default(uuid())
+  userId    String
+  currency  String   // BTC, ETH, USDT
+  balance   Decimal  @default(0)
+  address   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, currency])
+  @@index([userId])
+  @@index([currency])
+  @@map("crypto_wallets")
 }
 
 model CryptoWithdrawal {
