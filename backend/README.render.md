@@ -67,3 +67,26 @@ STRIPE_SECRET_KEY=sk_live_abcdefg...
 ```
 
 If you want, I can add a one-click Render template next—ask me to scaffold `render.yaml` if you want a full infrastructure-as-code method.
+
+## GitHub Actions / CI (recommended)
+
+This project includes a GitHub Actions workflow that runs pre-deploy checks on pushes to `main` and PRs. Steps include:
+
+- Setup Postgres service and apply migrations to a `TEST_DATABASE_URL` for fast integration checks
+- Run TypeScript typecheck, backend build & tests
+- Build frontend
+
+Before CI can test integration paths, add these GitHub Secrets (Repository -> Settings -> Secrets -> Actions):
+
+- TEST_DATABASE_URL (optional; workflow auto-sets a DB service but you can override)
+- JWT_SECRET
+- REFRESH_TOKEN_SECRET
+- RESEND_API_KEY
+- STRIPE_SECRET_KEY
+- STRIPE_WEBHOOK_SECRET
+- GMAIL_EMAIL
+- GMAIL_APP_PASSWORD
+- VAPID_PUBLIC_KEY
+- VAPID_PRIVATE_KEY
+
+If those secrets are not set the CI job will still run lint/typecheck/build. Integration tests will require a working `TEST_DATABASE_URL` or the workflow's Postgres service.
