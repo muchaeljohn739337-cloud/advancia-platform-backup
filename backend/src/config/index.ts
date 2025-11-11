@@ -87,6 +87,8 @@ function getAllowedOrigins(): string[] {
   if (process.env.NODE_ENV === "production") {
     set.add("https://advanciapayledger.com");
     set.add("https://www.advanciapayledger.com");
+    // Add Vercel deployment URL
+    set.add("https://modular-saas-platform-frontend-6iwhoautb-advanciapayledger.vercel.app");
   }
 
   // Add localhost variants for development
