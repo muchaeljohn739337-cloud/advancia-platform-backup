@@ -6,7 +6,7 @@
   "framework": "nextjs",
   "regions": ["iad1"],
   "env": {
-    "NEXT_PUBLIC_API_URL": "https://advancia-backend-upnrf.onrender.com",
+    "NEXT_PUBLIC_API_URL": "https://advancia-backend-upnf.onrender.com",
     "NEXT_PUBLIC_APP_NAME": "Advancia PayLedger",
     "NEXT_PUBLIC_CURRENCY_LIST": "USD,EUR,BTC,ETH,USDT,TRUMP,MEDBED",
     "NEXT_PUBLIC_FEATURE_FLAGS": "notifications,bonus_tokens,debit_card,crypto_recovery"
