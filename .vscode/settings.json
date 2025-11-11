@@ -28,7 +28,7 @@
   "jestrunner.runOptions": ["--runInBand", "--no-cache"],
   "jestrunner.codeLensSelector": "**/*.{test,spec}.{js,jsx,ts,tsx}",
   "jestrunner.enableYarnPnpSupport": false,
-  
+
   // Native VS Code Testing
   "testing.automaticallyOpenPeekView": "failureInVisibleDocument",
   "testing.openTesting": "neverOpen",
@@ -157,6 +157,10 @@
   "jest.disabledWorkspaceFolders": ["Advancia Pay Ledger (Root)", "Frontend"],
   "jest.rootPath": "backend",
   "playwright.showTrace": true,
+
+  // TypeScript Settings
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
 
   // ESLint Settings
   "eslint.workingDirectories": ["backend", "frontend"],
