@@ -34,9 +34,9 @@ chown "$SUDO_USER:${SUDO_USER:-$(whoami)}" "$TARGET_PARENT_DIR" || true
 cd "$TARGET_PARENT_DIR"
 
 if [ -d "$TARGET_PARENT_DIR/$REPO_DIR_NAME" ]; then
-  echo "Repository already exists in $TARGET_PARENT_DIR/$REPO_DIR_NAME — fetching latest"
-  cd "$TARGET_PARENT_DIR/$REPO_DIR_NAME"
-  git pull --rebase
+  echo "Repository already exists in $TARGET_PARENT_DIR/$REPO_DIR_NAME — skipping clone"
+  # Skip git pull when running as sudo to avoid SSH key issues
+  # User should manually pull if needed before running this script
 else
   echo "Cloning repository..."
   git clone "$REPO_SSH_URL"
@@ -98,5 +98,71 @@ pm2 save
 echo "==> Deploy helper finished — check pm2 status and logs"
 echo "  pm2 status advancia-backend"
 echo "  pm2 logs advancia-backend --lines 200"
+
+# Optional: when run as root, optionally install systemd unit and nginx site
+# Controls via environment variables (set when invoking the script):
+#   ENABLE_SYSTEMD=true  -> install and start systemd unit from templates
+#   ENABLE_NGINX=true    -> install nginx site from templates
+#   ENABLE_CERTBOT=true  -> run certbot for SERVER_NAME (requires domain)
+#   SERVER_NAME=example.com
+#   SERVICE_USER=www-data
+
+if [ "$(id -u)" -eq 0 ]; then
+  echo "==> Running post-deploy system tasks as root"
+
+  # Install systemd unit if requested
+  if [ "${ENABLE_SYSTEMD:-false}" = "true" ]; then
+    UNIT_TEMPLATE="$BACKEND_DIR/deploy/templates/advancia-backend.service.template"
+    if [ -f "$UNIT_TEMPLATE" ]; then
+      SERVICE_USER="${SERVICE_USER:-www-data}"
+      ENV_FILE="${ENV_FILE:-$BACKEND_DIR/.env}"
+      WORKING_DIR="${WORKING_DIR:-$BACKEND_DIR}"
+      echo "Installing systemd unit from template (user=$SERVICE_USER, env_file=$ENV_FILE)"
+      # Backup existing unit if present
+      if [ -f /etc/systemd/system/advancia-backend.service ]; then
+        ts=$(date +%Y%m%d%H%M%S)
+        echo "Backing up existing systemd unit to /etc/systemd/system/advancia-backend.service.bak.$ts"
+        cp /etc/systemd/system/advancia-backend.service /etc/systemd/system/advancia-backend.service.bak.$ts
+      fi
+      sed -e "s/{{USER}}/${SERVICE_USER}/g" \
+          -e "s|{{WORKING_DIR}}|${WORKING_DIR}|g" \
+          -e "s|{{ENV_FILE}}|${ENV_FILE}|g" \
+          "$UNIT_TEMPLATE" > /etc/systemd/system/advancia-backend.service
+      systemctl daemon-reload
+      systemctl enable advancia-backend
+      systemctl restart advancia-backend || true
+      echo "Systemd unit installed and started (advancia-backend)"
+    else
+      echo "Systemd template not found at $UNIT_TEMPLATE — skipping"
+    fi
+  fi
+
+  # Install nginx site if requested
+  if [ "${ENABLE_NGINX:-false}" = "true" ]; then
+    NGINX_TEMPLATE="$BACKEND_DIR/deploy/templates/advancia-nginx.conf.template"
+    if [ -f "$NGINX_TEMPLATE" ]; then
+      SERVER_NAME="${SERVER_NAME:-_}"
+      echo "Installing nginx site for server_name=$SERVER_NAME"
+      # Backup existing nginx config if present
+      if [ -f /etc/nginx/sites-available/advancia ]; then
+        ts=$(date +%Y%m%d%H%M%S)
+        echo "Backing up existing nginx site to /etc/nginx/sites-available/advancia.bak.$ts"
+        cp /etc/nginx/sites-available/advancia /etc/nginx/sites-available/advancia.bak.$ts
+      fi
+      sed -e "s/{{SERVER_NAME}}/${SERVER_NAME}/g" "$NGINX_TEMPLATE" > /etc/nginx/sites-available/advancia
+      ln -sf /etc/nginx/sites-available/advancia /etc/nginx/sites-enabled/advancia
+      nginx -t && systemctl restart nginx || echo "nginx test/restart failed"
+
+      if [ "${ENABLE_CERTBOT:-false}" = "true" ] && [ "$SERVER_NAME" != "_" ]; then
+        echo "Attempting to obtain TLS certificate for $SERVER_NAME via certbot"
+        apt-get update -y
+        apt-get install -y certbot python3-certbot-nginx || true
+        certbot --nginx -d "$SERVER_NAME" --non-interactive --agree-tos -m "admin@$SERVER_NAME" || echo "certbot failed or requires manual intervention"
+      fi
+    else
+      echo "NGINX template not found at $NGINX_TEMPLATE — skipping"
+    fi
+  fi
+fi
 
 exit 0
