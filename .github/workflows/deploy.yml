@@ -30,6 +30,11 @@ jobs:
             npx prisma generate
             npx prisma migrate deploy
             pm2 restart advvancia-backend || pm2 start ecosystem.config.js
+            pm2 install pm2-logrotate
+            pm2 set pm2-logrotate:max_size 10M
+            pm2 set pm2-logrotate:retain 7
+            pm2 set pm2-logrotate:compress true
+            pm2 set pm2-logrotate:rotateInterval '0 0 * * *'
 
   deploy-production:
     if: github.event_name == 'release'
@@ -54,3 +59,8 @@ jobs:
             npx prisma generate
             npx prisma migrate deploy
             pm2 restart advvancia-backend || pm2 start ecosystem.config.js
+            pm2 install pm2-logrotate
+            pm2 set pm2-logrotate:max_size 10M
+            pm2 set pm2-logrotate:retain 7
+            pm2 set pm2-logrotate:compress true
+            pm2 set pm2-logrotate:rotateInterval '0 0 * * *'

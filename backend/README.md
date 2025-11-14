@@ -52,6 +52,21 @@ pm2 startup
 
 PM2 ensures your application stays running, auto-restarts on crashes, and survives server reboots.
 
+### Log Rotation
+
+PM2 automatically rotates logs to prevent disk space issues:
+
+- **Max size**: 10MB per log file
+- **Retention**: Keep 7 rotated log files
+- **Compression**: Gzipped old logs
+- **Rotation**: Daily at midnight
+
+Logs are stored in `backend/logs/`:
+
+- `out.log` - Standard output
+- `err.log` - Error output
+- `combined.log` - All logs combined
+
 ## 🚀 API Endpoints
 
 ### Health & Status
