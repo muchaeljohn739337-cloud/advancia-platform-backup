@@ -43,6 +43,26 @@
 
 ---
 
+# 🔗 Flowchart: Feature Rollout Dependencies
+
+```
+[ Auth & Security ]
+       |
+       v
+[ Payments ]
+       |
+       v
+[ Dashboard & UX ]
+       |
+       v
+[ Monitoring & Ops ]
+       |
+       v
+[ Scale & Enhancements ]
+```
+
+---
+
 # 🔄 How to Use in Notion
 
 1. Create a new **Board view** in Notion.
