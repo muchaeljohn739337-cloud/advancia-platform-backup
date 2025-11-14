@@ -1,0 +1,144 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy Backend & Frontend to DO Droplet
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_DROPLET_IP }}
+          username: root
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            set -e
+            echo "📦 Deploying to DigitalOcean..."
+
+            # Navigate to app directory
+            cd /app/modular-saas-platform
+
+            # Pull latest code
+            echo "🔄 Pulling latest code..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Load environment variables
+            if [ -f /app/.env.production ]; then
+              export $(cat /app/.env.production | xargs)
+            fi
+
+            # Build and start services
+            echo "🏗️  Building Docker images..."
+            docker-compose -f docker-compose.prod.yml build --no-cache
+
+            # Run migrations
+            echo "📊 Running database migrations..."
+            docker-compose -f docker-compose.prod.yml run --rm backend npx prisma migrate deploy
+
+            # Start services
+            echo "🚀 Starting services..."
+            docker-compose -f docker-compose.prod.yml up -d
+
+            # Health check
+            echo "✅ Waiting for services to be healthy..."
+            sleep 10
+
+            # Check backend health
+            BACKEND_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4000/api/health || echo "000")
+            if [ "$BACKEND_STATUS" != "200" ]; then
+              echo "❌ Backend health check failed (HTTP $BACKEND_STATUS)"
+              docker-compose -f docker-compose.prod.yml logs backend
+              exit 1
+            fi
+
+            echo "✨ Deployment successful!"
+            echo "Backend: http://localhost:4000"
+            echo "Frontend: http://localhost:3000"
+            docker-compose -f docker-compose.prod.yml ps
+
+      - name: Notify deployment success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Deployment to DigitalOcean successful!\n\n- Backend: https://api.advanciapayledger.com\n- Frontend: https://advanciapayledger.com'
+            })
+
+      - name: Notify deployment failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '❌ Deployment to DigitalOcean failed. Check workflow logs for details.'
+            })
+
+  post-deploy-tests:
+    runs-on: ubuntu-latest
+    needs: deploy
+    name: Run Post-Deployment Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Wait for app to be healthy
+        run: |
+          MAX_ATTEMPTS=30
+          ATTEMPT=1
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            echo "Health check attempt $ATTEMPT/$MAX_ATTEMPTS..."
+            if curl -s https://api.advanciapayledger.com/api/health | grep -q "ok"; then
+              echo "✅ Backend is healthy!"
+              break
+            fi
+            if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+              echo "❌ Backend failed to become healthy"
+              exit 1
+            fi
+            sleep 10
+            ATTEMPT=$((ATTEMPT + 1))
+          done
+
+      - name: Test API endpoints
+        run: |
+          echo "Testing critical API endpoints..."
+
+          # Health check
+          curl -f https://api.advanciapayledger.com/api/health || exit 1
+
+          # System status
+          curl -f https://api.advanciapayledger.com/api/system/status || exit 1
+
+          echo "✅ All API tests passed!"
+
+      - name: Test frontend accessibility
+        run: |
+          echo "Testing frontend accessibility..."
+
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://advanciapayledger.com)
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ Frontend is accessible"
+          else
+            echo "⚠️  Frontend returned HTTP $RESPONSE"
+          fi

@@ -1,0 +1,133 @@
+name: DigitalOcean Backup & Migrate
+
+on:
+  schedule:
+    # Run at 3 AM UTC every day
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to perform"
+        required: true
+        default: "backup"
+        type: choice
+        options:
+          - backup
+          - migrate
+          - backup-and-migrate
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    name: Database Backup
+    if: github.event.inputs.action == 'backup' || github.event.inputs.action == 'backup-and-migrate' || github.event_name == 'schedule'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run backup on DO Droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_DROPLET_IP }}
+          username: root
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "🔄 Starting database backup..."
+
+            # Set environment variables
+            export $(cat /app/.env.production | xargs)
+
+            # Run backup script
+            bash /app/modular-saas-platform/scripts/backup-do-db.sh
+
+            # Verify backup was created
+            LATEST_BACKUP=$(ls -t /app/backups/backup_*.sql.gz 2>/dev/null | head -1)
+            if [ -n "$LATEST_BACKUP" ]; then
+              echo "✅ Backup created: $LATEST_BACKUP"
+              ls -lh "$LATEST_BACKUP"
+            else
+              echo "❌ Backup failed - no backup file found"
+              exit 1
+            fi
+
+      - name: Upload backup to S3
+        if: vars.S3_BACKUPS_BUCKET != ''
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_DROPLET_IP }}
+          username: root
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "📤 Uploading to S3..."
+
+            export $(cat /app/.env.production | xargs)
+
+            LATEST_BACKUP=$(ls -t /app/backups/backup_*.sql.gz 2>/dev/null | head -1)
+
+            if [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$S3_BACKUPS_BUCKET" ]; then
+              aws s3 cp "$LATEST_BACKUP" "s3://$S3_BACKUPS_BUCKET/backups/" \
+                --region us-east-1 \
+                --no-progress
+              echo "✅ S3 upload completed"
+            fi
+
+  migrate:
+    runs-on: ubuntu-latest
+    name: Database Migration
+    if: github.event.inputs.action == 'migrate' || github.event.inputs.action == 'backup-and-migrate'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run migrations on DO Droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_DROPLET_IP }}
+          username: root
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "📊 Running database migrations..."
+
+            cd /app/modular-saas-platform
+
+            # Set environment variables
+            export $(cat /app/.env.production | xargs)
+
+            # Run migrations
+            docker-compose -f docker-compose.prod.yml run --rm backend npx prisma migrate deploy
+
+            echo "✅ Migrations completed successfully"
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [backup, migrate]
+    if: always()
+    name: Notify Results
+
+    steps:
+      - name: Determine status
+        id: status
+        run: |
+          if [ "${{ needs.backup.result }}" = "failure" ] || [ "${{ needs.migrate.result }}" = "failure" ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=❌ Backup/Migrate job failed" >> $GITHUB_OUTPUT
+          else
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=✅ Backup/Migrate job completed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify GitHub
+        uses: actions/github-script@v7
+        if: github.event_name == 'schedule'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log('Workflow result: ${{ steps.status.outputs.status }}');
