@@ -1,15 +1,25 @@
+import { client, v2 } from "@datadog/datadog-api-client";
 import * as Sentry from "@sentry/node";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import { z } from "zod";
 
-// ✅ Initialize Sentry (call once in app entry)
+// ✅ Initialize monitoring (Sentry + Datadog)
 export function initMonitoring() {
   if (process.env.SENTRY_DSN) {
     Sentry.init({
       dsn: process.env.SENTRY_DSN,
-      tracesSampleRate: 1.0, // adjust for performance monitoring
+      tracesSampleRate: 1.0,
     });
+  }
+
+  if (process.env.DATADOG_API_KEY) {
+    const configuration = client.createConfiguration({
+      authMethods: {
+        apiKeyAuth: process.env.DATADOG_API_KEY,
+      },
+    });
+    global.datadogMetricsApi = new v2.MetricsApi(configuration);
   }
 }
 
@@ -21,6 +31,48 @@ export function securityHeaders(app) {
       crossOriginResourcePolicy: { policy: "same-origin" },
     }),
   );
+}
+
+// ✅ Request latency and metrics middleware
+export function requestMetrics(app) {
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on("finish", () => {
+      const duration = Date.now() - start;
+      const status = res.statusCode;
+
+      // Send metrics to Datadog
+      if (global.datadogMetricsApi) {
+        const now = Math.floor(Date.now() / 1000);
+        const series = [
+          {
+            metric: "advvancia.request.latency",
+            type: 0, // gauge
+            points: [{ timestamp: now, value: duration }],
+            tags: [
+              `method:${req.method}`,
+              `status:${status}`,
+              `endpoint:${req.path}`,
+            ],
+          },
+          {
+            metric: "advvancia.request.count",
+            type: 1, // count
+            points: [{ timestamp: now, value: 1 }],
+            tags: [
+              `method:${req.method}`,
+              `status:${status}`,
+              `endpoint:${req.path}`,
+            ],
+          },
+        ];
+        global.datadogMetricsApi
+          .submitMetrics({ body: { series } })
+          .catch(console.error);
+      }
+    });
+    next();
+  });
 }
 
 // ✅ Rate limiting (example: login endpoint)
@@ -56,6 +108,22 @@ export function errorHandler(err, req, res, next) {
   // Send error to Sentry if configured
   if (process.env.SENTRY_DSN) {
     Sentry.captureException(err);
+  }
+
+  // Send error metrics to Datadog
+  if (global.datadogMetricsApi) {
+    const now = Math.floor(Date.now() / 1000);
+    const series = [
+      {
+        metric: "advvancia.error.count",
+        type: 1, // count
+        points: [{ timestamp: now, value: 1 }],
+        tags: [`endpoint:${req.path}`, `status:${err.status || 500}`],
+      },
+    ];
+    global.datadogMetricsApi
+      .submitMetrics({ body: { series } })
+      .catch(console.error);
   }
 
   res.status(err.status || 500).json({

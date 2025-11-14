@@ -20,6 +20,10 @@ const PORT = process.env.PORT || 4000;
 
 // Apply security headers globally
 securityHeaders(app);
+
+// Apply request metrics
+requestMetrics(app);
+
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
