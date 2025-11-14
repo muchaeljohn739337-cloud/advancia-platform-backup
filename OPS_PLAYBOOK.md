@@ -511,6 +511,7 @@ sudo certbot renew
 - [OPS_WALL_CHART.md](./OPS_WALL_CHART.md) - Visual ops timeline
 - [FOUNDERS_OPS_HANDBOOK.md](./FOUNDERS_OPS_HANDBOOK.md) - Consolidated ops guide
 - [POST_LAUNCH_ROADMAP.md](./POST_LAUNCH_ROADMAP.md) - Feature rollout priorities
+- [NOTION_BOARD_TEMPLATE.md](./NOTION_BOARD_TEMPLATE.md) - Kanban board template for tracking
 
 ### Emergency Contacts
 
