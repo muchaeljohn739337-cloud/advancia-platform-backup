@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.DROPLET_USER_STAGING }}
           key: ${{ secrets.DROPLET_SSH_KEY_STAGING }}
           script: |
-            cd advvancia
+            cd -modular-saas-platform
             git pull origin main
             docker-compose up -d --build
 
@@ -52,6 +52,6 @@ jobs:
           username: ${{ secrets.DROPLET_USER_PROD }}
           key: ${{ secrets.DROPLET_SSH_KEY_PROD }}
           script: |
-            cd advvancia
+            cd -modular-saas-platform
             git pull origin main
             docker-compose up -d --build
