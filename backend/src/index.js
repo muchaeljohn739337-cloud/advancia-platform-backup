@@ -3,12 +3,13 @@ import dotenv from "dotenv";
 import express from "express";
 import { runMigrations } from "./db.js";
 import {
-  errorHandler,
-  initMonitoring,
-  securityHeaders,
+    errorHandler,
+    initMonitoring,
+    securityHeaders,
 } from "./middleware/protection.js";
 import authRoutes from "./routes/auth.js";
 import healthRoutes from "./routes/health.js";
+import { seedAdmin } from "./seed.js";
 
 dotenv.config();
 
@@ -39,12 +40,13 @@ app.use(errorHandler);
 
 // Run migrations at startup
 runMigrations()
+  .then(() => seedAdmin())
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Backend listening on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("Migration error:", err);
+    console.error("Startup error:", err);
     process.exit(1);
   });
