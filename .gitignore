@@ -323,3 +323,7 @@ scripts/logs/*.txt
 
 # Allow VS Code launch config for team debugging
 !.vscode/launch.json
+
+# GitHub configuration with secrets
+github-config.json
+

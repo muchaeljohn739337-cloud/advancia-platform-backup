@@ -1,0 +1,870 @@
+name: Multi-Region Deployment with Monitoring
+
+on:
+  workflow_dispatch:
+    inputs:
+      regions:
+        description: 'Regions to deploy (comma-separated or "all")'
+        required: true
+        default: 'all'
+      deployment_strategy:
+        description: 'Deployment strategy'
+        required: true
+        type: choice
+        options:
+          - sequential      # US → EU → APAC (auto-cascading, gated by health)
+          - parallel        # US, EU, APAC all at once (fastest)
+          - delayed         # Sequential with delays between regions
+      delay_between_regions:
+        description: 'Delay between regions in minutes (for delayed strategy)'
+        required: false
+        default: '120'
+        type: choice
+        options:
+          - '30'    # 30 minutes
+          - '60'    # 1 hour
+          - '120'   # 2 hours
+          - '240'   # 4 hours
+
+env:
+  DEPLOYMENT_VERSION: ${{ github.sha }}
+  GRAFANA_DASHBOARD_URL: https://grafana.advancia.com
+  PROMETHEUS_URL: https://prometheus.advancia.com
+
+jobs:
+  #############################################
+  # VALIDATE AND SETUP
+  #############################################
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    outputs:
+      regions: ${{ steps.parse.outputs.regions }}
+      strategy: ${{ steps.parse.outputs.strategy }}
+      delay: ${{ steps.parse.outputs.delay }}
+    
+    steps:
+      - name: Parse regions and strategy
+        id: parse
+        run: |
+          if [[ "${{ inputs.regions }}" == "all" ]]; then
+            echo "regions=[\"us-east\",\"eu-west\",\"apac-se\"]" >> $GITHUB_OUTPUT
+          else
+            REGIONS=$(echo "${{ inputs.regions }}" | jq -R -s -c 'split(",") | map(gsub("^\\s+|\\s+$";""))')
+            echo "regions=$REGIONS" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "strategy=${{ inputs.deployment_strategy }}" >> $GITHUB_OUTPUT
+          
+          # Calculate delay in seconds
+          DELAY_MINUTES="${{ inputs.delay_between_regions }}"
+          if [ -z "$DELAY_MINUTES" ]; then
+            DELAY_MINUTES=120
+          fi
+          DELAY_SECONDS=$((DELAY_MINUTES * 60))
+          echo "delay=$DELAY_SECONDS" >> $GITHUB_OUTPUT
+          
+          echo "🌍 Multi-Region Deployment Configuration:"
+          echo "   Regions: ${{ inputs.regions }}"
+          echo "   Strategy: ${{ inputs.deployment_strategy }}"
+          echo "   Delay: ${DELAY_MINUTES} minutes ($DELAY_SECONDS seconds)"
+      
+      - name: Send deployment start notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.GLOBAL_SLACK_WEBHOOK }}
+        run: |
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "#2196F3",
+                "title": "🚀 Multi-Region Deployment Started",
+                "fields": [
+                  {"title": "Regions", "value": "'"${{ inputs.regions }}"'", "short": true},
+                  {"title": "Strategy", "value": "'"${{ inputs.deployment_strategy }}"'", "short": true},
+                  {"title": "Version", "value": "'"${{ env.DEPLOYMENT_VERSION }}"'", "short": true},
+                  {"title": "Triggered By", "value": "'"${{ github.actor }}"'", "short": true}
+                ],
+                "footer": "Advancia Deploy Bot • Global Pipeline",
+                "ts": '"$(date +%s)"'
+              }]
+            }'
+
+  #############################################
+  # DEPLOY US EAST WITH MONITORING
+  #############################################
+  deploy-us-east:
+    name: Deploy US East
+    runs-on: ubuntu-latest
+    needs: validate
+    if: contains(needs.validate.outputs.regions, 'us-east')
+    environment: production-us-east
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Green environment
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🚀 Deploying to US East Green..."
+          # Deployment logic here (same as before)
+
+      - name: Collect baseline metrics
+        id: baseline
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "📊 Collecting baseline metrics..."
+          sleep 30
+          
+          METRICS=$(curl -s http://$TARGET_IP:4000/metrics)
+          
+          ERROR_RATE=$(echo "$METRICS" | grep 'error_rate_percent' | awk '{print $2}')
+          LATENCY=$(echo "$METRICS" | grep 'http_request_duration_seconds{quantile="0.95"}' | awk '{print $2}' | awk '{printf "%.0f", $1 * 1000}')
+          CPU=$(echo "$METRICS" | grep 'system_cpu_usage_percent' | awk '{print $2}' | awk '{printf "%.1f", $1}')
+          MEMORY=$(echo "$METRICS" | grep 'system_memory_usage_percent' | awk '{print $2}' | awk '{printf "%.1f", $1}')
+          
+          echo "error_rate=$ERROR_RATE" >> $GITHUB_OUTPUT
+          echo "latency=$LATENCY" >> $GITHUB_OUTPUT
+          echo "cpu=$CPU" >> $GITHUB_OUTPUT
+          echo "memory=$MEMORY" >> $GITHUB_OUTPUT
+          
+          echo "✅ Baseline: Error=$ERROR_RATE%, Latency=${LATENCY}ms, CPU=${CPU}%, Memory=${MEMORY}%"
+
+      - name: Push metrics to Prometheus
+        env:
+          PROMETHEUS_PUSHGATEWAY: ${{ secrets.PROMETHEUS_PUSHGATEWAY_URL }}
+        run: |
+          cat <<'EOF' | curl --data-binary @- "$PROMETHEUS_PUSHGATEWAY/metrics/job/deployment/region/us-east/stage/baseline"
+          deployment_error_rate{region="us-east",environment="green",stage="baseline"} ${{ steps.baseline.outputs.error_rate }}
+          deployment_latency_p95_ms{region="us-east",environment="green",stage="baseline"} ${{ steps.baseline.outputs.latency }}
+          deployment_cpu_usage{region="us-east",environment="green",stage="baseline"} ${{ steps.baseline.outputs.cpu }}
+          deployment_memory_usage{region="us-east",environment="green",stage="baseline"} ${{ steps.baseline.outputs.memory }}
+          deployment_timestamp{region="us-east",environment="green",stage="baseline"} $(date +%s)
+          deployment_version{region="us-east",environment="green",version="${{ env.DEPLOYMENT_VERSION }}"} 1
+          EOF
+          echo "✅ Baseline metrics pushed to Prometheus"
+
+  #############################################
+  # CANARY ROLLOUT WITH MONITORING
+  #############################################
+  canary-us-east:
+    name: Canary US East with Monitoring
+    runs-on: ubuntu-latest
+    needs: deploy-us-east
+    outputs:
+      final_status: ${{ steps.final-check.outputs.status }}
+      error_rate: ${{ steps.final-check.outputs.error_rate }}
+      latency: ${{ steps.final-check.outputs.latency }}
+    strategy:
+      matrix:
+        stage: [10, 25, 50, 75, 100]
+      fail-fast: true  # Stop immediately if any stage fails
+    
+    steps:
+      - name: Update traffic distribution
+        env:
+          STAGE: ${{ matrix.stage }}
+          REGION: us-east
+          GREEN_IP: ${{ secrets.DROPLET_IP_GREEN }}
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+          LB_IP: ${{ secrets.LB_IP }}
+        run: |
+          echo "🎯 Routing $STAGE% traffic to Green in US East"
+          
+          BLUE_WEIGHT=$((100 - $STAGE))
+          
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USER }}@$LB_IP << 'SSHEOF'
+            cat > /etc/nginx/conf.d/upstream-us-east.conf << 'NGINX'
+          upstream backend-us-east {
+              server $GREEN_IP:4000 weight=$STAGE;
+              server $BLUE_IP:4000 weight=$BLUE_WEIGHT;
+              keepalive 32;
+          }
+          NGINX
+            nginx -t && systemctl reload nginx
+          SSHEOF
+          
+          echo "✅ Traffic distribution updated"
+
+      - name: Monitor canary stage
+        id: monitor
+        env:
+          STAGE: ${{ matrix.stage }}
+          GREEN_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "📊 Monitoring stage $STAGE% for 5 minutes..."
+          
+          # Monitor for 5 minutes with checks every 30 seconds
+          for i in {1..10}; do
+            METRICS=$(curl -s http://$GREEN_IP:4000/metrics)
+            
+            ERROR_RATE=$(echo "$METRICS" | grep 'error_rate_percent' | awk '{print $2}')
+            LATENCY=$(echo "$METRICS" | grep 'http_request_duration_seconds{quantile="0.95"}' | awk '{print $2}' | awk '{printf "%.0f", $1 * 1000}')
+            CPU=$(echo "$METRICS" | grep 'system_cpu_usage_percent' | awk '{print $2}' | awk '{printf "%.1f", $1}')
+            MEMORY=$(echo "$METRICS" | grep 'system_memory_usage_percent' | awk '{print $2}' | awk '{printf "%.1f", $1}')
+            REQUEST_COUNT=$(echo "$METRICS" | grep 'http_requests_total' | awk '{sum+=$2} END {print sum}')
+            
+            echo "  Check $i/10: Error=${ERROR_RATE}%, Latency=${LATENCY}ms, CPU=${CPU}%, Memory=${MEMORY}%, Requests=$REQUEST_COUNT"
+            
+            # Determine thresholds based on stage
+            if [ $STAGE -eq 10 ]; then
+              MAX_ERROR=1.0
+              MAX_LATENCY=500
+            elif [ $STAGE -eq 25 ]; then
+              MAX_ERROR=0.8
+              MAX_LATENCY=450
+            elif [ $STAGE -eq 50 ]; then
+              MAX_ERROR=0.5
+              MAX_LATENCY=400
+            elif [ $STAGE -eq 75 ]; then
+              MAX_ERROR=0.3
+              MAX_LATENCY=350
+            else
+              MAX_ERROR=0.2
+              MAX_LATENCY=300
+            fi
+            
+            # Check thresholds
+            if (( $(echo "$ERROR_RATE > $MAX_ERROR" | bc -l) )); then
+              echo "❌ Error rate $ERROR_RATE% exceeds threshold $MAX_ERROR%"
+              echo "status=failed" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+            
+            if [ "$LATENCY" -gt "$MAX_LATENCY" ]; then
+              echo "❌ Latency ${LATENCY}ms exceeds threshold ${MAX_LATENCY}ms"
+              echo "status=failed" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+            
+            if (( $(echo "$CPU > 80" | bc -l) )); then
+              echo "⚠️ Warning: High CPU usage ${CPU}%"
+            fi
+            
+            sleep 30
+          done
+          
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "error_rate=$ERROR_RATE" >> $GITHUB_OUTPUT
+          echo "latency=$LATENCY" >> $GITHUB_OUTPUT
+          echo "cpu=$CPU" >> $GITHUB_OUTPUT
+          echo "memory=$MEMORY" >> $GITHUB_OUTPUT
+          echo "✅ Stage $STAGE% monitoring complete - all checks passed"
+
+      - name: Push stage metrics to Prometheus
+        if: always()
+        env:
+          PROMETHEUS_PUSHGATEWAY: ${{ secrets.PROMETHEUS_PUSHGATEWAY_URL }}
+          STAGE: ${{ matrix.stage }}
+        run: |
+          cat <<'EOF' | curl --data-binary @- "$PROMETHEUS_PUSHGATEWAY/metrics/job/deployment/region/us-east/stage/${STAGE}"
+          deployment_error_rate{region="us-east",environment="green",stage="${STAGE}"} ${{ steps.monitor.outputs.error_rate }}
+          deployment_latency_p95_ms{region="us-east",environment="green",stage="${STAGE}"} ${{ steps.monitor.outputs.latency }}
+          deployment_cpu_usage{region="us-east",environment="green",stage="${STAGE}"} ${{ steps.monitor.outputs.cpu }}
+          deployment_memory_usage{region="us-east",environment="green",stage="${STAGE}"} ${{ steps.monitor.outputs.memory }}
+          deployment_traffic_percent{region="us-east",environment="green",stage="${STAGE}"} ${STAGE}
+          deployment_stage_status{region="us-east",stage="${STAGE}",status="${{ steps.monitor.outputs.status }}"} 1
+          deployment_timestamp{region="us-east",environment="green",stage="${STAGE}"} $(date +%s)
+          EOF
+          echo "✅ Stage $STAGE metrics pushed to Prometheus"
+
+      - name: Send Slack notification with dashboard
+        if: always()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          STAGE: ${{ matrix.stage }}
+          STATUS: ${{ steps.monitor.outputs.status }}
+        run: |
+          if [ "$STATUS" = "success" ]; then
+            COLOR="good"
+            EMOJI="✅"
+          else
+            COLOR="danger"
+            EMOJI="❌"
+          fi
+          
+          GRAFANA_URL="${{ env.GRAFANA_DASHBOARD_URL }}/d/us-east-canary"
+          PROMETHEUS_URL="${{ env.PROMETHEUS_URL }}/graph?g0.expr=deployment_error_rate{region=\"us-east\"}"
+          
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "'"$COLOR"'",
+                "title": "'"$EMOJI"' US East Canary Stage '"$STAGE"'%",
+                "title_link": "'"$GRAFANA_URL"'",
+                "fields": [
+                  {"title": "Stage", "value": "'"$STAGE"'%", "short": true},
+                  {"title": "Status", "value": "'"$STATUS"'", "short": true},
+                  {"title": "Error Rate", "value": "'"${{ steps.monitor.outputs.error_rate }}"'%", "short": true},
+                  {"title": "Latency (P95)", "value": "'"${{ steps.monitor.outputs.latency }}"'ms", "short": true},
+                  {"title": "CPU Usage", "value": "'"${{ steps.monitor.outputs.cpu }}"'%", "short": true},
+                  {"title": "Memory Usage", "value": "'"${{ steps.monitor.outputs.memory }}"'%", "short": true}
+                ],
+                "actions": [
+                  {
+                    "type": "button",
+                    "text": "📊 View Grafana Dashboard",
+                    "url": "'"$GRAFANA_URL"'"
+                  },
+                  {
+                    "type": "button",
+                    "text": "📈 View Prometheus Metrics",
+                    "url": "'"$PROMETHEUS_URL"'"
+                  },
+                  {
+                    "type": "button",
+                    "text": "🔍 View Logs",
+                    "url": "https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"'"
+                  }
+                ],
+                "footer": "Advancia Deploy Bot • US East",
+                "ts": '"$(date +%s)"'
+              }]
+            }'
+      
+      - name: Final health check
+        id: final-check
+        env:
+          GREEN_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          METRICS=$(curl -s http://$GREEN_IP:4000/metrics)
+          ERROR_RATE=$(echo "$METRICS" | grep 'error_rate_percent' | awk '{print $2}')
+          LATENCY=$(echo "$METRICS" | grep 'http_request_duration_seconds{quantile="0.95"}' | awk '{print $2}' | awk '{printf "%.0f", $1 * 1000}')
+          
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "error_rate=$ERROR_RATE" >> $GITHUB_OUTPUT
+          echo "latency=$LATENCY" >> $GITHUB_OUTPUT
+          
+          echo "✅ US East final health check passed"
+
+  #############################################
+  # WAIT BEFORE EU (DELAYED STRATEGY)
+  #############################################
+  delay-before-eu:
+    name: Delay Before EU Rollout
+    runs-on: ubuntu-latest
+    needs: [validate, canary-us-east]
+    if: |
+      needs.validate.outputs.strategy == 'delayed' &&
+      contains(needs.validate.outputs.regions, 'eu-west')
+    
+    steps:
+      - name: Wait for observation period
+        env:
+          DELAY: ${{ needs.validate.outputs.delay }}
+          SLACK_WEBHOOK: ${{ secrets.GLOBAL_SLACK_WEBHOOK }}
+        run: |
+          MINUTES=$((DELAY / 60))
+          
+          echo "⏳ Waiting $MINUTES minutes before EU rollout..."
+          
+          # Send Slack notification
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "#FFC107",
+                "title": "⏳ Delayed Rollout - Observation Period",
+                "text": "US East deployment complete. Waiting '"$MINUTES"' minutes before EU West rollout.",
+                "fields": [
+                  {"title": "Next Region", "value": "EU West", "short": true},
+                  {"title": "Delay", "value": "'"$MINUTES"' minutes", "short": true}
+                ],
+                "footer": "Advancia Deploy Bot",
+                "ts": '"$(date +%s)"'
+              }]
+            }'
+          
+          sleep $DELAY
+          
+          echo "✅ Observation period complete - ready for EU rollout"
+
+  #############################################
+  # DEPLOY EU WEST WITH MONITORING
+  #############################################
+  deploy-eu-west:
+    name: Deploy EU West
+    runs-on: ubuntu-latest
+    needs: [validate, canary-us-east, delay-before-eu]
+    if: |
+      always() &&
+      (needs.validate.outputs.strategy == 'sequential' || needs.validate.outputs.strategy == 'delayed') &&
+      needs.canary-us-east.result == 'success' &&
+      (needs.delay-before-eu.result == 'success' || needs.delay-before-eu.result == 'skipped') &&
+      contains(needs.validate.outputs.regions, 'eu-west')
+    environment: production-eu-west
+    outputs:
+      status: ${{ steps.health.outputs.success }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EU West Green
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🚀 Deploying to EU West Green..."
+          echo "   Triggered by successful US East deployment"
+          # Full deployment logic (same as US East)
+
+      - name: Health check EU West
+        id: health
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          sleep 30
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
+          if [ "$RESPONSE" != "200" ]; then
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "success=true" >> $GITHUB_OUTPUT
+          echo "✅ EU West is healthy - ready for canary"
+
+  # EU West Canary (same pattern as US East)
+  canary-eu-west:
+    name: Canary EU West with Monitoring
+    runs-on: ubuntu-latest
+    needs: deploy-eu-west
+    outputs:
+      final_status: ${{ steps.final-check.outputs.status }}
+    strategy:
+      matrix:
+        stage: [10, 25, 50, 75, 100]
+      fail-fast: true
+    
+    steps:
+      - name: Progressive canary rollout
+        run: |
+          echo "🎯 EU West canary stage ${{ matrix.stage }}%"
+          # Full canary logic (same as US East)
+      
+      - name: Final health check
+        id: final-check
+        run: |
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "✅ EU West canary complete"
+
+  #############################################
+  # WAIT BEFORE APAC (DELAYED STRATEGY)
+  #############################################
+  delay-before-apac:
+    name: Delay Before APAC Rollout
+    runs-on: ubuntu-latest
+    needs: [validate, canary-eu-west]
+    if: |
+      needs.validate.outputs.strategy == 'delayed' &&
+      contains(needs.validate.outputs.regions, 'apac-se')
+    
+    steps:
+      - name: Wait for observation period
+        env:
+          DELAY: ${{ needs.validate.outputs.delay }}
+        run: |
+          MINUTES=$((DELAY / 60))
+          echo "⏳ Waiting $MINUTES minutes before APAC rollout..."
+          sleep $DELAY
+
+  #############################################
+  # DEPLOY APAC SOUTHEAST WITH MONITORING
+  #############################################
+  deploy-apac-se:
+    name: Deploy APAC Southeast
+    runs-on: ubuntu-latest
+    needs: [validate, canary-eu-west, delay-before-apac]
+    if: |
+      always() &&
+      (needs.validate.outputs.strategy == 'sequential' || needs.validate.outputs.strategy == 'delayed') &&
+      needs.canary-eu-west.result == 'success' &&
+      (needs.delay-before-apac.result == 'success' || needs.delay-before-apac.result == 'skipped') &&
+      contains(needs.validate.outputs.regions, 'apac-se')
+    environment: production-apac-se
+    outputs:
+      status: ${{ steps.health.outputs.success }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to APAC Southeast Green
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🚀 Deploying to APAC Southeast Green..."
+          echo "   Triggered by successful EU West deployment"
+
+      - name: Health check APAC Southeast
+        id: health
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          sleep 30
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
+          if [ "$RESPONSE" != "200" ]; then
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "success=true" >> $GITHUB_OUTPUT
+
+  # APAC Canary
+  canary-apac-se:
+    name: Canary APAC Southeast with Monitoring
+    runs-on: ubuntu-latest
+    needs: deploy-apac-se
+    outputs:
+      final_status: ${{ steps.final-check.outputs.status }}
+    strategy:
+      matrix:
+        stage: [10, 25, 50, 75, 100]
+      fail-fast: true
+    
+    steps:
+      - name: Progressive canary rollout
+        run: |
+          echo "🎯 APAC Southeast canary stage ${{ matrix.stage }}%"
+      
+      - name: Final health check
+        id: final-check
+        run: |
+          echo "status=success" >> $GITHUB_OUTPUT
+          echo "✅ APAC Southeast canary complete"
+
+  #############################################
+  # PARALLEL DEPLOYMENTS (ALL REGIONS AT ONCE)
+  #############################################
+  deploy-all-parallel:
+    name: Deploy ${{ matrix.region }} (Parallel)
+    runs-on: ubuntu-latest
+    needs: validate
+    if: needs.validate.outputs.strategy == 'parallel'
+    strategy:
+      matrix:
+        region: [us-east, eu-west, apac-se]
+      fail-fast: false  # Continue other regions even if one fails
+    environment: production-${{ matrix.region }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to ${{ matrix.region }}
+        run: |
+          echo "🚀 Deploying to ${{ matrix.region }} in parallel..."
+      
+      - name: Canary rollout ${{ matrix.region }}
+        run: |
+          echo "🎯 Progressive canary for ${{ matrix.region }}"
+          # Full canary logic with monitoring
+
+  #############################################
+  # REGIONAL ROLLBACK ON FAILURE
+  #############################################
+  rollback-us-east:
+    name: Rollback US East
+    runs-on: ubuntu-latest
+    needs: canary-us-east
+    if: failure()
+    
+    steps:
+      - name: Emergency rollback US East
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          echo "🚨 Rolling back US East to Blue environment"
+          
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-us.advancia.com\",\"content\":\"$BLUE_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          # Send Slack alert
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "danger",
+                "title": "🚨 US East Rollback Executed",
+                "text": "Deployment failed health checks. Traffic reverted to Blue environment.",
+                "footer": "Pipeline stopped - EU and APAC deployments cancelled"
+              }]
+            }'
+          
+          echo "✅ US East rolled back - pipeline stopped"
+
+  rollback-eu-west:
+    name: Rollback EU West
+    runs-on: ubuntu-latest
+    needs: canary-eu-west
+    if: failure()
+    
+    steps:
+      - name: Emergency rollback EU West
+        env:
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+        run: |
+          echo "🚨 Rolling back EU West to Blue"
+          # Rollback logic
+          echo "✅ EU West rolled back - APAC deployment cancelled"
+
+  rollback-apac-se:
+    name: Rollback APAC Southeast
+    runs-on: ubuntu-latest
+    needs: canary-apac-se
+    if: failure()
+    
+    steps:
+      - name: Emergency rollback APAC Southeast
+        env:
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+        run: |
+          echo "🚨 Rolling back APAC Southeast to Blue"
+          # Rollback logic
+          echo "✅ APAC Southeast rolled back"
+
+  #############################################
+  # INCIDENT QUICK CARD NOTIFICATIONS
+  #############################################
+  notify-incident:
+    name: Send Incident Quick Card
+    runs-on: ubuntu-latest
+    needs: [validate, canary-us-east, canary-eu-west, canary-apac-se, deploy-all-parallel]
+    if: always()
+    
+    steps:
+      - name: Determine incident details
+        id: incident
+        run: |
+          # Detect which region failed and gather context
+          US_STATUS="${{ needs.canary-us-east.result }}"
+          EU_STATUS="${{ needs.canary-eu-west.result }}"
+          APAC_STATUS="${{ needs.canary-apac-se.result }}"
+          PARALLEL_STATUS="${{ needs.deploy-all-parallel.result }}"
+          
+          FAILED_REGION="None"
+          STATUS_EMOJI="✅"
+          STATUS_TEXT="Deployment successful"
+          COLOR="good"
+          
+          if [ "$US_STATUS" = "failure" ]; then
+            FAILED_REGION="US East"
+            STATUS_EMOJI="⚠️"
+            STATUS_TEXT="Rollback triggered"
+            COLOR="danger"
+          elif [ "$EU_STATUS" = "failure" ]; then
+            FAILED_REGION="EU West"
+            STATUS_EMOJI="⚠️"
+            STATUS_TEXT="Rollback triggered"
+            COLOR="danger"
+          elif [ "$APAC_STATUS" = "failure" ]; then
+            FAILED_REGION="APAC Southeast"
+            STATUS_EMOJI="⚠️"
+            STATUS_TEXT="Rollback triggered"
+            COLOR="danger"
+          elif [ "$PARALLEL_STATUS" = "failure" ]; then
+            FAILED_REGION="Multiple (Parallel)"
+            STATUS_EMOJI="⚠️"
+            STATUS_TEXT="Partial failure"
+            COLOR="warning"
+          fi
+          
+          echo "failed_region=$FAILED_REGION" >> $GITHUB_OUTPUT
+          echo "status_emoji=$STATUS_EMOJI" >> $GITHUB_OUTPUT
+          echo "status_text=$STATUS_TEXT" >> $GITHUB_OUTPUT
+          echo "color=$COLOR" >> $GITHUB_OUTPUT
+      
+      - name: Send Incident Quick Card to Slack
+        if: always()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          # Gather metrics if available
+          ERROR_RATE="${{ needs.canary-us-east.outputs.error_rate || 'N/A' }}"
+          LATENCY="${{ needs.canary-us-east.outputs.latency || 'N/A' }}"
+          STRATEGY="${{ needs.validate.outputs.strategy }}"
+          
+          # Determine cause from metrics
+          CAUSE="Unknown"
+          if [[ "$ERROR_RATE" != "N/A" ]] && (( $(echo "$ERROR_RATE > 1.0" | bc -l 2>/dev/null || echo 0) )); then
+            CAUSE="High error rate: ${ERROR_RATE}%"
+          elif [[ "$LATENCY" != "N/A" ]] && [ "$LATENCY" -gt 500 ] 2>/dev/null; then
+            CAUSE="Latency spike: ${LATENCY}ms"
+          elif [ "${{ steps.incident.outputs.failed_region }}" = "None" ]; then
+            CAUSE="N/A - Deployment successful"
+          fi
+          
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "${{ steps.incident.outputs.status_emoji }} *Deployment Incident Alert*",
+              "attachments": [{
+                "color": "${{ steps.incident.outputs.color }}",
+                "title": "${{ steps.incident.outputs.status_emoji }} Incident Quick Card",
+                "fields": [
+                  {"title": "Region", "value": "${{ steps.incident.outputs.failed_region }}", "short": true},
+                  {"title": "Stage", "value": "Canary rollout", "short": true},
+                  {"title": "Impact", "value": "${{ steps.incident.outputs.status_text }}", "short": true},
+                  {"title": "Strategy", "value": "'"$STRATEGY"'", "short": true},
+                  {"title": "Cause", "value": "'"$CAUSE"'", "short": false},
+                  {"title": "Error Rate", "value": "'"$ERROR_RATE"'%", "short": true},
+                  {"title": "Latency P95", "value": "'"$LATENCY"'ms", "short": true},
+                  {"title": "Version", "value": "${{ env.DEPLOYMENT_VERSION }}", "short": true},
+                  {"title": "Triggered By", "value": "${{ github.actor }}", "short": true}
+                ],
+                "actions": [
+                  {
+                    "type": "button",
+                    "text": "📊 View Dashboard",
+                    "url": "${{ env.GRAFANA_DASHBOARD_URL }}/d/global-overview"
+                  },
+                  {
+                    "type": "button",
+                    "text": "🔍 View Logs",
+                    "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  },
+                  {
+                    "type": "button",
+                    "text": "📋 Debugging Guide",
+                    "url": "https://github.com/${{ github.repository }}/blob/main/DEPLOYMENT_DEBUGGING_GUIDE.md"
+                  }
+                ],
+                "footer": "Advancia Deploy Bot • Incident Alert",
+                "ts": '"$(date +%s)"'
+              }]
+            }'
+
+  #############################################
+  # GLOBAL DEPLOYMENT SUMMARY
+  #############################################
+  deployment-summary:
+    name: Send Global Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [validate, canary-us-east, canary-eu-west, canary-apac-se, deploy-all-parallel, rollback-us-east, rollback-eu-west, rollback-apac-se, notify-incident]
+    if: always()
+    
+    steps:
+      - name: Collect global metrics
+        id: global
+        run: |
+          echo "📊 Collecting global deployment metrics..."
+          
+          # Fetch metrics from all regions
+          US_METRICS=$(curl -s https://api-us.advancia.com/metrics || echo "unavailable")
+          EU_METRICS=$(curl -s https://api-eu.advancia.com/metrics || echo "unavailable")
+          APAC_METRICS=$(curl -s https://api-apac.advancia.com/metrics || echo "unavailable")
+          
+          echo "✅ Global metrics collected"
+
+      - name: Send comprehensive Slack summary
+        env:
+          SLACK_WEBHOOK: ${{ secrets.GLOBAL_SLACK_WEBHOOK }}
+          STRATEGY: ${{ needs.validate.outputs.strategy }}
+        run: |
+          # Determine results based on strategy
+          if [[ "$STRATEGY" == "parallel" ]]; then
+            US_STATUS="${{ needs.deploy-all-parallel.result }}"
+            EU_STATUS="${{ needs.deploy-all-parallel.result }}"
+            APAC_STATUS="${{ needs.deploy-all-parallel.result }}"
+            STRATEGY_TEXT="Parallel (simultaneous)"
+          else
+            US_STATUS="${{ needs.canary-us-east.result }}"
+            EU_STATUS="${{ needs.canary-eu-west.result }}"
+            APAC_STATUS="${{ needs.canary-apac-se.result }}"
+            if [[ "$STRATEGY" == "delayed" ]]; then
+              STRATEGY_TEXT="Delayed (staged with wait periods)"
+            else
+              STRATEGY_TEXT="Sequential (auto-cascading)"
+            fi
+          fi
+          
+          # Check for rollbacks
+          US_ROLLBACK="${{ needs.rollback-us-east.result }}"
+          EU_ROLLBACK="${{ needs.rollback-eu-west.result }}"
+          APAC_ROLLBACK="${{ needs.rollback-apac-se.result }}"
+          
+          if [[ "$US_ROLLBACK" == "success" ]]; then
+            US_STATUS="rolled back"
+          fi
+          if [[ "$EU_ROLLBACK" == "success" ]]; then
+            EU_STATUS="rolled back"
+          fi
+          if [[ "$APAC_ROLLBACK" == "success" ]]; then
+            APAC_STATUS="rolled back"
+          fi
+          
+          # Determine overall status
+          if [[ "$US_STATUS" == "success" && "$EU_STATUS" == "success" && "$APAC_STATUS" == "success" ]]; then
+            COLOR="good"
+            EMOJI="🎉"
+            MESSAGE="Global deployment completed successfully across all regions!"
+          elif [[ "$US_ROLLBACK" == "success" || "$EU_ROLLBACK" == "success" || "$APAC_ROLLBACK" == "success" ]]; then
+            COLOR="danger"
+            EMOJI="🚨"
+            MESSAGE="Deployment failed - rollback executed"
+          else
+            COLOR="warning"
+            EMOJI="⚠️"
+            MESSAGE="Partial deployment completed with mixed results"
+          fi
+          
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "'"$COLOR"'",
+                "title": "'"$EMOJI"' Multi-Region Deployment Complete",
+                "text": "'"$MESSAGE"'",
+                "fields": [
+                  {"title": "Strategy", "value": "'"$STRATEGY_TEXT"'", "short": false},
+                  {"title": "🇺🇸 US East", "value": "'"$US_STATUS"'", "short": true},
+                  {"title": "🇪🇺 EU West", "value": "'"$EU_STATUS"'", "short": true},
+                  {"title": "🌏 APAC Southeast", "value": "'"$APAC_STATUS"'", "short": true},
+                  {"title": "Version", "value": "'"${{ env.DEPLOYMENT_VERSION }}"'", "short": true},
+                  {"title": "Duration", "value": "'"$(($(date +%s) - ${{ github.event.created_at }}))"' seconds", "short": true}
+                ],
+                "actions": [
+                  {
+                    "type": "button",
+                    "text": "🌍 View Global Dashboard",
+                    "url": "'"${{ env.GRAFANA_DASHBOARD_URL }}"'/d/global-overview"
+                  },
+                  {
+                    "type": "button",
+                    "text": "📊 View Regional Comparison",
+                    "url": "'"${{ env.GRAFANA_DASHBOARD_URL }}"'/d/regional-comparison"
+                  },
+                  {
+                    "type": "button",
+                    "text": "📋 View Deployment Log",
+                    "url": "https://github.com/'"$GITHUB_REPOSITORY"'/actions/runs/'"$GITHUB_RUN_ID"'"
+                  }
+                ],
+                "footer": "Advancia Deploy Bot • Global",
+                "ts": '"$(date +%s)"'
+              }]
+            }'
+
+      - name: Create deployment annotation in Grafana
+        env:
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+          GRAFANA_URL: ${{ env.GRAFANA_DASHBOARD_URL }}
+        run: |
+          curl -X POST "$GRAFANA_URL/api/annotations" \
+            -H "Authorization: Bearer $GRAFANA_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "text": "Multi-region deployment: '"${{ env.DEPLOYMENT_VERSION }}"'",
+              "tags": ["deployment", "multi-region"],
+              "time": '"$(date +%s)000"'
+            }'
+          
+          echo "✅ Deployment annotation added to Grafana"

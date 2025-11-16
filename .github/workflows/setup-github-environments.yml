@@ -1,0 +1,113 @@
+name: Setup GitHub Environments
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in DryRun mode (preview only)'
+        required: false
+        type: boolean
+        default: true
+      config_file:
+        description: 'Configuration file to use'
+        required: false
+        default: 'github-config.json'
+
+jobs:
+  setup-environments:
+    runs-on: windows-latest
+    
+    permissions:
+      contents: read
+      actions: write
+      id-token: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup GitHub CLI
+        run: |
+          Write-Host "GitHub CLI version:"
+          gh --version
+          
+          Write-Host "`nAuthenticating GitHub CLI..."
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          
+          Write-Host "`nVerifying authentication..."
+          gh auth status
+        shell: pwsh
+      
+      - name: Validate configuration file
+        run: |
+          $configFile = "${{ github.event.inputs.config_file }}"
+          
+          if (-not (Test-Path $configFile)) {
+            Write-Error "Configuration file not found: $configFile"
+            Write-Host "`nAvailable files:"
+            Get-ChildItem -Filter "*.json"
+            exit 1
+          }
+          
+          Write-Host "✓ Configuration file found: $configFile"
+          
+          try {
+            $config = Get-Content $configFile -Raw | ConvertFrom-Json
+            Write-Host "✓ Configuration file is valid JSON"
+            Write-Host "`nConfiguration summary:"
+            Write-Host "  Environments: $($config.environments.Count)"
+            Write-Host "  Secrets: $($config.secrets.PSObject.Properties.Count)"
+            Write-Host "  Reviewers: $($config.reviewers.Count)"
+          } catch {
+            Write-Error "Failed to parse configuration file: $_"
+            exit 1
+          }
+        shell: pwsh
+      
+      - name: Run setup script (DryRun)
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          Write-Host "═══════════════════════════════════════"
+          Write-Host "  DRY RUN MODE - Preview Only"
+          Write-Host "═══════════════════════════════════════`n"
+          
+          .\setup-github-automated.ps1 -DryRun -ConfigFile "${{ github.event.inputs.config_file }}"
+        shell: pwsh
+      
+      - name: Run setup script (Apply Changes)
+        if: github.event.inputs.dry_run == 'false'
+        run: |
+          Write-Host "═══════════════════════════════════════"
+          Write-Host "  APPLYING CHANGES TO GITHUB"
+          Write-Host "═══════════════════════════════════════`n"
+          
+          .\setup-github-automated.ps1 -ConfigFile "${{ github.event.inputs.config_file }}"
+        shell: pwsh
+      
+      - name: Summary
+        if: always()
+        run: |
+          Write-Host "`n╔════════════════════════════════════════╗"
+          Write-Host "║  Workflow Summary"
+          Write-Host "╚════════════════════════════════════════╝`n"
+          
+          Write-Host "Mode: ${{ github.event.inputs.dry_run == 'true' && 'DRY RUN (Preview)' || 'APPLY CHANGES' }}"
+          Write-Host "Config: ${{ github.event.inputs.config_file }}"
+          Write-Host "Status: ${{ job.status }}"
+          Write-Host "Triggered by: ${{ github.actor }}"
+          Write-Host "`nNext steps:"
+          
+          if ("${{ github.event.inputs.dry_run }}" -eq "true") {
+            Write-Host "  • Review the dry run output above"
+            Write-Host "  • If everything looks good, run again with dry_run=false"
+            Write-Host "  • Verify environments: https://github.com/${{ github.repository }}/settings/environments"
+          } else {
+            Write-Host "  • Verify environments: https://github.com/${{ github.repository }}/settings/environments"
+            Write-Host "  • Check secrets: https://github.com/${{ github.repository }}/settings/secrets/actions"
+            Write-Host "  • Review protection rules per environment"
+            Write-Host "  • Run test deployment:"
+            Write-Host "    gh workflow run multi-region-deployment-with-monitoring.yml \\"
+            Write-Host "      -f regions=us \\"
+            Write-Host "      -f deployment_strategy=sequential"
+          }
+        shell: pwsh

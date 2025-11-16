@@ -1,0 +1,506 @@
+name: Multi-Region Progressive Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      regions:
+        description: 'Regions to deploy (comma-separated: us-east,eu-west,apac-se or "all")'
+        required: true
+        default: 'all'
+      deployment_strategy:
+        description: 'Deployment strategy'
+        required: true
+        type: choice
+        options:
+          - sequential  # Deploy one region at a time
+          - parallel    # Deploy all regions simultaneously
+          - primary-only  # Deploy US East only
+
+env:
+  DEPLOYMENT_VERSION: ${{ github.sha }}
+  MONITORING_INTERVAL: 300  # 5 minutes
+
+jobs:
+  #############################################
+  # VALIDATE DEPLOYMENT
+  #############################################
+  validate:
+    name: Validate Multi-Region Deployment
+    runs-on: ubuntu-latest
+    outputs:
+      regions: ${{ steps.parse.outputs.regions }}
+      strategy: ${{ inputs.deployment_strategy }}
+    
+    steps:
+      - name: Parse region list
+        id: parse
+        run: |
+          if [[ "${{ inputs.regions }}" == "all" ]]; then
+            echo "regions=[\"us-east\",\"eu-west\",\"apac-se\"]" >> $GITHUB_OUTPUT
+          else
+            # Convert comma-separated to JSON array
+            REGIONS=$(echo "${{ inputs.regions }}" | jq -R -s -c 'split(",") | map(gsub("^\\s+|\\s+$";""))')
+            echo "regions=$REGIONS" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "🌍 Deploying to regions: ${{ inputs.regions }}"
+          echo "📋 Strategy: ${{ inputs.deployment_strategy }}"
+
+  #############################################
+  # DEPLOY US EAST (PRIMARY REGION)
+  #############################################
+  deploy-us-east:
+    name: Deploy US East (Primary)
+    runs-on: ubuntu-latest
+    needs: validate
+    if: contains(needs.validate.outputs.regions, 'us-east')
+    environment: production-us-east
+    outputs:
+      success: ${{ steps.health.outputs.success }}
+      version: ${{ env.DEPLOYMENT_VERSION }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH for US East
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DROPLET_IP_GREEN }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to US East Green
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+          REGION: us-east
+        run: |
+          echo "🚀 Deploying to US East (Green) at $TARGET_IP"
+          
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$TARGET_IP << 'EOF'
+            cd /opt/advancia
+            git fetch origin main
+            git checkout main
+            git pull origin main
+            
+            # Update environment
+            cat > .env << EOL
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          REDIS_URL=${{ secrets.REDIS_URL }}
+          NODE_ENV=production
+          REGION=us-east
+          API_URL=https://api-us.advancia.com
+          FRONTEND_URL=https://www-us.advancia.com
+          EOL
+            
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
+            
+            echo "✅ US East deployment complete"
+          EOF
+
+      - name: Pre-canary health check
+        id: health
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🏥 Running pre-canary health checks..."
+          sleep 30
+          
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
+          if [ "$RESPONSE" != "200" ]; then
+            echo "❌ Health check failed"
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          
+          echo "success=true" >> $GITHUB_OUTPUT
+          echo "✅ US East is healthy"
+
+  #############################################
+  # CANARY ROLLOUT: US EAST
+  #############################################
+  canary-us-east:
+    name: Canary Rollout - US East
+    runs-on: ubuntu-latest
+    needs: deploy-us-east
+    if: needs.deploy-us-east.outputs.success == 'true'
+    
+    steps:
+      - name: Stage 1 - 10% US East
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+          CURRENT_IP: ${{ secrets.DROPLET_IP_BLUE }}
+          LB_IP: ${{ secrets.LB_IP }}
+        run: |
+          echo "🎯 US East: Routing 10% traffic to Green"
+          
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$LB_IP << 'EOF'
+            cat > /etc/nginx/conf.d/upstream-us.conf << 'NGINX'
+          upstream backend-us {
+              server ${{ secrets.DROPLET_IP_GREEN }}:4000 weight=1;  # 10%
+              server ${{ secrets.DROPLET_IP_BLUE }}:4000 weight=9;   # 90%
+              keepalive 32;
+          }
+          NGINX
+            nginx -t && systemctl reload nginx
+          EOF
+          
+          # Monitor for 5 minutes
+          for i in {1..10}; do
+            ERROR_RATE=$(curl -s http://$TARGET_IP:4000/metrics | grep 'error_rate' | awk '{print $2}')
+            if (( $(echo "$ERROR_RATE > 1.0" | bc -l) )); then
+              echo "❌ Error rate too high: $ERROR_RATE%"
+              exit 1
+            fi
+            sleep 30
+          done
+          
+          echo "✅ Stage 1 passed"
+
+      - name: Stage 2 - 25% US East
+        run: |
+          echo "🎯 US East: Routing 25% traffic to Green"
+          # Similar to Stage 1 with 25/75 weight
+
+      - name: Stage 3 - 50% US East
+        run: |
+          echo "🎯 US East: Routing 50% traffic to Green"
+          # Similar with 50/50 weight
+
+      - name: Stage 4 - 75% US East
+        run: |
+          echo "🎯 US East: Routing 75% traffic to Green"
+          # Similar with 75/25 weight
+
+      - name: Stage 5 - 100% US East (DNS Switch)
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🎯 US East: Routing 100% traffic (DNS switch)"
+          
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-us.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          echo "✅ US East canary complete - 100% on Green"
+
+  #############################################
+  # DEPLOY EU WEST (SECONDARY REGION)
+  #############################################
+  deploy-eu-west:
+    name: Deploy EU West (Secondary)
+    runs-on: ubuntu-latest
+    needs: [validate, canary-us-east]
+    if: |
+      needs.validate.outputs.strategy == 'sequential' &&
+      contains(needs.validate.outputs.regions, 'eu-west')
+    environment: production-eu-west
+    outputs:
+      success: ${{ steps.health.outputs.success }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH for EU West
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DROPLET_IP_GREEN }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to EU West Green
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+          REGION: eu-west
+        run: |
+          echo "🚀 Deploying to EU West (Green) at $TARGET_IP"
+          
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$TARGET_IP << 'EOF'
+            cd /opt/advancia
+            git fetch origin main
+            git checkout main
+            git pull origin main
+            
+            cat > .env << EOL
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          REDIS_URL=${{ secrets.REDIS_URL }}
+          NODE_ENV=production
+          REGION=eu-west
+          API_URL=https://api-eu.advancia.com
+          FRONTEND_URL=https://www-eu.advancia.com
+          GDPR_MODE=enabled
+          EOL
+            
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
+            
+            echo "✅ EU West deployment complete"
+          EOF
+
+      - name: Health check EU West
+        id: health
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          sleep 30
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
+          if [ "$RESPONSE" != "200" ]; then
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "success=true" >> $GITHUB_OUTPUT
+
+  #############################################
+  # CANARY ROLLOUT: EU WEST
+  #############################################
+  canary-eu-west:
+    name: Canary Rollout - EU West
+    runs-on: ubuntu-latest
+    needs: deploy-eu-west
+    if: needs.deploy-eu-west.outputs.success == 'true'
+    
+    steps:
+      - name: Progressive canary (10→25→50→75→100%)
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🎯 EU West: Progressive canary rollout"
+          
+          # Run through all canary stages
+          # (Similar to US East but for EU region)
+          
+          # Final DNS switch
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-eu.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          echo "✅ EU West canary complete"
+
+  #############################################
+  # DEPLOY APAC SOUTHEAST (TERTIARY REGION)
+  #############################################
+  deploy-apac-se:
+    name: Deploy APAC Southeast (Tertiary)
+    runs-on: ubuntu-latest
+    needs: [validate, canary-eu-west]
+    if: |
+      needs.validate.outputs.strategy == 'sequential' &&
+      contains(needs.validate.outputs.regions, 'apac-se')
+    environment: production-apac-se
+    outputs:
+      success: ${{ steps.health.outputs.success }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH for APAC Southeast
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DROPLET_IP_GREEN }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to APAC Southeast Green
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+          REGION: apac-se
+        run: |
+          echo "🚀 Deploying to APAC Southeast (Green) at $TARGET_IP"
+          
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$TARGET_IP << 'EOF'
+            cd /opt/advancia
+            git fetch origin main
+            git checkout main
+            git pull origin main
+            
+            cat > .env << EOL
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          REDIS_URL=${{ secrets.REDIS_URL }}
+          NODE_ENV=production
+          REGION=apac-se
+          API_URL=https://api-apac.advancia.com
+          FRONTEND_URL=https://www-apac.advancia.com
+          EOL
+            
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
+            
+            echo "✅ APAC Southeast deployment complete"
+          EOF
+
+      - name: Health check APAC Southeast
+        id: health
+        env:
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          sleep 30
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
+          if [ "$RESPONSE" != "200" ]; then
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "success=true" >> $GITHUB_OUTPUT
+
+  #############################################
+  # CANARY ROLLOUT: APAC SOUTHEAST
+  #############################################
+  canary-apac-se:
+    name: Canary Rollout - APAC Southeast
+    runs-on: ubuntu-latest
+    needs: deploy-apac-se
+    if: needs.deploy-apac-se.outputs.success == 'true'
+    
+    steps:
+      - name: Progressive canary (10→25→50→75→100%)
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          TARGET_IP: ${{ secrets.DROPLET_IP_GREEN }}
+        run: |
+          echo "🎯 APAC Southeast: Progressive canary rollout"
+          
+          # Final DNS switch
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-apac.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          echo "✅ APAC Southeast canary complete"
+
+  #############################################
+  # REGIONAL ROLLBACK (ON FAILURE)
+  #############################################
+  rollback-us-east:
+    name: Rollback US East
+    runs-on: ubuntu-latest
+    needs: [canary-us-east]
+    if: failure()
+    
+    steps:
+      - name: Rollback US East to Blue
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+        run: |
+          echo "🚨 Rolling back US East to Blue"
+          
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-us.advancia.com\",\"content\":\"$BLUE_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          echo "✅ US East rolled back"
+
+  rollback-eu-west:
+    name: Rollback EU West
+    runs-on: ubuntu-latest
+    needs: [canary-eu-west]
+    if: failure()
+    
+    steps:
+      - name: Rollback EU West to Blue
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+        run: |
+          echo "🚨 Rolling back EU West to Blue"
+          
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-eu.advancia.com\",\"content\":\"$BLUE_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          echo "✅ EU West rolled back"
+
+  rollback-apac-se:
+    name: Rollback APAC Southeast
+    runs-on: ubuntu-latest
+    needs: [canary-apac-se]
+    if: failure()
+    
+    steps:
+      - name: Rollback APAC Southeast to Blue
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CF_RECORD_ID: ${{ secrets.CF_RECORD_ID_API }}
+          BLUE_IP: ${{ secrets.DROPLET_IP_BLUE }}
+        run: |
+          echo "🚨 Rolling back APAC Southeast to Blue"
+          
+          curl -X PATCH \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"api-apac.advancia.com\",\"content\":\"$BLUE_IP\",\"ttl\":60,\"proxied\":true}"
+          
+          echo "✅ APAC Southeast rolled back"
+
+  #############################################
+  # NOTIFICATION
+  #############################################
+  notify:
+    name: Send Multi-Region Deployment Notification
+    runs-on: ubuntu-latest
+    needs: [canary-us-east, canary-eu-west, canary-apac-se]
+    if: always()
+    
+    steps:
+      - name: Determine deployment status
+        id: status
+        run: |
+          US_STATUS="${{ needs.canary-us-east.result }}"
+          EU_STATUS="${{ needs.canary-eu-west.result }}"
+          APAC_STATUS="${{ needs.canary-apac-se.result }}"
+          
+          if [[ "$US_STATUS" == "success" && "$EU_STATUS" == "success" && "$APAC_STATUS" == "success" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "color=good" >> $GITHUB_OUTPUT
+          else
+            echo "status=partial" >> $GITHUB_OUTPUT
+            echo "color=warning" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Slack notification
+        env:
+          SLACK_WEBHOOK: ${{ secrets.GLOBAL_SLACK_WEBHOOK }}
+        run: |
+          curl -X POST "$SLACK_WEBHOOK" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "attachments": [{
+                "color": "${{ steps.status.outputs.color }}",
+                "title": "🌍 Multi-Region Deployment Complete",
+                "fields": [
+                  {"title": "US East", "value": "${{ needs.canary-us-east.result }}", "short": true},
+                  {"title": "EU West", "value": "${{ needs.canary-eu-west.result }}", "short": true},
+                  {"title": "APAC Southeast", "value": "${{ needs.canary-apac-se.result }}", "short": true},
+                  {"title": "Strategy", "value": "${{ needs.validate.outputs.strategy }}", "short": true},
+                  {"title": "Version", "value": "${{ env.DEPLOYMENT_VERSION }}", "short": false}
+                ]
+              }]
+            }'

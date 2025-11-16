@@ -23,6 +23,15 @@ export async function runMigrations() {
   const path = await import("path");
   const url = await import("url");
   const dir = path.resolve("migrations");
+
+  // Check if migrations directory exists
+  if (!fs.existsSync(dir)) {
+    console.log(
+      "No migrations directory found, skipping migrations (using Prisma instead)"
+    );
+    return;
+  }
+
   const files = fs
     .readdirSync(dir)
     .filter((f) => f.endsWith(".sql") || f.endsWith(".js"))

@@ -1,0 +1,46 @@
+{
+  "environments": [
+    "production-us-east",
+    "production-eu-west",
+    "production-apac-se"
+  ],
+  "secrets": {
+    "SLACK_WEBHOOK_URL": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+    "GLOBAL_SLACK_WEBHOOK": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL2",
+    "TEAMS_WEBHOOK_URL": "",
+    "DROPLET_IP_GREEN": "10.0.0.1",
+    "DROPLET_IP_BLUE": "10.0.0.2",
+    "LB_IP": "10.0.0.3",
+    "DROPLET_USER": "deploy",
+    "PROMETHEUS_PUSHGATEWAY_URL": "http://pushgateway.monitoring.svc:9091",
+    "CF_ZONE_ID": "your-cloudflare-zone-id",
+    "CF_API_TOKEN": "your-cloudflare-api-token",
+    "CF_RECORD_ID_API": "your-dns-record-id",
+    "GRAFANA_API_KEY": "your-grafana-api-key"
+  },
+  "reviewers": [
+    {
+      "type": "User",
+      "username": "example-user1",
+      "comment": "Replace with actual GitHub username"
+    },
+    {
+      "type": "User",
+      "username": "example-user2",
+      "comment": "Replace with actual GitHub username"
+    }
+  ],
+  "protection": {
+    "wait_timer": 30,
+    "protected_branches_only": true,
+    "custom_branch_patterns": ["main", "release/*"],
+    "comment": "wait_timer is in minutes, 0-43200 allowed"
+  },
+  "instructions": {
+    "step1": "Replace all 'your-*' and example values with real credentials",
+    "step2": "Update reviewer usernames with actual GitHub users/teams",
+    "step3": "Keep this file secure - add to .gitignore",
+    "step4": "Run: .\\setup-github-automated.ps1 -DryRun to test",
+    "step5": "Run: .\\setup-github-automated.ps1 to apply for real"
+  }
+}

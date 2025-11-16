@@ -1,0 +1,349 @@
+{
+  "dashboard": {
+    "title": "Multi-Region Deployment Overview",
+    "tags": ["deployment", "multi-region", "canary"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "🌍 Global Traffic Distribution",
+        "type": "geomap",
+        "gridPos": {"x": 0, "y": 0, "w": 24, "h": 8},
+        "targets": [
+          {
+            "expr": "sum by (region) (rate(http_requests_total[5m]))",
+            "legendFormat": "{{region}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 1000, "color": "yellow"},
+                {"value": 5000, "color": "red"}
+              ]
+            },
+            "color": {"mode": "thresholds"},
+            "unit": "reqps"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Error Rate by Region",
+        "type": "timeseries",
+        "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "error_rate_percent{region=\"us-east\"}",
+            "legendFormat": "🇺🇸 US East"
+          },
+          {
+            "expr": "error_rate_percent{region=\"eu-west\"}",
+            "legendFormat": "🇪🇺 EU West"
+          },
+          {
+            "expr": "error_rate_percent{region=\"apac-se\"}",
+            "legendFormat": "🌏 APAC Southeast"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 10,
+              "showPoints": "auto"
+            },
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 0.5, "color": "yellow"},
+                {"value": 1.0, "color": "red"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "legend": {"displayMode": "table", "placement": "bottom"},
+          "tooltip": {"mode": "multi"}
+        }
+      },
+      {
+        "id": 3,
+        "title": "P95 Latency by Region",
+        "type": "timeseries",
+        "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{region=\"us-east\"}[5m])) * 1000",
+            "legendFormat": "🇺🇸 US East"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{region=\"eu-west\"}[5m])) * 1000",
+            "legendFormat": "🇪🇺 EU West"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{region=\"apac-se\"}[5m])) * 1000",
+            "legendFormat": "🌏 APAC Southeast"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 300, "color": "yellow"},
+                {"value": 500, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "🔄 Deployment Status - US East",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 16, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "traffic_distribution_percent{region=\"us-east\",environment=\"green\"}",
+            "legendFormat": "Green"
+          },
+          {
+            "expr": "traffic_distribution_percent{region=\"us-east\",environment=\"blue\"}",
+            "legendFormat": "Blue"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "blue"},
+                {"value": 50, "color": "yellow"},
+                {"value": 100, "color": "green"}
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "orientation": "horizontal",
+          "textMode": "value_and_name"
+        }
+      },
+      {
+        "id": 5,
+        "title": "🔄 Deployment Status - EU West",
+        "type": "stat",
+        "gridPos": {"x": 8, "y": 16, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "traffic_distribution_percent{region=\"eu-west\",environment=\"green\"}",
+            "legendFormat": "Green"
+          },
+          {
+            "expr": "traffic_distribution_percent{region=\"eu-west\",environment=\"blue\"}",
+            "legendFormat": "Blue"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "blue"},
+                {"value": 50, "color": "yellow"},
+                {"value": 100, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "🔄 Deployment Status - APAC Southeast",
+        "type": "stat",
+        "gridPos": {"x": 16, "y": 16, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "traffic_distribution_percent{region=\"apac-se\",environment=\"green\"}",
+            "legendFormat": "Green"
+          },
+          {
+            "expr": "traffic_distribution_percent{region=\"apac-se\",environment=\"blue\"}",
+            "legendFormat": "Blue"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "blue"},
+                {"value": 50, "color": "yellow"},
+                {"value": 100, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "CPU Usage by Region",
+        "type": "gauge",
+        "gridPos": {"x": 0, "y": 22, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "system_cpu_usage_percent{region=\"us-east\",droplet=\"green\"}",
+            "legendFormat": "🇺🇸 US East"
+          },
+          {
+            "expr": "system_cpu_usage_percent{region=\"eu-west\",droplet=\"green\"}",
+            "legendFormat": "🇪🇺 EU West"
+          },
+          {
+            "expr": "system_cpu_usage_percent{region=\"apac-se\",droplet=\"green\"}",
+            "legendFormat": "🌏 APAC SE"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 70, "color": "yellow"},
+                {"value": 85, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Memory Usage by Region",
+        "type": "gauge",
+        "gridPos": {"x": 12, "y": 22, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "system_memory_usage_percent{region=\"us-east\",droplet=\"green\"}",
+            "legendFormat": "🇺🇸 US East"
+          },
+          {
+            "expr": "system_memory_usage_percent{region=\"eu-west\",droplet=\"green\"}",
+            "legendFormat": "🇪🇺 EU West"
+          },
+          {
+            "expr": "system_memory_usage_percent{region=\"apac-se\",droplet=\"green\"}",
+            "legendFormat": "🌏 APAC SE"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": null, "color": "green"},
+                {"value": 80, "color": "yellow"},
+                {"value": 90, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "Request Rate by Region",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 28, "w": 24, "h": 8},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{region=\"us-east\"}[5m])",
+            "legendFormat": "🇺🇸 US East"
+          },
+          {
+            "expr": "rate(http_requests_total{region=\"eu-west\"}[5m])",
+            "legendFormat": "🇪🇺 EU West"
+          },
+          {
+            "expr": "rate(http_requests_total{region=\"apac-se\"}[5m])",
+            "legendFormat": "🌏 APAC SE"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "reqps"
+          }
+        },
+        "legend": {"show": true, "alignAsTable": true, "avg": true, "current": true, "max": true}
+      },
+      {
+        "id": 10,
+        "title": "Canary Deployment Progress",
+        "type": "timeseries",
+        "gridPos": {"x": 0, "y": 36, "w": 24, "h": 8},
+        "targets": [
+          {
+            "expr": "deployment_traffic_percent{region=\"us-east\",environment=\"green\"}",
+            "legendFormat": "🇺🇸 US East - Green %"
+          },
+          {
+            "expr": "deployment_traffic_percent{region=\"eu-west\",environment=\"green\"}",
+            "legendFormat": "🇪🇺 EU West - Green %"
+          },
+          {
+            "expr": "deployment_traffic_percent{region=\"apac-se\",environment=\"green\"}",
+            "legendFormat": "🌏 APAC SE - Green %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": {
+              "stacking": {"mode": "none"},
+              "fillOpacity": 20
+            }
+          }
+        },
+        "options": {
+          "legend": {"displayMode": "table", "placement": "right", "showLegend": true}
+        }
+      }
+    ]
+  }
+}
