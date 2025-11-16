@@ -109,7 +109,7 @@ export default function RateLimitsPage() {
       const response = await adminApi.get(
         `/admin/rate-limits?group=${selectedGroup}&limit=50`
       );
-      setData(response);
+      setData(response.data);
     } catch (error: any) {
       console.error("Failed to fetch rate limits:", error);
       toast.error(error.message || "Failed to fetch rate limit data");
@@ -123,7 +123,7 @@ export default function RateLimitsPage() {
       const response = await adminApi.get(
         `/admin/global-trends?group=${selectedGroup}&minutesBack=60`
       );
-      setGlobalTrends(response);
+      setGlobalTrends(response.data);
     } catch (error: any) {
       console.error("Failed to fetch global trends:", error);
     }
@@ -136,7 +136,7 @@ export default function RateLimitsPage() {
       const response = await adminApi.get(
         `/admin/rate-limit-trends?group=${selectedGroup}&identifier=${selectedOffender}&minutesBack=60`
       );
-      setOffenderTrends(response);
+      setOffenderTrends(response.data);
     } catch (error: any) {
       console.error("Failed to fetch offender trends:", error);
     }
