@@ -3,12 +3,13 @@
  */
 
 // Layout Components
-export { default as SidebarLayout } from './SidebarLayout';
+export { default as SidebarLayout } from "./SidebarLayout";
 
-// Auth & Role Components  
-export { default as RequireRole } from './RequireRole';
+// Auth & Role Components
+export { default as RequireRole } from "./RequireRole";
 
 // Admin Components
-export { default as CryptoAdminPanel } from './CryptoAdminPanel';
-export { default as AdminTransactionTable } from './admin/AdminTransactionTable';
-export { default as SilentModeSwitch } from './admin/SilentModeSwitch';
+export { default as AdminTransactionTable } from "./admin/AdminTransactionTable";
+export { default as SilentModeSwitch } from "./admin/SilentModeSwitch";
+export { default as AdminNav } from "./AdminNav";
+export { default as CryptoAdminPanel } from "./CryptoAdminPanel";
