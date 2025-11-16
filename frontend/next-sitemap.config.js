@@ -1,19 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
   siteUrl: process.env.SITE_URL || "https://advanciapayledger.com",
-  generateRobotsTxt: true,
-  robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin", "/api", "/dashboard"],
-      },
-    ],
-    additionalSitemaps: [
-      `${process.env.SITE_URL || "https://advanciapayledger.com"}/sitemap.xml`,
-    ],
-  },
+  generateRobotsTxt: false, // Disabled robots.txt generation
   exclude: [
     "/admin/*",
     "/api/*",
