@@ -327,3 +327,6 @@ scripts/logs/*.txt
 # GitHub configuration with secrets
 github-config.json
 
+
+# npm lockfiles (using pnpm)
+package-lock.json
