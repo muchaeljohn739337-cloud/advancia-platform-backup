@@ -1,5 +1,5 @@
 import express from "express";
-import { config } from "../jobs/config";
+import { config } from "../jobs/config/index";
 
 const router = express.Router();
 
