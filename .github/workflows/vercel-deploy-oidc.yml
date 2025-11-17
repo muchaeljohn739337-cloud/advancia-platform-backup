@@ -1,18 +1,4 @@
-# View recent deployment logs
-az webapp log deployment show --name AdvanciaCoreApp --resource-group AdvanciaRG
-
-# Download logs to a file
-az webapp log download --name AdvanciaCoreApp --resource-group AdvanciaRG --log-file azure-logs.zip
-
-# View specific log types
-az webapp log show --name AdvanciaCoreApp --resource-group AdvanciaRG# View recent deployment logs
-az webapp log deployment show --name AdvanciaCoreApp --resource-group AdvanciaRG
-
-# Download logs to a file
-az webapp log download --name AdvanciaCoreApp --resource-group AdvanciaRG --log-file azure-logs.zip
-
-# View specific log types
-az webapp log show --name AdvanciaCoreApp --resource-group AdvanciaRGname: Deploy to Vercel with OIDC
+name: Deploy to Vercel with OIDC
 
 on:
   push:
@@ -37,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: ${{ steps.deploy.outputs.url }}
+      url: $${{ steps.deploy.outputs.url }}
 
     steps:
       - name: Checkout code
@@ -56,15 +42,15 @@ jobs:
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
-        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+        run: echo "STORE_PATH=$$(pnpm store path)" >> $$GITHUB_OUTPUT
 
       - name: Setup pnpm cache
         uses: actions/cache@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: $${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: $${{ runner.os }}-pnpm-store-$${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            $${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
         working-directory: frontend
@@ -73,16 +59,16 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
-          NEXT_PUBLIC_SOCKET_URL: ${{ secrets.NEXT_PUBLIC_SOCKET_URL }}
+          NEXT_PUBLIC_API_URL: $${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_API_KEY: $${{ secrets.NEXT_PUBLIC_API_KEY }}
+          NEXT_PUBLIC_SOCKET_URL: $${{ secrets.NEXT_PUBLIC_SOCKET_URL }}
         run: pnpm build
 
       - name: Configure AWS credentials for OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsVercelDeploy
-          role-session-name: vercel-deploy-${{ github.run_id }}
+          role-to-assume: arn:aws:iam::$${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsVercelDeploy
+          role-session-name: vercel-deploy-$${{ github.run_id }}
           aws-region: us-east-1
         continue-on-error: true
 
@@ -100,13 +86,13 @@ jobs:
         id: deploy
         uses: amondnet/vercel-action@v25
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-token: $${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: $${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: $${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: frontend
-          vercel-args: ${{ github.ref == 'refs/heads/main' && '--prod' || '' }}
+          vercel-args: $${{ github.ref == 'refs/heads/main' && '--prod' || '' }}
           scope: advanciapayledger
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: $${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment deployment URL
         if: github.event_name == 'pull_request'
@@ -117,11 +103,11 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 Frontend deployed to Vercel!\n\n**Preview URL:** ${{ steps.deploy.outputs.preview-url }}`
+              body: `🚀 Frontend deployed to Vercel!\n\n**Preview URL:** $${{ steps.deploy.outputs.preview-url }}`
             })
 
       - name: Deployment status
         run: |
           echo "✅ Deployment completed successfully!"
-          echo "🌐 URL: ${{ steps.deploy.outputs.url }}"
-          echo "📦 Environment: ${{ github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}"
+          echo "🌐 URL: $${{ steps.deploy.outputs.url }}"
+          echo "📦 Environment: $${{ github.ref == 'refs/heads/main' && 'Production' || 'Preview' }}"
