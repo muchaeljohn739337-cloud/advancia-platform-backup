@@ -117,6 +117,11 @@ app.use(validateInput);
 app.use(activityLogger);
 app.use("/api", rateLimit({ windowMs: 60_000, maxRequests: 300 }));
 
+// Root health check endpoint (for load balancers/monitoring - no /api prefix)
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 // Health check endpoint (critical for production monitoring)
 app.use("/api", healthRouter);
 app.use("/api", statusRouter);
