@@ -1,4 +1,18 @@
-name: Deploy to Vercel with OIDC
+# View recent deployment logs
+az webapp log deployment show --name AdvanciaCoreApp --resource-group AdvanciaRG
+
+# Download logs to a file
+az webapp log download --name AdvanciaCoreApp --resource-group AdvanciaRG --log-file azure-logs.zip
+
+# View specific log types
+az webapp log show --name AdvanciaCoreApp --resource-group AdvanciaRG# View recent deployment logs
+az webapp log deployment show --name AdvanciaCoreApp --resource-group AdvanciaRG
+
+# Download logs to a file
+az webapp log download --name AdvanciaCoreApp --resource-group AdvanciaRG --log-file azure-logs.zip
+
+# View specific log types
+az webapp log show --name AdvanciaCoreApp --resource-group AdvanciaRGname: Deploy to Vercel with OIDC
 
 on:
   push:
