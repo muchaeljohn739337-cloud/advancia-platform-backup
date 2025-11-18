@@ -17,7 +17,7 @@ lerna-debug.log*
 .pnpm-debug.log*
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
+# pnpm-lock.yaml - MUST be committed for CI to work with --frozen-lockfile
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Build Outputs & Distribution
