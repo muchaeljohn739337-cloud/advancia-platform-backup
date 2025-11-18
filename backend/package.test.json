@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "test": "mocha test/**/*.test.js --timeout 10000 --exit",
+    "test:unit": "mocha test/wallet-unit.test.js --timeout 5000 --exit",
+    "test:integration": "mocha test/wallet-integration.test.js --timeout 15000 --exit",
+    "test:watch": "mocha test/**/*.test.js --watch --timeout 10000"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.10",
+    "axios": "^1.6.0"
+  }
+}
