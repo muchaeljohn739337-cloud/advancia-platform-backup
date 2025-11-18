@@ -133,6 +133,12 @@ jobs:
       API_KEY: test-api-key-ci
       NEXT_PUBLIC_API_URL: https://api.advanciapayledger.com
       NEXT_PUBLIC_API_KEY: dev-api-key-123
+      # Wallet system test variables (dummy values for CI)
+      WALLET_MASTER_SEED: "test seed word one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour"
+      WALLET_ENCRYPTION_KEY: "dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcw=="
+      ADMIN_BTC_WALLET_ADDRESS: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+      ADMIN_ETH_WALLET_ADDRESS: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+      ADMIN_USDT_WALLET_ADDRESS: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -168,6 +174,12 @@ jobs:
       - name: Run Backend Tests with Coverage
         run: npm run test:coverage
         working-directory: backend
+
+      # Run wallet unit tests specifically
+      - name: Run Wallet Unit Tests
+        run: npx mocha test/wallet-unit.test.js --timeout 5000 --exit
+        working-directory: backend
+        continue-on-error: false
 
       # Run frontend tests with coverage
       - name: Run Frontend Tests with Coverage
