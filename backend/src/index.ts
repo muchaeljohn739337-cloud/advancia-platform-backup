@@ -215,6 +215,7 @@ app.use("/api/withdrawals", withdrawalsRouter);
 app.use("/api/tokens", tokensRouter);
 app.use("/api/wallets", walletsRouter); // Custodial HD wallets (BTC/ETH/USDT)
 app.use("/api/prices", pricesRouter); // Multi-provider price service (CoinGecko + Binance)
+app.use("/api/trust-score", trustScoreRouter); // User trust & reputation system
 // app.use("/api/tokens", authenticateToken, tokensEnhancedRouter); // Enhanced token features
 // app.use("/api/crypto", authenticateToken, cryptoEnhancedRouter); // Crypto charts & swap (RE-ENABLED)
 // app.use("/api/cryptomus", cryptomusRouter); // Cryptomus payment processing
