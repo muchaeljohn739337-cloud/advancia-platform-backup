@@ -39,6 +39,7 @@
     "tailwindcss": "^3.4.4"
   },
   "devDependencies": {
+    "typescript": "^5.6.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.1",
     "@types/nodemailer": "^7.0.3",

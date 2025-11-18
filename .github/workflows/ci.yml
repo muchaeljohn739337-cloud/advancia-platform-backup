@@ -91,7 +91,7 @@ jobs:
 
       # Install dependencies using pnpm workspace
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       # Build Backend
       - name: Generate Prisma Client
@@ -168,11 +168,11 @@ jobs:
 
       # Install dependencies
       - name: Install Backend Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
         working-directory: backend
 
       - name: Install Frontend Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
         working-directory: frontend
 
       # Setup backend

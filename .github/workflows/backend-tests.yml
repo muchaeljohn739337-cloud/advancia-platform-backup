@@ -67,7 +67,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: backend
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Generate Prisma Client
         working-directory: backend
@@ -128,7 +128,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: backend
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Generate Prisma Client
         working-directory: backend

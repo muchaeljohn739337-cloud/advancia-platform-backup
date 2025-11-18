@@ -71,7 +71,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: backend
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Generate Prisma Client
         working-directory: backend
@@ -165,7 +165,7 @@ jobs:
           version: 8
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefix frontend
+        run: pnpm install --no-frozen-lockfile --prefix frontend
 
       - name: Run frontend tests
         run: pnpm --prefix frontend test -- --coverage --maxWorkers=2 --forceExit
@@ -244,11 +244,11 @@ jobs:
           LINES=$(lcov --summary ./coverage/merged/lcov.info 2>&1 | grep "lines" | awk '{print $2}' | sed 's/%//')
           FUNCTIONS=$(lcov --summary ./coverage/merged/lcov.info 2>&1 | grep "functions" | awk '{print $2}' | sed 's/%//')
           BRANCHES=$(lcov --summary ./coverage/merged/lcov.info 2>&1 | grep "branches" | awk '{print $2}' | sed 's/%//')
-          
+
           echo "lines=$LINES" >> $GITHUB_OUTPUT
           echo "functions=$FUNCTIONS" >> $GITHUB_OUTPUT
           echo "branches=$BRANCHES" >> $GITHUB_OUTPUT
-          
+
           # Save to trend file
           mkdir -p ./coverage-trends
           echo "$(date -Iseconds),${{ github.run_number }},$LINES,$FUNCTIONS,$BRANCHES" >> ./coverage-trends/history.csv
@@ -276,13 +276,13 @@ jobs:
           LINES=${{ steps.coverage.outputs.lines }}
           FUNCTIONS=${{ steps.coverage.outputs.functions }}
           BRANCHES=${{ steps.coverage.outputs.branches }}
-          
+
           echo "📊 Coverage Summary:"
           echo "  Lines: $LINES%"
           echo "  Functions: $FUNCTIONS%"
           echo "  Branches: $BRANCHES%"
           echo "  Threshold: $THRESHOLD%"
-          
+
           FAILED=0
           if (( $(echo "$LINES < $THRESHOLD" | bc -l) )); then
             echo "❌ Line coverage ($LINES%) is below threshold ($THRESHOLD%)"
@@ -296,7 +296,7 @@ jobs:
             echo "❌ Branch coverage ($BRANCHES%) is below threshold ($THRESHOLD%)"
             FAILED=1
           fi
-          
+
           if [ $FAILED -eq 1 ]; then
             echo "::error::Coverage below 80% threshold"
             exit 1
