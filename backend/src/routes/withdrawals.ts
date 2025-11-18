@@ -75,10 +75,10 @@ router.post(
         balanceType.toUpperCase() === "USD"
           ? "usdBalance"
           : balanceType.toUpperCase() === "BTC"
-            ? "btcBalance"
-            : balanceType.toUpperCase() === "ETH"
-              ? "ethBalance"
-              : "usdtBalance";
+          ? "btcBalance"
+          : balanceType.toUpperCase() === "ETH"
+          ? "ethBalance"
+          : "usdtBalance";
 
       // Check if user has sufficient balance
       if (user[balanceField].toNumber() < amountNum) {
@@ -298,10 +298,10 @@ router.patch(
         withdrawal.cryptoType === "USD"
           ? "usdBalance"
           : withdrawal.cryptoType === "BTC"
-            ? "btcBalance"
-            : withdrawal.cryptoType === "ETH"
-              ? "ethBalance"
-              : "usdtBalance";
+          ? "btcBalance"
+          : withdrawal.cryptoType === "ETH"
+          ? "ethBalance"
+          : "usdtBalance";
 
       if (action === "approve") {
         // Update withdrawal to approved/completed
