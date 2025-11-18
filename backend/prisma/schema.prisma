@@ -150,6 +150,7 @@ model AuditLog {
   previousValues Json?
   newValues      Json?
   metadata       Json?
+  details        Json? // Additional details for complex operations
   ipAddress      String?
   userAgent      String?
   timestamp      DateTime @default(now())
@@ -316,14 +317,17 @@ model CryptoOrder {
 }
 
 model CryptoWallet {
-  id        String   @id @default(uuid())
-  userId    String
-  currency  String   // BTC, ETH, USDT
-  balance   Decimal  @default(0)
-  address   String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String   @id @default(uuid())
+  userId        String
+  currency      String   // BTC, ETH, USDT
+  balance       Decimal  @default(0)
+  lockedBalance Decimal  @default(0) // Balance locked in pending withdrawals
+  totalIn       Decimal  @default(0) // Total deposits
+  totalOut      Decimal  @default(0) // Total withdrawals
+  address       String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, currency])
   @@index([userId])
@@ -332,29 +336,36 @@ model CryptoWallet {
 }
 
 model CryptoWithdrawal {
-  id                String    @id @default(uuid())
-  userId            String
-  cryptoType        String
-  cryptoAmount      Decimal
-  usdEquivalent     Decimal
-  withdrawalAddress String
-  status            String    @default("pending")
-  adminApprovedBy   String?
-  adminNotes        String?
-  txHash            String?
-  networkFee        Decimal?
-  approvedAt        DateTime?
-  rejectedAt        DateTime?
-  completedAt       DateTime?
-  cancelledAt       DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  user_notes        String?
-  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                   String    @id @default(uuid())
+  userId               String
+  cryptoType           String // Legacy field (kept for backward compatibility)
+  currency             String // BTC, ETH, USDT
+  amount               Decimal // Withdrawal amount
+  cryptoAmount         Decimal
+  usdEquivalent        Decimal
+  withdrawalAddress    String // Legacy field
+  destinationAddress   String // Destination address
+  status               String    @default("pending")
+  adminApprovedBy      String?
+  approvedBy           String? // Admin who approved
+  adminNotes           String?
+  txHash               String?
+  networkFee           Decimal?
+  requestedAt          DateTime  @default(now())
+  approvedAt           DateTime?
+  rejectedAt           DateTime?
+  completedAt          DateTime?
+  cancelledAt          DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  user_notes           String?
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([status])
   @@index([cryptoType])
+  @@index([currency])
+  @@index([requestedAt])
   @@index([createdAt])
   @@map("crypto_withdrawals")
 }
@@ -896,13 +907,19 @@ model CryptoPayments {
 }
 
 model AdminWallet {
-  id          String   @id @default(uuid())
-  currency    String   // USD, BTC, ETH, USDT, etc.
-  balance     Decimal  @default(0)
-  totalIn     Decimal  @default(0)  // Total received
-  totalOut    Decimal  @default(0)  // Total credited to users
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(uuid())
+  currency        String   // USD, BTC, ETH, USDT, etc.
+  balance         Decimal  @default(0)
+  totalIn         Decimal  @default(0)  // Total received
+  totalOut        Decimal  @default(0)  // Total credited to users
+  
+  // Default wallet address for receiving/sending crypto
+  walletAddress   String?  // e.g., BTC: 1A1z..., ETH: 0x742d..., USDT: 0x742d...
+  walletProvider  String?  // e.g., "Coinbase", "Binance", "Hardware Wallet", "MetaMask"
+  walletNotes     String?  // Internal notes about this wallet
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   transactions AdminWalletTransaction[]
 
@@ -1117,4 +1134,216 @@ model PolicyAuditLog {
   @@index([timestamp])
   @@index([entryHash])
   @@map("policy_audit_logs")
+}
+
+// ============================================================================
+// FINTECH PAYMENT & WITHDRAWAL SYSTEM MODELS
+// ============================================================================
+
+model PaymentSession {
+  id            String    @id @default(uuid())
+  sessionId     String    @unique // DEP-98271-AHSKD format
+  userId        String
+  amount        Decimal
+  currency      String    @default("USD")
+  paymentMethod String    // stripe, coinbase, paystack, flutterwave, cryptomus
+  provider      String?   // actual provider used
+  status        String    @default("pending") // pending, completed, failed, expired, cancelled
+  redirectUrl   String?
+  callbackUrl   String?
+  metadata      Json?     // custom order data
+  expiresAt     DateTime
+  completedAt   DateTime?
+  failedReason  String?
+  transactionId String?   // Link to Transaction model when completed
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([status])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("payment_sessions")
+}
+
+model KYCVerification {
+  id                   String    @id @default(uuid())
+  userId               String    @unique
+  kycLevel             Int       @default(0) // 0 = no KYC, 1 = basic, 2 = full
+  status               String    @default("not_started") // not_started, pending, approved, rejected, expired
+  firstName            String?
+  lastName             String?
+  dateOfBirth          DateTime?
+  nationality          String?
+  idDocumentType       String?   // passport, drivers_license, national_id, residence_permit
+  idDocumentNumber     String?
+  idDocumentFront      String?   // S3 URL or file path
+  idDocumentBack       String?   // S3 URL or file path
+  selfieImage          String?   // S3 URL - selfie with ID
+  addressProof         String?   // Utility bill, bank statement
+  addressLine1         String?
+  addressLine2         String?
+  city                 String?
+  state                String?
+  postalCode           String?
+  country              String?
+  phoneNumber          String?
+  verifiedAt           DateTime?
+  verifiedBy           String?   // Admin user ID
+  rejectedAt           DateTime?
+  rejectionReason      String?
+  submittedAt          DateTime?
+  dailyWithdrawLimit   Decimal   @default(100) // Level 0: $100
+  monthlyWithdrawLimit Decimal   @default(1000) // Level 0: $1K
+  lifetimeLimit        Decimal   @default(10000) // Level 0: $10K
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([kycLevel])
+  @@index([status])
+  @@index([verifiedAt])
+  @@map("kyc_verifications")
+}
+
+model FraudAlert {
+  id          String    @id @default(uuid())
+  userId      String
+  alertType   String    // velocity_exceeded, ip_suspicious, failed_payments, pattern_detected, duplicate_withdrawal, unusual_amount
+  severity    String    // low, medium, high, critical
+  description String
+  metadata    Json?
+  ipAddress   String?
+  resolved    Boolean   @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?   // Admin user ID
+  actionTaken String?   // account_locked, transaction_blocked, manual_review, warning_sent, account_suspended
+  notes       String?   // Admin notes
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])
+  @@index([alertType])
+  @@index([severity])
+  @@index([resolved])
+  @@index([createdAt])
+  @@map("fraud_alerts")
+}
+
+model IPReputation {
+  id          String   @id @default(uuid())
+  ipAddress   String   @unique
+  riskScore   Int      @default(0) // 0-100
+  isVPN       Boolean  @default(false)
+  isProxy     Boolean  @default(false)
+  isTor       Boolean  @default(false)
+  isHosting   Boolean  @default(false) // Datacenter/hosting IP
+  country     String?
+  city        String?
+  isp         String?
+  blacklisted Boolean  @default(false)
+  whitelisted Boolean  @default(false)
+  notes       String?
+  lastChecked DateTime @default(now())
+  checkCount  Int      @default(1) // How many times this IP was checked
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([ipAddress])
+  @@index([blacklisted])
+  @@index([riskScore])
+  @@map("ip_reputations")
+}
+
+model TransactionFee {
+  id         String   @id @default(uuid())
+  feeType    String   // deposit_fee, withdrawal_fee, trading_fee, network_fee, conversion_fee
+  currency   String?  // USD, BTC, ETH, USDT, null = applies to all
+  feePercent Decimal  @default(0) // Percentage fee (e.g., 1.5 for 1.5%)
+  flatFee    Decimal  @default(0) // Fixed fee amount
+  minFee     Decimal  @default(0) // Minimum fee to charge
+  maxFee     Decimal? // Optional cap
+  active     Boolean  @default(true)
+  priority   Int      @default(0) // Higher priority rules override lower
+  description String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  createdBy  String?  // Admin user ID
+
+  @@index([feeType])
+  @@index([currency])
+  @@index([active])
+  @@index([priority])
+  @@map("transaction_fees")
+}
+
+model FeeRevenue {
+  id              String   @id @default(uuid())
+  transactionId   String   @unique
+  transactionType String   // deposit, withdrawal, trade, conversion
+  userId          String
+  baseCurrency    String
+  baseAmount      Decimal
+  feePercent      Decimal
+  flatFee         Decimal
+  totalFee        Decimal
+  netAmount       Decimal  // Amount after fee deduction
+  revenueUSD      Decimal  // Fee converted to USD for reporting
+  feeRuleId       String?  // Link to TransactionFee rule used
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([transactionType])
+  @@index([createdAt])
+  @@index([baseCurrency])
+  @@map("fee_revenues")
+}
+
+model AdminMessage {
+  id          String    @id @default(uuid())
+  userId      String    // Target user
+  fromAdminId String    // Admin who sent message
+  fromAdmin   String    // Admin username/email for display
+  toUserId    String?   // If user replies, this becomes a thread
+  subject     String?
+  message     String
+  attachments Json?     // Array of file URLs
+  priority    String    @default("normal") // low, normal, high, urgent
+  category    String?   // billing, technical, kyc, withdrawal, general
+  isRead      Boolean   @default(false)
+  readAt      DateTime?
+  repliedTo   String?   // Parent message ID if this is a reply
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([fromAdminId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([repliedTo])
+  @@map("admin_messages")
+}
+
+model WithdrawalQueue {
+  id             String    @id @default(uuid())
+  withdrawalId   String    @unique // Link to CryptoWithdrawal
+  userId         String
+  cryptoType     String
+  amount         Decimal
+  priority       Int       @default(0) // Higher = process first
+  status         String    @default("queued") // queued, processing, completed, failed
+  attemptCount   Int       @default(0)
+  lastAttemptAt  DateTime?
+  errorMessage   String?
+  assignedTo     String?   // Admin user ID processing this
+  estimatedTime  DateTime? // When it will be processed
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([withdrawalId])
+  @@index([userId])
+  @@index([status])
+  @@index([priority])
+  @@index([estimatedTime])
+  @@map("withdrawal_queue")
 }

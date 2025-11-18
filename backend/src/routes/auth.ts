@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import express from "express";
 import jwt from "jsonwebtoken";
 import * as nodemailer from "nodemailer";
@@ -13,6 +12,11 @@ import {
   notifyAllAdmins,
 } from "../services/notificationService";
 import { getRedis } from "../services/redisClient";
+import {
+  hashPassword,
+  migratePasswordIfNeeded,
+  verifyPassword,
+} from "../utils/password";
 
 const router = express.Router();
 
@@ -37,7 +41,7 @@ router.post("/register", requireApiKey, async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await hashPassword(password);
     const user = await prisma.user.create({
       data: {
         email,
@@ -62,6 +66,18 @@ router.post("/register", requireApiKey, async (req, res) => {
         updatedAt: new Date(),
       },
     });
+
+    // Initialize custodial wallets (BTC, ETH, USDT) for new user
+    try {
+      const { initializeUserWallets } = await import(
+        "../services/custodialWalletService.js"
+      );
+      await initializeUserWallets(user.id);
+      console.log(`✅ Custodial wallets initialized for user ${user.id}`);
+    } catch (walletErr) {
+      console.error("⚠️ Failed to initialize user wallets:", walletErr);
+      // Don't fail registration if wallet initialization fails
+    }
 
     // Create admin notification
     await prisma.adminNotification.create({
@@ -144,9 +160,25 @@ router.post("/login", strictRateLimiter, requireApiKey, async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const valid = await bcrypt.compare(password, user.passwordHash);
+    const valid = await verifyPassword(password, user.passwordHash);
     if (!valid) {
       return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // Optional password hash migration (bcrypt -> argon2)
+    try {
+      const newHash = await migratePasswordIfNeeded(
+        password,
+        user.passwordHash
+      );
+      if (newHash) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { passwordHash: newHash },
+        });
+      }
+    } catch (e) {
+      console.warn("Password migration skipped:", (e as Error)?.message);
     }
 
     if (!user.emailVerified) {
@@ -252,7 +284,7 @@ router.post("/register-doctor", requireApiKey, async (req, res) => {
     }
 
     // Hash password
-    const passwordHash = await bcrypt.hash(data.password, 10);
+    const passwordHash = await hashPassword(data.password);
 
     // Create doctor (status: PENDING by default)
     const doctor = await prisma.doctor.create({
@@ -347,9 +379,28 @@ router.post(
         return res.status(401).json({ error: "Invalid credentials" });
       }
 
-      const valid = await bcrypt.compare(password, doctor.passwordHash);
+      const valid = await verifyPassword(password, doctor.passwordHash);
       if (!valid) {
         return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Optional password hash migration for doctor
+      try {
+        const newHash = await migratePasswordIfNeeded(
+          password,
+          doctor.passwordHash
+        );
+        if (newHash) {
+          await prisma.doctor.update({
+            where: { id: doctor.id },
+            data: { passwordHash: newHash },
+          });
+        }
+      } catch (e) {
+        console.warn(
+          "Doctor password migration skipped:",
+          (e as Error)?.message
+        );
       }
 
       const token = jwt.sign(
@@ -764,7 +815,7 @@ router.post("/reset-password", async (req, res) => {
     }
 
     // Update user password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await hashPassword(newPassword);
     await prisma.user.update({
       where: { id: userId },
       data: { passwordHash: hashedPassword },

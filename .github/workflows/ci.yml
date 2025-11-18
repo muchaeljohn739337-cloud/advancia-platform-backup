@@ -36,11 +36,26 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: "npm"
-          cache-dependency-path: |
-            backend/package-lock.json
-            frontend/package-lock.json
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       # Cache Prisma generated client
       - name: Cache Prisma Client
@@ -69,19 +84,14 @@ jobs:
           path: |
             frontend/.next/cache
             frontend/.next/static
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('frontend/package-lock.json') }}-${{ hashFiles('frontend/**/*.ts', 'frontend/**/*.tsx', 'frontend/**/*.js', 'frontend/**/*.jsx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('frontend/**/*.ts', 'frontend/**/*.tsx', 'frontend/**/*.js', 'frontend/**/*.jsx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('frontend/package-lock.json') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
             ${{ runner.os }}-nextjs-
 
-      # Install dependencies for both
-      - name: Install Backend Dependencies
-        run: npm ci
-        working-directory: backend
-
-      - name: Install Frontend Dependencies
-        run: npm ci
-        working-directory: frontend
+      # Install dependencies using pnpm workspace
+      - name: Install Dependencies
+        run: pnpm install --no-frozen-lockfile
 
       # Build Backend
       - name: Generate Prisma Client
@@ -89,12 +99,12 @@ jobs:
         working-directory: backend
 
       - name: Build Backend
-        run: npm run build
+        run: pnpm run build
         working-directory: backend
 
       # Build Frontend
       - name: Build Frontend
-        run: npm run build
+        run: pnpm run build
         working-directory: frontend
 
   coverage:
@@ -123,6 +133,12 @@ jobs:
       API_KEY: test-api-key-ci
       NEXT_PUBLIC_API_URL: https://api.advanciapayledger.com
       NEXT_PUBLIC_API_KEY: dev-api-key-123
+      # Wallet system test variables (dummy values for CI)
+      WALLET_MASTER_SEED: "test seed word one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour"
+      WALLET_ENCRYPTION_KEY: "dGVzdC1lbmNyeXB0aW9uLWtleS0zMi1ieXRlcw=="
+      ADMIN_BTC_WALLET_ADDRESS: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+      ADMIN_ETH_WALLET_ADDRESS: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+      ADMIN_USDT_WALLET_ADDRESS: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -130,19 +146,33 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: "npm"
-          cache-dependency-path: |
-            backend/package-lock.json
-            frontend/package-lock.json
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       # Install dependencies
       - name: Install Backend Dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
         working-directory: backend
 
       - name: Install Frontend Dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
         working-directory: frontend
 
       # Setup backend
@@ -156,18 +186,24 @@ jobs:
 
       # Run backend tests with coverage
       - name: Run Backend Tests with Coverage
-        run: npm run test:coverage
+        run: pnpm run test:coverage
         working-directory: backend
+
+      # Run wallet unit tests specifically
+      - name: Run Wallet Unit Tests
+        run: npx mocha test/wallet-unit.test.js --timeout 5000 --exit
+        working-directory: backend
+        continue-on-error: false
 
       # Run frontend tests with coverage
       - name: Run Frontend Tests with Coverage
-        run: npm run test -- --coverage
+        run: pnpm run test -- --coverage
         working-directory: frontend
 
       # Merge coverage reports
       - name: Merge Coverage Reports
         run: |
-          npm install -g lcov-result-merger
+          pnpm add -g lcov-result-merger
           lcov-result-merger \
             ./backend/coverage/lcov.info \
             ./frontend/coverage/lcov.info \

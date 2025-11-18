@@ -28,7 +28,7 @@ Write-Host "   Use your GitHub PAT for authentication"
 $ghcrLogin = Read-Host "   Login to GitHub Container Registry? (y/n)"
 if ($ghcrLogin -eq 'y') {
     $ghUsername = Read-Host "   GitHub username"
-    Write-Host "   Use your GitHub PAT (already configured): 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"
+    Write-Host "   Enter your GitHub Personal Access Token (PAT) when prompted"
     docker login ghcr.io -u $ghUsername
 }
 
