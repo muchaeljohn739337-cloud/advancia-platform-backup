@@ -4,14 +4,14 @@
  */
 
 import { Request, Router } from "express";
-import { AuthenticatedRequest, requireAdmin } from "../middleware/rbac.js";
+import { AuthenticatedRequest, requireAdmin } from "../middleware/rbac";
 import {
   detectAnomalies,
   getAllAuditLogs,
   getPolicyAuditHistory,
   getUserAuditLogs,
-} from "../services/policyAuditService.js";
-import { captureError } from "../utils/sentry.js";
+} from "../services/policyAuditService";
+import { captureError } from "../utils/sentry";
 
 const router = Router();
 

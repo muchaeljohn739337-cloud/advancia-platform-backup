@@ -1,17 +1,26 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle, CheckCircle, DollarSign, Loader, X } from "lucide-react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, DollarSign, AlertCircle, CheckCircle, Loader } from "lucide-react";
 
 interface CashoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   availableBalance: number;
-  onCashout: (amount: number, method: string, accountDetails: string) => Promise<void>;
+  onCashout: (
+    amount: number,
+    method: string,
+    accountDetails: string
+  ) => Promise<void>;
 }
 
-export default function CashoutModal({ isOpen, onClose, availableBalance, onCashout }: CashoutModalProps) {
+export default function CashoutModal({
+  isOpen,
+  onClose,
+  availableBalance,
+  onCashout,
+}: CashoutModalProps) {
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState<"bank" | "paypal" | "crypto">("bank");
   const [accountDetails, setAccountDetails] = useState("");
@@ -20,7 +29,7 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
 
   const MINIMUM_CASHOUT = 10; // $10 minimum
   const CASHOUT_FEE_PERCENT = 2; // 2% fee
-  const TOKEN_TO_USD = 0.10; // 1 token = $0.10
+  const TOKEN_TO_USD = 0.1; // 1 token = $0.10
 
   const usdValue = parseFloat(amount || "0") * TOKEN_TO_USD;
   const fee = usdValue * (CASHOUT_FEE_PERCENT / 100);
@@ -31,19 +40,25 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
     setError("");
 
     const tokenAmount = parseFloat(amount);
-    
+
     if (isNaN(tokenAmount) || tokenAmount <= 0) {
       setError("Please enter a valid amount");
       return;
     }
 
     if (tokenAmount > availableBalance) {
-      setError(`Insufficient balance. Available: ${availableBalance.toFixed(2)} tokens`);
+      setError(
+        `Insufficient balance. Available: ${availableBalance.toFixed(2)} tokens`
+      );
       return;
     }
 
     if (usdValue < MINIMUM_CASHOUT) {
-      setError(`Minimum cashout is $${MINIMUM_CASHOUT.toFixed(2)} (${(MINIMUM_CASHOUT / TOKEN_TO_USD).toFixed(0)} tokens)`);
+      setError(
+        `Minimum cashout is $${MINIMUM_CASHOUT.toFixed(2)} (${(
+          MINIMUM_CASHOUT / TOKEN_TO_USD
+        ).toFixed(0)} tokens)`
+      );
       return;
     }
 
@@ -93,7 +108,7 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 20 }}
             className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white">
@@ -104,7 +119,9 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold">Cash Out</h2>
-                    <p className="text-green-100 text-sm">Convert tokens to real money</p>
+                    <p className="text-green-100 text-sm">
+                      Convert tokens to real money
+                    </p>
                   </div>
                 </div>
                 <button
@@ -120,9 +137,12 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               {/* Available Balance */}
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200">
-                <p className="text-sm text-green-700 font-semibold mb-1">Available Balance</p>
+                <p className="text-sm text-green-700 font-semibold mb-1">
+                  Available Balance
+                </p>
                 <p className="text-3xl font-bold text-green-900">
-                  {availableBalance.toFixed(2)} <span className="text-lg">ADV</span>
+                  {availableBalance.toFixed(2)}{" "}
+                  <span className="text-lg">ADV</span>
                 </p>
                 <p className="text-sm text-green-600 mt-1">
                   ≈ ${(availableBalance * TOKEN_TO_USD).toFixed(2)} USD
@@ -182,7 +202,11 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
               {/* Account Details */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {method === "bank" ? "Bank Account" : method === "paypal" ? "PayPal Email" : "Crypto Wallet"}
+                  {method === "bank"
+                    ? "Bank Account"
+                    : method === "paypal"
+                    ? "PayPal Email"
+                    : "Crypto Wallet"}
                 </label>
                 <input
                   type="text"
@@ -202,11 +226,15 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
                 >
                   <div className="flex justify-between">
                     <span className="text-gray-600">Token Amount:</span>
-                    <span className="font-semibold text-gray-900">{parseFloat(amount).toFixed(2)} ADV</span>
+                    <span className="font-semibold text-gray-900">
+                      {parseFloat(amount).toFixed(2)} ADV
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">USD Value:</span>
-                    <span className="font-semibold text-gray-900">${usdValue.toFixed(2)}</span>
+                    <span className="font-semibold text-gray-900">
+                      ${usdValue.toFixed(2)}
+                    </span>
                   </div>
                   <div className="flex justify-between text-red-600">
                     <span>Processing Fee ({CASHOUT_FEE_PERCENT}%):</span>
@@ -214,7 +242,9 @@ export default function CashoutModal({ isOpen, onClose, availableBalance, onCash
                   </div>
                   <div className="border-t-2 border-gray-300 pt-2 flex justify-between text-lg font-bold">
                     <span className="text-green-700">You Receive:</span>
-                    <span className="text-green-700">${youReceive.toFixed(2)}</span>
+                    <span className="text-green-700">
+                      ${youReceive.toFixed(2)}
+                    </span>
                   </div>
                 </motion.div>
               )}

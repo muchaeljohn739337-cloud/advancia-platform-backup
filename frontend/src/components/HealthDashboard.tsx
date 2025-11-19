@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 
 interface HealthDashboardProps {
   userId: string;
@@ -49,7 +49,9 @@ interface Alert {
 
 export default function HealthDashboard({ userId }: HealthDashboardProps) {
   const [summary, setSummary] = useState<HealthSummary | null>(null);
-  const [latestReading, setLatestReading] = useState<HealthReading | null>(null);
+  const [latestReading, setLatestReading] = useState<HealthReading | null>(
+    null
+  );
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddReading, setShowAddReading] = useState(false);
@@ -64,14 +66,19 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
     oxygenLevel: "",
     mood: "good",
   });
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const fetchSummary = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/health/summary/${userId}?days=30`);
+      const res = await fetch(
+        `http://localhost:4000/api/health/summary/${userId}?days=30`
+      );
       const data = await res.json();
       // Ensure data is a valid summary object
-      if (data && typeof data === 'object' && data.averages) {
+      if (data && typeof data === "object" && data.averages) {
         setSummary(data);
       } else {
         setSummary(null);
@@ -86,10 +93,12 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
 
   const fetchLatestReading = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/health/latest/${userId}`);
+      const res = await fetch(
+        `http://localhost:4000/api/health/latest/${userId}`
+      );
       const data = await res.json();
       // Ensure reading exists and has required properties
-      if (data && data.reading && typeof data.reading === 'object') {
+      if (data && data.reading && typeof data.reading === "object") {
         setLatestReading(data.reading);
       } else {
         setLatestReading(null);
@@ -102,7 +111,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
 
   const fetchAlerts = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/health/alerts/${userId}`);
+      const res = await fetch(
+        `http://localhost:4000/api/health/alerts/${userId}`
+      );
       const data = await res.json();
       setAlerts(data.alerts || []);
     } catch (error) {
@@ -157,7 +168,10 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
         fetchAlerts();
         setTimeout(() => setMessage(null), 3000);
       } else {
-        setMessage({ type: "error", text: data.error || "Failed to record data" });
+        setMessage({
+          type: "error",
+          text: data.error || "Failed to record data",
+        });
       }
     } catch (error: unknown) {
       console.error("Error recording health data:", error);
@@ -186,7 +200,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`bg-gradient-to-br ${getHealthScoreColor(summary.healthScore)} rounded-2xl p-8 text-white shadow-2xl`}
+          className={`bg-gradient-to-br ${getHealthScoreColor(
+            summary.healthScore
+          )} rounded-2xl p-8 text-white shadow-2xl`}
         >
           <div className="flex justify-between items-start">
             <div>
@@ -214,7 +230,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className={`p-4 rounded-xl ${
-              message.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+              message.type === "success"
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
             }`}
           >
             {message.text}
@@ -255,7 +273,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">❤️</div>
-              <p className="text-3xl font-bold text-navy">{summary.averages.heartRate}</p>
+              <p className="text-3xl font-bold text-navy">
+                {summary.averages.heartRate}
+              </p>
               <p className="text-sm text-gray-600">Avg Heart Rate</p>
               <p className="text-xs text-gray-400">bpm</p>
             </motion.div>
@@ -269,7 +289,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">🩺</div>
-              <p className="text-3xl font-bold text-navy">{summary.averages.bloodPressure}</p>
+              <p className="text-3xl font-bold text-navy">
+                {summary.averages.bloodPressure}
+              </p>
               <p className="text-sm text-gray-600">Avg Blood Pressure</p>
               <p className="text-xs text-gray-400">mmHg</p>
             </motion.div>
@@ -283,9 +305,13 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">👟</div>
-              <p className="text-3xl font-bold text-navy">{summary.averages.steps.toLocaleString()}</p>
+              <p className="text-3xl font-bold text-navy">
+                {summary.averages.steps.toLocaleString()}
+              </p>
               <p className="text-sm text-gray-600">Avg Daily Steps</p>
-              <p className="text-xs text-gray-400">{summary.averages.totalSteps.toLocaleString()} total</p>
+              <p className="text-xs text-gray-400">
+                {summary.averages.totalSteps.toLocaleString()} total
+              </p>
             </motion.div>
           )}
 
@@ -297,7 +323,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">😴</div>
-              <p className="text-3xl font-bold text-navy">{summary.averages.sleepHours}h</p>
+              <p className="text-3xl font-bold text-navy">
+                {summary.averages.sleepHours}h
+              </p>
               <p className="text-sm text-gray-600">Avg Sleep</p>
               <p className="text-xs text-gray-400">per night</p>
             </motion.div>
@@ -311,7 +339,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">⚖️</div>
-              <p className="text-3xl font-bold text-navy">{summary.averages.weight}</p>
+              <p className="text-3xl font-bold text-navy">
+                {summary.averages.weight}
+              </p>
               <p className="text-sm text-gray-600">Avg Weight</p>
               <p className="text-xs text-gray-400">kg</p>
             </motion.div>
@@ -325,7 +355,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">🫁</div>
-              <p className="text-3xl font-bold text-navy">{summary.averages.oxygenLevel}%</p>
+              <p className="text-3xl font-bold text-navy">
+                {summary.averages.oxygenLevel}%
+              </p>
               <p className="text-sm text-gray-600">Avg Oxygen</p>
               <p className="text-xs text-gray-400">SpO2</p>
             </motion.div>
@@ -339,9 +371,15 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">
-                {summary.mostCommonMood === "great" ? "😄" : summary.mostCommonMood === "good" ? "🙂" : "😐"}
+                {summary.mostCommonMood === "great"
+                  ? "😄"
+                  : summary.mostCommonMood === "good"
+                  ? "🙂"
+                  : "😐"}
               </div>
-              <p className="text-3xl font-bold text-navy capitalize">{summary.mostCommonMood}</p>
+              <p className="text-3xl font-bold text-navy capitalize">
+                {summary.mostCommonMood}
+              </p>
               <p className="text-sm text-gray-600">Common Mood</p>
               <p className="text-xs text-gray-400">this month</p>
             </motion.div>
@@ -365,32 +403,42 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
       {latestReading && (
         <div className="bg-white rounded-2xl p-6 shadow-lg">
           <h3 className="text-xl font-bold text-navy mb-4">Latest Reading</h3>
-          <p className="text-sm text-gray-500 mb-4">{new Date(latestReading.recordedAt).toLocaleString()}</p>
+          <p className="text-sm text-gray-500 mb-4">
+            {new Date(latestReading.recordedAt).toLocaleString()}
+          </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {latestReading.heartRate && (
               <div className="p-3 bg-red-50 rounded-lg">
                 <p className="text-xs text-gray-600">Heart Rate</p>
-                <p className="text-lg font-bold text-navy">{latestReading.heartRate} bpm</p>
-              </div>
-            )}
-            {latestReading.bloodPressureSys && latestReading.bloodPressureDia && (
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <p className="text-xs text-gray-600">Blood Pressure</p>
                 <p className="text-lg font-bold text-navy">
-                  {latestReading.bloodPressureSys}/{latestReading.bloodPressureDia}
+                  {latestReading.heartRate} bpm
                 </p>
               </div>
             )}
+            {latestReading.bloodPressureSys &&
+              latestReading.bloodPressureDia && (
+                <div className="p-3 bg-blue-50 rounded-lg">
+                  <p className="text-xs text-gray-600">Blood Pressure</p>
+                  <p className="text-lg font-bold text-navy">
+                    {latestReading.bloodPressureSys}/
+                    {latestReading.bloodPressureDia}
+                  </p>
+                </div>
+              )}
             {latestReading.steps && (
               <div className="p-3 bg-green-50 rounded-lg">
                 <p className="text-xs text-gray-600">Steps</p>
-                <p className="text-lg font-bold text-navy">{latestReading.steps.toLocaleString()}</p>
+                <p className="text-lg font-bold text-navy">
+                  {latestReading.steps.toLocaleString()}
+                </p>
               </div>
             )}
             {latestReading.oxygenLevel && (
               <div className="p-3 bg-cyan-50 rounded-lg">
                 <p className="text-xs text-gray-600">Oxygen Level</p>
-                <p className="text-lg font-bold text-navy">{latestReading.oxygenLevel}%</p>
+                <p className="text-lg font-bold text-navy">
+                  {latestReading.oxygenLevel}%
+                </p>
               </div>
             )}
           </div>
@@ -412,27 +460,43 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-6">Add Health Reading</h3>
+              <h3 className="text-2xl font-bold text-navy mb-6">
+                Add Health Reading
+              </h3>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Heart Rate (bpm)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Heart Rate (bpm)
+                  </label>
                   <input
                     type="number"
                     value={newReading.heartRate}
-                    onChange={(e) => setNewReading({ ...newReading, heartRate: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({
+                        ...newReading,
+                        heartRate: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="70"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Blood Pressure</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Blood Pressure
+                  </label>
                   <div className="flex gap-2">
                     <input
                       type="number"
                       value={newReading.bloodPressureSys}
-                      onChange={(e) => setNewReading({ ...newReading, bloodPressureSys: e.target.value })}
+                      onChange={(e) =>
+                        setNewReading({
+                          ...newReading,
+                          bloodPressureSys: e.target.value,
+                        })
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                       placeholder="120"
                     />
@@ -440,70 +504,108 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
                     <input
                       type="number"
                       value={newReading.bloodPressureDia}
-                      onChange={(e) => setNewReading({ ...newReading, bloodPressureDia: e.target.value })}
+                      onChange={(e) =>
+                        setNewReading({
+                          ...newReading,
+                          bloodPressureDia: e.target.value,
+                        })
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                       placeholder="80"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Steps</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Steps
+                  </label>
                   <input
                     type="number"
                     value={newReading.steps}
-                    onChange={(e) => setNewReading({ ...newReading, steps: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({ ...newReading, steps: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="8000"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Sleep Hours</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Sleep Hours
+                  </label>
                   <input
                     type="number"
                     step="0.1"
                     value={newReading.sleepHours}
-                    onChange={(e) => setNewReading({ ...newReading, sleepHours: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({
+                        ...newReading,
+                        sleepHours: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="7.5"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Weight (kg)
+                  </label>
                   <input
                     type="number"
                     step="0.1"
                     value={newReading.weight}
-                    onChange={(e) => setNewReading({ ...newReading, weight: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({ ...newReading, weight: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="70.5"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Temperature (°C)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Temperature (°C)
+                  </label>
                   <input
                     type="number"
                     step="0.1"
                     value={newReading.temperature}
-                    onChange={(e) => setNewReading({ ...newReading, temperature: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({
+                        ...newReading,
+                        temperature: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="36.6"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Oxygen Level (%)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Oxygen Level (%)
+                  </label>
                   <input
                     type="number"
                     value={newReading.oxygenLevel}
-                    onChange={(e) => setNewReading({ ...newReading, oxygenLevel: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({
+                        ...newReading,
+                        oxygenLevel: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="98"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Mood</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Mood
+                  </label>
                   <select
                     value={newReading.mood}
-                    onChange={(e) => setNewReading({ ...newReading, mood: e.target.value })}
+                    onChange={(e) =>
+                      setNewReading({ ...newReading, mood: e.target.value })
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                   >
                     <option value="great">😄 Great</option>

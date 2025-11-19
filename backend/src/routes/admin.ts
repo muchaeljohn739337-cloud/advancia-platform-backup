@@ -7,6 +7,12 @@ import {
 } from "../middleware/auth";
 import prisma from "../prismaClient";
 
+// Guard admin logging middleware to avoid crashes if import resolves undefined
+const safeLogAdmin: any =
+  typeof logAdminAction === "function"
+    ? logAdminAction
+    : (_req: any, _res: any, next: any) => next();
+
 const router = express.Router();
 
 // GET /api/admin/doctors - List all doctors with filtering
@@ -93,7 +99,7 @@ router.get("/doctor/:id", adminAuth, async (req, res) => {
 });
 
 // POST /api/admin/doctor/:id/verify - Verify a doctor
-router.post("/doctor/:id/verify", adminAuth, async (req, res) => {
+router.post("/doctor/:id/verify", adminAuth, safeLogAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { adminId } = req.body || {};
@@ -141,44 +147,49 @@ router.post("/doctor/:id/verify", adminAuth, async (req, res) => {
 });
 
 // POST /api/admin/doctor/:id/suspend - Suspend a doctor
-router.post("/doctor/:id/suspend", adminAuth, async (req, res) => {
-  try {
-    const { id } = req.params;
+router.post(
+  "/doctor/:id/suspend",
+  adminAuth,
+  safeLogAdmin,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
 
-    const doctor = await prisma.doctor.findUnique({
-      where: { id },
-      select: { id: true, status: true },
-    });
+      const doctor = await prisma.doctor.findUnique({
+        where: { id },
+        select: { id: true, status: true },
+      });
 
-    if (!doctor) {
-      return res.status(404).json({ error: "Doctor not found" });
+      if (!doctor) {
+        return res.status(404).json({ error: "Doctor not found" });
+      }
+
+      const updated = await prisma.doctor.update({
+        where: { id },
+        data: { status: "SUSPENDED" },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          specialization: true,
+          status: true,
+        },
+      });
+
+      return res.json({
+        message: "Doctor suspended successfully",
+        doctor: updated,
+      });
+    } catch (err) {
+      console.error("Suspend doctor error:", err);
+      return res.status(500).json({ error: "Failed to suspend doctor" });
     }
-
-    const updated = await prisma.doctor.update({
-      where: { id },
-      data: { status: "SUSPENDED" },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        specialization: true,
-        status: true,
-      },
-    });
-
-    return res.json({
-      message: "Doctor suspended successfully",
-      doctor: updated,
-    });
-  } catch (err) {
-    console.error("Suspend doctor error:", err);
-    return res.status(500).json({ error: "Failed to suspend doctor" });
   }
-});
+);
 
 // DELETE /api/admin/doctor/:id - Delete a doctor (hard delete)
-router.delete("/doctor/:id", adminAuth, async (req, res) => {
+router.delete("/doctor/:id", adminAuth, safeLogAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -582,7 +593,13 @@ router.get("/stats", adminAuth, async (req, res) => {
         pendingWithdrawals,
         totalRevenue,
         recentActivity: recentActivity.map((activity) => {
-          const user = userMap.get(activity.userId);
+          const user = userMap.get(activity.userId) as
+            | {
+                firstName?: string | null;
+                lastName?: string | null;
+                email: string;
+              }
+            | undefined;
           return {
             id: activity.id,
             type: activity.type,

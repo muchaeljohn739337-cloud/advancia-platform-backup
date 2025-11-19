@@ -22,10 +22,11 @@ jobs:
       node-version: 20
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "20"
       - name: Install global tools
         run: |
           npm install -g npm@latest
@@ -96,7 +97,7 @@ jobs:
       - name: Verify Build Success
         run: |
           echo "🟢 Backend and Frontend successfully built"
-          echo "📝 Migrations run automatically on Render during deployment"
+          echo "📝 Migrations run automatically during deployment"
       - name: Build Status
         run: |
           echo "✅ CI Build completed successfully!"

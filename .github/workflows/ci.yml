@@ -175,14 +175,13 @@ jobs:
         run: pnpm install --no-frozen-lockfile
         working-directory: frontend
 
-      # Setup backend
-      - name: Generate Prisma Client
-        run: npx prisma generate
-        working-directory: backend
-
-      - name: Run database migrations
-        run: npx prisma migrate deploy
-        working-directory: backend
+      # Setup Test Database using reusable action
+      - name: Setup Test Database
+        uses: ./.github/actions/setup-test-db
+        with:
+          database-url: ${{ env.TEST_DATABASE_URL }}
+          working-directory: backend
+          run-seeds: false
 
       # Run backend tests with coverage
       - name: Run Backend Tests with Coverage

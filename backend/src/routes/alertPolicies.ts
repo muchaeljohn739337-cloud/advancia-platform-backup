@@ -10,9 +10,9 @@ import {
   requireAdmin,
   requireSuperAdmin,
 } from "../middleware/rbac.js";
-import prisma from "../prismaClient.js";
-import { logPolicyChange } from "../services/policyAuditService.js";
-import { captureError } from "../utils/sentry.js";
+import prisma from "../prismaClient";
+import { logPolicyChange } from "../services/policyAuditService";
+import { captureError } from "../utils/sentry";
 
 const router = Router();
 

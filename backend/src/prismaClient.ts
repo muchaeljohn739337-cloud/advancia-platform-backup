@@ -16,13 +16,13 @@ const prisma =
           },
         },
       })
-    : (global.__prisma ??
+    : global.__prisma ??
       new PrismaClient({
         log:
           process.env.NODE_ENV === "development"
             ? ["query", "error", "warn"]
             : ["error"],
-      }));
+      });
 
 if (process.env.NODE_ENV === "development") {
   global.__prisma = prisma;
@@ -30,29 +30,40 @@ if (process.env.NODE_ENV === "development") {
 
 // Add connection retry logic (skip in test mode - use mocks)
 if (process.env.NODE_ENV !== "test") {
-  let retries = 3;
-  const connectWithRetry = async () => {
-    while (retries > 0) {
-      try {
-        await prisma.$connect();
-        console.log("✅ Prisma connected successfully");
-        break;
-      } catch (error) {
-        retries--;
-        console.error(`❌ Prisma connection failed. Retries left: ${retries}`);
-        if (retries === 0) {
+  const shouldSkip =
+    process.env.SKIP_DATABASE_VALIDATION === "1" ||
+    process.env.SKIP_DB_CONNECT === "1";
+  if (shouldSkip) {
+    console.warn(
+      "⚠️  Skipping Prisma $connect() due to SKIP_DATABASE_VALIDATION/CONNECT flag"
+    );
+  } else {
+    let retries = 3;
+    const connectWithRetry = async () => {
+      while (retries > 0) {
+        try {
+          await prisma.$connect();
+          console.log("✅ Prisma connected successfully");
+          break;
+        } catch (error) {
+          retries--;
           console.error(
-            "Failed to connect to database after multiple attempts",
+            `❌ Prisma connection failed. Retries left: ${retries}`
           );
-          throw error;
+          if (retries === 0) {
+            console.error(
+              "Failed to connect to database after multiple attempts (continuing without DB)"
+            );
+            // Do NOT throw – allow app to continue for routes that don't need DB
+            break;
+          }
+          // Wait 2 seconds before retry
+          await new Promise((resolve) => setTimeout(resolve, 2000));
         }
-        // Wait 2 seconds before retry
-        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
-    }
-  };
-
-  connectWithRetry();
+    };
+    connectWithRetry();
+  }
 }
 
 export default prisma;

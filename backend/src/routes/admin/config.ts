@@ -1,6 +1,6 @@
-import { Router, Request, Response } from "express";
-import prisma from "../../prismaClient";
+import { Request, Response, Router } from "express";
 import { authenticateToken, requireAdmin } from "../../middleware/auth";
+import prisma from "../../prismaClient";
 
 const router = Router();
 
@@ -14,15 +14,12 @@ router.get(
   requireAdmin,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const isRender = process.env.RENDER === "true";
       const isProduction = process.env.NODE_ENV === "production";
 
       let silentMode = false;
 
-      // Auto-enable Silent Mode on Render production
-      if (isRender && isProduction) {
-        silentMode = true;
-      } else {
+      // Check database configuration
+      {
         // Check database configuration
         const config = await prisma.systemConfig.findUnique({
           where: { key: "silent_mode" },
@@ -32,9 +29,9 @@ router.get(
 
       res.json({
         silentMode,
-        autoEnabled: isRender && isProduction,
+        autoEnabled: false,
         environment: process.env.NODE_ENV,
-        platform: isRender ? "render" : "local",
+        platform: process.env.RENDER ? "render" : "local",
       });
     } catch (error) {
       console.error("Error fetching silent mode config:", error);

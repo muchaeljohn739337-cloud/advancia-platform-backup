@@ -11,9 +11,9 @@
 
 import { NextFunction, Request, Response } from "express";
 import { Redis } from "ioredis";
-import { shouldAlert } from "../config/alertPolicy.js";
-import { sendAlert } from "../services/alertServiceMinimal.js";
-import { captureError } from "../utils/sentry.js";
+import { shouldAlert } from "../config/alertPolicy";
+import { sendAlert } from "../services/alertServiceMinimal";
+import { captureError } from "../utils/sentry";
 
 // Initialize Redis client
 const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379", {

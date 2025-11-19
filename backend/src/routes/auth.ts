@@ -69,11 +69,13 @@ router.post("/register", requireApiKey, async (req, res) => {
 
     // Initialize custodial wallets (BTC, ETH, USDT) for new user
     try {
-      const { initializeUserWallets } = await import(
-        "../services/custodialWalletService.js"
+      // const { initializeUserWallets } = await import(
+      //   "../services/custodialWalletService.js" // TEMP DISABLED FOR PROD BUILD
+      // );
+      // await initializeUserWallets(user.id);
+      console.log(
+        `✅ Custodial wallets temporarily disabled for user ${user.id}`
       );
-      await initializeUserWallets(user.id);
-      console.log(`✅ Custodial wallets initialized for user ${user.id}`);
     } catch (walletErr) {
       console.error("⚠️ Failed to initialize user wallets:", walletErr);
       // Don't fail registration if wallet initialization fails

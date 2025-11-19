@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 export default function PaymentCancelPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const orderId = searchParams.get("orderId");
+  const orderId = searchParams?.get("orderId");
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-blue-50 p-6">

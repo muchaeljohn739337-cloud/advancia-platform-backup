@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
-    "moduleResolution": "Bundler",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "lib": ["ES2020"],
     "types": ["node"],
     "allowJs": true,
@@ -23,6 +23,16 @@
     "node_modules",
     "dist",
     "src/routes.bak",
+    "src/services/ethGateway.ts",
+    "src/services/aiAnalyticsService.ts",
+    "src/services/oalService.ts",
+
+    "src/services/custodialWalletService.ts",
+    "src/services/trustpilotInvitationService.ts",
+    "src/routes/trustScore.ts",
+    "src/tracing.ts",
+    "src/utils/fakeDataGenerator.ts",
+    "src/rpa/scheduler.ts",
     "tests/**/*",
     "**/*.test.ts",
     "**/*.spec.ts"

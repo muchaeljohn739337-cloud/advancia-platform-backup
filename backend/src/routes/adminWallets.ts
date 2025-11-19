@@ -1,6 +1,6 @@
 import express from "express";
-import { authenticateToken, requireAdmin } from "../middleware/auth.js";
-import prisma from "../prismaClient.js";
+import { authenticateToken, requireAdmin } from "../middleware/auth";
+import prisma from "../prismaClient";
 
 const router = express.Router();
 
@@ -116,7 +116,11 @@ router.post(
         },
       ];
 
-      const results = [];
+      const results: Array<{
+        currency: string;
+        walletAddress: string;
+        status: string;
+      }> = [];
 
       for (const { currency, address } of envWallets) {
         if (!address) continue;
@@ -138,9 +142,9 @@ router.post(
         });
 
         results.push({
-          currency: wallet.currency,
-          walletAddress: wallet.walletAddress,
-          status: "configured",
+          currency: wallet.currency as string,
+          walletAddress: wallet.walletAddress as string,
+          status: "configured" as const,
         });
       }
 

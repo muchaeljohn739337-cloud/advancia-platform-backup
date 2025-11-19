@@ -82,8 +82,8 @@ ci:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Render
-        run: echo "Auto-deploy handled by Render webhook."
+      - name: Deploy to Digital Ocean
+        run: echo "Auto-deploy handled by Digital Ocean."
 
 metadata:
   owner: Advancia Labs

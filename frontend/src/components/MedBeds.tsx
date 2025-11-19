@@ -1,23 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
-  Heart,
-  Brain,
-  Zap,
-  Calendar,
-  Clock,
-  CheckCircle,
   AlertCircle,
-  TrendingUp,
+  Brain,
+  Calendar,
+  CheckCircle,
+  Clock,
+  DollarSign,
+  Heart,
   Shield,
   Sparkles,
-  X,
-  DollarSign,
+  TrendingUp,
   Wallet,
+  X,
+  Zap,
 } from "lucide-react";
+import React, { useState } from "react";
 
 interface Chamber {
   id: string;
@@ -363,7 +363,7 @@ export default function MedBeds() {
                         ? "bg-white text-slate-900 hover:bg-white/90"
                         : "bg-white/20 text-white hover:bg-white/30"
                     }`}
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
                       if (activeChamber === chamber.id) {
                         handleBookSession(chamber);
@@ -515,7 +515,7 @@ export default function MedBeds() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
             >
               {/* Modal Header */}

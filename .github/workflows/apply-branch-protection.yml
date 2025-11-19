@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       required_checks:
-        description: 'Comma-separated status check names that must pass (e.g. "Render Pre-Deploy,build,test,Integration Tests")'
+        description: 'Comma-separated status check names that must pass (e.g. "build,test,Integration Tests")'
         required: false
-        default: "Render Pre-Deploy,build,test,Integration Tests"
+        default: "build,test,Integration Tests"
 
 jobs:
   apply-protection:
@@ -42,24 +42,24 @@ jobs:
           CONTEXTS_JSON="$CONTEXTS_JSON]"
           echo "Contexts JSON: $CONTEXTS_JSON"
 
-          # Build protection payload
-          read -r -d '' PAYLOAD <<EOF || true
-{
-  "required_status_checks": {
-    "strict": true,
-    "contexts": $CONTEXTS_JSON
-  },
-  "enforce_admins": true,
-  "required_pull_request_reviews": null,
-  "restrictions": null
-}
-EOF
+          # Build protection payload with JSON template
+          echo "Building protection payload..."
+
+          PAYLOAD='{
+            "required_status_checks": {
+              "strict": true,
+              "contexts": '$CONTEXTS_JSON'
+            },
+            "enforce_admins": true,
+            "required_pull_request_reviews": null,
+            "restrictions": null
+          }'
 
           echo "Applying branch protection to: $REPO"
           curl -s -S -X PUT \
             -H "Authorization: token $GH_ADMIN_PAT" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/$REPO/branches/main/protection \
+            "https://api.github.com/repos/$REPO/branches/main/protection" \
             -d "$PAYLOAD" | jq .
 
       - name: Show result

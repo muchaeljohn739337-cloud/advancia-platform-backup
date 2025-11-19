@@ -61,10 +61,11 @@ class TrustScoreEvaluator:
         # Domain Age (30 points max, 1 per month)
         score += min(domain_age_months, 30)
         
-        # Trustpilot Rating (up to 50 points, capped at max)
+        # Trustpilot Rating (up to 90 points total, matches backend logic)
         # Tiered system based on rating ranges
         if trustpilot_rating >= 4.5:
-            # 4.5-5.0: 40 base + 10 per 0.1 above 4.5 (max 50)
+            # 40 base + round((rating - 4.5) * 100) as per backend
+            # 4.5=40, 4.6=50, 4.7=60, 4.8=70, 4.9=80, 5.0=90
             score += 40 + round((trustpilot_rating - 4.5) * 100)
         elif trustpilot_rating >= 4.0:
             score += 40
@@ -76,6 +77,9 @@ class TrustScoreEvaluator:
         # Social Presence (10 points)
         if social_presence:
             score += 10
+        
+        # Apply total cap like the backend does (max 100)
+        score = min(score, 100)
         
         # Calculate accuracy
         exact_match = score == expected_score
@@ -100,7 +104,10 @@ class TrustScoreEvaluator:
             "score_breakdown": {
                 "ssl": 20 if ssl_valid else 0,
                 "domain_age": min(domain_age_months, 30),
-                "trustpilot": 40 if trustpilot_rating >= 4.0 else (20 if trustpilot_rating >= 3.0 else (10 if trustpilot_rating >= 2.0 else 0)),
+                "trustpilot": (40 + round((trustpilot_rating - 4.5) * 100)) if trustpilot_rating >= 4.5 
+                            else (40 if trustpilot_rating >= 4.0 
+                                 else (20 if trustpilot_rating >= 3.0 
+                                      else (10 if trustpilot_rating >= 2.0 else 0))),
                 "social": 10 if social_presence else 0
             }
         }
@@ -259,7 +266,11 @@ class DataTypeEvaluator:
             "verifiedBusiness": bool,
             "status": str,
             "domainAgeMonths": int,
-            "lastChecked": str  # ISO date string
+            "lastChecked": str,  # ISO date string
+            # Improvement tasks API fields
+            "tasks": list,
+            "totalTasks": int,
+            "highPriority": int
         }
     
     def __call__(

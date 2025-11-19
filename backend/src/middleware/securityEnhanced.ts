@@ -5,7 +5,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { captureError } from "../utils/sentry.js";
+import { captureError } from "../utils/sentry";
 
 /**
  * Validate request body against Zod schema

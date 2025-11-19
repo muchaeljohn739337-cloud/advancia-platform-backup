@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useEffect, useState } from "react";
 
 interface Wallet {
   balance: number;
@@ -20,7 +19,11 @@ export default function TokenWalletPage() {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
-  const [transferForm, setTransferForm] = useState({ toEmail: "", amount: "", message: "" });
+  const [transferForm, setTransferForm] = useState({
+    toEmail: "",
+    amount: "",
+    message: "",
+  });
   const [buyForm, setBuyForm] = useState({ usdAmount: "" });
   const [stakeForm, setStakeForm] = useState({ amount: "", duration: "30" });
   const [loading, setLoading] = useState(false);
@@ -178,25 +181,33 @@ export default function TokenWalletPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-blue-500">
             <div className="text-sm text-gray-600 mb-1">Available Balance</div>
-            <div className="text-2xl sm:text-3xl font-bold text-blue-600">{wallet.balance.toLocaleString()}</div>
+            <div className="text-2xl sm:text-3xl font-bold text-blue-600">
+              {wallet.balance.toLocaleString()}
+            </div>
             <div className="text-xs text-gray-500 mt-1">Tokens</div>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-purple-500">
             <div className="text-sm text-gray-600 mb-1">Locked Balance</div>
-            <div className="text-2xl sm:text-3xl font-bold text-purple-600">{(wallet.lockedBalance || 0).toLocaleString()}</div>
+            <div className="text-2xl sm:text-3xl font-bold text-purple-600">
+              {(wallet.lockedBalance || 0).toLocaleString()}
+            </div>
             <div className="text-xs text-gray-500 mt-1">Staking</div>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-green-500">
             <div className="text-sm text-gray-600 mb-1">Lifetime Earned</div>
-            <div className="text-2xl sm:text-3xl font-bold text-green-600">{wallet.lifetimeEarned.toLocaleString()}</div>
+            <div className="text-2xl sm:text-3xl font-bold text-green-600">
+              {wallet.lifetimeEarned.toLocaleString()}
+            </div>
             <div className="text-xs text-gray-500 mt-1">All Time</div>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-orange-500">
             <div className="text-sm text-gray-600 mb-1">Token Value</div>
-            <div className="text-2xl sm:text-3xl font-bold text-orange-600">${(wallet.balance * 0.1).toFixed(2)}</div>
+            <div className="text-2xl sm:text-3xl font-bold text-orange-600">
+              ${(wallet.balance * 0.1).toFixed(2)}
+            </div>
             <div className="text-xs text-gray-500 mt-1">USD Equivalent</div>
           </div>
         </div>
@@ -226,22 +237,25 @@ export default function TokenWalletPage() {
             {activeTab === "overview" && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg sm:text-xl font-semibold mb-4">Token Price Chart (30 Days)</h3>
-                  <div className="h-64 sm:h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-                        <YAxis tick={{ fontSize: 12 }} />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="price" stroke="#3B82F6" strokeWidth={2} />
-                      </LineChart>
-                    </ResponsiveContainer>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-4">
+                    Token Price Chart (30 Days)
+                  </h3>
+                  <div className="h-64 sm:h-80 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
+                    <div className="text-center">
+                      <h4 className="text-lg font-medium text-gray-600">
+                        Price Chart Coming Soon
+                      </h4>
+                      <p className="text-sm text-gray-500 mt-2">
+                        Token price history will be available in the next update
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg sm:text-xl font-semibold mb-4">Quick Actions</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-4">
+                    Quick Actions
+                  </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <button
                       onClick={() => {
@@ -267,31 +281,52 @@ export default function TokenWalletPage() {
             {activeTab === "transfer" && (
               <form onSubmit={handleTransfer} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Recipient Email</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Recipient Email
+                  </label>
                   <input
                     type="email"
                     value={transferForm.toEmail}
-                    onChange={(e) => setTransferForm({ ...transferForm, toEmail: e.target.value })}
+                    onChange={(e) =>
+                      setTransferForm({
+                        ...transferForm,
+                        toEmail: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount
+                  </label>
                   <input
                     type="number"
                     value={transferForm.amount}
-                    onChange={(e) => setTransferForm({ ...transferForm, amount: e.target.value })}
+                    onChange={(e) =>
+                      setTransferForm({
+                        ...transferForm,
+                        amount: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     min="1"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Message (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Message (Optional)
+                  </label>
                   <textarea
                     value={transferForm.message}
-                    onChange={(e) => setTransferForm({ ...transferForm, message: e.target.value })}
+                    onChange={(e) =>
+                      setTransferForm({
+                        ...transferForm,
+                        message: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows={3}
                   />
@@ -310,7 +345,9 @@ export default function TokenWalletPage() {
             {activeTab === "buy" && (
               <form onSubmit={handleBuy} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">USD Amount</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    USD Amount
+                  </label>
                   <input
                     type="number"
                     value={buyForm.usdAmount}
@@ -320,7 +357,11 @@ export default function TokenWalletPage() {
                     min="1"
                   />
                   <p className="text-sm text-gray-600 mt-2">
-                    You will receive: {buyForm.usdAmount ? (parseFloat(buyForm.usdAmount) * 10).toLocaleString() : 0} tokens
+                    You will receive:{" "}
+                    {buyForm.usdAmount
+                      ? (parseFloat(buyForm.usdAmount) * 10).toLocaleString()
+                      : 0}{" "}
+                    tokens
                   </p>
                 </div>
                 <button
@@ -337,21 +378,29 @@ export default function TokenWalletPage() {
             {activeTab === "stake" && (
               <form onSubmit={handleStake} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount to Stake</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount to Stake
+                  </label>
                   <input
                     type="number"
                     value={stakeForm.amount}
-                    onChange={(e) => setStakeForm({ ...stakeForm, amount: e.target.value })}
+                    onChange={(e) =>
+                      setStakeForm({ ...stakeForm, amount: e.target.value })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     min="1"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Duration (Days)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Duration (Days)
+                  </label>
                   <select
                     value={stakeForm.duration}
-                    onChange={(e) => setStakeForm({ ...stakeForm, duration: e.target.value })}
+                    onChange={(e) =>
+                      setStakeForm({ ...stakeForm, duration: e.target.value })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="7">7 Days (3% APY)</option>
@@ -362,7 +411,15 @@ export default function TokenWalletPage() {
                 </div>
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-700">
-                    Estimated Reward: {stakeForm.amount ? (parseFloat(stakeForm.amount) * 0.05 * (parseInt(stakeForm.duration) / 365)).toFixed(2) : 0} tokens
+                    Estimated Reward:{" "}
+                    {stakeForm.amount
+                      ? (
+                          parseFloat(stakeForm.amount) *
+                          0.05 *
+                          (parseInt(stakeForm.duration) / 365)
+                        ).toFixed(2)
+                      : 0}{" "}
+                    tokens
                   </p>
                 </div>
                 <button

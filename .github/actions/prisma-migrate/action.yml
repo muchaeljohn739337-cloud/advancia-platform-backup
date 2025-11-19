@@ -1,0 +1,81 @@
+name: "Prisma Database Migration"
+description: "Run Prisma migrations with proper setup and validation"
+inputs:
+  database-url:
+    description: "PostgreSQL database connection URL"
+    required: true
+  working-directory:
+    description: "Working directory (default: backend)"
+    required: false
+    default: "backend"
+  node-version:
+    description: "Node.js version to use"
+    required: false
+    default: "20"
+  skip-generate:
+    description: "Skip prisma generate step"
+    required: false
+    default: "false"
+  migration-command:
+    description: "Migration command to run (deploy, dev, reset)"
+    required: false
+    default: "deploy"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "npm"
+        cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        echo "📦 Installing dependencies..."
+        npm ci
+
+    - name: Generate Prisma Client
+      if: inputs.skip-generate != 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        DATABASE_URL: ${{ inputs.database-url }}
+      run: |
+        echo "🔧 Generating Prisma Client..."
+        npx prisma generate
+
+    - name: Run Prisma Migration
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        DATABASE_URL: ${{ inputs.database-url }}
+      run: |
+        echo "🗄️ Running Prisma migration: ${{ inputs.migration-command }}"
+        case "${{ inputs.migration-command }}" in
+          deploy)
+            npx prisma migrate deploy
+            ;;
+          dev)
+            npx prisma migrate dev
+            ;;
+          reset)
+            npx prisma migrate reset --force --skip-seed
+            ;;
+          *)
+            echo "❌ Unknown migration command: ${{ inputs.migration-command }}"
+            exit 1
+            ;;
+        esac
+
+    - name: Verify Migration
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        DATABASE_URL: ${{ inputs.database-url }}
+      run: |
+        echo "✅ Verifying database status..."
+        npx prisma migrate status

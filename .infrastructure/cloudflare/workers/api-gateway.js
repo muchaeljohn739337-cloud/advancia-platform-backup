@@ -3,7 +3,7 @@
 // Adds security headers, CORS, and basic rate limiting
 
 const CONFIG = {
-  BACKEND_ORIGIN: "https://advancia-backend.onrender.com",
+  BACKEND_ORIGIN: "http://157.245.8.131:4000",
   ALLOWED_ORIGINS: [
     "https://advancia.app",
     "https://www.advancia.app",

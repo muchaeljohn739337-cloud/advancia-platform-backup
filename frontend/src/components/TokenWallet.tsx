@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 interface TokenWalletProps {
@@ -39,13 +39,18 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
   const [transferAddress, setTransferAddress] = useState("");
   const [transferAmount, setTransferAmount] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
   const fetchBalance = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/tokens/balance/${userId}`);
+      const res = await fetch(
+        `http://localhost:4000/api/tokens/balance/${userId}`
+      );
       const data = await res.json();
       setBalance(data);
     } catch (error: unknown) {
@@ -57,7 +62,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
   const fetchTransactions = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/tokens/history/${userId}?limit=20`);
+      const res = await fetch(
+        `http://localhost:4000/api/tokens/history/${userId}?limit=20`
+      );
       const data = await res.json();
       setTransactions(data.transactions || []);
     } catch (error: unknown) {
@@ -107,7 +114,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
   const handleWithdraw = async () => {
     if (!withdrawAmount || !withdrawAddress) return;
-    
+
     setProcessing(true);
     try {
       const res = await fetch("http://localhost:4000/api/tokens/withdraw", {
@@ -119,9 +126,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
           toAddress: withdrawAddress,
         }),
       });
-      
+
       const data = await res.json();
-      
+
       if (res.ok) {
         setMessage({ type: "success", text: "Withdrawal successful!" });
         setWithdrawAmount("");
@@ -142,7 +149,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
   const handleCashout = async () => {
     if (!cashoutAmount) return;
-    
+
     setProcessing(true);
     try {
       const res = await fetch("http://localhost:4000/api/tokens/cashout", {
@@ -153,11 +160,11 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
           amount: cashoutAmount,
         }),
       });
-      
+
       const data = await res.json();
-      
+
       if (res.ok) {
-        const usdValue = (parseFloat(cashoutAmount) * 0.10).toFixed(2);
+        const usdValue = (parseFloat(cashoutAmount) * 0.1).toFixed(2);
         setMessage({ type: "success", text: `Cashed out $${usdValue}!` });
         setCashoutAmount("");
         setShowCashout(false);
@@ -176,7 +183,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
   const handleTransfer = async () => {
     if (!transferAmount || !transferAddress) return;
-    
+
     setProcessing(true);
     try {
       const res = await fetch("http://localhost:4000/api/tokens/transfer", {
@@ -188,9 +195,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
           amount: transferAmount,
         }),
       });
-      
+
       const data = await res.json();
-      
+
       if (res.ok) {
         setMessage({ type: "success", text: "Transfer successful!" });
         setTransferAmount("");
@@ -230,24 +237,34 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
           <div>
             <p className="text-sm opacity-90">Available Balance</p>
             <p className="text-5xl font-bold">
-              {parseFloat(balance?.availableBalance || "0").toLocaleString()} ADV
+              {parseFloat(balance?.availableBalance || "0").toLocaleString()}{" "}
+              ADV
             </p>
             <p className="text-sm opacity-75 mt-1">
-              ≈ ${(parseFloat(balance?.availableBalance || "0") * 0.10).toFixed(2)} USD
+              ≈ $
+              {(parseFloat(balance?.availableBalance || "0") * 0.1).toFixed(2)}{" "}
+              USD
             </p>
           </div>
           <div className="flex gap-6 text-sm">
             <div>
               <p className="opacity-75">Total Balance</p>
-              <p className="font-semibold">{parseFloat(balance?.balance || "0").toLocaleString()} ADV</p>
+              <p className="font-semibold">
+                {parseFloat(balance?.balance || "0").toLocaleString()} ADV
+              </p>
             </div>
             <div>
               <p className="opacity-75">Locked</p>
-              <p className="font-semibold">{parseFloat(balance?.lockedBalance || "0").toLocaleString()} ADV</p>
+              <p className="font-semibold">
+                {parseFloat(balance?.lockedBalance || "0").toLocaleString()} ADV
+              </p>
             </div>
             <div>
               <p className="opacity-75">Lifetime Earned</p>
-              <p className="font-semibold">{parseFloat(balance?.lifetimeEarned || "0").toLocaleString()} ADV</p>
+              <p className="font-semibold">
+                {parseFloat(balance?.lifetimeEarned || "0").toLocaleString()}{" "}
+                ADV
+              </p>
             </div>
           </div>
         </div>
@@ -289,7 +306,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className={`p-4 rounded-xl ${
-              message.type === "success" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+              message.type === "success"
+                ? "bg-green-100 text-green-800"
+                : "bg-red-100 text-red-800"
             }`}
           >
             {message.text}
@@ -299,10 +318,14 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
       {/* Transaction History */}
       <div className="bg-white rounded-2xl p-6 shadow-lg">
-        <h3 className="text-xl font-bold text-navy mb-4">Recent Transactions</h3>
+        <h3 className="text-xl font-bold text-navy mb-4">
+          Recent Transactions
+        </h3>
         <div className="space-y-3">
           {transactions.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No transactions yet</p>
+            <p className="text-gray-500 text-center py-8">
+              No transactions yet
+            </p>
           ) : (
             transactions.map((tx) => (
               <motion.div
@@ -312,9 +335,15 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                 className="flex justify-between items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
               >
                 <div>
-                  <p className="font-semibold text-navy capitalize">{tx.type.replace("_", " ")}</p>
-                  <p className="text-sm text-gray-500">{tx.description || "No description"}</p>
-                  <p className="text-xs text-gray-400">{new Date(tx.createdAt).toLocaleDateString()}</p>
+                  <p className="font-semibold text-navy capitalize">
+                    {tx.type.replace("_", " ")}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {tx.description || "No description"}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {new Date(tx.createdAt).toLocaleDateString()}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p
@@ -324,10 +353,18 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                         : "text-red-600"
                     }`}
                   >
-                    {["earn", "bonus", "reward", "referral"].includes(tx.type) ? "+" : "-"}
+                    {["earn", "bonus", "reward", "referral"].includes(tx.type)
+                      ? "+"
+                      : "-"}
                     {parseFloat(tx.amount).toLocaleString()} ADV
                   </p>
-                  <p className={`text-xs ${tx.status === "completed" ? "text-green-600" : "text-yellow-600"}`}>
+                  <p
+                    className={`text-xs ${
+                      tx.status === "completed"
+                        ? "text-green-600"
+                        : "text-yellow-600"
+                    }`}
+                  >
                     {tx.status}
                   </p>
                 </div>
@@ -352,12 +389,16 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-4">Withdraw Tokens</h3>
+              <h3 className="text-2xl font-bold text-navy mb-4">
+                Withdraw Tokens
+              </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount (ADV)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount (ADV)
+                  </label>
                   <input
                     type="number"
                     value={withdrawAmount}
@@ -365,10 +406,14 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="0.00"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Fee: 1% (includes gas fees)</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Fee: 1% (includes gas fees)
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Wallet Address</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Wallet Address
+                  </label>
                   <input
                     type="text"
                     value={withdrawAddress}
@@ -413,12 +458,16 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-4">Cash Out to USD</h3>
+              <h3 className="text-2xl font-bold text-navy mb-4">
+                Cash Out to USD
+              </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount (ADV)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount (ADV)
+                  </label>
                   <input
                     type="number"
                     value={cashoutAmount}
@@ -427,9 +476,13 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                     placeholder="0.00"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    You&apos;ll receive: ${(parseFloat(cashoutAmount || "0") * 0.10 * 0.98).toFixed(2)} USD (2% fee)
+                    You&apos;ll receive: $
+                    {(parseFloat(cashoutAmount || "0") * 0.1 * 0.98).toFixed(2)}{" "}
+                    USD (2% fee)
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">Exchange rate: 1 ADV = $0.10 USD</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Exchange rate: 1 ADV = $0.10 USD
+                  </p>
                 </div>
                 <div className="flex gap-3">
                   <button
@@ -467,12 +520,16 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-4">Transfer Tokens</h3>
+              <h3 className="text-2xl font-bold text-navy mb-4">
+                Transfer Tokens
+              </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount (ADV)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Amount (ADV)
+                  </label>
                   <input
                     type="number"
                     value={transferAmount}
@@ -482,7 +539,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Recipient User ID</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Recipient User ID
+                  </label>
                   <input
                     type="text"
                     value={transferAddress}

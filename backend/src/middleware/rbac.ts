@@ -4,7 +4,7 @@
  */
 
 import { NextFunction, Request, Response } from "express";
-import { captureError } from "../utils/sentry.js";
+import { captureError } from "../utils/sentry";
 
 /**
  * Extended request interface with user info

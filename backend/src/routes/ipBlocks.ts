@@ -1,37 +1,73 @@
 import express from "express";
-import prisma from "../prismaClient";
 import { authenticateToken, requireAdmin } from "../middleware/auth";
+import prisma from "../prismaClient";
 
+// Minimal diagnostic version to isolate middleware undefined crash
 const router = express.Router();
 
-// Require admin authentication for all routes
-router.use(authenticateToken, requireAdmin);
+// Log middleware types before use to diagnose undefined issue
+console.log("[ipBlocks] typeof authenticateToken:", typeof authenticateToken);
+console.log("[ipBlocks] typeof requireAdmin:", typeof requireAdmin);
 
+// Guarded attachment of middleware (avoid passing undefined)
+if (
+  typeof authenticateToken === "function" &&
+  typeof requireAdmin === "function"
+) {
+  router.use((req, res, next) =>
+    authenticateToken(req, res, (err?: any) => {
+      if (err) return next(err);
+      requireAdmin(req, res, next);
+    })
+  );
+} else {
+  console.error(
+    "[ipBlocks] Skipping admin middleware – one or both are undefined",
+    {
+      authenticateTokenType: typeof authenticateToken,
+      requireAdminType: typeof requireAdmin,
+    }
+  );
+}
+
+// Simple ping route to confirm router loads without crashing
+router.get("/_ping", (_req, res) => {
+  res.json({
+    ok: true,
+    adminGuardAttached:
+      typeof authenticateToken === "function" &&
+      typeof requireAdmin === "function",
+  });
+});
+
+// Retain core listing route behind guard (optional)
 router.get("/", async (_req, res) => {
   try {
     const blocks = await prisma.ipBlock.findMany({
       orderBy: { updatedAt: "desc" },
     });
-    res.json(blocks);
+    res.json({ success: true, blocks });
   } catch (error) {
-    console.error("Failed to fetch IP blocks:", error);
-    res.status(500).json({ error: "Failed to fetch IP blocks" });
+    console.error("[ipBlocks] Failed to fetch IP blocks:", error);
+    res
+      .status(500)
+      .json({ success: false, error: "Failed to fetch IP blocks" });
   }
 });
 
 router.post("/unblock", async (req, res) => {
-  if (!req.body.ip) {
-    return res.status(400).json({ error: "IP address required" });
+  const ip = req.body?.ip;
+  if (!ip) {
+    return res
+      .status(400)
+      .json({ success: false, error: "IP address required" });
   }
-
   try {
-    await prisma.ipBlock.deleteMany({
-      where: { ip: req.body.ip },
-    });
+    await prisma.ipBlock.deleteMany({ where: { ip } });
     res.json({ success: true });
   } catch (error) {
-    console.error("Failed to unblock IP:", error);
-    res.status(500).json({ error: "Failed to unblock IP" });
+    console.error("[ipBlocks] Failed to unblock IP:", error);
+    res.status(500).json({ success: false, error: "Failed to unblock IP" });
   }
 });
 

@@ -1,340 +1,288 @@
-import logger from "../logger";
-import prisma from "../prismaClient";
+import https from "https";
+import { performance } from "perf_hooks";
 
-interface ScamAdviserReport {
-  domain: string;
-  trustScore: number;
-  status: "verified" | "pending" | "needs_attention";
+/**
+ * Interface for Scam Adviser API response
+ */
+interface ScamAdviserResponse {
+  score: number;
+  risks?: string[];
+  verdict?: string;
+  details?: {
+    sslValid?: boolean;
+    domainAge?: number;
+    countryCode?: string;
+    ipReputation?: number;
+  };
+}
+
+/**
+ * Interface for our standardized trust report
+ */
+export interface TrustReport {
+  scamAdviserScore: number;
   sslValid: boolean;
+  verifiedBusiness: boolean;
+  status: "pending" | "verified" | "suspicious" | "high-risk";
   domainAgeMonths: number;
-  socialPresence: boolean;
-  trustpilotScore: number;
-  lastChecked: Date;
+  lastChecked: string;
 }
 
-interface TrustImprovementTask {
-  id: string;
-  priority: "high" | "medium" | "low";
-  task: string;
-  status: "pending" | "completed";
-  impact: string;
-}
-
-class ScamAdviserService {
-  private domain: string;
-  private apiKey: string;
-
-  constructor() {
-    this.domain = process.env.DOMAIN || "advanciapayledger.com";
-    this.apiKey = process.env.SCAM_ADVISER_API_KEY || "";
-  }
+/**
+ * Scam Adviser Service for domain trust verification
+ * Note: This is a simplified implementation - in production you would use actual Scam Adviser API
+ */
+export class ScamAdviserService {
+  private static readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+  private cache = new Map<string, { data: TrustReport; timestamp: number }>();
+  // In-flight promise dedup to avoid duplicate work on same domain
+  private inflight = new Map<string, Promise<TrustReport>>();
+  // Simple rolling metrics (not persisted)
+  private metrics: { total: number; cacheHits: number; avgMs: number } = {
+    total: 0,
+    cacheHits: 0,
+    avgMs: 0,
+  };
 
   /**
-   * Check domain reputation on Scam Adviser
+   * Get trust report for a domain
    */
-  async checkDomainReputation(): Promise<ScamAdviserReport> {
+  async getTrustReport(domain: string): Promise<TrustReport> {
     try {
-      logger.info(`🔍 Checking Scam Adviser reputation for ${this.domain}`);
+      const start = performance.now();
+      // Check cache first
+      const cached = this.cache.get(domain);
+      if (
+        cached &&
+        Date.now() - cached.timestamp < ScamAdviserService.CACHE_DURATION
+      ) {
+        this.recordMetrics(performance.now() - start, true);
+        return cached.data;
+      }
 
-      // Note: Scam Adviser doesn't have a public API
-      // This is a mock implementation - actual verification is manual
-      // In production, you'd scrape their site or use their business API if available
+      // Concurrency dedup: return existing in-flight promise if present
+      const existing = this.inflight.get(domain);
+      if (existing) {
+        const result = await existing;
+        this.recordMetrics(performance.now() - start, false);
+        return result;
+      }
 
-      const mockReport: ScamAdviserReport = {
-        domain: this.domain,
-        trustScore: 75, // Default score
-        status: "pending",
-        sslValid: true,
-        domainAgeMonths: 12,
-        socialPresence: false,
-        trustpilotScore: 0,
-        lastChecked: new Date(),
-      };
-
-      // Get actual Trustpilot score from our database
-      const trustpilotStats = await this.getTrustpilotStats();
-      mockReport.trustpilotScore = trustpilotStats.averageRating;
-
-      // Calculate trust score based on available metrics
-      mockReport.trustScore = this.calculateTrustScore({
-        sslValid: mockReport.sslValid,
-        domainAge: mockReport.domainAgeMonths,
-        trustpilotRating: mockReport.trustpilotScore,
-        socialPresence: mockReport.socialPresence,
-      });
-
-      mockReport.status = this.determineTrustStatus(mockReport.trustScore);
-
-      // Save to audit log
-      await this.saveVerificationReport(mockReport);
-
-      logger.info(
-        `✅ Scam Adviser check completed: Score ${mockReport.trustScore}`
-      );
-      return mockReport;
+      const p = this.generateTrustReport(domain)
+        .then((report) => {
+          // Cache fresh result
+          this.cache.set(domain, { data: report, timestamp: Date.now() });
+          return report;
+        })
+        .finally(() => {
+          this.inflight.delete(domain);
+        });
+      this.inflight.set(domain, p);
+      const report = await p;
+      this.recordMetrics(performance.now() - start, false);
+      // Generate trust report (simplified for demo purposes)
+      return report;
     } catch (error) {
-      logger.error("❌ Error checking Scam Adviser reputation:", error);
-      throw error;
+      console.error(`Error getting trust report for ${domain}:`, error);
+      throw new Error("Failed to retrieve trust report");
     }
   }
 
   /**
-   * Calculate trust score based on metrics
+   * Generate trust report based on domain analysis
+   * Note: This is a simplified implementation for demo purposes
    */
-  private calculateTrustScore(metrics: {
-    sslValid: boolean;
-    domainAge: number;
-    trustpilotRating: number;
-    socialPresence: boolean;
-  }): number {
-    let score = 0;
+  private async generateTrustReport(domain: string): Promise<TrustReport> {
+    // Wrap SSL check with timeout + fallback
+    // Basic SSL check
+    const sslValid = await this.withTimeout<boolean>(
+      this.checkSSL(domain),
+      5000,
+      false
+    );
+
+    // Simulate domain age calculation
+    const domainAgeMonths = this.estimateDomainAge(domain);
+
+    // Calculate base score
+    let scamAdviserScore = 50; // Base score
 
     // SSL Certificate (20 points)
-    if (metrics.sslValid) score += 20;
-
-    // Domain Age (30 points max)
-    // 1 point per month, cap at 30
-    score += Math.min(metrics.domainAge, 30);
-
-    // Trustpilot Rating (up to 50 points, capped at total max)
-    // Tiered system: 4.5+ gets bonus points for excellence
-    if (metrics.trustpilotRating >= 4.5) {
-      // 40 base + 10 per 0.1 above 4.5 (4.5=40, 4.6=41, ... 5.0=45)
-      score += 40 + Math.round((metrics.trustpilotRating - 4.5) * 100);
-    } else if (metrics.trustpilotRating >= 4.0) {
-      score += 40;
-    } else if (metrics.trustpilotRating >= 3.0) {
-      score += 20;
-    } else if (metrics.trustpilotRating >= 2.0) {
-      score += 10;
+    if (sslValid) {
+      scamAdviserScore += 20;
     }
 
-    // Social Presence (10 points)
-    if (metrics.socialPresence) score += 10;
+    // Domain Age (30 points max, 1 per month)
+    scamAdviserScore += Math.min(domainAgeMonths, 30);
 
-    return Math.min(score, 100);
-  }
-
-  /**
-   * Get Trustpilot statistics from local database
-   */
-  private async getTrustpilotStats(): Promise<{
-    averageRating: number;
-    totalReviews: number;
-  }> {
-    const reviews = await prisma.trustpilotReview.findMany({
-      where: { isPublished: true },
-    });
-
-    if (reviews.length === 0) {
-      return { averageRating: 0, totalReviews: 0 };
+    // Known safe domains get bonus points
+    if (this.isKnownSafeDomain(domain)) {
+      scamAdviserScore = Math.min(scamAdviserScore + 25, 100);
     }
 
-    const totalStars = reviews.reduce((sum, review) => sum + review.stars, 0);
-    const averageRating = totalStars / reviews.length;
+    // Determine status and business verification
+    const status = this.determineStatus(scamAdviserScore);
+    const verifiedBusiness = scamAdviserScore >= 80 && domainAgeMonths >= 12;
 
-    return {
-      averageRating: Number(averageRating.toFixed(2)),
-      totalReviews: reviews.length,
+    const result: TrustReport = {
+      scamAdviserScore: Math.max(0, Math.min(100, scamAdviserScore)),
+      sslValid,
+      verifiedBusiness,
+      status,
+      domainAgeMonths,
+      lastChecked: new Date().toISOString(),
     };
+    this.logReport(domain, result);
+    return result;
   }
 
   /**
-   * Submit domain for manual verification
+   * Check if domain has valid SSL certificate
    */
-  async requestManualVerification(): Promise<{
-    success: boolean;
-    message: string;
-  }> {
+  private async checkSSL(domain: string): Promise<boolean> {
     try {
-      logger.info(
-        `📨 Submitting ${this.domain} for Scam Adviser manual verification`
-      );
+      return new Promise((resolve) => {
+        const options = {
+          hostname: domain,
+          port: 443,
+          method: "HEAD",
+          timeout: 5000,
+          rejectUnauthorized: true, // This will fail if SSL is invalid
+        };
 
-      const verificationData = {
-        domain: this.domain,
-        businessName: "Advancia Pay Ledger",
-        contactEmail:
-          process.env.BUSINESS_EMAIL || "support@advanciapayledger.com",
-        trustpilotUrl: `https://www.trustpilot.com/review/${this.domain}`,
-        businessDescription:
-          "Secure digital payment platform for businesses and individuals",
-        additionalInfo: {
-          ssl: true,
-          httpsOnly: true,
-          privacyPolicy: `https://${this.domain}/privacy`,
-          termsOfService: `https://${this.domain}/terms`,
-          contactPage: `https://${this.domain}/contact`,
-          aboutPage: `https://${this.domain}/about`,
-        },
-      };
+        const req = https.request(options, (res) => {
+          resolve(res.statusCode !== undefined && res.statusCode < 500);
+        });
 
-      // Log the verification request
-      await prisma.auditLog.create({
-        data: {
-          action: "SCAM_ADVISER_VERIFICATION_REQUEST",
-          performedBy: "system",
-          details: JSON.stringify({
-            domain: this.domain,
-            timestamp: new Date(),
-            status: "submitted",
-            ...verificationData,
-          }),
-        },
+        req.on("error", () => resolve(false));
+        req.on("timeout", () => {
+          req.destroy();
+          resolve(false);
+        });
+
+        req.end();
       });
-
-      logger.info("✅ Verification request logged successfully");
-
-      return {
-        success: true,
-        message:
-          "Verification request submitted. Manual submission required at https://www.scamadviser.com/submit-website",
-      };
-    } catch (error) {
-      logger.error("❌ Error submitting Scam Adviser verification:", error);
-      return {
-        success: false,
-        message: "Failed to submit verification request",
-      };
+    } catch {
+      return false;
     }
   }
 
   /**
-   * Get trust improvement tasks
+   * Estimate domain age in months (simplified)
    */
-  async getTrustImprovementTasks(): Promise<TrustImprovementTask[]> {
-    const report = await this.checkDomainReputation();
-    const tasks: TrustImprovementTask[] = [];
+  private estimateDomainAge(domain: string): number {
+    // This is a simplified estimation - in production you'd use WHOIS data
+    const domainHashes = {
+      "google.com": 300,
+      "microsoft.com": 360,
+      "github.com": 200,
+      "stackoverflow.com": 180,
+      "example.com": 240,
+    };
 
-    if (!report.sslValid) {
-      tasks.push({
-        id: "ssl-certificate",
-        priority: "high",
-        task: "Ensure SSL certificate is valid and properly configured",
-        status: "pending",
-        impact: "+20 points to trust score",
-      });
+    // Check if it's a known domain
+    if (domainHashes[domain]) {
+      return domainHashes[domain];
     }
 
-    if (report.domainAgeMonths < 12) {
-      tasks.push({
-        id: "domain-age",
-        priority: "low",
-        task: "Domain age will increase naturally over time",
-        status: "pending",
-        impact: "+1 point per month (max +30)",
-      });
+    // Generate pseudo-random but consistent age based on domain
+    let hash = 0;
+    for (let i = 0; i < domain.length; i++) {
+      const char = domain.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
     }
 
-    if (!report.socialPresence) {
-      tasks.push({
-        id: "social-media",
-        priority: "medium",
-        task: "Create and verify social media profiles (LinkedIn, Twitter, Facebook)",
-        status: "pending",
-        impact: "+10 points to trust score",
-      });
-    }
-
-    if (report.trustpilotScore < 4.0) {
-      tasks.push({
-        id: "trustpilot-rating",
-        priority: "high",
-        task: "Improve Trustpilot rating to 4.0+ (collect more 5-star reviews)",
-        status: "pending",
-        impact: "+20-40 points to trust score",
-      });
-    }
-
-    if (report.trustScore < 70) {
-      tasks.push({
-        id: "trust-badges",
-        priority: "medium",
-        task: "Add trust badges (security certifications, payment processor logos)",
-        status: "pending",
-        impact: "Improves user perception",
-      });
-
-      tasks.push({
-        id: "business-info",
-        priority: "high",
-        task: "Add clear contact information, about page, and business registration details",
-        status: "pending",
-        impact: "Required for verification",
-      });
-
-      tasks.push({
-        id: "privacy-policy",
-        priority: "high",
-        task: "Implement comprehensive privacy policy and terms of service",
-        status: "pending",
-        impact: "Required for verification",
-      });
-    }
-
-    return tasks;
+    // Convert to age between 1-36 months
+    return Math.abs(hash % 36) + 1;
   }
 
   /**
-   * Automated trust signal improvement
+   * Check if domain is in known safe list
    */
-  async improveAutomatedTrustSignals(): Promise<void> {
-    try {
-      logger.info("🔧 Running automated trust signal improvements");
+  private isKnownSafeDomain(domain: string): boolean {
+    const safeDomains = [
+      "google.com",
+      "microsoft.com",
+      "github.com",
+      "stackoverflow.com",
+      "mozilla.org",
+      "w3.org",
+      "example.com",
+    ];
 
-      // Check if essential pages exist
-      await this.verifyEssentialPages();
+    return safeDomains.some(
+      (safeDomain) => domain === safeDomain || domain.endsWith(`.${safeDomain}`)
+    );
+  }
 
-      // Update sitemap with trust pages
-      await this.updateTrustPagesSitemap();
+  /**
+   * Determine status based on score
+   */
+  private determineStatus(score: number): TrustReport["status"] {
+    if (score >= 85) return "verified";
+    if (score >= 70) return "pending";
+    if (score >= 50) return "suspicious";
+    return "high-risk";
+  }
 
-      // Log improvement activity
-      await prisma.auditLog.create({
-        data: {
-          action: "TRUST_SIGNAL_IMPROVEMENT",
-          performedBy: "system",
-          details: JSON.stringify({
-            timestamp: new Date(),
-            actions: ["verified_pages", "updated_sitemap"],
-          }),
-        },
+  /**
+   * Clear cache (useful for testing or manual refresh)
+   */
+  clearCache(): void {
+    this.cache.clear();
+    this.inflight.clear();
+  }
+
+  /** Utility: timeout wrapper */
+  private withTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
+    return new Promise((resolve) => {
+      const t = setTimeout(() => resolve(fallback), ms);
+      p.then((v) => {
+        clearTimeout(t);
+        resolve(v);
+      }).catch(() => {
+        clearTimeout(t);
+        resolve(fallback);
       });
-
-      logger.info("✅ Automated trust signal improvements completed");
-    } catch (error) {
-      logger.error("❌ Error improving trust signals:", error);
-      throw error;
-    }
-  }
-
-  private determineTrustStatus(
-    score: number
-  ): "verified" | "pending" | "needs_attention" {
-    if (score >= 80) return "verified";
-    if (score >= 60) return "pending";
-    return "needs_attention";
-  }
-
-  private async saveVerificationReport(
-    report: ScamAdviserReport
-  ): Promise<void> {
-    await prisma.auditLog.create({
-      data: {
-        action: "SCAM_ADVISER_REPORT",
-        performedBy: "system",
-        details: JSON.stringify(report),
-      },
     });
   }
 
-  private async verifyEssentialPages(): Promise<void> {
-    const essentialPages = ["/about", "/contact", "/privacy", "/terms"];
-    logger.info(`✓ Essential pages verified: ${essentialPages.join(", ")}`);
+  /** Metrics recorder */
+  private recordMetrics(durationMs: number, cacheHit: boolean) {
+    this.metrics.total += 1;
+    if (cacheHit) this.metrics.cacheHits += 1;
+    // exponential moving average for simplicity
+    const alpha = 0.2;
+    this.metrics.avgMs =
+      this.metrics.avgMs === 0
+        ? durationMs
+        : this.metrics.avgMs * (1 - alpha) + durationMs * alpha;
   }
 
-  private async updateTrustPagesSitemap(): Promise<void> {
-    logger.info("✓ Sitemap updated with trust pages");
+  /** Simple structured log for debugging performance */
+  private logReport(domain: string, report: TrustReport) {
+    try {
+      const cacheHit = this.cache.has(domain);
+      console.log(
+        `[trust] domain=${domain} score=${report.scamAdviserScore} status=${report.status} ageMonths=${report.domainAgeMonths} ssl=${report.sslValid} verified=${report.verifiedBusiness} cacheHit=${cacheHit}`
+      );
+    } catch {}
+  }
+
+  /** Expose metrics summary (could be used in /status later) */
+  getMetrics() {
+    return {
+      totalRequests: this.metrics.total,
+      cacheHitRate:
+        this.metrics.total === 0
+          ? 0
+          : +(this.metrics.cacheHits / this.metrics.total).toFixed(3),
+      avgDurationMs: Math.round(this.metrics.avgMs),
+      cacheSize: this.cache.size,
+    };
   }
 }
 
-export default new ScamAdviserService();
+// Export singleton instance
+export const scamAdviserService = new ScamAdviserService();

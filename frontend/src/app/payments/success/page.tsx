@@ -21,9 +21,9 @@ function PaymentSuccessContent() {
   const [details, setDetails] = useState<any>(null);
   const [type, setType] = useState<"stripe" | "crypto" | null>(null);
 
-  const sessionId = searchParams.get("session_id");
-  const invoiceId = searchParams.get("invoice_id");
-  const orderId = searchParams.get("orderId");
+  const sessionId = searchParams?.get("session_id");
+  const invoiceId = searchParams?.get("invoice_id");
+  const orderId = searchParams?.get("orderId");
 
   const checkPayment = useCallback(async () => {
     const token = localStorage.getItem("token");

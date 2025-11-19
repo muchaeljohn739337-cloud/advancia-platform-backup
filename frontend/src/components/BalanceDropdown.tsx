@@ -1,44 +1,47 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import { X, Wallet, Gift, Award, DollarSign } from 'lucide-react'
+import { motion } from "framer-motion";
+import { Award, DollarSign, Gift, Wallet, X } from "lucide-react";
 
 interface Balance {
-  balance_main: number
-  earnings: number
-  referral: number
-  total: number
+  balance_main: number;
+  earnings: number;
+  referral: number;
+  total: number;
 }
 
 interface BalanceDropdownProps {
-  balance: Balance
-  onClose: () => void
+  balance: Balance;
+  onClose: () => void;
 }
 
-export default function BalanceDropdown({ balance, onClose }: BalanceDropdownProps) {
+export default function BalanceDropdown({
+  balance,
+  onClose,
+}: BalanceDropdownProps) {
   const items = [
     {
-      label: 'Main Account',
+      label: "Main Account",
       value: balance.balance_main,
       icon: <Wallet className="w-5 h-5" />,
-      color: 'text-primary-600',
-      bg: 'bg-primary-50'
+      color: "text-primary-600",
+      bg: "bg-primary-50",
     },
     {
-      label: 'Earnings',
+      label: "Earnings",
       value: balance.earnings,
       icon: <Gift className="w-5 h-5" />,
-      color: 'text-amber-600',
-      bg: 'bg-amber-50'
+      color: "text-amber-600",
+      bg: "bg-amber-50",
     },
     {
-      label: 'Rewards / Adjustments',
+      label: "Rewards / Adjustments",
       value: balance.referral,
       icon: <Award className="w-5 h-5" />,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50'
-    }
-  ]
+      color: "text-purple-600",
+      bg: "bg-purple-50",
+    },
+  ];
 
   return (
     <motion.div
@@ -52,8 +55,8 @@ export default function BalanceDropdown({ balance, onClose }: BalanceDropdownPro
         initial={{ scale: 0.9, y: 20, opacity: 0 }}
         animate={{ scale: 1, y: 0, opacity: 1 }}
         exit={{ scale: 0.9, y: 20, opacity: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        onClick={(e) => e.stopPropagation()}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
         className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
       >
         {/* Header */}
@@ -69,12 +72,16 @@ export default function BalanceDropdown({ balance, onClose }: BalanceDropdownPro
               <X className="w-5 h-5" />
             </motion.button>
           </div>
-          
+
           <div className="flex items-baseline gap-2">
             <DollarSign className="w-6 h-6" />
-            <span className="text-4xl font-bold">{balance.total.toFixed(2)}</span>
+            <span className="text-4xl font-bold">
+              {balance.total.toFixed(2)}
+            </span>
           </div>
-          <p className="text-primary-100 text-sm mt-1">Total Available Balance</p>
+          <p className="text-primary-100 text-sm mt-1">
+            Total Available Balance
+          </p>
         </div>
 
         {/* Breakdown Items */}
@@ -89,9 +96,7 @@ export default function BalanceDropdown({ balance, onClose }: BalanceDropdownPro
             >
               <div className="flex items-center gap-3">
                 <div className={`${item.bg} p-2 rounded-lg`}>
-                  <span className={item.color}>
-                    {item.icon}
-                  </span>
+                  <span className={item.color}>{item.icon}</span>
                 </div>
                 <span className="font-medium text-slate-700">{item.label}</span>
               </div>
@@ -125,5 +130,5 @@ export default function BalanceDropdown({ balance, onClose }: BalanceDropdownPro
         </div>
       </motion.div>
     </motion.div>
-  )
+  );
 }

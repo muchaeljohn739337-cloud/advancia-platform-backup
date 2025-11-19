@@ -6,8 +6,8 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --no-audit --no-fund
+# Install dependencies (use npm install as fallback for workspace issues)
+RUN npm install --legacy-peer-deps || npm ci --legacy-peer-deps || npm install
 
 # Copy source and Prisma schema
 COPY src ./src
@@ -24,9 +24,11 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files and install production deps only
+# Copy package files
 COPY package*.json ./
-RUN npm ci --only=production --no-audit --no-fund
+
+# Install production dependencies only
+RUN npm install --production --legacy-peer-deps || npm ci --only=production --legacy-peer-deps
 
 # Copy Prisma schema and generate client
 COPY prisma ./prisma
@@ -34,10 +36,12 @@ RUN npx prisma generate
 
 # Copy built application from builder
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/src ./src
 
 ENV NODE_ENV=production
 ENV PORT=4000
 
 EXPOSE 4000
 
-CMD ["node", "dist/index.js"]
+# Use ts-node for development compatibility
+CMD ["npx", "ts-node", "src/index.ts"]

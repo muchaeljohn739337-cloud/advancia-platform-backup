@@ -1,0 +1,69 @@
+name: advancia-pay-platform
+region: nyc
+
+# Backend API Service
+services:
+  - name: backend-api
+    github:
+      repo: muchaeljohn739337-cloud/-modular-saas-platform
+      branch: main
+      deploy_on_push: true
+    source_dir: /backend
+    build_command: npm install --legacy-peer-deps && npx prisma generate && npm run build
+    run_command: npm start
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATABASE_URL
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: JWT_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: SESSION_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: OTEL_TRACING_ENABLED
+        value: "true"
+      - key: NODE_VERSION
+        value: "20"
+    health_check:
+      http_path: /api/health
+      initial_delay_seconds: 60
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    http_port: 4000
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /api
+
+# Frontend Static Site
+static_sites:
+  - name: frontend
+    github:
+      repo: muchaeljohn739337-cloud/-modular-saas-platform
+      branch: main
+      deploy_on_push: true
+    source_dir: /frontend
+    build_command: npm install && npm run build
+    output_dir: .next
+    envs:
+      - key: NEXT_PUBLIC_API_URL
+        value: ${backend-api.PUBLIC_URL}/api
+      - key: NODE_VERSION
+        value: "20"
+    routes:
+      - path: /
+
+# PostgreSQL Database
+databases:
+  - name: advancia-db
+    engine: PG
+    version: "16"
+    production: true
+    cluster_name: advancia-db-cluster

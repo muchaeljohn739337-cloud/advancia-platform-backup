@@ -5,8 +5,8 @@
  */
 
 import { createHash } from "crypto";
-import prisma from "../prismaClient.js";
-import { captureError } from "../utils/sentry.js";
+import prisma from "../prismaClient";
+import { captureError } from "../utils/sentry";
 
 export interface PolicyAuditData {
   policyId: string;

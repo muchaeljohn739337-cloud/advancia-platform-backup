@@ -1,14 +1,14 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { CheckCircle, Calendar, Clock, DollarSign } from "lucide-react";
+import { Calendar, CheckCircle, Clock, DollarSign } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 function BookingSuccessContent() {
   const searchParams = useSearchParams();
-  const bookingId = searchParams.get("booking_id");
+  const bookingId = searchParams?.get("booking_id");
 
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,9 @@ function BookingSuccessContent() {
           setError("Booking not found");
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch booking");
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch booking"
+        );
       } finally {
         setLoading(false);
       }
@@ -120,7 +122,8 @@ function BookingSuccessContent() {
                 <strong>Booking ID:</strong> {booking.id}
               </p>
               <p className="text-sm text-blue-800 mt-2">
-                A confirmation email has been sent to your registered email address.
+                A confirmation email has been sent to your registered email
+                address.
               </p>
             </div>
 
@@ -142,23 +145,23 @@ function BookingSuccessContent() {
         )}
 
         <div className="mt-8 pt-6 border-t border-gray-200">
-          <h3 className="font-semibold text-gray-900 mb-3">What happens next?</h3>
+          <h3 className="font-semibold text-gray-900 mb-3">
+            What happens next?
+          </h3>
           <ul className="space-y-2 text-sm text-gray-600">
             <li className="flex items-start">
               <span className="mr-2">1.</span>
-              <span>You will receive a confirmation email with all the details.</span>
+              <span>
+                You will receive a confirmation email with all the details.
+              </span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">2.</span>
-              <span>
-                Please arrive 10 minutes before your scheduled time.
-              </span>
+              <span>Please arrive 10 minutes before your scheduled time.</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">3.</span>
-              <span>
-                Bring a valid ID and your booking confirmation.
-              </span>
+              <span>Bring a valid ID and your booking confirmation.</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">4.</span>
@@ -185,11 +188,13 @@ function BookingSuccessContent() {
 
 export default function BookingSuccessPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        </div>
+      }
+    >
       <BookingSuccessContent />
     </Suspense>
   );

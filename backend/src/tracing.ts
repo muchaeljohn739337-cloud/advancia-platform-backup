@@ -1,117 +1,149 @@
-import { context, trace } from "@opentelemetry/api";
+/**
+ * OpenTelemetry Tracing Configuration
+ *
+ * This module sets up distributed tracing for the backend using OpenTelemetry.
+ * Must be imported BEFORE any other modules to ensure proper instrumentation.
+ *
+ * Features:
+ * - Automatic HTTP/Express instrumentation
+ * - Prisma database query tracing
+ * - OTLP export to AI Toolkit trace viewer
+ * - Console export for development debugging
+ */
+
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { ExpressInstrumentation } from "@opentelemetry/instrumentation-express";
-import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
 import { Resource } from "@opentelemetry/resources";
 import { NodeSDK } from "@opentelemetry/sdk-node";
-import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import {
+  BatchSpanProcessor,
+  ConsoleSpanExporter,
+} from "@opentelemetry/sdk-trace-node";
 import { PrismaInstrumentation } from "@prisma/instrumentation";
-import type { NextFunction, Request, Response } from "express";
 
-// Resolve exporter endpoint from env or default to local AI Toolkit (4318)
-const otlpEndpoint =
-  process.env.OTEL_EXPORTER_OTLP_ENDPOINT?.trim() ||
-  "http://localhost:4318/v1/traces";
-const serviceName = process.env.OTEL_SERVICE_NAME || "advancia-backend";
+// Check if tracing should be enabled
+const TRACING_ENABLED = process.env.OTEL_TRACING_ENABLED !== "false";
+const CONSOLE_EXPORT_ENABLED = process.env.OTEL_TRACING_CONSOLE === "true";
+const OTLP_ENDPOINT =
+  process.env.OTEL_EXPORTER_OTLP_ENDPOINT || "http://localhost:4318/v1/traces";
+const SERVICE_NAME = process.env.OTEL_SERVICE_NAME || "advancia-backend";
+const SERVICE_VERSION = process.env.npm_package_version || "1.0.0";
 
-const traceExporter = new OTLPTraceExporter({ url: otlpEndpoint });
+let sdk: NodeSDK | null = null;
 
-const sdk = new NodeSDK({
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: serviceName,
-    [SemanticResourceAttributes.SERVICE_VERSION]: "1.0.0",
-    [SemanticResourceAttributes.DEPLOYMENT_ENV]:
-      process.env.NODE_ENV || "development",
-  }),
-  traceExporter,
-  instrumentations: [
-    getNodeAutoInstrumentations({
-      "@opentelemetry/instrumentation-fs": { enabled: false },
-    }),
-    new ExpressInstrumentation(),
-    new HttpInstrumentation(),
-    new PrismaInstrumentation(),
-  ],
-});
-
-sdk
-  .start()
-  .then(() => {
-    // eslint-disable-next-line no-console
+/**
+ * Initialize OpenTelemetry tracing
+ */
+export function initTracing(): void {
+  if (!TRACING_ENABLED) {
     console.log(
-      "[tracing] OpenTelemetry SDK started (endpoint:",
-      otlpEndpoint,
-      ")"
+      "⚠️  Tracing disabled (set OTEL_TRACING_ENABLED=true to enable)"
     );
-  })
-  .catch((err) => {
-    // eslint-disable-next-line no-console
-    console.error("[tracing] Failed to start OpenTelemetry SDK", err);
-  });
+    return;
+  }
 
-// Graceful shutdown
-process.on("SIGTERM", () => {
-  sdk
-    .shutdown()
-    .then(() => {
-      // eslint-disable-next-line no-console
-      console.log("[tracing] SDK shutdown complete");
-      process.exit(0);
-    })
-    .catch((err) => {
-      console.error("[tracing] SDK shutdown error", err);
-      process.exit(1);
+  try {
+    console.log("🔍 Initializing OpenTelemetry tracing...");
+    console.log(`   - Service: ${SERVICE_NAME} v${SERVICE_VERSION}`);
+    console.log(`   - OTLP endpoint: ${OTLP_ENDPOINT}`);
+
+    // Create OTLP exporter for AI Toolkit
+    const otlpExporter = new OTLPTraceExporter({
+      url: OTLP_ENDPOINT,
+      headers: {},
     });
+
+    // Create console exporter for development debugging
+    const consoleExporter = new ConsoleSpanExporter();
+
+    // Configure SDK with automatic instrumentations
+    sdk = new NodeSDK({
+      resource: new Resource({
+        "service.name": SERVICE_NAME,
+        "service.version": SERVICE_VERSION,
+      }),
+      spanProcessors: [
+        new BatchSpanProcessor(otlpExporter),
+        ...(CONSOLE_EXPORT_ENABLED
+          ? [new BatchSpanProcessor(consoleExporter)]
+          : []),
+      ],
+      instrumentations: [
+        // Auto-instrument Node.js core modules, HTTP, Express, etc.
+        getNodeAutoInstrumentations({
+          "@opentelemetry/instrumentation-fs": {
+            enabled: false, // Disable filesystem instrumentation (too noisy)
+          },
+          "@opentelemetry/instrumentation-http": {
+            enabled: true,
+          },
+          "@opentelemetry/instrumentation-express": {
+            enabled: true,
+          },
+        }),
+        // Instrument Prisma database queries
+        new PrismaInstrumentation(),
+      ],
+    });
+
+    // Start the SDK
+    sdk.start();
+    console.log("✅ OpenTelemetry tracing initialized successfully");
+    console.log("   📊 View traces in AI Toolkit (http://localhost:4318)");
+  } catch (error) {
+    console.error("❌ Failed to initialize tracing:", error);
+    // Don't fail the app if tracing setup fails
+  }
+}
+
+/**
+ * Gracefully shutdown tracing on app exit
+ */
+export async function shutdownTracing(): Promise<void> {
+  if (sdk) {
+    try {
+      console.log("🔍 Shutting down OpenTelemetry tracing...");
+      await sdk.shutdown();
+      console.log("✅ Tracing shutdown complete");
+    } catch (error) {
+      console.error("❌ Error shutting down tracing:", error);
+    }
+  }
+}
+
+/**
+ * Get the tracer instance for manual span creation
+ * Only use this if you need custom spans beyond automatic instrumentation
+ */
+export function getTracer() {
+  const { trace } = require("@opentelemetry/api");
+  return trace.getTracer(SERVICE_NAME, SERVICE_VERSION);
+}
+
+// Register shutdown handlers
+process.on("SIGTERM", async () => {
+  await shutdownTracing();
+  if (process.env.DIAG_INTERCEPT_EXIT === "1") {
+    throw new Error("[EXIT_INTERCEPT] SIGTERM graceful shutdown requested");
+  }
+  process.exit(0);
 });
 
-// Middleware to enrich spans with route/user details
-export function enrichRequestSpan(
-  req: Request,
-  _res: Response,
-  next: NextFunction
-) {
-  const span = trace.getSpan(context.active());
-  if (span) {
-    span.setAttribute("http.route", req.route?.path || req.path);
-    if (req.method) span.setAttribute("http.method", req.method);
-    const userId = (req as any).user?.id || (req as any).userId;
-    if (userId) span.setAttribute("app.user_id", String(userId));
-    const reqId = req.headers["x-request-id"];
-    if (reqId) span.setAttribute("app.request_id", String(reqId));
+process.on("SIGINT", async () => {
+  await shutdownTracing();
+  if (process.env.DIAG_INTERCEPT_EXIT === "1") {
+    throw new Error("[EXIT_INTERCEPT] SIGINT graceful shutdown requested");
   }
-  next();
+  process.exit(0);
+});
+
+// Auto-initialize if this module is imported
+if (TRACING_ENABLED) {
+  initTracing();
 }
 
-// Helper for manual spans around async work
-export async function withSpan<T>(
-  name: string,
-  fn: () => Promise<T>
-): Promise<T> {
-  const tracer = trace.getTracer("advancia-backend");
-  const span = tracer.startSpan(name);
-  try {
-    return await context.with(trace.setSpan(context.active(), span), fn());
-  } catch (err: any) {
-    span.recordException(err);
-    span.setStatus({ code: 2, message: err?.message || "error" });
-    throw err;
-  } finally {
-    span.end();
-  }
-}
-
-// Synchronous variant
-export function withSpanSync<T>(name: string, fn: () => T): T {
-  const tracer = trace.getTracer("advancia-backend");
-  const span = tracer.startSpan(name);
-  try {
-    return context.with(trace.setSpan(context.active(), span), fn());
-  } catch (err: any) {
-    span.recordException(err);
-    span.setStatus({ code: 2, message: err?.message || "error" });
-    throw err;
-  } finally {
-    span.end();
-  }
-}
+export default {
+  initTracing,
+  shutdownTracing,
+  getTracer,
+};

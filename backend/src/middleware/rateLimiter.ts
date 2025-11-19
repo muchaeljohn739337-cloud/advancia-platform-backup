@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { captureError } from "../utils/sentry.js";
+import { captureError } from "../utils/sentry";
 
 interface RateLimitEntry {
   count: number;

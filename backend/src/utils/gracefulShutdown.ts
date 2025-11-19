@@ -25,6 +25,11 @@ export function setupGracefulShutdown(
     // Give existing requests 15 seconds to complete
     const shutdownTimeout = setTimeout(() => {
       console.error("[SHUTDOWN] Forcing shutdown after timeout");
+      if (process.env.DIAG_INTERCEPT_EXIT === "1") {
+        throw new Error(
+          "[EXIT_INTERCEPT] gracefulShutdown timeout (force exit 1)"
+        );
+      }
       process.exit(1);
     }, 15000);
 
@@ -47,10 +52,16 @@ export function setupGracefulShutdown(
 
       clearTimeout(shutdownTimeout);
       console.log("[SHUTDOWN] Graceful shutdown complete");
+      if (process.env.DIAG_INTERCEPT_EXIT === "1") {
+        throw new Error("[EXIT_INTERCEPT] gracefulShutdown success (exit 0)");
+      }
       process.exit(0);
     } catch (error) {
       console.error("[SHUTDOWN] Error during graceful shutdown:", error);
       clearTimeout(shutdownTimeout);
+      if (process.env.DIAG_INTERCEPT_EXIT === "1") {
+        throw new Error("[EXIT_INTERCEPT] gracefulShutdown error (exit 1)");
+      }
       process.exit(1);
     }
   };
