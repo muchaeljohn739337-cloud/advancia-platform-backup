@@ -1,6 +1,6 @@
 "use client";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function SplashScreen() {
   const [isVisible, setIsVisible] = useState(true);
@@ -29,11 +29,13 @@ export default function SplashScreen() {
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 bg-purple-400/30 rounded-full"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  opacity: 0.3
-                } as any}
+                style={
+                  {
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    opacity: 0.3,
+                  } as any
+                }
                 animate={{
                   y: [0, -30, 0],
                   opacity: [0.2, 0.8, 0.2],
@@ -72,58 +74,11 @@ export default function SplashScreen() {
 
               {/* Logo icon */}
               <div className="relative w-32 h-32 flex items-center justify-center">
-                <svg
-                  viewBox="0 0 100 100"
+                <img
+                  src="/logo.svg"
+                  alt="Advancia Pay Logo"
                   className="w-full h-full drop-shadow-2xl"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Hexagon shape */}
-                  <motion.path
-                    d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z"
-                    stroke="url(#gradient1)"
-                    strokeWidth="3"
-                    fill="url(#gradient2)"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1.5, ease: "easeInOut" }}
-                  />
-
-                  {/* Inner "A" for Advancia */}
-                  <motion.path
-                    d="M50 25 L65 60 L60 60 L57 52 L43 52 L40 60 L35 60 L50 25 Z M45 47 L55 47 L50 35 Z"
-                    fill="white"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 0.5 }}
-                  />
-
-                  {/* Dollar sign accent */}
-                  <motion.text
-                    x="50"
-                    y="80"
-                    fontSize="20"
-                    fontWeight="bold"
-                    fill="white"
-                    textAnchor="middle"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1, duration: 0.5 }}
-                  >
-                    $
-                  </motion.text>
-
-                  <defs>
-                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#a855f7" />
-                      <stop offset="100%" stopColor="#3b82f6" />
-                    </linearGradient>
-                    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#2563eb" stopOpacity="0.2" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+                />
               </div>
             </motion.div>
 
