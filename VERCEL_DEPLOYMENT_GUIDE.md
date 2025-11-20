@@ -70,8 +70,8 @@ SMTP_PORT=587
 ### A. Vercel Token Authentication
 
 ```bash
-# Set token in environment
-$env:VERCEL_TOKEN = "5Mfvjjg2L4B46AbiypV6fgGH"
+# Set token in environment (get from Vercel dashboard)
+$env:VERCEL_TOKEN = "YOUR_VERCEL_TOKEN_HERE"
 
 # Or use interactive login
 vercel login

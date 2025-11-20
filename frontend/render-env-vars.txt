@@ -1,0 +1,25 @@
+# Copy these environment variables to Render dashboard:
+
+DATABASE_URL=postgresql://db_adnan_postrl_user:Gd1XFfDxFVsM5MltemAhFE3zPNcRh5hg@dpg-d4f112trnu6s73doipjg-a.oregon-postgres.render.com/db_adnan_postrl
+
+NODE_ENV=production
+
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+
+SESSION_SECRET=your-super-secret-session-key-change-this-too
+
+FRONTEND_URL=https://advanciapayledger.com
+
+ALLOWED_ORIGINS=https://advanciapayledger.com,https://www.advanciapayledger.com,https://frontend-odomewjhm-advanciapayledger.vercel.app
+
+PORT=4000
+
+STRIPE_SECRET_KEY=your-stripe-secret-key
+
+STRIPE_WEBHOOK_SECRET=your-stripe-webhook-secret
+
+VAPID_PUBLIC_KEY=your-vapid-public-key
+
+VAPID_PRIVATE_KEY=your-vapid-private-key
+
+VAPID_SUBJECT=mailto:support@advanciapayledger.com

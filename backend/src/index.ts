@@ -144,6 +144,7 @@ import trustRouter from "./routes/trust"; // Scam Adviser & trust verification
 // import trustpilotRouter from "./routes/trustpilot"; // Removed - using simple widget embed instead
 // import trustScoreRouter from "./routes/trustScore"; // User trust & reputation system (TEMPORARILY DISABLED)
 import pricesRouter from "./routes/prices";
+import securityRouter from "./routes/security"; // Breach monitoring & IP protection
 import telegramRouter from "./routes/telegram";
 import telegramWebhookRouter from "./routes/telegramWebhook";
 import transactionsRouter /* , { setTransactionSocketIO } */ from "./routes/transactions";
@@ -305,6 +306,7 @@ app.use("/api/prices", pricesRouter); // Multi-provider price service (CoinGecko
 // app.use("/api/trust-score", trustScoreRouter); // User trust & reputation system (TEMPORARILY DISABLED - import issue)
 // app.use("/api/trustpilot", trustpilotRouter); // Removed - using simple widget embed instead
 app.use("/api/trust", trustRouter); // Scam Adviser & trust verification
+app.use("/api/security", securityRouter); // Breach monitoring & IP protection
 // app.use("/api/tokens", authenticateToken, tokensEnhancedRouter); // Enhanced token features
 // app.use("/api/crypto", authenticateToken, cryptoEnhancedRouter); // Crypto charts & swap (RE-ENABLED)
 // app.use("/api/cryptomus", cryptomusRouter); // Cryptomus payment processing

@@ -2,13 +2,13 @@
 
 import { motion } from "framer-motion";
 import {
-  Settings,
-  Heart,
-  Zap,
-  Shield,
-  RefreshCw,
-  Home,
   Clock,
+  Heart,
+  Home,
+  RefreshCw,
+  Settings,
+  Shield,
+  Zap,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -111,8 +111,8 @@ export default function MaintenancePage() {
               className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed"
             >
               Our platform is currently undergoing scheduled maintenance to
-              bring you exciting new features and improvements. Don&apos;t worry—your
-              account and data are completely safe! ✨
+              bring you exciting new features and improvements. Don&apos;t
+              worry—your account and data are completely safe! ✨
             </motion.p>
           </div>
 
@@ -232,6 +232,77 @@ export default function MaintenancePage() {
           Thank you for your patience! We appreciate your trust in Advancia Pay.
           💙
         </motion.p>
+
+        {/* Company Information Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.8 }}
+          className="mt-12 text-center space-y-4"
+        >
+          {/* Payment Partners */}
+          <div className="bg-slate-800/30 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
+            <p className="text-slate-300 text-sm mb-2">
+              <strong className="text-white">
+                Payment Processing Partners:
+              </strong>
+            </p>
+            <p className="text-slate-400 text-sm">
+              <a
+                href="https://stripe.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-400 hover:text-purple-300 underline"
+              >
+                Stripe Inc.
+              </a>{" "}
+              (USA) and{" "}
+              <a
+                href="https://cryptomus.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-purple-400 hover:text-purple-300 underline"
+              >
+                Cryptomus
+              </a>{" "}
+              (International)
+            </p>
+          </div>
+
+          {/* Legal Entity Info */}
+          <div className="text-slate-400 text-xs space-y-1">
+            <p>
+              © {new Date().getFullYear()}{" "}
+              <strong className="text-slate-300">
+                Advancia Technologies LLC
+              </strong>
+            </p>
+            <p>
+              Services provided by Advancia Technologies LLC, registered in
+              Delaware, USA.
+            </p>
+            <p className="text-slate-500">
+              FinCEN MSB Registration: Pending | State Money Transmitter
+              Licenses: Applied
+            </p>
+          </div>
+
+          {/* Trust Badges */}
+          <div className="flex items-center justify-center space-x-6 pt-4">
+            <div className="flex items-center space-x-2 text-xs text-slate-400">
+              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              <span>Bank-Level Security</span>
+            </div>
+            <div className="flex items-center space-x-2 text-xs text-slate-400">
+              <span>🔒</span>
+              <span>SSL Encrypted</span>
+            </div>
+            <div className="flex items-center space-x-2 text-xs text-slate-400">
+              <span>✓</span>
+              <span>PCI Compliant</span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

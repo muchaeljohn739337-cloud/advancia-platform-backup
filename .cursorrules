@@ -1,0 +1,647 @@
+# Cursor AI Rules - Advancia Pay Ledger
+# Specialized for: AI/ML Development, Graphics/Design, Security, Business Intelligence, Market Analysis
+
+## Core Tech Stack
+- **Backend**: Node.js, Express, TypeScript, Prisma ORM, PostgreSQL
+- **Frontend**: Next.js 14 (App Router), React 18, TailwindCSS, Framer Motion
+- **AI/ML**: OpenAI API, Anthropic Claude, Azure AI, RAG patterns
+- **Real-time**: Socket.IO, Redis pub/sub
+- **Payments**: Stripe, Cryptomus (crypto), Web3.js/ethers.js
+- **Security**: JWT, bcrypt/argon2, TOTP 2FA, rate limiting
+
+---
+
+## 🤖 AI/ML Development Rules
+
+### AI Integration Patterns
+```typescript
+// ✅ GOOD: Use AI Toolkit best practices
+import { OpenAIChatClient } from '@azure/openai';
+import { Agent } from 'agent-framework';
+
+// Agent with memory and context isolation
+const agent = new Agent({
+  model: "gpt-4o",
+  systemPrompt: "You are a financial assistant for Advancia Pay",
+  memory: {
+    type: "conversation",
+    maxTokens: 4000
+  },
+  tools: [retrieveBalanceTool, transactionHistoryTool]
+});
+
+// ❌ AVOID: Direct API calls without error handling
+const response = await openai.chat.completions.create({ ... });
+```
+
+### RAG Implementation
+```typescript
+// ✅ GOOD: Implement RAG for contextual responses
+interface RAGContext {
+  userId: string;
+  query: string;
+  maxResults: number;
+}
+
+async function retrieveContext(ctx: RAGContext) {
+  // 1. Vector search user's transaction history
+  const vectors = await vectorDB.search(ctx.query);
+  
+  // 2. Retrieve relevant documents
+  const docs = await prisma.transaction.findMany({
+    where: { id: { in: vectors.map(v => v.id) } }
+  });
+  
+  // 3. Build context window
+  return buildContextPrompt(docs, ctx.query);
+}
+```
+
+### Model Selection Guidelines
+- **Chat/Support**: GPT-4o, Claude Sonnet 4.5
+- **Embeddings**: text-embedding-3-large
+- **Code Generation**: GPT-4o, Claude Sonnet
+- **Fast Responses**: GPT-3.5-turbo, Claude Haiku
+- **Analysis/Research**: Claude Opus, GPT-4
+
+### AI Tracing & Monitoring
+```typescript
+// ✅ GOOD: Always trace AI operations
+import { trace } from '@azure/ai-tracing';
+
+@trace({ name: 'chat.completion' })
+async function generateResponse(prompt: string) {
+  const response = await agent.run(prompt);
+  
+  // Log tokens, latency, cost
+  logger.info({
+    tokens: response.usage.total_tokens,
+    latency: response.latency,
+    cost: calculateCost(response.usage)
+  });
+  
+  return response;
+}
+```
+
+---
+
+## 🎨 Graphics & Design Rules
+
+### UI/UX Design System
+```typescript
+// ✅ GOOD: Use design tokens and Tailwind classes
+const designTokens = {
+  colors: {
+    primary: 'blue-600',
+    secondary: 'purple-600',
+    success: 'green-500',
+    danger: 'red-500',
+    warning: 'yellow-500'
+  },
+  gradients: {
+    primary: 'from-blue-600 to-purple-600',
+    success: 'from-green-400 to-emerald-600',
+    danger: 'from-red-500 to-pink-600'
+  },
+  spacing: {
+    section: 'py-16 px-4',
+    card: 'p-6',
+    button: 'px-6 py-3'
+  }
+}
+
+// ✅ GOOD: Consistent component styling
+<Button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-xl transition-all duration-300">
+  Action
+</Button>
+```
+
+### Animation Standards
+```typescript
+// ✅ GOOD: Use Framer Motion for smooth animations
+import { motion } from 'framer-motion';
+
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5, ease: 'easeOut' }}
+>
+  Content
+</motion.div>
+
+// ✅ GOOD: Define reusable animation variants
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 }
+};
+```
+
+### Chart & Data Visualization
+```typescript
+// ✅ GOOD: Use professional charting libraries
+import { Line, Bar } from 'react-chartjs-2';
+
+const chartConfig = {
+  responsive: true,
+  plugins: {
+    legend: { position: 'top' as const },
+    title: { display: true, text: 'Transaction Volume' }
+  },
+  scales: {
+    y: { beginAtZero: true }
+  }
+};
+```
+
+### Brand Consistency
+- **Primary Gradient**: Blue (#2563eb) → Purple (#9333ea)
+- **Typography**: System font stack, clear hierarchy
+- **Icons**: Lucide React (consistent, lightweight)
+- **Cards**: Rounded corners (rounded-lg), subtle shadows
+- **Buttons**: Hover states, loading spinners, disabled states
+
+---
+
+## 🔒 Security Best Practices
+
+### Authentication & Authorization
+```typescript
+// ✅ GOOD: Multi-layer security
+import { authenticateToken, requireAdmin, allowRoles } from './middleware/auth';
+
+// Public route
+router.post('/auth/login', rateLimit, requireApiKey, loginHandler);
+
+// Protected route
+router.get('/profile', authenticateToken, getProfileHandler);
+
+// Admin only
+router.post('/admin/users', authenticateToken, requireAdmin, createUserHandler);
+
+// Role-based access
+router.get('/reports', authenticateToken, allowRoles('ADMIN', 'STAFF'), getReportsHandler);
+```
+
+### Input Validation
+```typescript
+// ✅ GOOD: Use Zod for validation
+import { z } from 'zod';
+
+const registerSchema = z.object({
+  email: z.string().email().toLowerCase(),
+  password: z.string().min(8).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/),
+  username: z.string().min(3).max(20).regex(/^[a-zA-Z0-9_]+$/)
+});
+
+// Validate before processing
+const validated = registerSchema.parse(req.body);
+```
+
+### Sensitive Data Handling
+```typescript
+// ✅ GOOD: Never log sensitive data
+logger.info({
+  action: 'user.login',
+  userId: user.id,
+  email: user.email.replace(/(?<=.{2}).*(?=@)/, '***'), // Masked email
+  // ❌ NEVER: password, tokens, API keys, credit cards
+});
+
+// ✅ GOOD: Encrypt sensitive fields
+const encrypted = await encrypt(sensitiveData, process.env.ENCRYPTION_KEY);
+```
+
+### Rate Limiting & DDoS Protection
+```typescript
+// ✅ GOOD: Implement per-route rate limits
+const authRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: 'Too many login attempts, try again later'
+});
+
+router.post('/auth/login', authRateLimit, loginHandler);
+```
+
+### Security Headers
+```typescript
+// ✅ GOOD: Use helmet.js
+import helmet from 'helmet';
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "vercel.live"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'", "https://api.advanciapayledger.com"]
+    }
+  }
+}));
+```
+
+---
+
+## 💼 Business Intelligence & Analytics
+
+### Metrics Tracking
+```typescript
+// ✅ GOOD: Track business metrics
+interface BusinessMetrics {
+  totalUsers: number;
+  activeUsers: number;
+  revenue: Decimal;
+  transactionVolume: Decimal;
+  conversionRate: number;
+  churnRate: number;
+  averageTransactionValue: Decimal;
+}
+
+async function calculateMetrics(period: DateRange): Promise<BusinessMetrics> {
+  const [users, transactions, revenue] = await Promise.all([
+    prisma.user.count({ where: { createdAt: { gte: period.start } } }),
+    prisma.transaction.count({ where: { createdAt: { gte: period.start } } }),
+    prisma.transaction.aggregate({
+      where: { type: 'DEPOSIT', createdAt: { gte: period.start } },
+      _sum: { amount: true }
+    })
+  ]);
+  
+  return {
+    totalUsers: users,
+    activeUsers: await getActiveUsers(period),
+    revenue: revenue._sum.amount || new Decimal(0),
+    transactionVolume: await getTransactionVolume(period),
+    conversionRate: calculateConversionRate(users, transactions),
+    churnRate: await calculateChurnRate(period),
+    averageTransactionValue: new Decimal(revenue._sum.amount || 0).div(transactions || 1)
+  };
+}
+```
+
+### User Behavior Analytics
+```typescript
+// ✅ GOOD: Track user journeys
+interface UserJourney {
+  userId: string;
+  events: Array<{
+    type: 'page_view' | 'button_click' | 'transaction' | 'error';
+    page?: string;
+    action?: string;
+    timestamp: Date;
+    metadata?: Record<string, any>;
+  }>;
+}
+
+// Track critical business events
+await trackEvent({
+  type: 'transaction',
+  userId: user.id,
+  action: 'deposit_completed',
+  metadata: {
+    amount: transaction.amount,
+    method: transaction.paymentMethod,
+    convertedUser: user.firstTransactionCompleted === false
+  }
+});
+```
+
+### Cohort Analysis
+```typescript
+// ✅ GOOD: Segment users for analysis
+async function getCohortRetention(cohortMonth: Date) {
+  const users = await prisma.user.findMany({
+    where: {
+      createdAt: {
+        gte: cohortMonth,
+        lt: addMonths(cohortMonth, 1)
+      }
+    },
+    include: {
+      transactions: {
+        where: { createdAt: { gte: addMonths(cohortMonth, 1) } }
+      }
+    }
+  });
+  
+  const retained = users.filter(u => u.transactions.length > 0);
+  return (retained.length / users.length) * 100;
+}
+```
+
+---
+
+## 📊 Market Analysis & Competitive Intelligence
+
+### Market Data Integration
+```typescript
+// ✅ GOOD: Fetch and analyze market data
+interface MarketData {
+  cryptocurrency: {
+    btc: { price: number; change24h: number; volume: number };
+    eth: { price: number; change24h: number; volume: number };
+    usdt: { price: number; change24h: number; volume: number };
+  };
+  fiat: {
+    usd: { rate: number };
+    eur: { rate: number };
+    gbp: { rate: number };
+  };
+  competitors: Array<{
+    name: string;
+    marketShare: number;
+    userCount: number;
+    features: string[];
+  }>;
+}
+
+async function fetchMarketData(): Promise<MarketData> {
+  const [cryptoPrices, fiatRates] = await Promise.all([
+    fetchCryptoPrices(),
+    fetchFiatRates()
+  ]);
+  
+  return {
+    cryptocurrency: cryptoPrices,
+    fiat: fiatRates,
+    competitors: await analyzeCompetitors()
+  };
+}
+```
+
+### Competitive Analysis
+```typescript
+// ✅ GOOD: Track competitor features
+interface CompetitorAnalysis {
+  competitor: string;
+  features: {
+    breachMonitoring: boolean;
+    ipProtection: boolean;
+    cryptoSupport: boolean;
+    fiatSupport: boolean;
+    supportChat: boolean;
+    mobileApp: boolean;
+  };
+  pricing: {
+    freeTier: boolean;
+    paidTiers: Array<{ name: string; price: number; features: string[] }>;
+  };
+  marketPosition: 'leader' | 'challenger' | 'follower' | 'niche';
+}
+
+// Compare against competitors
+function generateCompetitiveMatrix(competitors: CompetitorAnalysis[]) {
+  return competitors.map(c => ({
+    name: c.competitor,
+    score: calculateCompetitiveScore(c),
+    gaps: identifyFeatureGaps(c, ourFeatures),
+    opportunities: identifyOpportunities(c)
+  }));
+}
+```
+
+### Pricing Strategy
+```typescript
+// ✅ GOOD: Dynamic pricing based on market
+interface PricingStrategy {
+  freeTier: {
+    features: string[];
+    limits: {
+      transactions: number;
+      apiCalls: number;
+      storage: number;
+    };
+  };
+  paidTiers: Array<{
+    name: string;
+    monthlyPrice: number;
+    annualPrice: number;
+    features: string[];
+    limits: Record<string, number>;
+    targetSegment: string;
+  }>;
+}
+
+// A/B test pricing
+async function optimizePricing(testGroup: 'A' | 'B') {
+  const pricing = testGroup === 'A' 
+    ? { starter: 9.99, pro: 29.99 }
+    : { starter: 7.99, pro: 24.99 };
+  
+  return trackConversionRate(pricing);
+}
+```
+
+---
+
+## 🔧 Development Guidelines
+
+### Code Organization
+```typescript
+// ✅ GOOD: Feature-based structure
+backend/
+├── src/
+│   ├── routes/          # API endpoints
+│   ├── services/        # Business logic
+│   ├── middleware/      # Auth, validation, rate limiting
+│   ├── utils/           # Helpers (encryption, decimal, etc.)
+│   ├── jobs/            # Background tasks
+│   └── prismaClient.ts  # Singleton Prisma instance
+
+frontend/
+├── src/
+│   ├── app/             # Next.js App Router pages
+│   ├── components/      # Reusable components
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utilities
+│   └── styles/          # Global styles
+```
+
+### Error Handling
+```typescript
+// ✅ GOOD: Consistent error responses
+try {
+  const result = await riskyOperation();
+  return res.json({ success: true, data: result });
+} catch (error) {
+  logger.error('Operation failed', { error, userId: req.user.userId });
+  
+  return res.status(500).json({
+    success: false,
+    error: process.env.NODE_ENV === 'production' 
+      ? 'Operation failed. Please try again.'
+      : error.message
+  });
+}
+```
+
+### Testing Standards
+```typescript
+// ✅ GOOD: Write comprehensive tests
+describe('User Registration', () => {
+  it('should auto-approve free users', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({ email: 'test@example.com', password: 'Test123!' });
+    
+    expect(response.body.user.approved).toBe(true);
+  });
+  
+  it('should validate email format', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({ email: 'invalid-email', password: 'Test123!' });
+    
+    expect(response.status).toBe(400);
+  });
+});
+```
+
+### Performance Optimization
+```typescript
+// ✅ GOOD: Use database indexes
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  amount    Decimal
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+}
+
+// ✅ GOOD: Implement caching
+const cachedData = await redis.get(`user:${userId}:balance`);
+if (cachedData) return JSON.parse(cachedData);
+
+const balance = await prisma.user.findUnique({ where: { id: userId } });
+await redis.setex(`user:${userId}:balance`, 300, JSON.stringify(balance));
+```
+
+---
+
+## 📝 Documentation Standards
+
+### API Documentation
+```typescript
+/**
+ * POST /api/security/rotate-ip
+ * 
+ * Rotate user's IP address to target country
+ * 
+ * @authentication Required (JWT token)
+ * @body {object} request
+ * @body {string} request.targetCountry - ISO country code (US, UK, DE, etc.)
+ * 
+ * @returns {object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.newIP - Generated IP address
+ * @returns {string} response.country - Target country
+ * @returns {string} response.city - Target city
+ * 
+ * @example
+ * POST /api/security/rotate-ip
+ * { "targetCountry": "US" }
+ * 
+ * Response:
+ * {
+ *   "success": true,
+ *   "newIP": "104.238.142.55",
+ *   "country": "US",
+ *   "city": "New York"
+ * }
+ */
+```
+
+### Component Documentation
+```typescript
+/**
+ * SupportChatWidget
+ * 
+ * Floating chat widget with AI-powered support
+ * 
+ * @features
+ * - Real-time messaging via /api/ai/chat
+ * - Quick action buttons (Deposits, Withdrawals, Rewards)
+ * - Minimize/maximize functionality
+ * - Welcome message on first open
+ * - Message history persistence
+ * 
+ * @usage
+ * <SupportChatWidget />
+ * 
+ * @dependencies
+ * - Lucide React (icons)
+ * - Framer Motion (animations)
+ * - localStorage (message persistence)
+ */
+```
+
+---
+
+## 🚀 Deployment Checklist
+
+### Pre-Deployment
+- [ ] Run tests: `npm test`
+- [ ] Check TypeScript: `npm run type-check`
+- [ ] Lint code: `npm run lint`
+- [ ] Build locally: `npm run build`
+- [ ] Run Prisma migrations: `npx prisma migrate deploy`
+- [ ] Update environment variables
+- [ ] Review security headers
+- [ ] Check rate limits
+- [ ] Verify CORS settings
+
+### Post-Deployment
+- [ ] Test health endpoint: `/api/health`
+- [ ] Verify database connection
+- [ ] Test authentication flow
+- [ ] Check all API routes respond
+- [ ] Monitor error logs (Sentry)
+- [ ] Verify analytics tracking
+- [ ] Test payment flows (Stripe, Cryptomus)
+- [ ] Check Socket.IO connections
+
+---
+
+## 💡 AI Assistant Instructions
+
+When working on this project:
+
+1. **Always follow TypeScript best practices** - Use strict typing, avoid `any`
+2. **Security first** - Validate inputs, sanitize outputs, check permissions
+3. **User experience matters** - Smooth animations, clear error messages, loading states
+4. **Performance optimization** - Use indexes, caching, lazy loading
+5. **Business metrics** - Track conversions, retention, revenue
+6. **Competitive awareness** - Monitor market trends, competitor features
+7. **AI integration** - Use agent patterns, RAG for context, trace operations
+8. **Design consistency** - Follow design tokens, use Tailwind utilities
+9. **Documentation** - Comment complex logic, document APIs
+10. **Testing** - Write tests for critical flows
+
+### Common Tasks
+- **Adding AI feature**: Use agent-framework, implement tracing, add memory
+- **New API route**: Validate input (Zod), authenticate, rate limit, error handling
+- **UI component**: Use Tailwind, add animations, handle loading/error states
+- **Database query**: Add indexes, use Prisma best practices, handle decimals
+- **Security feature**: Follow OWASP guidelines, implement logging, test thoroughly
+
+### Questions to Ask
+- "Does this need authentication/authorization?"
+- "Should this be rate limited?"
+- "What are the security implications?"
+- "How does this impact business metrics?"
+- "Is this consistent with our design system?"
+- "Should this be cached?"
+- "What's the error handling strategy?"
+- "Do we need AI/ML for this?"
+
+---
+
+**Last Updated**: November 19, 2025
+**Project**: Advancia Pay Ledger
+**Focus**: AI/ML, Security, Business Intelligence, Market Analysis
