@@ -144,7 +144,7 @@ done
 curl -X POST http://localhost:4000/api/auth/admin-login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "password": "admin123",
     "token": "123456"
   }'
@@ -159,7 +159,7 @@ curl -X POST http://localhost:4000/api/auth/admin-login \
   "token": "eyJhbGciOiJIUzI1NiIs...",
   "user": {
     "id": 1,
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "role": "admin"
   }
 }
@@ -173,7 +173,7 @@ curl -X POST http://localhost:4000/api/auth/admin-login \
 curl -X POST http://localhost:4000/api/auth/admin-login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "password": "admin123",
     "backupCode": "a1b2c3d4"
   }'
@@ -188,7 +188,7 @@ curl -X POST http://localhost:4000/api/auth/admin-login \
   "token": "eyJhbGciOiJIUzI1NiIs...",
   "user": {
     "id": 1,
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "role": "admin"
   }
 }
@@ -210,7 +210,7 @@ curl -X GET http://localhost:4000/api/me \
 
 ```json
 {
-  "service": "advvancia-backend",
+  "service": "advancia-backend",
   "version": "1.0.0"
 }
 ```
@@ -225,7 +225,7 @@ curl -X GET http://localhost:4000/api/me \
 curl -X POST http://localhost:4000/api/auth/admin-login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "password": "admin123",
     "token": "000000"
   }'
@@ -241,7 +241,7 @@ curl -X POST http://localhost:4000/api/auth/admin-login \
 curl -X POST http://localhost:4000/api/auth/admin-login \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "password": "admin123",
     "backupCode": "invalid"
   }'
@@ -259,7 +259,7 @@ for i in {1..5}; do
   curl -X POST http://localhost:4000/api/auth/admin-login \
     -H "Content-Type: application/json" \
     -d '{
-      "email": "admin@advvancia.com",
+      "email": "admin@advancia.com",
       "password": "wrong",
       "token": "000000"
     }'

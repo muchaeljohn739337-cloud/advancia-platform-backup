@@ -568,10 +568,10 @@ app.get("/api/test-sentry-context", (req, res) => {
 curl http://localhost:4000/api/test-sentry
 
 # View backend logs
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 
 # Check if Sentry is initialized
-pm2 logs advvancia-backend | grep "Sentry"
+pm2 logs advancia-backend | grep "Sentry"
 # Expected: "Sentry initialized for production environment"
 
 # Monitor errors in real-time

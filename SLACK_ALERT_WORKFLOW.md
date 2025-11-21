@@ -365,7 +365,7 @@ Environment: production
    ```bash
    # Connect to DB
    docker ps | grep postgres
-   psql -h localhost -U postgres -d advvancia
+   psql -h localhost -U postgres -d advancia
    ```
 3. **Verify connection pool settings**:
    ```javascript
@@ -434,7 +434,7 @@ Memory: 480MB/500MB (near limit)
 1. **Acknowledge** within 5 minutes
 2. **Check PM2 logs**:
    ```bash
-   pm2 logs advvancia-backend --lines 100 --err
+   pm2 logs advancia-backend --lines 100 --err
    ```
 3. **Review watchdog logs**:
    ```powershell
@@ -719,7 +719,7 @@ Configure in PM2 or run standalone.
 pm2 status
 
 # View recent errors
-pm2 logs advvancia-backend --err --lines 50
+pm2 logs advancia-backend --err --lines 50
 
 # Analyze watchdog logs
 .\parse-watchdog.ps1 -ShowDetails
@@ -731,7 +731,7 @@ https://sentry.io/organizations/YOUR_ORG/issues/
 https://app.datadoghq.com/monitors/manage
 
 # Restart backend
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 
 # View memory usage
 pm2 monit

@@ -7,7 +7,7 @@ export default function Layout({ children }) {
         fontFamily: "Inter, system-ui, Arial",
       }}
     >
-      <h1>Advvancia</h1>
+      <h1>Advancia</h1>
       <div>{children}</div>
     </div>
   );

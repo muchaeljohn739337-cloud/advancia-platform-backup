@@ -15,6 +15,7 @@
   "editor.rulers": [80, 120],
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
+  "files.autoSave": "onFocusChange",
 
   // TypeScript/JavaScript Settings
   "typescript.preferences.preferTypeOnlyAutoImports": true,
@@ -165,6 +166,11 @@
   // ESLint Settings
   "eslint.workingDirectories": ["backend", "frontend"],
 
+  // Explorer Visibility
+  "files.exclude": {
+    "**/node_modules": true
+  },
+
   // Search Settings
   "search.exclude": {
     "**/node_modules": true,
@@ -175,6 +181,23 @@
     "**/backups": true,
     "**/.venv": true
   },
+
+  // File Watcher Performance
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true
+  },
+
+  // Make dependencies read-only to avoid accidental edits
+  "files.readonlyInclude": {
+    "**/node_modules/**": true
+  },
+
+  // Hide everything listed in .gitignore from Explorer (includes node_modules)
+  "explorer.excludeGitIgnore": true,
 
   // Security
   "security.workspace.trust.untrustedFiles": "open",
@@ -190,5 +213,5 @@
     "editor.defaultFormatter": "ms-azuretools.vscode-containers"
   },
   "testing.automaticallyOpenTestResults": "neverOpen",
-  "prisma.pinToPrisma6": true
+  "prisma.pinToPrisma6": false
 }

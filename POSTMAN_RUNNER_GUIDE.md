@@ -175,7 +175,7 @@ You can use a CSV/JSON file to test multiple user accounts:
 
 ```csv
 email,password
-admin@advvancia.com,wrongpass1
+admin@advancia.com,wrongpass1
 user@test.com,badpassword
 another@test.com,incorrect123
 ```
@@ -202,7 +202,7 @@ another@test.com,incorrect123
 
 ```csv
 email,password,totp
-admin@advvancia.com,wrongpass,000000
+admin@advancia.com,wrongpass,000000
 user1@test.com,badpass,000000
 user2@test.com,incorrect,000000
 ```
@@ -335,12 +335,12 @@ start newman-report.html
 # Create test data file
 @"
 email,password,totp
-admin@advvancia.com,wrongpass1,000000
-admin@advvancia.com,wrongpass2,000000
-admin@advvancia.com,wrongpass3,000000
-admin@advvancia.com,wrongpass4,000000
-admin@advvancia.com,wrongpass5,000000
-admin@advvancia.com,wrongpass6,000000
+admin@advancia.com,wrongpass1,000000
+admin@advancia.com,wrongpass2,000000
+admin@advancia.com,wrongpass3,000000
+admin@advancia.com,wrongpass4,000000
+admin@advancia.com,wrongpass5,000000
+admin@advancia.com,wrongpass6,000000
 "@ | Out-File -FilePath "lockout-data.csv"
 
 # Run with data file
@@ -366,7 +366,7 @@ SELECT
         ELSE '✅ UNLOCKED'
     END as status
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected Result:**
@@ -374,7 +374,7 @@ WHERE email = 'admin@advvancia.com';
 ```
 email                  | failed_attempts | locked_until              | status
 -----------------------|-----------------|---------------------------|----------
-admin@advvancia.com    | 5               | 2025-11-14 10:45:30+00   | 🔒 LOCKED
+admin@advancia.com    | 5               | 2025-11-14 10:45:30+00   | 🔒 LOCKED
 ```
 
 ### Verify with PowerShell
@@ -388,7 +388,7 @@ admin@advvancia.com    | 5               | 2025-11-14 10:45:30+00   | 🔒 LOCKE
 # ║         LOCKOUT STATUS CHECK                      ║
 # ╚═══════════════════════════════════════════════════╝
 #
-# email: admin@advvancia.com
+# email: admin@advancia.com
 # failed_attempts: 5
 # locked_until: 2025-11-14 10:45:30.123
 # lock_status: 🔒 LOCKED

@@ -27,7 +27,7 @@ Click on the environment and edit these values:
 | Variable        | Current Value           | What to Set                                               |
 | --------------- | ----------------------- | --------------------------------------------------------- |
 | `baseUrl`       | `http://localhost:4000` | ✅ Leave as-is for local testing                          |
-| `adminEmail`    | `admin@advvancia.com`   | ✅ Leave as-is                                            |
+| `adminEmail`    | `admin@advancia.com`   | ✅ Leave as-is                                            |
 | `adminPassword` | `admin123`              | ✅ Leave as-is (development only!)                        |
 | `validTOTP`     | `000000`                | ⚠️ **UPDATE** with current TOTP from Google Authenticator |
 | `backupCode`    | empty                   | ⚠️ Optional: Set one of your backup codes                 |
@@ -80,7 +80,7 @@ Execute requests one-by-one in this order:
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "user": {
     "id": 1,
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "role": "admin"
   }
 }
@@ -222,7 +222,7 @@ Set `backupCode` variable to one of your backup codes
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "user": {
     "id": 1,
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "role": "admin"
   }
 }
@@ -274,7 +274,7 @@ last_login_at: [recent timestamp]
 [
   {
     "id": 1,
-    "email": "admin@advvancia.com",
+    "email": "admin@advancia.com",
     "role": "admin"
   },
   {

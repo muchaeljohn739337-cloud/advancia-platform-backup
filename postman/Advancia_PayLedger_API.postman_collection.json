@@ -113,7 +113,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@advvancia.com\",\n  \"password\": \"admin123\",\n  \"token\": \"123456\"\n}"
+              "raw": "{\n  \"email\": \"admin@advancia.com\",\n  \"password\": \"admin123\",\n  \"token\": \"123456\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/admin-login",
@@ -147,7 +147,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"admin@advvancia.com\",\n  \"password\": \"admin123\",\n  \"backupCode\": \"<your_backup_code>\"\n}"
+              "raw": "{\n  \"email\": \"admin@advancia.com\",\n  \"password\": \"admin123\",\n  \"backupCode\": \"<your_backup_code>\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/auth/admin-login",

@@ -30,7 +30,7 @@ SELECT
     totp_enabled,
     totp_verified
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 \echo ''
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -54,7 +54,7 @@ SELECT
     END as lockout_status,
     EXTRACT(EPOCH FROM (locked_until - NOW())) / 60 as minutes_remaining_numeric
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 \echo ''
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -74,7 +74,7 @@ SELECT
         ELSE '✗ 2FA Disabled'
     END as two_factor_status
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 \echo ''
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -93,7 +93,7 @@ SELECT
         ELSE '✗ No backup codes left'
     END as backup_status
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 \echo ''
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -114,7 +114,7 @@ SELECT
     created_at as account_created,
     updated_at as last_modified
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 \echo ''
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -131,7 +131,7 @@ SELECT
         ELSE CONCAT(array_length(recovery_codes, 1), ' recovery codes available')
     END as recovery_status
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 \echo ''
 \echo '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
@@ -166,7 +166,7 @@ SELECT
         ELSE NULL
     END as minutes_until_unlock
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 \x auto
 
 \echo ''

@@ -2,8 +2,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import { runMigrations } from "./db.js";
 import { swaggerSpec } from "./config/swagger.js";
+import { runMigrations } from "./db.js";
 import {
   errorHandler,
   initMonitoring,
@@ -65,7 +65,7 @@ app.use("/api", healthRoutes);
 app.use("/api/auth", authRoutes);
 
 app.get("/api/me", (req, res) =>
-  res.json({ service: "advvancia-backend", version: "1.0.0" })
+  res.json({ service: "advancia-backend", version: "1.0.0" })
 );
 
 // Sentry error handler must be before other error handlers

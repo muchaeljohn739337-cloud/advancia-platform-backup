@@ -46,7 +46,7 @@ export function requestMetrics(app) {
         const now = Math.floor(Date.now() / 1000);
         const series = [
           {
-            metric: "advvancia.request.latency",
+            metric: "advancia.request.latency",
             type: 0, // gauge
             points: [{ timestamp: now, value: duration }],
             tags: [
@@ -56,7 +56,7 @@ export function requestMetrics(app) {
             ],
           },
           {
-            metric: "advvancia.request.count",
+            metric: "advancia.request.count",
             type: 1, // count
             points: [{ timestamp: now, value: 1 }],
             tags: [
@@ -115,7 +115,7 @@ export function errorHandler(err, req, res, next) {
     const now = Math.floor(Date.now() / 1000);
     const series = [
       {
-        metric: "advvancia.error.count",
+        metric: "advancia.error.count",
         type: 1, // count
         points: [{ timestamp: now, value: 1 }],
         tags: [`endpoint:${req.path}`, `status:${err.status || 500}`],

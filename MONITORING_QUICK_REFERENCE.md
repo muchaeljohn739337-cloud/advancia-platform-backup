@@ -43,25 +43,25 @@ pm2 start ecosystem.config.cjs --env production
 pm2 status
 
 # Logs (live)
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 
 # Logs (last 100 lines)
-pm2 logs advvancia-backend --lines 100
+pm2 logs advancia-backend --lines 100
 
 # Real-time monitoring
 pm2 monit
 
 # Restart
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 
 # Reload (zero-downtime)
-pm2 reload advvancia-backend
+pm2 reload advancia-backend
 
 # Stop
-pm2 stop advvancia-backend
+pm2 stop advancia-backend
 
 # Delete
-pm2 delete advvancia-backend
+pm2 delete advancia-backend
 ```
 
 ### Watchdog Control
@@ -156,13 +156,13 @@ curl https://api.advancia.com/api/health
 pm2 status
 
 # 2. View recent errors
-pm2 logs advvancia-backend --err --lines 100
+pm2 logs advancia-backend --err --lines 100
 
 # 3. Check if port is blocked
 netstat -ano | findstr :4000
 
 # 4. Restart
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 
 # 5. If still down, manual start
 cd backend
@@ -176,10 +176,10 @@ node src/index.js
 pm2 monit
 
 # 2. Check current limit
-pm2 describe advvancia-backend | grep "max_memory"
+pm2 describe advancia-backend | grep "max_memory"
 
 # 3. Restart to clear
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 
 # 4. If persistent, increase limit in ecosystem.config.cjs
 ```
@@ -191,13 +191,13 @@ pm2 restart advvancia-backend
 pm2 status
 
 # 2. Analyze logs for crash reason
-pm2 logs advvancia-backend --err --lines 200
+pm2 logs advancia-backend --err --lines 200
 
 # 3. Run watchdog analysis
 .\parse-watchdog.ps1 -ShowDetails
 
 # 4. Stop PM2 and debug manually
-pm2 stop advvancia-backend
+pm2 stop advancia-backend
 cd backend
 node src/index.js
 ```
@@ -213,13 +213,13 @@ node src/index.js
 pm2 status
 
 # 2. Restart count (should be low)
-pm2 describe advvancia-backend | Select-String "restarts"
+pm2 describe advancia-backend | Select-String "restarts"
 
 # 3. Quick health check
 curl http://localhost:4000/api/health
 
 # 4. Recent errors
-pm2 logs advvancia-backend --err --lines 20
+pm2 logs advancia-backend --err --lines 20
 
 # 5. Uptime summary
 .\parse-watchdog.ps1 | Select-String "Overall Uptime"
@@ -269,7 +269,7 @@ Root/
 module.exports = {
   apps: [
     {
-      name: "advvancia-backend",
+      name: "advancia-backend",
       script: "src/index.js",
       instances: 1,
       exec_mode: "fork",
@@ -359,7 +359,7 @@ module.exports = {
 ```powershell
 # Check everything
 pm2 status
-pm2 logs advvancia-backend --lines 50
+pm2 logs advancia-backend --lines 50
 .\parse-watchdog.ps1
 
 # Start backend (dev)

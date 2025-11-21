@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "advvancia-backend",
+      name: "advancia-backend",
       script: "src/index.js",
       instances: 1, // or "max" for clustering
       exec_mode: "fork", // "cluster" if you want multi-core scaling

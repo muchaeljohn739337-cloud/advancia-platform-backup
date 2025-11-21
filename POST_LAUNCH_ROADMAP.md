@@ -68,7 +68,7 @@ By pacing rollout this way:
 
 ---
 
-# 🔧 Adaptations for Advvancia’s Ops & Feature Roadmap
+# 🔧 Adaptations for Advancia’s Ops & Feature Roadmap
 
 ## 📍 Add Milestones
 
@@ -186,6 +186,6 @@ By pacing rollout this way:
 
 # ✅ Outcome
 
-By adapting your roadmap with **milestones, dependencies, and tool integration**, you’ll keep Advvancia **lean, focused, and scalable**.
+By adapting your roadmap with **milestones, dependencies, and tool integration**, you’ll keep Advancia **lean, focused, and scalable**.
 
 ⚡ You can start simple (Kanban in Notion or Trello) and layer in milestones/dependencies as the project grows.

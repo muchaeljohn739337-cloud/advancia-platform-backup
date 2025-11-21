@@ -11,13 +11,13 @@ The backend is failing to start because it can't connect to PostgreSQL database.
 ```bash
 # Install Docker if not already installed
 # Then run PostgreSQL in Docker
-docker run --name advancia-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=advvancia -p 5432:5432 -d postgres:15
+docker run --name advancia-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=advancia -p 5432:5432 -d postgres:15
 
 # Wait for database to start
 sleep 10
 
 # Test connection
-docker exec -it advancia-postgres psql -U postgres -d advvancia -c "SELECT version();"
+docker exec -it advancia-postgres psql -U postgres -d advancia -c "SELECT version();"
 ```
 
 ### Option 2: Local PostgreSQL Installation
@@ -27,10 +27,10 @@ docker exec -it advancia-postgres psql -U postgres -d advvancia -c "SELECT versi
 # Download from: https://www.postgresql.org/download/windows/
 
 # Create database
-createdb -U postgres advvancia
+createdb -U postgres advancia
 
 # Or using psql
-psql -U postgres -c "CREATE DATABASE advvancia;"
+psql -U postgres -c "CREATE DATABASE advancia;"
 ```
 
 ### Option 3: Use Existing Docker Compose
@@ -65,7 +65,7 @@ npm run dev
 Make sure your `.env` file has:
 
 ```env
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/advvancia
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/advancia
 PORT=4000
 NODE_ENV=development
 JWT_SECRET=dev_secret_key_change_in_prod
@@ -102,19 +102,19 @@ JWT_SECRET=dev_secret_key_change_in_prod
 netstat -an | find "5432"
 
 # Test connection manually
-psql -h localhost -U postgres -d advvancia
+psql -h localhost -U postgres -d advancia
 ```
 
 ### Migration Issues
 
 ```bash
 # Reset database
-dropdb advvancia
-createdb advvancia
+dropdb advancia
+createdb advancia
 
 # Or with Docker
-docker exec -it advancia-postgres dropdb -U postgres advvancia
-docker exec -it advancia-postgres createdb -U postgres advvancia
+docker exec -it advancia-postgres dropdb -U postgres advancia
+docker exec -it advancia-postgres createdb -U postgres advancia
 ```
 
 ### PM2 Issues

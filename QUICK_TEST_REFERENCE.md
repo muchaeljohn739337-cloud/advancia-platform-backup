@@ -88,10 +88,10 @@
 
 ```bash
 # Connect to database
-docker exec -it advancia-postgres psql -U postgres -d advvancia
+docker exec -it advancia-postgres psql -U postgres -d advancia
 
 # Run monitoring script
-docker exec -it advancia-postgres psql -U postgres -d advvancia -f monitor_lockout.sql
+docker exec -it advancia-postgres psql -U postgres -d advancia -f monitor_lockout.sql
 ```
 
 ---
@@ -149,7 +149,7 @@ docker exec -it advancia-postgres psql -U postgres -d advvancia -f monitor_locko
 
 # 3. Simulate 5 failed attempts
 for ($i=1; $i -le 5; $i++) {
-    $body = @{email='admin@advvancia.com';password='wrong';token='000000'} | ConvertTo-Json
+    $body = @{email='admin@advancia.com';password='wrong';token='000000'} | ConvertTo-Json
     try { Invoke-RestMethod -Uri 'http://localhost:4000/api/auth/admin-login' -Method Post -Body $body -ContentType 'application/json' } catch {}
     .\quick-db-check.ps1 attempts
 }
@@ -182,7 +182,7 @@ for ($i=1; $i -le 5; $i++) {
 
 # 4. Login with valid credentials
 $totp = Read-Host "Enter TOTP code"
-$body = @{email='admin@advvancia.com';password='admin123';token=$totp} | ConvertTo-Json
+$body = @{email='admin@advancia.com';password='admin123';token=$totp} | ConvertTo-Json
 Invoke-RestMethod -Uri 'http://localhost:4000/api/auth/admin-login' -Method Post -Body $body -ContentType 'application/json'
 
 # 5. Verify reset
@@ -254,7 +254,7 @@ last_login_at: [recent timestamp]
 .\quick-db-check.ps1 reset
 
 # Or via SQL
-docker exec advancia-postgres psql -U postgres -d advvancia -c "UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE email='admin@advvancia.com';"
+docker exec advancia-postgres psql -U postgres -d advancia -c "UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE email='admin@advancia.com';"
 ```
 
 ### Script Not Found
@@ -292,7 +292,7 @@ cd backend ; node src/index.js
 ## 📝 Admin Credentials (Development)
 
 ```
-Email: admin@advvancia.com
+Email: admin@advancia.com
 Password: admin123
 TOTP Secret: LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3
 ```

@@ -2,7 +2,7 @@
 
 ## Admin Account Credentials
 
-**Email**: `admin@advvancia.com`  
+**Email**: `admin@advancia.com`  
 **Password**: `admin123`  
 **Role**: `admin`
 
@@ -34,7 +34,7 @@ LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3
 ### QR Code URL (Alternative Method)
 
 ```
-otpauth://totp/Advancia%20Pay%20Ledger:admin@advvancia.com?secret=LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3&issuer=Advancia%20Pay%20Ledger
+otpauth://totp/Advancia%20Pay%20Ledger:admin@advancia.com?secret=LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3&issuer=Advancia%20Pay%20Ledger
 ```
 
 You can generate a QR code from this URL using any QR code generator online, then scan it with your authenticator app.
@@ -52,7 +52,7 @@ The admin account has **5 backup codes** stored as bcrypt hashes in the database
 ### Viewing Backup Codes from Database
 
 ```bash
-docker exec advancia-postgres psql -U postgres -d advvancia -t -c "SELECT jsonb_pretty(backup_codes) FROM users WHERE email='admin@advvancia.com'"
+docker exec advancia-postgres psql -U postgres -d advancia -t -c "SELECT jsonb_pretty(backup_codes) FROM users WHERE email='admin@advancia.com'"
 ```
 
 ## Testing Admin Login
@@ -63,7 +63,7 @@ docker exec advancia-postgres psql -U postgres -d advvancia -t -c "SELECT jsonb_
 
 ```json
 {
-  "email": "admin@advvancia.com",
+  "email": "admin@advancia.com",
   "password": "admin123",
   "token": "123456"
 }
@@ -77,7 +77,7 @@ Replace `123456` with the 6-digit code from your authenticator app.
 
 ```json
 {
-  "email": "admin@advvancia.com",
+  "email": "admin@advancia.com",
   "password": "admin123",
   "backupCode": "generated-backup-code"
 }
@@ -130,7 +130,7 @@ Both requests automatically extract and store the JWT token for subsequent authe
 - Wait 15 minutes for automatic unlock
 - Or manually reset via database:
   ```sql
-  UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE email = 'admin@advvancia.com';
+  UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE email = 'admin@advancia.com';
   ```
 
 ### Lost Authenticator Access

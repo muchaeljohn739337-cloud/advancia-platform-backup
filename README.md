@@ -1,13 +1,13 @@
-# 💳 Advvancia Project — Fintech SaaS
+# 💳 Advancia Project — Fintech SaaS
 
-Advvancia is a secure, scalable fintech SaaS platform built with **React/Next.js**, **Node.js/Express**, and **PostgreSQL**, deployed on **DigitalOcean** with **Cloudflare edge protection**.
+Advancia is a secure, scalable fintech SaaS platform built with **React/Next.js**, **Node.js/Express**, and **PostgreSQL**, deployed on **DigitalOcean** with **Cloudflare edge protection**.
 It provides authentication, payments, dashboards, and monitoring — ready for production.
 
 ---
 
 ## 🏗️ Architecture
 
-![Advvancia Architecture](docs/architecture.png)
+![Advancia Architecture](docs/architecture.png)
 
 **Stack Overview:**
 - **Frontend** → React + Next.js (Dockerized, served via Nginx)

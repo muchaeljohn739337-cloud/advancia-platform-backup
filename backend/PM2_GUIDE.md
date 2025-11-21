@@ -24,7 +24,7 @@ pm2 start ecosystem.config.cjs --env production
 
 ```bash
 pm2 status
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 pm2 monit
 ```
 
@@ -36,7 +36,7 @@ pm2 monit
 module.exports = {
   apps: [
     {
-      name: "advvancia-backend",
+      name: "advancia-backend",
       script: "src/index.js",
       instances: 1, // or "max" for multi-core
       exec_mode: "fork", // or "cluster"
@@ -77,16 +77,16 @@ pm2 start ecosystem.config.cjs --env development
 pm2 start ecosystem.config.cjs --env production
 
 # Stop
-pm2 stop advvancia-backend
+pm2 stop advancia-backend
 
 # Restart
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 
 # Reload (zero-downtime restart)
-pm2 reload advvancia-backend
+pm2 reload advancia-backend
 
 # Delete from PM2
-pm2 delete advvancia-backend
+pm2 delete advancia-backend
 ```
 
 ### Monitoring
@@ -96,16 +96,16 @@ pm2 delete advvancia-backend
 pm2 status
 
 # Live logs (tail -f style)
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 
 # Last 100 lines
-pm2 logs advvancia-backend --lines 100
+pm2 logs advancia-backend --lines 100
 
 # Monitor CPU/Memory in real-time
 pm2 monit
 
 # Detailed info
-pm2 describe advvancia-backend
+pm2 describe advancia-backend
 
 # Process list as JSON
 pm2 jlist
@@ -115,7 +115,7 @@ pm2 jlist
 
 ```bash
 # View logs
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 
 # Clear logs
 pm2 flush
@@ -181,7 +181,7 @@ backend/logs/
 
 ```bash
 # PM2 logs (live)
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 
 # Direct file access
 tail -f logs/err.log
@@ -259,10 +259,10 @@ cd backend
 npm install
 
 # 2. Reload without downtime
-pm2 reload advvancia-backend
+pm2 reload advancia-backend
 
 # Or restart (brief downtime)
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 ```
 
 ### Monitoring
@@ -275,10 +275,10 @@ pm2 status
 pm2 monit
 
 # View recent errors
-pm2 logs advvancia-backend --err --lines 50
+pm2 logs advancia-backend --err --lines 50
 
 # Check restart count
-pm2 describe advvancia-backend | grep "restarts"
+pm2 describe advancia-backend | grep "restarts"
 ```
 
 ---
@@ -289,7 +289,7 @@ pm2 describe advvancia-backend | grep "restarts"
 
 ```bash
 # Check PM2 logs
-pm2 logs advvancia-backend --lines 100
+pm2 logs advancia-backend --lines 100
 
 # Check error log directly
 cat logs/err.log
@@ -308,11 +308,11 @@ node src/index.js
 pm2 monit
 
 # Check memory limit
-pm2 describe advvancia-backend | grep "max_memory"
+pm2 describe advancia-backend | grep "max_memory"
 
 # Increase limit if needed
 # Edit ecosystem.config.cjs: max_memory_restart: "1G"
-pm2 restart advvancia-backend
+pm2 restart advancia-backend
 ```
 
 ### Frequent Restarts
@@ -322,10 +322,10 @@ pm2 restart advvancia-backend
 pm2 status
 
 # View logs for crash reasons
-pm2 logs advvancia-backend --err --lines 100
+pm2 logs advancia-backend --err --lines 100
 
 # Disable auto-restart temporarily
-pm2 stop advvancia-backend
+pm2 stop advancia-backend
 node src/index.js  # Debug manually
 ```
 
@@ -340,7 +340,7 @@ lsof -i :4000
 netstat -ano | findstr :4000
 
 # Kill the process or stop PM2
-pm2 delete advvancia-backend
+pm2 delete advancia-backend
 ```
 
 ### ES Module Issues
@@ -361,7 +361,7 @@ mv ecosystem.config.js ecosystem.config.cjs
 
 ```javascript
 {
-  name: "advvancia-backend",
+  name: "advancia-backend",
   script: "src/index.js",
   instances: "max",      // Use all CPU cores
   exec_mode: "cluster",  // Enable clustering
@@ -389,12 +389,12 @@ mv ecosystem.config.js ecosystem.config.cjs
 module.exports = {
   apps: [
     {
-      name: "advvancia-backend",
+      name: "advancia-backend",
       script: "src/index.js",
       env_production: { PORT: 4000 },
     },
     {
-      name: "advvancia-worker",
+      name: "advancia-worker",
       script: "src/worker.js",
       instances: 2,
     },
@@ -475,12 +475,12 @@ pm2 start ecosystem.config.cjs --env production
 pm2 start ecosystem.config.cjs --env development
 
 # Monitor logs
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 
 # Make code changes (auto-restarts)
 
 # Stop when done
-pm2 stop advvancia-backend
+pm2 stop advancia-backend
 ```
 
 ### Scenario 2: Production Deployment
@@ -494,7 +494,7 @@ pm2 save
 # Future updates (zero-downtime)
 git pull
 npm install
-pm2 reload advvancia-backend
+pm2 reload advancia-backend
 ```
 
 ### Scenario 3: Debugging Production Issues
@@ -504,10 +504,10 @@ pm2 reload advvancia-backend
 pm2 status
 
 # View recent errors
-pm2 logs advvancia-backend --err --lines 200
+pm2 logs advancia-backend --err --lines 200
 
 # Check restart count
-pm2 describe advvancia-backend
+pm2 describe advancia-backend
 
 # Analyze patterns
 cd .. && .\parse-watchdog.ps1 -ShowDetails
@@ -520,14 +520,14 @@ cd .. && .\parse-watchdog.ps1 -ShowDetails
 pm2 monit
 
 # Check restart history (memory restarts)
-pm2 describe advvancia-backend | grep "restart"
+pm2 describe advancia-backend | grep "restart"
 
 # Increase limit temporarily for investigation
 # Edit ecosystem.config.cjs: max_memory_restart: "2G"
-pm2 reload advvancia-backend
+pm2 reload advancia-backend
 
 # Profile with Node.js inspector
-pm2 delete advvancia-backend
+pm2 delete advancia-backend
 node --inspect src/index.js
 ```
 
@@ -583,10 +583,10 @@ node --inspect src/index.js
 ```bash
 pm2 start ecosystem.config.cjs --env production  # Start
 pm2 status                                       # Check status
-pm2 logs advvancia-backend                       # View logs
+pm2 logs advancia-backend                       # View logs
 pm2 monit                                        # Monitor metrics
-pm2 reload advvancia-backend                     # Zero-downtime restart
-pm2 stop advvancia-backend                       # Stop
+pm2 reload advancia-backend                     # Zero-downtime restart
+pm2 stop advancia-backend                       # Stop
 ```
 
 **Integration:**

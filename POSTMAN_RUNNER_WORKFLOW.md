@@ -27,7 +27,7 @@
 │                                                                         │
 │  POST /api/auth/admin-login                                             │
 │  {                                                                      │
-│    "email": "admin@advvancia.com",                                      │
+│    "email": "admin@advancia.com",                                      │
 │    "password": "wrongpassword1",  ← Auto-incremented                   │
 │    "token": "000000"                                                    │
 │  }                                                                      │
@@ -60,7 +60,7 @@
 │                                                                         │
 │  POST /api/auth/admin-login                                             │
 │  {                                                                      │
-│    "email": "admin@advvancia.com",                                      │
+│    "email": "admin@advancia.com",                                      │
 │    "password": "wrongpassword5",                                        │
 │    "token": "000000"                                                    │
 │  }                                                                      │
@@ -87,7 +87,7 @@
 │                                                                         │
 │  POST /api/auth/admin-login                                             │
 │  {                                                                      │
-│    "email": "admin@advvancia.com",                                      │
+│    "email": "admin@advancia.com",                                      │
 │    "password": "wrongpassword6",                                        │
 │    "token": "000000"                                                    │
 │  }                                                                      │
@@ -124,7 +124,7 @@
 │                                                                         │
 │  Expected State:                                                        │
 │  ┌─────────────────────────────────────────────────────────┐           │
-│  │ email: admin@advvancia.com                              │           │
+│  │ email: admin@advancia.com                              │           │
 │  │ failed_attempts: 5                                      │           │
 │  │ locked_until: 2025-11-14 10:45:30.123                   │           │
 │  │ lock_status: 🔒 LOCKED                                  │           │

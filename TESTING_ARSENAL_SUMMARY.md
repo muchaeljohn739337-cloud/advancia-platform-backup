@@ -214,16 +214,16 @@ start newman-report.html
 ```sql
 -- Basic security state
 SELECT email, failed_attempts, locked_until, totp_enabled
-FROM users WHERE email = 'admin@advvancia.com';
+FROM users WHERE email = 'admin@advancia.com';
 
 -- Lockout timing
 SELECT
     EXTRACT(EPOCH FROM (locked_until - NOW())) / 60 as minutes_remaining
-FROM users WHERE email = 'admin@advvancia.com';
+FROM users WHERE email = 'admin@advancia.com';
 
 -- Backup codes count
 SELECT (SELECT COUNT(*) FROM jsonb_array_elements_text(backup_codes)) as count
-FROM users WHERE email = 'admin@advvancia.com';
+FROM users WHERE email = 'admin@advancia.com';
 ```
 
 ---

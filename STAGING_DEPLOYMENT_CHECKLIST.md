@@ -11,7 +11,7 @@
   ```
 - Restart services with PM2:
   ```bash
-  pm2 restart advvancia-backend
+  pm2 restart advancia-backend
   ```
 
 ---
@@ -46,7 +46,7 @@ app-error-2025-11-14_18-00-00.log
 ## 3. Monitor Logs in Real Time
 
 ```bash
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 ```
 
 - Watch new entries being written.
@@ -63,7 +63,7 @@ pm2 list
 Shows all running apps, uptime, memory usage, and status.
 
 ```bash
-pm2 logs advvancia-backend
+pm2 logs advancia-backend
 ```
 
 Shows live logs and confirms rotation in action.

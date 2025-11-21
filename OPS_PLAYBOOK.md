@@ -1,6 +1,6 @@
-# ⚙️ Advvancia Ops Playbook
+# ⚙️ Advancia Ops Playbook
 
-**Self-hosted SaaS Master Manual** - Complete infrastructure, deployment, security, and scaling guide for the Advvancia fintech platform.
+**Self-hosted SaaS Master Manual** - Complete infrastructure, deployment, security, and scaling guide for the Advancia fintech platform.
 
 ---
 
@@ -71,8 +71,8 @@ sudo systemctl enable docker
 
 ```bash
 # Clone repository
-git clone https://github.com/your-org/advvancia.git
-cd advvancia
+git clone https://github.com/your-org/Advancia.git
+cd Advancia
 
 # Configure environment variables
 cp backend/.env.example backend/.env
@@ -95,7 +95,7 @@ curl http://localhost/api/health
 
 ### 4. Configure Nginx Reverse Proxy
 
-Create `/etc/nginx/sites-available/advvancia`:
+Create `/etc/nginx/sites-available/Advancia`:
 
 ```nginx
 server {
@@ -147,7 +147,7 @@ server {
 Enable the site:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/advvancia /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/Advancia /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -254,7 +254,7 @@ CREATE TABLE audit_log (
 Create `.github/workflows/deploy.yml`:
 
 ```yaml
-name: Deploy Advvancia
+name: Deploy Advancia
 
 on:
   push:
@@ -270,14 +270,14 @@ jobs:
       - name: Build Docker Images
         run: |
           docker-compose build
-          docker tag advvancia-backend your-registry/advvancia-backend:latest
-          docker tag advvancia-frontend your-registry/advvancia-frontend:latest
+          docker tag Advancia-backend your-registry/Advancia-backend:latest
+          docker tag Advancia-frontend your-registry/Advancia-frontend:latest
 
       - name: Push to Registry
         run: |
           echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USER }} --password-stdin
-          docker push your-registry/advvancia-backend:latest
-          docker push your-registry/advvancia-frontend:latest
+          docker push your-registry/Advancia-backend:latest
+          docker push your-registry/Advancia-frontend:latest
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
@@ -286,7 +286,7 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_SSH_KEY }}
           script: |
-            cd /path/to/advvancia
+            cd /path/to/Advancia
             git pull origin main
             docker-compose pull
             docker-compose up -d --build
@@ -327,10 +327,10 @@ Add to GitHub repository secrets:
 
 ```bash
 # Daily PostgreSQL backup
-0 2 * * * pg_dump -U postgres -h localhost advvancia > /backups/advancia_$(date +\%Y\%m\%d).sql
+0 2 * * * pg_dump -U postgres -h localhost Advancia > /backups/advancia_$(date +\%Y\%m\%d).sql
 
 # Weekly full backup
-0 3 * * 0 docker exec advvancia-db pg_dumpall -U postgres > /backups/full_$(date +\%Y\%m\%d).sql
+0 3 * * 0 docker exec Advancia-db pg_dumpall -U postgres > /backups/full_$(date +\%Y\%m\%d).sql
 
 # Offsite backup (upload to cloud storage)
 aws s3 cp /backups/ s3://your-backup-bucket/ --recursive
@@ -391,7 +391,7 @@ sudo certbot renew --force-renewal
 **Database connection failed:**
 
 ```bash
-docker-compose exec db psql -U postgres -d advvancia
+docker-compose exec db psql -U postgres -d Advancia
 # Check DATABASE_URL in .env files
 ```
 
@@ -491,7 +491,7 @@ docker-compose restart
 git pull && docker-compose up -d --build
 
 # Backup database
-docker exec advvancia-db pg_dump -U postgres advvancia > backup.sql
+docker exec Advancia-db pg_dump -U postgres Advancia > backup.sql
 
 # Check SSL certificate
 sudo certbot certificates
@@ -518,7 +518,7 @@ sudo certbot renew
 #### GitHub Actions (CI/CD)
 
 ```yaml
-name: Advvancia Pipeline
+name: Advancia Pipeline
 
 on:
   push:
@@ -536,7 +536,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build # ensures deploy only runs after build
     concurrency: # prevents duplicate runs
-      group: advvancia-deploy
+      group: Advancia-deploy
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
@@ -547,7 +547,7 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           key: ${{ secrets.DROPLET_SSH_KEY }}
           script: |
-            cd advvancia
+            cd Advancia
             git pull origin main
             docker-compose up -d --build
 ```
@@ -562,7 +562,7 @@ jobs:
 ```js
 import Queue from "bull";
 
-const jobQueue = new Queue("advvancia-jobs");
+const jobQueue = new Queue("Advancia-jobs");
 
 // Prevent duplicate jobs by using jobId
 function addJob(name, data) {
@@ -587,7 +587,7 @@ await addJob("deploy", { id: "main-branch" });
 
 ```bash
 #!/bin/bash
-LOCKFILE="/tmp/advvancia.lock"
+LOCKFILE="/tmp/Advancia.lock"
 
 if [ -f "$LOCKFILE" ]; then
   echo "Job already running. Exiting."
@@ -619,10 +619,10 @@ echo "Running job systematically..."
 ### Emergency Contacts
 
 - **Infrastructure Issues**: DigitalOcean support
-- **Security Incidents**: security@advvancia.com
+- **Security Incidents**: security@Advancia.com
 - **Application Bugs**: GitHub Issues
 - **Performance Issues**: Datadog alerts
 
 ---
 
-**⚡ This Ops Playbook is your complete self-hosted SaaS master manual. Hand it to collaborators and they'll know exactly how to run, secure, and scale Advvancia.**
+**⚡ This Ops Playbook is your complete self-hosted SaaS master manual. Hand it to collaborators and they'll know exactly how to run, secure, and scale Advancia.**

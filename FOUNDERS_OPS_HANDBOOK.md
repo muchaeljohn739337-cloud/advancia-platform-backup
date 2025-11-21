@@ -1,8 +1,8 @@
-# 📖 Advvancia Founders Ops Handbook
+# 📖 Advancia Founders Ops Handbook
 
 ## 1. 🚀 Launch Script (Day‑1 Setup)
 
-**Purpose:** Get Advvancia SaaS live today.
+**Purpose:** Get Advancia SaaS live today.
 
 ### Infrastructure
 
@@ -16,7 +16,7 @@
 ```bash
 # Clone repository
 git clone https://github.com/muchaeljohn739337-cloud/-modular-saas-platform.git
-cd advvancia
+cd Advancia
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 nano backend/.env
@@ -26,7 +26,7 @@ docker-compose up -d --build
 
 ### Nginx Reverse Proxy
 
-- Configure `advvancia.conf` to route `/api` → backend and `/` → frontend.
+- Configure `Advancia.conf` to route `/api` → backend and `/` → frontend.
 - Enable SSL with Certbot.
 
 ### Cloudflare Security
@@ -52,7 +52,7 @@ docker-compose up -d --build
 
 ## 2. 🛠️ Day‑2 Ops Checklist
 
-**Purpose:** Keep Advvancia healthy, secure, and scalable.
+**Purpose:** Keep Advancia healthy, secure, and scalable.
 
 ### Daily
 
@@ -106,7 +106,7 @@ With this handbook, you have:
 - **Day‑2 Ops Checklist** → ongoing management.
 - **Ops Wall Chart** → visual workflow for team alignment.
 
-This is your **founder’s manual** — hand it to collaborators, and they’ll know exactly how to deploy, secure, monitor, and scale Advvancia.
+This is your **founder’s manual** — hand it to collaborators, and they’ll know exactly how to deploy, secure, monitor, and scale Advancia.
 
 ---
 

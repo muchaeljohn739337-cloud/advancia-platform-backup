@@ -73,4 +73,4 @@
 
 ---
 
-⚡ This template keeps Advvancia lean and focused: you’ll see **what’s next, what’s active, and what’s complete** at a glance.
+⚡ This template keeps Advancia lean and focused: you’ll see **what’s next, what’s active, and what’s complete** at a glance.

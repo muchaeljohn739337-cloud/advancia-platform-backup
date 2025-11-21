@@ -9,19 +9,19 @@ This guide provides SQL queries to verify the lockout policy and 2FA behavior at
 ### Using Docker (Recommended)
 
 ```bash
-docker exec -it advancia-postgres psql -U postgres -d advvancia
+docker exec -it advancia-postgres psql -U postgres -d advancia
 ```
 
 ### Using psql Directly
 
 ```bash
-psql -h localhost -U postgres -d advvancia
+psql -h localhost -U postgres -d advancia
 ```
 
 ### Windows PowerShell
 
 ```powershell
-docker exec -it advancia-postgres psql -U postgres -d advvancia
+docker exec -it advancia-postgres psql -U postgres -d advancia
 ```
 
 ---
@@ -42,7 +42,7 @@ SELECT
     created_at,
     updated_at
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected Initial State:**
@@ -72,7 +72,7 @@ SELECT
     END as lock_status,
     locked_until - NOW() as time_remaining
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected Progression:**
@@ -97,7 +97,7 @@ SELECT
     NOW() as current_time,
     EXTRACT(EPOCH FROM (locked_until - NOW())) / 60 as minutes_remaining
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected After 5 Failed Attempts:**
@@ -122,7 +122,7 @@ SELECT
     last_login_at AT TIME ZONE 'UTC' as last_login_utc,
     AGE(NOW(), last_login_at) as time_since_login
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected After Successful Login:**
@@ -144,7 +144,7 @@ SELECT
     jsonb_array_length(backup_codes) as total_backup_codes,
     jsonb_pretty(backup_codes) as backup_codes_hashed
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected:**
@@ -161,7 +161,7 @@ SELECT
     jsonb_array_length(backup_codes) as remaining_codes,
     backup_codes
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected:**
@@ -182,7 +182,7 @@ SELECT
     totp_verified,
     LENGTH(totp_secret) as secret_length
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 **Expected:**
@@ -216,7 +216,7 @@ SELECT
     created_at,
     updated_at
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ---
@@ -227,7 +227,7 @@ WHERE email = 'admin@advvancia.com';
 
 ```sql
 \x on  -- Enable expanded display
-SELECT * FROM users WHERE email = 'admin@advvancia.com';
+SELECT * FROM users WHERE email = 'admin@advancia.com';
 ```
 
 ### Step 2: Run Failed Login Tests
@@ -237,7 +237,7 @@ Execute `test-lockout.ps1` script, then check:
 ```sql
 SELECT email, failed_attempts, locked_until
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ### Step 3: Manually Unlock (Optional for Testing)
@@ -246,12 +246,12 @@ WHERE email = 'admin@advvancia.com';
 -- Manual unlock for quick testing
 UPDATE users
 SET failed_attempts = 0, locked_until = NULL
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 -- Verify unlock
 SELECT email, failed_attempts, locked_until
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ### Step 4: Test Successful Login
@@ -265,7 +265,7 @@ SELECT
     locked_until,
     last_login_at
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ### Step 5: Test Backup Code Usage
@@ -276,14 +276,14 @@ After using a backup code, verify removal:
 -- Before using backup code
 SELECT email, jsonb_array_length(backup_codes) as count_before
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 -- [Use backup code via API]
 
 -- After using backup code
 SELECT email, jsonb_array_length(backup_codes) as count_after
 FROM users
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ---
@@ -348,7 +348,7 @@ UPDATE users
 SET
     failed_attempts = 0,
     locked_until = NULL
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ### Reset All Lockouts (Emergency)
@@ -368,7 +368,7 @@ WHERE locked_until IS NOT NULL;
 -- This is just for demonstration
 UPDATE users
 SET backup_codes = '[]'::jsonb
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 
 -- Then seed new codes via backend seed script
 ```
@@ -381,7 +381,7 @@ UPDATE users
 SET
     totp_enabled = false,
     totp_verified = false
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ### Re-enable 2FA
@@ -391,7 +391,7 @@ UPDATE users
 SET
     totp_enabled = true,
     totp_verified = true
-WHERE email = 'admin@advvancia.com';
+WHERE email = 'admin@advancia.com';
 ```
 
 ---
@@ -478,7 +478,7 @@ SELECT
 FROM users;
 
 -- Then use:
-SELECT * FROM user_security_status WHERE email = 'admin@advvancia.com';
+SELECT * FROM user_security_status WHERE email = 'admin@advancia.com';
 ```
 
 ---
@@ -486,4 +486,4 @@ SELECT * FROM user_security_status WHERE email = 'admin@advvancia.com';
 **Created:** November 14, 2025  
 **Version:** 1.0  
 **Backend:** http://localhost:4000  
-**Database:** PostgreSQL 15 (advvancia)
+**Database:** PostgreSQL 15 (advancia)

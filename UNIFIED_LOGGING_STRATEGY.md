@@ -1,6 +1,6 @@
 # Unified Logging & Monitoring Strategy
 
-Complete guide to consolidating logs and implementing a scalable monitoring roadmap for Advvancia Pay.
+Complete guide to consolidating logs and implementing a scalable monitoring roadmap for Advancia Pay.
 
 ---
 
@@ -195,7 +195,7 @@ health_check: {
 **3. Restart PM2 to apply:**
 
 ```bash
-pm2 restart advvancia-backend
+pm2 restart Advancia-backend
 ```
 
 ### What It Does
@@ -211,10 +211,10 @@ pm2 restart advvancia-backend
 
 ```bash
 # Stop backend temporarily
-pm2 stop advvancia-backend
+pm2 stop Advancia-backend
 
 # Watch PM2 detect failure
-pm2 logs advvancia-backend --lines 50
+pm2 logs Advancia-backend --lines 50
 
 # PM2 will auto-restart after 3 failed checks (~90 seconds)
 ```
@@ -288,7 +288,7 @@ Already created! Analyzes watchdog logs for daily summaries:
 ```powershell
 Clear-Host
 Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "   Advvancia Backend - Unified Log Dashboard" -ForegroundColor Cyan
+Write-Host "   Advancia Backend - Unified Log Dashboard" -ForegroundColor Cyan
 Write-Host "═══════════════════════════════════════════════════════`n" -ForegroundColor Cyan
 
 # PM2 Status
@@ -460,8 +460,8 @@ Sentry already integrated in `backend/src/`:
 npm install dd-trace
 # Add to backend/src/index.js
 require('dd-trace').init({
-  hostname: 'advvancia-backend',
-  service: 'advvancia-pay',
+  hostname: 'Advancia-backend',
+  service: 'Advancia-pay',
 });
 ```
 
@@ -590,7 +590,7 @@ Select-String -Path backend\logs\combined.log -Pattern "$today.*restart" | Measu
 pm2 status
 
 # Check health check logs
-pm2 logs advvancia-backend | grep -i "health"
+pm2 logs Advancia-backend | grep -i "health"
 
 # Manually test health endpoint
 curl http://localhost:4000/api/health
