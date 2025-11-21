@@ -61,7 +61,7 @@ export const recordTransaction = async ({
     metadata,
   });
 
-  const trx = await prisma.transaction.create({
+  const trx = await prisma.transactions.create({
     data: {
       userId,
       amount: parsed.amount,
@@ -175,7 +175,7 @@ router.get("/user/:userId", safeAuth as any, async (req: any, res) => {
     if (!isAdmin && req.user?.userId !== userId) {
       return res.status(403).json({ success: false, error: "Forbidden" });
     }
-    const userTransactions = await prisma.transaction.findMany({
+    const userTransactions = await prisma.transactions.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
       take: 100,
@@ -204,7 +204,7 @@ router.get("/recent/:userId", safeAuth as any, async (req: any, res) => {
     if (!isAdmin && req.user?.userId !== userId) {
       return res.status(403).json({ success: false, error: "Forbidden" });
     }
-    const userTransactions = await prisma.transaction.findMany({
+    const userTransactions = await prisma.transactions.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
       take: 10,
@@ -228,7 +228,7 @@ router.get("/recent/:userId", safeAuth as any, async (req: any, res) => {
 // Get all transactions (admin only)
 router.get("/", safeAuth as any, safeAdmin as any, async (_req, res) => {
   try {
-    const all = await prisma.transaction.findMany({
+    const all = await prisma.transactions.findMany({
       orderBy: { createdAt: "desc" },
       take: 50,
     });
@@ -257,7 +257,7 @@ router.get("/balance/:userId", safeAuth as any, async (req: any, res) => {
       return res.status(403).json({ success: false, error: "Forbidden" });
     }
 
-    const userTransactions = await prisma.transaction.findMany({
+    const userTransactions = await prisma.transactions.findMany({
       where: { userId },
     });
 

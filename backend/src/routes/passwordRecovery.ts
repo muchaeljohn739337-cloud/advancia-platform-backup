@@ -311,7 +311,7 @@ router.post("/admin/reset-user-password", adminAuth, async (req: Request, res: R
     });
 
     // Log audit
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
         userId: adminUser.id,
         action: "ADMIN_RESET_USER_PASSWORD",

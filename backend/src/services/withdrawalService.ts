@@ -9,6 +9,7 @@
  * 5. System updates withdrawal status
  */
 
+import crypto from "crypto";
 import prisma from "../prismaClient";
 
 export interface WithdrawalRequest {
@@ -33,7 +34,7 @@ export async function createWithdrawalRequest(request: WithdrawalRequest) {
   const { userId, currency, amount, destinationAddress, network } = request;
 
   // Validate user has sufficient balance
-  const userWallet = await prisma.cryptoWallet.findFirst({
+  const userWallet = await prisma.crypto_wallets.findFirst({
     where: { userId, currency },
   });
 
@@ -42,7 +43,7 @@ export async function createWithdrawalRequest(request: WithdrawalRequest) {
   }
 
   // Get admin wallet info to show in approval UI
-  const adminWallet = await prisma.adminWallet.findUnique({
+  const adminWallet = await prisma.admin_wallets.findUnique({
     where: { currency },
     select: {
       walletAddress: true,
@@ -56,7 +57,7 @@ export async function createWithdrawalRequest(request: WithdrawalRequest) {
   }
 
   // Create withdrawal record
-  const withdrawal = await prisma.cryptoWithdrawal.create({
+  const withdrawal = await prisma.crypto_withdrawals.create({
     data: {
       userId,
       currency,
@@ -72,7 +73,7 @@ export async function createWithdrawalRequest(request: WithdrawalRequest) {
   });
 
   // Deduct from user's balance (hold until confirmed)
-  await prisma.cryptoWallet.update({
+  await prisma.crypto_wallets.update({
     where: { id: userWallet.id },
     data: {
       balance: { decrement: amount },
@@ -81,8 +82,9 @@ export async function createWithdrawalRequest(request: WithdrawalRequest) {
   });
 
   // Create audit log
-  await prisma.auditLog.create({
+  await prisma.audit_logs.create({
     data: {
+      id: crypto.randomUUID(),
       userId,
       action: "WITHDRAWAL_REQUEST",
       resourceType: "CRYPTO_WITHDRAWAL",
@@ -125,7 +127,7 @@ export async function approveWithdrawal(approval: WithdrawalApproval) {
   const { withdrawalId, adminId, txHash, adminNotes } = approval;
 
   // Get withdrawal details
-  const withdrawal = await prisma.cryptoWithdrawal.findUnique({
+  const withdrawal = await prisma.crypto_withdrawals.findUnique({
     where: { id: withdrawalId },
     include: { user: true },
   });
@@ -139,7 +141,7 @@ export async function approveWithdrawal(approval: WithdrawalApproval) {
   }
 
   // Update withdrawal status
-  const updated = await prisma.cryptoWithdrawal.update({
+  const updated = await prisma.crypto_withdrawals.update({
     where: { id: withdrawalId },
     data: {
       status: "completed",
@@ -152,7 +154,7 @@ export async function approveWithdrawal(approval: WithdrawalApproval) {
   });
 
   // Release locked balance (already deducted)
-  await prisma.cryptoWallet.updateMany({
+  await prisma.crypto_wallets.updateMany({
     where: {
       userId: withdrawal.userId,
       currency: withdrawal.currency,
@@ -163,7 +165,7 @@ export async function approveWithdrawal(approval: WithdrawalApproval) {
   });
 
   // Update admin wallet totalOut
-  await prisma.adminWallet.update({
+  await prisma.admin_wallets.update({
     where: { currency: withdrawal.currency },
     data: {
       totalOut: { increment: Number(withdrawal.amount) },
@@ -171,12 +173,12 @@ export async function approveWithdrawal(approval: WithdrawalApproval) {
   });
 
   // Create admin wallet transaction record
-  const adminWallet = await prisma.adminWallet.findUnique({
+  const adminWallet = await prisma.admin_wallets.findUnique({
     where: { currency: withdrawal.currency },
   });
 
   if (adminWallet) {
-    await prisma.adminWalletTransaction.create({
+    await prisma.admin_wallet_transactions.create({
       data: {
         adminWalletId: adminWallet.id,
         userId: withdrawal.userId,
@@ -189,8 +191,9 @@ export async function approveWithdrawal(approval: WithdrawalApproval) {
   }
 
   // Create audit log
-  await prisma.auditLog.create({
+  await prisma.audit_logs.create({
     data: {
+      id: crypto.randomUUID(),
       userId: adminId,
       action: "WITHDRAWAL_APPROVED",
       resourceType: "CRYPTO_WITHDRAWAL",
@@ -218,7 +221,7 @@ export async function rejectWithdrawal(
   adminId: string,
   reason: string
 ) {
-  const withdrawal = await prisma.cryptoWithdrawal.findUnique({
+  const withdrawal = await prisma.crypto_withdrawals.findUnique({
     where: { id: withdrawalId },
   });
 
@@ -231,7 +234,7 @@ export async function rejectWithdrawal(
   }
 
   // Update withdrawal status
-  const updated = await prisma.cryptoWithdrawal.update({
+  const updated = await prisma.crypto_withdrawals.update({
     where: { id: withdrawalId },
     data: {
       status: "rejected",
@@ -242,7 +245,7 @@ export async function rejectWithdrawal(
   });
 
   // Refund user's balance (unlock and restore)
-  const userWallet = await prisma.cryptoWallet.findFirst({
+  const userWallet = await prisma.crypto_wallets.findFirst({
     where: {
       userId: withdrawal.userId,
       currency: withdrawal.currency,
@@ -250,7 +253,7 @@ export async function rejectWithdrawal(
   });
 
   if (userWallet) {
-    await prisma.cryptoWallet.update({
+    await prisma.crypto_wallets.update({
       where: { id: userWallet.id },
       data: {
         balance: { increment: Number(withdrawal.amount) },
@@ -260,8 +263,9 @@ export async function rejectWithdrawal(
   }
 
   // Create audit log
-  await prisma.auditLog.create({
+  await prisma.audit_logs.create({
     data: {
+      id: crypto.randomUUID(),
       userId: adminId,
       action: "WITHDRAWAL_REJECTED",
       resourceType: "CRYPTO_WITHDRAWAL",
@@ -283,7 +287,7 @@ export async function rejectWithdrawal(
  * Get admin wallet info for withdrawal instructions
  */
 export async function getAdminWalletInfo(currency: string) {
-  const adminWallet = await prisma.adminWallet.findUnique({
+  const adminWallet = await prisma.admin_wallets.findUnique({
     where: { currency: currency.toUpperCase() },
     select: {
       currency: true,
@@ -310,7 +314,7 @@ export async function getAdminWalletInfo(currency: string) {
  * Get pending withdrawals for admin review
  */
 export async function getPendingWithdrawals() {
-  const withdrawals = await prisma.cryptoWithdrawal.findMany({
+  const withdrawals = await prisma.crypto_withdrawals.findMany({
     where: { status: "pending" },
     include: {
       user: {
@@ -329,7 +333,7 @@ export async function getPendingWithdrawals() {
   const currencies = [...new Set(withdrawals.map((w) => w.currency))];
   const adminWallets = await Promise.all(
     currencies.map((currency) =>
-      prisma.adminWallet.findUnique({
+      prisma.admin_wallets.findUnique({
         where: { currency },
         select: {
           currency: true,

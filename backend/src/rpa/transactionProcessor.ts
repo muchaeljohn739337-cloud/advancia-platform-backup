@@ -31,7 +31,7 @@ class TransactionProcessor {
       };
 
       // Fetch transaction with user details
-      const transaction = await prisma.transaction.findUnique({
+      const transaction = await prisma.transactions.findUnique({
         where: { id: transactionId },
       });
 
@@ -71,7 +71,7 @@ class TransactionProcessor {
 
       // Validation Rule 3: Check for duplicate transactions (within 1 minute)
       const oneMinuteAgo = new Date(Date.now() - 60000);
-      const duplicates = await prisma.transaction.count({
+      const duplicates = await prisma.transactions.count({
         where: {
           userId: transaction.userId,
           amount: transaction.amount,
@@ -87,7 +87,7 @@ class TransactionProcessor {
       }
 
       // Validation Rule 4: Check transaction limits
-      const dailyTransactions = await prisma.transaction.aggregate({
+      const dailyTransactions = await prisma.transactions.aggregate({
         where: {
           userId: transaction.userId,
           createdAt: { gte: new Date(Date.now() - 86400000) }, // Last 24 hours
@@ -152,7 +152,7 @@ class TransactionProcessor {
         );
 
         // Update transaction status to failed
-        await prisma.transaction.update({
+        await prisma.transactions.update({
           where: { id: transactionId },
           data: {
             status: "failed",
@@ -164,7 +164,7 @@ class TransactionProcessor {
       }
 
       // Fetch transaction details
-      const transaction = await prisma.transaction.findUnique({
+      const transaction = await prisma.transactions.findUnique({
         where: { id: transactionId },
       });
 
@@ -181,7 +181,7 @@ class TransactionProcessor {
       }
 
       // Update transaction status
-      await prisma.transaction.update({
+      await prisma.transactions.update({
         where: { id: transactionId },
         data: {
           status: "completed",
@@ -200,7 +200,7 @@ class TransactionProcessor {
       );
 
       // Mark transaction as failed
-      await prisma.transaction
+      await prisma.transactions
         .update({
           where: { id: transactionId },
           data: { status: "failed" },
@@ -251,7 +251,7 @@ class TransactionProcessor {
 
     // Pattern 1: Rapid succession of transactions (>5 in 5 minutes)
     const fiveMinutesAgo = new Date(Date.now() - 300000);
-    const recentTransactions = await prisma.transaction.count({
+    const recentTransactions = await prisma.transactions.count({
       where: {
         userId,
         createdAt: { gte: fiveMinutesAgo },
@@ -272,7 +272,7 @@ class TransactionProcessor {
       const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
       if (accountAge < sevenDays) {
-        const largeTransactions = await prisma.transaction.count({
+        const largeTransactions = await prisma.transactions.count({
           where: {
             userId,
             amount: { gte: 1000 },
@@ -286,7 +286,7 @@ class TransactionProcessor {
     }
 
     // Pattern 3: Round-trip transactions (rapid credit/debit cycles)
-    const creditDebitPairs = await prisma.transaction.groupBy({
+    const creditDebitPairs = await prisma.transactions.groupBy({
       by: ["type"],
       where: {
         userId,
@@ -316,7 +316,7 @@ class TransactionProcessor {
     validation: ValidationResult
   ): Promise<void> {
     try {
-      await prisma.auditLog.create({
+      await prisma.audit_logs.create({
         data: {
           action: `transaction_${action}`,
           resourceType: "Transaction",
@@ -344,7 +344,7 @@ class TransactionProcessor {
     try {
       console.log(`[RPA] Starting batch transaction processing...`);
 
-      const pendingTransactions = await prisma.transaction.findMany({
+      const pendingTransactions = await prisma.transactions.findMany({
         where: { status: "pending" },
         take: this.config.batchSize,
         orderBy: { createdAt: "asc" },

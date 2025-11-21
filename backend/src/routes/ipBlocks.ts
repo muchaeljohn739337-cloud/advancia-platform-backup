@@ -43,7 +43,7 @@ router.get("/_ping", (_req, res) => {
 // Retain core listing route behind guard (optional)
 router.get("/", async (_req, res) => {
   try {
-    const blocks = await prisma.ipBlock.findMany({
+    const blocks = await prisma.ip_blocks.findMany({
       orderBy: { updatedAt: "desc" },
     });
     res.json({ success: true, blocks });
@@ -63,7 +63,7 @@ router.post("/unblock", async (req, res) => {
       .json({ success: false, error: "IP address required" });
   }
   try {
-    await prisma.ipBlock.deleteMany({ where: { ip } });
+    await prisma.ip_blocks.deleteMany({ where: { ip } });
     res.json({ success: true });
   } catch (error) {
     console.error("[ipBlocks] Failed to unblock IP:", error);

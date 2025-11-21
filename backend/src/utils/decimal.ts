@@ -1,4 +1,5 @@
 import { Decimal } from "@prisma/client/runtime/library";
+import crypto from 'crypto';
 
 /**
  * Type guard to check if a value is a Prisma Decimal instance.
@@ -20,7 +21,7 @@ function isDecimal(value: any): value is Decimal {
  * @returns String representation of the decimal value
  *
  * @example
- * const balance = await prisma.tokenWallet.findUnique({ where: { id } });
+ * const balance = await prisma.token_wallets.findUnique({ where: { id } });
  * res.json({ balance: serializeDecimal(balance.balance) });
  */
 export function serializeDecimal(value: Decimal | null | undefined): string {
@@ -38,7 +39,7 @@ export function serializeDecimal(value: Decimal | null | undefined): string {
  * @returns Object with Decimal fields converted to strings
  *
  * @example
- * const wallet = await prisma.tokenWallet.findUnique({ where: { id } });
+ * const wallet = await prisma.token_wallets.findUnique({ where: { id } });
  * res.json(serializeDecimalFields(wallet));
  */
 export function serializeDecimalFields<T extends Record<string, any>>(
@@ -73,7 +74,7 @@ export function serializeDecimalFields<T extends Record<string, any>>(
  * @returns Array with Decimal fields converted to strings
  *
  * @example
- * const transactions = await prisma.transaction.findMany();
+ * const transactions = await prisma.transactions.findMany();
  * res.json(serializeDecimalArray(transactions));
  */
 export function serializeDecimalArray<T extends Record<string, any>>(
@@ -91,7 +92,10 @@ export function serializeDecimalArray<T extends Record<string, any>>(
  *
  * @example
  * const amount = parseToDecimal(req.body.amount);
- * await prisma.transaction.create({ data: { amount } });
+ * await prisma.transactions.create({ data: { 
+      id: crypto.randomUUID(),
+      updatedAt: new Date(),
+      amount } });
  */
 export function parseToDecimal(value: string | number): Decimal {
   return new Decimal(value);

@@ -60,13 +60,13 @@ export async function createNotification(payload: NotificationPayload) {
 
   try {
     // Get user preferences
-    let userPrefs = await prisma.notificationPreference.findUnique({
+    let userPrefs = await prisma.notifications_preferences.findUnique({
       where: { userId },
     });
 
     // Create default preferences if none exist
     if (!userPrefs) {
-      userPrefs = await prisma.notificationPreference.create({
+      userPrefs = await prisma.notifications_preferences.create({
         data: { userId },
       });
     }
@@ -81,7 +81,7 @@ export async function createNotification(payload: NotificationPayload) {
     }
 
     // Create notification record
-    const notification = await prisma.notification.create({
+    const notification = await prisma.notifications.create({
       data: {
         userId,
         type,
@@ -120,7 +120,7 @@ export async function createNotification(payload: NotificationPayload) {
         : Promise.resolve(),
     ]).then(async (results) => {
       // Update notification with delivery status
-      await prisma.notification.update({
+      await prisma.notifications.update({
         where: { id: notification.id },
         data: {
           emailSent:
@@ -230,7 +230,7 @@ async function sendPush(
       return;
     }
 
-    const subscriptions = await prisma.pushSubscription.findMany({
+    const subscriptions = await prisma.push_subscriptions.findMany({
       where: { userId, isActive: true },
     });
 
@@ -261,7 +261,7 @@ async function sendPush(
       } catch (error: any) {
         if (error.statusCode === 410) {
           // Subscription expired
-          await prisma.pushSubscription.update({
+          await prisma.push_subscriptions.update({
             where: { id: sub.id },
             data: { isActive: false },
           });
@@ -291,7 +291,7 @@ async function logDelivery(
   errorMessage?: string
 ) {
   try {
-    await prisma.notificationLog.create({
+    await prisma.notificationsLog.create({
       data: {
         notificationId,
         channel,
@@ -311,7 +311,7 @@ export async function sendFallbackEmails() {
   const cutoff = new Date(Date.now() - delay * 60 * 1000);
 
   try {
-    const unread = await prisma.notification.findMany({
+    const unread = await prisma.notifications.findMany({
       where: {
         isRead: false,
         createdAt: { lt: cutoff },
@@ -368,7 +368,7 @@ export async function sendFallbackEmails() {
           `,
         });
 
-        await prisma.notification.update({
+        await prisma.notifications.update({
           where: { id: notification.id },
           data: { emailSent: true, emailSentAt: new Date() },
         });
@@ -404,13 +404,13 @@ export async function getUserNotifications(
   if (category) where.category = category;
 
   const [notifications, total] = await Promise.all([
-    prisma.notification.findMany({
+    prisma.notifications.findMany({
       where,
       orderBy: { createdAt: "desc" },
       skip,
       take: limit,
     }),
-    prisma.notification.count({ where }),
+    prisma.notifications.count({ where }),
   ]);
 
   return {
@@ -423,7 +423,7 @@ export async function getUserNotifications(
 }
 
 export async function markAsRead(notificationId: string, userId: string) {
-  const updated = await prisma.notification.update({
+  const updated = await prisma.notifications.update({
     where: { id: notificationId, userId },
     data: { isRead: true, readAt: new Date() },
   });
@@ -444,7 +444,7 @@ export async function markAsRead(notificationId: string, userId: string) {
 }
 
 export async function markAllAsRead(userId: string) {
-  const res = await prisma.notification.updateMany({
+  const res = await prisma.notifications.updateMany({
     where: { userId, isRead: false },
     data: { isRead: true, readAt: new Date() },
   });
@@ -460,7 +460,7 @@ export async function markAllAsRead(userId: string) {
 }
 
 export async function getUnreadCount(userId: string) {
-  return await prisma.notification.count({
+  return await prisma.notifications.count({
     where: { userId, isRead: false },
   });
 }
@@ -469,18 +469,18 @@ export async function deleteNotification(
   notificationId: string,
   userId: string
 ) {
-  return await prisma.notification.delete({
+  return await prisma.notifications.delete({
     where: { id: notificationId, userId },
   });
 }
 
 export async function getUserPreferences(userId: string) {
-  let prefs = await prisma.notificationPreference.findUnique({
+  let prefs = await prisma.notifications_preferences.findUnique({
     where: { userId },
   });
 
   if (!prefs) {
-    prefs = await prisma.notificationPreference.create({
+    prefs = await prisma.notifications_preferences.create({
       data: { userId },
     });
   }
@@ -489,7 +489,7 @@ export async function getUserPreferences(userId: string) {
 }
 
 export async function updateUserPreferences(userId: string, updates: any) {
-  return await prisma.notificationPreference.upsert({
+  return await prisma.notifications_preferences.upsert({
     where: { userId },
     update: updates,
     create: { userId, ...updates },

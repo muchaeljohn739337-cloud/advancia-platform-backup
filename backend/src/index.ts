@@ -120,6 +120,13 @@ import {
   validateInput,
 } from "./middleware/security";
 import prisma from "./prismaClient";
+import authRouter from "./routes/auth";
+import authAdminRouter, {
+  activeSessions,
+  setBroadcastSessions as setAuthBroadcast,
+} from "./routes/authAdmin";
+console.log("[DIAG] About to import prismaClient...");
+console.log("[DIAG] prismaClient imported successfully");
 // import adminRouter from "./routes/admin"; // TEMPORARILY DISABLED FOR PROD BUILD
 // import adminWalletsRouter from "./routes/adminWallets"; // Disabled for crash isolation
 // import adminBulkActionsRouter from "./routes/adminBulkActions";
@@ -128,11 +135,8 @@ import prisma from "./prismaClient";
 // import amplitudeAnalyticsRouter from "./routes/amplitudeAnalytics";
 // import analyticsRouter from "./routes/analytics";
 // import analyticsEnhancedRouter from "./routes/analyticsEnhanced";
-import authRouter from "./routes/auth";
-import authAdminRouter, {
-  activeSessions,
-  setBroadcastSessions as setAuthBroadcast,
-} from "./routes/authAdmin";
+console.log("[DIAG] About to import authRouter...");
+console.log("[DIAG] authRouter imported successfully");
 // import chatRouter, { setChatSocketIO } from "./routes/chat";
 // import consultationRouter from "./routes/consultation";
 // import cryptoEnhancedRouter from "./routes/cryptoEnhanced";
@@ -189,7 +193,7 @@ import { sanitizeInput } from "./validation/middleware";
 // Global fatal error handlers to expose startup issues clearly
 // (Legacy instrumentation removed; using EARLY DIAGNOSTIC INSTRUMENTATION above)
 
-import { config } from "./jobs/config";
+import { config } from "./config";
 
 // Safe middleware wrappers (prevent undefined crashes during partial builds)
 const safeAuth: any =
@@ -438,6 +442,11 @@ export function broadcastSessions() {
 
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { setRateLimiterSocketIO } from "./middleware/rateLimiterRedis";
+import { closeQueue, initQueue } from "./utils/queue";
+console.log("[DIAG] About to import rateLimiterRedis...");
+console.log("[DIAG] rateLimiterRedis imported successfully");
+console.log("[DIAG] About to import queue utils...");
+console.log("[DIAG] queue utils imported successfully");
 
 setRateLimiterSocketIO(io);
 
@@ -462,5 +471,82 @@ app.get("/joke", async (req, res) => {
   }
 });
 
-// Start server
+// Start server (moved into async bootstrap below)
 const PORT = config.port || process.env.PORT || 5000;
+
+// Async bootstrap to allow awaiting service initializers (e.g. RabbitMQ)
+async function bootstrap() {
+  console.log("[DIAG] Bootstrap function called");
+  try {
+    console.log("[DIAG] Initializing RabbitMQ queue...");
+    await initQueue();
+    console.log("[INIT] RabbitMQ queues initialized");
+  } catch (e) {
+    console.error(
+      "[INIT] RabbitMQ initialization failed (continuing without queue)",
+      e
+    );
+  }
+
+  server.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+}
+
+bootstrap();
+
+// Graceful shutdown handler
+async function gracefulShutdown(signal: string) {
+  console.log(`\n[SHUTDOWN] ${signal} received, starting graceful shutdown...`);
+
+  try {
+    // Close queue connection
+    await closeQueue();
+    console.log("[SHUTDOWN] RabbitMQ connection closed");
+  } catch (e) {
+    console.error("[SHUTDOWN] Error closing RabbitMQ", e);
+  }
+
+  try {
+    // Shutdown tracing
+    if (process.env.OTEL_TRACING_ENABLED === "true") {
+      const { shutdownTracing } = require("./tracing");
+      await shutdownTracing();
+    }
+  } catch (e) {
+    console.error("[SHUTDOWN] Error shutting down tracing", e);
+  }
+
+  try {
+    // Close server
+    await new Promise<void>((resolve) => {
+      server.close(() => {
+        console.log("[SHUTDOWN] HTTP server closed");
+        resolve();
+      });
+      // Force close after 10 seconds
+      setTimeout(() => resolve(), 10000);
+    });
+  } catch (e) {
+    console.error("[SHUTDOWN] Error closing server", e);
+  }
+
+  try {
+    // Close database connection
+    await prisma.$disconnect();
+    console.log("[SHUTDOWN] Database connection closed");
+  } catch (e) {
+    console.error("[SHUTDOWN] Error closing database", e);
+  }
+
+  console.log("[SHUTDOWN] Graceful shutdown complete");
+
+  // Use original exit if intercept is active, otherwise normal exit
+  if ((process as any).__originalExit) {
+    (process as any).__originalExit(0);
+  } else {
+    process.exit(0);
+  }
+} // Handle shutdown signals
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));

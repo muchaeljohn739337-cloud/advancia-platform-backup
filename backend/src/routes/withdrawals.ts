@@ -102,7 +102,7 @@ router.post(
       }
 
       // Create withdrawal request
-      const withdrawal = await prisma.cryptoWithdrawal.create({
+      const withdrawal = await prisma.crypto_withdrawals.create({
         data: {
           userId,
           currency: balanceType.toUpperCase(),
@@ -127,7 +127,7 @@ router.post(
       });
 
       // Create transaction record
-      await prisma.transaction.create({
+      await prisma.transactions.create({
         data: {
           userId,
           amount: amountNum,
@@ -185,7 +185,7 @@ router.get(
     try {
       const userId = req.user!.userId;
 
-      const withdrawals = await prisma.cryptoWithdrawal.findMany({
+      const withdrawals = await prisma.crypto_withdrawals.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
         select: {
@@ -232,7 +232,7 @@ router.get(
         where.status = status;
       }
 
-      const withdrawals = await prisma.cryptoWithdrawal.findMany({
+      const withdrawals = await prisma.crypto_withdrawals.findMany({
         where,
         orderBy: { createdAt: "desc" },
         include: {
@@ -282,7 +282,7 @@ router.patch(
       }
 
       // Get withdrawal request
-      const withdrawal = await prisma.cryptoWithdrawal.findUnique({
+      const withdrawal = await prisma.crypto_withdrawals.findUnique({
         where: { id },
         include: {
           user: {
@@ -320,7 +320,7 @@ router.patch(
 
       if (action === "approve") {
         // Update withdrawal to approved/completed
-        const updatedWithdrawal = await prisma.cryptoWithdrawal.update({
+        const updatedWithdrawal = await prisma.crypto_withdrawals.update({
           where: { id },
           data: {
             status: "completed",
@@ -334,7 +334,7 @@ router.patch(
         });
 
         // Update transaction to completed
-        await prisma.transaction.updateMany({
+        await prisma.transactions.updateMany({
           where: {
             userId: withdrawal.userId,
             type: "withdrawal",
@@ -358,7 +358,7 @@ router.patch(
         }
 
         // Log audit
-        await prisma.auditLog.create({
+        await prisma.audit_logs.create({
           data: {
             userId: req.user!.userId,
             action: "approve_withdrawal",
@@ -395,7 +395,7 @@ router.patch(
         });
 
         // Update withdrawal to rejected
-        const updatedWithdrawal = await prisma.cryptoWithdrawal.update({
+        const updatedWithdrawal = await prisma.crypto_withdrawals.update({
           where: { id },
           data: {
             status: "rejected",
@@ -406,7 +406,7 @@ router.patch(
         });
 
         // Update transaction
-        await prisma.transaction.updateMany({
+        await prisma.transactions.updateMany({
           where: {
             userId: withdrawal.userId,
             type: "withdrawal",
@@ -432,7 +432,7 @@ router.patch(
         }
 
         // Log audit
-        await prisma.auditLog.create({
+        await prisma.audit_logs.create({
           data: {
             userId: req.user!.userId,
             action: "reject_withdrawal",

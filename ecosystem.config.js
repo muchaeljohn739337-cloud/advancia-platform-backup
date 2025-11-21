@@ -64,6 +64,38 @@ module.exports = {
       // Production optimizations
       node_args: "--max-old-space-size=512",
     },
+    {
+      name: "notification-worker",
+      script: "./dist/workers/notificationWorker.js",
+      cwd: "./backend",
+      instances: 2, // Run 2 workers for parallel processing
+      exec_mode: "cluster",
+      env: {
+        NODE_ENV: "production",
+        LOG_LEVEL: "info",
+      },
+      env_file: "./backend/.env.production",
+      error_file: "./backend/logs/worker-err.log",
+      out_file: "./backend/logs/worker-out.log",
+      log_file: "./backend/logs/worker-combined.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
+      merge_logs: true,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "512M",
+      min_uptime: "10s",
+      max_restarts: 10,
+      restart_delay: 5000,
+      // Production optimizations
+      node_args: "--max-old-space-size=512",
+      // Health check
+      health_check: {
+        enabled: true,
+        max_memory: "512M",
+        max_restarts: 10,
+        min_uptime: "10s",
+      },
+    },
   ],
 
   /**

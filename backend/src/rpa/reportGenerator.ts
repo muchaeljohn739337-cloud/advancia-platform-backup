@@ -80,7 +80,7 @@ export class ReportGenerator {
     });
 
     // Section 2: Token wallet balances
-    const tokenBalances = await prisma.tokenWallet.aggregate({
+    const tokenBalances = await prisma.token_wallets.aggregate({
       _sum: {
         balance: true,
         lockedBalance: true,
@@ -104,7 +104,7 @@ export class ReportGenerator {
     });
 
     // Section 3: Transaction summary
-    const transactions = await prisma.transaction.groupBy({
+    const transactions = await prisma.transactions.groupBy({
       by: ["type"],
       _sum: { amount: true },
       _count: { id: true },
@@ -235,7 +235,7 @@ export class ReportGenerator {
     const adminIds = adminUsers.map((u) => u.id);
 
     // Section 1: Admin audit logs
-    const adminLogs = await prisma.auditLog.findMany({
+    const adminLogs = await prisma.audit_logs.findMany({
       where: {
         userId: { in: adminIds },
         createdAt: {
@@ -260,7 +260,7 @@ export class ReportGenerator {
     });
 
     // Section 2: Action type breakdown
-    const actionBreakdown = await prisma.auditLog.groupBy({
+    const actionBreakdown = await prisma.audit_logs.groupBy({
       by: ["action"],
       _count: { id: true },
       where: {

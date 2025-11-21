@@ -1,75 +1,111 @@
-# 💳 Advancia Project — Fintech SaaS
+# 💳 Advancia Pay Ledger — Fintech SaaS
 
-Advancia is a secure, scalable fintech SaaS platform built with **React/Next.js**, **Node.js/Express**, and **PostgreSQL**, deployed on **DigitalOcean** with **Cloudflare edge protection**.
-It provides authentication, payments, dashboards, and monitoring — ready for production.
+Advancia Pay is a secure, scalable fintech SaaS platform built with **Next.js 14**, **Node.js/Express**, and **PostgreSQL**, deployed on **Render** (backend) and **Vercel** (frontend) with **Cloudflare** edge protection.
+It provides authentication, payments, crypto wallets, dashboards, and real-time notifications — ready for production.
 
 ---
 
 ## 🏗️ Architecture
 
-![Advancia Architecture](docs/architecture.png)
-
 **Stack Overview:**
-- **Frontend** → React + Next.js (Dockerized, served via Nginx)
-- **Backend** → Node.js + Express (Dockerized, API on port 4000)
-- **Database** → PostgreSQL
-- **Reverse Proxy** → Nginx (routes /api → backend, / → frontend)
-- **Hosting** → DigitalOcean Droplet
-- **Security** → Cloudflare (WAF, SSL, Rate Limiting, Bot Protection)
-- **Monitoring** → Sentry, Datadog, DigitalOcean Monitoring
-- **CI/CD** → GitHub Actions + Docker Compose
+
+- **Frontend** → Next.js 14 App Router (Vercel)
+- **Backend** → Node.js + Express + Socket.IO (Render)
+- **Database** → PostgreSQL (Render)
+- **Backups** → Digital Ocean Spaces (S3-compatible, automated nightly)
+- **CDN/DNS** → Cloudflare (WAF, SSL, Rate Limiting, Bot Protection)
+- **Monitoring** → Sentry
+- **CI/CD** → GitHub Actions (tests + automated backups)
 
 ---
 
-## 🚀 Launch Checklist
+## 🚀 Deployment
 
-See [Deployment Checklist](docs/deployment-checklist.md) for the full step‑by‑step guide.
-Key phases:
-1. **Droplet Setup** → Ubuntu, SSH, UFW firewall
-2. **Dependencies** → Node.js, PostgreSQL, PM2, Nginx
-3. **Project Setup** → Clone repo, .env files, install deps
-4. **Application Run** → PM2 start backend/frontend
-5. **Reverse Proxy** → Nginx routes + SSL via Certbot
-6. **Cloudflare** → WAF, SSL, Rate Limiting, Bot Protection
-7. **Monitoring** → DigitalOcean, Sentry, Datadog
+**Production Stack:**
+
+- **Backend**: Render (Web Service + PostgreSQL)
+- **Frontend**: Vercel (Next.js)
+- **Backups**: Digital Ocean Spaces (automated nightly via GitHub Actions)
+- **CDN**: Cloudflare
+
+**Quick Deploy:**
+
+1. **Backend**: Push to `main` branch → Render auto-deploys
+2. **Frontend**: Push to `main` branch → Vercel auto-deploys
+3. **Environment Variables**: Configure in Render & Vercel dashboards
+
+See detailed guide: `deploy-vercel.ps1` for frontend, `scripts/trigger-render-deploy.sh` for backend
 
 ---
 
 ## ⚡ Quick Start (Local Dev)
 
-`ash
-# Build and start everything
-docker-compose up -d --build
+```bash
+# Backend (Terminal 1)
+cd backend
+npm install
+npx prisma generate
+npm run dev
 
-# Stop all services
-docker-compose down
+# Frontend (Terminal 2)
+cd frontend
+npm install
+npm run dev
+```
 
-# View logs
-docker-compose logs -f
-`
+**Access:**
 
-Environment variables are stored in .env files for backend and frontend.
-See .env.example for required keys (JWT_SECRET, STRIPE keys, Plaid keys, DB URL).
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:4000/api/health
+- Prisma Studio: `cd backend && npx prisma studio`
+
+Environment variables are stored in `.env` files for backend and frontend.
+See `backend/.env.example` for required keys (JWT_SECRET, STRIPE keys, DATABASE_URL).
 
 ---
 
 ## 📊 Features
 
-- 🔐 **Authentication** → JWT, bcrypt, role‑based access
-- 💳 **Payments** → Stripe integration, Plaid bank linking
-- 📈 **Dashboard** → React charts, responsive UI
-- ⚙️ **Backend** → RESTful API, PostgreSQL models, validation middleware
-- 🐳 **DevOps** → Dockerized stack, Nginx reverse proxy, PM2 process manager
-- 🔒 **Security** → Cloudflare WAF, SSL, UFW firewall
-- 📉 **Monitoring** → Sentry, Datadog, DigitalOcean alerts
+- 🔐 **Authentication** → Email OTP (Gmail SMTP), JWT, 2FA/TOTP, password recovery
+- 💳 **Fiat Payments** → Stripe integration (cards, webhooks)
+- ₿ **Crypto Payments** → Cryptomus (BTC, ETH, USDT), custodial HD wallets
+- 💰 **Multi-Currency** → USD, BTC, ETH, USDT balances per user
+- 🎁 **Rewards System** → Token distribution, user tiers
+- 📈 **Dashboard** → Real-time charts, transaction history, analytics
+- 🔔 **Notifications** → Web Push, Email, Socket.IO real-time updates
+- ⚙️ **Backend** → RESTful API, Prisma ORM, Socket.IO, rate limiting
+- 🔒 **Security** → Cloudflare WAF, Sentry monitoring, audit logs
+- 📦 **DevOps** → GitHub Actions CI/CD, automated DB backups
 
 ---
 
-## 🧩 Contribution & CI/CD
+## 🧩 CI/CD Pipeline
 
-- CI/CD pipeline via **GitHub Actions** (build, test, deploy)
-- Contributions welcome → fork repo, create feature branch, submit PR
-- Issues tracked in GitHub for bugs/features
+**Automated Workflows:**
+
+- **Tests**: Run on every PR (see `.github/workflows/ci.yml`)
+- **Backups**: Nightly database backups to Digital Ocean Spaces
+- **Deployments**: Auto-deploy to Render (backend) and Vercel (frontend) on push to `main`
+
+**Key Scripts:**
+
+- `deploy-vercel.ps1` - Deploy frontend to Vercel
+- `scripts/trigger-render-deploy.sh` - Trigger backend deploy on Render
+- `scripts/render-smoke.ps1` - Test deployed backend health
+
+---
+
+## 💰 Cost Breakdown (Production)
+
+| Service             | Plan      | Monthly Cost  |
+| ------------------- | --------- | ------------- |
+| Render PostgreSQL   | Starter   | $7            |
+| Render Web Service  | Starter   | $7            |
+| Vercel              | Hobby     | $0            |
+| Cloudflare          | Free      | $0            |
+| Sentry              | Developer | $0            |
+| DO Spaces (Backups) | Standard  | $5            |
+| **Total**           |           | **$19/month** |
 
 ---
 

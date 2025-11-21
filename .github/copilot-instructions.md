@@ -70,10 +70,14 @@ Purpose: give AI coding agents the minimum, specific context to be productive in
 - **GitHub Actions**: Multiple workflows in `.github/workflows/`:
   - `ci.yml`: Build/test on push/PR
   - `ci-pnpm.yml`: Type checking and linting with pnpm
-  - `backup-and-migrate.yml`: Nightly DB backups to S3
+  - `backup-and-migrate.yml`: Nightly DB backups to Digital Ocean Spaces
   - `integration-tests.yml`: End-to-end testing
-- **Deployment**: Digital Ocean (backend + DB) + Vercel (frontend) + Cloudflare (DNS/CDN).
-- **Environment management**: Encrypted secrets with custom scripts (`scripts/secrets/encrypt-env.ts`).
+- **Deployment**: 
+  - **Backend**: Render (Node.js Web Service + PostgreSQL) - auto-deploys on push to `main`
+  - **Frontend**: Vercel (Next.js) - auto-deploys on push to `main`
+  - **CDN/DNS**: Cloudflare
+  - **Backups**: Digital Ocean Spaces (S3-compatible, automated nightly)
+- **Environment management**: Configure via Render dashboard (backend) and Vercel dashboard (frontend).
 - **Branch protection**: Automated via `apply-branch-protection.yml`.
 
 ### Debugging patterns

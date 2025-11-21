@@ -77,7 +77,7 @@ class TrustpilotInvitationService {
           sent++;
 
           // Mark as invited
-          await prisma.transaction.update({
+          await prisma.transactions.update({
             where: { id: transaction.id },
             data: {
               metadata: {
@@ -104,7 +104,7 @@ class TrustpilotInvitationService {
       );
 
       // Log to audit trail
-      await prisma.auditLog.create({
+      await prisma.audit_logs.create({
         data: {
           action: "TRUSTPILOT_INVITATIONS_SENT",
           performedBy: "system",
@@ -170,7 +170,7 @@ class TrustpilotInvitationService {
       cutoffDate.getDate() - this.invitationSettings.delayDays
     );
 
-    return prisma.transaction.findMany({
+    return prisma.transactions.findMany({
       where: {
         type: "deposit",
         status: "completed",
@@ -211,7 +211,7 @@ class TrustpilotInvitationService {
       ...settings,
     };
 
-    await prisma.auditLog.create({
+    await prisma.audit_logs.create({
       data: {
         action: "TRUSTPILOT_SETTINGS_UPDATED",
         performedBy: "admin",

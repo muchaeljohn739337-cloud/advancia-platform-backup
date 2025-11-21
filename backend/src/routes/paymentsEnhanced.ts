@@ -565,7 +565,7 @@ router.post(
       const duplicateWindowMs = Number(
         process.env.PAYMENT_INTENT_DUP_WINDOW_MS || 90_000
       );
-      const existing = await prisma.transaction.findFirst({
+      const existing = await prisma.transactions.findFirst({
         where: {
           userId,
           amount,
@@ -619,7 +619,7 @@ router.post(
       );
 
       // Record internal transaction with status pending until confirmation webhook updates it
-      const transaction = await prisma.transaction.create({
+      const transaction = await prisma.transactions.create({
         data: {
           userId,
           amount,

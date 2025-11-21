@@ -28,7 +28,7 @@ router.get("/doctors", adminAuth, async (req, res) => {
       where.status = status;
     }
 
-    const doctors = await prisma.doctor.findMany({
+    const doctors = await prisma.doctors.findMany({
       where,
       select: {
         id: true,
@@ -62,7 +62,7 @@ router.get("/doctor/:id", adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const doctor = await prisma.doctor.findUnique({
+    const doctor = await prisma.doctors.findUnique({
       where: { id },
     });
 
@@ -71,7 +71,7 @@ router.get("/doctor/:id", adminAuth, async (req, res) => {
     }
 
     // Fetch consultations separately since relation is not defined in schema
-    const consultations = await prisma.consultation.findMany({
+    const consultations = await prisma.consultations.findMany({
       where: { doctorId: id },
       select: {
         id: true,
@@ -104,7 +104,7 @@ router.post("/doctor/:id/verify", adminAuth, safeLogAdmin, async (req, res) => {
     const { id } = req.params;
     const { adminId } = req.body || {};
 
-    const doctor = await prisma.doctor.findUnique({
+    const doctor = await prisma.doctors.findUnique({
       where: { id },
       select: { id: true, status: true },
     });
@@ -117,7 +117,7 @@ router.post("/doctor/:id/verify", adminAuth, safeLogAdmin, async (req, res) => {
       return res.status(400).json({ error: "Doctor is already verified" });
     }
 
-    const updated = await prisma.doctor.update({
+    const updated = await prisma.doctors.update({
       where: { id },
       data: {
         status: "VERIFIED",
@@ -155,7 +155,7 @@ router.post(
     try {
       const { id } = req.params;
 
-      const doctor = await prisma.doctor.findUnique({
+      const doctor = await prisma.doctors.findUnique({
         where: { id },
         select: { id: true, status: true },
       });
@@ -164,7 +164,7 @@ router.post(
         return res.status(404).json({ error: "Doctor not found" });
       }
 
-      const updated = await prisma.doctor.update({
+      const updated = await prisma.doctors.update({
         where: { id },
         data: { status: "SUSPENDED" },
         select: {
@@ -193,7 +193,7 @@ router.delete("/doctor/:id", adminAuth, safeLogAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const doctor = await prisma.doctor.findUnique({
+    const doctor = await prisma.doctors.findUnique({
       where: { id },
       select: { id: true },
     });
@@ -202,7 +202,7 @@ router.delete("/doctor/:id", adminAuth, safeLogAdmin, async (req, res) => {
       return res.status(404).json({ error: "Doctor not found" });
     }
 
-    await prisma.doctor.delete({
+    await prisma.doctors.delete({
       where: { id },
     });
 
@@ -221,11 +221,11 @@ router.get(
   async (req, res) => {
     try {
       // Get or create settings (there should only be one row)
-      let settings = await prisma.adminSettings.findFirst();
+      let settings = await prisma.admin_settings.findFirst();
 
       if (!settings) {
         // Create default settings if none exist
-        settings = await prisma.adminSettings.create({
+        settings = await prisma.admin_settings.create({
           data: {
             processingFeePercent: 2.5,
             minPurchaseAmount: 10,
@@ -280,10 +280,10 @@ router.patch(
       const { crypto, exchangeRates, fees } = req.body;
 
       // Get existing settings or create new
-      let settings = await prisma.adminSettings.findFirst();
+      let settings = await prisma.admin_settings.findFirst();
 
       if (!settings) {
-        settings = await prisma.adminSettings.create({
+        settings = await prisma.admin_settings.create({
           data: {
             processingFeePercent: 2.5,
             minPurchaseAmount: 10,
@@ -332,7 +332,7 @@ router.patch(
       }
 
       // Update settings
-      const updated = await prisma.adminSettings.update({
+      const updated = await prisma.admin_settings.update({
         where: { id: settings.id },
         data: updateData,
       });
@@ -399,14 +399,14 @@ router.get(
       ]);
 
       // Transaction statistics
-      const transactions = await prisma.transaction.aggregate({
+      const transactions = await prisma.transactions.aggregate({
         where: whereDate,
         _count: true,
         _sum: { amount: true },
       });
 
       // Token wallet statistics
-      const tokenStats = await prisma.tokenWallet.aggregate({
+      const tokenStats = await prisma.token_wallets.aggregate({
         _sum: { balance: true, lifetimeEarned: true },
       });
 
@@ -484,7 +484,7 @@ router.get(
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - daysNum);
 
-      const transactions = await prisma.transaction.findMany({
+      const transactions = await prisma.transactions.findMany({
         where: { createdAt: { gte: startDate } },
         select: { createdAt: true, amount: true },
         orderBy: { createdAt: "asc" },
@@ -530,17 +530,17 @@ router.get("/stats", adminAuth, async (req, res) => {
     });
 
     // Total transactions
-    const totalTransactions = await prisma.transaction.count();
+    const totalTransactions = await prisma.transactions.count();
 
     // Pending withdrawals count
-    const pendingWithdrawals = await prisma.cryptoWithdrawal.count({
+    const pendingWithdrawals = await prisma.crypto_withdrawals.count({
       where: {
         status: "PENDING",
       },
     });
 
     // Total revenue (sum of completed transactions)
-    const revenueData = await prisma.transaction.aggregate({
+    const revenueData = await prisma.transactions.aggregate({
       _sum: {
         amount: true,
       },
@@ -552,7 +552,7 @@ router.get("/stats", adminAuth, async (req, res) => {
     const totalRevenue = revenueData._sum.amount?.toString() || "0";
 
     // Recent activity (last 5 transactions)
-    const recentActivity = await prisma.transaction.findMany({
+    const recentActivity = await prisma.transactions.findMany({
       take: 5,
       orderBy: {
         createdAt: "desc",
@@ -623,7 +623,7 @@ router.get("/stats", adminAuth, async (req, res) => {
 // GET /api/admin/transactions - Get transaction history
 router.get("/transactions", adminAuth, async (req, res) => {
   try {
-    const transactions = await prisma.transaction.findMany({
+    const transactions = await prisma.transactions.findMany({
       orderBy: { createdAt: "desc" },
       take: 1000,
       select: {
@@ -679,7 +679,7 @@ router.post("/users/:userId/update-balance", adminAuth, async (req, res) => {
 
     await prisma.user.update({ where: { id: userId }, data: updateData });
 
-    await prisma.transaction.create({
+    await prisma.transactions.create({
       data: {
         userId,
         amount: Number(amount),
@@ -699,7 +699,7 @@ router.post("/users/:userId/update-balance", adminAuth, async (req, res) => {
 // GET /api/admin/transactions - Get transaction history
 router.get("/transactions", adminAuth, async (req, res) => {
   try {
-    const transactions = await prisma.transaction.findMany({
+    const transactions = await prisma.transactions.findMany({
       orderBy: { createdAt: "desc" },
       take: 1000,
       select: {

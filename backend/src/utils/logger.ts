@@ -15,7 +15,7 @@ export async function logAdminLogin(
       req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown";
     const userAgent = req.headers["user-agent"] || "unknown";
 
-    await prisma.adminLoginLog.create({
+    await prisma.admin_login_logs.create({
       data: {
         email,
         phone,

@@ -23,7 +23,7 @@ router.get("/tier", authenticateToken, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.id;
 
-    const wallet = await prisma.tokenWallet.findUnique({ where: { userId } });
+    const wallet = await prisma.token_wallets.findUnique({ where: { userId } });
     const totalTokens = Number(wallet?.balance || 0) + Number(wallet?.lifetimeEarned || 0);
 
     let currentTier = "BRONZE";
@@ -75,7 +75,7 @@ router.get("/achievements", authenticateToken, async (req: Request, res: Respons
     ];
 
     // Check user progress
-    const transactionCount = await prisma.transaction.count({ where: { userId } });
+    const transactionCount = await prisma.transactions.count({ where: { userId } });
     const referralCount = await prisma.userTier.count({ where: { referredBy: userId } });
 
     // Mock login streak (would need DailyLoginStreak table)
@@ -127,7 +127,7 @@ router.get("/leaderboard", authenticateToken, async (req: Request, res: Response
   try {
     const { period = "all" } = req.query; // all, month, week
 
-    const wallets = await prisma.tokenWallet.findMany({
+    const wallets = await prisma.token_wallets.findMany({
       orderBy: { lifetimeEarned: "desc" },
       take: 100,
     });
@@ -202,9 +202,9 @@ router.post("/daily-bonus", authenticateToken, async (req: Request, res: Respons
     today.setHours(0, 0, 0, 0);
 
     // Get wallet first
-    let wallet = await prisma.tokenWallet.findUnique({ where: { userId } });
+    let wallet = await prisma.token_wallets.findUnique({ where: { userId } });
     if (!wallet) {
-      wallet = await prisma.tokenWallet.create({ data: { userId } });
+      wallet = await prisma.token_wallets.create({ data: { userId } });
     }
 
     const lastClaim = await prisma.tokenTransaction.findFirst({
@@ -310,7 +310,7 @@ router.get("/challenges", authenticateToken, async (req: Request, res: Response)
     const thisWeekStart = new Date();
     thisWeekStart.setDate(thisWeekStart.getDate() - 7);
 
-    const weeklySpend = await prisma.transaction.aggregate({
+    const weeklySpend = await prisma.transactions.aggregate({
       where: {
         userId,
         createdAt: { gte: thisWeekStart },
@@ -319,14 +319,14 @@ router.get("/challenges", authenticateToken, async (req: Request, res: Response)
       _sum: { amount: true },
     });
 
-    const monthlyTransactions = await prisma.transaction.count({
+    const monthlyTransactions = await prisma.transactions.count({
       where: {
         userId,
         createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
       },
     });
 
-    const cryptoPurchases = await prisma.cryptoWallet.count({ where: { userId } });
+    const cryptoPurchases = await prisma.crypto_wallets.count({ where: { userId } });
 
     challenges[0].progress = weeklySpend._sum.amount || 0;
     challenges[1].progress = monthlyTransactions;

@@ -69,7 +69,7 @@ export class DataBackupSync {
       console.log(`✅ Backup created: ${filename} (${(stats.size / 1024 / 1024).toFixed(2)} MB)`);
 
       // Log backup to audit log
-      await prisma.auditLog.create({
+      await prisma.audit_logs.create({
         data: {
           userId: "SYSTEM",
           action: "DATABASE_BACKUP",
@@ -227,10 +227,10 @@ export class DataBackupSync {
           });
           break;
         case "transactions":
-          data = await prisma.transaction.findMany();
+          data = await prisma.transactions.findMany();
           break;
         case "auditLogs":
-          data = await prisma.auditLog.findMany();
+          data = await prisma.audit_logs.findMany();
           break;
         default:
           throw new Error(`Unsupported table: ${tableName}`);
@@ -271,10 +271,10 @@ export class DataBackupSync {
         users: await prisma.user.findMany({
           where: { updatedAt: { gte: lastBackupDate } },
         }),
-        transactions: await prisma.transaction.findMany({
+        transactions: await prisma.transactions.findMany({
           where: { createdAt: { gte: lastBackupDate } },
         }),
-        auditLogs: await prisma.auditLog.findMany({
+        auditLogs: await prisma.audit_logs.findMany({
           where: { createdAt: { gte: lastBackupDate } },
         }),
       };

@@ -21,7 +21,7 @@ router.get(
       // Check database configuration
       {
         // Check database configuration
-        const config = await prisma.systemConfig.findUnique({
+        const config = await prisma.system_config.findUnique({
           where: { key: "silent_mode" },
         });
         silentMode = config?.value === "true";
@@ -77,7 +77,7 @@ router.post(
       }
 
       // Update or create configuration
-      await prisma.systemConfig.upsert({
+      await prisma.system_config.upsert({
         where: { key: "silent_mode" },
         update: { value: String(enabled) },
         create: { key: "silent_mode", value: String(enabled) },
@@ -108,7 +108,7 @@ router.get(
   requireAdmin,
   async (req: Request, res: Response): Promise<void> => {
     try {
-      const configs = await prisma.systemConfig.findMany({
+      const configs = await prisma.system_config.findMany({
         orderBy: { key: "asc" },
       });
 

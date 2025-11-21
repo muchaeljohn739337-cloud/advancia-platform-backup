@@ -4,749 +4,22 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
-model User {
-  id                      String                   @id @default(uuid())
-  email                   String                   @unique
-  username                String                   @unique
-  passwordHash            String
-  firstName               String?
-  lastName                String?
-  role                    Role                     @default(USER)
-  usdBalance              Decimal                  @default(0)
-  active                  Boolean                  @default(true)
-  emailVerified           Boolean                  @default(false)
-  emailVerifiedAt         DateTime?
-  lastLogin               DateTime?
-  termsAccepted           Boolean                  @default(false)
-  termsAcceptedAt         DateTime?
-  totpSecret              String?
-  totpEnabled             Boolean                  @default(false)
-  totpVerified            Boolean                  @default(false)
-  backupCodes             String?
-  ethWalletAddress        String?                  @unique
-  createdAt               DateTime                 @default(now())
-  updatedAt               DateTime                 @updatedAt
-  btcBalance              Decimal                  @default(0)
-  ethBalance              Decimal                  @default(0)
-  usdtBalance             Decimal                  @default(0)
-  address                 String?
-  approved                Boolean                  @default(false)
-  approvedAt              DateTime?
-  approvedBy              String?
-  city                    String?
-  country                 String?
-  phoneNumber             String?
-  postalCode              String?
-  profileImage            String?
-  rejectedAt              DateTime?
-  rejectionReason         String?
-  emailSignupToken        String?                  @unique
-  emailSignupTokenExpiry  DateTime?
-  firstLoginCompleted     Boolean                  @default(false)
-  signupMethod            String                   @default("password")
-  stripeCustomerId        String?                  @unique
-  gpt5Enabled             Boolean                  @default(false)
-  RPAWorkflow             RPAWorkflow[]
-  adminWalletTransactions AdminWalletTransaction[]
-  cryptoWallets           CryptoWallet[]
-  cryptoWithdrawals       CryptoWithdrawal[]
-  emailLogs               EmailLog[]
-  invoices                Invoice[]
-  medBedsBookings         MedBedsBooking[]
-  twoFactorAuth           TwoFactorAuth?
-  profile                 UserProfile?
-
-  @@map("users")
-}
-
-model UserProfile {
-  id        String   @id
-  userId    String   @unique
-  bio       String?
-  createdAt DateTime
-  updatedAt DateTime
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("user_profiles")
-}
-
-model Transaction {
-  id          String   @id @default(uuid())
-  userId      String
+model CryptoPayments {
+  id          String    @id
+  user_id     String
+  invoice_id  String
   amount      Float
-  type        String
-  description String?
-  category    String?
-  status      String   @default("completed")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  currency    String   @default("USD")
-  orderId     String?  @unique
-  provider    String?
-  Invoice     Invoice?
-
-  @@index([userId])
-  @@index([orderId])
-  @@index([provider])
-  @@index([createdAt])
-  @@map("transactions")
-}
-
-model DebitCard {
-  id             String   @id @default(uuid())
-  userId         String
-  cardNumber     String   @unique
-  cardHolderName String
-  expiryMonth    Int
-  expiryYear     Int
-  cvv            String
-  cardType       String   @default("virtual")
-  status         String   @default("active")
-  balance        Decimal  @default(0)
-  dailyLimit     Decimal  @default(1000)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  @@index([userId])
-  @@index([cardNumber])
-  @@map("debit_cards")
-}
-
-model Session {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  @@index([userId])
-  @@index([token])
-  @@map("sessions")
-}
-
-model BackupCode {
-  id        String    @id @default(uuid())
-  userId    String
-  code      String    @unique
-  isUsed    Boolean   @default(false)
-  usedAt    DateTime?
-  createdAt DateTime  @default(now())
-
-  @@index([userId])
-  @@index([code])
-  @@index([isUsed])
-  @@map("backup_codes")
-}
-
-model AuditLog {
-  id             String   @id @default(uuid())
-  userId         String?
-  action         String
-  resourceType   String
-  resourceId     String
-  changes        Json?
-  previousValues Json?
-  newValues      Json?
-  metadata       Json?
-  ipAddress      String?
-  userAgent      String?
-  timestamp      DateTime @default(now())
-  createdAt      DateTime @default(now())
-  details        Json?
-
-  @@index([userId])
-  @@index([resourceType])
-  @@index([resourceId])
-  @@index([timestamp])
-  @@index([createdAt])
-  @@map("audit_logs")
-}
-
-model TokenWallet {
-  id             String   @id @default(uuid())
-  userId         String   @unique
-  balance        Decimal  @default(0)
-  tokenType      String   @default("ADVANCIA")
-  lockedBalance  Decimal  @default(0)
-  lifetimeEarned Decimal  @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  @@index([userId])
-  @@map("token_wallets")
-}
-
-model TokenTransaction {
-  id          String   @id @default(uuid())
-  walletId    String
-  amount      Decimal
-  type        String
-  status      String   @default("completed")
-  description String?
-  toAddress   String?
-  fromAddress String?
-  txHash      String?
-  metadata    String?
-  createdAt   DateTime @default(now())
-
-  @@index([walletId])
-  @@index([createdAt])
-  @@index([type])
-  @@index([status])
-  @@map("token_transactions")
-}
-
-model Reward {
-  id          String    @id @default(uuid())
-  userId      String
-  type        String
-  amount      Decimal
+  currency    String
   status      String    @default("pending")
-  title       String
-  description String
-  metadata    String?
-  expiresAt   DateTime?
-  claimedAt   DateTime?
-  createdAt   DateTime  @default(now())
-
-  @@index([userId])
-  @@index([status])
-  @@index([type])
-  @@index([createdAt])
-  @@map("rewards")
-}
-
-model UserTier {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  currentTier     String   @default("bronze")
-  points          Int      @default(0)
-  lifetimePoints  Int      @default(0)
-  lifetimeRewards Decimal  @default(0)
-  streak          Int      @default(0)
-  longestStreak   Int      @default(0)
-  lastActiveDate  DateTime @default(now())
-  achievements    String?
-  badges          String?
-  referralCode    String?  @unique
-  referredBy      String?
-  totalReferrals  Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  @@index([userId])
-  @@index([currentTier])
-  @@index([points])
-  @@index([referralCode])
-  @@map("user_tiers")
-}
-
-model HealthReading {
-  id               String   @id @default(uuid())
-  userId           String
-  heartRate        Int?
-  bloodPressureSys Int?
-  bloodPressureDia Int?
-  steps            Int?
-  sleepHours       Decimal?
-  sleepQuality     String?
-  weight           Decimal?
-  temperature      Decimal?
-  oxygenLevel      Int?
-  stressLevel      String?
-  mood             String?
-  deviceId         String?
-  deviceType       String?
-  metadata         String?
-  notes            String?
-  recordedAt       DateTime @default(now())
-  createdAt        DateTime @default(now())
-
-  @@index([userId])
-  @@index([recordedAt])
-  @@index([createdAt])
-  @@map("health_readings")
-}
-
-model AdminSettings {
-  id                   String   @id @default(uuid())
-  btcAddress           String?
-  ethAddress           String?
-  usdtAddress          String?
-  ltcAddress           String?
-  otherAddresses       String?
-  exchangeRateBtc      Decimal?
-  exchangeRateEth      Decimal?
-  exchangeRateUsdt     Decimal?
-  processingFeePercent Decimal  @default(2.5)
-  minPurchaseAmount    Decimal  @default(10)
-  debitCardPriceUSD    Decimal  @default(1000)
-  updatedAt            DateTime @updatedAt
-  createdAt            DateTime @default(now())
-
-  @@map("admin_settings")
-}
-
-model CryptoOrder {
-  id                String    @id @default(uuid())
-  userId            String
-  cryptoType        String
-  usdAmount         Decimal
-  cryptoAmount      Decimal
-  exchangeRate      Decimal
-  processingFee     Decimal
-  totalUsd          Decimal
-  status            String    @default("pending")
-  adminAddress      String
-  txHash            String?
-  adminNotes        String?
-  userWalletAddress String?
-  stripeSessionId   String?
-  completedAt       DateTime?
-  cancelledAt       DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-
-  @@index([userId])
-  @@index([status])
-  @@index([cryptoType])
-  @@index([createdAt])
-  @@map("crypto_orders")
-}
-
-model CryptoWallet {
-  id            String   @id @default(uuid())
-  userId        String
-  currency      String
-  balance       Decimal  @default(0)
-  address       String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  lockedBalance Decimal  @default(0)
-  totalIn       Decimal  @default(0)
-  totalOut      Decimal  @default(0)
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, currency])
-  @@index([userId])
-  @@index([currency])
-  @@map("crypto_wallets")
-}
-
-model CryptoWithdrawal {
-  id                 String    @id @default(uuid())
-  userId             String
-  cryptoType         String
-  cryptoAmount       Decimal
-  usdEquivalent      Decimal
-  withdrawalAddress  String
-  status             String    @default("pending")
-  adminApprovedBy    String?
-  adminNotes         String?
-  txHash             String?
-  networkFee         Decimal?
-  approvedAt         DateTime?
-  rejectedAt         DateTime?
-  completedAt        DateTime?
-  cancelledAt        DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  user_notes         String?
-  amount             Decimal
-  approvedBy         String?
-  currency           String
-  destinationAddress String
-  requestedAt        DateTime  @default(now())
-  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([status])
-  @@index([cryptoType])
-  @@index([currency])
-  @@index([requestedAt])
-  @@index([createdAt])
-  @@map("crypto_withdrawals")
-}
-
-model EthActivity {
-  id                String          @id @default(uuid())
-  userId            String?
-  address           String
-  addressNormalized String
-  type              EthActivityType
-  txHash            String?         @unique
-  amountEth         Decimal
-  status            String
-  confirmations     Int             @default(0)
-  blockNumber       Int?
-  note              String?
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-
-  @@index([addressNormalized])
-  @@index([type])
-  @@index([createdAt])
-  @@map("eth_activity")
-}
-
-model AdminPortfolio {
-  id        String   @id @default(uuid())
-  currency  Currency @unique
-  balance   Decimal  @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("admin_portfolios")
-}
-
-model AdminTransfer {
-  id        String   @id @default(uuid())
-  adminId   String?
-  userId    String?
-  currency  Currency
-  amount    Decimal
-  note      String?
-  source    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([currency])
-  @@index([createdAt])
-  @@index([userId])
-  @@map("admin_transfers")
-}
-
-model Loan {
-  id               String    @id @default(uuid())
-  userId           String
-  amount           Decimal
-  interestRate     Decimal
-  termMonths       Int
-  monthlyPayment   Decimal
-  remainingBalance Decimal
-  status           String    @default("pending")
-  purpose          String
-  startDate        DateTime  @default(now())
-  dueDate          DateTime
-  approvedBy       String?
-  approvedAt       DateTime?
-  paidOffAt        DateTime?
-  defaultedAt      DateTime?
-  cancelledAt      DateTime?
-  adminNotes       String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  @@index([userId])
-  @@index([status])
-  @@index([createdAt])
-  @@map("loans")
-}
-
-model SystemStatus {
-  id            String   @id @default(uuid())
-  serviceName   String
-  status        String
-  responseTime  Int?
-  uptime        Decimal?
-  lastChecked   DateTime @default(now())
-  statusMessage String?
-  alertLevel    String   @default("none")
-  metadata      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@index([serviceName])
-  @@index([status])
-  @@index([alertLevel])
-  @@index([lastChecked])
-  @@map("system_status")
-}
-
-model SystemAlert {
-  id          String    @id @default(uuid())
-  alertType   String
-  severity    String
-  title       String
-  description String
-  serviceName String?
-  isResolved  Boolean   @default(false)
-  resolvedAt  DateTime?
-  resolvedBy  String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@index([alertType])
-  @@index([severity])
-  @@index([isResolved])
-  @@index([createdAt])
-  @@map("system_alerts")
-}
-
-model Notification {
-  id          String    @id @default(cuid())
-  userId      String
-  type        String
-  priority    String    @default("normal")
-  category    String
-  title       String
-  message     String
-  data        Json?
-  isRead      Boolean   @default(false)
-  readAt      DateTime?
-  emailSent   Boolean   @default(false)
-  emailSentAt DateTime?
-  smsSent     Boolean   @default(false)
-  smsSentAt   DateTime?
-  pushSent    Boolean   @default(false)
-  pushSentAt  DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@index([userId])
-  @@index([isRead])
-  @@index([createdAt])
-  @@index([category])
-  @@index([priority])
-  @@map("notifications")
-}
-
-model PushSubscription {
-  id         String   @id @default(cuid())
-  userId     String
-  endpoint   String
-  p256dh     String
-  auth       String
-  deviceInfo Json?
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-
-  @@unique([userId, endpoint])
-  @@index([userId])
-  @@index([isActive])
-  @@map("push_subscriptions")
-}
-
-model NotificationPreference {
-  id                String   @id @default(cuid())
-  userId            String   @unique
-  emailEnabled      Boolean  @default(true)
-  smsEnabled        Boolean  @default(false)
-  inAppEnabled      Boolean  @default(true)
-  pushEnabled       Boolean  @default(true)
-  transactionAlerts Boolean  @default(true)
-  securityAlerts    Boolean  @default(true)
-  systemAlerts      Boolean  @default(true)
-  rewardAlerts      Boolean  @default(true)
-  adminAlerts       Boolean  @default(true)
-  promotionalEmails Boolean  @default(false)
-  enableDigest      Boolean  @default(false)
-  digestFrequency   String   @default("daily")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@map("notification_preferences")
-}
-
-model NotificationLog {
-  id             String    @id @default(cuid())
-  notificationId String
-  channel        String
-  status         String
-  errorMessage   String?
-  sentAt         DateTime  @default(now())
-  deliveredAt    DateTime?
-  metadata       Json?
-
-  @@index([notificationId])
-  @@index([status])
-  @@index([sentAt])
-  @@index([channel])
-  @@map("notification_logs")
-}
-
-model SupportTicket {
-  id         String    @id @default(uuid())
-  userId     String
-  subject    String
-  message    String
-  category   String    @default("GENERAL")
-  status     String    @default("OPEN")
-  priority   String    @default("MEDIUM")
-  response   String?
-  resolvedBy String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  resolvedAt DateTime?
-
-  @@index([userId])
-  @@index([status])
-  @@map("support_tickets")
-}
-
-model ActivityLog {
-  id        String   @id @default(uuid())
-  userId    String?
-  action    String
-  ipAddress String
-  userAgent String
-  metadata  Json?
-  createdAt DateTime @default(now())
-
-  @@map("activity_logs")
-}
-
-model ChatSession {
-  id              String   @id @default(uuid())
-  userId          String?
-  status          String   @default("open")
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  assignedAdminId String?
-
-  @@map("chat_sessions")
-}
-
-model ChatMessage {
-  id         String   @id @default(uuid())
-  sessionId  String
-  senderType String
-  senderId   String?
-  content    String
-  metadata   Json?
-  createdAt  DateTime @default(now())
-
-  @@map("chat_messages")
-}
-
-model Doctor {
-  id             String       @id @default(uuid())
-  email          String
-  passwordHash   String
-  firstName      String
-  lastName       String
-  specialization String
-  licenseNumber  String
-  phoneNumber    String?
-  status         DoctorStatus @default(PENDING)
-  verifiedAt     DateTime?
-  verifiedBy     String?
-  inviteCode     String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-
-  @@map("doctors")
-}
-
-model Consultation {
-  id           String             @id @default(uuid())
-  patientId    String
-  doctorId     String
-  status       ConsultationStatus @default(SCHEDULED)
-  scheduledAt  DateTime?
-  startedAt    DateTime?
-  completedAt  DateTime?
-  symptoms     String?
-  diagnosis    String?
-  prescription String?
-  notes        String?
-  videoRoomId  String?
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-
-  @@map("consultations")
-}
-
-model ConsultationMessage {
-  id             String   @id @default(uuid())
-  consultationId String
-  senderType     String
-  senderId       String
-  content        String
-  attachmentUrl  String?
-  createdAt      DateTime @default(now())
-
-  @@map("consultation_messages")
-}
-
-model AdminLoginLog {
-  id        Int      @id @default(autoincrement())
-  email     String
-  phone     String?
-  status    String
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
-
-  @@index([email])
-  @@index([status])
-  @@index([createdAt])
-  @@map("admin_login_logs")
-}
-
-model IpBlock {
-  id        String    @id @default(uuid())
-  ip        String    @unique
-  reason    String?
-  until     DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([updatedAt])
-  @@map("ip_blocks")
-}
-
-model MedBedsBooking {
-  id              String   @id @default(uuid())
-  userId          String
-  chamberType     String
-  chamberName     String
-  sessionDate     DateTime
-  duration        Int
-  cost            Decimal  @db.Decimal(10, 2)
-  paymentMethod   String
-  paymentStatus   String   @default("pending")
-  transactionId   String?
-  stripeSessionId String?
-  status          String   @default("scheduled")
-  effectiveness   Int?
-  notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([sessionDate])
-  @@index([status])
-  @@index([paymentStatus])
-  @@map("medbeds_bookings")
-}
-
-model OAL {
-  id          String    @id @default(cuid())
-  object      String
-  action      String
-  location    String
-  subjectId   String?
-  metadata    Json?
-  status      OALStatus @default(PENDING)
-  createdById String
-  updatedById String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@index([object])
-  @@index([action])
-  @@index([location])
-  @@index([status])
-  @@index([createdById])
-  @@index([subjectId])
-  @@index([createdAt])
-  @@map("oal_audit_log")
+  payment_url String?
+  order_id    String?
+  description String?
+  paid_at     DateTime?
+  created_at  DateTime?
+  updated_at  DateTime?
 }
 
 model RPAExecution {
@@ -776,69 +49,409 @@ model RPAWorkflow {
   updatedAt    DateTime
   createdById  String
   RPAExecution RPAExecution[]
-  users        User           @relation(fields: [createdById], references: [id])
+  user         User           @relation(fields: [createdById], references: [id])
 
   @@index([createdById])
   @@index([enabled])
 }
 
-model SystemConfig {
+model activity_logs {
+  id        String   @id
+  userId    String?
+  action    String
+  ipAddress String
+  userAgent String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model admin_login_logs {
   id        Int      @id @default(autoincrement())
-  key       String   @unique
-  value     String
-  updatedAt DateTime @updatedAt
+  email     String
+  phone     String?
+  status    String
+  ipAddress String?
+  userAgent String?
   createdAt DateTime @default(now())
 
-  @@map("system_config")
-}
-
-model Invoice {
-  id             String        @id @default(uuid())
-  invoiceNumber  String        @unique
-  userId         String
-  amount         Decimal
-  currency       String        @default("USD")
-  status         String        @default("pending")
-  type           String        @default("transaction")
-  billingName    String?
-  billingEmail   String?
-  billingAddress String?
-  issueDate      DateTime      @default(now())
-  dueDate        DateTime
-  paidDate       DateTime?
-  transactionId  String?       @unique
-  pdfUrl         String?
-  pdfGenerated   Boolean       @default(false)
-  notes          String?
-  metadata       Json?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  items          InvoiceItem[]
-  transaction    Transaction?  @relation(fields: [transactionId], references: [id])
-  user           User          @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([invoiceNumber])
+  @@index([createdAt])
+  @@index([email])
   @@index([status])
-  @@map("invoices")
 }
 
-model InvoiceItem {
-  id          String   @id @default(uuid())
-  invoiceId   String
-  description String
-  quantity    Int      @default(1)
-  unitPrice   Decimal
-  amount      Decimal
-  createdAt   DateTime @default(now())
-  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+model admin_messages {
+  id          String    @id
+  userId      String
+  fromAdminId String
+  fromAdmin   String
+  toUserId    String?
+  subject     String?
+  message     String
+  attachments Json?
+  priority    String    @default("normal")
+  category    String?
+  isRead      Boolean   @default(false)
+  readAt      DateTime?
+  repliedTo   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
 
-  @@index([invoiceId])
-  @@map("invoice_items")
+  @@index([createdAt])
+  @@index([fromAdminId])
+  @@index([isRead])
+  @@index([repliedTo])
+  @@index([userId])
 }
 
-model EmailLog {
-  id         String    @id @default(uuid())
+model admin_notifications {
+  id        String    @id
+  type      String
+  title     String
+  message   String
+  userId    String?
+  metadata  Json?
+  read      Boolean   @default(false)
+  readAt    DateTime?
+  actionUrl String?
+  createdAt DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([read])
+  @@index([type])
+}
+
+model admin_portfolios {
+  id        String   @id
+  currency  Currency @unique
+  balance   Decimal  @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model admin_settings {
+  id                   String   @id
+  btcAddress           String?
+  ethAddress           String?
+  usdtAddress          String?
+  ltcAddress           String?
+  otherAddresses       String?
+  exchangeRateBtc      Decimal?
+  exchangeRateEth      Decimal?
+  exchangeRateUsdt     Decimal?
+  processingFeePercent Decimal  @default(2.5)
+  minPurchaseAmount    Decimal  @default(10)
+  debitCardPriceUSD    Decimal  @default(1000)
+  updatedAt            DateTime
+  createdAt            DateTime @default(now())
+}
+
+model admin_transfers {
+  id        String   @id
+  adminId   String?
+  userId    String?
+  currency  Currency
+  amount    Decimal
+  note      String?
+  source    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  @@index([createdAt])
+  @@index([currency])
+  @@index([userId])
+}
+
+model admin_user_notes {
+  id        String   @id
+  userId    String
+  adminId   String
+  noteType  String
+  title     String
+  content   String
+  priority  String   @default("normal")
+  tags      String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  @@index([adminId])
+  @@index([createdAt])
+  @@index([noteType])
+  @@index([userId])
+}
+
+model admin_wallet_transactions {
+  id            String        @id
+  adminWalletId String
+  userId        String?
+  amount        Decimal
+  currency      String
+  type          String
+  description   String
+  createdAt     DateTime      @default(now())
+  admin_wallets admin_wallets @relation(fields: [adminWalletId], references: [id])
+  user          User?         @relation(fields: [userId], references: [id])
+
+  @@index([adminWalletId])
+  @@index([type])
+  @@index([userId])
+}
+
+model admin_wallets {
+  id                        String                      @id
+  currency                  String                      @unique
+  balance                   Decimal                     @default(0)
+  totalIn                   Decimal                     @default(0)
+  totalOut                  Decimal                     @default(0)
+  walletAddress             String?
+  walletProvider            String?
+  walletNotes               String?
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime
+  admin_wallet_transactions admin_wallet_transactions[]
+}
+
+model alert_policies {
+  id                String              @id
+  routeGroup        String              @unique
+  threshold         Int
+  cooldown          Int                 @default(300000)
+  mode              AlertMode           @default(IMMEDIATE)
+  batchIntervalMs   Int?
+  channels          String[]
+  severity          AlertSeverity       @default(MEDIUM)
+  enabled           Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime
+  createdBy         String
+  updatedBy         String
+  policy_audit_logs policy_audit_logs[]
+
+  @@index([routeGroup])
+}
+
+model analytics_events {
+  id              String   @id
+  userId          String?
+  sessionId       String?
+  eventName       String
+  eventProperties Json?
+  userProperties  Json?
+  deviceInfo      Json?
+  timestamp       DateTime @default(now())
+  ipAddress       String?
+  userAgent       String?
+  referrer        String?
+  url             String?
+  platform        String?
+  appVersion      String?
+  createdAt       DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([eventName])
+  @@index([sessionId])
+  @@index([timestamp])
+  @@index([userId])
+}
+
+model audit_logs {
+  id             String   @id
+  userId         String?
+  action         String
+  resourceType   String
+  resourceId     String
+  changes        Json?
+  previousValues Json?
+  newValues      Json?
+  metadata       Json?
+  ipAddress      String?
+  userAgent      String?
+  timestamp      DateTime @default(now())
+  createdAt      DateTime @default(now())
+  details        Json?
+
+  @@index([createdAt])
+  @@index([resourceId])
+  @@index([resourceType])
+  @@index([timestamp])
+  @@index([userId])
+}
+
+model backup_codes {
+  id        String    @id
+  userId    String
+  code      String    @unique
+  isUsed    Boolean   @default(false)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([code])
+  @@index([isUsed])
+  @@index([userId])
+}
+
+model chat_messages {
+  id         String   @id
+  sessionId  String
+  senderType String
+  senderId   String?
+  content    String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+}
+
+model chat_sessions {
+  id              String   @id
+  userId          String?
+  status          String   @default("open")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+  assignedAdminId String?
+}
+
+model consultation_messages {
+  id             String   @id
+  consultationId String
+  senderType     String
+  senderId       String
+  content        String
+  attachmentUrl  String?
+  createdAt      DateTime @default(now())
+}
+
+model consultations {
+  id           String             @id
+  patientId    String
+  doctorId     String
+  status       ConsultationStatus @default(SCHEDULED)
+  scheduledAt  DateTime?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  symptoms     String?
+  diagnosis    String?
+  prescription String?
+  notes        String?
+  videoRoomId  String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime
+}
+
+model crypto_orders {
+  id                String    @id
+  userId            String
+  cryptoType        String
+  usdAmount         Decimal
+  cryptoAmount      Decimal
+  exchangeRate      Decimal
+  processingFee     Decimal
+  totalUsd          Decimal
+  status            String    @default("pending")
+  adminAddress      String
+  txHash            String?
+  adminNotes        String?
+  userWalletAddress String?
+  stripeSessionId   String?
+  completedAt       DateTime?
+  cancelledAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime
+
+  @@index([createdAt])
+  @@index([cryptoType])
+  @@index([status])
+  @@index([userId])
+}
+
+model crypto_wallets {
+  id            String   @id
+  userId        String
+  currency      String
+  balance       Decimal  @default(0)
+  address       String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+  lockedBalance Decimal  @default(0)
+  totalIn       Decimal  @default(0)
+  totalOut      Decimal  @default(0)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, currency])
+  @@index([currency])
+  @@index([userId])
+}
+
+model crypto_withdrawals {
+  id                 String    @id
+  userId             String
+  cryptoType         String
+  cryptoAmount       Decimal
+  usdEquivalent      Decimal
+  withdrawalAddress  String
+  status             String    @default("pending")
+  adminApprovedBy    String?
+  adminNotes         String?
+  txHash             String?
+  networkFee         Decimal?
+  approvedAt         DateTime?
+  rejectedAt         DateTime?
+  completedAt        DateTime?
+  cancelledAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime
+  user_notes         String?
+  amount             Decimal
+  approvedBy         String?
+  currency           String
+  destinationAddress String
+  requestedAt        DateTime  @default(now())
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([cryptoType])
+  @@index([currency])
+  @@index([requestedAt])
+  @@index([status])
+  @@index([userId])
+}
+
+model debit_cards {
+  id             String   @id
+  userId         String
+  cardNumber     String   @unique
+  cardHolderName String
+  expiryMonth    Int
+  expiryYear     Int
+  cvv            String
+  cardType       String   @default("virtual")
+  status         String   @default("active")
+  balance        Decimal  @default(0)
+  dailyLimit     Decimal  @default(1000)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+
+  @@index([cardNumber])
+  @@index([userId])
+}
+
+model doctors {
+  id             String       @id
+  email          String
+  passwordHash   String
+  firstName      String
+  lastName       String
+  specialization String
+  licenseNumber  String
+  phoneNumber    String?
+  status         DoctorStatus @default(PENDING)
+  verifiedAt     DateTime?
+  verifiedBy     String?
+  inviteCode     String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime
+}
+
+model email_logs {
+  id         String    @id
   userId     String?
   to         String
   from       String    @default("noreply@advancia.com")
@@ -855,253 +468,180 @@ model EmailLog {
   createdAt  DateTime  @default(now())
   user       User?     @relation(fields: [userId], references: [id])
 
-  @@index([userId])
   @@index([status])
   @@index([template])
-  @@map("email_logs")
+  @@index([userId])
 }
 
-model TwoFactorAuth {
-  id          String   @id @default(uuid())
-  userId      String   @unique
-  secret      String
-  enabled     Boolean  @default(false)
-  backupCodes String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model eth_activity {
+  id                String          @id
+  userId            String?
+  address           String
+  addressNormalized String
+  type              EthActivityType
+  txHash            String?         @unique
+  amountEth         Decimal
+  status            String
+  confirmations     Int             @default(0)
+  blockNumber       Int?
+  note              String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime
 
-  @@map("two_factor_auth")
-}
-
-model AdminNotification {
-  id        String    @id @default(uuid())
-  type      String
-  title     String
-  message   String
-  userId    String?
-  metadata  Json?
-  read      Boolean   @default(false)
-  readAt    DateTime?
-  actionUrl String?
-  createdAt DateTime  @default(now())
-
+  @@index([addressNormalized])
+  @@index([createdAt])
   @@index([type])
-  @@index([read])
-  @@index([createdAt])
-  @@map("admin_notifications")
 }
 
-model CryptoPayments {
-  id          String    @id
-  user_id     String
-  invoice_id  String
-  amount      Float
-  currency    String
-  status      String    @default("pending")
-  payment_url String?
-  order_id    String?
-  description String?
-  paid_at     DateTime?
-  created_at  DateTime?
-  updated_at  DateTime?
-}
-
-model AdminWallet {
-  id             String                   @id @default(uuid())
-  currency       String                   @unique
-  balance        Decimal                  @default(0)
-  totalIn        Decimal                  @default(0)
-  totalOut       Decimal                  @default(0)
-  walletAddress  String?
-  walletProvider String?
-  walletNotes    String?
-  createdAt      DateTime                 @default(now())
-  updatedAt      DateTime                 @updatedAt
-  transactions   AdminWalletTransaction[]
-
-  @@map("admin_wallets")
-}
-
-model AdminWalletTransaction {
-  id            String      @id @default(uuid())
-  adminWalletId String
-  userId        String?
-  amount        Decimal
-  currency      String
-  type          String
-  description   String
-  createdAt     DateTime    @default(now())
-  adminWallet   AdminWallet @relation(fields: [adminWalletId], references: [id])
-  user          User?       @relation(fields: [userId], references: [id])
-
-  @@index([adminWalletId])
-  @@index([userId])
-  @@index([type])
-  @@map("admin_wallet_transactions")
-}
-
-model PasswordResetRequest {
-  id            String    @id @default(uuid())
-  userId        String
-  email         String
-  token         String    @unique
-  expiresAt     DateTime
-  used          Boolean   @default(false)
-  usedAt        DateTime?
-  ipAddress     String?
-  userAgent     String?
-  adminViewed   Boolean   @default(false)
-  adminViewedBy String?
-  adminViewedAt DateTime?
-  createdAt     DateTime  @default(now())
-
-  @@index([userId])
-  @@index([email])
-  @@index([token])
-  @@index([createdAt])
-  @@map("password_reset_requests")
-}
-
-model UserActivity {
-  id         String   @id @default(uuid())
-  userId     String
-  email      String
-  action     String
-  details    Json?
-  ipAddress  String?
-  userAgent  String?
-  location   String?
-  successful Boolean  @default(true)
-  metadata   Json?
-  createdAt  DateTime @default(now())
-
-  @@index([userId])
-  @@index([email])
-  @@index([action])
-  @@index([createdAt])
-  @@map("user_activities")
-}
-
-model AdminUserNote {
-  id        String   @id @default(uuid())
-  userId    String
-  adminId   String
-  noteType  String
-  title     String
-  content   String
-  priority  String   @default("normal")
-  tags      String?
-  metadata  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([adminId])
-  @@index([noteType])
-  @@index([createdAt])
-  @@map("admin_user_notes")
-}
-
-model AnalyticsEvent {
-  id              String   @id @default(uuid())
-  userId          String?
-  sessionId       String?
-  eventName       String
-  eventProperties Json?
-  userProperties  Json?
-  deviceInfo      Json?
-  timestamp       DateTime @default(now())
-  ipAddress       String?
-  userAgent       String?
-  referrer        String?
-  url             String?
-  platform        String?
-  appVersion      String?
+model fee_revenues {
+  id              String   @id
+  transactionId   String   @unique
+  transactionType String
+  userId          String
+  baseCurrency    String
+  baseAmount      Decimal
+  feePercent      Decimal
+  flatFee         Decimal
+  totalFee        Decimal
+  netAmount       Decimal
+  revenueUSD      Decimal
+  feeRuleId       String?
   createdAt       DateTime @default(now())
 
-  @@index([userId])
-  @@index([eventName])
-  @@index([timestamp])
-  @@index([sessionId])
+  @@index([baseCurrency])
   @@index([createdAt])
-  @@map("analytics_events")
-}
-
-model AlertPolicy {
-  id              String           @id @default(uuid())
-  routeGroup      String           @unique
-  threshold       Int
-  cooldown        Int              @default(300000)
-  mode            AlertMode        @default(IMMEDIATE)
-  batchIntervalMs Int?
-  channels        String[]
-  severity        AlertSeverity    @default(MEDIUM)
-  enabled         Boolean          @default(true)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  createdBy       String
-  updatedBy       String
-  auditLogs       PolicyAuditLog[]
-
-  @@index([routeGroup])
-  @@map("alert_policies")
-}
-
-model PolicyAuditLog {
-  id            String      @id @default(uuid())
-  policyId      String
-  action        String
-  changedBy     String
-  userEmail     String
-  userRole      String
-  ipAddress     String?
-  userAgent     String?
-  changesBefore Json?
-  changesAfter  Json
-  reason        String?
-  timestamp     DateTime    @default(now())
-  entryHash     String?
-  prevHash      String?
-  signature     String?
-  policy        AlertPolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
-
-  @@index([policyId])
-  @@index([changedBy])
-  @@index([timestamp])
-  @@index([entryHash])
-  @@map("policy_audit_logs")
-}
-
-model PaymentSession {
-  id            String    @id @default(uuid())
-  sessionId     String    @unique
-  userId        String
-  amount        Decimal
-  currency      String    @default("USD")
-  paymentMethod String
-  provider      String?
-  status        String    @default("pending")
-  redirectUrl   String?
-  callbackUrl   String?
-  metadata      Json?
-  expiresAt     DateTime
-  completedAt   DateTime?
-  failedReason  String?
-  transactionId String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@index([sessionId])
+  @@index([transactionType])
   @@index([userId])
+}
+
+model fraud_alerts {
+  id          String    @id
+  userId      String
+  alertType   String
+  severity    String
+  description String
+  metadata    Json?
+  ipAddress   String?
+  resolved    Boolean   @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  actionTaken String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+
+  @@index([alertType])
+  @@index([createdAt])
+  @@index([resolved])
+  @@index([severity])
+  @@index([userId])
+}
+
+model health_readings {
+  id               String   @id
+  userId           String
+  heartRate        Int?
+  bloodPressureSys Int?
+  bloodPressureDia Int?
+  steps            Int?
+  sleepHours       Decimal?
+  sleepQuality     String?
+  weight           Decimal?
+  temperature      Decimal?
+  oxygenLevel      Int?
+  stressLevel      String?
+  mood             String?
+  deviceId         String?
+  deviceType       String?
+  metadata         String?
+  notes            String?
+  recordedAt       DateTime @default(now())
+  createdAt        DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([recordedAt])
+  @@index([userId])
+}
+
+model invoice_items {
+  id          String   @id
+  invoiceId   String
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Decimal
+  amount      Decimal
+  createdAt   DateTime @default(now())
+  invoices    invoices @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+}
+
+model invoices {
+  id             String          @id
+  invoiceNumber  String          @unique
+  userId         String
+  amount         Decimal
+  currency       String          @default("USD")
+  status         String          @default("pending")
+  type           String          @default("transaction")
+  billingName    String?
+  billingEmail   String?
+  billingAddress String?
+  issueDate      DateTime        @default(now())
+  dueDate        DateTime
+  paidDate       DateTime?
+  transactionId  String?         @unique
+  pdfUrl         String?
+  pdfGenerated   Boolean         @default(false)
+  notes          String?
+  metadata       Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime
+  invoice_items  invoice_items[]
+  transactions   transactions?   @relation(fields: [transactionId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+
+  @@index([invoiceNumber])
   @@index([status])
-  @@index([expiresAt])
-  @@index([createdAt])
-  @@map("payment_sessions")
+  @@index([userId])
 }
 
-model KYCVerification {
-  id                   String    @id @default(uuid())
+model ip_blocks {
+  id        String    @id
+  ip        String    @unique
+  reason    String?
+  until     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+
+  @@index([updatedAt])
+}
+
+model ip_reputations {
+  id          String   @id
+  ipAddress   String   @unique
+  riskScore   Int      @default(0)
+  isVPN       Boolean  @default(false)
+  isProxy     Boolean  @default(false)
+  isTor       Boolean  @default(false)
+  isHosting   Boolean  @default(false)
+  country     String?
+  city        String?
+  isp         String?
+  blacklisted Boolean  @default(false)
+  whitelisted Boolean  @default(false)
+  notes       String?
+  lastChecked DateTime @default(now())
+  checkCount  Int      @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+
+  @@index([blacklisted])
+  @@index([ipAddress])
+  @@index([riskScore])
+}
+
+model kyc_verifications {
+  id                   String    @id
   userId               String    @unique
   kycLevel             Int       @default(0)
   status               String    @default("not_started")
@@ -1131,65 +671,364 @@ model KYCVerification {
   monthlyWithdrawLimit Decimal   @default(1000)
   lifetimeLimit        Decimal   @default(10000)
   createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  updatedAt            DateTime
 
-  @@index([userId])
   @@index([kycLevel])
   @@index([status])
+  @@index([userId])
   @@index([verifiedAt])
-  @@map("kyc_verifications")
 }
 
-model FraudAlert {
-  id          String    @id @default(uuid())
+model loans {
+  id               String    @id
+  userId           String
+  amount           Decimal
+  interestRate     Decimal
+  termMonths       Int
+  monthlyPayment   Decimal
+  remainingBalance Decimal
+  status           String    @default("pending")
+  purpose          String
+  startDate        DateTime  @default(now())
+  dueDate          DateTime
+  approvedBy       String?
+  approvedAt       DateTime?
+  paidOffAt        DateTime?
+  defaultedAt      DateTime?
+  cancelledAt      DateTime?
+  adminNotes       String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime
+
+  @@index([createdAt])
+  @@index([status])
+  @@index([userId])
+}
+
+model medbeds_bookings {
+  id              String   @id
+  userId          String
+  chamberType     String
+  chamberName     String
+  sessionDate     DateTime
+  duration        Int
+  cost            Decimal  @db.Decimal(10, 2)
+  paymentMethod   String
+  paymentStatus   String   @default("pending")
+  transactionId   String?
+  stripeSessionId String?
+  status          String   @default("scheduled")
+  effectiveness   Int?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([paymentStatus])
+  @@index([sessionDate])
+  @@index([status])
+  @@index([userId])
+}
+
+model notification_logs {
+  id             String    @id
+  notificationId String
+  channel        String
+  status         String
+  errorMessage   String?
+  sentAt         DateTime  @default(now())
+  deliveredAt    DateTime?
+  metadata       Json?
+
+  @@index([channel])
+  @@index([notificationId])
+  @@index([sentAt])
+  @@index([status])
+}
+
+model notification_preferences {
+  id                String   @id
+  userId            String   @unique
+  emailEnabled      Boolean  @default(true)
+  smsEnabled        Boolean  @default(false)
+  inAppEnabled      Boolean  @default(true)
+  pushEnabled       Boolean  @default(true)
+  transactionAlerts Boolean  @default(true)
+  securityAlerts    Boolean  @default(true)
+  systemAlerts      Boolean  @default(true)
+  rewardAlerts      Boolean  @default(true)
+  adminAlerts       Boolean  @default(true)
+  promotionalEmails Boolean  @default(false)
+  enableDigest      Boolean  @default(false)
+  digestFrequency   String   @default("daily")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+}
+
+model notifications {
+  id          String    @id
   userId      String
-  alertType   String
-  severity    String
-  description String
+  type        String
+  priority    String    @default("normal")
+  category    String
+  title       String
+  message     String
+  data        Json?
+  isRead      Boolean   @default(false)
+  readAt      DateTime?
+  emailSent   Boolean   @default(false)
+  emailSentAt DateTime?
+  smsSent     Boolean   @default(false)
+  smsSentAt   DateTime?
+  pushSent    Boolean   @default(false)
+  pushSentAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+
+  @@index([category])
+  @@index([createdAt])
+  @@index([isRead])
+  @@index([priority])
+  @@index([userId])
+}
+
+model oal_audit_log {
+  id          String    @id
+  object      String
+  action      String
+  location    String
+  subjectId   String?
   metadata    Json?
-  ipAddress   String?
-  resolved    Boolean   @default(false)
-  resolvedAt  DateTime?
-  resolvedBy  String?
-  actionTaken String?
-  notes       String?
+  status      OALStatus @default(PENDING)
+  createdById String
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+
+  @@index([action])
+  @@index([createdAt])
+  @@index([createdById])
+  @@index([location])
+  @@index([object])
+  @@index([status])
+  @@index([subjectId])
+}
+
+model password_reset_requests {
+  id            String    @id
+  userId        String
+  email         String
+  token         String    @unique
+  expiresAt     DateTime
+  used          Boolean   @default(false)
+  usedAt        DateTime?
+  ipAddress     String?
+  userAgent     String?
+  adminViewed   Boolean   @default(false)
+  adminViewedBy String?
+  adminViewedAt DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([email])
+  @@index([token])
+  @@index([userId])
+}
+
+model payment_sessions {
+  id            String    @id
+  sessionId     String    @unique
+  userId        String
+  amount        Decimal
+  currency      String    @default("USD")
+  paymentMethod String
+  provider      String?
+  status        String    @default("pending")
+  redirectUrl   String?
+  callbackUrl   String?
+  metadata      Json?
+  expiresAt     DateTime
+  completedAt   DateTime?
+  failedReason  String?
+  transactionId String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+
+  @@index([createdAt])
+  @@index([expiresAt])
+  @@index([sessionId])
+  @@index([status])
+  @@index([userId])
+}
+
+model policy_audit_logs {
+  id             String         @id
+  policyId       String
+  action         String
+  changedBy      String
+  userEmail      String
+  userRole       String
+  ipAddress      String?
+  userAgent      String?
+  changesBefore  Json?
+  changesAfter   Json
+  reason         String?
+  timestamp      DateTime       @default(now())
+  entryHash      String?
+  prevHash       String?
+  signature      String?
+  alert_policies alert_policies @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@index([changedBy])
+  @@index([entryHash])
+  @@index([policyId])
+  @@index([timestamp])
+}
+
+model push_subscriptions {
+  id         String   @id
+  userId     String
+  endpoint   String
+  p256dh     String
+  auth       String
+  deviceInfo Json?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  @@unique([userId, endpoint])
+  @@index([isActive])
+  @@index([userId])
+}
+
+model rewards {
+  id          String    @id
+  userId      String
+  type        String
+  amount      Decimal
+  status      String    @default("pending")
+  title       String
+  description String
+  metadata    String?
+  expiresAt   DateTime?
+  claimedAt   DateTime?
   createdAt   DateTime  @default(now())
 
-  @@index([userId])
-  @@index([alertType])
-  @@index([severity])
-  @@index([resolved])
   @@index([createdAt])
-  @@map("fraud_alerts")
+  @@index([status])
+  @@index([type])
+  @@index([userId])
 }
 
-model IPReputation {
-  id          String   @id @default(uuid())
-  ipAddress   String   @unique
-  riskScore   Int      @default(0)
-  isVPN       Boolean  @default(false)
-  isProxy     Boolean  @default(false)
-  isTor       Boolean  @default(false)
-  isHosting   Boolean  @default(false)
-  country     String?
-  city        String?
-  isp         String?
-  blacklisted Boolean  @default(false)
-  whitelisted Boolean  @default(false)
-  notes       String?
-  lastChecked DateTime @default(now())
-  checkCount  Int      @default(1)
+model sessions {
+  id        String   @id
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+model support_tickets {
+  id         String    @id
+  userId     String
+  subject    String
+  message    String
+  category   String    @default("GENERAL")
+  status     String    @default("OPEN")
+  priority   String    @default("MEDIUM")
+  response   String?
+  resolvedBy String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  resolvedAt DateTime?
+
+  @@index([status])
+  @@index([userId])
+}
+
+model system_alerts {
+  id          String    @id
+  alertType   String
+  severity    String
+  title       String
+  description String
+  serviceName String?
+  isResolved  Boolean   @default(false)
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+
+  @@index([alertType])
+  @@index([createdAt])
+  @@index([isResolved])
+  @@index([severity])
+}
+
+model system_config {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String
+  updatedAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model system_status {
+  id            String   @id
+  serviceName   String
+  status        String
+  responseTime  Int?
+  uptime        Decimal?
+  lastChecked   DateTime @default(now())
+  statusMessage String?
+  alertLevel    String   @default("none")
+  metadata      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+
+  @@index([alertLevel])
+  @@index([lastChecked])
+  @@index([serviceName])
+  @@index([status])
+}
+
+model token_transactions {
+  id          String   @id
+  walletId    String
+  amount      Decimal
+  type        String
+  status      String   @default("completed")
+  description String?
+  toAddress   String?
+  fromAddress String?
+  txHash      String?
+  metadata    String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  @@index([ipAddress])
-  @@index([blacklisted])
-  @@index([riskScore])
-  @@map("ip_reputations")
+  @@index([createdAt])
+  @@index([status])
+  @@index([type])
+  @@index([walletId])
 }
 
-model TransactionFee {
-  id          String   @id @default(uuid())
+model token_wallets {
+  id             String   @id
+  userId         String   @unique
+  balance        Decimal  @default(0)
+  tokenType      String   @default("ADVANCIA")
+  lockedBalance  Decimal  @default(0)
+  lifetimeEarned Decimal  @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+
+  @@index([userId])
+}
+
+model transaction_fees {
+  id          String   @id
   feeType     String
   currency    String?
   feePercent  Decimal  @default(0)
@@ -1200,65 +1039,180 @@ model TransactionFee {
   priority    Int      @default(0)
   description String?
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime
   createdBy   String?
 
-  @@index([feeType])
-  @@index([currency])
   @@index([active])
+  @@index([currency])
+  @@index([feeType])
   @@index([priority])
-  @@map("transaction_fees")
 }
 
-model FeeRevenue {
-  id              String   @id @default(uuid())
-  transactionId   String   @unique
-  transactionType String
-  userId          String
-  baseCurrency    String
-  baseAmount      Decimal
-  feePercent      Decimal
-  flatFee         Decimal
-  totalFee        Decimal
-  netAmount       Decimal
-  revenueUSD      Decimal
-  feeRuleId       String?
-  createdAt       DateTime @default(now())
-
-  @@index([userId])
-  @@index([transactionType])
-  @@index([createdAt])
-  @@index([baseCurrency])
-  @@map("fee_revenues")
-}
-
-model AdminMessage {
-  id          String    @id @default(uuid())
+model transactions {
+  id          String    @id
   userId      String
-  fromAdminId String
-  fromAdmin   String
-  toUserId    String?
-  subject     String?
-  message     String
-  attachments Json?
-  priority    String    @default("normal")
+  amount      Float
+  type        String
+  description String?
   category    String?
-  isRead      Boolean   @default(false)
-  readAt      DateTime?
-  repliedTo   String?
+  status      String    @default("completed")
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  updatedAt   DateTime
+  currency    String    @default("USD")
+  orderId     String?   @unique
+  provider    String?
+  invoices    invoices?
 
-  @@index([userId])
-  @@index([fromAdminId])
-  @@index([isRead])
   @@index([createdAt])
-  @@index([repliedTo])
-  @@map("admin_messages")
+  @@index([orderId])
+  @@index([provider])
+  @@index([userId])
 }
 
-model WithdrawalQueue {
-  id            String    @id @default(uuid())
+model trustpilot_reviews {
+  id           String       @id
+  reviewId     String       @unique
+  userId       String?
+  userName     String
+  userEmail    String?
+  rating       Int
+  title        String
+  content      String
+  date         DateTime
+  verified     Boolean      @default(false)
+  helpful      Int          @default(0)
+  notHelpful   Int          @default(0)
+  response     String?
+  responseDate DateTime?
+  tags         String[]     @default([])
+  source       String       @default("trustpilot")
+  status       ReviewStatus @default(PENDING)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime
+  user         User?        @relation(fields: [userId], references: [id])
+}
+
+model two_factor_auth {
+  id          String   @id
+  userId      String   @unique
+  secret      String
+  enabled     Boolean  @default(false)
+  backupCodes String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model user_activities {
+  id         String   @id
+  userId     String
+  email      String
+  action     String
+  details    Json?
+  ipAddress  String?
+  userAgent  String?
+  location   String?
+  successful Boolean  @default(true)
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([action])
+  @@index([createdAt])
+  @@index([email])
+  @@index([userId])
+}
+
+model user_profiles {
+  id        String   @id
+  userId    String   @unique
+  bio       String?
+  createdAt DateTime
+  updatedAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model user_tiers {
+  id              String   @id
+  userId          String   @unique
+  currentTier     String   @default("bronze")
+  points          Int      @default(0)
+  lifetimePoints  Int      @default(0)
+  lifetimeRewards Decimal  @default(0)
+  streak          Int      @default(0)
+  longestStreak   Int      @default(0)
+  lastActiveDate  DateTime @default(now())
+  achievements    String?
+  badges          String?
+  referralCode    String?  @unique
+  referredBy      String?
+  totalReferrals  Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+
+  @@index([currentTier])
+  @@index([points])
+  @@index([referralCode])
+  @@index([userId])
+}
+
+model User {
+  id                        String                      @id
+  email                     String                      @unique
+  username                  String                      @unique
+  passwordHash              String
+  firstName                 String?
+  lastName                  String?
+  role                      Role                        @default(USER)
+  usdBalance                Decimal                     @default(0)
+  active                    Boolean                     @default(true)
+  emailVerified             Boolean                     @default(false)
+  emailVerifiedAt           DateTime?
+  lastLogin                 DateTime?
+  termsAccepted             Boolean                     @default(false)
+  termsAcceptedAt           DateTime?
+  totpSecret                String?
+  totpEnabled               Boolean                     @default(false)
+  totpVerified              Boolean                     @default(false)
+  backupCodes               String?
+  ethWalletAddress          String?                     @unique
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime
+  btcBalance                Decimal                     @default(0)
+  ethBalance                Decimal                     @default(0)
+  usdtBalance               Decimal                     @default(0)
+  address                   String?
+  approved                  Boolean                     @default(false)
+  approvedAt                DateTime?
+  approvedBy                String?
+  city                      String?
+  country                   String?
+  phoneNumber               String?
+  postalCode                String?
+  profileImage              String?
+  rejectedAt                DateTime?
+  rejectionReason           String?
+  emailSignupToken          String?                     @unique
+  emailSignupTokenExpiry    DateTime?
+  firstLoginCompleted       Boolean                     @default(false)
+  signupMethod              String                      @default("password")
+  stripeCustomerId          String?                     @unique
+  gpt5Enabled               Boolean                     @default(false)
+  RPAWorkflow               RPAWorkflow[]
+  admin_wallet_transactions admin_wallet_transactions[]
+  crypto_wallets            crypto_wallets[]
+  crypto_withdrawals        crypto_withdrawals[]
+  email_logs                email_logs[]
+  invoices                  invoices[]
+  medbeds_bookings          medbeds_bookings[]
+  trustpilot_reviews        trustpilot_reviews[]
+  two_factor_auth           two_factor_auth?
+  user_profiles             user_profiles?
+
+  @@map("users")
+}
+
+model withdrawal_queue {
+  id            String    @id
   withdrawalId  String    @unique
   userId        String
   cryptoType    String
@@ -1271,57 +1225,13 @@ model WithdrawalQueue {
   assignedTo    String?
   estimatedTime DateTime?
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  updatedAt     DateTime
 
-  @@index([withdrawalId])
-  @@index([userId])
-  @@index([status])
-  @@index([priority])
   @@index([estimatedTime])
-  @@map("withdrawal_queue")
-}
-
-enum Currency {
-  USD
-  ETH
-  BTC
-}
-
-enum EthActivityType {
-  DEPOSIT
-  WITHDRAWAL
-}
-
-enum DoctorStatus {
-  PENDING
-  VERIFIED
-  SUSPENDED
-}
-
-enum ConsultationStatus {
-  SCHEDULED
-  ACTIVE
-  COMPLETED
-  CANCELLED
-}
-
-enum OALStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-enum Role {
-  USER
-  STAFF
-  ADMIN
-  SUPERADMIN
-}
-
-enum RPAExecutionStatus {
-  RUNNING
-  SUCCESS
-  FAILED
+  @@index([priority])
+  @@index([status])
+  @@index([userId])
+  @@index([withdrawalId])
 }
 
 enum AlertMode {
@@ -1337,63 +1247,52 @@ enum AlertSeverity {
   CRITICAL
 }
 
-enum SubscriptionTier {
-  FREE
-  STARTER
-  PRO
-  ENTERPRISE
+enum ConsultationStatus {
+  SCHEDULED
+  ACTIVE
+  COMPLETED
+  CANCELLED
 }
 
-model BreachAlert {
-  id          String    @id @default(uuid())
-  userId      String
-  email       String
-  breachName  String
-  breachDate  DateTime?
-  dataClasses String[]
-  pwnCount    Int       @default(0)
-  notified    Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@index([userId])
-  @@index([email])
-  @@map("breach_alerts")
+enum Currency {
+  USD
+  ETH
+  BTC
 }
 
-model IPRotationLog {
-  id             String   @id @default(uuid())
-  userId         String
-  originalIP     String
-  maskedIP       String
-  targetCountry  String
-  city           String?
-  vpnActive      Boolean  @default(false)
-  proxyActive    Boolean  @default(true)
-  locationMasked Boolean  @default(false)
-  provider       String?
-  createdAt      DateTime @default(now())
-
-  @@index([userId])
-  @@index([createdAt])
-  @@map("ip_rotation_logs")
+enum DoctorStatus {
+  PENDING
+  VERIFIED
+  SUSPENDED
 }
 
-model SecuritySettings {
-  id                     String   @id @default(uuid())
-  userId                 String   @unique
-  breachMonitoringActive Boolean  @default(false)
-  ipProtectionActive     Boolean  @default(false)
-  vpnEnabled             Boolean  @default(false)
-  proxyEnabled           Boolean  @default(false)
-  locationMaskingEnabled Boolean  @default(false)
-  preferredCountry       String?
-  autoRotateIP           Boolean  @default(false)
-  rotationIntervalHours  Int      @default(24)
-  emailAlerts            Boolean  @default(true)
-  pushNotifications      Boolean  @default(true)
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+enum EthActivityType {
+  DEPOSIT
+  WITHDRAWAL
+}
 
-  @@map("security_settings")
+enum OALStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum RPAExecutionStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  HIDDEN
+}
+
+enum Role {
+  USER
+  STAFF
+  ADMIN
+  SUPERADMIN
 }

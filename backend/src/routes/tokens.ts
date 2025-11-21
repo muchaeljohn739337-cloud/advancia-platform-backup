@@ -23,12 +23,12 @@ router.get("/balance/:userId", safeAuth as any, async (req, res) => {
   try {
     const { userId } = req.params;
 
-    let wallet = await prisma.tokenWallet.findUnique({
+    let wallet = await prisma.token_wallets.findUnique({
       where: { userId },
     });
 
     if (!wallet) {
-      wallet = await prisma.tokenWallet.create({
+      wallet = await prisma.token_wallets.create({
         data: { userId },
       });
     }
@@ -46,7 +46,7 @@ router.get("/history/:userId", safeAuth as any, async (req, res) => {
     const limit = Math.min(100, Number(req.query.limit) || 50);
     const offset = Math.max(0, Number(req.query.offset) || 0);
 
-    const wallet = await prisma.tokenWallet.findUnique({
+    const wallet = await prisma.token_wallets.findUnique({
       where: { userId },
     });
 

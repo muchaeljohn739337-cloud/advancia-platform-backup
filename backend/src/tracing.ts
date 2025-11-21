@@ -120,22 +120,9 @@ export function getTracer() {
   return trace.getTracer(SERVICE_NAME, SERVICE_VERSION);
 }
 
-// Register shutdown handlers
-process.on("SIGTERM", async () => {
-  await shutdownTracing();
-  if (process.env.DIAG_INTERCEPT_EXIT === "1") {
-    throw new Error("[EXIT_INTERCEPT] SIGTERM graceful shutdown requested");
-  }
-  process.exit(0);
-});
-
-process.on("SIGINT", async () => {
-  await shutdownTracing();
-  if (process.env.DIAG_INTERCEPT_EXIT === "1") {
-    throw new Error("[EXIT_INTERCEPT] SIGINT graceful shutdown requested");
-  }
-  process.exit(0);
-});
+// NOTE: Shutdown handlers removed from here
+// Graceful shutdown is now centrally managed in index.ts
+// Call shutdownTracing() from the main shutdown handler
 
 // Auto-initialize if this module is imported
 if (TRACING_ENABLED) {

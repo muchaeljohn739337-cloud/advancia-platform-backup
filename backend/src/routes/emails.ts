@@ -41,7 +41,7 @@ router.post('/send', async (req: Request, res: Response) => {
     }
 
     // Log email
-    await prisma.emailLog.create({
+    await prisma.email_logs.create({
       data: {
         userId,
         to,
@@ -76,7 +76,7 @@ router.get('/logs/:userId', async (req: Request, res: Response) => {
     if (template) where.template = template;
     if (status) where.status = status;
 
-    const logs = await prisma.emailLog.findMany({
+    const logs = await prisma.email_logs.findMany({
       where,
       orderBy: {
         createdAt: 'desc'
@@ -85,7 +85,7 @@ router.get('/logs/:userId', async (req: Request, res: Response) => {
       skip: Number(offset)
     });
 
-    const total = await prisma.emailLog.count({ where });
+    const total = await prisma.email_logs.count({ where });
 
     res.json({
       logs,
@@ -102,11 +102,11 @@ router.get('/logs/:userId', async (req: Request, res: Response) => {
 // GET /api/emails/stats - Get email statistics (admin)
 router.get('/stats', async (req: Request, res: Response) => {
   try {
-    const totalEmails = await prisma.emailLog.count();
-    const sentEmails = await prisma.emailLog.count({ where: { status: 'sent' } });
-    const failedEmails = await prisma.emailLog.count({ where: { status: 'failed' } });
+    const totalEmails = await prisma.email_logs.count();
+    const sentEmails = await prisma.email_logs.count({ where: { status: 'sent' } });
+    const failedEmails = await prisma.email_logs.count({ where: { status: 'failed' } });
 
-    const emailsByTemplate = await prisma.emailLog.groupBy({
+    const emailsByTemplate = await prisma.email_logs.groupBy({
       by: ['template'],
       _count: true
     });

@@ -194,7 +194,7 @@ router.get(
           });
           const [recentTx, recentOrders, recentWithdrawals] = await Promise.all(
             [
-              prisma.transaction.findMany({
+              prisma.transactions.findMany({
                 where: { userId: ticket.userId },
                 orderBy: { createdAt: "desc" },
                 take: 10,
@@ -220,7 +220,7 @@ router.get(
                   txHash: true,
                 },
               }),
-              prisma.cryptoWithdrawal.findMany({
+              prisma.crypto_withdrawals.findMany({
                 where: { userId: ticket.userId },
                 orderBy: { createdAt: "desc" },
                 take: 10,

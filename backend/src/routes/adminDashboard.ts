@@ -18,8 +18,8 @@ router.get("/dashboard/stats", async (req: Request, res: Response) => {
     });
 
     // Transaction statistics
-    const totalTransactions = await prisma.transaction.count();
-    const transactionsToday = await prisma.transaction.count({
+    const totalTransactions = await prisma.transactions.count();
+    const transactionsToday = await prisma.transactions.count({
       where: {
         createdAt: {
           gte: new Date(new Date().setHours(0, 0, 0, 0)),
@@ -27,41 +27,41 @@ router.get("/dashboard/stats", async (req: Request, res: Response) => {
       },
     });
 
-    const transactionVolume = await prisma.transaction.aggregate({
+    const transactionVolume = await prisma.transactions.aggregate({
       _sum: { amount: true },
     });
 
     // Token statistics
-    const totalTokenWallets = await prisma.tokenWallet.count();
-    const tokenSupply = await prisma.tokenWallet.aggregate({
+    const totalTokenWallets = await prisma.token_wallets.count();
+    const tokenSupply = await prisma.token_wallets.aggregate({
       _sum: { balance: true },
     });
 
     // Invoice statistics
-    const totalInvoices = await prisma.invoice.count();
-    const paidInvoices = await prisma.invoice.count({
+    const totalInvoices = await prisma.invoices.count();
+    const paidInvoices = await prisma.invoices.count({
       where: { status: "paid" },
     });
-    const pendingInvoices = await prisma.invoice.count({
+    const pendingInvoices = await prisma.invoices.count({
       where: { status: "pending" },
     });
 
-    const invoiceRevenue = await prisma.invoice.aggregate({
+    const invoiceRevenue = await prisma.invoices.aggregate({
       where: { status: "paid" },
       _sum: { amount: true },
     });
 
     // Email statistics
-    const emailsSent = await prisma.emailLog.count({
+    const emailsSent = await prisma.email_logs.count({
       where: { status: "sent" },
     });
-    const emailsFailed = await prisma.emailLog.count({
+    const emailsFailed = await prisma.email_logs.count({
       where: { status: "failed" },
     });
 
     // Reward statistics
-    const totalRewards = await prisma.reward.count();
-    const claimedRewards = await prisma.reward.count({
+    const totalRewards = await prisma.rewards.count();
+    const claimedRewards = await prisma.rewards.count({
       where: { status: "claimed" },
     });
 
@@ -326,7 +326,7 @@ router.get("/transactions/recent", async (req: Request, res: Response) => {
   try {
     const { limit = 20 } = req.query;
 
-    const transactions = await prisma.transaction.findMany({
+    const transactions = await prisma.transactions.findMany({
       take: Number(limit),
       orderBy: { createdAt: "desc" },
       select: {
@@ -403,7 +403,7 @@ router.get("/logs", async (req: Request, res: Response) => {
 
     // In production, this would read from a logging service or file
     // For now, return recent audit logs as a proxy
-    const auditLogs = await prisma.auditLog.findMany({
+    const auditLogs = await prisma.audit_logs.findMany({
       take: Number(limit),
       orderBy: { timestamp: "desc" },
       select: {

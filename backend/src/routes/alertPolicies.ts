@@ -56,7 +56,7 @@ const updatePolicySchema = z.object({
  */
 router.get("/", requireAdmin, async (req: AuthenticatedRequest, res) => {
   try {
-    const policies = await prisma.alertPolicy.findMany({
+    const policies = await prisma.alert_policies.findMany({
       orderBy: { routeGroup: "asc" },
     });
 
@@ -86,7 +86,7 @@ router.get("/:group", requireAdmin, async (req: AuthenticatedRequest, res) => {
   try {
     const { group } = (req as ReqWithParams).params;
 
-    const policy = await prisma.alertPolicy.findUnique({
+    const policy = await prisma.alert_policies.findUnique({
       where: { routeGroup: group },
     });
 
@@ -121,7 +121,7 @@ router.post("/", requireSuperAdmin, async (req: AuthenticatedRequest, res) => {
     const validated = createPolicySchema.parse((req as ReqWithParams).body);
 
     // Check if policy already exists
-    const existing = await prisma.alertPolicy.findUnique({
+    const existing = await prisma.alert_policies.findUnique({
       where: { routeGroup: validated.routeGroup },
     });
 
@@ -133,7 +133,7 @@ router.post("/", requireSuperAdmin, async (req: AuthenticatedRequest, res) => {
       return;
     }
 
-    const policy = await prisma.alertPolicy.create({
+    const policy = await prisma.alert_policies.create({
       data: {
         routeGroup: validated.routeGroup,
         threshold: validated.threshold,
@@ -205,7 +205,7 @@ router.put(
       const validated = updatePolicySchema.parse((req as ReqWithParams).body);
 
       // Get current policy for audit trail
-      const currentPolicy = await prisma.alertPolicy.findUnique({
+      const currentPolicy = await prisma.alert_policies.findUnique({
         where: { routeGroup: group },
       });
 
@@ -218,7 +218,7 @@ router.put(
       }
 
       // Update policy
-      const updatedPolicy = await prisma.alertPolicy.update({
+      const updatedPolicy = await prisma.alert_policies.update({
         where: { routeGroup: group },
         data: {
           ...validated,
@@ -286,7 +286,7 @@ router.delete(
       const { reason } = (req as ReqWithParams).body;
 
       // Get current policy for audit trail
-      const currentPolicy = await prisma.alertPolicy.findUnique({
+      const currentPolicy = await prisma.alert_policies.findUnique({
         where: { routeGroup: group },
       });
 
@@ -299,7 +299,7 @@ router.delete(
       }
 
       // Delete policy
-      await prisma.alertPolicy.delete({
+      await prisma.alert_policies.delete({
         where: { routeGroup: group },
       });
 
@@ -370,7 +370,7 @@ router.patch(
       }
 
       // Get current policy for audit trail
-      const currentPolicy = await prisma.alertPolicy.findUnique({
+      const currentPolicy = await prisma.alert_policies.findUnique({
         where: { routeGroup: group },
       });
 
@@ -383,7 +383,7 @@ router.patch(
       }
 
       // Update enabled status
-      const updatedPolicy = await prisma.alertPolicy.update({
+      const updatedPolicy = await prisma.alert_policies.update({
         where: { routeGroup: group },
         data: {
           enabled,

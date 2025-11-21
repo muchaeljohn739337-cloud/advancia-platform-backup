@@ -274,7 +274,7 @@ export class NotificationAutomation {
       result.success = !!(result.emailSent || result.smsSent);
 
       // Log notification
-      await prisma.auditLog.create({
+      await prisma.audit_logs.create({
         data: {
           userId: payload.userId,
           action: "NOTIFICATION_SENT",

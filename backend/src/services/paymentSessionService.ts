@@ -56,7 +56,7 @@ export async function createPaymentSession(
   const sessionId = generateSessionId();
   const expiresAt = new Date(Date.now() + SESSION_EXPIRY_MINUTES * 60 * 1000);
 
-  const session = await prisma.paymentSession.create({
+  const session = await prisma.payment_sessions.create({
     data: {
       sessionId,
       userId,
@@ -75,7 +75,7 @@ export async function createPaymentSession(
   const redirectUrl = await generateProviderRedirect(session);
 
   // Update session with redirect URL
-  await prisma.paymentSession.update({
+  await prisma.payment_sessions.update({
     where: { id: session.id },
     data: { redirectUrl },
   });
@@ -91,7 +91,7 @@ export async function createPaymentSession(
  * Get payment session status
  */
 export async function getPaymentSession(sessionId: string) {
-  const session = await prisma.paymentSession.findUnique({
+  const session = await prisma.payment_sessions.findUnique({
     where: { sessionId },
   });
 
@@ -101,7 +101,7 @@ export async function getPaymentSession(sessionId: string) {
 
   // Auto-expire if past expiry time
   if (session.status === "pending" && new Date() > session.expiresAt) {
-    await prisma.paymentSession.update({
+    await prisma.payment_sessions.update({
       where: { id: session.id },
       data: { status: "expired" },
     });
@@ -119,7 +119,7 @@ export async function completePaymentSession(
   transactionId: string,
   provider: string
 ) {
-  const session = await prisma.paymentSession.findUnique({
+  const session = await prisma.payment_sessions.findUnique({
     where: { sessionId },
   });
 
@@ -131,7 +131,7 @@ export async function completePaymentSession(
     throw new Error(`Cannot complete session with status: ${session.status}`);
   }
 
-  await prisma.paymentSession.update({
+  await prisma.payment_sessions.update({
     where: { id: session.id },
     data: {
       status: "completed",
@@ -148,7 +148,7 @@ export async function completePaymentSession(
  * Fail payment session
  */
 export async function failPaymentSession(sessionId: string, reason: string) {
-  await prisma.paymentSession.update({
+  await prisma.payment_sessions.update({
     where: { sessionId },
     data: {
       status: "failed",
@@ -162,7 +162,7 @@ export async function failPaymentSession(sessionId: string, reason: string) {
  * Cancel payment session (user-initiated)
  */
 export async function cancelPaymentSession(sessionId: string, userId: string) {
-  const session = await prisma.paymentSession.findUnique({
+  const session = await prisma.payment_sessions.findUnique({
     where: { sessionId },
   });
 
@@ -178,7 +178,7 @@ export async function cancelPaymentSession(sessionId: string, userId: string) {
     throw new Error(`Cannot cancel session with status: ${session.status}`);
   }
 
-  await prisma.paymentSession.update({
+  await prisma.payment_sessions.update({
     where: { id: session.id },
     data: { status: "cancelled" },
   });
@@ -191,7 +191,7 @@ export async function getUserPaymentSessions(
   userId: string,
   limit: number = 20
 ) {
-  return prisma.paymentSession.findMany({
+  return prisma.payment_sessions.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
     take: limit,
@@ -202,7 +202,7 @@ export async function getUserPaymentSessions(
  * Cleanup expired sessions (cron job)
  */
 export async function cleanupExpiredSessions() {
-  const result = await prisma.paymentSession.updateMany({
+  const result = await prisma.payment_sessions.updateMany({
     where: {
       status: "pending",
       expiresAt: { lt: new Date() },
@@ -260,23 +260,23 @@ export async function getPaymentSessionStats(startDate?: Date, endDate?: Date) {
   }
 
   const [totalSessions, byStatus, byMethod, totalVolume] = await Promise.all([
-    prisma.paymentSession.count({ where }),
+    prisma.payment_sessions.count({ where }),
 
-    prisma.paymentSession.groupBy({
+    prisma.payment_sessions.groupBy({
       by: ["status"],
       where,
       _count: true,
       _sum: { amount: true },
     }),
 
-    prisma.paymentSession.groupBy({
+    prisma.payment_sessions.groupBy({
       by: ["paymentMethod"],
       where: { ...where, status: "completed" },
       _count: true,
       _sum: { amount: true },
     }),
 
-    prisma.paymentSession.aggregate({
+    prisma.payment_sessions.aggregate({
       where: { ...where, status: "completed" },
       _sum: { amount: true },
     }),

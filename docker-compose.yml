@@ -14,16 +14,37 @@ services:
     networks:
       - app_net
 
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: advancia-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: advancia
+      RABBITMQ_DEFAULT_PASS: rabbitmq_pass_change_in_prod
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app_net
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   backend:
     build: ./backend
     container_name: advancia_backend
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/advancia
+      - RABBITMQ_URL=amqp://advancia:rabbitmq_pass_change_in_prod@rabbitmq:5672
       - NODE_ENV=development
       - PORT=4000
       - JWT_SECRET=dev_secret_key_change_in_prod
     depends_on:
       - db
+      - rabbitmq
     ports:
       - "4000:4000"
     networks:
@@ -56,6 +77,7 @@ services:
 
 volumes:
   db_data:
+  rabbitmq_data:
 
 
 networks:

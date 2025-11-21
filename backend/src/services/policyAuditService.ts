@@ -44,7 +44,7 @@ function computeEntryHash(entry: any, prevHash: string): string {
  */
 async function getLastEntryHash(): Promise<string> {
   try {
-    const lastEntry = await prisma.policyAuditLog.findFirst({
+    const lastEntry = await prisma.policy_audit_logs.findFirst({
       orderBy: { timestamp: "desc" },
       select: { entryHash: true },
     });
@@ -84,7 +84,7 @@ export async function logPolicyChange(data: PolicyAuditData): Promise<void> {
     const entryHash = computeEntryHash(entryData, prevHash);
 
     // Store entry with hash chain
-    await prisma.policyAuditLog.create({
+    await prisma.policy_audit_logs.create({
       data: {
         ...entryData,
         entryHash,
@@ -133,7 +133,7 @@ export async function getPolicyAuditHistory(
   limit: number = 100
 ) {
   try {
-    const logs = await prisma.policyAuditLog.findMany({
+    const logs = await prisma.policy_audit_logs.findMany({
       where: { policyId },
       orderBy: { timestamp: "desc" },
       take: limit,
@@ -158,7 +158,7 @@ export async function getPolicyAuditHistory(
  */
 export async function getAllAuditLogs(limit: number = 500) {
   try {
-    const logs = await prisma.policyAuditLog.findMany({
+    const logs = await prisma.policy_audit_logs.findMany({
       orderBy: { timestamp: "desc" },
       take: limit,
       include: {
@@ -182,7 +182,7 @@ export async function getAllAuditLogs(limit: number = 500) {
  */
 export async function getUserAuditLogs(userId: string, limit: number = 100) {
   try {
-    const logs = await prisma.policyAuditLog.findMany({
+    const logs = await prisma.policy_audit_logs.findMany({
       where: { changedBy: userId },
       orderBy: { timestamp: "desc" },
       take: limit,
@@ -214,7 +214,7 @@ export async function detectAnomalies(): Promise<{
     const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
     // Detect rapid changes (>5 changes in 1 hour by same user)
-    const recentLogs = await prisma.policyAuditLog.findMany({
+    const recentLogs = await prisma.policy_audit_logs.findMany({
       where: { timestamp: { gte: last24h } },
       orderBy: { timestamp: "desc" },
     });
@@ -259,7 +259,7 @@ export async function verifyAuditLogIntegrity(): Promise<{
   errors: string[];
 }> {
   try {
-    const logs = await prisma.policyAuditLog.findMany({
+    const logs = await prisma.policy_audit_logs.findMany({
       orderBy: { timestamp: "asc" },
     });
 

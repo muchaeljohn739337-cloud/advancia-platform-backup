@@ -39,7 +39,7 @@ export class ChatbotSupport {
    */
   async getRecentTransactions(userId: string, limit: number = 5) {
     try {
-      const transactions = await prisma.transaction.findMany({
+      const transactions = await prisma.transactions.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
         take: limit,
@@ -189,7 +189,7 @@ export class ChatbotSupport {
   async createSupportTicket(userId: string, message: string): Promise<string> {
     try {
       // Log to audit trail
-      await prisma.auditLog.create({
+      await prisma.audit_logs.create({
         data: {
           userId,
           action: "chatbot_support_ticket",
@@ -260,7 +260,7 @@ export class ChatbotSupport {
    */
   async getAnalytics(startDate: Date, endDate: Date) {
     try {
-      const interactions = await prisma.auditLog.count({
+      const interactions = await prisma.audit_logs.count({
         where: {
           action: { startsWith: "chatbot_" },
           createdAt: {
@@ -270,7 +270,7 @@ export class ChatbotSupport {
         },
       });
 
-      const supportTickets = await prisma.auditLog.count({
+      const supportTickets = await prisma.audit_logs.count({
         where: {
           action: "chatbot_support_ticket",
           createdAt: {

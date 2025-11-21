@@ -37,7 +37,7 @@ export class TransactionManager {
   ): Promise<UnifiedTransaction> {
     try {
       // Create transaction record
-      const transaction = await prisma.transaction.create({
+      const transaction = await prisma.transactions.create({
         data: {
           userId: txData.userId,
           amount: txData.amount,
@@ -105,7 +105,7 @@ export class TransactionManager {
   ): Promise<UnifiedTransaction | null> {
     try {
       // Try regular transactions first
-      const transaction = await prisma.transaction.findFirst({
+      const transaction = await prisma.transactions.findFirst({
         where: {
           description: {
             contains: `Order: ${orderId}`,
@@ -167,12 +167,12 @@ export class TransactionManager {
    */
   private static async creditAdminWallet(amount: number, currency: string) {
     try {
-      let adminWallet = await prisma.adminWallet.findFirst({
+      let adminWallet = await prisma.admin_wallets.findFirst({
         where: { currency: currency.toUpperCase() },
       });
 
       if (!adminWallet) {
-        adminWallet = await prisma.adminWallet.create({
+        adminWallet = await prisma.admin_wallets.create({
           data: {
             currency: currency.toUpperCase(),
             balance: 0,
@@ -181,7 +181,7 @@ export class TransactionManager {
         });
       }
 
-      await prisma.adminWallet.update({
+      await prisma.admin_wallets.update({
         where: { id: adminWallet.id },
         data: {
           balance: { increment: amount },
@@ -205,7 +205,7 @@ export class TransactionManager {
     currency: string
   ) {
     try {
-      let userWallet = await prisma.cryptoWallet.findFirst({
+      let userWallet = await prisma.crypto_wallets.findFirst({
         where: {
           userId: userId,
           currency: currency.toUpperCase(),
@@ -213,7 +213,7 @@ export class TransactionManager {
       });
 
       if (!userWallet) {
-        userWallet = await prisma.cryptoWallet.create({
+        userWallet = await prisma.crypto_wallets.create({
           data: {
             userId: userId,
             currency: currency.toUpperCase(),
@@ -223,7 +223,7 @@ export class TransactionManager {
         });
       }
 
-      await prisma.cryptoWallet.update({
+      await prisma.crypto_wallets.update({
         where: { id: userWallet.id },
         data: {
           balance: { increment: amount },

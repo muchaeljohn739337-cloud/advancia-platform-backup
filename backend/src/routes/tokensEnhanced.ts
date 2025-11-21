@@ -20,7 +20,7 @@ router.post("/withdraw", authenticateToken, async (req: Request, res: Response) 
     }
 
     // Get token wallet
-    const wallet = await prisma.tokenWallet.findUnique({ where: { userId } });
+    const wallet = await prisma.token_wallets.findUnique({ where: { userId } });
     if (!wallet || wallet.balance < amount) {
       return res.status(400).json({ error: "Insufficient token balance" });
     }
@@ -96,17 +96,17 @@ router.post("/transfer", authenticateToken, async (req: Request, res: Response) 
     }
 
     // Get sender wallet
-    const senderWallet = await prisma.tokenWallet.findUnique({ where: { userId } });
+    const senderWallet = await prisma.token_wallets.findUnique({ where: { userId } });
     if (!senderWallet || senderWallet.balance < amount) {
       return res.status(400).json({ error: "Insufficient token balance" });
     }
 
     // Get or create recipient wallet
-    let recipientWallet = await prisma.tokenWallet.findUnique({
+    let recipientWallet = await prisma.token_wallets.findUnique({
       where: { userId: recipient.id },
     });
     if (!recipientWallet) {
-      recipientWallet = await prisma.tokenWallet.create({
+      recipientWallet = await prisma.token_wallets.create({
         data: { userId: recipient.id },
       });
     }
@@ -184,9 +184,9 @@ router.post("/buy", authenticateToken, async (req: Request, res: Response) => {
     const tokenAmount = usdAmount * exchangeRate;
 
     // Get or create wallet
-    let wallet = await prisma.tokenWallet.findUnique({ where: { userId } });
+    let wallet = await prisma.token_wallets.findUnique({ where: { userId } });
     if (!wallet) {
-      wallet = await prisma.tokenWallet.create({ data: { userId } });
+      wallet = await prisma.token_wallets.create({ data: { userId } });
     }
 
     // Transaction
@@ -243,7 +243,7 @@ router.post("/stake", authenticateToken, async (req: Request, res: Response) => 
       return res.status(400).json({ error: "Invalid amount" });
     }
 
-    const wallet = await prisma.tokenWallet.findUnique({ where: { userId } });
+    const wallet = await prisma.token_wallets.findUnique({ where: { userId } });
     if (!wallet || wallet.balance < amount) {
       return res.status(400).json({ error: "Insufficient token balance" });
     }

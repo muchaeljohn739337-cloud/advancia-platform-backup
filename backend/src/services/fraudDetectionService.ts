@@ -75,7 +75,7 @@ export async function checkWithdrawalVelocity(
 
   const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-  const recentWithdrawals = await prisma.cryptoWithdrawal.count({
+  const recentWithdrawals = await prisma.crypto_withdrawals.count({
     where: {
       userId,
       createdAt: { gte: last24h },
@@ -224,7 +224,7 @@ export async function monitorFailedPayments(userId: string): Promise<void> {
 
   const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-  const failedCount = await prisma.paymentSession.count({
+  const failedCount = await prisma.payment_sessions.count({
     where: {
       userId,
       status: "failed",
@@ -269,7 +269,7 @@ export async function detectUnusualAmount(
   // Get user's withdrawal history (last 30 days)
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-  const recentWithdrawals = await prisma.cryptoWithdrawal.findMany({
+  const recentWithdrawals = await prisma.crypto_withdrawals.findMany({
     where: {
       userId,
       cryptoType: currency,
@@ -329,7 +329,7 @@ export async function checkDuplicateWithdrawalAddress(
   }
 
   // Check if this address has been used by other users
-  const otherUsersWithAddress = await prisma.cryptoWithdrawal.findMany({
+  const otherUsersWithAddress = await prisma.crypto_withdrawals.findMany({
     where: {
       withdrawalAddress: address,
       cryptoType: currency,

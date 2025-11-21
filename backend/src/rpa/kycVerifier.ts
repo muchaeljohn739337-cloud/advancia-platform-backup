@@ -192,7 +192,7 @@ export class KYCVerifier {
         });
 
         // Log KYC approval
-        await prisma.auditLog.create({
+        await prisma.audit_logs.create({
           data: {
             userId,
             action: "KYC_APPROVED",
@@ -216,7 +216,7 @@ export class KYCVerifier {
         result.warnings.push("Manual review required");
 
         // Log for manual review
-        await prisma.auditLog.create({
+        await prisma.audit_logs.create({
           data: {
             userId,
             action: "KYC_PENDING_REVIEW",

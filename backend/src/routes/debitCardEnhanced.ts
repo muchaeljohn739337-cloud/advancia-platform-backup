@@ -214,7 +214,7 @@ router.get("/transactions/:cardId", authenticateToken, async (req: Request, res:
 
     // Get transactions for this card
     // Note: Would need to add cardId to Transaction model
-    const transactions = await prisma.transaction.findMany({
+    const transactions = await prisma.transactions.findMany({
       where: {
         userId,
         // cardId: cardId, // Would need this field in schema

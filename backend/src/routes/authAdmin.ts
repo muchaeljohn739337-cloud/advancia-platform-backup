@@ -182,7 +182,7 @@ router.get("/dev/get-otp", (req, res) => {
 // GET /api/auth/admin/logs - Get admin login history
 router.get("/logs", async (req, res) => {
   try {
-    const logs = await prisma.adminLoginLog.findMany({
+    const logs = await prisma.admin_login_logs.findMany({
       orderBy: { createdAt: "desc" },
       take: 100, // Last 100 login attempts
     });

@@ -7,7 +7,7 @@ const router = express.Router();
 // Get all admin wallet addresses
 router.get("/", authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const wallets = await prisma.adminWallet.findMany({
+    const wallets = await prisma.admin_wallets.findMany({
       select: {
         id: true,
         currency: true,
@@ -46,13 +46,13 @@ router.put("/:currency", authenticateToken, requireAdmin, async (req, res) => {
     }
 
     // Find or create admin wallet for this currency
-    let wallet = await prisma.adminWallet.findUnique({
+    let wallet = await prisma.admin_wallets.findUnique({
       where: { currency: currency.toUpperCase() },
     });
 
     if (!wallet) {
       // Create new wallet
-      wallet = await prisma.adminWallet.create({
+      wallet = await prisma.admin_wallets.create({
         data: {
           currency: currency.toUpperCase(),
           balance: 0,
@@ -65,7 +65,7 @@ router.put("/:currency", authenticateToken, requireAdmin, async (req, res) => {
       });
     } else {
       // Update existing wallet
-      wallet = await prisma.adminWallet.update({
+      wallet = await prisma.admin_wallets.update({
         where: { currency: currency.toUpperCase() },
         data: {
           walletAddress,
@@ -125,7 +125,7 @@ router.post(
       for (const { currency, address } of envWallets) {
         if (!address) continue;
 
-        const wallet = await prisma.adminWallet.upsert({
+        const wallet = await prisma.admin_wallets.upsert({
           where: { currency },
           update: {
             walletAddress: address,

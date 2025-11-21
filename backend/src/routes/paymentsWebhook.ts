@@ -69,7 +69,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
         } catch (e) {
           logger.warn("Balance transaction fetch failed", e);
         }
-        const updated = await prisma.transaction.updateMany({
+        const updated = await prisma.transactions.updateMany({
           where: { orderId, provider: "stripe", status: "pending" },
           data: {
             status: "completed",
@@ -77,7 +77,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
           },
         });
         if (feeInfo) {
-          const tx = await prisma.transaction.findFirst({ where: { orderId } });
+          const tx = await prisma.transactions.findFirst({ where: { orderId } });
           if (tx) {
             await prisma.feeRevenue.create({
               data: {
@@ -96,11 +96,11 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
           }
         }
         if (updated) {
-          const txRecord = await prisma.transaction.findFirst({
+          const txRecord = await prisma.transactions.findFirst({
             where: { orderId },
           });
           if (txRecord) {
-            await prisma.auditLog.create({
+            await prisma.audit_logs.create({
               data: {
                 userId: txRecord.userId,
                 action: "payment_intent_completed",
@@ -116,7 +116,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
           }
         }
         if (paymentsIO && updated) {
-          const tx = await prisma.transaction.findFirst({ where: { orderId } });
+          const tx = await prisma.transactions.findFirst({ where: { orderId } });
           if (tx) {
             paymentsIO.to(`user-${tx.userId}`).emit("payment-status", {
               orderId,
@@ -131,7 +131,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
       case "payment_intent.payment_failed": {
         const pi = event.data.object as Stripe.PaymentIntent;
         const orderId = pi.id;
-        const updated = await prisma.transaction.updateMany({
+        const updated = await prisma.transactions.updateMany({
           where: { orderId, provider: "stripe", status: "pending" },
           data: {
             status: "failed",
@@ -139,11 +139,11 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
           },
         });
         if (updated) {
-          const txRecord = await prisma.transaction.findFirst({
+          const txRecord = await prisma.transactions.findFirst({
             where: { orderId },
           });
           if (txRecord) {
-            await prisma.auditLog.create({
+            await prisma.audit_logs.create({
               data: {
                 userId: txRecord.userId,
                 action: "payment_intent_failed",
@@ -156,7 +156,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
           }
         }
         if (paymentsIO && updated) {
-          const tx = await prisma.transaction.findFirst({ where: { orderId } });
+          const tx = await prisma.transactions.findFirst({ where: { orderId } });
           if (tx) {
             paymentsIO.to(`user-${tx.userId}`).emit("payment-status", {
               orderId,
@@ -171,16 +171,16 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
       case "payment_intent.canceled": {
         const pi = event.data.object as Stripe.PaymentIntent;
         const orderId = pi.id;
-        const updated = await prisma.transaction.updateMany({
+        const updated = await prisma.transactions.updateMany({
           where: { orderId, provider: "stripe", status: "pending" },
           data: { status: "canceled", description: "Payment canceled" },
         });
         if (updated) {
-          const txRecord = await prisma.transaction.findFirst({
+          const txRecord = await prisma.transactions.findFirst({
             where: { orderId },
           });
           if (txRecord) {
-            await prisma.auditLog.create({
+            await prisma.audit_logs.create({
               data: {
                 userId: txRecord.userId,
                 action: "payment_intent_canceled",
@@ -193,7 +193,7 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
           }
         }
         if (paymentsIO && updated) {
-          const tx = await prisma.transaction.findFirst({ where: { orderId } });
+          const tx = await prisma.transactions.findFirst({ where: { orderId } });
           if (tx) {
             paymentsIO.to(`user-${tx.userId}`).emit("payment-status", {
               orderId,

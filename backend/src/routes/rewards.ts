@@ -14,7 +14,7 @@ router.get("/:userId", authenticateToken as any, async (req, res) => {
     if (status) where.status = status as string;
     if (type) where.type = type as string;
     
-    const rewards = await prisma.reward.findMany({
+    const rewards = await prisma.rewards.findMany({
       where,
       orderBy: { createdAt: "desc" },
     });
@@ -44,7 +44,7 @@ router.post("/claim/:rewardId", authenticateToken as any, async (req, res) => {
     const { rewardId } = req.params;
     const { userId } = req.body;
     
-    const reward = await prisma.reward.findUnique({
+    const reward = await prisma.rewards.findUnique({
       where: { id: rewardId },
     });
     
@@ -61,7 +61,7 @@ router.post("/claim/:rewardId", authenticateToken as any, async (req, res) => {
     }
     
     if (reward.expiresAt && new Date() > reward.expiresAt) {
-      await prisma.reward.update({
+      await prisma.rewards.update({
         where: { id: rewardId },
         data: { status: "expired" },
       });
@@ -229,7 +229,7 @@ router.post("/tier/points", authenticateToken as any, async (req, res) => {
       );
       
       if (bonusAmount.gt(0)) {
-        await prisma.reward.create({
+        await prisma.rewards.create({
           data: {
             userId,
             type: "milestone",
@@ -265,7 +265,7 @@ router.get("/pending/:userId", authenticateToken as any, async (req, res) => {
   try {
     const { userId } = req.params;
     
-    const rewards = await prisma.reward.findMany({
+    const rewards = await prisma.rewards.findMany({
       where: { 
         userId,
         status: "pending",

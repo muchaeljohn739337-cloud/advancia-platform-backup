@@ -5,12 +5,12 @@ export async function runSecurityRPA() {
   const now = new Date();
 
   // Auto-unblock expired IPs
-  const expiredBlocks = await prisma.ipBlock.findMany({
+  const expiredBlocks = await prisma.ip_blocks.findMany({
     where: { until: { lt: now } },
   });
 
   if (expiredBlocks.length) {
-    await prisma.ipBlock.deleteMany({
+    await prisma.ip_blocks.deleteMany({
       where: { until: { lt: now } },
     });
 
@@ -23,7 +23,7 @@ export async function runSecurityRPA() {
 
   // Compute current threat level (blocks in last hour)
   const sinceHour = new Date(Date.now() - 60 * 60 * 1000);
-  const blocksHour = await prisma.ipBlock.count({
+  const blocksHour = await prisma.ip_blocks.count({
     where: { updatedAt: { gt: sinceHour } },
   });
 
