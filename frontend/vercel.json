@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api.advanciapayledger.com/api/:path*"
+      "destination": "https://advancia-backend.onrender.com/api/:path*"
     }
   ],
   "headers": [
