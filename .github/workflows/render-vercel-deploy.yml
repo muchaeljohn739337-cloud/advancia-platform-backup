@@ -1,0 +1,47 @@
+name: Render/Vercel Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        default: production
+        options:
+          - production
+          - staging
+
+jobs:
+  deploy:
+    name: Trigger Deploy Hooks
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      RENDER_DEPLOY_HOOK_URL_BACKEND: ${{ secrets.RENDER_DEPLOY_HOOK_URL_BACKEND }}
+      VERCEL_DEPLOY_HOOK_URL_FRONTEND_PROD: ${{ secrets.VERCEL_DEPLOY_HOOK_URL_FRONTEND_PROD }}
+      VERCEL_DEPLOY_HOOK_URL_FRONTEND_STAGING: ${{ secrets.VERCEL_DEPLOY_HOOK_URL_FRONTEND_STAGING }}
+    steps:
+      - name: Deploy Backend (Render)
+        if: ${{ env.RENDER_DEPLOY_HOOK_URL_BACKEND != '' }}
+        run: |
+          echo "Triggering Render deploy hook..."
+          curl -fsSL -X POST "$RENDER_DEPLOY_HOOK_URL_BACKEND"
+
+      - name: Deploy Frontend (Vercel - Production)
+        if: ${{ github.event.inputs.environment == 'production' && env.VERCEL_DEPLOY_HOOK_URL_FRONTEND_PROD != '' }}
+        run: |
+          echo "Triggering Vercel production deploy hook..."
+          curl -fsSL -X POST "$VERCEL_DEPLOY_HOOK_URL_FRONTEND_PROD"
+
+      - name: Deploy Frontend (Vercel - Staging)
+        if: ${{ github.event.inputs.environment == 'staging' && env.VERCEL_DEPLOY_HOOK_URL_FRONTEND_STAGING != '' }}
+        run: |
+          echo "Triggering Vercel staging deploy hook..."
+          curl -fsSL -X POST "$VERCEL_DEPLOY_HOOK_URL_FRONTEND_STAGING"
+
+      - name: Output Summary
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "Render: ${{ env.RENDER_DEPLOY_HOOK_URL_BACKEND != '' && 'Triggered' || 'Skipped (no hook)' }}" >> $GITHUB_STEP_SUMMARY
+          echo "Vercel: Triggered if corresponding hook secret is set" >> $GITHUB_STEP_SUMMARY
