@@ -1,5 +1,5 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
 
 ## Advancia Pay Ledger — AI agent working guide
@@ -76,7 +76,7 @@ Purpose: give AI coding agents the minimum, specific context to be productive in
   - `ci-pnpm.yml`: Type checking and linting with pnpm
   - `backup-and-migrate.yml`: Nightly DB backups to Digital Ocean Spaces
   - `integration-tests.yml`: End-to-end testing
-- **Deployment**: 
+- **Deployment**:
   - **Backend**: Render (Node.js Web Service + PostgreSQL) - auto-deploys on push to `main`
   - **Frontend**: Vercel (Next.js) - auto-deploys on push to `main`
   - **CDN/DNS**: Cloudflare

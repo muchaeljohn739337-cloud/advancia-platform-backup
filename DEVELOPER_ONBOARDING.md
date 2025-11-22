@@ -224,7 +224,6 @@ Optional verification:
 
 Note: If you don’t see the Prompt Files setting, your org may restrict it.
 
-
 **Expected data:**
 
 - ✅ 3 Users (admin, user, agent)

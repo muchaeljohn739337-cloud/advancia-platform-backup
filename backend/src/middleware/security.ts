@@ -186,6 +186,7 @@ export function validateInput(req: Request, res: Response, next: NextFunction) {
 /**
  * CORS middleware configuration
  * Allows cross-origin requests from specified origins
+ * Uses config.allowedOrigins as single source of truth
  */
 export function corsMiddleware() {
   const corsOptions = {
@@ -193,22 +194,21 @@ export function corsMiddleware() {
       // Allow requests with no origin (mobile apps, Postman, etc.)
       if (!origin) return callback(null, true);
 
-      const allowedOrigins = [
-        "http://localhost:3000", // Frontend development
-        "http://localhost:3001",
-        "https://yourdomain.com", // Replace with your production domain
-        "https://www.yourdomain.com",
-      ];
-
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      // Use centralized allowed origins from config
+      if (config.allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "X-API-Key",
+    ],
   };
 
   return cors(corsOptions);

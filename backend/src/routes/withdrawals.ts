@@ -1,12 +1,17 @@
 import { Response, Router } from "express";
 import type { Server as IOServer } from "socket.io";
 import {
-  authenticateToken,
-  AuthRequest,
-  logAdminAction,
-  requireAdmin,
+    authenticateToken,
+    AuthRequest,
+    logAdminAction,
+    requireAdmin,
 } from "../middleware/auth";
+import { validateSchema } from "../middleware/validateSchema";
 import prisma from "../prismaClient";
+import {
+    WithdrawalAdminActionSchema,
+    WithdrawalRequestSchema,
+} from "../validation/schemas";
 
 const router = Router();
 const safeAuth: any =
@@ -32,37 +37,12 @@ export function setWithdrawalSocketIO(io: IOServer) {
 router.post(
   "/request",
   safeAuth as any,
+  validateSchema(WithdrawalRequestSchema),
   async (req: AuthRequest, res: Response) => {
     try {
       const userId = req.user!.userId;
-      const { balanceType, amount, withdrawalAddress, notes } = req.body;
-
-      // Validate inputs
-      if (
-        !balanceType ||
-        !["USD", "BTC", "ETH", "USDT"].includes(balanceType.toUpperCase())
-      ) {
-        return res.status(400).json({
-          error: "Invalid balanceType. Must be USD, BTC, ETH, or USDT",
-        });
-      }
-
-      const amountNum = parseFloat(amount);
-      if (isNaN(amountNum) || amountNum <= 0) {
-        return res.status(400).json({
-          error: "Invalid amount. Must be a positive number",
-        });
-      }
-
-      // For crypto withdrawals, validate address is provided
-      if (
-        ["BTC", "ETH", "USDT"].includes(balanceType.toUpperCase()) &&
-        !withdrawalAddress
-      ) {
-        return res.status(400).json({
-          error: "Withdrawal address is required for crypto withdrawals",
-        });
-      }
+      const { balanceType, amount, withdrawalAddress } = req.body as any;
+      const amountNum = typeof amount === "number" ? amount : parseFloat(amount);
 
       // Get user and check balance
       const user = await prisma.user.findUnique({
@@ -270,10 +250,11 @@ router.patch(
   safeAuth as any,
   safeAdmin as any,
   safeLogAdmin as any,
+  validateSchema(WithdrawalAdminActionSchema),
   async (req: AuthRequest, res: Response) => {
     try {
       const { id } = req.params;
-      const { action, adminNotes, txHash, networkFee } = req.body;
+      const { action, adminNotes, txHash, networkFee } = req.body as any;
 
       if (!action || !["approve", "reject"].includes(action)) {
         return res.status(400).json({

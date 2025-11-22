@@ -6,6 +6,7 @@ import { config } from "../jobs/config";
 import { authenticateToken, requireApiKey } from "../middleware/auth";
 import { strictRateLimiter } from "../middleware/rateLimiterRedis";
 import { rateLimit } from "../middleware/security";
+import { validateSchema } from "../middleware/validateSchema";
 import prisma from "../prismaClient";
 import {
   createNotification,
@@ -17,219 +18,220 @@ import {
   migratePasswordIfNeeded,
   verifyPassword,
 } from "../utils/password";
+import { AuthLoginSchema, AuthRegisterSchema } from "../validation/schemas";
 
 const router = express.Router();
 
 // POST /api/auth/register - WITH ADMIN APPROVAL WORKFLOW
-router.post("/register", requireApiKey, async (req, res) => {
-  try {
-    const { email, password, username, firstName, lastName } = req.body || {};
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
-    if (typeof password !== "string" || password.length < 6) {
-      return res
-        .status(400)
-        .json({ error: "Password must be at least 6 characters" });
-    }
-
-    const existing = await prisma.user.findFirst({
-      where: { OR: [{ email }, ...(username ? [{ username }] : [])] },
-      select: { id: true },
-    });
-    if (existing) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-
-    const passwordHash = await hashPassword(password);
-    const user = await prisma.user.create({
-      data: {
-        email,
-        username: username || email.split("@")[0],
-        passwordHash,
-        firstName: firstName || "",
-        lastName: lastName || "",
-        termsAccepted: true,
-        termsAcceptedAt: new Date(),
-        active: true,
-        approved: true, // ✅ Auto-approve free users - no admin approval needed
-        emailVerified: false,
-      },
-    });
-
-    // Create user profile
-    await prisma.userProfile.create({
-      data: {
-        id: `profile-${user.id}`, // Use prefixed ID to avoid conflicts
-        userId: user.id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-
-    // Initialize custodial wallets (BTC, ETH, USDT) for new user
+router.post(
+  "/register",
+  requireApiKey,
+  validateSchema(AuthRegisterSchema),
+  async (req, res) => {
     try {
-      // const { initializeUserWallets } = await import(
-      //   "../services/custodialWalletService.js" // TEMP DISABLED FOR PROD BUILD
-      // );
-      // await initializeUserWallets(user.id);
-      console.log(
-        `✅ Custodial wallets temporarily disabled for user ${user.id}`
-      );
-    } catch (walletErr) {
-      console.error("⚠️ Failed to initialize user wallets:", walletErr);
-      // Don't fail registration if wallet initialization fails
-    }
+      const { email, password, username, firstName, lastName } = req.body || {};
 
-    // Create admin notification
-    await prisma.adminNotification.create({
-      data: {
-        type: "NEW_USER",
-        title: "🎉 New User Registration",
-        message: `${
-          firstName || email
-        } just signed up and is waiting for approval!`,
-        userId: user.id,
-        metadata: { email, firstName, lastName, username },
-        actionUrl: `/admin/users/${user.id}`,
-      },
-    });
-
-    // Notify admins via push notifications
-    try {
-      await notifyAllAdmins({
-        type: "all",
-        category: "admin",
-        title: "New User Registration - Pending Approval",
-        message: `User ${email} (${firstName} ${lastName}) has registered and is awaiting approval.`,
-        priority: "high",
-        data: { userId: user.id, email, firstName, lastName },
+      const existing = await prisma.user.findFirst({
+        where: { OR: [{ email }, ...(username ? [{ username }] : [])] },
+        select: { id: true },
       });
-    } catch (notifyErr) {
-      console.error("Failed to notify admins of registration:", notifyErr);
-    }
-
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      config.jwtSecret,
-      {
-        expiresIn: "7d",
+      if (existing) {
+        return res.status(400).json({ error: "User already exists" });
       }
-    );
 
-    return res.status(201).json({
-      message: "Registration submitted. Awaiting admin approval.",
-      status: "pending_approval",
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        approved: false,
-      },
-    });
-  } catch (err) {
-    console.error("Registration error:", err);
-    return res.status(500).json({ error: "Failed to register user" });
+      const passwordHash = await hashPassword(password);
+      const user = await prisma.user.create({
+        data: {
+          email,
+          username: username || email.split("@")[0],
+          passwordHash,
+          firstName: firstName || "",
+          lastName: lastName || "",
+          termsAccepted: true,
+          termsAcceptedAt: new Date(),
+          active: true,
+          approved: true, // ✅ Auto-approve free users - no admin approval needed
+          emailVerified: false,
+        },
+      });
+
+      // Create user profile
+      await prisma.userProfile.create({
+        data: {
+          id: `profile-${user.id}`, // Use prefixed ID to avoid conflicts
+          userId: user.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+      // Initialize custodial wallets (BTC, ETH, USDT) for new user
+      try {
+        // const { initializeUserWallets } = await import(
+        //   "../services/custodialWalletService.js" // TEMP DISABLED FOR PROD BUILD
+        // );
+        // await initializeUserWallets(user.id);
+        console.log(
+          `✅ Custodial wallets temporarily disabled for user ${user.id}`
+        );
+      } catch (walletErr) {
+        console.error("⚠️ Failed to initialize user wallets:", walletErr);
+        // Don't fail registration if wallet initialization fails
+      }
+
+      // Create admin notification
+      await prisma.adminNotification.create({
+        data: {
+          type: "NEW_USER",
+          title: "🎉 New User Registration",
+          message: `${
+            firstName || email
+          } just signed up and is waiting for approval!`,
+          userId: user.id,
+          metadata: { email, firstName, lastName, username },
+          actionUrl: `/admin/users/${user.id}`,
+        },
+      });
+
+      // Notify admins via push notifications
+      try {
+        await notifyAllAdmins({
+          type: "all",
+          category: "admin",
+          title: "New User Registration - Pending Approval",
+          message: `User ${email} (${firstName} ${lastName}) has registered and is awaiting approval.`,
+          priority: "high",
+          data: { userId: user.id, email, firstName, lastName },
+        });
+      } catch (notifyErr) {
+        console.error("Failed to notify admins of registration:", notifyErr);
+      }
+
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        config.jwtSecret,
+        {
+          expiresIn: "7d",
+        }
+      );
+
+      return res.status(201).json({
+        message: "Registration submitted. Awaiting admin approval.",
+        status: "pending_approval",
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          approved: false,
+        },
+      });
+    } catch (err) {
+      console.error("Registration error:", err);
+      return res.status(500).json({ error: "Failed to register user" });
+    }
   }
-});
+);
 
 // POST /api/auth/login
-router.post("/login", strictRateLimiter, requireApiKey, async (req, res) => {
-  try {
-    const { email, password } = req.body || {};
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
-
-    const user = await prisma.user.findFirst({
-      where: { OR: [{ email }, { username: email }] },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        firstName: true,
-        lastName: true,
-        passwordHash: true,
-        usdBalance: true,
-        active: true,
-        emailVerified: true,
-      },
-    });
-    if (!user || !user.passwordHash) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    const valid = await verifyPassword(password, user.passwordHash);
-    if (!valid) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // Optional password hash migration (bcrypt -> argon2)
+router.post(
+  "/login",
+  strictRateLimiter,
+  requireApiKey,
+  validateSchema(AuthLoginSchema),
+  async (req, res) => {
     try {
-      const newHash = await migratePasswordIfNeeded(
-        password,
-        user.passwordHash
-      );
-      if (newHash) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { passwordHash: newHash },
+      const { email, password } = req.body || {};
+
+      const user = await prisma.user.findFirst({
+        where: { OR: [{ email }, { username: email }] },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          firstName: true,
+          lastName: true,
+          passwordHash: true,
+          usdBalance: true,
+          active: true,
+          emailVerified: true,
+        },
+      });
+      if (!user || !user.passwordHash) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      const valid = await verifyPassword(password, user.passwordHash);
+      if (!valid) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Optional password hash migration (bcrypt -> argon2)
+      try {
+        const newHash = await migratePasswordIfNeeded(
+          password,
+          user.passwordHash
+        );
+        if (newHash) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { passwordHash: newHash },
+          });
+        }
+      } catch (e) {
+        console.warn("Password migration skipped:", (e as Error)?.message);
+      }
+
+      if (!user.emailVerified) {
+        return res.status(403).json({
+          error: "Email not verified. Please verify your email to continue.",
+          status: "email_unverified",
         });
       }
-    } catch (e) {
-      console.warn("Password migration skipped:", (e as Error)?.message);
-    }
 
-    if (!user.emailVerified) {
-      return res.status(403).json({
-        error: "Email not verified. Please verify your email to continue.",
-        status: "email_unverified",
-      });
-    }
-
-    if (!user.active) {
-      return res.status(403).json({
-        error: "Account pending admin approval.",
-        status: "pending_approval",
-      });
-    }
-
-    // Update last login (best effort)
-    try {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { lastLogin: new Date() },
-      });
-    } catch {}
-
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      config.jwtSecret,
-      {
-        expiresIn: "7d",
+      if (!user.active) {
+        return res.status(403).json({
+          error: "Account pending admin approval.",
+          status: "pending_approval",
+        });
       }
-    );
 
-    return res.json({
-      message: "Login successful",
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        usdBalance: (user as any).usdBalance?.toString?.() ?? "0",
-      },
-    });
-  } catch (err) {
-    console.error("Login error:", err);
-    return res.status(500).json({ error: "Failed to login" });
+      // Update last login (best effort)
+      try {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLogin: new Date() },
+        });
+      } catch {}
+
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        config.jwtSecret,
+        {
+          expiresIn: "7d",
+        }
+      );
+
+      return res.json({
+        message: "Login successful",
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          usdBalance: (user as any).usdBalance?.toString?.() ?? "0",
+        },
+      });
+    } catch (err) {
+      console.error("Login error:", err);
+      return res.status(500).json({ error: "Failed to login" });
+    }
   }
-});
+);
 
 // ============================================
 // DOCTOR REGISTRATION (Invite-Only)

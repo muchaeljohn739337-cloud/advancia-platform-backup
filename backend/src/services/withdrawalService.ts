@@ -330,9 +330,9 @@ export async function getPendingWithdrawals() {
   });
 
   // Get admin wallet info for each currency
-  const currencies = [...new Set(withdrawals.map((w) => w.currency))];
+  const currencies = [...new Set(withdrawals.map((w: any) => w.currency))];
   const adminWallets = await Promise.all(
-    currencies.map((currency) =>
+    currencies.map((currency: any) =>
       prisma.admin_wallets.findUnique({
         where: { currency },
         select: {
@@ -348,7 +348,7 @@ export async function getPendingWithdrawals() {
     adminWallets.filter((w) => w).map((w) => [w!.currency, w])
   );
 
-  return withdrawals.map((withdrawal) => ({
+  return withdrawals.map((withdrawal: any) => ({
     ...withdrawal,
     adminWallet: walletMap[withdrawal.currency],
     instructions: walletMap[withdrawal.currency]

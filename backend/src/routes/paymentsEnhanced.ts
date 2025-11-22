@@ -5,6 +5,15 @@ import { config } from "../jobs/config";
 import logger from "../logger";
 import { authenticateToken, requireAdmin } from "../middleware/auth";
 import { rateLimit } from "../middleware/security";
+import { validateSchema } from "../middleware/validateSchema";
+import {
+  AdminRefundSchema,
+  PaymentChargeSavedSchema,
+  PaymentCreateIntentSchema,
+  PaymentSaveMethodSchema,
+  SubscriptionCancelSchema,
+  SubscriptionCreateSchema,
+} from "../validation/schemas";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -22,6 +31,7 @@ const stripeClient = config.stripeSecretKey
 router.post(
   "/save-method",
   authenticateToken,
+  validateSchema(PaymentSaveMethodSchema),
   async (req: Request, res: Response) => {
     if (!stripeClient) {
       return res.status(503).json({
@@ -33,13 +43,6 @@ router.post(
     try {
       const userId = (req as any).user.id;
       const { paymentMethodId } = req.body;
-
-      if (!paymentMethodId) {
-        return res.status(400).json({
-          error: "Payment method ID required",
-          code: "MISSING_PAYMENT_METHOD_ID",
-        });
-      }
 
       // Get or create Stripe customer
       let user = await prisma.user.findUnique({ where: { id: userId } });
@@ -210,6 +213,7 @@ router.delete(
 router.post(
   "/subscription/create",
   authenticateToken,
+  validateSchema(SubscriptionCreateSchema),
   async (req: Request, res: Response) => {
     if (!stripeClient) {
       return res.status(503).json({
@@ -226,13 +230,7 @@ router.post(
         planName,
         amount,
         interval = "month",
-      } = req.body;
-
-      if (!amount || amount <= 0) {
-        return res
-          .status(400)
-          .json({ error: "Valid amount required", code: "INVALID_AMOUNT" });
-      }
+      } = req.body as any;
 
       // Get or create customer
       let user = await prisma.user.findUnique({ where: { id: userId } });
@@ -380,6 +378,7 @@ router.get(
 router.post(
   "/subscription/:id/cancel",
   authenticateToken,
+  validateSchema(SubscriptionCancelSchema),
   async (req: Request, res: Response) => {
     if (!stripeClient) {
       return res.status(503).json({
@@ -391,7 +390,7 @@ router.post(
     try {
       const userId = (req as any).user.id;
       const { id } = req.params;
-      const { immediately = false } = req.body;
+      const { immediately = false } = req.body as any;
 
       // Verify subscription belongs to user
       const subscription = await stripeClient.subscriptions.retrieve(id);
@@ -441,6 +440,7 @@ router.post(
   "/charge-saved-method",
   rateLimit({ windowMs: 5 * 60_000, maxRequests: 10 }),
   authenticateToken,
+  validateSchema(PaymentChargeSavedSchema),
   async (req: Request, res: Response) => {
     if (!stripeClient) {
       return res.status(503).json({
@@ -451,14 +451,7 @@ router.post(
 
     try {
       const userId = (req as any).user.id;
-      const { paymentMethodId, amount, description } = req.body;
-
-      if (!paymentMethodId || !amount || amount <= 0) {
-        return res.status(400).json({
-          error: "Payment method and amount required",
-          code: "MISSING_PAYMENT_METHOD_OR_AMOUNT",
-        });
-      }
+      const { paymentMethodId, amount, description } = req.body as any;
 
       const user = await prisma.user.findUnique({
         where: { id: userId },
@@ -518,6 +511,7 @@ router.post(
   "/create-intent",
   rateLimit({ windowMs: 5 * 60_000, maxRequests: 15 }),
   authenticateToken,
+  validateSchema(PaymentCreateIntentSchema),
   async (req: Request, res: Response) => {
     if (!stripeClient) {
       return res.status(503).json({ error: "Stripe not configured" });
@@ -525,14 +519,7 @@ router.post(
 
     try {
       const userId = (req as any).user.id;
-      let { amount, currency = "usd", description, metadata } = req.body;
-
-      if (!amount || typeof amount !== "number" || amount <= 0) {
-        return res.status(400).json({
-          error: "Valid numeric amount required",
-          code: "INVALID_AMOUNT",
-        });
-      }
+      let { amount, currency = "usd", description, metadata } = req.body as any;
 
       amount = Number(amount);
       currency = String(currency).toLowerCase();
@@ -660,18 +647,14 @@ router.post(
   "/admin/refund",
   authenticateToken,
   requireAdmin,
+  validateSchema(AdminRefundSchema),
   async (req: Request, res: Response) => {
     if (!stripeClient)
       return res.status(503).json({
         error: "Stripe not configured",
         code: "STRIPE_NOT_CONFIGURED",
       });
-    const { paymentIntentId, amount } = req.body;
-    if (!paymentIntentId)
-      return res.status(400).json({
-        error: "paymentIntentId required",
-        code: "MISSING_PAYMENT_INTENT_ID",
-      });
+    const { paymentIntentId, amount } = req.body as any;
     try {
       const pi = await stripeClient.paymentIntents.retrieve(paymentIntentId, {
         expand: ["charges"],
