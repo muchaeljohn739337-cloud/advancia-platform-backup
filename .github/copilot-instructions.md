@@ -1,3 +1,7 @@
+---
+applyTo: '**'
+---
+
 ## Advancia Pay Ledger — AI agent working guide
 
 Purpose: give AI coding agents the minimum, specific context to be productive in this repo without guesswork.
