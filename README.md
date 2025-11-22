@@ -55,8 +55,8 @@ npm run dev
 
 **Access:**
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:4000/api/health
+- Frontend: <http://localhost:3000>
+- Backend API: <http://localhost:4000/api/health>
 - Prisma Studio: `cd backend && npx prisma studio`
 
 Environment variables are stored in `.env` files for backend and frontend.
@@ -92,6 +92,24 @@ See `backend/.env.example` for required keys (JWT_SECRET, STRIPE keys, DATABASE_
 - `deploy-vercel.ps1` - Deploy frontend to Vercel
 - `scripts/trigger-render-deploy.sh` - Trigger backend deploy on Render
 - `scripts/render-smoke.ps1` - Test deployed backend health
+
+---
+
+## 🤖 Copilot Chat Instructions
+
+This repo includes `.github/copilot-instructions.md` with auto-apply front matter so Copilot Chat loads our repo guidance by default.
+
+Enable in VS Code:
+
+- Open Settings and enable `GitHub Copilot Chat › Experimental: Prompt Files`.
+- In the Chat gear menu, ensure `Instructions` shows the file as active.
+
+Optional debug:
+
+- Run `Developer: Set Log Level...` → Trace.
+- Run `Developer: Show Logs...` → Window, then confirm log lines mentioning `[InstructionsContextComputer]` show 1 Copilot instructions file added.
+
+Note: Some organizations disable prompt files; if you do not see the setting, it may be restricted.
 
 ---
 
