@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy-staging:
-    if: github.event_name == 'push'
+    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: advancia-staging
@@ -305,7 +305,7 @@ jobs:
           fi
 
   deploy-production:
-    if: github.event_name == 'release'
+    if: false
     runs-on: ubuntu-latest
     concurrency:
       group: advancia-production
