@@ -101,7 +101,7 @@
     "socket.io-client": "^4.8.1",
     "socks-proxy-agent": "^8.0.4",
     "speakeasy": "^2.0.0",
-    "stripe": "^14.25.0",
+    "stripe": "^20.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "tiny-secp256k1": "^2.2.4",
