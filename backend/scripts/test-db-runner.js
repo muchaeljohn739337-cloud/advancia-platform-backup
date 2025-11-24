@@ -79,10 +79,10 @@ const DatabaseOps = {
     console.log("🔄 Resetting database...");
     try {
       execCommand(
-        `docker exec ${CONFIG.CONTAINER_NAME} psql -U postgres -c "DROP DATABASE IF EXISTS ${CONFIG.POSTGRES_DB}"`
+        `docker exec ${CONFIG.CONTAINER_NAME} psql -U postgres -c "DROP DATABASE IF EXISTS ${CONFIG.POSTGRES_DB}"`,
       );
       execCommand(
-        `docker exec ${CONFIG.CONTAINER_NAME} psql -U postgres -c "CREATE DATABASE ${CONFIG.POSTGRES_DB}"`
+        `docker exec ${CONFIG.CONTAINER_NAME} psql -U postgres -c "CREATE DATABASE ${CONFIG.POSTGRES_DB}"`,
       );
 
       // Re-run migrations
@@ -194,7 +194,7 @@ main()
       // Check Docker container
       const containerStatus = execCommand(
         `docker inspect ${CONFIG.CONTAINER_NAME} --format='{{.State.Status}}'`,
-        { silent: true }
+        { silent: true },
       );
       console.log(`📦 Container Status: ${containerStatus.trim()}`);
 
@@ -208,7 +208,7 @@ main()
       // Check table counts
       const result = execCommand(
         `docker exec ${CONFIG.CONTAINER_NAME} psql -U postgres -d ${CONFIG.POSTGRES_DB} -t -c "SELECT schemaname,tablename FROM pg_tables WHERE schemaname='public';"`,
-        { silent: true }
+        { silent: true },
       );
       const tables = result
         .trim()
@@ -281,7 +281,7 @@ benchmark().catch(console.error);
 
     fs.writeFileSync(
       path.join(process.cwd(), "temp-benchmark.js"),
-      benchmarkScript
+      benchmarkScript,
     );
 
     try {

@@ -1,4 +1,4 @@
-import prisma from "../prismaClient.js";
+import prisma from '../prismaClient.js';
 
 /**
  * Record a new transaction in the DB
@@ -17,7 +17,7 @@ export async function recordTransaction({
   orderId,
   amount,
   currency,
-  status = "confirmed",
+  status = 'confirmed',
   userId,
   description,
 }) {
@@ -28,8 +28,8 @@ export async function recordTransaction({
         orderId,
         provider,
         amount,
-        currency: currency || "USD",
-        type: "credit",
+        currency: currency || 'USD',
+        type: 'credit',
         description:
           description || `Payment via ${provider} - Order: ${orderId}`,
         category: `${provider}_payment`,
@@ -38,11 +38,11 @@ export async function recordTransaction({
     });
 
     console.log(
-      `✅ Transaction recorded: ${provider} - ${amount} ${currency} for user ${userId}`
+      `✅ Transaction recorded: ${provider} - ${amount} ${currency} for user ${userId}`,
     );
     return transaction;
   } catch (error) {
-    console.error("Error recording transaction:", error);
+    console.error('Error recording transaction:', error);
     throw error;
   }
 }
@@ -82,11 +82,11 @@ export async function creditAdminWallet(amount, currency) {
     }
 
     console.log(
-      `💰 Admin wallet credited: +${amount} ${currency} (Balance: ${wallet.balance})`
+      `💰 Admin wallet credited: +${amount} ${currency} (Balance: ${wallet.balance})`,
     );
     return wallet;
   } catch (error) {
-    console.error("Error crediting admin wallet:", error);
+    console.error('Error crediting admin wallet:', error);
     throw error;
   }
 }
@@ -113,7 +113,7 @@ export async function creditUserCryptoWallet(userId, amount, currency) {
           userId: userId,
           currency: currency.toUpperCase(),
           balance: 0,
-          address: "",
+          address: '',
         },
       });
     }
@@ -126,11 +126,11 @@ export async function creditUserCryptoWallet(userId, amount, currency) {
     });
 
     console.log(
-      `👤 User ${userId} crypto wallet credited: +${amount} ${currency} (Balance: ${updatedWallet.balance})`
+      `👤 User ${userId} crypto wallet credited: +${amount} ${currency} (Balance: ${updatedWallet.balance})`,
     );
     return updatedWallet;
   } catch (error) {
-    console.error("Error crediting user crypto wallet:", error);
+    console.error('Error crediting user crypto wallet:', error);
     throw error;
   }
 }
@@ -151,11 +151,11 @@ export async function creditUserUsdBalance(userId, amount) {
     });
 
     console.log(
-      `💵 User ${userId} USD balance credited: +${amount} (Balance: ${updatedUser.usdBalance})`
+      `💵 User ${userId} USD balance credited: +${amount} (Balance: ${updatedUser.usdBalance})`,
     );
     return updatedUser;
   } catch (error) {
-    console.error("Error crediting user USD balance:", error);
+    console.error('Error crediting user USD balance:', error);
     throw error;
   }
 }
@@ -189,7 +189,7 @@ export async function getTransactionByOrderId(orderId) {
 
     return cryptoPayment;
   } catch (error) {
-    console.error("Error getting transaction by order ID:", error);
+    console.error('Error getting transaction by order ID:', error);
     throw error;
   }
 }
@@ -197,7 +197,7 @@ export async function getTransactionByOrderId(orderId) {
 export function emitPaymentNotification(userId, paymentData) {
   const io = global.io;
   if (io) {
-    io.to(`user-${userId}`).emit("payment_confirmed", paymentData);
+    io.to(`user-${userId}`).emit('payment_confirmed', paymentData);
     console.log(`📡 Payment notification sent to user ${userId}`);
   }
 }

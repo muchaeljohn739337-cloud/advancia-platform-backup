@@ -1,17 +1,17 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
 const CONFIG = {
-  logsDir: path.join(__dirname, '../logs'),
-  outputFile: path.join(__dirname, '../public/status.json'),
-  watchdogLog: 'watchdog.log',
-  pm2Combined: 'combined.log',
-  pm2Error: 'err.log',
+  logsDir: path.join(__dirname, "../logs"),
+  outputFile: path.join(__dirname, "../public/status.json"),
+  watchdogLog: "watchdog.log",
+  pm2Combined: "combined.log",
+  pm2Error: "err.log",
   healthCheckInterval: 30000, // 30 seconds
 };
 
@@ -22,27 +22,27 @@ function parseWatchdogLog(filePath) {
     return { restarts: [], healthChecks: [], failures: [] };
   }
 
-  const content = fs.readFileSync(filePath, 'utf8');
-  const lines = content.split('\n').filter(Boolean);
+  const content = fs.readFileSync(filePath, "utf8");
+  const lines = content.split("\n").filter(Boolean);
 
   const restarts = [];
   const healthChecks = [];
   const failures = [];
 
-  lines.forEach(line => {
+  lines.forEach((line) => {
     const match = line.match(/\[(.*?)\] \[(.*?)\] (.*)/);
     if (!match) return;
 
     const [, timestamp, level, message] = match;
     const date = new Date(timestamp);
 
-    if (message.includes('restart') || message.includes('Restarting')) {
+    if (message.includes("restart") || message.includes("Restarting")) {
       restarts.push({ timestamp: date, message });
-    } else if (message.includes('Health check')) {
-      if (message.includes('passed') || message.includes('OK')) {
-        healthChecks.push({ timestamp: date, status: 'success' });
-      } else if (message.includes('failed') || message.includes('FAIL')) {
-        healthChecks.push({ timestamp: date, status: 'failure' });
+    } else if (message.includes("Health check")) {
+      if (message.includes("passed") || message.includes("OK")) {
+        healthChecks.push({ timestamp: date, status: "success" });
+      } else if (message.includes("failed") || message.includes("FAIL")) {
+        healthChecks.push({ timestamp: date, status: "failure" });
         failures.push({ timestamp: date, message });
       }
     }
@@ -58,17 +58,21 @@ function parseErrorLog(filePath) {
     return [];
   }
 
-  const content = fs.readFileSync(filePath, 'utf8');
-  const lines = content.split('\n').filter(Boolean);
+  const content = fs.readFileSync(filePath, "utf8");
+  const lines = content.split("\n").filter(Boolean);
 
   const errors = [];
 
-  lines.forEach(line => {
-    if (line.includes('Error') || line.includes('ERROR')) {
+  lines.forEach((line) => {
+    if (line.includes("Error") || line.includes("ERROR")) {
       // Try to extract timestamp
-      const timestampMatch = line.match(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/);
-      const timestamp = timestampMatch ? new Date(timestampMatch[0]) : new Date();
-      
+      const timestampMatch = line.match(
+        /\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}/,
+      );
+      const timestamp = timestampMatch
+        ? new Date(timestampMatch[0])
+        : new Date();
+
       errors.push({
         timestamp,
         message: line.substring(0, 200), // Limit length
@@ -85,13 +89,13 @@ function calculateUptime(healthChecks, timeRange) {
   const startTime = new Date(now - timeRange);
 
   const relevantChecks = healthChecks.filter(
-    check => check.timestamp >= startTime
+    (check) => check.timestamp >= startTime,
   );
 
   if (relevantChecks.length === 0) return 100; // No data = assume operational
 
   const successCount = relevantChecks.filter(
-    check => check.status === 'success'
+    (check) => check.status === "success",
   ).length;
 
   return ((successCount / relevantChecks.length) * 100).toFixed(2);
@@ -101,30 +105,30 @@ function calculateUptime(healthChecks, timeRange) {
 function countEventsInRange(events, timeRange) {
   const now = new Date();
   const startTime = new Date(now - timeRange);
-  return events.filter(event => event.timestamp >= startTime).length;
+  return events.filter((event) => event.timestamp >= startTime).length;
 }
 
 // Determine overall status
 function determineOverallStatus(components) {
-  const statuses = components.map(c => c.status);
+  const statuses = components.map((c) => c.status);
 
-  if (statuses.includes('outage')) return 'outage';
-  if (statuses.includes('partial-outage')) return 'partial-outage';
-  if (statuses.includes('degraded')) return 'degraded';
-  if (statuses.includes('maintenance')) return 'maintenance';
-  return 'operational';
+  if (statuses.includes("outage")) return "outage";
+  if (statuses.includes("partial-outage")) return "partial-outage";
+  if (statuses.includes("degraded")) return "degraded";
+  if (statuses.includes("maintenance")) return "maintenance";
+  return "operational";
 }
 
 // Get status message
 function getStatusMessage(status) {
   const messages = {
-    operational: 'All systems operational',
-    degraded: 'Some systems experiencing performance issues',
-    'partial-outage': 'Some systems are currently unavailable',
-    outage: 'Major outage affecting all systems',
-    maintenance: 'Scheduled maintenance in progress',
+    operational: "All systems operational",
+    degraded: "Some systems experiencing performance issues",
+    "partial-outage": "Some systems are currently unavailable",
+    outage: "Major outage affecting all systems",
+    maintenance: "Scheduled maintenance in progress",
   };
-  return messages[status] || 'Status unknown';
+  return messages[status] || "Status unknown";
 }
 
 // Detect incidents from recent restarts and failures
@@ -134,25 +138,25 @@ function detectIncidents(restarts, failures, errors) {
 
   // Check for recent restart storms (3+ restarts in 1 hour)
   const recentRestarts = restarts.filter(
-    r => r.timestamp > new Date(now - 60 * 60 * 1000)
+    (r) => r.timestamp > new Date(now - 60 * 60 * 1000),
   );
 
   if (recentRestarts.length >= 3) {
     incidents.push({
-      id: `inc-${now.toISOString().split('T')[0]}-001`,
+      id: `inc-${now.toISOString().split("T")[0]}-001`,
       timestamp: recentRestarts[0].timestamp.toISOString(),
-      component: 'backend-api',
-      severity: 'degraded',
-      title: 'Backend Restart Storm Detected',
+      component: "backend-api",
+      severity: "degraded",
+      title: "Backend Restart Storm Detected",
       description: `Backend restarted ${recentRestarts.length} times in the last hour`,
       duration: null, // Ongoing
-      status: 'investigating',
+      status: "investigating",
       resolution: null,
       impactedUsers: null,
       updates: [
         {
           timestamp: now.toISOString(),
-          message: 'Multiple restarts detected, investigating root cause',
+          message: "Multiple restarts detected, investigating root cause",
         },
       ],
     });
@@ -166,17 +170,17 @@ function generateHistoricalData(healthChecks, restarts) {
   const dailyData = {};
 
   // Group by date
-  healthChecks.forEach(check => {
-    const date = check.timestamp.toISOString().split('T')[0];
+  healthChecks.forEach((check) => {
+    const date = check.timestamp.toISOString().split("T")[0];
     if (!dailyData[date]) {
       dailyData[date] = { successChecks: 0, totalChecks: 0, restarts: 0 };
     }
     dailyData[date].totalChecks++;
-    if (check.status === 'success') dailyData[date].successChecks++;
+    if (check.status === "success") dailyData[date].successChecks++;
   });
 
-  restarts.forEach(restart => {
-    const date = restart.timestamp.toISOString().split('T')[0];
+  restarts.forEach((restart) => {
+    const date = restart.timestamp.toISOString().split("T")[0];
     if (!dailyData[date]) {
       dailyData[date] = { successChecks: 0, totalChecks: 0, restarts: 0 };
     }
@@ -187,13 +191,17 @@ function generateHistoricalData(healthChecks, restarts) {
   const dates = Object.keys(dailyData).sort().slice(-30); // Last 30 days
 
   return {
-    dailyUptime: dates.map(date => ({
+    dailyUptime: dates.map((date) => ({
       date,
-      uptime: dailyData[date].totalChecks > 0
-        ? ((dailyData[date].successChecks / dailyData[date].totalChecks) * 100).toFixed(2)
-        : 100,
+      uptime:
+        dailyData[date].totalChecks > 0
+          ? (
+              (dailyData[date].successChecks / dailyData[date].totalChecks) *
+              100
+            ).toFixed(2)
+          : 100,
     })),
-    dailyRestarts: dates.map(date => ({
+    dailyRestarts: dates.map((date) => ({
       date,
       count: dailyData[date].restarts,
     })),
@@ -202,7 +210,7 @@ function generateHistoricalData(healthChecks, restarts) {
 
 // Main parser function
 async function generateStatus() {
-  console.log('🔍 Parsing logs and generating status...');
+  console.log("🔍 Parsing logs and generating status...");
 
   // Parse all logs
   const watchdogPath = path.join(CONFIG.logsDir, CONFIG.watchdogLog);
@@ -211,13 +219,23 @@ async function generateStatus() {
   const { restarts, healthChecks, failures } = parseWatchdogLog(watchdogPath);
   const errors = parseErrorLog(errorLogPath);
 
-  console.log(`📊 Found: ${restarts.length} restarts, ${healthChecks.length} health checks, ${errors.length} errors`);
+  console.log(
+    `📊 Found: ${restarts.length} restarts, ${healthChecks.length} health checks, ${errors.length} errors`,
+  );
 
   // Calculate metrics
-  const uptime24h = parseFloat(calculateUptime(healthChecks, 24 * 60 * 60 * 1000));
-  const uptime7d = parseFloat(calculateUptime(healthChecks, 7 * 24 * 60 * 60 * 1000));
-  const uptime30d = parseFloat(calculateUptime(healthChecks, 30 * 24 * 60 * 60 * 1000));
-  const uptime90d = parseFloat(calculateUptime(healthChecks, 90 * 24 * 60 * 60 * 1000));
+  const uptime24h = parseFloat(
+    calculateUptime(healthChecks, 24 * 60 * 60 * 1000),
+  );
+  const uptime7d = parseFloat(
+    calculateUptime(healthChecks, 7 * 24 * 60 * 60 * 1000),
+  );
+  const uptime30d = parseFloat(
+    calculateUptime(healthChecks, 30 * 24 * 60 * 60 * 1000),
+  );
+  const uptime90d = parseFloat(
+    calculateUptime(healthChecks, 90 * 24 * 60 * 60 * 1000),
+  );
 
   const restarts24h = countEventsInRange(restarts, 24 * 60 * 60 * 1000);
   const restarts7d = countEventsInRange(restarts, 7 * 24 * 60 * 60 * 1000);
@@ -228,12 +246,13 @@ async function generateStatus() {
   const errors30d = countEventsInRange(errors, 30 * 24 * 60 * 60 * 1000);
 
   // Determine component statuses
-  const backendStatus = restarts24h >= 3 ? 'degraded' : uptime24h < 99 ? 'degraded' : 'operational';
+  const backendStatus =
+    restarts24h >= 3 ? "degraded" : uptime24h < 99 ? "degraded" : "operational";
 
   const components = [
     {
-      id: 'backend-api',
-      name: 'Backend API',
+      id: "backend-api",
+      name: "Backend API",
       status: backendStatus,
       uptime24h,
       uptime7d,
@@ -245,39 +264,40 @@ async function generateStatus() {
         p95: 280,
         p99: 450,
       },
-      lastIncident: restarts.length > 0 ? restarts[0].timestamp.toISOString() : null,
+      lastIncident:
+        restarts.length > 0 ? restarts[0].timestamp.toISOString() : null,
     },
     {
-      id: 'frontend-web',
-      name: 'Frontend Web App',
-      status: 'operational',
+      id: "frontend-web",
+      name: "Frontend Web App",
+      status: "operational",
       uptime24h: 99.98,
       uptime7d: 99.95,
       uptime30d: 99.92,
       uptime90d: 99.88,
     },
     {
-      id: 'database',
-      name: 'Database (PostgreSQL)',
-      status: 'operational',
+      id: "database",
+      name: "Database (PostgreSQL)",
+      status: "operational",
       uptime24h: 99.92,
       uptime7d: 99.85,
       uptime30d: 99.78,
-      uptime90d: 99.70,
+      uptime90d: 99.7,
     },
     {
-      id: 'payment-processing',
-      name: 'Payment Processing',
-      status: 'operational',
+      id: "payment-processing",
+      name: "Payment Processing",
+      status: "operational",
       uptime24h: 99.87,
-      uptime7d: 99.80,
+      uptime7d: 99.8,
       uptime30d: 99.75,
       uptime90d: 99.65,
     },
     {
-      id: 'monitoring',
-      name: 'Monitoring System',
-      status: 'active',
+      id: "monitoring",
+      name: "Monitoring System",
+      status: "active",
       uptime24h: 100,
       uptime7d: 100,
       uptime30d: 100,
@@ -296,7 +316,7 @@ async function generateStatus() {
 
   // Build status object
   const status = {
-    version: '1.0',
+    version: "1.0",
     lastUpdated: new Date().toISOString(),
     overallStatus,
     statusMessage,
@@ -327,7 +347,9 @@ async function generateStatus() {
 
   console.log(`✅ Status file generated: ${CONFIG.outputFile}`);
   console.log(`📈 Overall Status: ${overallStatus} (${statusMessage})`);
-  console.log(`📊 Uptime 24h: ${uptime24h}% | Restarts: ${restarts24h} | Errors: ${errors24h}`);
+  console.log(
+    `📊 Uptime 24h: ${uptime24h}% | Restarts: ${restarts24h} | Errors: ${errors24h}`,
+  );
 
   return status;
 }

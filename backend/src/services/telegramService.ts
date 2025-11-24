@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
-const TELEGRAM_API_BASE = "https://api.telegram.org";
+const TELEGRAM_API_BASE = 'https://api.telegram.org';
 
 function getBotToken(): string {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  if (!token) throw new Error("TELEGRAM_BOT_TOKEN not set");
+  if (!token) throw new Error('TELEGRAM_BOT_TOKEN not set');
   return token;
 }
 
@@ -12,17 +12,17 @@ export async function sendTelegramMessage(
   chatId: string | number,
   text: string,
   options?: {
-    parse_mode?: "HTML" | "MarkdownV2" | "Markdown";
+    parse_mode?: 'HTML' | 'MarkdownV2' | 'Markdown';
     disable_web_page_preview?: boolean;
     reply_markup?: any;
-  }
+  },
 ) {
   const token = getBotToken();
   const url = `${TELEGRAM_API_BASE}/bot${token}/sendMessage`;
   const resp = await axios.post(url, {
     chat_id: chatId,
     text,
-    parse_mode: options?.parse_mode ?? "HTML",
+    parse_mode: options?.parse_mode ?? 'HTML',
     disable_web_page_preview: options?.disable_web_page_preview ?? true,
     ...(options?.reply_markup ? { reply_markup: options.reply_markup } : {}),
   });
@@ -38,7 +38,7 @@ export async function getBotInfo() {
 
 export async function deleteMessage(
   chatId: string | number,
-  messageId: number
+  messageId: number,
 ) {
   const token = getBotToken();
   const url = `${TELEGRAM_API_BASE}/bot${token}/deleteMessage`;
@@ -53,7 +53,7 @@ export async function restrictChatMember(
   chatId: string | number,
   userId: number,
   permissions: Record<string, unknown>,
-  untilDate?: number
+  untilDate?: number,
 ) {
   const token = getBotToken();
   const url = `${TELEGRAM_API_BASE}/bot${token}/restrictChatMember`;
@@ -66,7 +66,7 @@ export async function restrictChatMember(
 export async function banChatMember(
   chatId: string | number,
   userId: number,
-  untilDate?: number
+  untilDate?: number,
 ) {
   const token = getBotToken();
   const url = `${TELEGRAM_API_BASE}/bot${token}/banChatMember`;

@@ -11,33 +11,39 @@ const prisma = new PrismaClient();
  * Get price chart data for a cryptocurrency
  * Supports: BTC, ETH, USDT
  */
-router.get("/chart/:symbol", authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { symbol } = req.params;
-    const { days = "7" } = req.query;
+router.get(
+  "/chart/:symbol",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const { symbol } = req.params;
+      const { days = "7" } = req.query;
 
-    const validSymbols = ["BTC", "ETH", "USDT"];
-    if (!validSymbols.includes(symbol.toUpperCase())) {
-      return res.status(400).json({ error: "Invalid symbol. Use BTC, ETH, or USDT" });
+      const validSymbols = ["BTC", "ETH", "USDT"];
+      if (!validSymbols.includes(symbol.toUpperCase())) {
+        return res
+          .status(400)
+          .json({ error: "Invalid symbol. Use BTC, ETH, or USDT" });
+      }
+
+      // Generate mock historical data (in production, fetch from CoinGecko/CryptoCompare)
+      const numDays = parseInt(days as string);
+      const history = generateMockPriceData(symbol.toUpperCase(), numDays);
+
+      res.json({
+        success: true,
+        symbol: symbol.toUpperCase(),
+        days: numDays,
+        history,
+        currentPrice: history[history.length - 1].price,
+        change24h: calculateChange(history),
+      });
+    } catch (error) {
+      logger.error("Crypto chart error:", error);
+      res.status(500).json({ error: "Failed to fetch chart data" });
     }
-
-    // Generate mock historical data (in production, fetch from CoinGecko/CryptoCompare)
-    const numDays = parseInt(days as string);
-    const history = generateMockPriceData(symbol.toUpperCase(), numDays);
-
-    res.json({
-      success: true,
-      symbol: symbol.toUpperCase(),
-      days: numDays,
-      history,
-      currentPrice: history[history.length - 1].price,
-      change24h: calculateChange(history),
-    });
-  } catch (error) {
-    logger.error("Crypto chart error:", error);
-    res.status(500).json({ error: "Failed to fetch chart data" });
-  }
-});
+  },
+);
 
 /**
  * POST /api/crypto/swap
@@ -49,7 +55,9 @@ router.post("/swap", authenticateToken, async (req: Request, res: Response) => {
     const { fromSymbol, toSymbol, amount } = req.body;
 
     if (!fromSymbol || !toSymbol || !amount || amount <= 0) {
-      return res.status(400).json({ error: "Valid fromSymbol, toSymbol, and amount required" });
+      return res
+        .status(400)
+        .json({ error: "Valid fromSymbol, toSymbol, and amount required" });
     }
 
     if (fromSymbol === toSymbol) {
@@ -139,7 +147,7 @@ router.post("/swap", authenticateToken, async (req: Request, res: Response) => {
 router.get("/rates", authenticateToken, async (req: Request, res: Response) => {
   try {
     const rates = getCurrentRates();
-    
+
     res.json({
       success: true,
       rates,
@@ -155,38 +163,44 @@ router.get("/rates", authenticateToken, async (req: Request, res: Response) => {
  * GET /api/crypto/swap/preview
  * Preview a swap without executing
  */
-router.get("/swap/preview", authenticateToken, async (req: Request, res: Response) => {
-  try {
-    const { fromSymbol, toSymbol, amount } = req.query;
+router.get(
+  "/swap/preview",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    try {
+      const { fromSymbol, toSymbol, amount } = req.query;
 
-    if (!fromSymbol || !toSymbol || !amount) {
-      return res.status(400).json({ error: "fromSymbol, toSymbol, and amount required" });
+      if (!fromSymbol || !toSymbol || !amount) {
+        return res
+          .status(400)
+          .json({ error: "fromSymbol, toSymbol, and amount required" });
+      }
+
+      const rates = getCurrentRates();
+      const fromRate = rates[(fromSymbol as string).toUpperCase()] || 1;
+      const toRate = rates[(toSymbol as string).toUpperCase()] || 1;
+
+      const fee = 0.005; // 0.5%
+      const usdValue = parseFloat(amount as string) * fromRate;
+      const toAmount = (usdValue / toRate) * (1 - fee);
+      const feeAmount = usdValue * fee;
+
+      res.json({
+        success: true,
+        fromAmount: parseFloat(amount as string),
+        toAmount,
+        fee: feeAmount,
+        feePercent: 0.5,
+        rate: toAmount / parseFloat(amount as string),
+        fromRate,
+        toRate,
+      });
+    } catch (error) {
+      logger.error("Swap preview error:", error);
+      res.status(500).json({ error: "Failed to preview swap" });
     }
-
-    const rates = getCurrentRates();
-    const fromRate = rates[(fromSymbol as string).toUpperCase()] || 1;
-    const toRate = rates[(toSymbol as string).toUpperCase()] || 1;
-
-    const fee = 0.005; // 0.5%
-    const usdValue = parseFloat(amount as string) * fromRate;
-    const toAmount = (usdValue / toRate) * (1 - fee);
-    const feeAmount = usdValue * fee;
-
-    res.json({
-      success: true,
-      fromAmount: parseFloat(amount as string),
-      toAmount,
-      fee: feeAmount,
-      feePercent: 0.5,
-      rate: toAmount / parseFloat(amount as string),
-      fromRate,
-      toRate,
-    });
-  } catch (error) {
-    logger.error("Swap preview error:", error);
-    res.status(500).json({ error: "Failed to preview swap" });
-  }
-});
+  },
+);
 
 // Helper: Generate mock price data
 function generateMockPriceData(symbol: string, days: number) {
@@ -231,10 +245,10 @@ function getCurrentRates(): Record<string, number> {
 // Helper: Calculate 24h price change percentage
 function calculateChange(history: any[]): number {
   if (history.length < 2) return 0;
-  
+
   const latest = history[history.length - 1].price;
   const previous = history[history.length - 2].price;
-  
+
   return ((latest - previous) / previous) * 100;
 }
 

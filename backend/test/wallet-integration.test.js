@@ -77,7 +77,7 @@ describe("Custodial Wallet System - Integration Tests", function () {
       expect(btcWallet.address).to.match(btcAddressRegex);
 
       console.log(
-        `   ✅ BTC address valid: ${btcWallet.address.substring(0, 10)}...`
+        `   ✅ BTC address valid: ${btcWallet.address.substring(0, 10)}...`,
       );
     });
 
@@ -90,7 +90,7 @@ describe("Custodial Wallet System - Integration Tests", function () {
       expect(ethWallet.address).to.match(ethAddressRegex);
 
       console.log(
-        `   ✅ ETH address valid: ${ethWallet.address.substring(0, 10)}...`
+        `   ✅ ETH address valid: ${ethWallet.address.substring(0, 10)}...`,
       );
     });
 
@@ -102,7 +102,7 @@ describe("Custodial Wallet System - Integration Tests", function () {
       expect(usdtWallet.address).to.match(ethAddressRegex);
 
       console.log(
-        `   ✅ USDT address valid: ${usdtWallet.address.substring(0, 10)}...`
+        `   ✅ USDT address valid: ${usdtWallet.address.substring(0, 10)}...`,
       );
     });
 
@@ -124,7 +124,7 @@ describe("Custodial Wallet System - Integration Tests", function () {
       const response = await axios.post(
         `${BASE_URL}/wallets/rotate/BTC`,
         { reason: "Integration test rotation" },
-        { headers: { Authorization: `Bearer ${authToken}` } }
+        { headers: { Authorization: `Bearer ${authToken}` } },
       );
 
       expect(response.status).to.equal(200);
@@ -138,8 +138,8 @@ describe("Custodial Wallet System - Integration Tests", function () {
       console.log(
         `   ✅ Rotated: ${originalBtcAddress.substring(
           0,
-          10
-        )}... → ${newWallet.address.substring(0, 10)}...`
+          10,
+        )}... → ${newWallet.address.substring(0, 10)}...`,
       );
     });
 
@@ -191,7 +191,7 @@ describe("Custodial Wallet System - Integration Tests", function () {
         await axios.post(
           `${BASE_URL}/wallets/rotate/BTC`,
           {},
-          { headers: { Authorization: `Bearer ${authToken}` } }
+          { headers: { Authorization: `Bearer ${authToken}` } },
         );
         throw new Error("Should have required rotation reason");
       } catch (error) {
@@ -205,7 +205,7 @@ describe("Custodial Wallet System - Integration Tests", function () {
         await axios.post(
           `${BASE_URL}/wallets/rotate/INVALID`,
           { reason: "Test" },
-          { headers: { Authorization: `Bearer ${authToken}` } }
+          { headers: { Authorization: `Bearer ${authToken}` } },
         );
         throw new Error("Should have rejected invalid currency");
       } catch (error) {

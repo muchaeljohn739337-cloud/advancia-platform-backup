@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
 /**
  * Maintenance mode middleware
@@ -8,22 +8,22 @@ import { Request, Response, NextFunction } from "express";
 export function maintenanceMode(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
-  const isMaintenanceMode = process.env.MAINTENANCE_MODE === "true";
+  const isMaintenanceMode = process.env.MAINTENANCE_MODE === 'true';
 
   // Always allow health checks
-  if (req.path.includes("/health")) {
+  if (req.path.includes('/health')) {
     return next();
   }
 
   if (isMaintenanceMode) {
     return res.status(503).json({
-      status: "maintenance",
-      message: "We're making Advancia Pay even better! Back soon.",
-      estimatedDowntime: "15-30 minutes",
+      status: 'maintenance',
+      message: 'We\'re making Advancia Pay even better! Back soon.',
+      estimatedDowntime: '15-30 minutes',
       timestamp: new Date().toISOString(),
-      supportEmail: "support@advanciapayledger.com",
+      supportEmail: 'support@advanciapayledger.com',
     });
   }
 
@@ -38,19 +38,19 @@ export function resilientErrorHandler(
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
-  console.error("[ERROR] Caught but continuing:", err);
+  console.error('[ERROR] Caught but continuing:', err);
 
   // Don't crash - log and return friendly error
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === 'production';
 
   const statusCode = err.statusCode || err.status || 500;
 
   res.status(statusCode).json({
-    status: "error",
+    status: 'error',
     message: isProduction
-      ? "Something went wrong, but we're on it! Please try again."
+      ? 'Something went wrong, but we\'re on it! Please try again.'
       : err.message,
     timestamp: new Date().toISOString(),
     ...(isProduction ? {} : { stack: err.stack }),
@@ -62,8 +62,8 @@ export function resilientErrorHandler(
  */
 export function notFoundHandler(req: Request, res: Response) {
   res.status(404).json({
-    status: "not_found",
-    message: "Endpoint not found",
+    status: 'not_found',
+    message: 'Endpoint not found',
     path: req.path,
     timestamp: new Date().toISOString(),
   });

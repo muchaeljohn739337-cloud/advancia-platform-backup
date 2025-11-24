@@ -1,9 +1,11 @@
 # Test Implementation Guide
 
 ## Overview
+
 This guide explains how to enable the 19 currently skipped tests using the new test infrastructure (mocks.ts, testEnv.ts, adminSetup.ts).
 
 ## Skipped Tests Breakdown
+
 - **Payments API**: 17 tests (entire suite) - `tests/payments.test.ts`
 - **Notifications**: 2 tests - `tests/integration.test.ts` lines 546-585
 
@@ -12,30 +14,40 @@ This guide explains how to enable the 19 currently skipped tests using the new t
 ## Part 1: Enable Payments Tests (17 tests)
 
 ### Current State
+
 File: `backend/tests/payments.test.ts`
+
 - Status: Entire suite marked with `describe.skip`
 - Reason: Tests for generic payment API that doesn't exist yet (current endpoints are Stripe-specific)
 
 ### Implementation Options
 
 #### Option A: Skip Implementation (Recommended for now)
+
 These tests expect generic `/api/payments` endpoints that are NOT implemented. The current system uses:
+
 - `/api/payments/checkout-session` (Stripe)
 - `/api/payments/webhook` (Stripe)
 
 **Action**: Leave as `describe.skip` until generic payment endpoints are created.
 
 #### Option B: Rewrite Tests for Existing Stripe API
+
 If you want to test the actual Stripe integration:
 
 1. Create new test file: `backend/tests/routes/stripe.test.ts`
-```typescript
-import request from 'supertest';
-import app from '../test-app';
-import { createTestUser, generateUserToken, cleanupTestUsers } from '../setup/adminSetup';
-import { mockStripeCheckoutSession } from '../setup/mocks';
 
-describe('Stripe Payments API', () => {
+```typescript
+import request from "supertest";
+import app from "../test-app";
+import {
+  createTestUser,
+  generateUserToken,
+  cleanupTestUsers,
+} from "../setup/adminSetup";
+import { mockStripeCheckoutSession } from "../setup/mocks";
+
+describe("Stripe Payments API", () => {
   let userId: string;
   let userToken: string;
 
@@ -49,45 +61,45 @@ describe('Stripe Payments API', () => {
     await cleanupTestUsers();
   });
 
-  describe('POST /api/payments/checkout-session', () => {
-    it('should create Stripe checkout session', async () => {
+  describe("POST /api/payments/checkout-session", () => {
+    it("should create Stripe checkout session", async () => {
       const res = await request(app)
-        .post('/api/payments/checkout-session')
-        .set('Authorization', `Bearer ${userToken}`)
+        .post("/api/payments/checkout-session")
+        .set("Authorization", `Bearer ${userToken}`)
         .send({
-          amount: 50.00,
-          currency: 'USD',
-          successUrl: 'http://localhost:3000/success',
-          cancelUrl: 'http://localhost:3000/cancel'
+          amount: 50.0,
+          currency: "USD",
+          successUrl: "http://localhost:3000/success",
+          cancelUrl: "http://localhost:3000/cancel",
         });
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('sessionId');
-      expect(res.body).toHaveProperty('url');
+      expect(res.body).toHaveProperty("sessionId");
+      expect(res.body).toHaveProperty("url");
     });
 
-    it('should reject invalid amount', async () => {
+    it("should reject invalid amount", async () => {
       const res = await request(app)
-        .post('/api/payments/checkout-session')
-        .set('Authorization', `Bearer ${userToken}`)
+        .post("/api/payments/checkout-session")
+        .set("Authorization", `Bearer ${userToken}`)
         .send({
           amount: -10,
-          currency: 'USD'
+          currency: "USD",
         });
 
       expect(res.status).toBe(400);
     });
   });
 
-  describe('POST /api/payments/webhook', () => {
-    it('should handle Stripe webhook with valid signature', async () => {
+  describe("POST /api/payments/webhook", () => {
+    it("should handle Stripe webhook with valid signature", async () => {
       // This requires mocking Stripe webhook signature verification
       const res = await request(app)
-        .post('/api/payments/webhook')
-        .set('stripe-signature', 'mock-signature')
+        .post("/api/payments/webhook")
+        .set("stripe-signature", "mock-signature")
         .send({
-          type: 'checkout.session.completed',
-          data: mockStripeCheckoutSession
+          type: "checkout.session.completed",
+          data: mockStripeCheckoutSession,
         });
 
       // Webhook typically returns 200 with no body
@@ -98,32 +110,33 @@ describe('Stripe Payments API', () => {
 ```
 
 2. Add Stripe mock to `backend/tests/setup/mocks.ts`:
+
 ```typescript
 export const mockStripeCheckoutSession = {
-  id: 'cs_test_123',
-  object: 'checkout.session',
+  id: "cs_test_123",
+  object: "checkout.session",
   amount_total: 5000,
-  currency: 'usd',
-  customer: 'cus_test_123',
-  payment_status: 'paid',
-  status: 'complete'
+  currency: "usd",
+  customer: "cus_test_123",
+  payment_status: "paid",
+  status: "complete",
 };
 
 export const mockStripe = {
   checkout: {
     sessions: {
       create: jest.fn().mockResolvedValue({
-        id: 'cs_test_123',
-        url: 'https://checkout.stripe.com/test'
-      })
-    }
+        id: "cs_test_123",
+        url: "https://checkout.stripe.com/test",
+      }),
+    },
   },
   webhooks: {
     constructEvent: jest.fn().mockReturnValue({
-      type: 'checkout.session.completed',
-      data: { object: mockStripeCheckoutSession }
-    })
-  }
+      type: "checkout.session.completed",
+      data: { object: mockStripeCheckoutSession },
+    }),
+  },
 };
 ```
 
@@ -132,11 +145,14 @@ export const mockStripe = {
 ## Part 2: Enable Notifications Tests (2 tests)
 
 ### Current State
+
 File: `backend/tests/integration.test.ts` lines 546-585
+
 - Status: `describe.skip("Notifications", ...)`
 - Reason: Comment states "Notifications routes don't exist as standalone endpoints yet"
 
 ### Investigation Required
+
 Before enabling, check if notification endpoints exist:
 
 ```bash
@@ -148,10 +164,12 @@ grep -r "/api/notifications" src/
 ### Implementation Steps
 
 #### Step 1: Verify Route Existence
+
 Check `backend/src/index.ts` for notification route registration:
+
 ```typescript
 // Look for something like:
-app.use('/api/notifications', notificationsRouter);
+app.use("/api/notifications", notificationsRouter);
 ```
 
 #### Step 2A: If Routes Exist - Enable Tests
@@ -160,8 +178,13 @@ app.use('/api/notifications', notificationsRouter);
    - Change `describe.skip` to `describe` on line 546
 
 2. **Add admin authentication** (notifications require admin):
+
 ```typescript
-import { createTestAdmin, generateAdminToken, cleanupTestAdmin } from './setup/adminSetup';
+import {
+  createTestAdmin,
+  generateAdminToken,
+  cleanupTestAdmin,
+} from "./setup/adminSetup";
 
 // In the Notifications describe block:
 describe("Notifications", () => {
@@ -169,7 +192,7 @@ describe("Notifications", () => {
 
   beforeAll(async () => {
     await createTestAdmin();
-    adminToken = generateAdminToken('admin-test-id');
+    adminToken = generateAdminToken("admin-test-id");
   });
 
   afterAll(async () => {
@@ -220,53 +243,54 @@ describe("Notifications", () => {
 #### Step 2B: If Routes Don't Exist - Create Routes First
 
 1. **Create notification routes**: `backend/src/routes/notifications.ts`
+
 ```typescript
-import { Router } from 'express';
-import { authenticateToken } from '../middleware/auth';
-import prisma from '../prismaClient';
+import { Router } from "express";
+import { authenticateToken } from "../middleware/auth";
+import prisma from "../prismaClient";
 
 const router = Router();
 
 // GET /api/notifications - Get user's notifications
-router.get('/', authenticateToken, async (req, res) => {
+router.get("/", authenticateToken, async (req, res) => {
   try {
     const userId = (req as any).user.userId;
 
     const notifications = await prisma.notification.findMany({
       where: { userId },
-      orderBy: { createdAt: 'desc' },
-      take: 50
+      orderBy: { createdAt: "desc" },
+      take: 50,
     });
 
     res.json(notifications);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch notifications' });
+    res.status(500).json({ error: "Failed to fetch notifications" });
   }
 });
 
 // PUT /api/notifications/:id/read - Mark notification as read
-router.put('/:id/read', authenticateToken, async (req, res) => {
+router.put("/:id/read", authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = (req as any).user.userId;
 
     // Verify notification belongs to user
     const notification = await prisma.notification.findFirst({
-      where: { id, userId }
+      where: { id, userId },
     });
 
     if (!notification) {
-      return res.status(404).json({ error: 'Notification not found' });
+      return res.status(404).json({ error: "Notification not found" });
     }
 
     const updated = await prisma.notification.update({
       where: { id },
-      data: { isRead: true, readAt: new Date() }
+      data: { isRead: true, readAt: new Date() },
     });
 
     res.json(updated);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update notification' });
+    res.status(500).json({ error: "Failed to update notification" });
   }
 });
 
@@ -274,11 +298,12 @@ export default router;
 ```
 
 2. **Register route in** `backend/src/index.ts`:
+
 ```typescript
-import notificationsRouter from './routes/notifications';
+import notificationsRouter from "./routes/notifications";
 
 // In the routes section:
-app.use('/api/notifications', notificationsRouter);
+app.use("/api/notifications", notificationsRouter);
 ```
 
 3. **Then enable tests** as described in Step 2A
@@ -288,12 +313,14 @@ app.use('/api/notifications', notificationsRouter);
 ## Part 3: Run Tests
 
 ### Run All Tests
+
 ```bash
 cd backend
 npm test
 ```
 
 ### Run Specific Test Suite
+
 ```bash
 # Run only integration tests
 npm test -- integration.test.ts
@@ -303,6 +330,7 @@ npm test -- stripe.test.ts
 ```
 
 ### Run with Coverage
+
 ```bash
 npm test -- --coverage --coveragePathIgnorePatterns=tests/
 ```
@@ -312,6 +340,7 @@ npm test -- --coverage --coveragePathIgnorePatterns=tests/
 ## Part 4: Add NPM Scripts
 
 Add to `backend/package.json`:
+
 ```json
 {
   "scripts": {
@@ -368,6 +397,7 @@ After implementation:
 ## Next Steps
 
 1. Check if notification routes exist:
+
 ```bash
 cd /root/projects/advancia-pay-ledger/backend
 grep -r "router.*notification" src/routes/
@@ -383,6 +413,7 @@ grep -r "/api/notifications" src/index.ts
 ## Support
 
 For questions or issues:
+
 - Check test output: `npm test -- --verbose`
 - Review mock implementations in `tests/setup/mocks.ts`
 - Verify environment config in `.env.test`

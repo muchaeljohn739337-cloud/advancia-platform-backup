@@ -1,20 +1,20 @@
-import { Router } from "express";
-import { allowRoles, authenticateToken } from "../middleware/auth";
-import { validateInput } from "../middleware/security";
-import { scamAdviserService } from "../services/scamAdviserService";
+import { Router } from 'express';
+import { allowRoles, authenticateToken } from '../middleware/auth';
+import { validateInput } from '../middleware/security';
+import { scamAdviserService } from '../services/scamAdviserService';
 console.log(
-  "[trust] middleware types:",
+  '[trust] middleware types:',
   typeof authenticateToken,
-  typeof allowRoles
+  typeof allowRoles,
 );
 
 const router = Router();
 const safeAuth: any =
-  typeof authenticateToken === "function"
+  typeof authenticateToken === 'function'
     ? authenticateToken
     : (_req: any, _res: any, next: any) => next();
 const safeAllowRoles = (...roles: string[]) => {
-  if (typeof allowRoles === "function") return allowRoles(...roles);
+  if (typeof allowRoles === 'function') return allowRoles(...roles);
   return (_req: any, _res: any, next: any) => next();
 };
 
@@ -23,7 +23,7 @@ const safeAllowRoles = (...roles: string[]) => {
  */
 interface ImprovementTask {
   id: string;
-  priority: "low" | "medium" | "high";
+  priority: 'low' | 'medium' | 'high';
   description: string;
   actionRequired: string;
 }
@@ -34,13 +34,13 @@ interface ImprovementTask {
  * Query params:
  *   - domain: Domain to analyze (required)
  */
-router.get("/report", validateInput, async (req, res) => {
+router.get('/report', validateInput, async (req, res) => {
   try {
     const { domain } = req.query;
 
-    if (!domain || typeof domain !== "string") {
+    if (!domain || typeof domain !== 'string') {
       return res.status(400).json({
-        error: "Domain parameter is required and must be a string",
+        error: 'Domain parameter is required and must be a string',
       });
     }
 
@@ -49,7 +49,7 @@ router.get("/report", validateInput, async (req, res) => {
       /^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$/;
     if (!domainRegex.test(domain)) {
       return res.status(400).json({
-        error: "Invalid domain format",
+        error: 'Invalid domain format',
       });
     }
 
@@ -62,11 +62,11 @@ router.get("/report", validateInput, async (req, res) => {
       ...trustReport,
     });
   } catch (error) {
-    console.error("Trust report error:", error);
+    console.error('Trust report error:', error);
     res.status(500).json({
-      error: "Failed to generate trust report",
+      error: 'Failed to generate trust report',
       details:
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === 'development'
           ? (error as Error).message
           : undefined,
     });
@@ -79,13 +79,13 @@ router.get("/report", validateInput, async (req, res) => {
  * Query params:
  *   - domain: Domain to analyze (required)
  */
-router.get("/improvement-tasks", validateInput, async (req, res) => {
+router.get('/improvement-tasks', validateInput, async (req, res) => {
   try {
     const { domain } = req.query;
 
-    if (!domain || typeof domain !== "string") {
+    if (!domain || typeof domain !== 'string') {
       return res.status(400).json({
-        error: "Domain parameter is required and must be a string",
+        error: 'Domain parameter is required and must be a string',
       });
     }
 
@@ -98,50 +98,50 @@ router.get("/improvement-tasks", validateInput, async (req, res) => {
     // SSL-related tasks
     if (!trustReport.sslValid) {
       tasks.push({
-        id: "ssl",
-        priority: "high",
-        description: "Install valid SSL certificate",
+        id: 'ssl',
+        priority: 'high',
+        description: 'Install valid SSL certificate',
         actionRequired:
-          "Obtain and install a valid SSL/TLS certificate from a trusted Certificate Authority",
+          'Obtain and install a valid SSL/TLS certificate from a trusted Certificate Authority',
       });
     }
 
     // Domain age tasks
     if (trustReport.domainAgeMonths < 6) {
       tasks.push({
-        id: "domain-age",
-        priority: "low",
-        description: "Domain is relatively new",
-        actionRequired: "Continue building domain reputation over time",
+        id: 'domain-age',
+        priority: 'low',
+        description: 'Domain is relatively new',
+        actionRequired: 'Continue building domain reputation over time',
       });
     }
 
     // Business verification tasks
     if (!trustReport.verifiedBusiness && trustReport.scamAdviserScore >= 70) {
       tasks.push({
-        id: "business-verification",
-        priority: "medium",
-        description: "Complete business verification",
+        id: 'business-verification',
+        priority: 'medium',
+        description: 'Complete business verification',
         actionRequired:
-          "Submit business registration documents and verification materials",
+          'Submit business registration documents and verification materials',
       });
     }
 
     // General score improvement
     if (trustReport.scamAdviserScore < 80) {
       tasks.push({
-        id: "score-improvement",
-        priority: trustReport.scamAdviserScore < 60 ? "high" : "medium",
-        description: "Improve overall trust score",
+        id: 'score-improvement',
+        priority: trustReport.scamAdviserScore < 60 ? 'high' : 'medium',
+        description: 'Improve overall trust score',
         actionRequired:
-          "Implement security best practices, obtain business certifications, and build online reputation",
+          'Implement security best practices, obtain business certifications, and build online reputation',
       });
     }
 
     // Calculate statistics
     const totalTasks = tasks.length;
     const highPriority = tasks.filter(
-      (task) => task.priority === "high"
+      (task) => task.priority === 'high',
     ).length;
 
     res.json({
@@ -154,11 +154,11 @@ router.get("/improvement-tasks", validateInput, async (req, res) => {
       lastChecked: trustReport.lastChecked,
     });
   } catch (error) {
-    console.error("Improvement tasks error:", error);
+    console.error('Improvement tasks error:', error);
     res.status(500).json({
-      error: "Failed to generate improvement tasks",
+      error: 'Failed to generate improvement tasks',
       details:
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === 'development'
           ? (error as Error).message
           : undefined,
     });
@@ -171,17 +171,17 @@ router.get("/improvement-tasks", validateInput, async (req, res) => {
  * Body: { domain: string }
  */
 router.post(
-  "/refresh",
+  '/refresh',
   safeAuth,
-  safeAllowRoles("admin"),
+  safeAllowRoles('admin'),
   validateInput,
   async (req, res) => {
     try {
       const { domain } = req.body;
 
-      if (!domain || typeof domain !== "string") {
+      if (!domain || typeof domain !== 'string') {
         return res.status(400).json({
-          error: "Domain is required and must be a string",
+          error: 'Domain is required and must be a string',
         });
       }
 
@@ -191,43 +191,43 @@ router.post(
 
       res.json({
         success: true,
-        message: "Trust data refreshed successfully",
+        message: 'Trust data refreshed successfully',
         domain,
         ...trustReport,
       });
     } catch (error) {
-      console.error("Trust refresh error:", error);
+      console.error('Trust refresh error:', error);
       res.status(500).json({
-        error: "Failed to refresh trust data",
+        error: 'Failed to refresh trust data',
         details:
-          process.env.NODE_ENV === "development"
+          process.env.NODE_ENV === 'development'
             ? (error as Error).message
             : undefined,
       });
     }
-  }
+  },
 );
 
 /**
  * GET /api/trust/status
  * Get service status and statistics (admin only)
  */
-router.get("/status", safeAuth, safeAllowRoles("admin"), (req, res) => {
+router.get('/status', safeAuth, safeAllowRoles('admin'), (req, res) => {
   try {
     const metrics = scamAdviserService.getMetrics();
     res.json({
       success: true,
-      service: "ScamAdviser Trust Verification",
-      version: "1.0.0",
-      status: "operational",
+      service: 'ScamAdviser Trust Verification',
+      version: '1.0.0',
+      status: 'operational',
       timestamp: new Date().toISOString(),
       features: [
-        "Domain trust scoring",
-        "SSL certificate validation",
-        "Business verification status",
-        "Security improvement recommendations",
-        "Performance metrics",
-        "Caching & concurrency dedup",
+        'Domain trust scoring',
+        'SSL certificate validation',
+        'Business verification status',
+        'Security improvement recommendations',
+        'Performance metrics',
+        'Caching & concurrency dedup',
       ],
       metrics,
       cache: {
@@ -238,9 +238,9 @@ router.get("/status", safeAuth, safeAllowRoles("admin"), (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Trust status error:", error);
+    console.error('Trust status error:', error);
     res.status(500).json({
-      error: "Failed to get service status",
+      error: 'Failed to get service status',
     });
   }
 });

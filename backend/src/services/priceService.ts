@@ -9,17 +9,17 @@
  * - No API keys required for free tier
  */
 
-import { Redis } from "ioredis";
+import { Redis } from 'ioredis';
 
 // Initialize Redis client
-const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379", {
+const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
   retryStrategy: (times) => Math.min(times * 50, 2000),
   maxRetriesPerRequest: 3,
   enableOfflineQueue: false,
 });
 
-redis.on("error", (err) => {
-  console.error("Redis connection error (price service):", err.message);
+redis.on('error', (err) => {
+  console.error('Redis connection error (price service):', err.message);
 });
 
 // Types
@@ -47,19 +47,19 @@ export interface PriceProvider {
 
 // CoinGecko Provider (Free, no API key)
 class CoinGeckoProvider implements PriceProvider {
-  name = "coingecko";
-  private baseUrl = "https://api.coingecko.com/api/v3";
+  name = 'coingecko';
+  private baseUrl = 'https://api.coingecko.com/api/v3';
   private symbolMap: Record<string, string> = {
-    BTC: "bitcoin",
-    ETH: "ethereum",
-    USDT: "tether",
-    BNB: "binancecoin",
-    SOL: "solana",
-    XRP: "ripple",
-    USDC: "usd-coin",
-    ADA: "cardano",
-    DOGE: "dogecoin",
-    AVAX: "avalanche-2",
+    BTC: 'bitcoin',
+    ETH: 'ethereum',
+    USDT: 'tether',
+    BNB: 'binancecoin',
+    SOL: 'solana',
+    XRP: 'ripple',
+    USDC: 'usd-coin',
+    ADA: 'cardano',
+    DOGE: 'dogecoin',
+    AVAX: 'avalanche-2',
   };
 
   async getCurrentPrice(symbol: string): Promise<CurrentPrice> {
@@ -91,7 +91,7 @@ class CoinGeckoProvider implements PriceProvider {
   async getBatchPrices(symbols: string[]): Promise<Map<string, CurrentPrice>> {
     const coinIds = symbols
       .map((s) => this.symbolMap[s.toUpperCase()] || s.toLowerCase())
-      .join(",");
+      .join(',');
     const url = `${this.baseUrl}/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true`;
 
     const response = await fetch(url);
@@ -124,7 +124,7 @@ class CoinGeckoProvider implements PriceProvider {
 
   async getHistoricalPrices(
     symbol: string,
-    days: number
+    days: number,
   ): Promise<PricePoint[]> {
     const coinId = this.symbolMap[symbol.toUpperCase()] || symbol.toLowerCase();
     const url = `${this.baseUrl}/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`;
@@ -145,8 +145,8 @@ class CoinGeckoProvider implements PriceProvider {
 
 // Binance Provider (Free, no API key)
 class BinanceProvider implements PriceProvider {
-  name = "binance";
-  private baseUrl = "https://api.binance.com/api/v3";
+  name = 'binance';
+  private baseUrl = 'https://api.binance.com/api/v3';
 
   async getCurrentPrice(symbol: string): Promise<CurrentPrice> {
     const pair = `${symbol.toUpperCase()}USDT`;
@@ -201,15 +201,15 @@ class BinanceProvider implements PriceProvider {
 
   async getHistoricalPrices(
     symbol: string,
-    days: number
+    days: number,
   ): Promise<PricePoint[]> {
     const pair = `${symbol.toUpperCase()}USDT`;
-    const interval = days <= 1 ? "5m" : days <= 7 ? "1h" : "1d";
+    const interval = days <= 1 ? '5m' : days <= 7 ? '1h' : '1d';
     const url = `${
       this.baseUrl
     }/klines?symbol=${pair}&interval=${interval}&limit=${Math.min(
       days * 24,
-      1000
+      1000,
     )}`;
 
     const response = await fetch(url);
@@ -234,15 +234,15 @@ export class PriceService {
 
   constructor() {
     this.providers = [new CoinGeckoProvider(), new BinanceProvider()];
-    this.cacheTTL = parseInt(process.env.PRICE_CACHE_TTL || "300", 10); // 5 minutes default
+    this.cacheTTL = parseInt(process.env.PRICE_CACHE_TTL || '300', 10); // 5 minutes default
   }
 
   private getCacheKey(type: string, ...args: string[]): string {
-    return `price:${type}:${args.join(":")}`;
+    return `price:${type}:${args.join(':')}`;
   }
 
   async getCurrentPrice(symbol: string): Promise<CurrentPrice> {
-    const cacheKey = this.getCacheKey("current", symbol.toUpperCase());
+    const cacheKey = this.getCacheKey('current', symbol.toUpperCase());
 
     // Try cache first
     try {
@@ -252,7 +252,7 @@ export class PriceService {
         return { ...price, cached: true } as any;
       }
     } catch (err) {
-      console.warn("Cache read failed:", err);
+      console.warn('Cache read failed:', err);
     }
 
     // Try providers in order
@@ -264,7 +264,7 @@ export class PriceService {
         try {
           await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(price));
         } catch (err) {
-          console.warn("Cache write failed:", err);
+          console.warn('Cache write failed:', err);
         }
 
         return price;
@@ -283,7 +283,7 @@ export class PriceService {
 
     // Check cache first
     for (const symbol of symbols) {
-      const cacheKey = this.getCacheKey("current", symbol.toUpperCase());
+      const cacheKey = this.getCacheKey('current', symbol.toUpperCase());
       try {
         const cached = await redis.get(cacheKey);
         if (cached) {
@@ -306,11 +306,11 @@ export class PriceService {
           // Cache and add to results
           for (const [symbol, price] of providerResults.entries()) {
             results.set(symbol, price);
-            const cacheKey = this.getCacheKey("current", symbol);
+            const cacheKey = this.getCacheKey('current', symbol);
             try {
               await redis.setex(cacheKey, this.cacheTTL, JSON.stringify(price));
             } catch (err) {
-              console.warn("Cache write failed:", err);
+              console.warn('Cache write failed:', err);
             }
           }
 
@@ -327,12 +327,12 @@ export class PriceService {
 
   async getHistoricalPrices(
     symbol: string,
-    days: number
+    days: number,
   ): Promise<PricePoint[]> {
     const cacheKey = this.getCacheKey(
-      "historical",
+      'historical',
       symbol.toUpperCase(),
-      days.toString()
+      days.toString(),
     );
 
     // Try cache first (longer TTL for historical data)
@@ -342,7 +342,7 @@ export class PriceService {
         return JSON.parse(cached);
       }
     } catch (err) {
-      console.warn("Cache read failed:", err);
+      console.warn('Cache read failed:', err);
     }
 
     // Try providers
@@ -354,7 +354,7 @@ export class PriceService {
         try {
           await redis.setex(cacheKey, 3600, JSON.stringify(data));
         } catch (err) {
-          console.warn("Cache write failed:", err);
+          console.warn('Cache write failed:', err);
         }
 
         return data;
@@ -373,12 +373,12 @@ export class PriceService {
 
     for (const provider of this.providers) {
       try {
-        await provider.getCurrentPrice("BTC");
-        status.push({ provider: provider.name, status: "healthy" });
+        await provider.getCurrentPrice('BTC');
+        status.push({ provider: provider.name, status: 'healthy' });
       } catch (err) {
         status.push({
           provider: provider.name,
-          status: "unhealthy",
+          status: 'unhealthy',
           error: (err as Error).message,
         });
       }
@@ -389,15 +389,15 @@ export class PriceService {
 
   async getCacheStats() {
     try {
-      const keys = await redis.keys("price:*");
-      const info = await redis.info("stats");
+      const keys = await redis.keys('price:*');
+      const info = await redis.info('stats');
 
       return {
         cachedKeys: keys.length,
         redisInfo: info,
       };
     } catch (err) {
-      return { error: "Cache stats unavailable" };
+      return { error: 'Cache stats unavailable' };
     }
   }
 }

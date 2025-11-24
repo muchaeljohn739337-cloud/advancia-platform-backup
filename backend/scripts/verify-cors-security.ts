@@ -45,7 +45,7 @@ function verifyCors(config: any) {
   if (duplicates.length) {
     console.warn(
       "⚠️  Duplicate origins found:",
-      [...new Set(duplicates)].join(", ")
+      [...new Set(duplicates)].join(", "),
     );
   }
   const requiredProd = [
@@ -53,16 +53,16 @@ function verifyCors(config: any) {
     "https://www.advanciapayledger.com",
   ];
   const missingProd = requiredProd.filter(
-    (p) => !unique.has(p) && config.nodeEnv === "production"
+    (p) => !unique.has(p) && config.nodeEnv === "production",
   );
   if (missingProd.length) {
     console.warn(
       "⚠️  Missing production domain origins:",
-      missingProd.join(", ")
+      missingProd.join(", "),
     );
   } else {
     console.log(
-      "✅ Production domain origins present (or not required in non-prod)"
+      "✅ Production domain origins present (or not required in non-prod)",
     );
   }
 }
@@ -88,10 +88,10 @@ function verifyHelmet(config: any) {
   console.log("Expected security headers:", expectedHeaders.join(", "));
   console.log("Manual Validation Command (after deploy):");
   console.log(
-    `curl -I https://<backend-domain>/health | tr -d '\r' | grep -iE '(content-security-policy|x-frame-options|strict-transport-security|referrer-policy)'`
+    `curl -I https://<backend-domain>/health | tr -d '\r' | grep -iE '(content-security-policy|x-frame-options|strict-transport-security|referrer-policy)'`,
   );
   console.log(
-    "✅ Helmet middleware constructed (runtime headers require live request to confirm)."
+    "✅ Helmet middleware constructed (runtime headers require live request to confirm).",
   );
 }
 
@@ -101,7 +101,7 @@ if (config) {
   verifyHelmet(config);
   if (process.exitCode !== 1) {
     console.log(
-      "\n✅ Static CORS & security configuration verification complete"
+      "\n✅ Static CORS & security configuration verification complete",
     );
   }
 }

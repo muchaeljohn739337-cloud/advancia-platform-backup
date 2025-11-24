@@ -26,7 +26,11 @@ class APITester {
   async testEndpoint(
     path: string,
     name?: string,
-    opts: { method?: string; body?: any; headers?: Record<string, string> } = {}
+    opts: {
+      method?: string;
+      body?: any;
+      headers?: Record<string, string>;
+    } = {},
   ): Promise<TestResult> {
     const startTime = Date.now();
     const url = new URL(path, this.baseUrl);
@@ -34,7 +38,7 @@ class APITester {
     const payload = opts.body ? JSON.stringify(opts.body) : undefined;
     const headers: Record<string, string> = Object.assign(
       { Accept: "application/json" },
-      opts.headers || {}
+      opts.headers || {},
     );
     if (payload) headers["Content-Type"] = "application/json";
     if (this.adminToken && !headers.Authorization) {
@@ -76,7 +80,7 @@ class APITester {
               });
             }
           });
-        }
+        },
       );
       req.on("error", (err: any) => {
         resolve({
@@ -136,7 +140,7 @@ class APITester {
     }
 
     const results = await Promise.all(
-      testCases.map((tc) => this.testEndpoint(tc.path, tc.name))
+      testCases.map((tc) => this.testEndpoint(tc.path, tc.name)),
     );
 
     for (const r of results) {
@@ -150,7 +154,7 @@ class APITester {
             console.log(`   📊 Trust Score: ${d.scamAdviserScore}/100`);
             console.log(`   🔒 SSL Valid: ${d.sslValid ? "✅" : "❌"}`);
             console.log(
-              `   🏢 Verified Business: ${d.verifiedBusiness ? "✅" : "❌"}`
+              `   🏢 Verified Business: ${d.verifiedBusiness ? "✅" : "❌"}`,
             );
             console.log(`   📅 Domain Age: ${d.domainAgeMonths} months`);
             console.log(`   📊 Status: ${d.status}`);
@@ -164,7 +168,7 @@ class APITester {
             console.log(
               `   ✔ Feature count: ${
                 Array.isArray(d.features) ? d.features.length : 0
-              }`
+              }`,
             );
           }
         }
@@ -176,13 +180,13 @@ class APITester {
     const successCount = results.filter((r) => r.status === "success").length;
     const errorCount = results.length - successCount;
     const avg = Math.round(
-      results.reduce((a, r) => a + r.responseTime, 0) / results.length
+      results.reduce((a, r) => a + r.responseTime, 0) / results.length,
     );
     const slow = results.filter((r) => r.responseTime > 1500).length;
     console.log("\n🎯 Test Summary");
     console.log("================");
     console.log(
-      `Total: ${results.length} | Success: ${successCount} | Errors: ${errorCount}`
+      `Total: ${results.length} | Success: ${successCount} | Errors: ${errorCount}`,
     );
     console.log(`Avg Response Time: ${avg}ms | Slow (>1500ms): ${slow}`);
     if (errorCount === 0) {

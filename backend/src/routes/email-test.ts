@@ -1,20 +1,20 @@
-import { Router, Request, Response } from 'express';
-import { EmailService } from '../services/emailService';
+import { Request, Response, Router } from 'express';
 import emailRateLimit from '../middleware/emailRateLimit';
-import { validateEmailMiddleware } from '../services/emailSecurityService';
-import EmailMonitoringService from '../services/emailMonitoringService';
+import { EmailService } from '../services/emailService';
 
 const router = Router();
 const emailService = new EmailService();
 
 // Apply rate limiting to all email test routes
 // 10 emails per hour per user, 100 per day per IP
-router.use(emailRateLimit({
-  perUserHourly: 10,
-  perIPDaily: 100,
-  globalDaily: 1000,
-  enabled: true,
-}));
+router.use(
+  emailRateLimit({
+    perUserHourly: 10,
+    perIPDaily: 100,
+    globalDaily: 1000,
+    enabled: true,
+  }),
+);
 
 /**
  * Test Email Endpoints
@@ -29,7 +29,7 @@ router.post('/test/email/welcome', async (req: Request, res: Response) => {
     if (!email || !username) {
       return res.status(400).json({
         success: false,
-        error: 'Email and username are required'
+        error: 'Email and username are required',
       });
     }
 
@@ -37,14 +37,16 @@ router.post('/test/email/welcome', async (req: Request, res: Response) => {
 
     res.json({
       success: result.success,
-      message: result.success ? 'Welcome email sent successfully' : 'Failed to send email',
+      message: result.success
+        ? 'Welcome email sent successfully'
+        : 'Failed to send email',
       emailId: result.id,
-      error: result.error
+      error: result.error,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -57,7 +59,7 @@ router.post('/test/email/transaction', async (req: Request, res: Response) => {
     if (!email) {
       return res.status(400).json({
         success: false,
-        error: 'Email is required'
+        error: 'Email is required',
       });
     }
 
@@ -65,54 +67,66 @@ router.post('/test/email/transaction', async (req: Request, res: Response) => {
       type: type || 'credit',
       amount: amount || 100,
       description: description || 'Test transaction',
-      transactionId: transactionId || `TEST-${Date.now()}`
+      transactionId: transactionId || `TEST-${Date.now()}`,
     };
 
-    const result = await emailService.sendTransactionConfirmation(email, transactionData);
+    const result = await emailService.sendTransactionConfirmation(
+      email,
+      transactionData,
+    );
 
     res.json({
       success: result.success,
-      message: result.success ? 'Transaction email sent successfully' : 'Failed to send email',
+      message: result.success
+        ? 'Transaction email sent successfully'
+        : 'Failed to send email',
       emailId: result.id,
-      error: result.error
+      error: result.error,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
 
 // Test Password Reset Email
-router.post('/test/email/reset-password', async (req: Request, res: Response) => {
-  try {
-    const { email, resetToken } = req.body;
+router.post(
+  '/test/email/reset-password',
+  async (req: Request, res: Response) => {
+    try {
+      const { email, resetToken } = req.body;
 
-    if (!email) {
-      return res.status(400).json({
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          error: 'Email is required',
+        });
+      }
+
+      const token =
+        resetToken ||
+        `reset_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      const result = await emailService.sendPasswordResetEmail(email, token);
+
+      res.json({
+        success: result.success,
+        message: result.success
+          ? 'Password reset email sent successfully'
+          : 'Failed to send email',
+        emailId: result.id,
+        resetToken: token,
+        error: result.error,
+      });
+    } catch (error: any) {
+      res.status(500).json({
         success: false,
-        error: 'Email is required'
+        error: error.message,
       });
     }
-
-    const token = resetToken || `reset_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-    const result = await emailService.sendPasswordResetEmail(email, token);
-
-    res.json({
-      success: result.success,
-      message: result.success ? 'Password reset email sent successfully' : 'Failed to send email',
-      emailId: result.id,
-      resetToken: token,
-      error: result.error
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
+  },
+);
 
 // Test 2FA Email
 router.post('/test/email/2fa', async (req: Request, res: Response) => {
@@ -122,12 +136,13 @@ router.post('/test/email/2fa', async (req: Request, res: Response) => {
     if (!email) {
       return res.status(400).json({
         success: false,
-        error: 'Email is required'
+        error: 'Email is required',
       });
     }
 
-    const twoFACode = code || Math.floor(100000 + Math.random() * 900000).toString();
-    
+    const twoFACode =
+      code || Math.floor(100000 + Math.random() * 900000).toString();
+
     // Use generic sendEmail for 2FA (method doesn't exist yet)
     const result = await emailService.sendEmail({
       to: email,
@@ -142,20 +157,22 @@ router.post('/test/email/2fa', async (req: Request, res: Response) => {
           <p>This code will expire in 10 minutes.</p>
           <p>If you didn't request this code, please ignore this email.</p>
         </div>
-      `
+      `,
     });
 
     res.json({
       success: result.success,
-      message: result.success ? '2FA email sent successfully' : 'Failed to send email',
+      message: result.success
+        ? '2FA email sent successfully'
+        : 'Failed to send email',
       emailId: result.id,
       code: twoFACode,
-      error: result.error
+      error: result.error,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -168,55 +185,63 @@ router.post('/test/email/invoice', async (req: Request, res: Response) => {
     if (!email) {
       return res.status(400).json({
         success: false,
-        error: 'Email is required'
+        error: 'Email is required',
       });
     }
 
     const invoiceData = {
       invoiceNumber: invoiceNumber || `INV-${Date.now()}`,
-      amount: amount || 250.00,
-      dueDate: dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      amount: amount || 250.0,
+      dueDate:
+        dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
       items: [
-        { description: 'Service Fee', amount: 150.00 },
-        { description: 'Processing Fee', amount: 100.00 }
-      ]
+        { description: 'Service Fee', amount: 150.0 },
+        { description: 'Processing Fee', amount: 100.0 },
+      ],
     };
 
     const result = await emailService.sendInvoiceEmail(email, invoiceData);
 
     res.json({
       success: result.success,
-      message: result.success ? 'Invoice email sent successfully' : 'Failed to send email',
+      message: result.success
+        ? 'Invoice email sent successfully'
+        : 'Failed to send email',
       emailId: result.id,
       invoiceNumber: invoiceData.invoiceNumber,
-      error: result.error
+      error: result.error,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
 
 // Test Admin Notification
-router.post('/test/email/admin-notification', async (req: Request, res: Response) => {
-  try {
-    const { message, type } = req.body;
+router.post(
+  '/test/email/admin-notification',
+  async (req: Request, res: Response) => {
+    try {
+      const { message, type } = req.body;
 
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@advanciapayledger.com';
-    
-    const notificationData = {
-      type: type || 'user_registration',
-      message: message || 'Test admin notification',
-      timestamp: new Date().toISOString()
-    };
+      const adminEmail =
+        process.env.ADMIN_EMAIL || 'admin@advanciapayledger.com';
 
-    // Use generic sendEmail for admin notifications (method doesn't exist yet)
-    const result = await emailService.sendEmail({
-      to: adminEmail,
-      subject: `Admin Alert: ${notificationData.type.replace('_', ' ').toUpperCase()}`,
-      html: `
+      const notificationData = {
+        type: type || 'user_registration',
+        message: message || 'Test admin notification',
+        timestamp: new Date().toISOString(),
+      };
+
+      // Use generic sendEmail for admin notifications (method doesn't exist yet)
+      const result = await emailService.sendEmail({
+        to: adminEmail,
+        subject: `Admin Alert: ${notificationData.type
+          .replace('_', ' ')
+          .toUpperCase()}`,
+        html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #dc2626;">Admin Notification</h2>
           <div style="background: #fef2f2; border-left: 4px solid #dc2626; padding: 15px; margin: 20px 0;">
@@ -226,47 +251,51 @@ router.post('/test/email/admin-notification', async (req: Request, res: Response
             <p>${notificationData.message}</p>
           </div>
         </div>
-      `
-    });
+      `,
+      });
 
-    res.json({
-      success: result.success,
-      message: result.success ? 'Admin notification sent successfully' : 'Failed to send email',
-      emailId: result.id,
-      sentTo: adminEmail,
-      error: result.error
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-});
+      res.json({
+        success: result.success,
+        message: result.success
+          ? 'Admin notification sent successfully'
+          : 'Failed to send email',
+        emailId: result.id,
+        sentTo: adminEmail,
+        error: result.error,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  },
+);
 
 // Get Email Configuration Status
 router.get('/test/email/status', async (req: Request, res: Response) => {
   try {
     const config = {
-      resendConfigured: !!process.env.RESEND_API_KEY,
+      gmailConfigured: !!(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD),
       emailFrom: process.env.EMAIL_FROM || 'noreply@advancia.com',
       adminEmail: process.env.ADMIN_EMAIL || 'admin@advanciapayledger.com',
       environment: process.env.NODE_ENV || 'development',
-      gmailConfigured: !!(process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD)
+      smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
+      smtpPort: process.env.SMTP_PORT || '587',
     };
 
     res.json({
       success: true,
       configuration: config,
-      status: config.resendConfigured ? 'ready' : 'not_configured',
-      message: config.resendConfigured 
-        ? 'Email service is configured and ready' 
-        : 'RESEND_API_KEY not configured. Please add it to environment variables.'
+      status: config.gmailConfigured ? 'ready' : 'not_configured',
+      message: config.gmailConfigured
+        ? 'Gmail SMTP is configured and ready to use'
+        : 'EMAIL_USER and EMAIL_PASSWORD not configured. Please add them to environment variables.',
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -279,26 +308,28 @@ router.post('/test/email/custom', async (req: Request, res: Response) => {
     if (!to || !subject || !html) {
       return res.status(400).json({
         success: false,
-        error: 'to, subject, and html are required'
+        error: 'to, subject, and html are required',
       });
     }
 
     const result = await emailService.sendEmail({
       to,
       subject,
-      html
+      html,
     });
 
     res.json({
       success: result.success,
-      message: result.success ? 'Custom email sent successfully' : 'Failed to send email',
+      message: result.success
+        ? 'Custom email sent successfully'
+        : 'Failed to send email',
       emailId: result.id,
-      error: result.error
+      error: result.error,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });

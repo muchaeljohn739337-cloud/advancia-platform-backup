@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/node";
-import { NextFunction, Request, Response } from "express";
+import * as Sentry from '@sentry/node';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * Enhanced global error handler middleware with Sentry integration
@@ -13,7 +13,7 @@ export const errorHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   // Extract user context from authenticated requests
   const user = (req as any).user;
@@ -21,10 +21,10 @@ export const errorHandler = (
 
   // Get client IP
   const clientIP =
-    (req.headers["x-forwarded-for"] as string)?.split(",")[0] ||
-    (req.headers["x-real-ip"] as string) ||
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0] ||
+    (req.headers['x-real-ip'] as string) ||
     req.ip ||
-    "Unknown";
+    'Unknown';
 
   // Comprehensive error context
   const errorContext = {
@@ -33,7 +33,7 @@ export const errorHandler = (
     path: req.path,
     method: req.method,
     ip: clientIP,
-    userAgent: req.get("user-agent"),
+    userAgent: req.get('user-agent'),
     userId: userId,
     query: req.query,
     body: sanitizeBody(req.body), // Remove sensitive fields
@@ -43,10 +43,10 @@ export const errorHandler = (
   };
 
   // Log full error details on backend (always)
-  console.error("[ERROR]", errorContext);
+  console.error('[ERROR]', errorContext);
 
   // Send to Sentry in production
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === 'production';
   if (isProduction && process.env.SENTRY_DSN) {
     Sentry.captureException(err, {
       user: userId ? { id: userId } : undefined,
@@ -69,7 +69,7 @@ export const errorHandler = (
     // Generic error message for production
     res.status(statusCode).json({
       success: false,
-      error: "An error occurred. Please try again later.",
+      error: 'An error occurred. Please try again later.',
       timestamp: new Date().toISOString(),
     });
   } else {
@@ -90,25 +90,25 @@ export const errorHandler = (
  * Sanitize request body to remove sensitive fields before logging
  */
 function sanitizeBody(body: any): any {
-  if (!body || typeof body !== "object") return body;
+  if (!body || typeof body !== 'object') return body;
 
   const sanitized = { ...body };
   const sensitiveFields = [
-    "password",
-    "passwordHash",
-    "token",
-    "apiKey",
-    "secret",
-    "totpSecret",
-    "backupCodes",
-    "cardNumber",
-    "cvv",
-    "pin",
+    'password',
+    'passwordHash',
+    'token',
+    'apiKey',
+    'secret',
+    'totpSecret',
+    'backupCodes',
+    'cardNumber',
+    'cvv',
+    'pin',
   ];
 
   for (const field of sensitiveFields) {
     if (field in sanitized) {
-      sanitized[field] = "[REDACTED]";
+      sanitized[field] = '[REDACTED]';
     }
   }
 
@@ -122,19 +122,19 @@ function sanitizeBody(body: any): any {
  */
 export const notFoundHandler = (req: Request, res: Response) => {
   // Silent mode logging - minimal console output
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.warn(`[404] ${req.method} ${req.path}`);
   }
 
   // Optional: Track in production analytics/monitoring
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === 'production') {
     // Example: Sentry, DataDog, or custom analytics
     // trackEvent('404', { path: req.path, method: req.method });
   }
 
   res.status(404).json({
     success: false,
-    error: "Route not found",
+    error: 'Route not found',
     path: req.path,
     method: req.method,
     timestamp: new Date().toISOString(),

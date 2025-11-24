@@ -6,18 +6,18 @@
  */
 
 export type AlertChannel =
-  | "email"
-  | "sms"
-  | "slack"
-  | "teams"
-  | "websocket"
-  | "sentry";
+  | 'email'
+  | 'sms'
+  | 'slack'
+  | 'teams'
+  | 'websocket'
+  | 'sentry';
 
 export interface AlertPolicy {
   threshold: number; // Number of requests before triggering alert
   channels: AlertChannel[]; // Notification channels to use
   cooldown?: number; // Cooldown period in milliseconds (default: 5 minutes)
-  severity?: "low" | "medium" | "high" | "critical"; // Alert severity
+  severity?: 'low' | 'medium' | 'high' | 'critical'; // Alert severity
 }
 
 export interface AlertPolicies {
@@ -31,71 +31,71 @@ export const alertPolicies: AlertPolicies = {
   // Authentication routes - very strict (potential brute force)
   auth: {
     threshold: 10,
-    channels: ["email", "sms", "slack", "websocket", "sentry"],
+    channels: ['email', 'sms', 'slack', 'websocket', 'sentry'],
     cooldown: 5 * 60 * 1000, // 5 minutes
-    severity: "critical",
+    severity: 'critical',
   },
-  "auth-strict": {
+  'auth-strict': {
     threshold: 8,
-    channels: ["email", "sms", "slack", "teams", "websocket", "sentry"],
+    channels: ['email', 'sms', 'slack', 'teams', 'websocket', 'sentry'],
     cooldown: 3 * 60 * 1000, // 3 minutes
-    severity: "critical",
+    severity: 'critical',
   },
 
   // Admin routes - strict (unauthorized access attempts)
   admin: {
     threshold: 20,
-    channels: ["email", "sms", "slack", "websocket", "sentry"],
+    channels: ['email', 'sms', 'slack', 'websocket', 'sentry'],
     cooldown: 10 * 60 * 1000, // 10 minutes
-    severity: "high",
+    severity: 'high',
   },
 
   // Payment routes - very strict (financial security)
   payments: {
     threshold: 15,
-    channels: ["email", "sms", "slack", "teams", "websocket", "sentry"],
+    channels: ['email', 'sms', 'slack', 'teams', 'websocket', 'sentry'],
     cooldown: 5 * 60 * 1000, // 5 minutes
-    severity: "critical",
+    severity: 'critical',
   },
 
   // Crypto routes - strict (financial security)
   crypto: {
     threshold: 15,
-    channels: ["email", "slack", "websocket", "sentry"],
+    channels: ['email', 'slack', 'websocket', 'sentry'],
     cooldown: 10 * 60 * 1000, // 10 minutes
-    severity: "high",
+    severity: 'high',
   },
 
   // Transaction routes - moderate
   transactions: {
     threshold: 30,
-    channels: ["email", "slack", "websocket", "sentry"],
+    channels: ['email', 'slack', 'websocket', 'sentry'],
     cooldown: 15 * 60 * 1000, // 15 minutes
-    severity: "medium",
+    severity: 'medium',
   },
 
   // User routes - moderate
   users: {
     threshold: 50,
-    channels: ["email", "websocket", "sentry"],
+    channels: ['email', 'websocket', 'sentry'],
     cooldown: 15 * 60 * 1000, // 15 minutes
-    severity: "medium",
+    severity: 'medium',
   },
 
   // General API routes - lenient
   api: {
     threshold: 100,
-    channels: ["email", "websocket", "sentry"],
+    channels: ['email', 'websocket', 'sentry'],
     cooldown: 30 * 60 * 1000, // 30 minutes
-    severity: "low",
+    severity: 'low',
   },
 
   // Other routes - lenient
   general: {
     threshold: 80,
-    channels: ["email", "sentry"],
+    channels: ['email', 'sentry'],
     cooldown: 30 * 60 * 1000, // 30 minutes
-    severity: "low",
+    severity: 'low',
   },
 };
 

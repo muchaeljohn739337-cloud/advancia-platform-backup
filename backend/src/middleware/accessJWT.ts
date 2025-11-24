@@ -1,15 +1,15 @@
 /**
  * Cloudflare Access JWT Validation Middleware
- * 
+ *
  * Validates the Cf-Access-Jwt-Assertion header from Cloudflare Access using:
  * - Team JWKS endpoint for public key retrieval
  * - jose library for JWT verification
  * - Extracts identity claims (email, sub) to req.accessIdentity
- * 
+ *
  * Usage:
  * import { validateAccessJWT } from '../middleware/accessJWT';
  * router.get('/admin/users', validateAccessJWT, allowRoles(['ADMIN']), handler);
- * 
+ *
  * Environment:
  * - CLOUDFLARE_ACCESS_TEAM_DOMAIN: Your team domain (e.g., advancia-pay.cloudflareaccess.com)
  * - CLOUDFLARE_ACCESS_AUD: Application Audience tag (get from Access app settings)
@@ -48,19 +48,20 @@ const initJose = async () => {
   return joseLib;
 };
 
-const CLOUDFLARE_ACCESS_TEAM_DOMAIN = process.env.CLOUDFLARE_ACCESS_TEAM_DOMAIN || '';
+const CLOUDFLARE_ACCESS_TEAM_DOMAIN =
+  process.env.CLOUDFLARE_ACCESS_TEAM_DOMAIN || '';
 const CLOUDFLARE_ACCESS_AUD = process.env.CLOUDFLARE_ACCESS_AUD || '';
 
 /**
  * Middleware to validate Cloudflare Access JWT
- * 
+ *
  * Flow:
  * 1. Read Cf-Access-Jwt-Assertion header
  * 2. Verify JWT signature using team JWKS
  * 3. Validate audience (aud) matches app
  * 4. Extract email/sub claims
  * 5. Attach to req.accessIdentity
- * 
+ *
  * If validation fails:
  * - Development: Logs error, allows request (for testing without Access)
  * - Production: Returns 401 Unauthorized
@@ -68,7 +69,7 @@ const CLOUDFLARE_ACCESS_AUD = process.env.CLOUDFLARE_ACCESS_AUD || '';
 export const validateAccessJWT = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const token = req.headers['cf-access-jwt-assertion'] as string;
 
@@ -78,7 +79,9 @@ export const validateAccessJWT = async (
       console.warn('[Access JWT] Skipping validation (no team/aud configured)');
       return next();
     } else {
-      console.error('[Access JWT] Missing CLOUDFLARE_ACCESS_TEAM_DOMAIN or AUD');
+      console.error(
+        '[Access JWT] Missing CLOUDFLARE_ACCESS_TEAM_DOMAIN or AUD',
+      );
       res.status(500).json({ error: 'Access validation not configured' });
       return;
     }
@@ -98,7 +101,7 @@ export const validateAccessJWT = async (
   try {
     // Ensure jose is loaded
     const jose = await initJose();
-    
+
     // Verify JWT using team JWKS
     const { payload } = await jose.jwtVerify(token, JWKS, {
       audience: CLOUDFLARE_ACCESS_AUD,
@@ -119,33 +122,33 @@ export const validateAccessJWT = async (
     next();
   } catch (err: any) {
     console.error('[Access JWT] Verification failed:', err.message);
-    
+
     if (process.env.NODE_ENV === 'development') {
       console.warn('[Access JWT] Allowing failed verification in dev mode');
       return next();
     }
-    
+
     res.status(401).json({ error: 'Invalid Cloudflare Access token' });
   }
 };
 
 /**
  * Optional: Simpler middleware that trusts Cf-Access-Authenticated-User-Email header
- * 
+ *
  * WARNING: Only use if you trust the header isn't spoofed. This skips JWT signature verification.
  * Cloudflare Access sets this header after successful authentication.
- * 
+ *
  * Use this if:
  * - You want simpler code
  * - You trust Cloudflare to set header correctly
  * - You don't need cryptographic proof of identity
- * 
+ *
  * Prefer validateAccessJWT for production (cryptographically verifies identity).
  */
 export const validateAccessEmailHeader = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const email = req.headers['cf-access-authenticated-user-email'] as string;
 
@@ -174,7 +177,7 @@ export const validateAccessEmailHeader = (
 
 /**
  * Utility: Extract Access identity from request
- * 
+ *
  * Use in routes to get authenticated user:
  * const identity = getAccessIdentity(req);
  * if (identity) console.log(`User: ${identity.email}`);

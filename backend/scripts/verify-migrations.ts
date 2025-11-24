@@ -21,7 +21,7 @@ async function verifyMigrations() {
       migrateStatus.includes("unapplied")
     ) {
       console.error(
-        "❌ Pending migrations found! Run: npx prisma migrate deploy"
+        "❌ Pending migrations found! Run: npx prisma migrate deploy",
       );
       process.exit(1);
     }

@@ -1,8 +1,8 @@
-import express from "express";
-import prisma from "../prismaClient";
-import { validateInput } from "../middleware/security";
-import { requireAdmin } from "../middleware/adminAuth";
-import { z } from "zod";
+import express from 'express';
+import prisma from '../prismaClient';
+import { validateInput } from '../middleware/security';
+import { requireAdmin } from '../middleware/adminAuth';
+import { z } from 'zod';
 // Avoid adding a new dependency for CSV generation; we'll build CSV manually
 
 const router = express.Router();
@@ -12,7 +12,7 @@ const subscribeSchema = z.object({
 });
 
 // POST /api/subscribers/subscribe
-router.post("/subscribe", async (req, res, next) => {
+router.post('/subscribe', async (req, res, next) => {
   try {
     // validate with zod here since validateInput middleware is a generic sanitizer
     const parsed = subscribeSchema.safeParse(req.body);
@@ -25,7 +25,7 @@ router.post("/subscribe", async (req, res, next) => {
       where: { email },
     });
     if (existing) {
-      return res.status(200).json({ ok: true, message: "Already subscribed" });
+      return res.status(200).json({ ok: true, message: 'Already subscribed' });
     }
 
     const subscriber = await (prisma as any).subscriber.create({
@@ -41,10 +41,10 @@ router.post("/subscribe", async (req, res, next) => {
 });
 
 // GET /api/subscribers - Admin only
-router.get("/", requireAdmin, async (req, res, next) => {
+router.get('/', requireAdmin, async (req, res, next) => {
   try {
     const subs = await (prisma as any).subscriber.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
     res.json({ ok: true, subscribers: subs });
   } catch (err) {
@@ -53,7 +53,7 @@ router.get("/", requireAdmin, async (req, res, next) => {
 });
 
 // DELETE /api/subscribers/:id - Admin only
-router.delete("/:id", requireAdmin, async (req, res, next) => {
+router.delete('/:id', requireAdmin, async (req, res, next) => {
   try {
     const id = Number(req.params.id);
     await (prisma as any).subscriber.delete({ where: { id } });
@@ -64,21 +64,21 @@ router.delete("/:id", requireAdmin, async (req, res, next) => {
 });
 
 // GET /api/subscribers/export/csv - Admin only
-router.get("/export/csv", requireAdmin, async (req, res, next) => {
+router.get('/export/csv', requireAdmin, async (req, res, next) => {
   try {
     const subs: Array<{ id: number; email: string; createdAt: Date }> = await (
       prisma as any
-    ).subscriber.findMany({ orderBy: { createdAt: "desc" } });
+    ).subscriber.findMany({ orderBy: { createdAt: 'desc' } });
 
     // Build CSV manually to avoid adding dependencies
-    const header = ["id", "email", "createdAt"].join(",");
+    const header = ['id', 'email', 'createdAt'].join(',');
     const rows = subs.map(
-      (s) => `${s.id},"${s.email}","${s.createdAt.toISOString()}"`
+      (s) => `${s.id},"${s.email}","${s.createdAt.toISOString()}"`,
     );
-    const csv = [header, ...rows].join("\n");
+    const csv = [header, ...rows].join('\n');
 
-    res.header("Content-Type", "text/csv");
-    res.attachment("subscribers.csv");
+    res.header('Content-Type', 'text/csv');
+    res.attachment('subscribers.csv');
     res.send(csv);
   } catch (err) {
     next(err);
@@ -86,11 +86,11 @@ router.get("/export/csv", requireAdmin, async (req, res, next) => {
 });
 
 // GET /api/subscribers/summary - Admin only
-router.get("/summary", requireAdmin, async (req, res, next) => {
+router.get('/summary', requireAdmin, async (req, res, next) => {
   try {
     const total = await (prisma as any).subscriber.count();
     const latest = await (prisma as any).subscriber.findFirst({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
     res.json({ ok: true, total, latest });
   } catch (err) {

@@ -1,4 +1,4 @@
-import { Decimal } from "@prisma/client/runtime/library";
+import { Decimal } from '@prisma/client/runtime/library';
 import crypto from 'crypto';
 
 /**
@@ -7,9 +7,9 @@ import crypto from 'crypto';
 function isDecimal(value: any): value is Decimal {
   return (
     value &&
-    typeof value === "object" &&
+    typeof value === 'object' &&
     value.constructor &&
-    value.constructor.name === "Decimal"
+    value.constructor.name === 'Decimal'
   );
 }
 
@@ -26,7 +26,7 @@ function isDecimal(value: any): value is Decimal {
  */
 export function serializeDecimal(value: Decimal | null | undefined): string {
   if (value === null || value === undefined) {
-    return "0";
+    return '0';
   }
   return value.toString();
 }
@@ -43,9 +43,9 @@ export function serializeDecimal(value: Decimal | null | undefined): string {
  * res.json(serializeDecimalFields(wallet));
  */
 export function serializeDecimalFields<T extends Record<string, any>>(
-  obj: T
+  obj: T,
 ): T {
-  if (!obj || typeof obj !== "object") {
+  if (!obj || typeof obj !== 'object') {
     return obj;
   }
 
@@ -56,7 +56,7 @@ export function serializeDecimalFields<T extends Record<string, any>>(
 
     if (isDecimal(value)) {
       serialized[key] = value.toString();
-    } else if (value && typeof value === "object") {
+    } else if (value && typeof value === 'object') {
       serialized[key] = serializeDecimalFields(value);
     } else {
       serialized[key] = value;
@@ -78,7 +78,7 @@ export function serializeDecimalFields<T extends Record<string, any>>(
  * res.json(serializeDecimalArray(transactions));
  */
 export function serializeDecimalArray<T extends Record<string, any>>(
-  array: T[]
+  array: T[],
 ): T[] {
   return array.map((item) => serializeDecimalFields(item));
 }

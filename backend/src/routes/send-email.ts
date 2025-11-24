@@ -34,10 +34,12 @@ router.post('/send-email', async (req: Request, res: Response) => {
     logger.info('Sending email via backend', { to, subject });
 
     const transporter = createTransporter();
-    
+
     // Send email
     const info = await transporter.sendMail({
-      from: from || `"Advancia Pay" <${process.env.GMAIL_EMAIL || 'advanciapayledger@gmail.com'}>`,
+      from:
+        from ||
+        `"Advancia Pay" <${process.env.GMAIL_EMAIL || 'advanciapayledger@gmail.com'}>`,
       to: Array.isArray(to) ? to.join(', ') : to,
       subject: subject,
       html: html,
@@ -66,13 +68,15 @@ router.post('/send-email', async (req: Request, res: Response) => {
  */
 router.get('/send-email/status', async (req: Request, res: Response) => {
   try {
-    const isConfigured = !!(process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD);
-    
+    const isConfigured = !!(
+      process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD
+    );
+
     if (isConfigured) {
       const transporter = createTransporter();
       // Test connection
       await transporter.verify();
-      
+
       res.json({
         success: true,
         status: 'ready',

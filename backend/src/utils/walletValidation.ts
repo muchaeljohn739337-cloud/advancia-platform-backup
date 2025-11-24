@@ -1,4 +1,4 @@
-const WAValidator = require("wallet-address-validator");
+const WAValidator = require('wallet-address-validator');
 
 /**
  * Validate cryptocurrency wallet addresses using wallet-address-validator
@@ -6,7 +6,7 @@ const WAValidator = require("wallet-address-validator");
 
 export function validateBTCAddress(address: string): boolean {
   try {
-    return WAValidator.validate(address, "BTC");
+    return WAValidator.validate(address, 'BTC');
   } catch (error) {
     return false;
   }
@@ -14,7 +14,7 @@ export function validateBTCAddress(address: string): boolean {
 
 export function validateETHAddress(address: string): boolean {
   try {
-    return WAValidator.validate(address, "ETH");
+    return WAValidator.validate(address, 'ETH');
   } catch (error) {
     return false;
   }
@@ -27,7 +27,7 @@ export function validateUSDTAddress(address: string): boolean {
 
 export function validateLTCAddress(address: string): boolean {
   try {
-    return WAValidator.validate(address, "LTC");
+    return WAValidator.validate(address, 'LTC');
   } catch (error) {
     return false;
   }
@@ -35,47 +35,49 @@ export function validateLTCAddress(address: string): boolean {
 
 export function validateCryptoAddress(
   address: string,
-  cryptoType: string
+  cryptoType: string,
 ): { valid: boolean; error?: string } {
   if (!address || address.trim().length === 0) {
-    return { valid: false, error: "Address is required" };
+    return { valid: false, error: 'Address is required' };
   }
 
   const trimmedAddress = address.trim();
 
   switch (cryptoType.toUpperCase()) {
-    case "BTC":
+    case 'BTC':
       if (!validateBTCAddress(trimmedAddress)) {
         return {
           valid: false,
-          error: "Invalid Bitcoin address. Must be a valid mainnet address (bc1... or 1... or 3...)",
+          error:
+            'Invalid Bitcoin address. Must be a valid mainnet address (bc1... or 1... or 3...)',
         };
       }
       break;
 
-    case "ETH":
+    case 'ETH':
       if (!validateETHAddress(trimmedAddress)) {
         return {
           valid: false,
-          error: "Invalid Ethereum address. Must be a valid 0x... address",
+          error: 'Invalid Ethereum address. Must be a valid 0x... address',
         };
       }
       break;
 
-    case "USDT":
+    case 'USDT':
       if (!validateUSDTAddress(trimmedAddress)) {
         return {
           valid: false,
-          error: "Invalid USDT address. Must be a valid ERC-20 (Ethereum) address",
+          error:
+            'Invalid USDT address. Must be a valid ERC-20 (Ethereum) address',
         };
       }
       break;
 
-    case "LTC":
+    case 'LTC':
       if (!validateLTCAddress(trimmedAddress)) {
         return {
           valid: false,
-          error: "Invalid Litecoin address. Must be a valid LTC address",
+          error: 'Invalid Litecoin address. Must be a valid LTC address',
         };
       }
       break;
@@ -92,15 +94,15 @@ export function validateCryptoAddress(
 
 export function getAddressFormat(cryptoType: string): string {
   switch (cryptoType.toUpperCase()) {
-    case "BTC":
-      return "Bitcoin address (bc1q... or 1... or 3...)";
-    case "ETH":
-      return "Ethereum address (0x...)";
-    case "USDT":
-      return "ERC-20 address (0x...)";
-    case "LTC":
-      return "Litecoin address (ltc1... or L... or M...)";
+    case 'BTC':
+      return 'Bitcoin address (bc1q... or 1... or 3...)';
+    case 'ETH':
+      return 'Ethereum address (0x...)';
+    case 'USDT':
+      return 'ERC-20 address (0x...)';
+    case 'LTC':
+      return 'Litecoin address (ltc1... or L... or M...)';
     default:
-      return "Cryptocurrency address";
+      return 'Cryptocurrency address';
   }
 }

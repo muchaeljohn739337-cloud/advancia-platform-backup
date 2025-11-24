@@ -121,7 +121,7 @@ describe("Auth Middleware Tests", () => {
     const validToken = jwt.sign(
       { userId: "user123", email: "test@example.com", role: "USER" },
       "test-jwt-secret-key-for-testing-only",
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     it("should allow request with valid Bearer token", () => {
@@ -164,7 +164,7 @@ describe("Auth Middleware Tests", () => {
       const expiredToken = jwt.sign(
         { userId: "user123", email: "test@example.com" },
         "test-jwt-secret-key-for-testing-only",
-        { expiresIn: "-1h" } // Already expired
+        { expiresIn: "-1h" }, // Already expired
       );
       mockReq.headers = { authorization: `Bearer ${expiredToken}` };
 
@@ -181,7 +181,7 @@ describe("Auth Middleware Tests", () => {
       const invalidToken = jwt.sign(
         { userId: "user123", email: "test@example.com" },
         "wrong-secret-key",
-        { expiresIn: "1h" }
+        { expiresIn: "1h" },
       );
       mockReq.headers = { authorization: `Bearer ${invalidToken}` };
 
@@ -215,7 +215,7 @@ describe("Auth Middleware Tests", () => {
           customField: "test",
         },
         "test-jwt-secret-key-for-testing-only",
-        { expiresIn: "1h" }
+        { expiresIn: "1h" },
       );
       mockReq.headers = { authorization: `Bearer ${tokenWithRole}` };
 
@@ -245,7 +245,7 @@ describe("Auth Middleware Tests", () => {
       const tokenWithDefaultSecret = jwt.sign(
         { userId: "user456", email: "user@example.com" },
         "test-jwt-secret-key-for-testing-only",
-        { expiresIn: "1h" }
+        { expiresIn: "1h" },
       );
       mockReq.headers = { authorization: `Bearer ${tokenWithDefaultSecret}` };
 
@@ -264,7 +264,7 @@ describe("Auth Middleware Tests", () => {
       const token = jwt.sign(
         { userId: "user789", email: "integrated@example.com" },
         "test-jwt-secret-key-for-testing-only",
-        { expiresIn: "1h" }
+        { expiresIn: "1h" },
       );
 
       mockReq.headers = {

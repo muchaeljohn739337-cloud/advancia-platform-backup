@@ -3,15 +3,15 @@
  * View audit logs for alert policy changes
  */
 
-import { Request, Router } from "express";
-import { AuthenticatedRequest, requireAdmin } from "../middleware/rbac";
+import { Request, Router } from 'express';
+import { AuthenticatedRequest, requireAdmin } from '../middleware/rbac';
 import {
   detectAnomalies,
   getAllAuditLogs,
   getPolicyAuditHistory,
   getUserAuditLogs,
-} from "../services/policyAuditService";
-import { captureError } from "../utils/sentry";
+} from '../services/policyAuditService';
+import { captureError } from '../utils/sentry';
 
 const router = Router();
 
@@ -22,7 +22,7 @@ type ReqWithParams = AuthenticatedRequest & Request;
  * GET /api/admin/policy-audit
  * Get all audit logs (most recent first)
  */
-router.get("/", requireAdmin, async (req: AuthenticatedRequest, res) => {
+router.get('/', requireAdmin, async (req: AuthenticatedRequest, res) => {
   try {
     const limit = parseInt((req as ReqWithParams).query.limit as string) || 500;
     const logs = await getAllAuditLogs(limit);
@@ -33,14 +33,14 @@ router.get("/", requireAdmin, async (req: AuthenticatedRequest, res) => {
       count: logs.length,
     });
   } catch (err) {
-    console.error("Failed to fetch audit logs:", err);
+    console.error('Failed to fetch audit logs:', err);
     captureError(err as Error, {
-      tags: { component: "policy-audit", operation: "fetch-all" },
+      tags: { component: 'policy-audit', operation: 'fetch-all' },
     });
 
     res.status(500).json({
       success: false,
-      error: "Failed to fetch audit logs",
+      error: 'Failed to fetch audit logs',
     });
   }
 });
@@ -50,7 +50,7 @@ router.get("/", requireAdmin, async (req: AuthenticatedRequest, res) => {
  * Get audit logs for a specific policy
  */
 router.get(
-  "/policy/:policyId",
+  '/policy/:policyId',
   requireAdmin,
   async (req: AuthenticatedRequest, res) => {
     try {
@@ -66,13 +66,13 @@ router.get(
         count: logs.length,
       });
     } catch (err) {
-      console.error("Failed to fetch policy audit logs:", err);
+      console.error('Failed to fetch policy audit logs:', err);
       res.status(500).json({
         success: false,
-        error: "Failed to fetch policy audit logs",
+        error: 'Failed to fetch policy audit logs',
       });
     }
-  }
+  },
 );
 
 /**
@@ -80,7 +80,7 @@ router.get(
  * Get audit logs for a specific user (track admin activity)
  */
 router.get(
-  "/user/:userId",
+  '/user/:userId',
   requireAdmin,
   async (req: AuthenticatedRequest, res) => {
     try {
@@ -96,13 +96,13 @@ router.get(
         count: logs.length,
       });
     } catch (err) {
-      console.error("Failed to fetch user audit logs:", err);
+      console.error('Failed to fetch user audit logs:', err);
       res.status(500).json({
         success: false,
-        error: "Failed to fetch user audit logs",
+        error: 'Failed to fetch user audit logs',
       });
     }
-  }
+  },
 );
 
 /**
@@ -110,7 +110,7 @@ router.get(
  * Detect suspicious patterns in audit logs
  */
 router.get(
-  "/anomalies",
+  '/anomalies',
   requireAdmin,
   async (req: AuthenticatedRequest, res) => {
     try {
@@ -125,13 +125,13 @@ router.get(
           anomalies.deletions.length > 0,
       });
     } catch (err) {
-      console.error("Failed to detect anomalies:", err);
+      console.error('Failed to detect anomalies:', err);
       res.status(500).json({
         success: false,
-        error: "Failed to detect anomalies",
+        error: 'Failed to detect anomalies',
       });
     }
-  }
+  },
 );
 
 /**
@@ -140,18 +140,18 @@ router.get(
  * Returns true if chain is intact, false if tampering detected
  */
 router.get(
-  "/verify-integrity",
+  '/verify-integrity',
   requireAdmin,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { verifyAuditLogIntegrity } = await import(
-        "../services/policyAuditService.js"
+        '../services/policyAuditService.js'
       );
       const result = await verifyAuditLogIntegrity();
 
       if (!result.valid) {
         // Critical: tampering detected
-        console.error("🚨 AUDIT LOG TAMPERING DETECTED:", result.errors);
+        console.error('🚨 AUDIT LOG TAMPERING DETECTED:', result.errors);
       }
 
       res.json({
@@ -160,17 +160,17 @@ router.get(
         totalEntries: result.totalEntries,
         errors: result.errors,
         message: result.valid
-          ? "Audit log integrity verified"
-          : "⚠️ TAMPERING DETECTED - audit log has been modified",
+          ? 'Audit log integrity verified'
+          : '⚠️ TAMPERING DETECTED - audit log has been modified',
       });
     } catch (err) {
-      console.error("Failed to verify audit integrity:", err);
+      console.error('Failed to verify audit integrity:', err);
       res.status(500).json({
         success: false,
-        error: "Failed to verify audit log integrity",
+        error: 'Failed to verify audit log integrity',
       });
     }
-  }
+  },
 );
 
 export default router;

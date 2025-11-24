@@ -18,22 +18,24 @@ router.post('/setup', async (req: Request, res: Response) => {
 
     // Check if 2FA already enabled
     const existing = await prisma.twoFactorAuth.findUnique({
-      where: { userId }
+      where: { userId },
     });
 
     if (existing && existing.enabled) {
-      return res.status(400).json({ error: '2FA already enabled for this user' });
+      return res
+        .status(400)
+        .json({ error: '2FA already enabled for this user' });
     }
 
     // Generate secret
     const secret = speakeasy.generateSecret({
       name: `Advancia Pay Ledger (${userId})`,
-      length: 32
+      length: 32,
     });
 
     // Generate backup codes (10 codes)
     const backupCodes = Array.from({ length: 10 }, () =>
-      crypto.randomBytes(4).toString('hex').toUpperCase()
+      crypto.randomBytes(4).toString('hex').toUpperCase(),
     );
 
     // Save or update 2FA record
@@ -43,12 +45,12 @@ router.post('/setup', async (req: Request, res: Response) => {
         userId,
         secret: secret.base32,
         enabled: false,
-        backupCodes
+        backupCodes,
       },
       update: {
         secret: secret.base32,
-        backupCodes
-      }
+        backupCodes,
+      },
     });
 
     // Generate QR code
@@ -59,7 +61,7 @@ router.post('/setup', async (req: Request, res: Response) => {
       secret: secret.base32,
       qrCode: qrCodeUrl,
       backupCodes,
-      message: 'Scan QR code with your authenticator app'
+      message: 'Scan QR code with your authenticator app',
     });
   } catch (error) {
     console.error('Error setting up 2FA:', error);
@@ -77,7 +79,7 @@ router.post('/verify', async (req: Request, res: Response) => {
     }
 
     const twoFactorAuth = await prisma.twoFactorAuth.findUnique({
-      where: { userId }
+      where: { userId },
     });
 
     if (!twoFactorAuth) {
@@ -89,7 +91,7 @@ router.post('/verify', async (req: Request, res: Response) => {
       secret: twoFactorAuth.secret,
       encoding: 'base32',
       token,
-      window: 2 // Allow 2 time steps (60 seconds) tolerance
+      window: 2, // Allow 2 time steps (60 seconds) tolerance
     });
 
     if (!verified) {
@@ -99,12 +101,12 @@ router.post('/verify', async (req: Request, res: Response) => {
     // Enable 2FA
     await prisma.twoFactorAuth.update({
       where: { userId },
-      data: { enabled: true }
+      data: { enabled: true },
     });
 
     res.json({
       success: true,
-      message: '2FA enabled successfully'
+      message: '2FA enabled successfully',
     });
   } catch (error) {
     console.error('Error verifying 2FA:', error);
@@ -122,7 +124,7 @@ router.post('/validate', async (req: Request, res: Response) => {
     }
 
     const twoFactorAuth = await prisma.twoFactorAuth.findUnique({
-      where: { userId }
+      where: { userId },
     });
 
     if (!twoFactorAuth || !twoFactorAuth.enabled) {
@@ -133,18 +135,18 @@ router.post('/validate', async (req: Request, res: Response) => {
     if (twoFactorAuth.backupCodes.includes(token.toUpperCase())) {
       // Remove used backup code
       const updatedCodes = twoFactorAuth.backupCodes.filter(
-        code => code !== token.toUpperCase()
+        (code) => code !== token.toUpperCase(),
       );
 
       await prisma.twoFactorAuth.update({
         where: { userId },
-        data: { backupCodes: updatedCodes }
+        data: { backupCodes: updatedCodes },
       });
 
       return res.json({
         success: true,
         method: 'backup_code',
-        message: 'Backup code accepted. Please generate new backup codes.'
+        message: 'Backup code accepted. Please generate new backup codes.',
       });
     }
 
@@ -153,7 +155,7 @@ router.post('/validate', async (req: Request, res: Response) => {
       secret: twoFactorAuth.secret,
       encoding: 'base32',
       token,
-      window: 2
+      window: 2,
     });
 
     if (!verified) {
@@ -163,7 +165,7 @@ router.post('/validate', async (req: Request, res: Response) => {
     res.json({
       success: true,
       method: 'totp',
-      message: '2FA validation successful'
+      message: '2FA validation successful',
     });
   } catch (error) {
     console.error('Error validating 2FA:', error);
@@ -182,7 +184,7 @@ router.post('/disable', async (req: Request, res: Response) => {
 
     // Verify password before disabling
     const user = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!user) {
@@ -197,12 +199,12 @@ router.post('/disable', async (req: Request, res: Response) => {
     // Disable 2FA
     await prisma.twoFactorAuth.update({
       where: { userId },
-      data: { enabled: false }
+      data: { enabled: false },
     });
 
     res.json({
       success: true,
-      message: '2FA disabled successfully'
+      message: '2FA disabled successfully',
     });
   } catch (error) {
     console.error('Error disabling 2FA:', error);
@@ -219,20 +221,20 @@ router.get('/status/:userId', async (req: Request, res: Response) => {
       where: { userId },
       select: {
         enabled: true,
-        backupCodes: true
-      }
+        backupCodes: true,
+      },
     });
 
     if (!twoFactorAuth) {
       return res.json({
         enabled: false,
-        backupCodesRemaining: 0
+        backupCodesRemaining: 0,
       });
     }
 
     res.json({
       enabled: twoFactorAuth.enabled,
-      backupCodesRemaining: twoFactorAuth.backupCodes.length
+      backupCodesRemaining: twoFactorAuth.backupCodes.length,
     });
   } catch (error) {
     console.error('Error checking 2FA status:', error);
@@ -250,7 +252,7 @@ router.post('/regenerate-backup-codes', async (req: Request, res: Response) => {
     }
 
     const twoFactorAuth = await prisma.twoFactorAuth.findUnique({
-      where: { userId }
+      where: { userId },
     });
 
     if (!twoFactorAuth || !twoFactorAuth.enabled) {
@@ -259,18 +261,18 @@ router.post('/regenerate-backup-codes', async (req: Request, res: Response) => {
 
     // Generate new backup codes
     const backupCodes = Array.from({ length: 10 }, () =>
-      crypto.randomBytes(4).toString('hex').toUpperCase()
+      crypto.randomBytes(4).toString('hex').toUpperCase(),
     );
 
     await prisma.twoFactorAuth.update({
       where: { userId },
-      data: { backupCodes }
+      data: { backupCodes },
     });
 
     res.json({
       success: true,
       backupCodes,
-      message: 'New backup codes generated. Save them securely!'
+      message: 'New backup codes generated. Save them securely!',
     });
   } catch (error) {
     console.error('Error regenerating backup codes:', error);

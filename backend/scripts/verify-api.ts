@@ -47,7 +47,7 @@ class APIVerifier {
 
     if (this.failed > 0) {
       console.error(
-        "\n❌ API VERIFICATION FAILED - Make sure backend is running"
+        "\n❌ API VERIFICATION FAILED - Make sure backend is running",
       );
       process.exit(1);
     }
@@ -72,17 +72,17 @@ class APIVerifier {
 
       if (response.status === test.expectedStatus) {
         console.log(
-          `  ✅ Status: ${response.status} (expected ${test.expectedStatus})`
+          `  ✅ Status: ${response.status} (expected ${test.expectedStatus})`,
         );
         this.passed++;
       } else {
         console.error(
-          `  ❌ Status: ${response.status} (expected ${test.expectedStatus})`
+          `  ❌ Status: ${response.status} (expected ${test.expectedStatus})`,
         );
         if (response.data) {
           console.error(
             `  Response:`,
-            JSON.stringify(response.data).substring(0, 200)
+            JSON.stringify(response.data).substring(0, 200),
           );
         }
         this.failed++;

@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { authenticateToken } from "../middleware/auth";
+import { Router } from 'express';
+import { authenticateToken } from '../middleware/auth';
 import {
   deleteObject,
   initR2Client,
   signedUrl,
   uploadObject,
-} from "../services/r2StorageService";
+} from '../services/r2StorageService';
 
 // Initialize R2 client once (safe if env vars present)
 try {
@@ -17,15 +17,15 @@ try {
 const router = Router();
 
 // Upload object (expects JSON: { key, dataBase64, contentType })
-router.post("/upload", authenticateToken, async (req, res) => {
+router.post('/upload', authenticateToken, async (req, res) => {
   const { key, dataBase64, contentType } = req.body || {};
   if (!key || !dataBase64) {
     return res
       .status(400)
-      .json({ success: false, error: "key and dataBase64 required" });
+      .json({ success: false, error: 'key and dataBase64 required' });
   }
   try {
-    const buffer = Buffer.from(dataBase64, "base64");
+    const buffer = Buffer.from(dataBase64, 'base64');
     const result = await uploadObject(key, buffer, contentType);
     return res.json({
       success: true,
@@ -38,12 +38,12 @@ router.post("/upload", authenticateToken, async (req, res) => {
 });
 
 // Generate signed URL for GET
-router.get("/signed-url", authenticateToken, async (req, res) => {
+router.get('/signed-url', authenticateToken, async (req, res) => {
   const { key, expires } = req.query as { key?: string; expires?: string };
   if (!key)
     return res
       .status(400)
-      .json({ success: false, error: "key query param required" });
+      .json({ success: false, error: 'key query param required' });
   try {
     const url = await signedUrl(key, expires ? parseInt(expires, 10) : 3600);
     return res.json({
@@ -58,12 +58,12 @@ router.get("/signed-url", authenticateToken, async (req, res) => {
 });
 
 // Delete object
-router.delete("/:key", authenticateToken, async (req, res) => {
+router.delete('/:key', authenticateToken, async (req, res) => {
   const { key } = req.params;
   if (!key)
     return res
       .status(400)
-      .json({ success: false, error: "key param required" });
+      .json({ success: false, error: 'key param required' });
   try {
     const result = await deleteObject(key);
     return res.json({

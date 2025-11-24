@@ -124,7 +124,7 @@ router.post(
       console.error("Cryptomus create invoice error:", error);
       return res.status(500).json({ error: "Internal server error" });
     }
-  }
+  },
 );
 
 /**
@@ -292,7 +292,7 @@ router.post("/webhook", async (req, res) => {
       await creditUserCryptoWallet(
         existingPayment.user_id,
         paymentAmount,
-        currency.toUpperCase()
+        currency.toUpperCase(),
       );
 
       // Emit real-time notification
@@ -304,7 +304,7 @@ router.post("/webhook", async (req, res) => {
       });
 
       console.log(
-        `✅ Cryptomus payment processed: ${paymentAmount} ${currency} for user ${existingPayment.user_id}`
+        `✅ Cryptomus payment processed: ${paymentAmount} ${currency} for user ${existingPayment.user_id}`,
       );
 
       return res

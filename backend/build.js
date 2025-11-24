@@ -8,7 +8,7 @@ const path = require("path");
 
 console.log("Starting TypeScript compilation...");
 console.log(
-  "Note: Type errors will be reported but compilation will proceed\n"
+  "Note: Type errors will be reported but compilation will proceed\n",
 );
 
 const tscPath = path.join(__dirname, "node_modules", ".bin", "tsc");

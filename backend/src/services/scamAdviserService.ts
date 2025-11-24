@@ -1,5 +1,5 @@
-import https from "https";
-import { performance } from "perf_hooks";
+import https from 'https';
+import { performance } from 'perf_hooks';
 
 /**
  * Interface for Scam Adviser API response
@@ -23,7 +23,7 @@ export interface TrustReport {
   scamAdviserScore: number;
   sslValid: boolean;
   verifiedBusiness: boolean;
-  status: "pending" | "verified" | "suspicious" | "high-risk";
+  status: 'pending' | 'verified' | 'suspicious' | 'high-risk';
   domainAgeMonths: number;
   lastChecked: string;
 }
@@ -84,7 +84,7 @@ export class ScamAdviserService {
       return report;
     } catch (error) {
       console.error(`Error getting trust report for ${domain}:`, error);
-      throw new Error("Failed to retrieve trust report");
+      throw new Error('Failed to retrieve trust report');
     }
   }
 
@@ -98,7 +98,7 @@ export class ScamAdviserService {
     const sslValid = await this.withTimeout<boolean>(
       this.checkSSL(domain),
       5000,
-      false
+      false,
     );
 
     // Simulate domain age calculation
@@ -145,7 +145,7 @@ export class ScamAdviserService {
         const options = {
           hostname: domain,
           port: 443,
-          method: "HEAD",
+          method: 'HEAD',
           timeout: 5000,
           rejectUnauthorized: true, // This will fail if SSL is invalid
         };
@@ -154,8 +154,8 @@ export class ScamAdviserService {
           resolve(res.statusCode !== undefined && res.statusCode < 500);
         });
 
-        req.on("error", () => resolve(false));
-        req.on("timeout", () => {
+        req.on('error', () => resolve(false));
+        req.on('timeout', () => {
           req.destroy();
           resolve(false);
         });
@@ -173,11 +173,11 @@ export class ScamAdviserService {
   private estimateDomainAge(domain: string): number {
     // This is a simplified estimation - in production you'd use WHOIS data
     const domainHashes = {
-      "google.com": 300,
-      "microsoft.com": 360,
-      "github.com": 200,
-      "stackoverflow.com": 180,
-      "example.com": 240,
+      'google.com': 300,
+      'microsoft.com': 360,
+      'github.com': 200,
+      'stackoverflow.com': 180,
+      'example.com': 240,
     };
 
     // Check if it's a known domain
@@ -202,28 +202,29 @@ export class ScamAdviserService {
    */
   private isKnownSafeDomain(domain: string): boolean {
     const safeDomains = [
-      "google.com",
-      "microsoft.com",
-      "github.com",
-      "stackoverflow.com",
-      "mozilla.org",
-      "w3.org",
-      "example.com",
+      'google.com',
+      'microsoft.com',
+      'github.com',
+      'stackoverflow.com',
+      'mozilla.org',
+      'w3.org',
+      'example.com',
     ];
 
     return safeDomains.some(
-      (safeDomain) => domain === safeDomain || domain.endsWith(`.${safeDomain}`)
+      (safeDomain) =>
+        domain === safeDomain || domain.endsWith(`.${safeDomain}`),
     );
   }
 
   /**
    * Determine status based on score
    */
-  private determineStatus(score: number): TrustReport["status"] {
-    if (score >= 85) return "verified";
-    if (score >= 70) return "pending";
-    if (score >= 50) return "suspicious";
-    return "high-risk";
+  private determineStatus(score: number): TrustReport['status'] {
+    if (score >= 85) return 'verified';
+    if (score >= 70) return 'pending';
+    if (score >= 50) return 'suspicious';
+    return 'high-risk';
   }
 
   /**
@@ -265,7 +266,7 @@ export class ScamAdviserService {
     try {
       const cacheHit = this.cache.has(domain);
       console.log(
-        `[trust] domain=${domain} score=${report.scamAdviserScore} status=${report.status} ageMonths=${report.domainAgeMonths} ssl=${report.sslValid} verified=${report.verifiedBusiness} cacheHit=${cacheHit}`
+        `[trust] domain=${domain} score=${report.scamAdviserScore} status=${report.status} ageMonths=${report.domainAgeMonths} ssl=${report.sslValid} verified=${report.verifiedBusiness} cacheHit=${cacheHit}`,
       );
     } catch {}
   }

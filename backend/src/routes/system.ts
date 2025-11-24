@@ -1,10 +1,10 @@
-import express from "express";
-import { config } from "../jobs/config/index";
+import express from 'express';
+import { config } from '../jobs/config/index';
 
 const router = express.Router();
 
 // GET /api/system/cors-origins - returns computed allowed CORS origins
-router.get("/cors-origins", (req, res) => {
+router.get('/cors-origins', (req, res) => {
   return res.json({
     allowedOrigins: config.allowedOrigins,
     count: config.allowedOrigins.length,
@@ -13,10 +13,10 @@ router.get("/cors-origins", (req, res) => {
 });
 
 // Simple health extension (optional)
-router.get("/health", (req, res) => {
+router.get('/health', (req, res) => {
   res.json({
-    status: "ok",
-    service: "system",
+    status: 'ok',
+    service: 'system',
     time: new Date().toISOString(),
   });
 });

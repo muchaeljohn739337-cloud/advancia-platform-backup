@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   logger.info(`Backend server started on port ${port}`, {
     port,
-    env: process.env.NODE_ENV || 'development'
+    env: process.env.NODE_ENV || 'development',
   });
   console.log(`Backend running at http://localhost:${port}`);
 });

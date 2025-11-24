@@ -51,14 +51,16 @@ router.post('/send', async (req: Request, res: Response) => {
         providerId: result.id,
         error: result.error,
         sentAt: result.success ? new Date() : null,
-        metadata: data
-      }
+        metadata: data,
+      },
     });
 
     res.json({
       success: result.success,
-      message: result.success ? 'Email sent successfully' : 'Email failed to send',
-      error: result.error
+      message: result.success
+        ? 'Email sent successfully'
+        : 'Email failed to send',
+      error: result.error,
     });
   } catch (error) {
     console.error('Error sending email:', error);
@@ -79,10 +81,10 @@ router.get('/logs/:userId', async (req: Request, res: Response) => {
     const logs = await prisma.email_logs.findMany({
       where,
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       take: Number(limit),
-      skip: Number(offset)
+      skip: Number(offset),
     });
 
     const total = await prisma.email_logs.count({ where });
@@ -91,7 +93,7 @@ router.get('/logs/:userId', async (req: Request, res: Response) => {
       logs,
       total,
       limit: Number(limit),
-      offset: Number(offset)
+      offset: Number(offset),
     });
   } catch (error) {
     console.error('Error fetching email logs:', error);
@@ -103,20 +105,25 @@ router.get('/logs/:userId', async (req: Request, res: Response) => {
 router.get('/stats', async (req: Request, res: Response) => {
   try {
     const totalEmails = await prisma.email_logs.count();
-    const sentEmails = await prisma.email_logs.count({ where: { status: 'sent' } });
-    const failedEmails = await prisma.email_logs.count({ where: { status: 'failed' } });
+    const sentEmails = await prisma.email_logs.count({
+      where: { status: 'sent' },
+    });
+    const failedEmails = await prisma.email_logs.count({
+      where: { status: 'failed' },
+    });
 
     const emailsByTemplate = await prisma.email_logs.groupBy({
       by: ['template'],
-      _count: true
+      _count: true,
     });
 
     res.json({
       totalEmails,
       sentEmails,
       failedEmails,
-      deliveryRate: totalEmails > 0 ? ((sentEmails / totalEmails) * 100).toFixed(2) : 0,
-      byTemplate: emailsByTemplate
+      deliveryRate:
+        totalEmails > 0 ? ((sentEmails / totalEmails) * 100).toFixed(2) : 0,
+      byTemplate: emailsByTemplate,
     });
   } catch (error) {
     console.error('Error fetching email stats:', error);

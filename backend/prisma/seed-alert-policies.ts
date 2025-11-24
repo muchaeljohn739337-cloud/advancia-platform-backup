@@ -122,7 +122,7 @@ async function main() {
   }
 
   console.log(
-    `\n🎉 Done! ${created} policies created, ${updated} policies updated.`
+    `\n🎉 Done! ${created} policies created, ${updated} policies updated.`,
   );
 }
 

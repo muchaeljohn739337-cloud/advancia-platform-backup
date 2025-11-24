@@ -44,7 +44,7 @@ router.post(
       logger.error("Bulk activate users error:", error);
       res.status(500).json({ error: "Failed to activate users" });
     }
-  }
+  },
 );
 
 /**
@@ -93,7 +93,7 @@ router.post(
       logger.error("Bulk delete users error:", error);
       res.status(500).json({ error: "Failed to delete users" });
     }
-  }
+  },
 );
 
 /**
@@ -133,7 +133,7 @@ router.post(
       logger.error("Bulk assign role error:", error);
       res.status(500).json({ error: "Failed to assign roles" });
     }
-  }
+  },
 );
 
 /**
@@ -191,7 +191,7 @@ router.post(
       logger.error("Bulk send email error:", error);
       res.status(500).json({ error: "Failed to send emails" });
     }
-  }
+  },
 );
 
 /**
@@ -275,7 +275,7 @@ router.post(
       logger.error("Bulk adjust balance error:", error);
       res.status(500).json({ error: "Failed to adjust balances" });
     }
-  }
+  },
 );
 
 /**
@@ -311,7 +311,7 @@ router.post(
       logger.error("Bulk verify email error:", error);
       res.status(500).json({ error: "Failed to verify emails" });
     }
-  }
+  },
 );
 
 /**
@@ -394,7 +394,7 @@ router.post(
       logger.error("Bulk export users error:", error);
       res.status(500).json({ error: "Failed to export users" });
     }
-  }
+  },
 );
 
 /**
@@ -433,7 +433,7 @@ router.post(
               expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
             },
           });
-        })
+        }),
       );
 
       res.json({
@@ -445,7 +445,7 @@ router.post(
       logger.error("Bulk reset password error:", error);
       res.status(500).json({ error: "Failed to create reset requests" });
     }
-  }
+  },
 );
 
 /**
@@ -486,7 +486,7 @@ router.post(
       logger.error("Bulk enable GPT-5 error:", error);
       res.status(500).json({ error: "Failed to update GPT-5 access" });
     }
-  }
+  },
 );
 
 export default router;

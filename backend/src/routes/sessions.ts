@@ -1,8 +1,8 @@
-import express from "express";
-import jwt from "jsonwebtoken";
-import { requireAdmin } from "../middleware/adminAuth";
-import { activeSessions } from "./authAdmin";
-import { sendAlert } from "../utils/mailer";
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import { requireAdmin } from '../middleware/adminAuth';
+import { activeSessions } from './authAdmin';
+import { sendAlert } from '../utils/mailer';
 
 const router = express.Router();
 
@@ -19,29 +19,29 @@ export function revokeSession(token: string) {
 }
 
 // GET /api/sessions - Get all active sessions
-router.get("/", requireAdmin, (req, res) => {
+router.get('/', requireAdmin, (req, res) => {
   res.json({ sessions: activeSessions });
 });
 
 // POST /api/sessions/revoke - Revoke specific session
-router.post("/revoke", requireAdmin, async (req, res) => {
+router.post('/revoke', requireAdmin, async (req, res) => {
   const { token } = req.body;
   if (!token || !activeSessions[token]) {
-    return res.status(404).json({ error: "Session not found" });
+    return res.status(404).json({ error: 'Session not found' });
   }
 
   try {
     const info: any = jwt.decode(token);
     await sendAlert(
-      "⚠ Advancia: Admin Session Revoked",
+      '⚠ Advancia: Admin Session Revoked',
       `Revoked session for: ${
-        info?.email || "unknown"
-      }\nTime: ${new Date().toISOString()}`
+        info?.email || 'unknown'
+      }\nTime: ${new Date().toISOString()}`,
     );
   } catch {}
 
   revokeSession(token);
-  res.json({ message: "Session revoked successfully" });
+  res.json({ message: 'Session revoked successfully' });
 });
 
 // Clean up expired sessions periodically

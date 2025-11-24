@@ -1,6 +1,6 @@
 /**
  * Example: Standalone Express App with Logger & Email Templates
- * 
+ *
  * This demonstrates a clean Express server setup with:
  * - Winston logging middleware
  * - Email templates with XSS protection
@@ -22,7 +22,7 @@ const corsOptions = {
   origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'x-admin-key']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'x-admin-key'],
 };
 
 app.use(cors(corsOptions));
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
       path: req.path,
       status: res.statusCode,
       duration: `${duration}ms`,
-      ip: req.ip
+      ip: req.ip,
     });
   });
   next();
@@ -59,7 +59,7 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
-    service: 'backend-api'
+    service: 'backend-api',
   });
 });
 
@@ -68,7 +68,7 @@ app.get('/api/health', (req, res) => {
  */
 app.post('/api/send-welcome-email', (req, res) => {
   const { name, email } = req.body;
-  
+
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required' });
   }
@@ -76,17 +76,21 @@ app.post('/api/send-welcome-email', (req, res) => {
   try {
     // Generate email HTML
     const emailHTML = emailTemplates.welcome(name);
-    
+
     // In production, use nodemailer or email service here
     logger.info('Welcome email generated', { name, email });
-    
+
     res.json({
       success: true,
       message: 'Welcome email sent',
-      preview: emailHTML.substring(0, 200) + '...'
+      preview: emailHTML.substring(0, 200) + '...',
     });
   } catch (error: any) {
-    logger.error('Failed to send welcome email', { error: error.message, name, email });
+    logger.error('Failed to send welcome email', {
+      error: error.message,
+      name,
+      email,
+    });
     res.status(500).json({ error: 'Failed to send email' });
   }
 });
@@ -96,23 +100,29 @@ app.post('/api/send-welcome-email', (req, res) => {
  */
 app.post('/api/send-reset-email', (req, res) => {
   const { name, email, resetLink } = req.body;
-  
+
   if (!name || !email || !resetLink) {
-    return res.status(400).json({ error: 'Name, email, and resetLink are required' });
+    return res
+      .status(400)
+      .json({ error: 'Name, email, and resetLink are required' });
   }
 
   try {
     const emailHTML = emailTemplates.passwordReset(name, resetLink, '1 hour');
-    
+
     logger.info('Password reset email generated', { name, email });
-    
+
     res.json({
       success: true,
       message: 'Password reset email sent',
-      preview: emailHTML.substring(0, 200) + '...'
+      preview: emailHTML.substring(0, 200) + '...',
     });
   } catch (error: any) {
-    logger.error('Failed to send reset email', { error: error.message, name, email });
+    logger.error('Failed to send reset email', {
+      error: error.message,
+      name,
+      email,
+    });
     res.status(500).json({ error: 'Failed to send email' });
   }
 });
@@ -122,28 +132,34 @@ app.post('/api/send-reset-email', (req, res) => {
  */
 app.post('/api/send-transaction-alert', (req, res) => {
   const { name, email, transaction } = req.body;
-  
+
   if (!name || !email || !transaction) {
-    return res.status(400).json({ error: 'Name, email, and transaction are required' });
+    return res
+      .status(400)
+      .json({ error: 'Name, email, and transaction are required' });
   }
 
   try {
     const emailHTML = emailTemplates.transactionAlert(name, transaction);
-    
-    logger.info('Transaction alert generated', { 
-      name, 
-      email, 
+
+    logger.info('Transaction alert generated', {
+      name,
+      email,
       transactionType: transaction.type,
-      amount: transaction.amount 
+      amount: transaction.amount,
     });
-    
+
     res.json({
       success: true,
       message: 'Transaction alert sent',
-      preview: emailHTML.substring(0, 200) + '...'
+      preview: emailHTML.substring(0, 200) + '...',
     });
   } catch (error: any) {
-    logger.error('Failed to send transaction alert', { error: error.message, name, email });
+    logger.error('Failed to send transaction alert', {
+      error: error.message,
+      name,
+      email,
+    });
     res.status(500).json({ error: 'Failed to send alert' });
   }
 });
@@ -155,7 +171,7 @@ app.post('/api/send-transaction-alert', (req, res) => {
 // import authRoutes from './routes/auth';
 // import paymentsRoutes from './routes/payments';
 // import transactionsRoutes from './routes/transactions';
-// 
+//
 // app.use('/api/auth', authRoutes);
 // app.use('/api/payments', paymentsRoutes);
 // app.use('/api/transactions', transactionsRoutes);
@@ -175,18 +191,25 @@ app.use((req, res) => {
 /**
  * Global error handler - must be last middleware
  */
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  logger.error('Unhandled error', { 
-    error: err.message, 
-    stack: err.stack, 
-    path: req.path,
-    method: req.method
-  });
-  
-  res.status(500).json({
-    error: 'Something went wrong!',
-    details: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
-});
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    logger.error('Unhandled error', {
+      error: err.message,
+      stack: err.stack,
+      path: req.path,
+      method: req.method,
+    });
+
+    res.status(500).json({
+      error: 'Something went wrong!',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    });
+  },
+);
 
 export default app;

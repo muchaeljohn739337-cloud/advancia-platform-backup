@@ -43,7 +43,7 @@ export class TrustpilotCollector {
    */
   async fetchReviews(
     page = 1,
-    perPage = 20
+    perPage = 20,
   ): Promise<TrustpilotResponse | null> {
     if (!this.apiKey || !this.businessUnitId) {
       logger.error("❌ Trustpilot API credentials missing");
@@ -63,7 +63,7 @@ export class TrustpilotCollector {
             stars: "5", // Only fetch 5-star reviews (best positive feedback)
             orderBy: "createdat.desc",
           },
-        }
+        },
       );
 
       return response.data;
@@ -145,7 +145,7 @@ export class TrustpilotCollector {
       }
 
       logger.info(
-        `✅ Trustpilot sync complete: ${synced} synced, ${errors} errors`
+        `✅ Trustpilot sync complete: ${synced} synced, ${errors} errors`,
       );
 
       // Log sync activity
@@ -205,7 +205,7 @@ export class TrustpilotCollector {
   private async logSyncActivity(
     synced: number,
     errors: number,
-    totalReviews: number
+    totalReviews: number,
   ): Promise<void> {
     try {
       await prisma.auditLog.create({

@@ -67,7 +67,7 @@ function validateEnvironment() {
   for (const file of requiredFiles) {
     if (!fs.existsSync(file)) {
       throw new Error(
-        `Required file not found: ${file}. Please run from backend directory.`
+        `Required file not found: ${file}. Please run from backend directory.`,
       );
     }
   }
@@ -182,7 +182,7 @@ async function setupTestDatabase() {
       console.log("✅ Docker is available");
     } catch (error) {
       console.error(
-        "❌ Docker not found. Install with: winget install Docker.DockerDesktop"
+        "❌ Docker not found. Install with: winget install Docker.DockerDesktop",
       );
       console.error("💡 Or use CI environment with PostgreSQL");
       process.exit(1);
@@ -209,10 +209,10 @@ async function setupTestDatabase() {
       }
 
       console.log(
-        `🚀 Starting PostgreSQL container on port ${CONFIG.POSTGRES_PORT}...`
+        `🚀 Starting PostgreSQL container on port ${CONFIG.POSTGRES_PORT}...`,
       );
       execCommand(
-        `docker run -d --name ${CONFIG.CONTAINER_NAME} -p ${CONFIG.POSTGRES_PORT}:5432 -e POSTGRES_PASSWORD=${CONFIG.POSTGRES_PASSWORD} -e POSTGRES_DB=${CONFIG.POSTGRES_DB} postgres:15-alpine`
+        `docker run -d --name ${CONFIG.CONTAINER_NAME} -p ${CONFIG.POSTGRES_PORT}:5432 -e POSTGRES_PASSWORD=${CONFIG.POSTGRES_PASSWORD} -e POSTGRES_DB=${CONFIG.POSTGRES_DB} postgres:15-alpine`,
       );
 
       // Wait for PostgreSQL to be ready with better feedback
@@ -286,11 +286,11 @@ async function setupTestDatabase() {
 
     console.log("\n🌐 Frontend Integration Tips:");
     console.log(
-      "   • Add to frontend .env.local: NEXT_PUBLIC_API_URL=http://localhost:4000"
+      "   • Add to frontend .env.local: NEXT_PUBLIC_API_URL=http://localhost:4000",
     );
     console.log("   • Ensure CORS origins include your frontend URL");
     console.log(
-      "   • Socket.IO client should connect to: http://localhost:4000"
+      "   • Socket.IO client should connect to: http://localhost:4000",
     );
   } catch (error) {
     console.error("❌ Database setup failed:", error.message);
@@ -298,7 +298,7 @@ async function setupTestDatabase() {
     if (error.message.includes("Docker")) {
       console.log("\n🔧 Docker Troubleshooting:");
       console.log(
-        "   • Install Docker Desktop: https://www.docker.com/products/docker-desktop/"
+        "   • Install Docker Desktop: https://www.docker.com/products/docker-desktop/",
       );
       console.log("   • Verify Docker is running: docker --version");
       console.log("   • Check Docker daemon: docker ps");
@@ -315,7 +315,7 @@ async function setupTestDatabase() {
       console.log("\n🔧 Port Troubleshooting:");
       console.log("   • Check port usage: netstat -an | findstr :5433");
       console.log(
-        "   • Stop conflicting containers: docker stop postgres-test"
+        "   • Stop conflicting containers: docker stop postgres-test",
       );
       console.log("   • Use different port: Set POSTGRES_PORT in .env.test");
     }
@@ -326,7 +326,7 @@ async function setupTestDatabase() {
     ) {
       console.log("\n🔧 Connection Troubleshooting:");
       console.log(
-        "   • Wait longer for PostgreSQL: Increase POSTGRES_TIMEOUT in CONFIG"
+        "   • Wait longer for PostgreSQL: Increase POSTGRES_TIMEOUT in CONFIG",
       );
       console.log("   • Check container logs: docker logs postgres-test");
       console.log("   • Verify network: docker network ls");
@@ -336,19 +336,19 @@ async function setupTestDatabase() {
     console.log("   • Check logs: docker logs postgres-test");
     console.log("   • Database status: docker ps -a");
     console.log(
-      "   • Full cleanup: docker rm -f postgres-test && npm run setup:test-db"
+      "   • Full cleanup: docker rm -f postgres-test && npm run setup:test-db",
     );
     console.log(
-      "   • Manual connection: docker exec -it postgres-test psql -U postgres -d advancia_payledger_test"
+      "   • Manual connection: docker exec -it postgres-test psql -U postgres -d advancia_payledger_test",
     );
 
     console.log("\n🚀 Alternative Setup:");
     console.log(
-      "   • Use CI/CD database: Set DATABASE_URL for external PostgreSQL"
+      "   • Use CI/CD database: Set DATABASE_URL for external PostgreSQL",
     );
     console.log("   • Use SQLite: Update schema.prisma provider to 'sqlite'");
     console.log(
-      "   • Docker Compose: docker-compose -f docker-compose.dev-db.yml up"
+      "   • Docker Compose: docker-compose -f docker-compose.dev-db.yml up",
     );
 
     process.exit(1);

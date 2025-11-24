@@ -69,7 +69,7 @@ router.post("/generate/:currency", authenticateToken, async (req, res) => {
 
     const wallet = await generateUserWallet(
       userId,
-      currency.toUpperCase() as "BTC" | "ETH" | "USDT"
+      currency.toUpperCase() as "BTC" | "ETH" | "USDT",
     );
 
     res.json({
@@ -137,7 +137,7 @@ router.post("/rotate/:currency", authenticateToken, async (req, res) => {
     const result = await rotateUserWallet(
       userId,
       currency.toUpperCase() as "BTC" | "ETH" | "USDT",
-      reason
+      reason,
     );
 
     res.json({
@@ -249,7 +249,7 @@ router.post(
         error: "Failed to generate master seed",
       });
     }
-  }
+  },
 );
 
 /**
@@ -297,7 +297,7 @@ router.post(
         error: error.message || "Failed to initialize wallets",
       });
     }
-  }
+  },
 );
 
 export default router;

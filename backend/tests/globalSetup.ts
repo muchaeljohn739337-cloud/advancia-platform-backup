@@ -19,11 +19,7 @@ export default async () => {
 
   console.log("Cleaning test database...");
   const prisma = new PrismaClient({
-    datasources: {
-      db: {
-        url: testDbUrl,
-      },
-    },
+    datasourceUrl: testDbUrl,
   });
 
   try {

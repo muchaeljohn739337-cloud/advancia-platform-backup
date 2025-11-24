@@ -1,12 +1,12 @@
-import { Server as HTTPServer } from "http";
-import { Server as SocketIOServer } from "socket.io";
-import prisma from "../prismaClient";
+import { Server as HTTPServer } from 'http';
+import { Server as SocketIOServer } from 'socket.io';
+import prisma from '../prismaClient';
 
 let isShuttingDown = false;
 
 export function setupGracefulShutdown(
   server: HTTPServer,
-  io: SocketIOServer
+  io: SocketIOServer,
 ): void {
   const shutdown = async (signal: string) => {
     if (isShuttingDown) {
@@ -19,15 +19,15 @@ export function setupGracefulShutdown(
 
     // Stop accepting new connections
     server.close(() => {
-      console.log("[SHUTDOWN] HTTP server closed");
+      console.log('[SHUTDOWN] HTTP server closed');
     });
 
     // Give existing requests 15 seconds to complete
     const shutdownTimeout = setTimeout(() => {
-      console.error("[SHUTDOWN] Forcing shutdown after timeout");
-      if (process.env.DIAG_INTERCEPT_EXIT === "1") {
+      console.error('[SHUTDOWN] Forcing shutdown after timeout');
+      if (process.env.DIAG_INTERCEPT_EXIT === '1') {
         throw new Error(
-          "[EXIT_INTERCEPT] gracefulShutdown timeout (force exit 1)"
+          '[EXIT_INTERCEPT] gracefulShutdown timeout (force exit 1)',
         );
       }
       process.exit(1);
@@ -35,75 +35,75 @@ export function setupGracefulShutdown(
 
     try {
       // Disconnect all socket connections gracefully
-      console.log("[SHUTDOWN] Closing WebSocket connections...");
-      io.emit("server-shutdown", {
-        message: "Server is restarting. Please refresh in a moment.",
+      console.log('[SHUTDOWN] Closing WebSocket connections...');
+      io.emit('server-shutdown', {
+        message: 'Server is restarting. Please refresh in a moment.',
       });
 
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for messages to send
       io.close(() => {
-        console.log("[SHUTDOWN] Socket.IO connections closed");
+        console.log('[SHUTDOWN] Socket.IO connections closed');
       });
 
       // Close database connections
-      console.log("[SHUTDOWN] Disconnecting database...");
+      console.log('[SHUTDOWN] Disconnecting database...');
       await prisma.$disconnect();
-      console.log("[SHUTDOWN] Database disconnected");
+      console.log('[SHUTDOWN] Database disconnected');
 
       clearTimeout(shutdownTimeout);
-      console.log("[SHUTDOWN] Graceful shutdown complete");
-      if (process.env.DIAG_INTERCEPT_EXIT === "1") {
-        throw new Error("[EXIT_INTERCEPT] gracefulShutdown success (exit 0)");
+      console.log('[SHUTDOWN] Graceful shutdown complete');
+      if (process.env.DIAG_INTERCEPT_EXIT === '1') {
+        throw new Error('[EXIT_INTERCEPT] gracefulShutdown success (exit 0)');
       }
       process.exit(0);
     } catch (error) {
-      console.error("[SHUTDOWN] Error during graceful shutdown:", error);
+      console.error('[SHUTDOWN] Error during graceful shutdown:', error);
       clearTimeout(shutdownTimeout);
-      if (process.env.DIAG_INTERCEPT_EXIT === "1") {
-        throw new Error("[EXIT_INTERCEPT] gracefulShutdown error (exit 1)");
+      if (process.env.DIAG_INTERCEPT_EXIT === '1') {
+        throw new Error('[EXIT_INTERCEPT] gracefulShutdown error (exit 1)');
       }
       process.exit(1);
     }
   };
 
   // Handle various termination signals
-  process.on("SIGTERM", () => shutdown("SIGTERM"));
-  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
+  process.on('SIGINT', () => shutdown('SIGINT'));
 
   // Handle uncaught exceptions
-  process.on("uncaughtException", (error) => {
-    console.error("[CRITICAL] Uncaught Exception:", error);
+  process.on('uncaughtException', (error) => {
+    console.error('[CRITICAL] Uncaught Exception:', error);
 
     // Don't exit immediately - try graceful shutdown
     if (!isShuttingDown) {
-      shutdown("uncaughtException");
+      shutdown('uncaughtException');
     }
   });
 
   // Handle unhandled promise rejections
-  process.on("unhandledRejection", (reason, promise) => {
+  process.on('unhandledRejection', (reason, promise) => {
     console.error(
-      "[CRITICAL] Unhandled Rejection at:",
+      '[CRITICAL] Unhandled Rejection at:',
       promise,
-      "reason:",
-      reason
+      'reason:',
+      reason,
     );
 
     // Log but don't crash - service should stay up
     // Only shutdown if it's a critical error
-    if (reason instanceof Error && reason.message.includes("ECONNREFUSED")) {
-      console.error("[CRITICAL] Database connection lost, initiating shutdown");
-      shutdown("unhandledRejection");
+    if (reason instanceof Error && reason.message.includes('ECONNREFUSED')) {
+      console.error('[CRITICAL] Database connection lost, initiating shutdown');
+      shutdown('unhandledRejection');
     }
   });
 
-  console.log("[STARTUP] Graceful shutdown handlers registered");
+  console.log('[STARTUP] Graceful shutdown handlers registered');
 }
 
 // Health check for PM2/process managers
 export function sendReadySignal(): void {
   if (process.send) {
-    process.send("ready");
-    console.log("[STARTUP] Process ready signal sent to PM2");
+    process.send('ready');
+    console.log('[STARTUP] Process ready signal sent to PM2');
   }
 }

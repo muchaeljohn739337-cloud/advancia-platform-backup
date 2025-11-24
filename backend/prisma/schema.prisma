@@ -1115,7 +1115,7 @@ model two_factor_auth {
 }
 
 model user_activities {
-  id         String   @id
+  id         String   @id @default(cuid())
   userId     String
   email      String
   action     String
@@ -1167,7 +1167,7 @@ model user_tiers {
 }
 
 model User {
-  id                        String                      @id
+  id                        String                      @id @default(cuid())
   email                     String                      @unique
   username                  String                      @unique
   passwordHash              String
@@ -1187,7 +1187,7 @@ model User {
   backupCodes               String?
   ethWalletAddress          String?                     @unique
   createdAt                 DateTime                    @default(now())
-  updatedAt                 DateTime
+  updatedAt                 DateTime                    @updatedAt
   btcBalance                Decimal                     @default(0)
   ethBalance                Decimal                     @default(0)
   usdtBalance               Decimal                     @default(0)

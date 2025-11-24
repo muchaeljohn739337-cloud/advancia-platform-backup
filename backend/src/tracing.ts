@@ -11,23 +11,23 @@
  * - Console export for development debugging
  */
 
-import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { Resource } from "@opentelemetry/resources";
-import { NodeSDK } from "@opentelemetry/sdk-node";
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { Resource } from '@opentelemetry/resources';
+import { NodeSDK } from '@opentelemetry/sdk-node';
 import {
   BatchSpanProcessor,
   ConsoleSpanExporter,
-} from "@opentelemetry/sdk-trace-node";
-import { PrismaInstrumentation } from "@prisma/instrumentation";
+} from '@opentelemetry/sdk-trace-node';
+import { PrismaInstrumentation } from '@prisma/instrumentation';
 
 // Check if tracing should be enabled
-const TRACING_ENABLED = process.env.OTEL_TRACING_ENABLED !== "false";
-const CONSOLE_EXPORT_ENABLED = process.env.OTEL_TRACING_CONSOLE === "true";
+const TRACING_ENABLED = process.env.OTEL_TRACING_ENABLED !== 'false';
+const CONSOLE_EXPORT_ENABLED = process.env.OTEL_TRACING_CONSOLE === 'true';
 const OTLP_ENDPOINT =
-  process.env.OTEL_EXPORTER_OTLP_ENDPOINT || "http://localhost:4318/v1/traces";
-const SERVICE_NAME = process.env.OTEL_SERVICE_NAME || "advancia-backend";
-const SERVICE_VERSION = process.env.npm_package_version || "1.0.0";
+  process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://localhost:4318/v1/traces';
+const SERVICE_NAME = process.env.OTEL_SERVICE_NAME || 'advancia-backend';
+const SERVICE_VERSION = process.env.npm_package_version || '1.0.0';
 
 let sdk: NodeSDK | null = null;
 
@@ -37,13 +37,13 @@ let sdk: NodeSDK | null = null;
 export function initTracing(): void {
   if (!TRACING_ENABLED) {
     console.log(
-      "⚠️  Tracing disabled (set OTEL_TRACING_ENABLED=true to enable)"
+      '⚠️  Tracing disabled (set OTEL_TRACING_ENABLED=true to enable)',
     );
     return;
   }
 
   try {
-    console.log("🔍 Initializing OpenTelemetry tracing...");
+    console.log('🔍 Initializing OpenTelemetry tracing...');
     console.log(`   - Service: ${SERVICE_NAME} v${SERVICE_VERSION}`);
     console.log(`   - OTLP endpoint: ${OTLP_ENDPOINT}`);
 
@@ -59,8 +59,8 @@ export function initTracing(): void {
     // Configure SDK with automatic instrumentations
     sdk = new NodeSDK({
       resource: new Resource({
-        "service.name": SERVICE_NAME,
-        "service.version": SERVICE_VERSION,
+        'service.name': SERVICE_NAME,
+        'service.version': SERVICE_VERSION,
       }),
       spanProcessors: [
         new BatchSpanProcessor(otlpExporter),
@@ -71,13 +71,13 @@ export function initTracing(): void {
       instrumentations: [
         // Auto-instrument Node.js core modules, HTTP, Express, etc.
         getNodeAutoInstrumentations({
-          "@opentelemetry/instrumentation-fs": {
+          '@opentelemetry/instrumentation-fs': {
             enabled: false, // Disable filesystem instrumentation (too noisy)
           },
-          "@opentelemetry/instrumentation-http": {
+          '@opentelemetry/instrumentation-http': {
             enabled: true,
           },
-          "@opentelemetry/instrumentation-express": {
+          '@opentelemetry/instrumentation-express': {
             enabled: true,
           },
         }),
@@ -88,10 +88,10 @@ export function initTracing(): void {
 
     // Start the SDK
     sdk.start();
-    console.log("✅ OpenTelemetry tracing initialized successfully");
-    console.log("   📊 View traces in AI Toolkit (http://localhost:4318)");
+    console.log('✅ OpenTelemetry tracing initialized successfully');
+    console.log('   📊 View traces in AI Toolkit (http://localhost:4318)');
   } catch (error) {
-    console.error("❌ Failed to initialize tracing:", error);
+    console.error('❌ Failed to initialize tracing:', error);
     // Don't fail the app if tracing setup fails
   }
 }
@@ -102,11 +102,11 @@ export function initTracing(): void {
 export async function shutdownTracing(): Promise<void> {
   if (sdk) {
     try {
-      console.log("🔍 Shutting down OpenTelemetry tracing...");
+      console.log('🔍 Shutting down OpenTelemetry tracing...');
       await sdk.shutdown();
-      console.log("✅ Tracing shutdown complete");
+      console.log('✅ Tracing shutdown complete');
     } catch (error) {
-      console.error("❌ Error shutting down tracing:", error);
+      console.error('❌ Error shutting down tracing:', error);
     }
   }
 }
@@ -116,7 +116,7 @@ export async function shutdownTracing(): Promise<void> {
  * Only use this if you need custom spans beyond automatic instrumentation
  */
 export function getTracer() {
-  const { trace } = require("@opentelemetry/api");
+  const { trace } = require('@opentelemetry/api');
   return trace.getTracer(SERVICE_NAME, SERVICE_VERSION);
 }
 

@@ -214,7 +214,6 @@ export async function getOALLogsWithCount(filters: {
       orderBy: { createdAt: "desc" },
       take: limit,
       skip: offset,
-      
     }),
     prisma.oAL.count({ where }),
   ]);
@@ -228,7 +227,5 @@ export async function getOALLogsWithCount(filters: {
 export async function getAllOALLogsForExport() {
   return await prisma.oAL.findMany({
     orderBy: { createdAt: "desc" },
-    
   });
 }
-

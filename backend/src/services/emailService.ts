@@ -1,17 +1,22 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-// Lazily initialize the Resend client — avoid throwing on import when key not present.
-let resend: Resend | null = null;
-if (process.env.RESEND_API_KEY) {
+// Initialize nodemailer transporter with Gmail SMTP
+let transporter: nodemailer.Transporter | null = null;
+
+if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
   try {
-    resend = new Resend(process.env.RESEND_API_KEY);
+    transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
   } catch (err) {
-    // Don't crash the process; log and keep resend as null (email will be disabled)
-    // The rest of the code already guards sendEmail by checking the env var.
-    // We keep this defensive for environments where the key might be injected after start.
-    // eslint-disable-next-line no-console
-    console.error('Failed to initialize Resend client:', err);
-    resend = null;
+    console.error('Failed to initialize nodemailer transporter:', err);
+    transporter = null;
   }
 }
 
@@ -29,31 +34,30 @@ export class EmailService {
     this.from = process.env.EMAIL_FROM || 'noreply@advancia.com';
   }
 
-  async sendEmail(options: EmailOptions): Promise<{ success: boolean; id?: string; error?: string }> {
+  async sendEmail(
+    options: EmailOptions,
+  ): Promise<{ success: boolean; id?: string; error?: string }> {
     try {
-      if (!process.env.RESEND_API_KEY) {
-        console.warn('RESEND_API_KEY not configured. Email not sent.');
+      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+        console.warn(
+          'EMAIL_USER or EMAIL_PASSWORD not configured. Email not sent.',
+        );
         return { success: false, error: 'Email service not configured' };
       }
 
-      if (!resend) {
-        console.warn('Resend client not initialized. Email not sent.');
+      if (!transporter) {
+        console.warn('Nodemailer transporter not initialized. Email not sent.');
         return { success: false, error: 'Email service not configured' };
       }
 
-      const { data, error } = await resend.emails.send({
+      const info = await transporter.sendMail({
         from: options.from || this.from,
         to: options.to,
         subject: options.subject,
-        html: options.html
+        html: options.html,
       });
 
-      if (error) {
-        console.error('Email send error:', error);
-        return { success: false, error: error.message };
-      }
-
-      return { success: true, id: data?.id };
+      return { success: true, id: info.messageId };
     } catch (error: any) {
       console.error('Email service error:', error);
       return { success: false, error: error.message };
@@ -107,13 +111,16 @@ export class EmailService {
     return this.sendEmail({
       to,
       subject: 'Welcome to Advancia Pay Ledger! 🎉',
-      html
+      html,
     });
   }
 
-  async sendTransactionConfirmation(to: string, transactionData: any): Promise<any> {
+  async sendTransactionConfirmation(
+    to: string,
+    transactionData: any,
+  ): Promise<any> {
     const { type, amount, description, transactionId } = transactionData;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -121,10 +128,16 @@ export class EmailService {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: ${type === 'credit' ? '#10b981' : '#ef4444'}; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .header { background: ${
+            type === 'credit' ? '#10b981' : '#ef4444'
+          }; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
           .content { background: #f9f9f9; padding: 30px; }
-          .transaction-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid ${type === 'credit' ? '#10b981' : '#ef4444'}; }
-          .amount { font-size: 32px; font-weight: bold; color: ${type === 'credit' ? '#10b981' : '#ef4444'}; }
+          .transaction-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid ${
+            type === 'credit' ? '#10b981' : '#ef4444'
+          }; }
+          .amount { font-size: 32px; font-weight: bold; color: ${
+            type === 'credit' ? '#10b981' : '#ef4444'
+          }; }
           .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
         </style>
       </head>
@@ -137,7 +150,9 @@ export class EmailService {
             <div class="transaction-box">
               <p><strong>Transaction ID:</strong> ${transactionId}</p>
               <p><strong>Type:</strong> ${type.toUpperCase()}</p>
-              <p><strong>Amount:</strong> <span class="amount">${type === 'credit' ? '+' : '-'}$${amount}</span></p>
+              <p><strong>Amount:</strong> <span class="amount">${
+                type === 'credit' ? '+' : '-'
+              }$${amount}</span></p>
               <p><strong>Description:</strong> ${description || 'N/A'}</p>
               <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
             </div>
@@ -153,14 +168,20 @@ export class EmailService {
 
     return this.sendEmail({
       to,
-      subject: `Transaction Confirmation - ${type === 'credit' ? 'Received' : 'Sent'} $${amount}`,
-      html
+      subject: `Transaction Confirmation - ${
+        type === 'credit' ? 'Received' : 'Sent'
+      } $${amount}`,
+      html,
     });
   }
 
-  async sendInvoiceEmail(to: string, invoiceData: any, pdfUrl?: string): Promise<any> {
+  async sendInvoiceEmail(
+    to: string,
+    invoiceData: any,
+    pdfUrl?: string,
+  ): Promise<any> {
     const { invoiceNumber, amount, dueDate } = invoiceData;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -184,10 +205,18 @@ export class EmailService {
             <div class="invoice-box">
               <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
               <p><strong>Amount Due:</strong> $${amount}</p>
-              <p><strong>Due Date:</strong> ${new Date(dueDate).toLocaleDateString()}</p>
+              <p><strong>Due Date:</strong> ${new Date(
+                dueDate,
+              ).toLocaleDateString()}</p>
             </div>
-            <p>Please find your invoice attached ${pdfUrl ? 'or download it using the link below' : ''}.</p>
-            ${pdfUrl ? `<a href="${pdfUrl}" class="button">Download Invoice PDF</a>` : ''}
+            <p>Please find your invoice attached ${
+              pdfUrl ? 'or download it using the link below' : ''
+            }.</p>
+            ${
+              pdfUrl
+                ? `<a href="${pdfUrl}" class="button">Download Invoice PDF</a>`
+                : ''
+            }
             <p>If you have any questions about this invoice, please contact our support team.</p>
           </div>
           <div class="footer">
@@ -201,13 +230,13 @@ export class EmailService {
     return this.sendEmail({
       to,
       subject: `Invoice ${invoiceNumber} - $${amount} Due`,
-      html
+      html,
     });
   }
 
   async sendRewardClaimedEmail(to: string, rewardData: any): Promise<any> {
     const { amount, title, description } = rewardData;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -247,19 +276,19 @@ export class EmailService {
     return this.sendEmail({
       to,
       subject: `🎁 You claimed ${amount} tokens!`,
-      html
+      html,
     });
   }
 
   async sendTierUpgradeEmail(to: string, tierData: any): Promise<any> {
     const { newTier, points } = tierData;
-    
+
     const tierEmojis: any = {
       bronze: '🥉',
       silver: '🥈',
       gold: '🥇',
       platinum: '💎',
-      diamond: '👑'
+      diamond: '👑',
     };
 
     const html = `
@@ -298,13 +327,13 @@ export class EmailService {
     return this.sendEmail({
       to,
       subject: `🎉 You've been upgraded to ${newTier.toUpperCase()} tier!`,
-      html
+      html,
     });
   }
 
   async sendPasswordResetEmail(to: string, resetToken: string): Promise<any> {
     const resetUrl = `http://localhost:3000/reset-password?token=${resetToken}`;
-    
+
     const html = `
       <!DOCTYPE html>
       <html>
@@ -346,7 +375,7 @@ export class EmailService {
     return this.sendEmail({
       to,
       subject: 'Password Reset Request - Advancia Pay Ledger',
-      html
+      html,
     });
   }
 }

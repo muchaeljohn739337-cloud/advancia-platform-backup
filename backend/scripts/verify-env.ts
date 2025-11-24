@@ -171,7 +171,7 @@ function verifyEnv() {
 
   if (missing.length === 0 && suspicious.length === 0 && weak.length === 0) {
     console.log(
-      "✅ All required environment variables are properly configured"
+      "✅ All required environment variables are properly configured",
     );
     console.log("");
   }

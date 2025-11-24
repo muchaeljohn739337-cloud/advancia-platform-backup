@@ -44,7 +44,7 @@ class TrustpilotInvitationService {
 
       if (!this.apiKey || !this.businessUnitId) {
         logger.warn(
-          "⚠️ Trustpilot credentials not configured, skipping invitations"
+          "⚠️ Trustpilot credentials not configured, skipping invitations",
         );
         return { sent: 0, errors: 0, skipped: 0 };
       }
@@ -55,7 +55,7 @@ class TrustpilotInvitationService {
       let skipped = 0;
 
       logger.info(
-        `📋 Found ${eligibleTransactions.length} eligible transactions`
+        `📋 Found ${eligibleTransactions.length} eligible transactions`,
       );
 
       for (const transaction of eligibleTransactions) {
@@ -67,7 +67,7 @@ class TrustpilotInvitationService {
 
           if (!user || !user.email) {
             logger.warn(
-              `⚠️ User not found or no email for transaction ${transaction.id}`
+              `⚠️ User not found or no email for transaction ${transaction.id}`,
             );
             skipped++;
             continue;
@@ -93,14 +93,14 @@ class TrustpilotInvitationService {
         } catch (error) {
           logger.error(
             `❌ Error sending invitation for transaction ${transaction.id}:`,
-            error
+            error,
           );
           errors++;
         }
       }
 
       logger.info(
-        `✅ Invitation campaign completed: ${sent} sent, ${errors} errors, ${skipped} skipped`
+        `✅ Invitation campaign completed: ${sent} sent, ${errors} errors, ${skipped} skipped`,
       );
 
       // Log to audit trail
@@ -152,12 +152,12 @@ class TrustpilotInvitationService {
             Authorization: `ApiKey ${this.apiKey}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
     }
 
     logger.info(
-      `📧 Trustpilot invitation sent to ${user.email} for transaction ${transaction.id}`
+      `📧 Trustpilot invitation sent to ${user.email} for transaction ${transaction.id}`,
     );
   }
 
@@ -167,7 +167,7 @@ class TrustpilotInvitationService {
   private async getEligibleTransactions(): Promise<any[]> {
     const cutoffDate = new Date();
     cutoffDate.setDate(
-      cutoffDate.getDate() - this.invitationSettings.delayDays
+      cutoffDate.getDate() - this.invitationSettings.delayDays,
     );
 
     return prisma.transactions.findMany({

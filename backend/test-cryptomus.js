@@ -20,7 +20,7 @@ console.log(
     CRYPTOMUS_API_KEY
       ? CRYPTOMUS_API_KEY.substring(0, 20) + "..."
       : "❌ MISSING"
-  }`
+  }`,
 );
 console.log(`   ✅ User ID: ${CRYPTOMUS_USER_ID || "❌ MISSING"}`);
 

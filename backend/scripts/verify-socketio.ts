@@ -36,7 +36,7 @@ async function main() {
     try {
       const payloadPart = jwt.split(".")[1];
       const decoded = JSON.parse(
-        Buffer.from(payloadPart, "base64").toString("utf8")
+        Buffer.from(payloadPart, "base64").toString("utf8"),
       );
       userId = decoded.userId || decoded.id || decoded.sub;
     } catch (e) {
@@ -145,7 +145,7 @@ function dump(results: Result[]) {
   console.log("\nSocket.IO Verification Summary".padEnd(width, "="));
   for (const r of results) {
     console.log(
-      `${r.success ? "[PASS]" : "[FAIL]"} ${r.step} - ${r.detail || ""}`
+      `${r.success ? "[PASS]" : "[FAIL]"} ${r.step} - ${r.detail || ""}`,
     );
   }
 }

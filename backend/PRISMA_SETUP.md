@@ -16,6 +16,7 @@
 ### Option 1: Local PostgreSQL (Recommended for Production)
 
 **Install PostgreSQL:**
+
 ```powershell
 # Using Chocolatey
 choco install postgresql
@@ -24,6 +25,7 @@ choco install postgresql
 ```
 
 **Configure Database:**
+
 ```powershell
 # Start PostgreSQL service
 Start-Service postgresql-x64-14
@@ -37,11 +39,13 @@ GRANT ALL PRIVILEGES ON DATABASE advancia_ledger TO dev_user;
 ```
 
 **Update `.env` file:**
+
 ```env
 DATABASE_URL="postgresql://dev_user:dev_password@localhost:5432/advancia_ledger?schema=public"
 ```
 
 **Run Migration:**
+
 ```powershell
 cd backend
 npx prisma migrate dev --name init
@@ -50,6 +54,7 @@ npx prisma migrate dev --name init
 ### Option 2: Docker PostgreSQL (Quick Setup)
 
 **Start PostgreSQL Container:**
+
 ```powershell
 docker run --name advancia-postgres `
   -e POSTGRES_USER=dev_user `
@@ -60,11 +65,13 @@ docker run --name advancia-postgres `
 ```
 
 **Update `.env` file:**
+
 ```env
 DATABASE_URL="postgresql://dev_user:dev_password@localhost:5432/advancia_ledger?schema=public"
 ```
 
 **Run Migration:**
+
 ```powershell
 cd backend
 npx prisma migrate dev --name init
@@ -73,6 +80,7 @@ npx prisma migrate dev --name init
 ### Option 3: SQLite (Quick Development Only)
 
 **Update `schema.prisma`:**
+
 ```prisma
 datasource db {
   provider = "sqlite"
@@ -81,11 +89,13 @@ datasource db {
 ```
 
 **Remove DATABASE_URL from `.env` or set:**
+
 ```env
 DATABASE_URL="file:./dev.db"
 ```
 
 **Run Migration:**
+
 ```powershell
 cd backend
 npx prisma migrate dev --name init
@@ -96,26 +106,29 @@ npx prisma migrate dev --name init
 ## 🎯 Next Steps After Database Setup
 
 1. **Verify Migration:**
+
    ```powershell
    npx prisma studio
    ```
+
    This opens a GUI to view your database tables.
 
 2. **Update Transaction Routes** (`backend/src/routes/transaction.ts`):
    Replace in-memory array with Prisma client:
+
    ```typescript
-   import { PrismaClient } from '@prisma/client';
+   import { PrismaClient } from "@prisma/client";
    const prisma = new PrismaClient();
-   
+
    // Example: Create transaction
    const transaction = await prisma.transaction.create({
      data: {
        userId: req.body.userId,
        amount: req.body.amount,
        type: req.body.type,
-       status: 'pending',
-       description: req.body.description
-     }
+       status: "pending",
+       description: req.body.description,
+     },
    });
    ```
 
@@ -157,16 +170,19 @@ npx prisma migrate status
 ## 🚨 Common Issues
 
 **Error: "Authentication failed against database server"**
+
 - PostgreSQL is not running or credentials are wrong
 - Check if PostgreSQL service is active: `Get-Service postgresql*`
 - Verify DATABASE_URL in `.env` matches your database credentials
 
 **Error: "Can't reach database server"**
+
 - PostgreSQL is not installed or not running
 - For Docker: check container status with `docker ps`
 - Verify port 5432 is not blocked by firewall
 
 **Error: "Database does not exist"**
+
 - Create the database first using `psql` or pgAdmin
 - Or use `npx prisma db push` to create database automatically
 

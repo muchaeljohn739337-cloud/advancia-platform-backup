@@ -133,7 +133,7 @@ function detectIncidents(watchdogContent, pm2errContent) {
     const firstRestart = recentRestarts[0];
     const lastRestart = recentRestarts[recentRestarts.length - 1];
     const durationSeconds = Math.floor(
-      (lastRestart.getTime() - firstRestart.getTime()) / 1000
+      (lastRestart.getTime() - firstRestart.getTime()) / 1000,
     );
 
     incidents.push({
@@ -284,12 +284,12 @@ async function generateStatus() {
   const restarts24h = countEventsInWindow(
     watchdogContent,
     "Restarting backend",
-    WINDOW_24H
+    WINDOW_24H,
   );
   const restarts7d = countEventsInWindow(
     watchdogContent,
     "Restarting backend",
-    WINDOW_7D
+    WINDOW_7D,
   );
 
   const errors24h = countEventsInWindow(pm2errContent, "Error", WINDOW_24H);
@@ -299,14 +299,14 @@ async function generateStatus() {
   const overallStatus = determineOverallStatus(
     uptime24h,
     incidents,
-    restarts24h
+    restarts24h,
   );
   const historical = generateHistoricalData(watchdogContent);
 
   const restarts30d = countEventsInWindow(
     watchdogContent,
     "Restarting backend",
-    WINDOW_30D
+    WINDOW_30D,
   );
   const errors30d = countEventsInWindow(pm2errContent, "Error", WINDOW_30D);
 
@@ -575,7 +575,7 @@ async function checkAndSendAlerts(status) {
 
   // Check critical incidents
   const criticalIncidents = status.incidents.filter(
-    (i) => i.severity === "outage" && i.status !== "resolved"
+    (i) => i.severity === "outage" && i.status !== "resolved",
   );
   if (criticalIncidents.length > 0) {
     if (shouldSendAlert("critical_incident", state)) {

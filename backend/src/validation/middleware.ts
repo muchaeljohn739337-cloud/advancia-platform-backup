@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { ZodError, ZodSchema } from "zod";
-import { validationSchemas } from "./schemas";
+import { NextFunction, Request, Response } from 'express';
+import { ZodError, ZodSchema } from 'zod';
+import { validationSchemas } from './schemas';
 
 /**
  * Validation middleware factory
@@ -8,7 +8,7 @@ import { validationSchemas } from "./schemas";
  */
 export function validate(
   schema: ZodSchema,
-  property: "body" | "query" | "params" = "body"
+  property: 'body' | 'query' | 'params' = 'body',
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -23,21 +23,21 @@ export function validate(
       if (error instanceof ZodError) {
         // Format Zod errors for client
         const formattedErrors = error.issues.map((err) => ({
-          field: err.path.join("."),
+          field: err.path.join('.'),
           message: err.message,
           code: err.code,
         }));
 
         return res.status(400).json({
-          error: "Validation failed",
+          error: 'Validation failed',
           details: formattedErrors,
         });
       }
 
       // Unknown validation error
-      console.error("Validation middleware error:", error);
+      console.error('Validation middleware error:', error);
       return res.status(500).json({
-        error: "Internal validation error",
+        error: 'Internal validation error',
       });
     }
   };
@@ -77,9 +77,9 @@ export const validators = {
   settings: validate(validationSchemas.settings),
 
   // Generic validators
-  id: validate(validationSchemas.id, "params"),
-  pagination: validate(validationSchemas.pagination, "query"),
-  search: validate(validationSchemas.search, "query"),
+  id: validate(validationSchemas.id, 'params'),
+  pagination: validate(validationSchemas.pagination, 'query'),
+  search: validate(validationSchemas.search, 'query'),
 };
 
 /**
@@ -88,14 +88,14 @@ export const validators = {
  */
 export function sanitizeInput(req: Request, res: Response, next: NextFunction) {
   const sanitizeString = (str: string): string => {
-    if (typeof str !== "string") return str;
+    if (typeof str !== 'string') return str;
 
     return (
       str
         // Remove null bytes
-        .replace(/\0/g, "")
+        .replace(/\0/g, '')
         // Remove potential XSS vectors
-        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
         // Trim whitespace
         .trim()
         // Limit length to prevent buffer overflow attempts
@@ -104,7 +104,7 @@ export function sanitizeInput(req: Request, res: Response, next: NextFunction) {
   };
 
   const sanitizeObject = (obj: any): any => {
-    if (typeof obj === "string") {
+    if (typeof obj === 'string') {
       return sanitizeString(obj);
     }
 
@@ -112,11 +112,11 @@ export function sanitizeInput(req: Request, res: Response, next: NextFunction) {
       return obj.map(sanitizeObject);
     }
 
-    if (typeof obj === "object" && obj !== null) {
+    if (typeof obj === 'object' && obj !== null) {
       const sanitized: any = {};
       for (const [key, value] of Object.entries(obj)) {
         // Skip sensitive fields that shouldn't be logged/modified
-        if (["password", "passwordHash", "token", "secret"].includes(key)) {
+        if (['password', 'passwordHash', 'token', 'secret'].includes(key)) {
           sanitized[key] = value;
         } else {
           sanitized[key] = sanitizeObject(value);

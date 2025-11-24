@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
-import { winstonLogger as logger } from "../utils/winstonLogger";
+import { Request, Response, NextFunction } from 'express';
+import { PrismaClient } from '@prisma/client';
+import { winstonLogger as logger } from '../utils/winstonLogger';
 
 const prisma = new PrismaClient();
 
@@ -47,9 +47,9 @@ export const emailRateLimit = (config: Partial<EmailRateLimitConfig> = {}) => {
       const userId = (req as any).user?.id;
       const userEmail = (req as any).user?.email || req.body.email;
       const ipAddress =
-        (req.headers["x-forwarded-for"] as string)?.split(",")[0].trim() ||
+        (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() ||
         req.socket.remoteAddress ||
-        "unknown";
+        'unknown';
 
       // Check global rate limit
       if (isRateLimitExceeded(globalRateLimit)) {
@@ -62,11 +62,14 @@ export const emailRateLimit = (config: Partial<EmailRateLimitConfig> = {}) => {
       }
 
       if (globalRateLimit.count >= finalConfig.globalDaily) {
-        logger.warn(`Global email rate limit exceeded: ${globalRateLimit.count}/${finalConfig.globalDaily}`);
+        logger.warn(
+          `Global email rate limit exceeded: ${globalRateLimit.count}/${finalConfig.globalDaily}`,
+        );
         return res.status(429).json({
           success: false,
-          error: "Email service temporarily unavailable. Please try again later.",
-          code: "GLOBAL_RATE_LIMIT_EXCEEDED",
+          error:
+            'Email service temporarily unavailable. Please try again later.',
+          code: 'GLOBAL_RATE_LIMIT_EXCEEDED',
           retryAfter: getRetryAfterSeconds(globalRateLimit.resetAt),
         });
       }
@@ -85,15 +88,22 @@ export const emailRateLimit = (config: Partial<EmailRateLimitConfig> = {}) => {
         }
 
         if (userLimit.count >= finalConfig.perUserHourly) {
-          logger.warn(`User email rate limit exceeded: ${userEmail} - ${userLimit.count}/${finalConfig.perUserHourly}`);
-          
+          logger.warn(
+            `User email rate limit exceeded: ${userEmail} - ${userLimit.count}/${finalConfig.perUserHourly}`,
+          );
+
           // Log suspicious activity
-          await logSuspiciousActivity(userId, userEmail, ipAddress, "USER_RATE_LIMIT_EXCEEDED");
+          await logSuspiciousActivity(
+            userId,
+            userEmail,
+            ipAddress,
+            'USER_RATE_LIMIT_EXCEEDED',
+          );
 
           return res.status(429).json({
             success: false,
             error: `You can only send ${finalConfig.perUserHourly} emails per hour. Please try again later.`,
-            code: "USER_RATE_LIMIT_EXCEEDED",
+            code: 'USER_RATE_LIMIT_EXCEEDED',
             retryAfter: getRetryAfterSeconds(userLimit.resetAt),
           });
         }
@@ -114,15 +124,23 @@ export const emailRateLimit = (config: Partial<EmailRateLimitConfig> = {}) => {
       }
 
       if (ipLimit.count >= finalConfig.perIPDaily) {
-        logger.warn(`IP email rate limit exceeded: ${ipAddress} - ${ipLimit.count}/${finalConfig.perIPDaily}`);
-        
+        logger.warn(
+          `IP email rate limit exceeded: ${ipAddress} - ${ipLimit.count}/${finalConfig.perIPDaily}`,
+        );
+
         // Log suspicious activity
-        await logSuspiciousActivity(userId, userEmail, ipAddress, "IP_RATE_LIMIT_EXCEEDED");
+        await logSuspiciousActivity(
+          userId,
+          userEmail,
+          ipAddress,
+          'IP_RATE_LIMIT_EXCEEDED',
+        );
 
         return res.status(429).json({
           success: false,
-          error: "Too many email requests from this location. Please try again tomorrow.",
-          code: "IP_RATE_LIMIT_EXCEEDED",
+          error:
+            'Too many email requests from this location. Please try again tomorrow.',
+          code: 'IP_RATE_LIMIT_EXCEEDED',
           retryAfter: getRetryAfterSeconds(ipLimit.resetAt),
         });
       }
@@ -131,24 +149,45 @@ export const emailRateLimit = (config: Partial<EmailRateLimitConfig> = {}) => {
       globalRateLimit.count++;
 
       // Add rate limit info to response headers
-      res.setHeader("X-RateLimit-Limit-User", finalConfig.perUserHourly.toString());
-      res.setHeader("X-RateLimit-Limit-IP", finalConfig.perIPDaily.toString());
-      res.setHeader("X-RateLimit-Limit-Global", finalConfig.globalDaily.toString());
-      
+      res.setHeader(
+        'X-RateLimit-Limit-User',
+        finalConfig.perUserHourly.toString(),
+      );
+      res.setHeader('X-RateLimit-Limit-IP', finalConfig.perIPDaily.toString());
+      res.setHeader(
+        'X-RateLimit-Limit-Global',
+        finalConfig.globalDaily.toString(),
+      );
+
       if (userId) {
         const userLimit = userRateLimits.get(`user:${userId}`)!;
-        res.setHeader("X-RateLimit-Remaining-User", (finalConfig.perUserHourly - userLimit.count).toString());
-        res.setHeader("X-RateLimit-Reset-User", userLimit.resetAt.toISOString());
+        res.setHeader(
+          'X-RateLimit-Remaining-User',
+          (finalConfig.perUserHourly - userLimit.count).toString(),
+        );
+        res.setHeader(
+          'X-RateLimit-Reset-User',
+          userLimit.resetAt.toISOString(),
+        );
       }
-      
-      res.setHeader("X-RateLimit-Remaining-IP", (finalConfig.perIPDaily - ipLimit.count).toString());
-      res.setHeader("X-RateLimit-Reset-IP", ipLimit.resetAt.toISOString());
-      res.setHeader("X-RateLimit-Remaining-Global", (finalConfig.globalDaily - globalRateLimit.count).toString());
-      res.setHeader("X-RateLimit-Reset-Global", globalRateLimit.resetAt.toISOString());
+
+      res.setHeader(
+        'X-RateLimit-Remaining-IP',
+        (finalConfig.perIPDaily - ipLimit.count).toString(),
+      );
+      res.setHeader('X-RateLimit-Reset-IP', ipLimit.resetAt.toISOString());
+      res.setHeader(
+        'X-RateLimit-Remaining-Global',
+        (finalConfig.globalDaily - globalRateLimit.count).toString(),
+      );
+      res.setHeader(
+        'X-RateLimit-Reset-Global',
+        globalRateLimit.resetAt.toISOString(),
+      );
 
       next();
     } catch (error) {
-      logger.error("Email rate limit middleware error:", error);
+      logger.error('Email rate limit middleware error:', error);
       // Don't block requests if rate limiting fails
       next();
     }
@@ -174,7 +213,7 @@ function isRateLimitExpired(limit: RateLimitEntry): boolean {
  */
 function resetRateLimitIfExpired(
   limit: RateLimitEntry,
-  resetCallback: () => void
+  resetCallback: () => void,
 ): void {
   if (isRateLimitExpired(limit)) {
     resetCallback();
@@ -195,11 +234,11 @@ async function logSuspiciousActivity(
   userId: string | undefined,
   email: string,
   ipAddress: string,
-  reason: string
+  reason: string,
 ): Promise<void> {
   try {
     // This would typically log to a security/audit table
-    logger.warn("Suspicious email activity detected", {
+    logger.warn('Suspicious email activity detected', {
       userId,
       email,
       ipAddress,
@@ -218,7 +257,7 @@ async function logSuspiciousActivity(
     //   },
     // });
   } catch (error) {
-    logger.error("Failed to log suspicious activity:", error);
+    logger.error('Failed to log suspicious activity:', error);
   }
 }
 
@@ -233,13 +272,13 @@ export function getRateLimitStats() {
       remaining: DEFAULT_CONFIG.globalDaily - globalRateLimit.count,
     },
     users: Array.from(userRateLimits.entries()).map(([key, limit]) => ({
-      userId: key.replace("user:", ""),
+      userId: key.replace('user:', ''),
       count: limit.count,
       resetAt: limit.resetAt,
       remaining: DEFAULT_CONFIG.perUserHourly - limit.count,
     })),
     ips: Array.from(ipRateLimits.entries()).map(([key, limit]) => ({
-      ip: key.replace("ip:", ""),
+      ip: key.replace('ip:', ''),
       count: limit.count,
       resetAt: limit.resetAt,
       remaining: DEFAULT_CONFIG.perIPDaily - limit.count,
@@ -257,7 +296,7 @@ export function resetAllRateLimits() {
     count: 0,
     resetAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
   };
-  logger.info("All email rate limits have been reset");
+  logger.info('All email rate limits have been reset');
 }
 
 /**

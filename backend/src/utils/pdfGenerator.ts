@@ -28,7 +28,10 @@ export class PDFGenerator {
     this.doc = new PDFDocument({ margin: 50 });
   }
 
-  async generateInvoice(data: InvoiceData, outputPath: string): Promise<string> {
+  async generateInvoice(
+    data: InvoiceData,
+    outputPath: string,
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       try {
         // Ensure invoices directory exists
@@ -42,24 +45,24 @@ export class PDFGenerator {
 
         // Header
         this.addHeader();
-        
+
         // Invoice details
         this.addInvoiceDetails(data);
-        
+
         // Billing information
         this.addBillingInfo(data);
-        
+
         // Line items table
         this.addItemsTable(data.items);
-        
+
         // Totals
         this.addTotals(data);
-        
+
         // Notes
         if (data.notes) {
           this.addNotes(data.notes);
         }
-        
+
         // Footer
         this.addFooter();
 
@@ -92,22 +95,28 @@ export class PDFGenerator {
 
   private addInvoiceDetails(data: InvoiceData) {
     const topY = 50;
-    
+
     this.doc
       .fontSize(16)
       .font('Helvetica-Bold')
       .text('INVOICE', 400, topY, { align: 'right' })
       .fontSize(10)
       .font('Helvetica')
-      .text(`Invoice #: ${data.invoiceNumber}`, 400, topY + 25, { align: 'right' })
-      .text(`Issue Date: ${this.formatDate(data.issueDate)}`, 400, topY + 40, { align: 'right' })
-      .text(`Due Date: ${this.formatDate(data.dueDate)}`, 400, topY + 55, { align: 'right' })
+      .text(`Invoice #: ${data.invoiceNumber}`, 400, topY + 25, {
+        align: 'right',
+      })
+      .text(`Issue Date: ${this.formatDate(data.issueDate)}`, 400, topY + 40, {
+        align: 'right',
+      })
+      .text(`Due Date: ${this.formatDate(data.dueDate)}`, 400, topY + 55, {
+        align: 'right',
+      })
       .moveDown(2);
   }
 
   private addBillingInfo(data: InvoiceData) {
     const startY = 150;
-    
+
     this.doc
       .fontSize(12)
       .font('Helvetica-Bold')
@@ -116,25 +125,28 @@ export class PDFGenerator {
       .font('Helvetica')
       .text(data.billingName, 50, startY + 20)
       .text(data.billingEmail, 50, startY + 35);
-    
+
     if (data.billingAddress) {
       this.doc.text(data.billingAddress, 50, startY + 50, { width: 250 });
     }
-    
+
     this.doc.moveDown(3);
   }
 
   private addItemsTable(items: InvoiceData['items']) {
     const tableTop = 260;
     const tableLeft = 50;
-    
+
     // Table headers
     this.doc
       .fontSize(10)
       .font('Helvetica-Bold')
       .text('Description', tableLeft, tableTop)
       .text('Qty', tableLeft + 300, tableTop, { width: 50, align: 'right' })
-      .text('Unit Price', tableLeft + 360, tableTop, { width: 80, align: 'right' })
+      .text('Unit Price', tableLeft + 360, tableTop, {
+        width: 80,
+        align: 'right',
+      })
       .text('Amount', tableLeft + 450, tableTop, { width: 80, align: 'right' });
 
     // Line under headers
@@ -150,10 +162,19 @@ export class PDFGenerator {
     items.forEach((item) => {
       this.doc
         .text(item.description, tableLeft, currentY, { width: 290 })
-        .text(item.quantity.toString(), tableLeft + 300, currentY, { width: 50, align: 'right' })
-        .text(`$${item.unitPrice.toFixed(2)}`, tableLeft + 360, currentY, { width: 80, align: 'right' })
-        .text(`$${item.amount.toFixed(2)}`, tableLeft + 450, currentY, { width: 80, align: 'right' });
-      
+        .text(item.quantity.toString(), tableLeft + 300, currentY, {
+          width: 50,
+          align: 'right',
+        })
+        .text(`$${item.unitPrice.toFixed(2)}`, tableLeft + 360, currentY, {
+          width: 80,
+          align: 'right',
+        })
+        .text(`$${item.amount.toFixed(2)}`, tableLeft + 450, currentY, {
+          width: 80,
+          align: 'right',
+        });
+
       currentY += 25;
     });
 
@@ -172,13 +193,17 @@ export class PDFGenerator {
       .fontSize(10)
       .font('Helvetica')
       .text('Subtotal:', totalsX, currentY)
-      .text(`$${data.subtotal.toFixed(2)}`, totalsX + 100, currentY, { align: 'right' });
+      .text(`$${data.subtotal.toFixed(2)}`, totalsX + 100, currentY, {
+        align: 'right',
+      });
 
     if (data.tax && data.tax > 0) {
       currentY += 20;
       this.doc
         .text('Tax:', totalsX, currentY)
-        .text(`$${data.tax.toFixed(2)}`, totalsX + 100, currentY, { align: 'right' });
+        .text(`$${data.tax.toFixed(2)}`, totalsX + 100, currentY, {
+          align: 'right',
+        });
     }
 
     currentY += 25;
@@ -186,7 +211,9 @@ export class PDFGenerator {
       .fontSize(12)
       .font('Helvetica-Bold')
       .text('TOTAL:', totalsX, currentY)
-      .text(`$${data.total.toFixed(2)}`, totalsX + 100, currentY, { align: 'right' });
+      .text(`$${data.total.toFixed(2)}`, totalsX + 100, currentY, {
+        align: 'right',
+      });
   }
 
   private addNotes(notes: string) {
@@ -201,19 +228,21 @@ export class PDFGenerator {
 
   private addFooter() {
     const bottomY = 720;
-    
+
     this.doc
       .fontSize(8)
       .font('Helvetica')
       .text('Thank you for your business!', 50, bottomY, { align: 'center' })
-      .text('For questions, contact: support@advancia.com', 50, bottomY + 15, { align: 'center' });
+      .text('For questions, contact: support@advancia.com', 50, bottomY + 15, {
+        align: 'center',
+      });
   }
 
   private formatDate(date: Date): string {
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     }).format(date);
   }
 }

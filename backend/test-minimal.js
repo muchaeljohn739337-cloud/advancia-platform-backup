@@ -1,1 +1,2 @@
-console.log('TEST WORKS'); process.exit(0);
+console.log("TEST WORKS");
+process.exit(0);

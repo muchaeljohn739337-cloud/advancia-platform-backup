@@ -58,15 +58,15 @@ function main() {
   console.log(
     `curl -X POST "$BACKEND_URL/api/payments/webhook" \\\n+  -H "Stripe-Signature: ${header}" \\\n+  -H "Content-Type: application/json" \\\n+  --data '${payload.replace(
       /'/g,
-      "'\\''"
-    )}'`
+      "'\\''",
+    )}'`,
   );
 }
 
 function dump(list: Result[]) {
   for (const r of list)
     console.log(
-      `${r.success ? "[PASS]" : "[FAIL]"} ${r.step} - ${r.detail || ""}`
+      `${r.success ? "[PASS]" : "[FAIL]"} ${r.step} - ${r.detail || ""}`,
     );
 }
 

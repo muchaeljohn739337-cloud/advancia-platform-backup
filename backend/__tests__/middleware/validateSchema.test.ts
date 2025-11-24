@@ -44,7 +44,7 @@ describe("validateSchema middleware", () => {
           details: expect.arrayContaining([
             expect.objectContaining({ path: expect.any(String) }),
           ]),
-        })
+        }),
       );
       expect(next).not.toHaveBeenCalled();
     });
@@ -73,7 +73,7 @@ describe("validateSchema middleware", () => {
             expect.objectContaining({ path: "email" }),
             expect.objectContaining({ path: "age" }),
           ]),
-        })
+        }),
       );
     });
   });
@@ -128,7 +128,7 @@ describe("validateSchema middleware", () => {
       expect(jsonMock).toHaveBeenCalledWith(
         expect.objectContaining({
           error: "Invalid request",
-        })
+        }),
       );
     });
   });
@@ -170,7 +170,7 @@ describe("validateSchema middleware", () => {
           details: expect.arrayContaining([
             expect.objectContaining({ path: "user.profile.email" }),
           ]),
-        })
+        }),
       );
     });
 
@@ -185,7 +185,7 @@ describe("validateSchema middleware", () => {
       expect(jsonMock).toHaveBeenCalledWith(
         expect.objectContaining({
           error: expect.stringContaining("Invalid request"),
-        })
+        }),
       );
     });
   });

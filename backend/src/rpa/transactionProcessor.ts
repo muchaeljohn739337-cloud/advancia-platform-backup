@@ -2,9 +2,9 @@
 // Automatically validates and processes pending transactions
 // Implements fraud detection and compliance checks
 
-import { Decimal } from "@prisma/client/runtime/library";
-import prisma from "../prismaClient";
-import config from "./config";
+import { Decimal } from '@prisma/client/runtime/library';
+import prisma from '../prismaClient';
+import config from './config';
 
 interface ValidationResult {
   isValid: boolean;
@@ -39,7 +39,7 @@ class TransactionProcessor {
         return {
           isValid: false,
           confidence: 0,
-          errors: ["Transaction not found"],
+          errors: ['Transaction not found'],
           warnings: [],
           fraudScore: 0,
         };
@@ -55,16 +55,16 @@ class TransactionProcessor {
       const amountNum = Number(transaction.amount);
       if (amountNum <= 0) {
         result.isValid = false;
-        result.errors.push("Transaction amount must be positive");
+        result.errors.push('Transaction amount must be positive');
         result.confidence -= 0.3;
       }
 
       // Validation Rule 2: Check user balance for debits
-      if (transaction.type === "debit" && user) {
+      if (transaction.type === 'debit' && user) {
         const balanceNum = Number(user.usdBalance);
         if (balanceNum < amountNum) {
           result.isValid = false;
-          result.errors.push("Insufficient balance");
+          result.errors.push('Insufficient balance');
           result.confidence -= 0.5;
         }
       }
@@ -82,7 +82,7 @@ class TransactionProcessor {
       });
 
       if (duplicates > 0) {
-        result.warnings.push("Possible duplicate transaction detected");
+        result.warnings.push('Possible duplicate transaction detected');
         result.confidence -= 0.1;
       }
 
@@ -101,16 +101,16 @@ class TransactionProcessor {
         : 0;
 
       if (dailySum + amountNum > dailyLimit) {
-        result.warnings.push("Transaction exceeds daily limit");
+        result.warnings.push('Transaction exceeds daily limit');
         result.confidence -= 0.15;
       }
 
       // Validation Rule 5: Fraud detection based on patterns
       const fraudIndicators = await this.detectFraudPatterns(
-        transaction.userId
+        transaction.userId,
       );
       if (fraudIndicators > 3) {
-        result.warnings.push("Multiple fraud indicators detected");
+        result.warnings.push('Multiple fraud indicators detected');
         result.fraudScore = fraudIndicators * 0.2;
         result.confidence -= fraudIndicators * 0.1;
       }
@@ -119,19 +119,19 @@ class TransactionProcessor {
       const minConfidence = 0.7; // Minimum 70% confidence required
       if (result.confidence < minConfidence) {
         result.isValid = false;
-        result.errors.push("Transaction confidence below threshold");
+        result.errors.push('Transaction confidence below threshold');
       }
 
       return result;
     } catch (error) {
       console.error(
         `[RPA] Validation error for transaction ${transactionId}:`,
-        error
+        error,
       );
       return {
         isValid: false,
         confidence: 0,
-        errors: ["Validation system error"],
+        errors: ['Validation system error'],
         warnings: [],
         fraudScore: 0,
       };
@@ -148,15 +148,15 @@ class TransactionProcessor {
       if (!validation.isValid) {
         console.log(
           `[RPA] Transaction ${transactionId} failed validation:`,
-          validation.errors
+          validation.errors,
         );
 
         // Update transaction status to failed
         await prisma.transactions.update({
           where: { id: transactionId },
           data: {
-            status: "failed",
-            description: `Failed: ${validation.errors.join(", ")}`,
+            status: 'failed',
+            description: `Failed: ${validation.errors.join(', ')}`,
           },
         });
 
@@ -174,9 +174,9 @@ class TransactionProcessor {
       }
 
       // Process based on transaction type
-      if (transaction.type === "credit") {
+      if (transaction.type === 'credit') {
         await this.processCredit(transaction);
-      } else if (transaction.type === "debit") {
+      } else if (transaction.type === 'debit') {
         await this.processDebit(transaction);
       }
 
@@ -184,26 +184,26 @@ class TransactionProcessor {
       await prisma.transactions.update({
         where: { id: transactionId },
         data: {
-          status: "completed",
+          status: 'completed',
         },
       });
 
       // Log audit trail
-      await this.logTransaction(transactionId, "processed", validation);
+      await this.logTransaction(transactionId, 'processed', validation);
 
       console.log(`[RPA] Successfully processed transaction ${transactionId}`);
       return true;
     } catch (error) {
       console.error(
         `[RPA] Error processing transaction ${transactionId}:`,
-        error
+        error,
       );
 
       // Mark transaction as failed
       await prisma.transactions
         .update({
           where: { id: transactionId },
-          data: { status: "failed" },
+          data: { status: 'failed' },
         })
         .catch(() => {});
 
@@ -287,7 +287,7 @@ class TransactionProcessor {
 
     // Pattern 3: Round-trip transactions (rapid credit/debit cycles)
     const creditDebitPairs = await prisma.transactions.groupBy({
-      by: ["type"],
+      by: ['type'],
       where: {
         userId,
         createdAt: { gte: new Date(Date.now() - 3600000) }, // Last hour
@@ -296,9 +296,9 @@ class TransactionProcessor {
     });
 
     const credits =
-      creditDebitPairs.find((g) => g.type === "credit")?._count?.type || 0;
+      creditDebitPairs.find((g) => g.type === 'credit')?._count?.type || 0;
     const debits =
-      creditDebitPairs.find((g) => g.type === "debit")?._count?.type || 0;
+      creditDebitPairs.find((g) => g.type === 'debit')?._count?.type || 0;
 
     if (Math.min(credits, debits) > 3) {
       indicators++;
@@ -313,13 +313,13 @@ class TransactionProcessor {
   private async logTransaction(
     transactionId: string,
     action: string,
-    validation: ValidationResult
+    validation: ValidationResult,
   ): Promise<void> {
     try {
       await prisma.audit_logs.create({
         data: {
           action: `transaction_${action}`,
-          resourceType: "Transaction",
+          resourceType: 'Transaction',
           resourceId: transactionId,
           userId: transactionId,
           metadata: JSON.stringify({
@@ -327,8 +327,8 @@ class TransactionProcessor {
             fraudScore: validation.fraudScore,
             warnings: validation.warnings,
           }),
-          ipAddress: "RPA-System",
-          userAgent: "RPA-TransactionProcessor",
+          ipAddress: 'RPA-System',
+          userAgent: 'RPA-TransactionProcessor',
           timestamp: new Date(),
         },
       });
@@ -342,16 +342,16 @@ class TransactionProcessor {
    */
   async batchProcess(): Promise<void> {
     try {
-      console.log(`[RPA] Starting batch transaction processing...`);
+      console.log('[RPA] Starting batch transaction processing...');
 
       const pendingTransactions = await prisma.transactions.findMany({
-        where: { status: "pending" },
+        where: { status: 'pending' },
         take: this.config.batchSize,
-        orderBy: { createdAt: "asc" },
+        orderBy: { createdAt: 'asc' },
       });
 
       console.log(
-        `[RPA] Found ${pendingTransactions.length} pending transactions`
+        `[RPA] Found ${pendingTransactions.length} pending transactions`,
       );
 
       for (const transaction of pendingTransactions) {
@@ -361,9 +361,9 @@ class TransactionProcessor {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      console.log(`[RPA] Batch processing complete`);
+      console.log('[RPA] Batch processing complete');
     } catch (error) {
-      console.error("[RPA] Batch processing error:", error);
+      console.error('[RPA] Batch processing error:', error);
     }
   }
 }

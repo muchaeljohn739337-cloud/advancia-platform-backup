@@ -1,10 +1,10 @@
-import express from "express";
-import { authenticateToken } from "../middleware/auth";
-import { priceService } from "../services/priceService";
+import express from 'express';
+import { authenticateToken } from '../middleware/auth';
+import { priceService } from '../services/priceService';
 
 const router = express.Router();
 const safeAuth: any =
-  typeof authenticateToken === "function"
+  typeof authenticateToken === 'function'
     ? authenticateToken
     : (_req: any, _res: any, next: any) => next();
 
@@ -12,12 +12,12 @@ const safeAuth: any =
  * GET /api/prices/current/:symbol
  * Get current price for a single cryptocurrency
  */
-router.get("/current/:symbol", async (req, res) => {
+router.get('/current/:symbol', async (req, res) => {
   try {
     const { symbol } = req.params;
 
     if (!symbol || symbol.length < 2) {
-      return res.status(400).json({ error: "Invalid symbol" });
+      return res.status(400).json({ error: 'Invalid symbol' });
     }
 
     const price = await priceService.getCurrentPrice(symbol);
@@ -27,10 +27,10 @@ router.get("/current/:symbol", async (req, res) => {
       data: price,
     });
   } catch (error) {
-    console.error("Price fetch error:", error);
+    console.error('Price fetch error:', error);
     res.status(500).json({
       success: false,
-      error: error instanceof Error ? error.message : "Failed to fetch price",
+      error: error instanceof Error ? error.message : 'Failed to fetch price',
     });
   }
 });
@@ -40,18 +40,18 @@ router.get("/current/:symbol", async (req, res) => {
  * Get current prices for multiple cryptocurrencies
  * Body: { symbols: ["BTC", "ETH", "SOL"] }
  */
-router.post("/batch", async (req, res) => {
+router.post('/batch', async (req, res) => {
   try {
     const { symbols } = req.body;
 
     if (!Array.isArray(symbols) || symbols.length === 0) {
-      return res.status(400).json({ error: "Invalid symbols array" });
+      return res.status(400).json({ error: 'Invalid symbols array' });
     }
 
     if (symbols.length > 50) {
       return res
         .status(400)
-        .json({ error: "Maximum 50 symbols per batch request" });
+        .json({ error: 'Maximum 50 symbols per batch request' });
     }
 
     const prices = await priceService.getBatchPrices(symbols);
@@ -68,11 +68,11 @@ router.post("/batch", async (req, res) => {
       count: prices.size,
     });
   } catch (error) {
-    console.error("Batch price fetch error:", error);
+    console.error('Batch price fetch error:', error);
     res.status(500).json({
       success: false,
       error:
-        error instanceof Error ? error.message : "Failed to fetch batch prices",
+        error instanceof Error ? error.message : 'Failed to fetch batch prices',
     });
   }
 });
@@ -82,13 +82,13 @@ router.post("/batch", async (req, res) => {
  * Get historical price data
  * Query params: days (default: 7, max: 365)
  */
-router.get("/historical/:symbol", async (req, res) => {
+router.get('/historical/:symbol', async (req, res) => {
   try {
     const { symbol } = req.params;
     const days = Math.min(parseInt(req.query.days as string) || 7, 365);
 
     if (!symbol || symbol.length < 2) {
-      return res.status(400).json({ error: "Invalid symbol" });
+      return res.status(400).json({ error: 'Invalid symbol' });
     }
 
     const historicalData = await priceService.getHistoricalPrices(symbol, days);
@@ -103,13 +103,13 @@ router.get("/historical/:symbol", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Historical price fetch error:", error);
+    console.error('Historical price fetch error:', error);
     res.status(500).json({
       success: false,
       error:
         error instanceof Error
           ? error.message
-          : "Failed to fetch historical prices",
+          : 'Failed to fetch historical prices',
     });
   }
 });
@@ -118,12 +118,12 @@ router.get("/historical/:symbol", async (req, res) => {
  * GET /api/prices/status
  * Check health of price providers (admin/monitoring)
  */
-router.get("/status", safeAuth as any, async (req: any, res) => {
+router.get('/status', safeAuth as any, async (req: any, res) => {
   try {
-    const isAdmin = req.user?.role === "ADMIN";
+    const isAdmin = req.user?.role === 'ADMIN';
 
     if (!isAdmin) {
-      return res.status(403).json({ error: "Admin access required" });
+      return res.status(403).json({ error: 'Admin access required' });
     }
 
     const [providerStatus, cacheStats] = await Promise.all([
@@ -140,10 +140,10 @@ router.get("/status", safeAuth as any, async (req: any, res) => {
       },
     });
   } catch (error) {
-    console.error("Price service status error:", error);
+    console.error('Price service status error:', error);
     res.status(500).json({
       success: false,
-      error: error instanceof Error ? error.message : "Failed to fetch status",
+      error: error instanceof Error ? error.message : 'Failed to fetch status',
     });
   }
 });
@@ -153,19 +153,19 @@ router.get("/status", safeAuth as any, async (req: any, res) => {
  * Calculate total portfolio value for authenticated user
  * Requires holdings data from user's wallet/portfolio
  */
-router.get("/portfolio", safeAuth as any, async (req: any, res) => {
+router.get('/portfolio', safeAuth as any, async (req: any, res) => {
   try {
     const userId = req.user?.userId;
 
     if (!userId) {
-      return res.status(401).json({ error: "Unauthorized" });
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
     // TODO: Fetch user's holdings from database
     // For now, return structure for frontend integration
     const mockHoldings = [
-      { symbol: "BTC", amount: 0.5 },
-      { symbol: "ETH", amount: 2.0 },
+      { symbol: 'BTC', amount: 0.5 },
+      { symbol: 'ETH', amount: 2.0 },
     ];
 
     const symbols = mockHoldings.map((h) => h.symbol);
@@ -200,13 +200,13 @@ router.get("/portfolio", safeAuth as any, async (req: any, res) => {
       },
     });
   } catch (error) {
-    console.error("Portfolio value calculation error:", error);
+    console.error('Portfolio value calculation error:', error);
     res.status(500).json({
       success: false,
       error:
         error instanceof Error
           ? error.message
-          : "Failed to calculate portfolio value",
+          : 'Failed to calculate portfolio value',
     });
   }
 });

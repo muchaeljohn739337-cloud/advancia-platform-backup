@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { captureError } from "../utils/sentry";
+import { NextFunction, Request, Response } from 'express';
+import { captureError } from '../utils/sentry';
 
 interface RateLimitEntry {
   count: number;
@@ -22,13 +22,13 @@ const attempts = new Map<string, RateLimitEntry>();
  * Helper to determine route group from URL path for rate limiting
  */
 function getRouteGroup(path: string): string {
-  if (path.includes("/api/admin")) return "admin";
-  if (path.includes("/api/payments")) return "payments";
-  if (path.includes("/api/crypto")) return "crypto";
-  if (path.includes("/api/transactions")) return "transactions";
-  if (path.includes("/api/auth")) return "auth";
-  if (path.includes("/api/users")) return "users";
-  return "general";
+  if (path.includes('/api/admin')) return 'admin';
+  if (path.includes('/api/payments')) return 'payments';
+  if (path.includes('/api/crypto')) return 'crypto';
+  if (path.includes('/api/transactions')) return 'transactions';
+  if (path.includes('/api/auth')) return 'auth';
+  if (path.includes('/api/users')) return 'users';
+  return 'general';
 }
 
 /**
@@ -36,11 +36,11 @@ function getRouteGroup(path: string): string {
  */
 function getClientIp(req: Request): string {
   return (
-    (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
-    (req.headers["x-real-ip"] as string) ||
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ||
+    (req.headers['x-real-ip'] as string) ||
     req.ip ||
     req.connection?.remoteAddress ||
-    "unknown"
+    'unknown'
   );
 }
 
@@ -62,7 +62,7 @@ export function rateLimiter(options: RateLimiterOptions = {}) {
     windowMs = 60000, // Default: 1 minute
     max = 10, // Default: 10 requests
     group,
-    message = "Too many requests, please try again later",
+    message = 'Too many requests, please try again later',
     skipSuccessfulRequests = false,
   } = options;
 
@@ -99,16 +99,16 @@ export function rateLimiter(options: RateLimiterOptions = {}) {
       // Log to Sentry in production
       captureError(new Error(`Rate limit exceeded: ${ip} on ${routeGroup}`), {
         tags: {
-          type: "security",
-          event: "rate_limit_exceeded",
-          severity: "warning",
+          type: 'security',
+          event: 'rate_limit_exceeded',
+          severity: 'warning',
           routeGroup,
         },
         extra: {
           ip,
           path: req.originalUrl,
           method: req.method,
-          userAgent: req.headers["user-agent"],
+          userAgent: req.headers['user-agent'],
           attemptsCount: entry.count,
           windowMs,
           maxAllowed: max,
@@ -159,7 +159,7 @@ setInterval(() => {
 export const strictRateLimiter = rateLimiter({
   windowMs: 900000, // 15 minutes
   max: 5, // 5 attempts
-  message: "Too many failed attempts. Please try again in 15 minutes.",
+  message: 'Too many failed attempts. Please try again in 15 minutes.',
 });
 
 /**
@@ -168,7 +168,7 @@ export const strictRateLimiter = rateLimiter({
 export const adminRateLimiter = rateLimiter({
   windowMs: 60000, // 1 minute
   max: 20, // 20 requests
-  group: "admin",
+  group: 'admin',
 });
 
 /**

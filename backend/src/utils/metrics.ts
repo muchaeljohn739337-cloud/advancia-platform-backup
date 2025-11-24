@@ -3,7 +3,7 @@
  * Provides observability for HTTP requests, active users, and withdrawals
  */
 
-import promClient from "prom-client";
+import promClient from 'prom-client';
 
 // Create a registry for all metrics
 const register = new promClient.Registry();
@@ -18,9 +18,9 @@ promClient.collectDefaultMetrics({ register });
  * Tracks the duration of HTTP requests by method, route, and status code
  */
 export const httpRequestDuration = new promClient.Histogram({
-  name: "http_request_duration_seconds",
-  help: "Duration of HTTP requests in seconds",
-  labelNames: ["method", "route", "status_code"],
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
   buckets: [0.1, 0.5, 1, 2, 5, 10], // Response time buckets in seconds
   registers: [register],
 });
@@ -30,9 +30,9 @@ export const httpRequestDuration = new promClient.Histogram({
  * Counts total HTTP requests by method, route, and status code
  */
 export const httpRequestCounter = new promClient.Counter({
-  name: "http_requests_total",
-  help: "Total number of HTTP requests",
-  labelNames: ["method", "route", "status_code"],
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code'],
   registers: [register],
 });
 
@@ -41,8 +41,8 @@ export const httpRequestCounter = new promClient.Counter({
  * Tracks the number of currently active/logged-in users
  */
 export const activeUsers = new promClient.Gauge({
-  name: "active_users_total",
-  help: "Number of active users",
+  name: 'active_users_total',
+  help: 'Number of active users',
   registers: [register],
 });
 
@@ -51,9 +51,9 @@ export const activeUsers = new promClient.Gauge({
  * Counts total number of withdrawals by currency and status
  */
 export const withdrawalTotal = new promClient.Counter({
-  name: "withdrawal_total",
-  help: "Total number of withdrawals",
-  labelNames: ["currency", "status"],
+  name: 'withdrawal_total',
+  help: 'Total number of withdrawals',
+  labelNames: ['currency', 'status'],
   registers: [register],
 });
 
@@ -62,9 +62,9 @@ export const withdrawalTotal = new promClient.Counter({
  * Tracks withdrawal amounts by currency
  */
 export const withdrawalAmount = new promClient.Summary({
-  name: "withdrawal_amount",
-  help: "Amount of withdrawals",
-  labelNames: ["currency"],
+  name: 'withdrawal_amount',
+  help: 'Amount of withdrawals',
+  labelNames: ['currency'],
   percentiles: [0.5, 0.9, 0.99], // Median, 90th, 99th percentile
   registers: [register],
 });
@@ -74,9 +74,9 @@ export const withdrawalAmount = new promClient.Summary({
  * Tracks Prisma query performance
  */
 export const dbQueryDuration = new promClient.Histogram({
-  name: "db_query_duration_seconds",
-  help: "Duration of database queries in seconds",
-  labelNames: ["operation", "model"],
+  name: 'db_query_duration_seconds',
+  help: 'Duration of database queries in seconds',
+  labelNames: ['operation', 'model'],
   buckets: [0.01, 0.05, 0.1, 0.5, 1, 2],
   registers: [register],
 });
@@ -86,9 +86,9 @@ export const dbQueryDuration = new promClient.Histogram({
  * Counts security events (IP blocks, failed auth, etc.)
  */
 export const securityAlerts = new promClient.Counter({
-  name: "security_alerts_total",
-  help: "Total number of security alerts",
-  labelNames: ["type", "severity"],
+  name: 'security_alerts_total',
+  help: 'Total number of security alerts',
+  labelNames: ['type', 'severity'],
   registers: [register],
 });
 
@@ -97,9 +97,9 @@ export const securityAlerts = new promClient.Counter({
  * Tracks currently processing payments
  */
 export const processingPayments = new promClient.Gauge({
-  name: "payments_processing",
-  help: "Number of payments currently being processed",
-  labelNames: ["provider", "currency"],
+  name: 'payments_processing',
+  help: 'Number of payments currently being processed',
+  labelNames: ['provider', 'currency'],
   registers: [register],
 });
 
@@ -108,8 +108,8 @@ export const processingPayments = new promClient.Gauge({
  * Tracks active WebSocket connections
  */
 export const websocketConnections = new promClient.Gauge({
-  name: "websocket_connections_active",
-  help: "Number of active WebSocket connections",
+  name: 'websocket_connections_active',
+  help: 'Number of active WebSocket connections',
   registers: [register],
 });
 
@@ -118,9 +118,9 @@ export const websocketConnections = new promClient.Gauge({
  * Counts application errors by type and route
  */
 export const errorCounter = new promClient.Counter({
-  name: "errors_total",
-  help: "Total number of application errors",
-  labelNames: ["type", "route", "status_code"],
+  name: 'errors_total',
+  help: 'Total number of application errors',
+  labelNames: ['type', 'route', 'status_code'],
   registers: [register],
 });
 
@@ -158,9 +158,9 @@ export function metricsMiddleware(req: any, res: any, next: any) {
   const start = Date.now();
 
   // Track response finish
-  res.on("finish", () => {
+  res.on('finish', () => {
     const duration = (Date.now() - start) / 1000; // Convert to seconds
-    const route = req.route?.path || req.path || "unknown";
+    const route = req.route?.path || req.path || 'unknown';
     const method = req.method;
     const statusCode = res.statusCode;
 
@@ -174,9 +174,9 @@ export function metricsMiddleware(req: any, res: any, next: any) {
     if (statusCode >= 400) {
       errorCounter
         .labels(
-          statusCode >= 500 ? "server_error" : "client_error",
+          statusCode >= 500 ? 'server_error' : 'client_error',
           route,
-          statusCode.toString()
+          statusCode.toString(),
         )
         .inc();
     }
@@ -191,7 +191,7 @@ export function metricsMiddleware(req: any, res: any, next: any) {
 export function trackWithdrawal(
   currency: string,
   status: string,
-  amount: number
+  amount: number,
 ) {
   withdrawalTotal.labels(currency, status).inc();
   withdrawalAmount.labels(currency).observe(amount);
@@ -202,7 +202,7 @@ export function trackWithdrawal(
  */
 export function trackSecurityAlert(
   type: string,
-  severity: "low" | "medium" | "high" | "critical"
+  severity: 'low' | 'medium' | 'high' | 'critical',
 ) {
   securityAlerts.labels(type, severity).inc();
 }
@@ -213,7 +213,7 @@ export function trackSecurityAlert(
 export function trackDbQuery(
   operation: string,
   model: string,
-  durationMs: number
+  durationMs: number,
 ) {
   dbQueryDuration.labels(operation, model).observe(durationMs / 1000); // Convert to seconds
 }
@@ -231,7 +231,7 @@ export function updateActiveUsers(count: number) {
 export function trackPaymentProcessing(
   provider: string,
   currency: string,
-  increment: boolean = true
+  increment: boolean = true,
 ) {
   if (increment) {
     processingPayments.labels(provider, currency).inc();

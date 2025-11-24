@@ -1,14 +1,14 @@
 // RPA Module - Main Export
 // Central export point for all RPA automation modules
 
-export { default as dataBackupSync } from "./dataBackupSync";
-export { default as kycVerifier } from "./kycVerifier";
-export { default as notificationAutomation } from "./notificationAutomation";
-export { default as reportGenerator } from "./reportGenerator";
-export { default as transactionProcessor } from "./transactionProcessor";
+export { default as dataBackupSync } from './dataBackupSync';
+export { default as kycVerifier } from './kycVerifier';
+export { default as notificationAutomation } from './notificationAutomation';
+export { default as reportGenerator } from './reportGenerator';
+export { default as transactionProcessor } from './transactionProcessor';
 // export { default as rpaScheduler } from "./scheduler"; // TEMP DISABLED - compilation errors
-export { default as chatbotSupport } from "./chatbot";
-export { rpaConfig } from "./config";
+export { default as chatbotSupport } from './chatbot';
+export { rpaConfig } from './config';
 // export { default as rpaRoutes } from "./routes"; // TEMP DISABLED - compilation errors
 
 // Note: For scheduler control functions, import rpaScheduler directly:

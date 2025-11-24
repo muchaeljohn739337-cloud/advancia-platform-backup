@@ -40,7 +40,7 @@ class SecurityAuditor {
         audit.metadata.vulnerabilities.critical > 0
       ) {
         this.issues.push(
-          `Found ${audit.metadata.vulnerabilities.critical} critical and ${audit.metadata.vulnerabilities.high} high vulnerabilities`
+          `Found ${audit.metadata.vulnerabilities.critical} critical and ${audit.metadata.vulnerabilities.high} high vulnerabilities`,
         );
       } else {
         console.log("  ✅ No critical/high vulnerabilities found");
@@ -54,7 +54,7 @@ class SecurityAuditor {
             audit.metadata.vulnerabilities.critical > 0
           ) {
             this.issues.push(
-              `Found ${audit.metadata.vulnerabilities.critical} critical and ${audit.metadata.vulnerabilities.high} high vulnerabilities`
+              `Found ${audit.metadata.vulnerabilities.critical} critical and ${audit.metadata.vulnerabilities.high} high vulnerabilities`,
             );
           } else {
             console.log("  ✅ No critical/high vulnerabilities found");
@@ -72,7 +72,7 @@ class SecurityAuditor {
 
     if (!fs.existsSync(envFile)) {
       this.warnings.push(
-        ".env file not found - make sure to configure before deployment"
+        ".env file not found - make sure to configure before deployment",
       );
       return;
     }
@@ -90,7 +90,7 @@ class SecurityAuditor {
     placeholders.forEach((placeholder) => {
       if (envContent.includes(placeholder)) {
         this.warnings.push(
-          `Possible placeholder value found in .env: "${placeholder}"`
+          `Possible placeholder value found in .env: "${placeholder}"`,
         );
       }
     });
@@ -114,7 +114,7 @@ class SecurityAuditor {
       configContent.includes('origin:"*"')
     ) {
       this.issues.push(
-        "CORS allows all origins (*) - restrict to specific domains in production"
+        "CORS allows all origins (*) - restrict to specific domains in production",
       );
     } else {
       console.log("  ✅ CORS appears to be restricted");

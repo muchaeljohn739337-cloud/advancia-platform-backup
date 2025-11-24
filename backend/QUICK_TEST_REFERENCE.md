@@ -1,6 +1,7 @@
 # Quick Reference: Test Infrastructure
 
 ## Files Created
+
 - ✅ `tests/setup/mocks.ts` - Mock objects for Cryptomus, Email, Blockchain
 - ✅ `tests/setup/testEnv.ts` - Environment helpers
 - ✅ `tests/setup/adminSetup.ts` - User management & auth
@@ -10,6 +11,7 @@
 - ✅ `scripts/enable-notification-tests.ts` - Automation
 
 ## Current Status
+
 ```
 Tests: 65 passed, 19 skipped (84 total)
 ```
@@ -22,10 +24,16 @@ npx ts-node scripts/enable-notification-tests.ts
 ```
 
 Then edit `tests/integration.test.ts` line ~546:
-```typescript
-import { createTestAdmin, generateAdminToken, cleanupTestAdmin } from './setup/adminSetup';
 
-describe("Notifications", () => {  // Remove .skip
+```typescript
+import {
+  createTestAdmin,
+  generateAdminToken,
+  cleanupTestAdmin,
+} from "./setup/adminSetup";
+
+describe("Notifications", () => {
+  // Remove .skip
   let adminToken: string;
 
   beforeAll(async () => {
@@ -44,6 +52,7 @@ describe("Notifications", () => {  // Remove .skip
 ```
 
 Run tests:
+
 ```bash
 npm test
 ```
@@ -66,7 +75,7 @@ it('test', async () => {
 ## Admin Authentication
 
 ```typescript
-import { createTestAdmin, generateAdminToken } from './setup/adminSetup';
+import { createTestAdmin, generateAdminToken } from "./setup/adminSetup";
 
 let adminToken: string;
 
@@ -75,21 +84,21 @@ beforeAll(async () => {
   adminToken = generateAdminToken(admin.id);
 });
 
-it('admin test', async () => {
+it("admin test", async () => {
   const res = await request(app)
-    .get('/api/admin/endpoint')
-    .set('Authorization', `Bearer ${adminToken}`);
+    .get("/api/admin/endpoint")
+    .set("Authorization", `Bearer ${adminToken}`);
 });
 ```
 
 ## Environment Helpers
 
 ```typescript
-import { loadTestEnv, skipIfNoCredentials } from './setup/testEnv';
+import { loadTestEnv, skipIfNoCredentials } from "./setup/testEnv";
 
 beforeAll(() => {
   loadTestEnv();
-  skipIfNoCredentials(['CRYPTOMUS_API_KEY']);
+  skipIfNoCredentials(["CRYPTOMUS_API_KEY"]);
 });
 ```
 
@@ -105,10 +114,12 @@ beforeAll(() => {
 ```
 
 ## Documentation
+
 - `TEST_INFRASTRUCTURE_COMPLETE.md` - Full summary & examples
 - `TEST_IMPLEMENTATION_GUIDE.md` - Detailed enablement guide
 
 ## Next Steps
+
 1. Enable notification tests (5 min)
 2. Add npm scripts to package.json
 3. Run: `npm test`

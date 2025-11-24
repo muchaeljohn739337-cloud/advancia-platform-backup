@@ -5,7 +5,8 @@ const swaggerDefinition = {
   info: {
     title: 'Advancia Pay Ledger API',
     version: '1.0.0',
-    description: 'Complete API documentation for Advancia Pay Ledger - A modular SaaS payment platform',
+    description:
+      'Complete API documentation for Advancia Pay Ledger - A modular SaaS payment platform',
     contact: {
       name: 'API Support',
       email: 'support@advancia.com',
@@ -88,10 +89,16 @@ const swaggerDefinition = {
         properties: {
           id: { type: 'string', format: 'uuid' },
           userId: { type: 'string', format: 'uuid' },
-          type: { type: 'string', enum: ['DEPOSIT', 'WITHDRAWAL', 'TRANSFER', 'PAYMENT'] },
+          type: {
+            type: 'string',
+            enum: ['DEPOSIT', 'WITHDRAWAL', 'TRANSFER', 'PAYMENT'],
+          },
           amount: { type: 'number', format: 'decimal' },
           currency: { type: 'string' },
-          status: { type: 'string', enum: ['PENDING', 'COMPLETED', 'FAILED', 'CANCELLED'] },
+          status: {
+            type: 'string',
+            enum: ['PENDING', 'COMPLETED', 'FAILED', 'CANCELLED'],
+          },
           description: { type: 'string' },
           metadata: { type: 'object' },
           createdAt: { type: 'string', format: 'date-time' },
@@ -104,8 +111,14 @@ const swaggerDefinition = {
           userId: { type: 'string', format: 'uuid' },
           subject: { type: 'string' },
           description: { type: 'string' },
-          status: { type: 'string', enum: ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'] },
-          priority: { type: 'string', enum: ['LOW', 'MEDIUM', 'HIGH', 'URGENT'] },
+          status: {
+            type: 'string',
+            enum: ['OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'],
+          },
+          priority: {
+            type: 'string',
+            enum: ['LOW', 'MEDIUM', 'HIGH', 'URGENT'],
+          },
           assignedTo: { type: 'string', format: 'uuid', nullable: true },
           createdAt: { type: 'string', format: 'date-time' },
           updatedAt: { type: 'string', format: 'date-time' },
@@ -184,7 +197,10 @@ const swaggerDefinition = {
     },
   },
   tags: [
-    { name: 'Authentication', description: 'User authentication and authorization' },
+    {
+      name: 'Authentication',
+      description: 'User authentication and authorization',
+    },
     { name: 'Users', description: 'User management endpoints' },
     { name: 'Wallets', description: 'Token and crypto wallet operations' },
     { name: 'Transactions', description: 'Transaction management and history' },

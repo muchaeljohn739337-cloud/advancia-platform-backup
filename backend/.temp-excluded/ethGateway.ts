@@ -2,7 +2,8 @@ import { ethers } from "ethers";
 
 // Initialize Ethereum provider using public RPC endpoint
 // Using Ethereum's public RPC endpoint (no API key required)
-const providerUrl = process.env.ETH_PROVIDER_URL || "https://ethereum.publicnode.com";
+const providerUrl =
+  process.env.ETH_PROVIDER_URL || "https://ethereum.publicnode.com";
 
 // Lazy initialization of provider with explicit network configuration
 let provider: ethers.providers.JsonRpcProvider | null = null;
@@ -26,7 +27,7 @@ export async function getEthBalance(address: string): Promise<number> {
     if (!ethers.utils.isAddress(address)) {
       throw new Error("Invalid Ethereum address");
     }
-    
+
     const balance = await getProvider().getBalance(address);
     return parseFloat(ethers.utils.formatEther(balance));
   } catch (error) {
@@ -100,7 +101,7 @@ export async function getTransactionReceipt(txHash: string) {
 export async function sendEthTransaction(
   fromPrivateKey: string,
   toAddress: string,
-  amountEth: number
+  amountEth: number,
 ): Promise<string> {
   try {
     if (!ethers.utils.isAddress(toAddress)) {
@@ -108,11 +109,11 @@ export async function sendEthTransaction(
     }
 
     const wallet = new ethers.Wallet(fromPrivateKey, getProvider());
-    
+
     // Check sender balance
     const balance = await wallet.getBalance();
     const amountWei = ethers.utils.parseEther(amountEth.toString());
-    
+
     if (balance.lt(amountWei)) {
       throw new Error("Insufficient balance for transaction");
     }
@@ -146,7 +147,7 @@ export async function sendEthTransaction(
 export async function verifyTransaction(txHash: string): Promise<boolean> {
   try {
     const receipt = await getTransactionReceipt(txHash);
-    
+
     if (!receipt) {
       return false; // Still pending
     }
@@ -170,12 +171,16 @@ export async function verifyTransaction(txHash: string): Promise<boolean> {
  */
 export async function estimateTransferCost(
   toAddress: string,
-  amountEth: number
-): Promise<{ gasLimit: number; gasPriceGwei: number; estimatedCostEth: number }> {
+  amountEth: number,
+): Promise<{
+  gasLimit: number;
+  gasPriceGwei: number;
+  estimatedCostEth: number;
+}> {
   try {
     const normalizedAddress = ethers.utils.getAddress(toAddress);
     const amountWei = ethers.utils.parseEther(amountEth.toString());
-    
+
     // Estimate gas limit
     const gasLimit = await getProvider().estimateGas({
       to: normalizedAddress,

@@ -1,7 +1,7 @@
-import express, { Request, Response, NextFunction } from "express";
-import { helmetMiddleware } from "./middleware/security";
-import cors from "cors";
-import { logger } from "./logger";
+import express, { Request, Response, NextFunction } from 'express';
+import { helmetMiddleware } from './middleware/security';
+import cors from 'cors';
+import { logger } from './logger';
 
 // Initialize express app
 const app = express();
@@ -22,7 +22,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
       path: req.path,
       status: res.statusCode,
       duration: `${duration}ms`,
-      ip: req.ip || req.headers['x-forwarded-for'] || 'unknown'
+      ip: req.ip || req.headers['x-forwarded-for'] || 'unknown',
     });
   });
 
@@ -33,19 +33,19 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // Route registration deferred to index.ts to ensure correct middleware order
 
 // Root health check
-app.get("/", (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   logger.debug('Root endpoint accessed');
-  res.send("Backend running ✅");
+  res.send('Backend running ✅');
 });
 
 // Health check route
-app.get("/health", (req: Request, res: Response) => {
+app.get('/health', (req: Request, res: Response) => {
   res.json({
-    status: "healthy",
+    status: 'healthy',
     timestamp: new Date().toISOString(),
-    service: "advancia-backend",
-    version: "1.0.0",
-    uptime: process.uptime()
+    service: 'advancia-backend',
+    version: '1.0.0',
+    uptime: process.uptime(),
   });
 });
 

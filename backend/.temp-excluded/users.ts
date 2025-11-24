@@ -33,7 +33,7 @@ router.get(
       const page = Math.max(1, Number((req.query as any).page) || 1);
       const pageSize = Math.max(
         1,
-        Math.min(100, Number((req.query as any).pageSize) || 20)
+        Math.min(100, Number((req.query as any).pageSize) || 20),
       );
       const skip = (page - 1) * pageSize;
 
@@ -98,7 +98,7 @@ router.get(
       console.error("Error fetching users:", err);
       return res.status(500).json({ error: "Failed to fetch users" });
     }
-  }
+  },
 );
 
 // POST /api/admin/fund/:id
@@ -153,7 +153,7 @@ router.post(
       console.error("Error updating user balance:", err);
       return res.status(500).json({ error: "Failed to update balance" });
     }
-  }
+  },
 );
 
 // POST /api/admin/fund-all
@@ -268,7 +268,7 @@ router.post(
         .status(500)
         .json({ error: "Failed to credit all users (batched)" });
     }
-  }
+  },
 );
 
 // POST /api/admin/update-role/:id
@@ -311,7 +311,7 @@ router.post(
       console.error("Error updating user role:", err);
       return res.status(500).json({ error: "Failed to update user role" });
     }
-  }
+  },
 );
 
 // POST /api/admin/users/:id/add-balance
@@ -366,10 +366,10 @@ router.post(
         balanceType.toUpperCase() === "USD"
           ? "usdBalance"
           : balanceType.toUpperCase() === "BTC"
-          ? "btcBalance"
-          : balanceType.toUpperCase() === "ETH"
-          ? "ethBalance"
-          : "usdtBalance";
+            ? "btcBalance"
+            : balanceType.toUpperCase() === "ETH"
+              ? "ethBalance"
+              : "usdtBalance";
 
       // Update user balance
       const updatedUser = await prisma.user.update({
@@ -446,7 +446,7 @@ router.post(
       console.error("Error adding balance:", err);
       return res.status(500).json({ error: "Failed to add balance" });
     }
-  }
+  },
 );
 
 // PATCH /api/admin/users/:id/role - updates the Role enum on User
@@ -473,7 +473,7 @@ router.patch(
       console.error("Error updating user role (PATCH):", err);
       return res.status(500).json({ error: "Failed to update user role" });
     }
-  }
+  },
 );
 
 // GET /api/admin/users/:id - fetch full user detail: profile, balances, kyc, recent activity
@@ -592,7 +592,7 @@ router.get(
       console.error("Error fetching user detail:", err);
       return res.status(500).json({ error: "Failed to fetch user detail" });
     }
-  }
+  },
 );
 
 // GET /api/admin/users/:id/activity - Get activity/audit logs for a user
@@ -660,7 +660,7 @@ router.get(
       console.error("Error fetching user activity:", err);
       return res.status(500).json({ error: "Failed to fetch user activity" });
     }
-  }
+  },
 );
 
 // PATCH /api/admin/users/:id/status - toggle user active/suspended status
@@ -693,7 +693,7 @@ router.patch(
       console.error("Error updating user status:", err);
       return res.status(500).json({ error: "Failed to update user status" });
     }
-  }
+  },
 );
 
 // GET /api/admin/bulk-credits/recent?limit=5
@@ -724,7 +724,7 @@ router.get(
         .status(500)
         .json({ error: "Failed to fetch recent bulk credits" });
     }
-  }
+  },
 );
 
 // GET /api/admin/bulk-credits?page=1&pageSize=5
@@ -738,7 +738,7 @@ router.get(
       const page = Math.max(1, Number(req.query.page) || 1);
       const pageSize = Math.max(
         1,
-        Math.min(100, Number((req.query as any).pageSize) || 5)
+        Math.min(100, Number((req.query as any).pageSize) || 5),
       );
       const skip = (page - 1) * pageSize;
       const where = { source: "admin:bulk-credit" as const };
@@ -780,7 +780,7 @@ router.get(
       console.error("Error fetching paginated bulk credits:", err);
       return res.status(500).json({ error: "Failed to fetch bulk credits" });
     }
-  }
+  },
 );
 
 // ============================================
@@ -821,7 +821,7 @@ router.get(
         error: "Failed to fetch rate limit statistics",
       });
     }
-  }
+  },
 );
 
 /**
@@ -847,7 +847,7 @@ router.get(
         error: "Failed to fetch rate limit groups",
       });
     }
-  }
+  },
 );
 
 /**
@@ -881,7 +881,7 @@ router.post(
         "CLEAR_RATE_LIMIT",
         "RATE_LIMIT",
         identifier,
-        { group, identifier }
+        { group, identifier },
       );
 
       return res.json({
@@ -895,7 +895,7 @@ router.post(
         error: "Failed to clear rate limit",
       });
     }
-  }
+  },
 );
 
 /**
@@ -926,7 +926,7 @@ router.get(
       const trends = await getOffenderTrends(
         group as string,
         identifier as string,
-        minutes
+        minutes,
       );
 
       return res.json({
@@ -943,7 +943,7 @@ router.get(
         error: "Failed to fetch offender trends",
       });
     }
-  }
+  },
 );
 
 /**
@@ -985,7 +985,7 @@ router.get(
         error: "Failed to fetch global trends",
       });
     }
-  }
+  },
 );
 
 /**
@@ -1027,7 +1027,7 @@ router.get(
         error: "Failed to fetch alert history",
       });
     }
-  }
+  },
 );
 
 export default router;

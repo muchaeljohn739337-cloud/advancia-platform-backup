@@ -244,7 +244,7 @@ describe("UAT: New API Endpoints", () => {
       if (response.body.rewards.length > 0) {
         const calculatedTotal = response.body.rewards.reduce(
           (sum: number, r: any) => sum + r.amount,
-          0
+          0,
         );
         expect(response.body.totalAmount).toBe(calculatedTotal);
       }
@@ -335,7 +335,7 @@ describe("UAT: New API Endpoints", () => {
       response.body.leaderboard.forEach((user: any) => {
         expect(user.tier).toBeDefined();
         expect(["bronze", "silver", "gold", "platinum"]).toContain(
-          user.tier.toLowerCase()
+          user.tier.toLowerCase(),
         );
       });
     });
@@ -365,7 +365,7 @@ describe("UAT: New API Endpoints", () => {
       const page2Ids = page2Response.body.leaderboard.map((u: any) => u.userId);
 
       const intersection = page1Ids.filter((id: string) =>
-        page2Ids.includes(id)
+        page2Ids.includes(id),
       );
       expect(intersection.length).toBe(0);
     });
@@ -398,7 +398,7 @@ describe("UAT: New API Endpoints", () => {
         .set("Authorization", `Bearer ${authToken}`);
 
       expect(updatedBalance.body.tokenBalance).toBeLessThan(
-        initialBalance.body.tokenBalance
+        initialBalance.body.tokenBalance,
       );
     });
 
@@ -409,7 +409,7 @@ describe("UAT: New API Endpoints", () => {
         .set("Authorization", `Bearer ${authToken}`);
 
       const userInLeaderboard = beforeResponse.body.leaderboard.some(
-        (user: any) => user.userId === testUserId
+        (user: any) => user.userId === testUserId,
       );
 
       expect(userInLeaderboard).toBe(true);

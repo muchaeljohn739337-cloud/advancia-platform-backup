@@ -13,7 +13,11 @@ import jwt from "jsonwebtoken";
 import request from "supertest";
 import prisma from "../src/prismaClient";
 import app from "./test-app";
-import { createTestAdmin, generateAdminToken, cleanupTestAdmin } from "./setup/adminSetup";
+import {
+  createTestAdmin,
+  generateAdminToken,
+  cleanupTestAdmin,
+} from "./setup/adminSetup";
 
 // Mock notificationService to prevent real notifications during tests
 jest.mock("../src/services/notificationService", () => ({
@@ -118,7 +122,7 @@ async function seedAdmin() {
       role: "ADMIN",
     },
     JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: "1h" },
   );
 
   return { admin, token };
@@ -251,7 +255,7 @@ describe("Integration Tests - Core Endpoints", () => {
 
       console.log(
         "🔍 Testing /api/auth/me with token:",
-        authToken.substring(0, 30) + "..."
+        authToken.substring(0, 30) + "...",
       );
 
       const res = await request(app)
@@ -319,7 +323,7 @@ describe("Integration Tests - Core Endpoints", () => {
         res.body.insights || res.body.data?.insights || res.body.data;
       expect(
         Array.isArray(insights) ||
-          (res.body.success !== undefined && res.body.data !== undefined)
+          (res.body.success !== undefined && res.body.data !== undefined),
       ).toBe(true);
     });
 
@@ -400,7 +404,7 @@ describe("Integration Tests - Core Endpoints", () => {
         res.body.data;
       expect(
         Array.isArray(recommendations) ||
-          (res.body.success !== undefined && res.body.data !== undefined)
+          (res.body.success !== undefined && res.body.data !== undefined),
       ).toBe(true);
     });
   }); // ════════════════════════════════════════════════════
@@ -570,9 +574,9 @@ describe("Integration Tests - Core Endpoints", () => {
         .expect(200);
 
       // Response is {notifications: [], unreadCount: 0}
-      expect(res.body).toHaveProperty('notifications');
+      expect(res.body).toHaveProperty("notifications");
       expect(Array.isArray(res.body.notifications)).toBe(true);
-      expect(res.body).toHaveProperty('unreadCount');
+      expect(res.body).toHaveProperty("unreadCount");
     });
 
     it("should mark notification as read", async () => {
@@ -590,12 +594,14 @@ describe("Integration Tests - Core Endpoints", () => {
       });
 
       const res = await request(app)
-        .post(`/api/admin/user-approval/notifications/${notification.id}/mark-read`)
+        .post(
+          `/api/admin/user-approval/notifications/${notification.id}/mark-read`,
+        )
         .set("x-api-key", API_KEY)
         .set("Authorization", `Bearer ${adminToken}`)
         .expect(200);
 
-      expect(res.body.message).toBe('Notification marked as read');
+      expect(res.body.message).toBe("Notification marked as read");
 
       // Cleanup
       await prisma.adminNotification.delete({ where: { id: notification.id } });
@@ -643,7 +649,8 @@ describe("Integration Tests - Admin Endpoints", () => {
   it("should get dashboard stats", async () => {
     expect(adminToken).toBeDefined();
 
-    const ADMIN_KEY = process.env.ADMIN_KEY || "supersecureadminkey123-production";
+    const ADMIN_KEY =
+      process.env.ADMIN_KEY || "supersecureadminkey123-production";
 
     const res = await request(app)
       .get("/api/admin/stats")
@@ -668,7 +675,8 @@ describe("Integration Tests - Admin Endpoints", () => {
   it("should get all users", async () => {
     expect(adminToken).toBeDefined();
 
-    const ADMIN_KEY = process.env.ADMIN_KEY || "supersecureadminkey123-production";
+    const ADMIN_KEY =
+      process.env.ADMIN_KEY || "supersecureadminkey123-production";
 
     const res = await request(app)
       .get("/api/admin/users")

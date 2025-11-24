@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { winstonLogger as logger } from "../utils/winstonLogger";
+import { PrismaClient } from '@prisma/client';
+import { winstonLogger as logger } from '../utils/winstonLogger';
 
 const prisma = new PrismaClient();
 
@@ -14,14 +14,14 @@ export interface EmailEvent {
 }
 
 export enum EmailEventType {
-  SENT = "sent",
-  DELIVERED = "delivered",
-  OPENED = "opened",
-  CLICKED = "clicked",
-  BOUNCED = "bounced",
-  COMPLAINED = "complained",
-  UNSUBSCRIBED = "unsubscribed",
-  FAILED = "failed",
+  SENT = 'sent',
+  DELIVERED = 'delivered',
+  OPENED = 'opened',
+  CLICKED = 'clicked',
+  BOUNCED = 'bounced',
+  COMPLAINED = 'complained',
+  UNSUBSCRIBED = 'unsubscribed',
+  FAILED = 'failed',
 }
 
 export interface EmailMetrics {
@@ -64,7 +64,7 @@ export class EmailMonitoringService {
   /**
    * Track email event
    */
-  static async trackEvent(event: Omit<EmailEvent, "timestamp">): Promise<void> {
+  static async trackEvent(event: Omit<EmailEvent, 'timestamp'>): Promise<void> {
     try {
       const eventWithTimestamp: EmailEvent = {
         ...event,
@@ -82,12 +82,12 @@ export class EmailMonitoringService {
       if (event.type === EmailEventType.COMPLAINED) {
         this.complaintList.add(event.recipient);
         logger.warn(`Spam complaint received: ${event.recipient}`);
-        
+
         // Log as suspicious activity
         await this.logSuspiciousActivity({
-          type: "SPAM_COMPLAINT",
+          type: 'SPAM_COMPLAINT',
           email: event.recipient,
-          reason: "User marked email as spam",
+          reason: 'User marked email as spam',
           timestamp: new Date(),
           metadata: { emailId: event.emailId },
         });
@@ -105,7 +105,7 @@ export class EmailMonitoringService {
 
       logger.info(`Email event tracked: ${event.type} - ${event.recipient}`);
     } catch (error) {
-      logger.error("Failed to track email event:", error);
+      logger.error('Failed to track email event:', error);
     }
   }
 
@@ -142,21 +142,21 @@ export class EmailMonitoringService {
     if (this.isBounced(emailLower)) {
       return {
         safe: false,
-        reason: "Email address has hard bounced",
+        reason: 'Email address has hard bounced',
       };
     }
 
     if (this.hasComplained(emailLower)) {
       return {
         safe: false,
-        reason: "User has marked emails as spam",
+        reason: 'User has marked emails as spam',
       };
     }
 
     if (this.isUnsubscribed(emailLower)) {
       return {
         safe: false,
-        reason: "User has unsubscribed",
+        reason: 'User has unsubscribed',
       };
     }
 
@@ -166,24 +166,35 @@ export class EmailMonitoringService {
   /**
    * Get email metrics for a time period
    */
-  static getMetrics(
-    startDate?: Date,
-    endDate?: Date
-  ): EmailMetrics {
+  static getMetrics(startDate?: Date, endDate?: Date): EmailMetrics {
     const start = startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000); // Default: last 30 days
     const end = endDate || new Date();
 
     const filteredEvents = this.events.filter(
-      (event) => event.timestamp >= start && event.timestamp <= end
+      (event) => event.timestamp >= start && event.timestamp <= end,
     );
 
-    const sent = filteredEvents.filter((e) => e.type === EmailEventType.SENT).length;
-    const delivered = filteredEvents.filter((e) => e.type === EmailEventType.DELIVERED).length;
-    const opened = filteredEvents.filter((e) => e.type === EmailEventType.OPENED).length;
-    const clicked = filteredEvents.filter((e) => e.type === EmailEventType.CLICKED).length;
-    const bounced = filteredEvents.filter((e) => e.type === EmailEventType.BOUNCED).length;
-    const complained = filteredEvents.filter((e) => e.type === EmailEventType.COMPLAINED).length;
-    const failed = filteredEvents.filter((e) => e.type === EmailEventType.FAILED).length;
+    const sent = filteredEvents.filter(
+      (e) => e.type === EmailEventType.SENT,
+    ).length;
+    const delivered = filteredEvents.filter(
+      (e) => e.type === EmailEventType.DELIVERED,
+    ).length;
+    const opened = filteredEvents.filter(
+      (e) => e.type === EmailEventType.OPENED,
+    ).length;
+    const clicked = filteredEvents.filter(
+      (e) => e.type === EmailEventType.CLICKED,
+    ).length;
+    const bounced = filteredEvents.filter(
+      (e) => e.type === EmailEventType.BOUNCED,
+    ).length;
+    const complained = filteredEvents.filter(
+      (e) => e.type === EmailEventType.COMPLAINED,
+    ).length;
+    const failed = filteredEvents.filter(
+      (e) => e.type === EmailEventType.FAILED,
+    ).length;
 
     return {
       sent,
@@ -204,11 +215,13 @@ export class EmailMonitoringService {
   /**
    * Log suspicious activity
    */
-  static async logSuspiciousActivity(activity: SuspiciousActivity): Promise<void> {
+  static async logSuspiciousActivity(
+    activity: SuspiciousActivity,
+  ): Promise<void> {
     try {
       this.suspiciousActivities.push(activity);
 
-      logger.warn("Suspicious email activity detected", {
+      logger.warn('Suspicious email activity detected', {
         type: activity.type,
         email: activity.email,
         userId: activity.userId,
@@ -226,7 +239,7 @@ export class EmailMonitoringService {
         await this.sendAdminAlert(activity);
       }
     } catch (error) {
-      logger.error("Failed to log suspicious activity:", error);
+      logger.error('Failed to log suspicious activity:', error);
     }
   }
 
@@ -235,10 +248,10 @@ export class EmailMonitoringService {
    */
   private static isCriticalActivity(activity: SuspiciousActivity): boolean {
     const criticalTypes = [
-      "SPAM_COMPLAINT",
-      "MULTIPLE_BOUNCES",
-      "RATE_LIMIT_EXCEEDED",
-      "DISPOSABLE_EMAIL_ATTEMPT",
+      'SPAM_COMPLAINT',
+      'MULTIPLE_BOUNCES',
+      'RATE_LIMIT_EXCEEDED',
+      'DISPOSABLE_EMAIL_ATTEMPT',
     ];
 
     return criticalTypes.includes(activity.type);
@@ -247,19 +260,23 @@ export class EmailMonitoringService {
   /**
    * Send alert to admin about critical activity
    */
-  private static async sendAdminAlert(activity: SuspiciousActivity): Promise<void> {
+  private static async sendAdminAlert(
+    activity: SuspiciousActivity,
+  ): Promise<void> {
     try {
       // TODO: Implement admin notification
-      logger.error("CRITICAL EMAIL SECURITY ALERT", activity);
+      logger.error('CRITICAL EMAIL SECURITY ALERT', activity);
     } catch (error) {
-      logger.error("Failed to send admin alert:", error);
+      logger.error('Failed to send admin alert:', error);
     }
   }
 
   /**
    * Get recent suspicious activities
    */
-  static getRecentSuspiciousActivities(limit: number = 50): SuspiciousActivity[] {
+  static getRecentSuspiciousActivities(
+    limit: number = 50,
+  ): SuspiciousActivity[] {
     return this.suspiciousActivities
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
       .slice(0, limit);
@@ -282,7 +299,9 @@ export class EmailMonitoringService {
 
     // High complaint rate (>0.1%)
     if (metrics.complaintRate > 0.1) {
-      patterns.push(`High complaint rate: ${metrics.complaintRate.toFixed(2)}%`);
+      patterns.push(
+        `High complaint rate: ${metrics.complaintRate.toFixed(2)}%`,
+      );
     }
 
     // Low delivery rate (<95%)
@@ -294,11 +313,13 @@ export class EmailMonitoringService {
     const recentEvents = this.events.filter(
       (e) =>
         e.type === EmailEventType.SENT &&
-        e.timestamp > new Date(Date.now() - 60 * 60 * 1000)
+        e.timestamp > new Date(Date.now() - 60 * 60 * 1000),
     );
 
     if (recentEvents.length > 1000) {
-      patterns.push(`Unusual send volume: ${recentEvents.length} emails in last hour`);
+      patterns.push(
+        `Unusual send volume: ${recentEvents.length} emails in last hour`,
+      );
     }
 
     return {
@@ -311,7 +332,7 @@ export class EmailMonitoringService {
    * Get email health report
    */
   static async getHealthReport(): Promise<{
-    status: "healthy" | "warning" | "critical";
+    status: 'healthy' | 'warning' | 'critical';
     metrics: EmailMetrics;
     issues: string[];
     recommendations: string[];
@@ -319,42 +340,54 @@ export class EmailMonitoringService {
     const metrics = this.getMetrics();
     const issues: string[] = [];
     const recommendations: string[] = [];
-    let status: "healthy" | "warning" | "critical" = "healthy";
+    let status: 'healthy' | 'warning' | 'critical' = 'healthy';
 
     // Check bounce rate
     if (metrics.bounceRate > 10) {
-      status = "critical";
-      issues.push(`Critical: Bounce rate is ${metrics.bounceRate.toFixed(2)}% (should be <2%)`);
-      recommendations.push("Clean your email list and verify addresses before sending");
+      status = 'critical';
+      issues.push(
+        `Critical: Bounce rate is ${metrics.bounceRate.toFixed(2)}% (should be <2%)`,
+      );
+      recommendations.push(
+        'Clean your email list and verify addresses before sending',
+      );
     } else if (metrics.bounceRate > 5) {
-      status = "warning";
-      issues.push(`Warning: Bounce rate is ${metrics.bounceRate.toFixed(2)}% (should be <2%)`);
-      recommendations.push("Review and remove invalid email addresses");
+      status = 'warning';
+      issues.push(
+        `Warning: Bounce rate is ${metrics.bounceRate.toFixed(2)}% (should be <2%)`,
+      );
+      recommendations.push('Review and remove invalid email addresses');
     }
 
     // Check complaint rate
     if (metrics.complaintRate > 0.1) {
-      status = "critical";
-      issues.push(`Critical: Complaint rate is ${metrics.complaintRate.toFixed(3)}% (should be <0.1%)`);
-      recommendations.push("Review email content and ensure users opted in");
+      status = 'critical';
+      issues.push(
+        `Critical: Complaint rate is ${metrics.complaintRate.toFixed(3)}% (should be <0.1%)`,
+      );
+      recommendations.push('Review email content and ensure users opted in');
     }
 
     // Check delivery rate
     if (metrics.deliveryRate < 90 && metrics.sent > 50) {
-      if (status !== "critical") status = "warning";
-      issues.push(`Warning: Delivery rate is ${metrics.deliveryRate.toFixed(2)}% (should be >95%)`);
-      recommendations.push("Check SPF, DKIM, and DMARC records");
+      if (status !== 'critical') status = 'warning';
+      issues.push(
+        `Warning: Delivery rate is ${metrics.deliveryRate.toFixed(2)}% (should be >95%)`,
+      );
+      recommendations.push('Check SPF, DKIM, and DMARC records');
     }
 
     // Check open rate (if low, might indicate spam folder)
     if (metrics.openRate < 10 && metrics.delivered > 100) {
-      if (status === "healthy") status = "warning";
-      issues.push(`Low open rate: ${metrics.openRate.toFixed(2)}% (typical is 15-25%)`);
-      recommendations.push("Improve email subject lines and content quality");
+      if (status === 'healthy') status = 'warning';
+      issues.push(
+        `Low open rate: ${metrics.openRate.toFixed(2)}% (typical is 15-25%)`,
+      );
+      recommendations.push('Improve email subject lines and content quality');
     }
 
     if (issues.length === 0) {
-      recommendations.push("Email health is good! Keep monitoring metrics.");
+      recommendations.push('Email health is good! Keep monitoring metrics.');
     }
 
     return {
@@ -368,19 +401,22 @@ export class EmailMonitoringService {
   /**
    * Remove email from bounce/complaint lists (manual intervention)
    */
-  static removeFromBlocklist(email: string, listType: "bounce" | "complaint" | "unsubscribe"): void {
+  static removeFromBlocklist(
+    email: string,
+    listType: 'bounce' | 'complaint' | 'unsubscribe',
+  ): void {
     const emailLower = email.toLowerCase();
 
     switch (listType) {
-      case "bounce":
+      case 'bounce':
         this.bounceList.delete(emailLower);
         logger.info(`Removed ${email} from bounce list`);
         break;
-      case "complaint":
+      case 'complaint':
         this.complaintList.delete(emailLower);
         logger.info(`Removed ${email} from complaint list`);
         break;
-      case "unsubscribe":
+      case 'unsubscribe':
         this.unsubscribeList.delete(emailLower);
         logger.info(`Removed ${email} from unsubscribe list`);
         break;
@@ -400,7 +436,10 @@ export class EmailMonitoringService {
       bounced: this.bounceList.size,
       complained: this.complaintList.size,
       unsubscribed: this.unsubscribeList.size,
-      total: this.bounceList.size + this.complaintList.size + this.unsubscribeList.size,
+      total:
+        this.bounceList.size +
+        this.complaintList.size +
+        this.unsubscribeList.size,
     };
   }
 
@@ -428,7 +467,7 @@ export class EmailMonitoringService {
     this.bounceList.clear();
     this.complaintList.clear();
     this.unsubscribeList.clear();
-    logger.info("All email monitoring data cleared");
+    logger.info('All email monitoring data cleared');
   }
 }
 

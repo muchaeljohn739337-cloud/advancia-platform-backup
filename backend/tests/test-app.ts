@@ -44,14 +44,14 @@ app.use(
   cors({
     origin: "*",
     credentials: true,
-  })
+  }),
 );
 
 // Stripe webhook MUST use raw body
 app.post(
   "/api/payments/webhook",
   express.raw({ type: "application/json" }),
-  handleStripeWebhook
+  handleStripeWebhook,
 );
 
 // JSON parser and common middlewares AFTER webhook

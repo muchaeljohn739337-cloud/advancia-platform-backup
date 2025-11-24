@@ -75,10 +75,10 @@ async function testSmtp(recipientEmail: string) {
       console.log("\n💡 Authentication failed. Please check:");
       console.log("   1. EMAIL_USER is your Gmail address");
       console.log(
-        "   2. EMAIL_PASSWORD is an App Password (not your regular password)"
+        "   2. EMAIL_PASSWORD is an App Password (not your regular password)",
       );
       console.log(
-        "   3. Create an App Password at: https://myaccount.google.com/apppasswords"
+        "   3. Create an App Password at: https://myaccount.google.com/apppasswords",
       );
     }
 

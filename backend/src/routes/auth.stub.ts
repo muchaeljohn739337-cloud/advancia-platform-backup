@@ -15,8 +15,8 @@ router.post('/login', async (req, res) => {
 
     // Validation
     if (!email || !password) {
-      return res.status(400).json({ 
-        error: 'Email and password are required' 
+      return res.status(400).json({
+        error: 'Email and password are required',
       });
     }
 
@@ -28,14 +28,14 @@ router.post('/login', async (req, res) => {
     // 3. Generate JWT token
     // 4. Return user data + token
 
-    res.status(501).json({ 
+    res.status(501).json({
       error: 'Not implemented: replace stub with real logic.',
       todo: [
         'Add Prisma user lookup',
         'Implement bcrypt password verification',
         'Generate JWT token',
-        'Return user profile + token'
-      ]
+        'Return user profile + token',
+      ],
     });
   } catch (error: any) {
     logger.error('Login error', { error: error.message });
@@ -53,8 +53,8 @@ router.post('/register', async (req, res) => {
 
     // Validation
     if (!email || !password || !username) {
-      return res.status(400).json({ 
-        error: 'Email, password, and username are required' 
+      return res.status(400).json({
+        error: 'Email, password, and username are required',
       });
     }
 
@@ -68,15 +68,15 @@ router.post('/register', async (req, res) => {
     // 5. Generate JWT token
     // 6. Return user data + token
 
-    res.status(501).json({ 
+    res.status(501).json({
       error: 'Not implemented: replace stub with real logic.',
       todo: [
         'Add duplicate email check',
         'Hash password with bcrypt',
         'Create user in Prisma',
         'Send welcome/verification email',
-        'Generate JWT token'
-      ]
+        'Generate JWT token',
+      ],
     });
   } catch (error: any) {
     logger.error('Registration error', { error: error.message });
@@ -95,8 +95,8 @@ router.post('/logout', async (req, res) => {
     // TODO: Implement token invalidation
     // For JWT, you might maintain a blacklist in Redis
 
-    res.status(501).json({ 
-      error: 'Not implemented: replace stub with real logic.' 
+    res.status(501).json({
+      error: 'Not implemented: replace stub with real logic.',
     });
   } catch (error: any) {
     logger.error('Logout error', { error: error.message });

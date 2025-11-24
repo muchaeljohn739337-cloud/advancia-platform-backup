@@ -1,30 +1,30 @@
-import { Router } from "express";
-import { authenticateToken, requireAdmin } from "../middleware/auth";
-import prisma from "../prismaClient";
-import { createNotification } from "../services/notificationService";
+import { Router } from 'express';
+import { authenticateToken, requireAdmin } from '../middleware/auth';
+import prisma from '../prismaClient';
+import { createNotification } from '../services/notificationService';
 // Diagnostic: trace unexpected module load to identify importer
 try {
   // Only log once per process
   if (!(global as any).__uaTraceLogged) {
     (global as any).__uaTraceLogged = true;
-    console.log("[diag] userApproval.ts loaded");
-    // eslint-disable-next-line no-console
-    console.trace("[diag] userApproval import stack");
+    console.log('[diag] userApproval.ts loaded');
+
+    console.trace('[diag] userApproval import stack');
   }
 } catch {}
 
 const router = Router();
 const safeAuth: any =
-  typeof authenticateToken === "function"
+  typeof authenticateToken === 'function'
     ? authenticateToken
     : (_req: any, _res: any, next: any) => next();
 const safeAdmin: any =
-  typeof requireAdmin === "function"
+  typeof requireAdmin === 'function'
     ? requireAdmin
     : (_req: any, _res: any, next: any) => next();
 
 // GET /api/admin/pending-users - Get all pending approval users
-router.get("/pending-users", safeAuth, safeAdmin, async (req: any, res) => {
+router.get('/pending-users', safeAuth, safeAdmin, async (req: any, res) => {
   try {
     const pendingUsers = await prisma.user.findMany({
       where: {
@@ -42,7 +42,7 @@ router.get("/pending-users", safeAuth, safeAdmin, async (req: any, res) => {
         createdAt: true,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
 
@@ -51,14 +51,14 @@ router.get("/pending-users", safeAuth, safeAdmin, async (req: any, res) => {
       users: pendingUsers,
     });
   } catch (error) {
-    console.error("Error fetching pending users:", error);
-    return res.status(500).json({ error: "Failed to fetch pending users" });
+    console.error('Error fetching pending users:', error);
+    return res.status(500).json({ error: 'Failed to fetch pending users' });
   }
 });
 
 // POST /api/admin/approve-user/:userId - Approve a user
 router.post(
-  "/approve-user/:userId",
+  '/approve-user/:userId',
   safeAuth,
   safeAdmin,
   async (req: any, res) => {
@@ -72,11 +72,11 @@ router.post(
       });
 
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({ error: 'User not found' });
       }
 
       if (user.approved) {
-        return res.status(400).json({ error: "User already approved" });
+        return res.status(400).json({ error: 'User already approved' });
       }
 
       // Approve user
@@ -92,12 +92,12 @@ router.post(
       // Create notification for user
       await createNotification({
         userId: userId,
-        category: "system",
-        type: "email",
-        title: "🎉 Account Approved!",
+        category: 'system',
+        type: 'email',
+        title: '🎉 Account Approved!',
         message:
-          "Welcome to Advancia! Your account has been approved. You can now access all features and start trading.",
-        priority: "high",
+          'Welcome to Advancia! Your account has been approved. You can now access all features and start trading.',
+        priority: 'high',
         data: { approvedAt: new Date() },
       });
 
@@ -105,7 +105,7 @@ router.post(
       await prisma.adminNotification.updateMany({
         where: {
           userId: userId,
-          type: "NEW_USER",
+          type: 'NEW_USER',
           read: false,
         },
         data: {
@@ -115,7 +115,7 @@ router.post(
       });
 
       return res.json({
-        message: "User approved successfully",
+        message: 'User approved successfully',
         user: {
           id: updatedUser.id,
           email: updatedUser.email,
@@ -124,15 +124,15 @@ router.post(
         },
       });
     } catch (error) {
-      console.error("Error approving user:", error);
-      return res.status(500).json({ error: "Failed to approve user" });
+      console.error('Error approving user:', error);
+      return res.status(500).json({ error: 'Failed to approve user' });
     }
-  }
+  },
 );
 
 // POST /api/admin/reject-user/:userId - Reject a user
 router.post(
-  "/reject-user/:userId",
+  '/reject-user/:userId',
   safeAuth,
   safeAdmin,
   async (req: any, res) => {
@@ -141,7 +141,7 @@ router.post(
       const { reason } = req.body;
 
       if (!reason) {
-        return res.status(400).json({ error: "Rejection reason is required" });
+        return res.status(400).json({ error: 'Rejection reason is required' });
       }
 
       const user = await prisma.user.findUnique({
@@ -156,17 +156,17 @@ router.post(
       });
 
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({ error: 'User not found' });
       }
 
       if (user.approved) {
         return res
           .status(400)
-          .json({ error: "Cannot reject an approved user" });
+          .json({ error: 'Cannot reject an approved user' });
       }
 
       if (user.rejectedAt) {
-        return res.status(400).json({ error: "User already rejected" });
+        return res.status(400).json({ error: 'User already rejected' });
       }
 
       // Reject user
@@ -182,11 +182,11 @@ router.post(
       // Notify user of rejection
       await createNotification({
         userId: userId,
-        category: "system",
-        type: "email",
-        title: "Account Application Update",
+        category: 'system',
+        type: 'email',
+        title: 'Account Application Update',
         message: `Your account application was not approved. Reason: ${reason}. Please contact support for more information.`,
-        priority: "high",
+        priority: 'high',
         data: { reason, rejectedAt: new Date() },
       });
 
@@ -194,7 +194,7 @@ router.post(
       await prisma.adminNotification.updateMany({
         where: {
           userId: userId,
-          type: "NEW_USER",
+          type: 'NEW_USER',
           read: false,
         },
         data: {
@@ -204,7 +204,7 @@ router.post(
       });
 
       return res.json({
-        message: "User rejected successfully",
+        message: 'User rejected successfully',
         user: {
           id: updatedUser.id,
           email: updatedUser.email,
@@ -213,18 +213,18 @@ router.post(
         },
       });
     } catch (error) {
-      console.error("Error rejecting user:", error);
-      return res.status(500).json({ error: "Failed to reject user" });
+      console.error('Error rejecting user:', error);
+      return res.status(500).json({ error: 'Failed to reject user' });
     }
-  }
+  },
 );
 
 // GET /api/admin/notifications - Get admin notifications
-router.get("/notifications", safeAuth, safeAdmin, async (req: any, res) => {
+router.get('/notifications', safeAuth, safeAdmin, async (req: any, res) => {
   try {
     const notifications = await prisma.adminNotification.findMany({
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       take: 50,
     });
@@ -238,14 +238,14 @@ router.get("/notifications", safeAuth, safeAdmin, async (req: any, res) => {
       unreadCount,
     });
   } catch (error) {
-    console.error("Error fetching notifications:", error);
-    return res.status(500).json({ error: "Failed to fetch notifications" });
+    console.error('Error fetching notifications:', error);
+    return res.status(500).json({ error: 'Failed to fetch notifications' });
   }
 });
 
 // POST /api/admin/notifications/:id/mark-read - Mark notification as read
 router.post(
-  "/notifications/:id/mark-read",
+  '/notifications/:id/mark-read',
   safeAuth,
   safeAdmin,
   async (req: any, res) => {
@@ -260,14 +260,14 @@ router.post(
         },
       });
 
-      return res.json({ message: "Notification marked as read" });
+      return res.json({ message: 'Notification marked as read' });
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      console.error('Error marking notification as read:', error);
       return res
         .status(500)
-        .json({ error: "Failed to mark notification as read" });
+        .json({ error: 'Failed to mark notification as read' });
     }
-  }
+  },
 );
 
 export default router;

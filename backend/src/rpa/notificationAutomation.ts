@@ -1,17 +1,17 @@
 // RPA Module - Email/SMS Notifications
 // RPA can automate outgoing notifications for OTPs, recoveries, and med-bed alerts
 
-import nodemailer from "nodemailer";
-import prisma from "../prismaClient";
-import { rpaConfig } from "./config";
+import nodemailer from 'nodemailer';
+import prisma from '../prismaClient';
+import { rpaConfig } from './config';
 // SMS/Twilio removed to save costs
 
 interface NotificationPayload {
   userId: string;
-  type: "email" | "sms" | "both";
+  type: 'email' | 'sms' | 'both';
   template: string;
   data: Record<string, any>;
-  priority?: "low" | "normal" | "high";
+  priority?: 'low' | 'normal' | 'high';
 }
 
 interface NotificationResult {
@@ -42,15 +42,15 @@ export class NotificationAutomation {
     if (rpaConfig.notifications.email.enabled) {
       try {
         this.emailTransporter = nodemailer.createTransport({
-          service: "gmail",
+          service: 'gmail',
           auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASSWORD,
           },
         });
-        console.log("✅ Email service initialized");
+        console.log('✅ Email service initialized');
       } catch (error) {
-        console.error("❌ Failed to initialize email service:", error);
+        console.error('❌ Failed to initialize email service:', error);
       }
     }
 
@@ -88,11 +88,11 @@ export class NotificationAutomation {
    */
   private getEmailTemplate(
     template: string,
-    data: Record<string, any>
+    data: Record<string, any>,
   ): { subject: string; html: string } {
     const templates: Record<string, any> = {
       otp: {
-        subject: "Your One-Time Password",
+        subject: 'Your One-Time Password',
         html: `
           <h2>Your OTP Code</h2>
           <p>Your one-time password is: <strong>${data.otp}</strong></p>
@@ -101,17 +101,17 @@ export class NotificationAutomation {
         `,
       },
       recovery: {
-        subject: "Crypto Recovery Request Processed",
+        subject: 'Crypto Recovery Request Processed',
         html: `
           <h2>Crypto Recovery Update</h2>
           <p>Your crypto recovery request has been ${data.status}.</p>
           <p><strong>Amount:</strong> ${data.amount} ${data.cryptoType}</p>
           <p><strong>Status:</strong> ${data.status}</p>
-          ${data.message ? `<p>${data.message}</p>` : ""}
+          ${data.message ? `<p>${data.message}</p>` : ''}
         `,
       },
       medbed_alert: {
-        subject: "Med-Bed Session Alert",
+        subject: 'Med-Bed Session Alert',
         html: `
           <h2>Med-Bed Session Alert</h2>
           <p>${data.message}</p>
@@ -120,7 +120,7 @@ export class NotificationAutomation {
         `,
       },
       transaction: {
-        subject: "Transaction Notification",
+        subject: 'Transaction Notification',
         html: `
           <h2>Transaction ${data.status}</h2>
           <p>Your transaction has been ${data.status}.</p>
@@ -130,7 +130,7 @@ export class NotificationAutomation {
         `,
       },
       welcome: {
-        subject: "Welcome to Advancia Pay",
+        subject: 'Welcome to Advancia Pay',
         html: `
           <h2>Welcome ${data.name}!</h2>
           <p>Thank you for joining Advancia Pay.</p>
@@ -142,8 +142,8 @@ export class NotificationAutomation {
 
     return (
       templates[template] || {
-        subject: "Notification",
-        html: data.message || "",
+        subject: 'Notification',
+        html: data.message || '',
       }
     );
   }
@@ -162,7 +162,7 @@ export class NotificationAutomation {
       welcome: `Welcome to Advancia Pay, ${data.name}! Your account is ready.`,
     };
 
-    return templates[template] || data.message || "Notification";
+    return templates[template] || data.message || 'Notification';
   }
 
   /**
@@ -171,10 +171,10 @@ export class NotificationAutomation {
   private async sendEmail(
     userEmail: string,
     template: string,
-    data: Record<string, any>
+    data: Record<string, any>,
   ): Promise<boolean> {
     if (!this.emailTransporter) {
-      console.error("❌ Email transporter not initialized");
+      console.error('❌ Email transporter not initialized');
       return false;
     }
 
@@ -202,9 +202,9 @@ export class NotificationAutomation {
   private async sendSMS(
     userPhone: string,
     template: string,
-    data: Record<string, any>
+    data: Record<string, any>,
   ): Promise<boolean> {
-    console.warn("❌ SMS service disabled - Twilio not configured");
+    console.warn('❌ SMS service disabled - Twilio not configured');
     return false;
   }
 
@@ -212,7 +212,7 @@ export class NotificationAutomation {
    * Send notification to user
    */
   async sendNotification(
-    payload: NotificationPayload
+    payload: NotificationPayload,
   ): Promise<NotificationResult> {
     const result: NotificationResult = {
       success: false,
@@ -222,8 +222,8 @@ export class NotificationAutomation {
     try {
       // Check rate limit
       if (!this.canSend()) {
-        result.errors.push("Rate limit exceeded");
-        console.warn("⚠️  Notification rate limit exceeded, queuing...");
+        result.errors.push('Rate limit exceeded');
+        console.warn('⚠️  Notification rate limit exceeded, queuing...');
         this.notificationQueue.push(payload);
         return result;
       }
@@ -235,16 +235,16 @@ export class NotificationAutomation {
       });
 
       if (!user) {
-        result.errors.push("User not found");
+        result.errors.push('User not found');
         return result;
       }
 
       // Send email
-      if (payload.type === "email" || payload.type === "both") {
+      if (payload.type === 'email' || payload.type === 'both') {
         result.emailSent = await this.sendEmail(
           user.email,
           payload.template,
-          payload.data
+          payload.data,
         );
         if (result.emailSent) {
           this.rateLimitCounter.perMinute++;
@@ -253,21 +253,21 @@ export class NotificationAutomation {
       }
 
       // Send SMS
-      if (payload.type === "sms" || payload.type === "both") {
+      if (payload.type === 'sms' || payload.type === 'both') {
         // In production, fetch user's phone number from database
         const userPhone = payload.data.phone || process.env.ADMIN_PHONE;
         if (userPhone) {
           result.smsSent = await this.sendSMS(
             userPhone,
             payload.template,
-            payload.data
+            payload.data,
           );
           if (result.smsSent) {
             this.rateLimitCounter.perMinute++;
             this.rateLimitCounter.perHour++;
           }
         } else {
-          result.errors.push("User phone number not found");
+          result.errors.push('User phone number not found');
         }
       }
 
@@ -277,25 +277,25 @@ export class NotificationAutomation {
       await prisma.audit_logs.create({
         data: {
           userId: payload.userId,
-          action: "NOTIFICATION_SENT",
-          resourceType: "Notification",
-          resourceId: "rpa-notification",
+          action: 'NOTIFICATION_SENT',
+          resourceType: 'Notification',
+          resourceId: 'rpa-notification',
           metadata: JSON.stringify({
             template: payload.template,
             type: payload.type,
             emailSent: result.emailSent,
             smsSent: result.smsSent,
           }),
-          ipAddress: "SYSTEM-RPA",
-          userAgent: "RPA-NotificationAutomation",
+          ipAddress: 'SYSTEM-RPA',
+          userAgent: 'RPA-NotificationAutomation',
           timestamp: new Date(),
         },
       });
     } catch (error) {
       result.errors.push(
-        error instanceof Error ? error.message : "Unknown error"
+        error instanceof Error ? error.message : 'Unknown error',
       );
-      console.error("❌ Notification error:", error);
+      console.error('❌ Notification error:', error);
     }
 
     return result;
@@ -310,7 +310,7 @@ export class NotificationAutomation {
     }
 
     console.log(
-      `📬 Processing ${this.notificationQueue.length} queued notifications...`
+      `📬 Processing ${this.notificationQueue.length} queued notifications...`,
     );
 
     while (this.notificationQueue.length > 0 && this.canSend()) {
@@ -321,7 +321,7 @@ export class NotificationAutomation {
     }
 
     console.log(
-      `✅ Queue processed. ${this.notificationQueue.length} remaining.`
+      `✅ Queue processed. ${this.notificationQueue.length} remaining.`,
     );
   }
 
@@ -331,14 +331,14 @@ export class NotificationAutomation {
   async sendOTP(
     userId: string,
     otp: string,
-    type: "email" | "sms" = "email"
+    type: 'email' | 'sms' = 'email',
   ): Promise<NotificationResult> {
     return this.sendNotification({
       userId,
       type,
-      template: "otp",
+      template: 'otp',
       data: { otp, expiryMinutes: 10 },
-      priority: "high",
+      priority: 'high',
     });
   }
 
@@ -347,14 +347,14 @@ export class NotificationAutomation {
    */
   async sendRecoveryUpdate(
     userId: string,
-    recoveryData: Record<string, any>
+    recoveryData: Record<string, any>,
   ): Promise<NotificationResult> {
     return this.sendNotification({
       userId,
-      type: "email",
-      template: "recovery",
+      type: 'email',
+      template: 'recovery',
       data: recoveryData,
-      priority: "normal",
+      priority: 'normal',
     });
   }
 
@@ -363,14 +363,14 @@ export class NotificationAutomation {
    */
   async sendMedbedAlert(
     userId: string,
-    alertData: Record<string, any>
+    alertData: Record<string, any>,
   ): Promise<NotificationResult> {
     return this.sendNotification({
       userId,
-      type: "both",
-      template: "medbed_alert",
+      type: 'both',
+      template: 'medbed_alert',
       data: alertData,
-      priority: "high",
+      priority: 'high',
     });
   }
 
@@ -379,14 +379,14 @@ export class NotificationAutomation {
    */
   async sendTransactionNotification(
     userId: string,
-    transactionData: Record<string, any>
+    transactionData: Record<string, any>,
   ): Promise<NotificationResult> {
     return this.sendNotification({
       userId,
-      type: "email",
-      template: "transaction",
+      type: 'email',
+      template: 'transaction',
       data: transactionData,
-      priority: "normal",
+      priority: 'normal',
     });
   }
 }

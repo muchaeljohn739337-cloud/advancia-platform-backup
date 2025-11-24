@@ -1,5 +1,5 @@
-import express, { Request, Response } from "express";
-import nodemailer from "nodemailer";
+import express, { Request, Response } from 'express';
+import nodemailer from 'nodemailer';
 // import prisma from "../prismaClient";
 
 const router = express.Router();
@@ -7,9 +7,9 @@ const router = express.Router();
 // Configure Mailchimp (Transactional via SMTP in this example)
 // For production: use Mailchimp API directly or SMTP integration
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true", // false for 587, true for 465
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true', // false for 587, true for 465
   auth: {
     user: process.env.GMAIL_EMAIL,
     pass: process.env.GMAIL_APP_PASSWORD,
@@ -21,18 +21,18 @@ const transporter = nodemailer.createTransport({
  * Subscribe a user to the newsletter
  * TODO: Add NewsletterSubscriber model to schema.prisma
  */
-router.post("/subscribe", async (req: Request, res: Response) => {
+router.post('/subscribe', async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
 
     if (!email || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      return res.status(400).json({ error: "Valid email required" });
+      return res.status(400).json({ error: 'Valid email required' });
     }
 
     // TODO: Implement when NewsletterSubscriber model is added
     res.status(501).json({
       error:
-        "Newsletter subscription not yet implemented. Add NewsletterSubscriber model to schema.prisma",
+        'Newsletter subscription not yet implemented. Add NewsletterSubscriber model to schema.prisma',
     });
 
     /* Commented until model exists
@@ -92,8 +92,8 @@ router.post("/subscribe", async (req: Request, res: Response) => {
     });
     */
   } catch (error) {
-    console.error("Subscribe error:", error);
-    res.status(500).json({ error: "Subscription failed" });
+    console.error('Subscribe error:', error);
+    res.status(500).json({ error: 'Subscription failed' });
   }
 });
 
@@ -102,23 +102,21 @@ router.post("/subscribe", async (req: Request, res: Response) => {
  * Send a contact form message
  * TODO: Add ContactMessage model to schema.prisma
  */
-router.post("/contact", async (req: Request, res: Response) => {
+router.post('/contact', async (req: Request, res: Response) => {
   try {
     const { name, email, message, subject } = req.body;
 
     if (!name || !email || !message) {
       return res
         .status(400)
-        .json({ error: "Name, email, and message required" });
+        .json({ error: 'Name, email, and message required' });
     }
 
     // TODO: Implement when ContactMessage model is added
-    res
-      .status(501)
-      .json({
-        error:
-          "Contact form not yet implemented. Add ContactMessage model to schema.prisma",
-      });
+    res.status(501).json({
+      error:
+        'Contact form not yet implemented. Add ContactMessage model to schema.prisma',
+    });
 
     /* Commented until model exists
     // Store in database for admin review
@@ -159,8 +157,8 @@ router.post("/contact", async (req: Request, res: Response) => {
     });
     */
   } catch (error) {
-    console.error("Contact error:", error);
-    res.status(500).json({ error: "Message failed to send" });
+    console.error('Contact error:', error);
+    res.status(500).json({ error: 'Message failed to send' });
   }
 });
 
@@ -169,14 +167,14 @@ router.post("/contact", async (req: Request, res: Response) => {
  * Get marketing analytics (public stats)
  * TODO: Implement when models are added
  */
-router.get("/analytics", async (req: Request, res: Response) => {
+router.get('/analytics', async (req: Request, res: Response) => {
   try {
     // TODO: Implement when models exist
     res.json({
       subscribers: 0,
       contacts: 0,
       timestamp: new Date().toISOString(),
-      message: "Marketing models not yet implemented",
+      message: 'Marketing models not yet implemented',
     });
 
     /* Commented until models exist
@@ -193,8 +191,8 @@ router.get("/analytics", async (req: Request, res: Response) => {
     });
     */
   } catch (error) {
-    console.error("Analytics error:", error);
-    res.status(500).json({ error: "Failed to fetch analytics" });
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch analytics' });
   }
 });
 

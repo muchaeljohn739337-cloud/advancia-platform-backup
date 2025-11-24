@@ -15,7 +15,7 @@ if (!secret) {
 }
 if (!secret.startsWith("whsec_")) {
   console.error(
-    "❌ STRIPE_WEBHOOK_SECRET format invalid (should start with whsec_)"
+    "❌ STRIPE_WEBHOOK_SECRET format invalid (should start with whsec_)",
   );
   process.exit(1);
 }
@@ -35,14 +35,14 @@ const expected = crypto
 const signatureHeader = `t=${timestamp},v1=${expected}`;
 console.log(
   "✅ Simulated signature header:",
-  signatureHeader.slice(0, 40) + "..."
+  signatureHeader.slice(0, 40) + "...",
 );
 
 // Provide instructions for live test
 console.log("\nNext live test (after deploy):");
 console.log("1. Install Stripe CLI: https://stripe.com/docs/stripe-cli");
 console.log(
-  "2. Run: stripe listen --forward-to https://<backend-domain>/api/payments/webhook"
+  "2. Run: stripe listen --forward-to https://<backend-domain>/api/payments/webhook",
 );
 console.log("3. Trigger: stripe trigger payment_intent.succeeded");
 console.log("4. Confirm server logs show successful verification.");

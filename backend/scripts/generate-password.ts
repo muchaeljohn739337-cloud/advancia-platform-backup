@@ -34,7 +34,7 @@ function parseArgs(argv: string[]): Options {
       case "--length":
         opts.length = Math.max(
           8,
-          Math.min(256, parseInt(argv[++i] ?? "32", 10))
+          Math.min(256, parseInt(argv[++i] ?? "32", 10)),
         );
         break;
       case "--no-lower":
@@ -55,7 +55,7 @@ function parseArgs(argv: string[]): Options {
       case "--hex":
         opts.hexBytes = Math.max(
           8,
-          Math.min(256, parseInt(argv[++i] ?? "32", 10))
+          Math.min(256, parseInt(argv[++i] ?? "32", 10)),
         );
         break;
       case "--urlsafe":
@@ -90,7 +90,7 @@ function usage() {
       `  npm run gen:password -- --length 24\n` +
       `  npm run gen:password -- --length 48 --no-symbols\n` +
       `  npm run gen:password -- --urlsafe\n` +
-      `  npm run gen:secret       # 64-byte hex secret (JWT, SESSION)\n`
+      `  npm run gen:secret       # 64-byte hex secret (JWT, SESSION)\n`,
   );
 }
 

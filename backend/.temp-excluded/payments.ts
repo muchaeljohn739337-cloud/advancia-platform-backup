@@ -113,7 +113,7 @@ router.post(
                 description: description || "Crypto Payment",
               }),
             }),
-          }
+          },
         );
 
         if (!cryptomusResponse.ok) {
@@ -144,7 +144,7 @@ router.post(
         details: error instanceof Error ? error.message : "Unknown error",
       });
     }
-  }
+  },
 );
 
 // Create a Checkout Session, requiring auth; attach userId to metadata server-side
@@ -194,7 +194,7 @@ router.post(
         .status(500)
         .json({ error: "Unable to create checkout session." });
     }
-  }
+  },
 );
 
 // Retrieve a Checkout Session by id for the authenticated user
@@ -247,7 +247,7 @@ router.get(
       console.error("Admin payments list error", error);
       return res.status(500).json({ error: "Failed to list payments" });
     }
-  }
+  },
 );
 
 // Admin: Refund payment
@@ -266,7 +266,7 @@ router.post(
 
       // Update user balance and create refund transaction
       const payment = await stripeClient.paymentIntents.retrieve(
-        req.params.paymentId
+        req.params.paymentId,
       );
       const userId = payment.metadata?.userId;
 
@@ -305,7 +305,7 @@ router.post(
       console.error("Admin refund error", error);
       return res.status(500).json({ error: "Failed to process refund" });
     }
-  }
+  },
 );
 
 // Webhook handler (to be mounted before express.json in index.ts)
@@ -321,13 +321,13 @@ export const handleStripeWebhook = async (req: any, res: any) => {
     const rawBody: Buffer = Buffer.isBuffer(req.body)
       ? (req.body as Buffer)
       : Buffer.from(
-          typeof req.body === "string" ? req.body : JSON.stringify(req.body)
+          typeof req.body === "string" ? req.body : JSON.stringify(req.body),
         );
 
     const event = stripeClient.webhooks.constructEvent(
       rawBody,
       sig as string,
-      config.stripeWebhookSecret
+      config.stripeWebhookSecret,
     );
 
     switch (event.type) {
@@ -367,7 +367,7 @@ export const handleStripeWebhook = async (req: any, res: any) => {
         });
 
         console.log(
-          `✅ Stripe payment processed: ${amount} ${currency} for user ${userId}`
+          `✅ Stripe payment processed: ${amount} ${currency} for user ${userId}`,
         );
 
         break;

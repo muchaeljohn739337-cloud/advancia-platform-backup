@@ -64,7 +64,7 @@ if (allPassed) {
   exit(0);
 } else if (criticalFailed) {
   console.error(
-    "\n❌ CRITICAL VERIFICATIONS FAILED - DO NOT DEPLOY TO PRODUCTION!\n"
+    "\n❌ CRITICAL VERIFICATIONS FAILED - DO NOT DEPLOY TO PRODUCTION!\n",
   );
   console.error("Fix all critical issues above before proceeding.\n");
   exit(1);

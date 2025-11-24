@@ -21,6 +21,10 @@
     "prisma:db:push": "cd backend && prisma db push",
     "deploy": "bash ./scripts/deploy.sh",
     "backup": "bash ./scripts/backup_db.sh",
+    "dev": "concurrently --kill-others --restart-tries 3 --restart-after 2000 --names \"FRONTEND,BACKEND\" --prefix-colors \"cyan,magenta\" \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:safe": "concurrently --kill-others-on-fail --restart-tries 5 --names \"FRONTEND,BACKEND\" --prefix-colors \"cyan,magenta\" \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:fast": "concurrently --kill-others --names \"FRONTEND,BACKEND\" --prefix-colors \"cyan,magenta\" \"npm run dev:frontend\" \"cd backend && npm run dev:fast\"",
+    "dev:debug": "concurrently --kill-others --names \"FRONTEND,BACKEND,LOGS\" --prefix-colors \"cyan,magenta,yellow\" \"npm run dev:frontend\" \"npm run dev:backend\" \"tail -f backend/logs/*.log || echo 'No logs yet'\"",
     "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
@@ -28,8 +32,12 @@
     "test": "npm run test --workspaces",
     "lint": "npm run lint --workspaces",
     "type-check": "npm run type-check --workspaces",
+    "fix": "npm run lint:fix --workspaces && npx prettier --write . && npm run type-check --workspaces",
+    "format": "npx prettier --write .",
+    "lint-staged": "lint-staged",
+    "commit": "git-cz",
     "start": "cd frontend && npm start",
-    "prepare": "node -e \"try { if (process.env.NODE_ENV !== 'production' && require('fs').existsSync('.git')) require('husky').install() } catch (e) {}\"",
+    "prepare": "node -e \"try { if (process.env.NODE_ENV !== 'production' && require('fs').existsSync('.git')) require('husky').install() } catch (e) {}\" && husky install",
     "docs:lint": "markdownlint-cli2"
   },
   "engines": {
@@ -70,8 +78,11 @@
     ]
   },
   "devDependencies": {
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
+    "commitizen": "^4.3.1",
+    "concurrently": "^9.2.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.5.2",
     "markdownlint-cli": "^0.41.0",
     "markdownlint-cli2": "^0.14.0",
     "sharp": "^0.34.5"
@@ -81,6 +92,20 @@
     "redis": "^5.9.0"
   },
   "lint-staged": {
-    "*.md": "markdownlint --fix"
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "markdownlint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }

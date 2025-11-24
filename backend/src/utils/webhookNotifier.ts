@@ -5,7 +5,7 @@
  */
 export async function sendWebhook(
   message: string,
-  level?: "green" | "orange" | "red"
+  level?: 'green' | 'orange' | 'red',
 ) {
   const url = process.env.SECURITY_WEBHOOK_URL;
   if (!url) return; // Skip if webhook URL not configured
@@ -13,8 +13,8 @@ export async function sendWebhook(
   try {
     // Use native fetch available in Node.js 18+
     const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         text: message,
         level,
@@ -26,6 +26,6 @@ export async function sendWebhook(
       console.error(`Webhook request failed with status ${response.status}`);
     }
   } catch (err) {
-    console.error("Security webhook notification failed:", err);
+    console.error('Security webhook notification failed:', err);
   }
 }

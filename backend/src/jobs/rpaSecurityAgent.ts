@@ -1,5 +1,5 @@
-import prisma from "../prismaClient";
-import { sendAlert } from "../utils/mailer";
+import prisma from '../prismaClient';
+import { sendAlert } from '../utils/mailer';
 
 export async function runSecurityRPA() {
   const now = new Date();
@@ -14,10 +14,10 @@ export async function runSecurityRPA() {
       where: { until: { lt: now } },
     });
 
-    const list = expiredBlocks.map((b: { ip: string }) => b.ip).join(", ");
+    const list = expiredBlocks.map((b: { ip: string }) => b.ip).join(', ');
     await sendAlert(
-      "✅ Advancia Security: IPs Unblocked",
-      `Automatically unblocked ${expiredBlocks.length} IP(s): ${list}`
+      '✅ Advancia Security: IPs Unblocked',
+      `Automatically unblocked ${expiredBlocks.length} IP(s): ${list}`,
     );
   }
 
@@ -30,18 +30,18 @@ export async function runSecurityRPA() {
   // Alert thresholds
   if (blocksHour === 0) {
     await sendAlert(
-      "🟢 Advancia: System Normal",
-      "No IP blocks detected in the last hour. Security baseline restored."
+      '🟢 Advancia: System Normal',
+      'No IP blocks detected in the last hour. Security baseline restored.',
     );
   } else if (blocksHour > 5) {
     await sendAlert(
-      "🟠 Advancia Alert",
-      `Moderate threat: ${blocksHour} IP blocks in the last hour.`
+      '🟠 Advancia Alert',
+      `Moderate threat: ${blocksHour} IP blocks in the last hour.`,
     );
   } else if (blocksHour > 15) {
     await sendAlert(
-      "🔴 Critical Threat Level",
-      `High anomaly activity (${blocksHour} IP blocks/hr). Immediate review recommended.`
+      '🔴 Critical Threat Level',
+      `High anomaly activity (${blocksHour} IP blocks/hr). Immediate review recommended.`,
     );
   }
 
@@ -49,14 +49,14 @@ export async function runSecurityRPA() {
   if (process.env.SECURITY_WEBHOOK_URL && blocksHour > 0) {
     try {
       await fetch(process.env.SECURITY_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: `Security Alert: ${blocksHour} IP blocks in the last hour`,
         }),
       });
     } catch (error) {
-      console.error("Failed to send security webhook:", error);
+      console.error('Failed to send security webhook:', error);
     }
   }
 }

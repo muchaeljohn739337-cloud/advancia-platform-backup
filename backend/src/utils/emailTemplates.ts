@@ -16,14 +16,18 @@ type Transaction = {
  * Includes = to prevent attribute-based XSS
  */
 function escape(str: string): string {
-  return String(str).replace(/[&<>"'=]/g, c => ({
-    '&': '&amp;', 
-    '<': '&lt;', 
-    '>': '&gt;', 
-    '"': '&quot;', 
-    "'": '&#39;',
-    '=': '&#x3D;'
-  }[c] || c));
+  return String(str).replace(
+    /[&<>"'=]/g,
+    (c) =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '\'': '&#39;',
+        '=': '&#x3D;',
+      })[c] || c,
+  );
 }
 
 export const emailTemplates = {
@@ -69,7 +73,11 @@ export const emailTemplates = {
   /**
    * Password reset email
    */
-  passwordReset: (name: string, resetLink: string, expiry: string = '1 hour') => `
+  passwordReset: (
+    name: string,
+    resetLink: string,
+    expiry: string = '1 hour',
+  ) => `
     <!DOCTYPE html>
     <html>
     <head>
@@ -201,12 +209,16 @@ export const emailTemplates = {
                 <span class="status status-${transaction.status.toLowerCase()}">${escape(transaction.status)}</span>
               </span>
             </div>
-            ${transaction.description ? `
+            ${
+              transaction.description
+                ? `
             <div class="detail-row">
               <span class="detail-label">Description:</span>
               <span class="detail-value">${escape(transaction.description)}</span>
             </div>
-            ` : ''}
+            `
+                : ''
+            }
           </div>
           <p>If you did not authorize this transaction, please contact our support team immediately.</p>
           <p><a href="https://advanciapayledger.com/transactions" style="color: #2196f3;">View Transaction History</a></p>
@@ -218,7 +230,7 @@ export const emailTemplates = {
       </div>
     </body>
     </html>
-  `
+  `,
 };
 
 export default emailTemplates;

@@ -1,43 +1,43 @@
-import express from "express";
-import { getRedis } from "../services/redisClient";
+import express from 'express';
+import { getRedis } from '../services/redisClient';
 import {
   banChatMember,
   deleteMessage,
   restrictChatMember,
   sendTelegramMessage,
-} from "../services/telegramService";
+} from '../services/telegramService';
 
 const router = express.Router();
 
 function verifySecret(req: express.Request): boolean {
   const expected = process.env.TELEGRAM_WEBHOOK_SECRET;
   if (!expected) return true; // if not set, skip
-  const header = req.header("X-Telegram-Bot-Api-Secret-Token");
+  const header = req.header('X-Telegram-Bot-Api-Secret-Token');
   return !!header && header === expected;
 }
 
 // Minimal moderation rules
 const LINK_REGEX = /(https?:\/\/|t\.me\/.+|telegram\.me\/.+|joinchat)/i;
-const AD_KEYWORDS = ["earn", "crypto", "profit", "investment", "casino", "bet"]; // keep short and conservative
+const AD_KEYWORDS = ['earn', 'crypto', 'profit', 'investment', 'casino', 'bet']; // keep short and conservative
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     if (!verifySecret(req))
-      return res.status(401).json({ error: "Invalid secret" });
+      return res.status(401).json({ error: 'Invalid secret' });
 
     const update = req.body || {};
     const msg = update.message;
     const callback = update.callback_query;
 
     if (msg && msg.chat && msg.message_id && (msg.text || msg.caption)) {
-      const text = (msg.text || msg.caption || "").toString();
+      const text = (msg.text || msg.caption || '').toString();
       const chatId = msg.chat.id as number;
       const fromUserId: number | undefined = msg.from?.id as number | undefined;
       const redis = getRedis();
 
       const hasLink = LINK_REGEX.test(text);
       const hasAdKeyword = AD_KEYWORDS.some((k) =>
-        text.toLowerCase().includes(k)
+        text.toLowerCase().includes(k),
       );
 
       // Delete obvious ad/link messages (basic anti-ads)
@@ -108,7 +108,7 @@ router.post("/", async (req, res) => {
                   can_send_other_messages: false,
                   can_add_web_page_previews: false,
                 },
-                nowTs + 10 * 60
+                nowTs + 10 * 60,
               ).catch(() => {});
             } else if (strikes === 2) {
               await restrictChatMember(
@@ -121,7 +121,7 @@ router.post("/", async (req, res) => {
                   can_send_other_messages: false,
                   can_add_web_page_previews: false,
                 },
-                nowTs + 24 * 3600
+                nowTs + 24 * 3600,
               ).catch(() => {});
             } else if (strikes >= 3) {
               await banChatMember(chatId, fromUserId).catch(() => {});
@@ -165,13 +165,13 @@ router.post("/", async (req, res) => {
           inline_keyboard: [
             [
               {
-                text: "I am human",
+                text: 'I am human',
                 callback_data:
-                  "verify:" +
+                  'verify:' +
                   String(chatId) +
-                  ":" +
+                  ':' +
                   String(userId) +
-                  ":" +
+                  ':' +
                   token,
               },
             ],
@@ -180,7 +180,7 @@ router.post("/", async (req, res) => {
         const prompt = await sendTelegramMessage(
           chatId,
           `👋 Welcome, <a href="tg://user?id=${userId}">user</a>!\nPlease verify you're human within 60 seconds.`,
-          { reply_markup: tokenBtn }
+          { reply_markup: tokenBtn },
         ).catch(() => null);
 
         // Persist pending token and prompt id
@@ -191,7 +191,7 @@ router.post("/", async (req, res) => {
               await redis.setex(
                 keyMsg,
                 ttlSec,
-                String(prompt.result.message_id)
+                String(prompt.result.message_id),
               );
             }
           } else {
@@ -227,10 +227,10 @@ router.post("/", async (req, res) => {
     }
 
     // Handle verification button
-    if (callback && callback.data && typeof callback.data === "string") {
+    if (callback && callback.data && typeof callback.data === 'string') {
       try {
-        const parts = callback.data.split(":");
-        if (parts[0] === "verify") {
+        const parts = callback.data.split(':');
+        if (parts[0] === 'verify') {
           const chatId = Number(parts[1]);
           const userId = Number(parts[2]);
           const token = parts[3];
@@ -276,7 +276,7 @@ router.post("/", async (req, res) => {
             // Acknowledge
             await sendTelegramMessage(
               chatId,
-              `✅ Verification complete for <a href="tg://user?id=${userId}">user</a>.`
+              `✅ Verification complete for <a href="tg://user?id=${userId}">user</a>.`,
             ).catch(() => {});
           } else {
             // Ignore invalid/expired

@@ -42,7 +42,7 @@ if (!MASTER_SEED) {
  */
 export async function generateUserWallet(
   userId: string,
-  currency: "BTC" | "ETH" | "USDT"
+  currency: "BTC" | "ETH" | "USDT",
 ) {
   if (!MASTER_SEED) {
     throw new Error("Wallet master seed not configured");
@@ -206,7 +206,7 @@ function decryptPrivateKey(encryptedData: string): string {
 export async function rotateUserWallet(
   userId: string,
   currency: "BTC" | "ETH" | "USDT",
-  reason: string
+  reason: string,
 ) {
   const oldWallet = await prisma.cryptoWallet.findFirst({
     where: { userId, currency },
@@ -287,7 +287,7 @@ export async function initializeUserWallets(userId: string) {
   const currencies: Array<"BTC" | "ETH" | "USDT"> = ["BTC", "ETH", "USDT"];
 
   const wallets = await Promise.all(
-    currencies.map((currency) => generateUserWallet(userId, currency))
+    currencies.map((currency) => generateUserWallet(userId, currency)),
   );
 
   return wallets;

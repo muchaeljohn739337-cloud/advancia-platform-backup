@@ -222,7 +222,7 @@ function detectIncidents(watchdogStats, errorStats, timeWindow) {
 
   // Restart storm detection
   const recentRestarts = watchdogStats.events.filter(
-    (e) => e.type === "restart" && e.timestamp > oneHourAgo
+    (e) => e.type === "restart" && e.timestamp > oneHourAgo,
   );
 
   if (recentRestarts.length >= CONFIG.thresholds.restartStorm) {
@@ -262,7 +262,7 @@ function detectIncidents(watchdogStats, errorStats, timeWindow) {
 function generateComponentStatuses(watchdogStats, errorStats) {
   const uptime24h = calculateUptime(
     watchdogStats.healthChecks,
-    watchdogStats.failedChecks
+    watchdogStats.failedChecks,
   );
 
   return [
@@ -353,51 +353,51 @@ function generateStatus() {
   // Parse 24-hour window
   const watchdog24h = parseWatchdogLog(
     watchdogContent,
-    CONFIG.timeWindows["24h"]
+    CONFIG.timeWindows["24h"],
   );
   const errors24h = parseErrorLog(
     pm2ErrContent + "\n" + errorContent,
-    CONFIG.timeWindows["24h"]
+    CONFIG.timeWindows["24h"],
   );
 
   // Parse 7-day window
   const watchdog7d = parseWatchdogLog(
     watchdogContent,
-    CONFIG.timeWindows["7d"]
+    CONFIG.timeWindows["7d"],
   );
 
   // Parse 30-day window
   const watchdog30d = parseWatchdogLog(
     watchdogContent,
-    CONFIG.timeWindows["30d"]
+    CONFIG.timeWindows["30d"],
   );
 
   // Calculate metrics
   const uptime24h = calculateUptime(
     watchdog24h.healthChecks,
-    watchdog24h.failedChecks
+    watchdog24h.failedChecks,
   );
   const uptime7d = calculateUptime(
     watchdog7d.healthChecks,
-    watchdog7d.failedChecks
+    watchdog7d.failedChecks,
   );
   const uptime30d = calculateUptime(
     watchdog30d.healthChecks,
-    watchdog30d.failedChecks
+    watchdog30d.failedChecks,
   );
 
   // Determine overall status
   const overall = determineOverallStatus(
     parseFloat(uptime24h),
     watchdog24h.restarts,
-    errors24h.total
+    errors24h.total,
   );
 
   // Detect incidents
   const incidents = detectIncidents(
     watchdog24h,
     errors24h,
-    CONFIG.timeWindows["24h"]
+    CONFIG.timeWindows["24h"],
   );
 
   // Generate component statuses

@@ -36,10 +36,10 @@ console.log("SESSION_SECRET=" + crypto.randomBytes(64).toString("hex"));
 // Webhook Secrets
 console.log("\n🔗 Webhook Secrets:\n");
 console.log(
-  "STRIPE_WEBHOOK_SECRET=whsec_" + crypto.randomBytes(24).toString("hex")
+  "STRIPE_WEBHOOK_SECRET=whsec_" + crypto.randomBytes(24).toString("hex"),
 );
 console.log(
-  "CRYPTOMUS_WEBHOOK_SECRET=" + crypto.randomBytes(32).toString("hex")
+  "CRYPTOMUS_WEBHOOK_SECRET=" + crypto.randomBytes(32).toString("hex"),
 );
 
 // API Keys (template)

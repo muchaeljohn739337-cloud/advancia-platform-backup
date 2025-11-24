@@ -87,7 +87,7 @@ export async function analyzeTrumpCoinWallet(userId: string) {
         createdAt: withdrawal.createdAt,
       })),
       accountAge: Math.floor(
-        (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+        (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24),
       ),
     };
 
@@ -164,8 +164,8 @@ ${
             cryptoOrders.length > 10
               ? "high"
               : cryptoOrders.length > 3
-              ? "medium"
-              : "low",
+                ? "medium"
+                : "low",
           accountAge: walletData.accountAge,
         },
       },
@@ -187,7 +187,7 @@ ${
  */
 export async function analyzeCashOutEligibility(
   userId: string,
-  requestedAmount: number
+  requestedAmount: number,
 ) {
   try {
     // Get user with balances
@@ -242,19 +242,19 @@ export async function analyzeCashOutEligibility(
     const availableBalance = parseFloat(user.usdBalance.toString());
     const hasEnoughBalance = availableBalance >= requestedAmount;
     const accountAgeInDays = Math.floor(
-      (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+      (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24),
     );
     const isAccountOldEnough = accountAgeInDays >= 7; // Minimum 7 days
     const hasPendingWithdrawals = pendingWithdrawals.length > 0;
     const hasActiveLoans = activeLoans.length > 0;
     const totalLoanDebt = activeLoans.reduce(
       (sum, loan) => sum + parseFloat(loan.remainingBalance.toString()),
-      0
+      0,
     );
 
     // Transaction velocity check (fraud detection)
     const last24HoursTransactions = transactions.filter(
-      (tx) => Date.now() - tx.createdAt.getTime() < 24 * 60 * 60 * 1000
+      (tx) => Date.now() - tx.createdAt.getTime() < 24 * 60 * 60 * 1000,
     );
     const suspiciousActivity = last24HoursTransactions.length > 20;
 
@@ -289,29 +289,29 @@ export async function analyzeCashOutEligibility(
       eligibilityScore -= 50;
       reasons.push(
         `Insufficient balance: You have $${availableBalance.toFixed(
-          2
-        )}, need $${requestedAmount.toFixed(2)}`
+          2,
+        )}, need $${requestedAmount.toFixed(2)}`,
       );
     }
 
     if (!isAccountOldEnough) {
       eligibilityScore -= 30;
       reasons.push(
-        `Account too new: ${accountAgeInDays} days old (minimum 7 days required)`
+        `Account too new: ${accountAgeInDays} days old (minimum 7 days required)`,
       );
     }
 
     if (hasPendingWithdrawals) {
       eligibilityScore -= 20;
       reasons.push(
-        `${pendingWithdrawals.length} pending withdrawal(s) must complete first`
+        `${pendingWithdrawals.length} pending withdrawal(s) must complete first`,
       );
     }
 
     if (suspiciousActivity) {
       eligibilityScore -= 40;
       reasons.push(
-        `Unusual activity: ${last24HoursTransactions.length} transactions in last 24 hours`
+        `Unusual activity: ${last24HoursTransactions.length} transactions in last 24 hours`,
       );
     }
 
@@ -323,20 +323,20 @@ export async function analyzeCashOutEligibility(
     if (hasActiveLoans) {
       warnings.push(
         `Active loan debt: $${totalLoanDebt.toFixed(
-          2
-        )} - consider payment obligations`
+          2,
+        )} - consider payment obligations`,
       );
     }
 
     if (!user.totpEnabled) {
       warnings.push(
-        "Two-factor authentication not enabled - recommended for withdrawals"
+        "Two-factor authentication not enabled - recommended for withdrawals",
       );
     }
 
     if (requestedAmount > availableBalance * 0.8) {
       warnings.push(
-        "Withdrawing >80% of balance - consider maintaining reserves"
+        "Withdrawing >80% of balance - consider maintaining reserves",
       );
     }
 
@@ -485,7 +485,7 @@ export async function generateProductRecommendations(userId: string) {
       },
       tier: userTier?.currentTier || "bronze",
       accountAgeInDays: Math.floor(
-        (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+        (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24),
       ),
     };
 
@@ -587,7 +587,7 @@ export async function generateProductRecommendations(userId: string) {
         product: "Virtual Debit Card",
         priority: "high",
         reason: `You have $${parseFloat(user.usdBalance.toString()).toFixed(
-          2
+          2,
         )} USD. Get instant access to your funds with a virtual debit card.`,
         relevance: 90,
       });
@@ -617,7 +617,7 @@ export async function generateProductRecommendations(userId: string) {
         (rec, idx) =>
           `${idx + 1}. ${rec.product} [${rec.priority.toUpperCase()}]\n   ${
             rec.reason
-          }\n   Relevance: ${rec.relevance}%`
+          }\n   Relevance: ${rec.relevance}%`,
       )
       .join("\n\n");
 
@@ -727,7 +727,7 @@ export async function generateMarketInsights() {
     // Calculate market metrics
     const totalCryptoVolume = cryptoOrderStats.reduce(
       (sum, stat) => sum + parseFloat(stat._sum.usdAmount?.toString() || "0"),
-      0
+      0,
     );
 
     const marketData = {
@@ -773,7 +773,7 @@ export async function generateMarketInsights() {
 
     // Generate rule-based market insights
     const activePercentage = parseFloat(
-      ((activeUsers / totalUsers) * 100).toFixed(2)
+      ((activeUsers / totalUsers) * 100).toFixed(2),
     );
 
     let userGrowthTrend = "Stable";
@@ -843,8 +843,8 @@ ${loanStats
   .map(
     (stat) =>
       `• ${stat.status}: ${stat._count} loans ($${parseFloat(
-        stat._sum.amount?.toString() || "0"
-      ).toLocaleString()})`
+        stat._sum.amount?.toString() || "0",
+      ).toLocaleString()})`,
   )
   .join("\n")}
 • Repayment Success Rate: ${loanRepaymentRate}%
@@ -858,8 +858,8 @@ ${
             `• ${stat.chamberType} (${stat.status}): ${
               stat._count
             } bookings ($${parseFloat(
-              stat._sum.cost?.toString() || "0"
-            ).toLocaleString()} revenue)`
+              stat._sum.cost?.toString() || "0",
+            ).toLocaleString()} revenue)`,
         )
         .join("\n")
     : "• No recent MedBeds activity"

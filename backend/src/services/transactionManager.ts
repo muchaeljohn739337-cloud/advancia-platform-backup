@@ -1,7 +1,7 @@
-import prisma from "../prismaClient";
+import prisma from '../prismaClient';
 
 export interface TransactionData {
-  provider: "stripe" | "cryptomus";
+  provider: 'stripe' | 'cryptomus';
   orderId: string;
   amount: number;
   currency: string;
@@ -16,7 +16,7 @@ export interface UnifiedTransaction {
   orderId: string;
   amount: number;
   currency: string;
-  status: "pending" | "confirmed" | "failed";
+  status: 'pending' | 'confirmed' | 'failed';
   userId: string;
   description?: string;
   metadata?: any;
@@ -33,7 +33,7 @@ export class TransactionManager {
    * Create and process a transaction from any provider
    */
   static async createTransaction(
-    txData: TransactionData
+    txData: TransactionData,
   ): Promise<UnifiedTransaction> {
     try {
       // Create transaction record
@@ -41,12 +41,12 @@ export class TransactionManager {
         data: {
           userId: txData.userId,
           amount: txData.amount,
-          type: "credit",
+          type: 'credit',
           description:
             txData.description ||
             `Payment via ${txData.provider} - Order: ${txData.orderId}`,
           category: `${txData.provider}_payment`,
-          status: "confirmed", // Assume confirmed since webhook verified it
+          status: 'confirmed', // Assume confirmed since webhook verified it
         },
       });
 
@@ -54,20 +54,20 @@ export class TransactionManager {
       await this.creditAdminWallet(txData.amount, txData.currency);
 
       // Credit user account (crypto wallet for crypto payments, USD balance for fiat)
-      if (txData.provider === "cryptomus") {
+      if (txData.provider === 'cryptomus') {
         await this.creditUserCryptoWallet(
           txData.userId,
           txData.amount,
-          txData.currency
+          txData.currency,
         );
-      } else if (txData.provider === "stripe") {
+      } else if (txData.provider === 'stripe') {
         await this.creditUserUsdBalance(txData.userId, txData.amount);
       }
 
       // Emit real-time notification
       const io = (global as any).io;
       if (io) {
-        io.to(`user-${txData.userId}`).emit("payment_confirmed", {
+        io.to(`user-${txData.userId}`).emit('payment_confirmed', {
           provider: txData.provider,
           amount: txData.amount,
           currency: txData.currency,
@@ -76,7 +76,7 @@ export class TransactionManager {
       }
 
       console.log(
-        `✅ Transaction processed: ${txData.provider} - ${txData.amount} ${txData.currency} for user ${txData.userId}`
+        `✅ Transaction processed: ${txData.provider} - ${txData.amount} ${txData.currency} for user ${txData.userId}`,
       );
 
       return {
@@ -85,14 +85,14 @@ export class TransactionManager {
         orderId: txData.orderId,
         amount: txData.amount,
         currency: txData.currency,
-        status: "confirmed",
+        status: 'confirmed',
         userId: txData.userId,
         description: transaction.description || undefined,
         createdAt: transaction.createdAt,
         updatedAt: transaction.updatedAt,
       };
     } catch (error) {
-      console.error("Error creating transaction:", error);
+      console.error('Error creating transaction:', error);
       throw error;
     }
   }
@@ -101,7 +101,7 @@ export class TransactionManager {
    * Get transaction status by order ID
    */
   static async getTransactionStatus(
-    orderId: string
+    orderId: string,
   ): Promise<UnifiedTransaction | null> {
     try {
       // Try regular transactions first
@@ -116,11 +116,11 @@ export class TransactionManager {
       if (transaction) {
         return {
           id: transaction.id,
-          provider: transaction.category?.replace("_payment", "") || "unknown",
+          provider: transaction.category?.replace('_payment', '') || 'unknown',
           orderId: orderId,
           amount: transaction.amount,
-          currency: "USD", // Default, could be enhanced
-          status: transaction.status as "pending" | "confirmed" | "failed",
+          currency: 'USD', // Default, could be enhanced
+          status: transaction.status as 'pending' | 'confirmed' | 'failed',
           userId: transaction.userId,
           description: transaction.description || undefined,
           createdAt: transaction.createdAt,
@@ -138,16 +138,16 @@ export class TransactionManager {
       if (cryptoPayment) {
         return {
           id: cryptoPayment.id,
-          provider: "cryptomus",
+          provider: 'cryptomus',
           orderId: orderId,
           amount: cryptoPayment.amount,
           currency: cryptoPayment.currency,
           status:
-            cryptoPayment.status === "paid"
-              ? "confirmed"
-              : cryptoPayment.status === "pending"
-              ? "pending"
-              : "failed",
+            cryptoPayment.status === 'paid'
+              ? 'confirmed'
+              : cryptoPayment.status === 'pending'
+                ? 'pending'
+                : 'failed',
           userId: cryptoPayment.user_id,
           description: cryptoPayment.description || undefined,
           createdAt: cryptoPayment.created_at || new Date(),
@@ -157,7 +157,7 @@ export class TransactionManager {
 
       return null;
     } catch (error) {
-      console.error("Error getting transaction status:", error);
+      console.error('Error getting transaction status:', error);
       throw error;
     }
   }
@@ -191,7 +191,7 @@ export class TransactionManager {
 
       console.log(`Admin wallet credited: +${amount} ${currency}`);
     } catch (error) {
-      console.error("Error crediting admin wallet:", error);
+      console.error('Error crediting admin wallet:', error);
       throw error;
     }
   }
@@ -202,7 +202,7 @@ export class TransactionManager {
   private static async creditUserCryptoWallet(
     userId: string,
     amount: number,
-    currency: string
+    currency: string,
   ) {
     try {
       let userWallet = await prisma.crypto_wallets.findFirst({
@@ -218,7 +218,7 @@ export class TransactionManager {
             userId: userId,
             currency: currency.toUpperCase(),
             balance: 0,
-            address: "",
+            address: '',
           },
         });
       }
@@ -231,10 +231,10 @@ export class TransactionManager {
       });
 
       console.log(
-        `User ${userId} crypto wallet credited: +${amount} ${currency}`
+        `User ${userId} crypto wallet credited: +${amount} ${currency}`,
       );
     } catch (error) {
-      console.error("Error crediting user crypto wallet:", error);
+      console.error('Error crediting user crypto wallet:', error);
       throw error;
     }
   }
@@ -253,7 +253,7 @@ export class TransactionManager {
 
       console.log(`User ${userId} USD balance credited: +${amount}`);
     } catch (error) {
-      console.error("Error crediting user USD balance:", error);
+      console.error('Error crediting user USD balance:', error);
       throw error;
     }
   }

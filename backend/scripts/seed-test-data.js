@@ -24,7 +24,7 @@ const prisma = new PrismaClient({
 async function seedTestData() {
   console.log("🌱 Seeding test database...");
   console.log(
-    `📊 Database: ${process.env.TEST_DATABASE_URL?.split("@")[1] || "Unknown"}`
+    `📊 Database: ${process.env.TEST_DATABASE_URL?.split("@")[1] || "Unknown"}`,
   );
 
   try {

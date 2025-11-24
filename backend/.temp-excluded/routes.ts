@@ -147,7 +147,7 @@ router.post("/kyc/verify", async (req: Request, res: Response) => {
     const result = await kycVerifier.verifyDocument(
       userId,
       documentPath,
-      documentType
+      documentType,
     );
 
     res.json({

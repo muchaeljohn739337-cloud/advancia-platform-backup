@@ -7,7 +7,9 @@ export function getRedis(): Redis | null {
   if (redis !== null) return redis;
   const url = config.redisUrl || process.env.REDIS_URL;
   if (!url) {
-    console.warn('⚠️  REDIS_URL not set. Falling back to in-memory for OTP and rate limits.');
+    console.warn(
+      '⚠️  REDIS_URL not set. Falling back to in-memory for OTP and rate limits.',
+    );
     redis = null;
     return redis;
   }

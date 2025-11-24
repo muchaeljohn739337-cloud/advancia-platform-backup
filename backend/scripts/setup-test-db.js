@@ -22,7 +22,7 @@ if (!DATABASE_URL) {
 
 // Parse database URL
 const urlMatch = DATABASE_URL.match(
-  /postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/
+  /postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/,
 );
 if (!urlMatch) {
   console.error("❌ Invalid TEST_DATABASE_URL format");
@@ -47,7 +47,7 @@ async function setupTestDatabase() {
         {
           stdio: "pipe",
           env: { ...process.env, PGPASSWORD: password },
-        }
+        },
       );
       console.log("   ✅ PostgreSQL is running\n");
     } catch (error) {
@@ -67,7 +67,7 @@ async function setupTestDatabase() {
         {
           stdio: "pipe",
           env: { ...process.env, PGPASSWORD: password },
-        }
+        },
       );
       console.log(`   ✅ Database "${dbName}" created\n`);
     } catch (error) {
@@ -87,12 +87,12 @@ async function setupTestDatabase() {
         {
           stdio: "pipe",
           env: { ...process.env, PGPASSWORD: password },
-        }
+        },
       );
       console.log("   ✅ Privileges granted\n");
     } catch (error) {
       console.log(
-        "   ⚠️  Warning: Could not grant privileges (may already be owner)\n"
+        "   ⚠️  Warning: Could not grant privileges (may already be owner)\n",
       );
     }
 

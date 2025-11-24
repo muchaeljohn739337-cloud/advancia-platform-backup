@@ -125,7 +125,7 @@ describe("Security Whitelist Tests", () => {
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.address.address).toBe(
-        "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
       );
       expect(res.body.address.verified).toBe(false);
 
@@ -226,7 +226,7 @@ describe("Security Whitelist Tests", () => {
 
       await request(app)
         .post(
-          `/api/security/whitelist/address/${addRes.body.address.id}/verify`
+          `/api/security/whitelist/address/${addRes.body.address.id}/verify`,
         )
         .set("Authorization", `Bearer ${authToken}`);
 

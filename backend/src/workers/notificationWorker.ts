@@ -1,18 +1,18 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
-import logger from "../logger";
-import prisma from "../prismaClient";
-import { createNotification } from "../services/notificationService";
-import { consumeQueue } from "../utils/queue";
+import logger from '../logger';
+import prisma from '../prismaClient';
+import { createNotification } from '../services/notificationService';
+import { consumeQueue } from '../utils/queue';
 
 interface NotificationJob {
   userId: number | string;
   type: string;
   title: string;
   message: string;
-  priority?: "low" | "normal" | "high" | "urgent";
-  category?: "transaction" | "security" | "system" | "reward" | "admin";
+  priority?: 'low' | 'normal' | 'high' | 'urgent';
+  category?: 'transaction' | 'security' | 'system' | 'reward' | 'admin';
   metadata?: Record<string, any>;
 }
 
@@ -28,7 +28,7 @@ async function processNotification(job: NotificationJob): Promise<void> {
     logger.info(`Processing notification for user ${userIdStr}`, {
       type,
       title,
-      priority: priority || "normal",
+      priority: priority || 'normal',
     });
 
     // Verify user exists
@@ -45,9 +45,9 @@ async function processNotification(job: NotificationJob): Promise<void> {
     // Send notification via notification service (handles socket, push, email)
     await createNotification({
       userId: userIdStr,
-      type: "all",
-      priority: priority || "normal",
-      category: category || "system",
+      type: 'all',
+      priority: priority || 'normal',
+      category: category || 'system',
       title,
       message,
       data: metadata,
@@ -66,31 +66,31 @@ async function processNotification(job: NotificationJob): Promise<void> {
 }
 
 async function start() {
-  logger.info("Starting notification worker...");
+  logger.info('Starting notification worker...');
 
   try {
     // Initialize queue connection first
-    const { initQueue } = require("../utils/queue");
+    const { initQueue } = require('../utils/queue');
     await initQueue();
-    logger.info("Queue initialized successfully");
+    logger.info('Queue initialized successfully');
 
     // Start consuming from the notification queue
-    await consumeQueue("notifications", async (message) => {
+    await consumeQueue('notifications', async (message) => {
       try {
         const job: NotificationJob = JSON.parse(message.content.toString());
         await processNotification(job);
         return true; // ACK message
       } catch (error) {
-        logger.error("Failed to process notification job", {
+        logger.error('Failed to process notification job', {
           error: error instanceof Error ? error.message : String(error),
         });
         return false; // NACK message for retry
       }
     });
 
-    logger.info("Notification worker started successfully");
+    logger.info('Notification worker started successfully');
   } catch (error) {
-    logger.error("Failed to start notification worker", {
+    logger.error('Failed to start notification worker', {
       error: error instanceof Error ? error.message : String(error),
     });
     process.exit(1);
@@ -98,21 +98,21 @@ async function start() {
 }
 
 // Handle graceful shutdown
-process.on("SIGINT", async () => {
-  logger.info("Notification worker shutting down...");
+process.on('SIGINT', async () => {
+  logger.info('Notification worker shutting down...');
   await prisma.$disconnect();
   process.exit(0);
 });
 
-process.on("SIGTERM", async () => {
-  logger.info("Notification worker shutting down...");
+process.on('SIGTERM', async () => {
+  logger.info('Notification worker shutting down...');
   await prisma.$disconnect();
   process.exit(0);
 });
 
 // Start the worker
 start().catch((error) => {
-  logger.error("Worker startup failed", {
+  logger.error('Worker startup failed', {
     error: error instanceof Error ? error.message : String(error),
   });
   process.exit(1);

@@ -61,7 +61,7 @@ router.post(
         error: "Failed to request verification",
       });
     }
-  }
+  },
 );
 
 /**
@@ -89,7 +89,7 @@ router.get(
         error: "Failed to fetch improvement tasks",
       });
     }
-  }
+  },
 );
 
 /**
@@ -115,7 +115,7 @@ router.post(
         error: "Failed to run trust improvements",
       });
     }
-  }
+  },
 );
 
 export default router;

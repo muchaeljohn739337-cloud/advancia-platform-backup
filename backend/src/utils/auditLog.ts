@@ -1,6 +1,6 @@
-import crypto from "crypto";
-import { Request, Response } from "express";
-import prisma from "../prismaClient";
+import crypto from 'crypto';
+import { Request, Response } from 'express';
+import prisma from '../prismaClient';
 
 export interface AuditLogEntry {
   userId: string;
@@ -35,9 +35,9 @@ export const createAuditLog = async (entry: AuditLogEntry) => {
       },
     });
   } catch (error) {
-    console.error("Error creating audit log:", error);
+    console.error('Error creating audit log:', error);
     // Fallback to console logging if database fails
-    console.log("[AUDIT LOG]", {
+    console.log('[AUDIT LOG]', {
       timestamp: new Date().toISOString(),
       ...entry,
     });
@@ -55,26 +55,26 @@ export const auditLogMiddleware = (req: Request, res: Response, next: any) => {
   // Override send function to log after response
   res.send = function (data: any) {
     // Only log write operations
-    if (["POST", "PUT", "DELETE", "PATCH"].includes(req.method)) {
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
       // Extract user ID from token or session
       const userId =
-        ((req as any).user as any)?.id || req.query.userId || "unknown";
+        ((req as any).user as any)?.id || req.query.userId || 'unknown';
 
       // Determine action based on endpoint and method
       const action = `${req.method} ${req.path}`;
-      const [resourceType] = req.path.split("/").filter(Boolean);
+      const [resourceType] = req.path.split('/').filter(Boolean);
 
       createAuditLog({
         userId,
         action,
-        resourceType: resourceType || "unknown",
-        resourceId: req.params.id || "N/A",
+        resourceType: resourceType || 'unknown',
+        resourceId: req.params.id || 'N/A',
         metadata: {
           method: req.method,
           path: req.path,
           query: req.query,
           ipAddress: req.ip,
-          userAgent: req.get("user-agent"),
+          userAgent: req.get('user-agent'),
           responseStatus: res.statusCode,
         },
       });
@@ -107,14 +107,14 @@ export const getAuditLogs = async (filters: {
         ...(filters.startDate && { timestamp: { gte: filters.startDate } }),
         ...(filters.endDate && { timestamp: { lte: filters.endDate } }),
       },
-      orderBy: { timestamp: "desc" },
+      orderBy: { timestamp: 'desc' },
       take: filters.limit || 50,
       skip: filters.skip || 0,
     });
 
     return logs;
   } catch (error) {
-    console.error("Error fetching audit logs:", error);
+    console.error('Error fetching audit logs:', error);
     return [];
   }
 };

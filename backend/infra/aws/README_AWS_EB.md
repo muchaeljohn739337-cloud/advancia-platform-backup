@@ -1,11 +1,13 @@
 # Deploy backend to AWS Elastic Beanstalk (Windows PowerShell)
 
 ## Prereqs
+
 - AWS account with IAM user/role that has EB, EC2, S3, RDS permissions
 - AWS CLI configured: `aws configure`
 - EB CLI installed: `pip install --upgrade awsebcli`
 
 ## One-time setup (run in backend/)
+
 ```powershell
 # 1) Initialize EB application
 cd backend
@@ -34,12 +36,14 @@ eb deploy $envName
 ```
 
 Notes:
+
 - Procfile already set to `web: npm run start`
 - postinstall will run `prisma generate && npm run build`
 - A postdeploy hook runs `npx prisma migrate deploy`
 - Health check is configured at `/api/payments/health`
 
 ## View logs and health
+
 ```powershell
 eb status
 eb health
@@ -50,9 +54,11 @@ eb open
 ---
 
 # Frontend (Next.js) → S3 + CloudFront
+
 If your app can be statically exported (no server-side rendering required), you can host it on S3+CloudFront.
 
 ## Build and export
+
 ```powershell
 cd ../frontend
 npm ci
@@ -61,6 +67,7 @@ npm run export   # produces .\out folder
 ```
 
 ## Upload to S3 (example)
+
 ```powershell
 $bucket = "my-frontend-bucket-unique-name"
 aws s3 mb s3://$bucket
@@ -69,9 +76,11 @@ aws s3 cp ./out/index.html s3://$bucket/index.html --cache-control "no-cache"
 ```
 
 ## CloudFront
+
 - Create a CloudFront distribution with the S3 bucket as origin
 - Default root object: `index.html`
 - Add SSL via ACM (in us-east-1 for global distributions)
 
 ## CORS/Env
+
 Set `NEXT_PUBLIC_API_URL` on frontend to your EB backend URL. Update backend CORS origins in `backend/src/config/index.ts` if needed.

@@ -293,7 +293,7 @@ export async function batchOALLog(
     metadata?: any;
     createdById: string;
     status?: "PENDING" | "APPROVED" | "REJECTED";
-  }>
+  }>,
 ) {
   const promises = entries.map((entry) => createOALLog(entry));
   return Promise.allSettled(promises);

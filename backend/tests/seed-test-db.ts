@@ -70,11 +70,13 @@ export async function cleanTestDatabase() {
     await prisma.tokenWallet.deleteMany({
       where: {
         userId: {
-          in: await prisma.user.findMany({
-            where: { email: { in: ["admin@test.com", "user@test.com"] } },
-            select: { id: true }
-          }).then(users => users.map(u => u.id))
-        }
+          in: await prisma.user
+            .findMany({
+              where: { email: { in: ["admin@test.com", "user@test.com"] } },
+              select: { id: true },
+            })
+            .then((users) => users.map((u) => u.id)),
+        },
       },
     });
 

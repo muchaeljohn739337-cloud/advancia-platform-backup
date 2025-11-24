@@ -213,7 +213,7 @@ router.post(
         message: "Failed to create adjustment request",
       });
     }
-  }
+  },
 );
 
 // Step 2: Approve/reject the request
@@ -294,7 +294,7 @@ router.post(
         message: "Failed to process approval",
       });
     }
-  }
+  },
 );
 
 export default router;

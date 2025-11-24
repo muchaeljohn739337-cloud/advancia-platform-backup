@@ -1,6 +1,6 @@
 /**
  * Modular Express App with Route Separation
- * 
+ *
  * This demonstrates clean separation of concerns with:
  * - Modular route handlers
  * - CORS configuration
@@ -26,26 +26,26 @@ const allowedOrigins = [
   'http://127.0.0.1:3001',
   'https://advanciapayledger.com',
   'https://www.advanciapayledger.com',
-  ...(process.env.ALLOWED_ORIGINS?.split(',') || [])
+  ...(process.env.ALLOWED_ORIGINS?.split(',') || []),
 ];
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
-    
+
     // Allow whitelisted origins
     if (allowedOrigins.includes(origin)) return callback(null, true);
-    
+
     // Allow Vercel preview deployments
     if (origin.endsWith('.vercel.app')) return callback(null, true);
-    
+
     // Reject all others
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'x-admin-key']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'x-admin-key'],
 };
 
 app.use(cors(corsOptions));
@@ -64,7 +64,7 @@ app.use((req, res, next) => {
       path: req.path,
       status: res.statusCode,
       duration: `${duration}ms`,
-      ip: req.ip
+      ip: req.ip,
     });
   });
   next();
@@ -80,7 +80,7 @@ app.use('/api/auth', authRouter);
 // import emailRouter from './routes/email';
 // import paymentsRouter from './routes/payments';
 // import transactionsRouter from './routes/transactions';
-// 
+//
 // app.use('/api/email', emailRouter);
 // app.use('/api/payments', paymentsRouter);
 // app.use('/api/transactions', transactionsRouter);
@@ -100,18 +100,25 @@ app.use((req, res) => {
 /**
  * Global Error Handler - Must be last middleware
  */
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  logger.error('Unhandled error', { 
-    error: err.message, 
-    stack: err.stack, 
-    path: req.path,
-    method: req.method
-  });
-  
-  res.status(500).json({ 
-    error: 'Something went wrong!',
-    details: process.env.NODE_ENV === 'development' ? err.message : undefined
-  });
-});
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    logger.error('Unhandled error', {
+      error: err.message,
+      stack: err.stack,
+      path: req.path,
+      method: req.method,
+    });
+
+    res.status(500).json({
+      error: 'Something went wrong!',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    });
+  },
+);
 
 export default app;

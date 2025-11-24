@@ -38,9 +38,9 @@ export function serializeDate(value: any): string {
 export function serializePrismaObject(obj: any): any {
   if (!obj) return obj;
   if (Array.isArray(obj)) {
-    return obj.map(item => serializePrismaObject(item));
+    return obj.map((item) => serializePrismaObject(item));
   }
-  
+
   const serialized: any = {};
   for (const [key, value] of Object.entries(obj)) {
     if (value instanceof Decimal) {
@@ -50,8 +50,8 @@ export function serializePrismaObject(obj: any): any {
     } else if (value && typeof value === 'object' && !Array.isArray(value)) {
       serialized[key] = serializePrismaObject(value);
     } else if (Array.isArray(value)) {
-      serialized[key] = value.map(item => 
-        typeof item === 'object' ? serializePrismaObject(item) : item
+      serialized[key] = value.map((item) =>
+        typeof item === 'object' ? serializePrismaObject(item) : item,
       );
     } else {
       serialized[key] = value;

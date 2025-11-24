@@ -22,7 +22,7 @@ const mockStripePaymentIntentsRetrieve = jest
       status: "requires_payment_method",
       amount: 5000,
       currency: "usd",
-    })
+    }),
   );
 
 // Mock PrismaClient directly to avoid real DB connections
@@ -52,7 +52,7 @@ jest.mock("stripe", () =>
       create: (...args: any[]) => mockStripePaymentIntentsCreate(...args),
       retrieve: (...args: any[]) => mockStripePaymentIntentsRetrieve(...args),
     },
-  }))
+  })),
 );
 
 // Mock auth middleware to bypass JWT validation while setting req.user

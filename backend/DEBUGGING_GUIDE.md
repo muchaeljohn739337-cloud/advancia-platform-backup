@@ -191,7 +191,7 @@ const res = await request(app).get("/api/transactions/user/123"); // Not /api/tr
 // Debug Console - check route exists:
 console.log(
   "Routes:",
-  app._router.stack.map((r) => r.route?.path)
+  app._router.stack.map((r) => r.route?.path),
 );
 ```
 

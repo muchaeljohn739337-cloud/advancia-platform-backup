@@ -1,8 +1,8 @@
-import { client, v2 } from "@datadog/datadog-api-client";
-import * as Sentry from "@sentry/node";
-import rateLimit from "express-rate-limit";
-import helmet from "helmet";
-import { z } from "zod";
+import { client, v2 } from '@datadog/datadog-api-client';
+import * as Sentry from '@sentry/node';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import { z } from 'zod';
 
 // ✅ Initialize monitoring (Sentry + Datadog)
 export function initMonitoring() {
@@ -28,7 +28,7 @@ export function securityHeaders(app) {
   app.use(
     helmet({
       contentSecurityPolicy: false, // adjust if serving frontend
-      crossOriginResourcePolicy: { policy: "same-origin" },
+      crossOriginResourcePolicy: { policy: 'same-origin' },
     }),
   );
 }
@@ -37,7 +37,7 @@ export function securityHeaders(app) {
 export function requestMetrics(app) {
   app.use((req, res, next) => {
     const start = Date.now();
-    res.on("finish", () => {
+    res.on('finish', () => {
       const duration = Date.now() - start;
       const status = res.statusCode;
 
@@ -46,7 +46,7 @@ export function requestMetrics(app) {
         const now = Math.floor(Date.now() / 1000);
         const series = [
           {
-            metric: "advancia.request.latency",
+            metric: 'advancia.request.latency',
             type: 0, // gauge
             points: [{ timestamp: now, value: duration }],
             tags: [
@@ -56,7 +56,7 @@ export function requestMetrics(app) {
             ],
           },
           {
-            metric: "advancia.request.count",
+            metric: 'advancia.request.count',
             type: 1, // count
             points: [{ timestamp: now, value: 1 }],
             tags: [
@@ -79,7 +79,7 @@ export function requestMetrics(app) {
 export const loginLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 5, // limit each IP to 5 requests/minute
-  message: { error: "Too many login attempts, try again later." },
+  message: { error: 'Too many login attempts, try again later.' },
 });
 
 // ✅ Response sanitizer
@@ -115,7 +115,7 @@ export function errorHandler(err, req, res, next) {
     const now = Math.floor(Date.now() / 1000);
     const series = [
       {
-        metric: "advancia.error.count",
+        metric: 'advancia.error.count',
         type: 1, // count
         points: [{ timestamp: now, value: 1 }],
         tags: [`endpoint:${req.path}`, `status:${err.status || 500}`],
@@ -128,6 +128,6 @@ export function errorHandler(err, req, res, next) {
 
   res.status(err.status || 500).json({
     ok: false,
-    error: err.message || "Internal server error",
+    error: err.message || 'Internal server error',
   });
 }

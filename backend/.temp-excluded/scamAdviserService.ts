@@ -69,7 +69,7 @@ class ScamAdviserService {
       await this.saveVerificationReport(mockReport);
 
       logger.info(
-        `✅ Scam Adviser check completed: Score ${mockReport.trustScore}`
+        `✅ Scam Adviser check completed: Score ${mockReport.trustScore}`,
       );
       return mockReport;
     } catch (error) {
@@ -148,7 +148,7 @@ class ScamAdviserService {
   }> {
     try {
       logger.info(
-        `📨 Submitting ${this.domain} for Scam Adviser manual verification`
+        `📨 Submitting ${this.domain} for Scam Adviser manual verification`,
       );
 
       const verificationData = {
@@ -308,7 +308,7 @@ class ScamAdviserService {
   }
 
   private determineTrustStatus(
-    score: number
+    score: number,
   ): "verified" | "pending" | "needs_attention" {
     if (score >= 80) return "verified";
     if (score >= 60) return "pending";
@@ -316,7 +316,7 @@ class ScamAdviserService {
   }
 
   private async saveVerificationReport(
-    report: ScamAdviserReport
+    report: ScamAdviserReport,
   ): Promise<void> {
     await prisma.auditLog.create({
       data: {

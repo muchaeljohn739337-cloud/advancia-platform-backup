@@ -3,7 +3,7 @@
  * Captures errors with stack traces, context, and user information
  */
 
-import * as Sentry from "@sentry/node";
+import * as Sentry from '@sentry/node';
 
 /**
  * Initialize Sentry error tracking
@@ -12,31 +12,31 @@ import * as Sentry from "@sentry/node";
 export function initSentry() {
   // Skip if no DSN provided (e.g., local development)
   const dsn = process.env.SENTRY_DSN;
-  if (!dsn || dsn.includes("YOUR_") || dsn.includes("_HERE")) {
-    console.log("Sentry DSN not configured, error tracking disabled");
+  if (!dsn || dsn.includes('YOUR_') || dsn.includes('_HERE')) {
+    console.log('Sentry DSN not configured, error tracking disabled');
     return;
   }
 
   Sentry.init({
     dsn: dsn,
-    environment: process.env.NODE_ENV || "development",
+    environment: process.env.NODE_ENV || 'development',
 
     // Performance Monitoring
-    tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1.0,
+    tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
 
     // Release tracking
-    release: process.env.APP_VERSION || "1.0.0",
+    release: process.env.APP_VERSION || '1.0.0',
 
     // Filter out health check noise
     beforeSend(event, hint) {
       // Ignore health check requests
-      if (event.request?.url?.includes("/api/health")) {
+      if (event.request?.url?.includes('/api/health')) {
         return null;
       }
 
       // Ignore specific error types if needed
       const error = hint.originalException;
-      if (error?.message?.includes("ECONNRESET")) {
+      if (error?.message?.includes('ECONNRESET')) {
         return null; // Client disconnected, not our problem
       }
 
@@ -54,18 +54,18 @@ export function initSentry() {
  * Setup global error handlers to catch unhandled exceptions
  */
 function setupGlobalErrorHandlers() {
-  process.on("uncaughtException", (err) => {
-    console.error("Uncaught Exception:", err);
+  process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
     Sentry.captureException(err, {
-      tags: { type: "uncaughtException" },
+      tags: { type: 'uncaughtException' },
     });
     // Don't exit - let PM2 handle it
   });
 
-  process.on("unhandledRejection", (reason, promise) => {
-    console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
     Sentry.captureException(reason, {
-      tags: { type: "unhandledRejection" },
+      tags: { type: 'unhandledRejection' },
     });
     // Don't exit - let PM2 handle it
   });
@@ -76,7 +76,7 @@ function setupGlobalErrorHandlers() {
  */
 export const sentryRequestHandler = () => {
   const dsn = process.env.SENTRY_DSN;
-  if (!dsn || dsn.includes("YOUR_") || dsn.includes("_HERE")) {
+  if (!dsn || dsn.includes('YOUR_') || dsn.includes('_HERE')) {
     return (req, res, next) => next();
   }
   return Sentry.Handlers.requestHandler();
@@ -87,7 +87,7 @@ export const sentryRequestHandler = () => {
  */
 export const sentryTracingHandler = () => {
   const dsn = process.env.SENTRY_DSN;
-  if (!dsn || dsn.includes("YOUR_") || dsn.includes("_HERE")) {
+  if (!dsn || dsn.includes('YOUR_') || dsn.includes('_HERE')) {
     return (req, res, next) => next();
   }
   return Sentry.Handlers.tracingHandler();
@@ -98,7 +98,7 @@ export const sentryTracingHandler = () => {
  */
 export const sentryErrorHandler = () => {
   const dsn = process.env.SENTRY_DSN;
-  if (!dsn || dsn.includes("YOUR_") || dsn.includes("_HERE")) {
+  if (!dsn || dsn.includes('YOUR_') || dsn.includes('_HERE')) {
     return (err, req, res, next) => next(err);
   }
   return Sentry.Handlers.errorHandler();
@@ -114,7 +114,7 @@ export function captureError(error, context = {}) {
     tags: context.tags || {},
     extra: context.extra || {},
     user: context.user || {},
-    level: context.level || "error",
+    level: context.level || 'error',
   });
 }
 
@@ -123,7 +123,7 @@ export function captureError(error, context = {}) {
  * @param {string} message - The message to capture
  * @param {string} level - Severity level (info, warning, error)
  */
-export function captureMessage(message, level = "info") {
+export function captureMessage(message, level = 'info') {
   Sentry.captureMessage(message, level);
 }
 
@@ -155,7 +155,7 @@ export function addBreadcrumb(message, data = {}) {
   Sentry.addBreadcrumb({
     message,
     data,
-    level: "info",
+    level: 'info',
     timestamp: Date.now() / 1000,
   });
 }

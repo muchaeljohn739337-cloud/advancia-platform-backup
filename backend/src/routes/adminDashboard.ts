@@ -1,10 +1,10 @@
-import { Request, Response, Router } from "express";
-import prisma from "../prismaClient";
+import { Request, Response, Router } from 'express';
+import prisma from '../prismaClient';
 
 const router = Router();
 
 // GET /api/admin/dashboard/stats - Real-time dashboard statistics
-router.get("/dashboard/stats", async (req: Request, res: Response) => {
+router.get('/dashboard/stats', async (req: Request, res: Response) => {
   try {
     // User statistics
     const totalUsers = await prisma.user.count();
@@ -40,29 +40,29 @@ router.get("/dashboard/stats", async (req: Request, res: Response) => {
     // Invoice statistics
     const totalInvoices = await prisma.invoices.count();
     const paidInvoices = await prisma.invoices.count({
-      where: { status: "paid" },
+      where: { status: 'paid' },
     });
     const pendingInvoices = await prisma.invoices.count({
-      where: { status: "pending" },
+      where: { status: 'pending' },
     });
 
     const invoiceRevenue = await prisma.invoices.aggregate({
-      where: { status: "paid" },
+      where: { status: 'paid' },
       _sum: { amount: true },
     });
 
     // Email statistics
     const emailsSent = await prisma.email_logs.count({
-      where: { status: "sent" },
+      where: { status: 'sent' },
     });
     const emailsFailed = await prisma.email_logs.count({
-      where: { status: "failed" },
+      where: { status: 'failed' },
     });
 
     // Reward statistics
     const totalRewards = await prisma.rewards.count();
     const claimedRewards = await prisma.rewards.count({
-      where: { status: "claimed" },
+      where: { status: 'claimed' },
     });
 
     res.json({
@@ -121,13 +121,13 @@ router.get("/dashboard/stats", async (req: Request, res: Response) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching dashboard stats:", error);
-    res.status(500).json({ error: "Failed to fetch dashboard statistics" });
+    console.error('Error fetching dashboard stats:', error);
+    res.status(500).json({ error: 'Failed to fetch dashboard statistics' });
   }
 });
 
 // GET /api/admin/dashboard/charts/users - User growth chart data
-router.get("/dashboard/charts/users", async (req: Request, res: Response) => {
+router.get('/dashboard/charts/users', async (req: Request, res: Response) => {
   try {
     const { days = 30 } = req.query;
     const daysAgo = Number(days);
@@ -146,20 +146,20 @@ router.get("/dashboard/charts/users", async (req: Request, res: Response) => {
     `;
 
     const formattedData = userGrowth.map((item) => ({
-      date: item.date.toISOString().split("T")[0],
+      date: item.date.toISOString().split('T')[0],
       count: Number(item.count),
     }));
 
     res.json({ data: formattedData });
   } catch (error) {
-    console.error("Error fetching user growth chart:", error);
-    res.status(500).json({ error: "Failed to fetch user growth data" });
+    console.error('Error fetching user growth chart:', error);
+    res.status(500).json({ error: 'Failed to fetch user growth data' });
   }
 });
 
 // GET /api/admin/dashboard/charts/transactions - Transaction volume chart
 router.get(
-  "/dashboard/charts/transactions",
+  '/dashboard/charts/transactions',
   async (req: Request, res: Response) => {
     try {
       const { days = 30 } = req.query;
@@ -178,21 +178,21 @@ router.get(
     `;
 
       const formattedData = transactionData.map((item) => ({
-        date: item.date.toISOString().split("T")[0],
+        date: item.date.toISOString().split('T')[0],
         count: Number(item.count),
         volume: Number(item.volume || 0),
       }));
 
       res.json({ data: formattedData });
     } catch (error) {
-      console.error("Error fetching transaction chart:", error);
-      res.status(500).json({ error: "Failed to fetch transaction data" });
+      console.error('Error fetching transaction chart:', error);
+      res.status(500).json({ error: 'Failed to fetch transaction data' });
     }
-  }
+  },
 );
 
 // GET /api/admin/dashboard/charts/revenue - Revenue chart
-router.get("/dashboard/charts/revenue", async (req: Request, res: Response) => {
+router.get('/dashboard/charts/revenue', async (req: Request, res: Response) => {
   try {
     const { days = 30 } = req.query;
     const daysAgo = Number(days);
@@ -210,19 +210,19 @@ router.get("/dashboard/charts/revenue", async (req: Request, res: Response) => {
     `;
 
     const formattedData = revenueData.map((item) => ({
-      date: item.date.toISOString().split("T")[0],
+      date: item.date.toISOString().split('T')[0],
       revenue: Number(item.revenue || 0),
     }));
 
     res.json({ data: formattedData });
   } catch (error) {
-    console.error("Error fetching revenue chart:", error);
-    res.status(500).json({ error: "Failed to fetch revenue data" });
+    console.error('Error fetching revenue chart:', error);
+    res.status(500).json({ error: 'Failed to fetch revenue data' });
   }
 });
 
 // GET /api/admin/users/search - Advanced user search
-router.get("/users/search", async (req: Request, res: Response) => {
+router.get('/users/search', async (req: Request, res: Response) => {
   try {
     const { q, role, active, limit = 50, offset = 0 } = req.query;
 
@@ -230,15 +230,15 @@ router.get("/users/search", async (req: Request, res: Response) => {
 
     if (q) {
       where.OR = [
-        { email: { contains: q as string, mode: "insensitive" } },
-        { username: { contains: q as string, mode: "insensitive" } },
-        { firstName: { contains: q as string, mode: "insensitive" } },
-        { lastName: { contains: q as string, mode: "insensitive" } },
+        { email: { contains: q as string, mode: 'insensitive' } },
+        { username: { contains: q as string, mode: 'insensitive' } },
+        { firstName: { contains: q as string, mode: 'insensitive' } },
+        { lastName: { contains: q as string, mode: 'insensitive' } },
       ];
     }
 
     if (role) where.role = role;
-    if (active !== undefined) where.active = active === "true";
+    if (active !== undefined) where.active = active === 'true';
 
     const users = await prisma.user.findMany({
       where,
@@ -256,7 +256,7 @@ router.get("/users/search", async (req: Request, res: Response) => {
       },
       take: Number(limit),
       skip: Number(offset),
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     });
 
     const total = await prisma.user.count({ where });
@@ -268,13 +268,13 @@ router.get("/users/search", async (req: Request, res: Response) => {
       offset: Number(offset),
     });
   } catch (error) {
-    console.error("Error searching users:", error);
-    res.status(500).json({ error: "Failed to search users" });
+    console.error('Error searching users:', error);
+    res.status(500).json({ error: 'Failed to search users' });
   }
 });
 
 // POST /api/admin/users/:userId/suspend - Suspend user
-router.post("/users/:userId/suspend", async (req: Request, res: Response) => {
+router.post('/users/:userId/suspend', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const { reason } = req.body;
@@ -286,22 +286,22 @@ router.post("/users/:userId/suspend", async (req: Request, res: Response) => {
 
     // TODO: Log admin action
     console.log(
-      `User ${userId} suspended. Reason: ${reason || "No reason provided"}`
+      `User ${userId} suspended. Reason: ${reason || 'No reason provided'}`,
     );
 
     res.json({
       success: true,
       user,
-      message: "User suspended successfully",
+      message: 'User suspended successfully',
     });
   } catch (error) {
-    console.error("Error suspending user:", error);
-    res.status(500).json({ error: "Failed to suspend user" });
+    console.error('Error suspending user:', error);
+    res.status(500).json({ error: 'Failed to suspend user' });
   }
 });
 
 // POST /api/admin/users/:userId/activate - Activate user
-router.post("/users/:userId/activate", async (req: Request, res: Response) => {
+router.post('/users/:userId/activate', async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
@@ -313,22 +313,22 @@ router.post("/users/:userId/activate", async (req: Request, res: Response) => {
     res.json({
       success: true,
       user,
-      message: "User activated successfully",
+      message: 'User activated successfully',
     });
   } catch (error) {
-    console.error("Error activating user:", error);
-    res.status(500).json({ error: "Failed to activate user" });
+    console.error('Error activating user:', error);
+    res.status(500).json({ error: 'Failed to activate user' });
   }
 });
 
 // GET /api/admin/transactions/recent - Recent transactions feed
-router.get("/transactions/recent", async (req: Request, res: Response) => {
+router.get('/transactions/recent', async (req: Request, res: Response) => {
   try {
     const { limit = 20 } = req.query;
 
     const transactions = await prisma.transactions.findMany({
       take: Number(limit),
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         userId: true,
@@ -342,13 +342,13 @@ router.get("/transactions/recent", async (req: Request, res: Response) => {
 
     res.json({ transactions });
   } catch (error) {
-    console.error("Error fetching recent transactions:", error);
-    res.status(500).json({ error: "Failed to fetch recent transactions" });
+    console.error('Error fetching recent transactions:', error);
+    res.status(500).json({ error: 'Failed to fetch recent transactions' });
   }
 });
 
 // GET /api/admin/system/health - System health metrics
-router.get("/system/health", async (req: Request, res: Response) => {
+router.get('/system/health', async (req: Request, res: Response) => {
   try {
     // Database health
     const dbHealthStart = Date.now();
@@ -358,10 +358,10 @@ router.get("/system/health", async (req: Request, res: Response) => {
     // Check database connections
     const dbStatus =
       dbResponseTime < 100
-        ? "healthy"
+        ? 'healthy'
         : dbResponseTime < 500
-          ? "degraded"
-          : "critical";
+          ? 'degraded'
+          : 'critical';
 
     // Memory usage
     const memUsage = process.memoryUsage();
@@ -370,7 +370,7 @@ router.get("/system/health", async (req: Request, res: Response) => {
     const uptime = process.uptime();
 
     res.json({
-      status: "operational",
+      status: 'operational',
       database: {
         status: dbStatus,
         responseTime: `${dbResponseTime}ms`,
@@ -388,16 +388,16 @@ router.get("/system/health", async (req: Request, res: Response) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error checking system health:", error);
+    console.error('Error checking system health:', error);
     res.status(500).json({
-      status: "error",
-      error: "Failed to check system health",
+      status: 'error',
+      error: 'Failed to check system health',
     });
   }
 });
 
 // GET /api/admin/logs - Application logs (simple version)
-router.get("/logs", async (req: Request, res: Response) => {
+router.get('/logs', async (req: Request, res: Response) => {
   try {
     const { limit = 100, level } = req.query;
 
@@ -405,7 +405,7 @@ router.get("/logs", async (req: Request, res: Response) => {
     // For now, return recent audit logs as a proxy
     const auditLogs = await prisma.audit_logs.findMany({
       take: Number(limit),
-      orderBy: { timestamp: "desc" },
+      orderBy: { timestamp: 'desc' },
       select: {
         id: true,
         action: true,
@@ -420,11 +420,11 @@ router.get("/logs", async (req: Request, res: Response) => {
     res.json({
       logs: auditLogs,
       total: auditLogs.length,
-      message: "Showing audit logs as application logs proxy",
+      message: 'Showing audit logs as application logs proxy',
     });
   } catch (error) {
-    console.error("Error fetching logs:", error);
-    res.status(500).json({ error: "Failed to fetch logs" });
+    console.error('Error fetching logs:', error);
+    res.status(500).json({ error: 'Failed to fetch logs' });
   }
 });
 

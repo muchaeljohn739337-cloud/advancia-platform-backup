@@ -8,7 +8,7 @@ const logFormat = format.combine(
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   format.errors({ stack: true }),
   format.splat(),
-  format.json()
+  format.json(),
 );
 
 export const logger = createLogger({
@@ -25,21 +25,21 @@ export const logger = createLogger({
             msg += ` ${JSON.stringify(metadata)}`;
           }
           return msg;
-        })
-      )
+        }),
+      ),
     }),
     new transports.File({
       filename: 'logs/error.log',
       level: 'error',
       maxsize: 5242880, // 5MB
-      maxFiles: 5
+      maxFiles: 5,
     }),
     new transports.File({
       filename: 'logs/combined.log',
       maxsize: 5242880, // 5MB
-      maxFiles: 5
-    })
-  ]
+      maxFiles: 5,
+    }),
+  ],
 });
 
 // Re-export for convenience

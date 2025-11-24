@@ -25,7 +25,7 @@ async function main() {
     "DATABASE_URL",
     "SMTP_USER",
     "SMTP_PASS",
-    "NEXT_PUBLIC_API_URL"
+    "NEXT_PUBLIC_API_URL",
   ];
 
   let ok = true;
@@ -43,31 +43,44 @@ async function main() {
   // Flexible JWT secret check: allow plain, base64, or encrypted variants
   const hasPlain = !!process.env.JWT_SECRET;
   const hasBase64 = !!process.env.JWT_SECRET_BASE64;
-  const hasEncrypted = !!process.env.JWT_SECRET_ENCRYPTED && !!process.env.JWT_ENCRYPTION_KEY && !!process.env.JWT_ENCRYPTION_IV;
+  const hasEncrypted =
+    !!process.env.JWT_SECRET_ENCRYPTED &&
+    !!process.env.JWT_ENCRYPTION_KEY &&
+    !!process.env.JWT_ENCRYPTION_IV;
   if (hasEncrypted) {
-    console.log("✅ JWT secret provided via encrypted variables (JWT_SECRET_ENCRYPTED + key/iv)");
+    console.log(
+      "✅ JWT secret provided via encrypted variables (JWT_SECRET_ENCRYPTED + key/iv)",
+    );
   } else if (hasBase64) {
     console.log("✅ JWT secret provided via base64 (JWT_SECRET_BASE64)");
   } else if (hasPlain) {
     console.log("✅ JWT secret provided via plain JWT_SECRET");
   } else {
-    console.error("❌ Missing JWT secret. Provide one of: JWT_SECRET, JWT_SECRET_BASE64, or JWT_SECRET_ENCRYPTED + JWT_ENCRYPTION_KEY + JWT_ENCRYPTION_IV");
+    console.error(
+      "❌ Missing JWT secret. Provide one of: JWT_SECRET, JWT_SECRET_BASE64, or JWT_SECRET_ENCRYPTED + JWT_ENCRYPTION_KEY + JWT_ENCRYPTION_IV",
+    );
     ok = false;
   }
 
   // Quick sanity for Prisma URL format
   const dbUrl = process.env.DATABASE_URL || "";
   if (!/^postgres(ql)?:\/\//.test(dbUrl)) {
-    console.error(`❌ DATABASE_URL must start with postgresql:// or postgres:// (current: ${dbUrl})`);
+    console.error(
+      `❌ DATABASE_URL must start with postgresql:// or postgres:// (current: ${dbUrl})`,
+    );
     ok = false;
   }
 
   // Stripe keys are optional in dev but required for payments
   if (!process.env.STRIPE_SECRET_KEY) {
-    console.warn("⚠️  STRIPE_SECRET_KEY not set. Payment endpoints will be disabled.");
+    console.warn(
+      "⚠️  STRIPE_SECRET_KEY not set. Payment endpoints will be disabled.",
+    );
   }
   if (process.env.STRIPE_SECRET_KEY && !process.env.STRIPE_WEBHOOK_SECRET) {
-    console.warn("⚠️  STRIPE_WEBHOOK_SECRET not set. Webhook verification will be disabled.");
+    console.warn(
+      "⚠️  STRIPE_WEBHOOK_SECRET not set. Webhook verification will be disabled.",
+    );
   }
 
   console.log("\n🔗 Testing database connection...");

@@ -35,7 +35,7 @@ export class RPAScheduler {
         async () => {
           console.log("🔄 Running scheduled transaction processing...");
           await transactionProcessor.batchProcess();
-        }
+        },
       );
       console.log("✅ Transaction Processing scheduled");
     }
@@ -48,7 +48,7 @@ export class RPAScheduler {
         async () => {
           console.log("🔍 Running scheduled KYC verification...");
           await kycVerifier.batchProcessKYC();
-        }
+        },
       );
       console.log("✅ KYC Verification scheduled");
     }
@@ -61,7 +61,7 @@ export class RPAScheduler {
         async () => {
           console.log("📊 Running scheduled report generation...");
           await reportGenerator.generateAllReports();
-        }
+        },
       );
       console.log("✅ Report Generation scheduled");
     }
@@ -73,7 +73,7 @@ export class RPAScheduler {
         "*/2 * * * *", // Every 2 minutes
         async () => {
           await notificationAutomation.processQueue();
-        }
+        },
       );
       console.log("✅ Notification Queue Processing scheduled");
     }
@@ -86,7 +86,7 @@ export class RPAScheduler {
         async () => {
           console.log("💾 Running scheduled data backup...");
           await dataBackupSync.performBackupAndSync();
-        }
+        },
       );
       console.log("✅ Data Backup scheduled");
     }
@@ -98,7 +98,7 @@ export class RPAScheduler {
       async () => {
         console.log("⭐ Running scheduled Trustpilot review sync...");
         await trustpilotCollector.syncReviews();
-      }
+      },
     );
     console.log("✅ Trustpilot Review Sync scheduled");
 
@@ -109,7 +109,7 @@ export class RPAScheduler {
       async () => {
         console.log("📧 Running scheduled Trustpilot invitation campaign...");
         await trustpilotInvitationService.sendAutomatedInvitations();
-      }
+      },
     );
     console.log("✅ Trustpilot Invitations scheduled");
 
@@ -123,7 +123,7 @@ export class RPAScheduler {
         if (report.trustScore < 70) {
           await scamAdviserService.requestManualVerification();
         }
-      }
+      },
     );
     console.log("✅ Scam Adviser Check scheduled");
 
@@ -134,7 +134,7 @@ export class RPAScheduler {
       async () => {
         console.log("🔧 Running scheduled trust signal improvements...");
         await scamAdviserService.improveAutomatedTrustSignals();
-      }
+      },
     );
     console.log("✅ Trust Signal Improvement scheduled");
 
@@ -165,7 +165,7 @@ export class RPAScheduler {
   private scheduleTask(
     name: string,
     schedule: string,
-    handler: () => Promise<void>
+    handler: () => Promise<void>,
   ): void {
     try {
       const task = cron.schedule(schedule, async () => {

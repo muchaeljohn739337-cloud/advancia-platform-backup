@@ -3,7 +3,7 @@
  * Handles fee calculations for all transaction types with admin-configurable rules
  */
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -34,10 +34,10 @@ export interface RecordRevenueParams {
 export async function calculateTransactionFee(
   feeType: string,
   currency: string,
-  amount: number
+  amount: number,
 ): Promise<FeeCalculation> {
   if (amount <= 0) {
-    throw new Error("Amount must be greater than 0");
+    throw new Error('Amount must be greater than 0');
   }
 
   // Get active fee configuration
@@ -49,9 +49,9 @@ export async function calculateTransactionFee(
       active: true,
     },
     orderBy: [
-      { currency: "desc" }, // null comes last, so specific currency first
-      { priority: "desc" },
-      { createdAt: "desc" },
+      { currency: 'desc' }, // null comes last, so specific currency first
+      { priority: 'desc' },
+      { createdAt: 'desc' },
     ],
   });
 
@@ -146,7 +146,7 @@ export async function recordFeeRevenue(params: RecordRevenueParams) {
 export async function getFeeRevenueStats(
   startDate?: Date,
   endDate?: Date,
-  transactionType?: string
+  transactionType?: string,
 ) {
   const where: any = {};
 
@@ -171,7 +171,7 @@ export async function getFeeRevenueStats(
 
     // Revenue by transaction type
     prisma.feeRevenue.groupBy({
-      by: ["transactionType"],
+      by: ['transactionType'],
       where,
       _sum: {
         totalFee: true,
@@ -182,7 +182,7 @@ export async function getFeeRevenueStats(
 
     // Revenue by currency
     prisma.feeRevenue.groupBy({
-      by: ["baseCurrency"],
+      by: ['baseCurrency'],
       where,
       _sum: {
         totalFee: true,
@@ -209,7 +209,7 @@ export async function getFeeRevenueStats(
 export async function getTopRevenueUsers(
   limit: number = 10,
   startDate?: Date,
-  endDate?: Date
+  endDate?: Date,
 ) {
   const where: any = {};
   if (startDate && endDate) {
@@ -217,7 +217,7 @@ export async function getTopRevenueUsers(
   }
 
   const topUsers = await prisma.feeRevenue.groupBy({
-    by: ["userId"],
+    by: ['userId'],
     where,
     _sum: {
       revenueUSD: true,
@@ -225,7 +225,7 @@ export async function getTopRevenueUsers(
     _count: true,
     orderBy: {
       _sum: {
-        revenueUSD: "desc",
+        revenueUSD: 'desc',
       },
     },
     take: limit,
@@ -308,7 +308,7 @@ export async function updateFeeRule(
     priority?: number;
     active?: boolean;
     description?: string;
-  }
+  },
 ) {
   const feeRule = await prisma.transactionFee.update({
     where: { id: ruleId },
@@ -338,7 +338,7 @@ export async function getAllFeeRules(activeOnly: boolean = false) {
 
   return prisma.transactionFee.findMany({
     where,
-    orderBy: [{ feeType: "asc" }, { currency: "asc" }, { priority: "desc" }],
+    orderBy: [{ feeType: 'asc' }, { currency: 'asc' }, { priority: 'desc' }],
   });
 }
 
@@ -347,12 +347,12 @@ export async function getAllFeeRules(activeOnly: boolean = false) {
  */
 export async function calculateBatchFees(
   feeType: string,
-  items: Array<{ currency: string; amount: number }>
+  items: Array<{ currency: string; amount: number }>,
 ): Promise<FeeCalculation[]> {
   const results = await Promise.all(
     items.map((item) =>
-      calculateTransactionFee(feeType, item.currency, item.amount)
-    )
+      calculateTransactionFee(feeType, item.currency, item.amount),
+    ),
   );
   return results;
 }
@@ -363,7 +363,7 @@ export async function calculateBatchFees(
 export async function previewFee(
   feeType: string,
   currency: string,
-  amount: number
+  amount: number,
 ): Promise<FeeCalculation & { description?: string }> {
   const fee = await calculateTransactionFee(feeType, currency, amount);
 

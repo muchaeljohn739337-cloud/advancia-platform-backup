@@ -56,7 +56,7 @@ function summarize(list: Outcome[]) {
     console.log(
       `${o.success ? "[PASS]" : "[FAIL]"} ${o.step} ${
         o.detail ? "- " + o.detail : ""
-      }`
+      }`,
     );
   }
 }

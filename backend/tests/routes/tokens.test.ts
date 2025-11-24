@@ -3,14 +3,18 @@
  * Tests for token balance and transaction history endpoints
  */
 
-import request from 'supertest';
-import app from '../test-app';
-import prisma from '../../src/prismaClient';
-import { createTestUser, generateUserToken, cleanupTestUsers } from '../setup/adminSetup';
+import request from "supertest";
+import app from "../test-app";
+import prisma from "../../src/prismaClient";
+import {
+  createTestUser,
+  generateUserToken,
+  cleanupTestUsers,
+} from "../setup/adminSetup";
 
-const API_KEY = process.env.API_KEY || 'dev-api-key-123';
+const API_KEY = process.env.API_KEY || "dev-api-key-123";
 
-describe('Token Wallet API', () => {
+describe("Token Wallet API", () => {
   let userId: string;
   let userToken: string;
   let walletId: string;
@@ -38,41 +42,42 @@ describe('Token Wallet API', () => {
     await cleanupTestUsers();
   });
 
-  describe('GET /api/tokens/balance/:userId', () => {
-    it('should create wallet if it does not exist', async () => {
+  describe("GET /api/tokens/balance/:userId", () => {
+    it("should create wallet if it does not exist", async () => {
       const res = await request(app)
         .get(`/api/tokens/balance/${userId}`)
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .expect(200);
 
-      expect(res.body).toHaveProperty('userId', userId);
-      expect(res.body).toHaveProperty('balance');
-      expect(res.body).toHaveProperty('lockedBalance');
+      expect(res.body).toHaveProperty("userId", userId);
+      expect(res.body).toHaveProperty("balance");
+      expect(res.body).toHaveProperty("lockedBalance");
 
       // Store walletId for cleanup
       walletId = res.body.id;
-    });    it('should return existing wallet balance', async () => {
+    });
+    it("should return existing wallet balance", async () => {
       // Get balance again
       const res = await request(app)
         .get(`/api/tokens/balance/${userId}`)
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .expect(200);
 
-      expect(res.body).toHaveProperty('userId', userId);
-      expect(res.body).toHaveProperty('balance');
+      expect(res.body).toHaveProperty("userId", userId);
+      expect(res.body).toHaveProperty("balance");
     });
 
-    it('should require authentication', async () => {
+    it("should require authentication", async () => {
       await request(app)
         .get(`/api/tokens/balance/${userId}`)
-        .set('x-api-key', API_KEY)
+        .set("x-api-key", API_KEY)
         .expect(401);
     });
   });
 
-  describe('GET /api/tokens/history/:userId', () => {
+  describe("GET /api/tokens/history/:userId", () => {
     beforeAll(async () => {
       // Ensure wallet exists
       const wallet = await prisma.tokenWallet.upsert({
@@ -87,53 +92,53 @@ describe('Token Wallet API', () => {
         data: [
           {
             walletId,
-            type: 'EARN',
+            type: "EARN",
             amount: 100,
-            description: 'Test reward',
-            status: 'COMPLETED',
+            description: "Test reward",
+            status: "COMPLETED",
           },
           {
             walletId,
-            type: 'SPEND',
+            type: "SPEND",
             amount: 50,
-            description: 'Test purchase',
-            status: 'COMPLETED',
+            description: "Test purchase",
+            status: "COMPLETED",
           },
           {
             walletId,
-            type: 'EARN',
+            type: "EARN",
             amount: 25,
-            description: 'Test bonus',
-            status: 'PENDING',
+            description: "Test bonus",
+            status: "PENDING",
           },
         ],
       });
     });
 
-    it('should return transaction history', async () => {
+    it("should return transaction history", async () => {
       const res = await request(app)
         .get(`/api/tokens/history/${userId}`)
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .expect(200);
 
-      expect(res.body).toHaveProperty('transactions');
+      expect(res.body).toHaveProperty("transactions");
       expect(Array.isArray(res.body.transactions)).toBe(true);
-      expect(res.body).toHaveProperty('total');
+      expect(res.body).toHaveProperty("total");
       expect(res.body.total).toBeGreaterThanOrEqual(3);
     });
 
-    it('should respect limit parameter', async () => {
+    it("should respect limit parameter", async () => {
       const res = await request(app)
         .get(`/api/tokens/history/${userId}?limit=2`)
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .expect(200);
 
       expect(res.body.transactions.length).toBeLessThanOrEqual(2);
     });
 
-    it('should return empty array for user with no wallet', async () => {
+    it("should return empty array for user with no wallet", async () => {
       const newUser = await createTestUser({
         email: `nowallet-${Date.now()}@example.com`,
         username: `nowallet${Date.now()}`,
@@ -142,27 +147,27 @@ describe('Token Wallet API', () => {
 
       const res = await request(app)
         .get(`/api/tokens/history/${newUser.id}`)
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${newToken}`)
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${newToken}`)
         .expect(200);
 
       expect(res.body).toEqual({ transactions: [], total: 0 });
 
       // Cleanup
       await prisma.user.deleteMany({
-        where: { email: { contains: 'nowallet-' } },
+        where: { email: { contains: "nowallet-" } },
       });
     });
 
-    it('should require authentication', async () => {
+    it("should require authentication", async () => {
       await request(app)
         .get(`/api/tokens/history/${userId}`)
-        .set('x-api-key', API_KEY)
+        .set("x-api-key", API_KEY)
         .expect(401);
     });
   });
 
-  describe('POST /api/tokens/transfer', () => {
+  describe("POST /api/tokens/transfer", () => {
     let recipientId: string;
     let recipientToken: string;
 
@@ -206,63 +211,63 @@ describe('Token Wallet API', () => {
         }
         // Delete user through cleanup function
         await prisma.user.deleteMany({
-          where: { email: { contains: 'recipient-' } },
+          where: { email: { contains: "recipient-" } },
         });
       }
     });
 
-    it('should transfer tokens between users', async () => {
+    it("should transfer tokens between users", async () => {
       const res = await request(app)
-        .post('/api/tokens/transfer')
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .post("/api/tokens/transfer")
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .send({
           fromUserId: userId,
           toUserId: recipientId,
           amount: 100,
-          description: 'Test transfer',
+          description: "Test transfer",
         })
         .expect(200);
 
-      expect(res.body).toHaveProperty('success', true);
-      expect(res.body).toHaveProperty('transactionId');
-      expect(res.body).toHaveProperty('message');
+      expect(res.body).toHaveProperty("success", true);
+      expect(res.body).toHaveProperty("transactionId");
+      expect(res.body).toHaveProperty("message");
     });
 
-    it('should reject transfer with insufficient balance', async () => {
+    it("should reject transfer with insufficient balance", async () => {
       const res = await request(app)
-        .post('/api/tokens/transfer')
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .post("/api/tokens/transfer")
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .send({
           fromUserId: userId,
           toUserId: recipientId,
           amount: 999999,
-          description: 'Too much',
+          description: "Too much",
         });
 
       expect(res.status).toBeGreaterThanOrEqual(400);
     });
 
-    it('should reject negative amounts', async () => {
+    it("should reject negative amounts", async () => {
       const res = await request(app)
-        .post('/api/tokens/transfer')
-        .set('x-api-key', API_KEY)
-        .set('Authorization', `Bearer ${userToken}`)
+        .post("/api/tokens/transfer")
+        .set("x-api-key", API_KEY)
+        .set("Authorization", `Bearer ${userToken}`)
         .send({
           fromUserId: userId,
           toUserId: recipientId,
           amount: -50,
-          description: 'Negative',
+          description: "Negative",
         });
 
       expect(res.status).toBeGreaterThanOrEqual(400);
     });
 
-    it('should require authentication', async () => {
+    it("should require authentication", async () => {
       await request(app)
-        .post('/api/tokens/transfer')
-        .set('x-api-key', API_KEY)
+        .post("/api/tokens/transfer")
+        .set("x-api-key", API_KEY)
         .send({
           fromUserId: userId,
           toUserId: recipientId,

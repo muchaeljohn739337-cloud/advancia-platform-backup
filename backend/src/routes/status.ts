@@ -1,8 +1,8 @@
-import { exec } from "child_process";
-import express, { Request, Response } from "express";
-import fs from "fs";
-import path from "path";
-import { promisify } from "util";
+import { exec } from 'child_process';
+import express, { Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
+import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 const router = express.Router();
@@ -13,31 +13,31 @@ const router = express.Router();
  *
  * Returns parsed status from logs including uptime, restarts, etc.
  */
-router.get("/status", async (req: Request, res: Response) => {
+router.get('/status', async (req: Request, res: Response) => {
   try {
     // Run the parse-status script
-    const scriptPath = path.join(process.cwd(), "scripts", "parse-status.js");
+    const scriptPath = path.join(process.cwd(), 'scripts', 'parse-status.js');
     await execAsync(`node ${scriptPath}`);
 
     // Read the generated status.json
-    const statusPath = path.join(process.cwd(), "public", "status.json");
+    const statusPath = path.join(process.cwd(), 'public', 'status.json');
     if (fs.existsSync(statusPath)) {
-      const statusData = JSON.parse(fs.readFileSync(statusPath, "utf8"));
+      const statusData = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
       res.json(statusData);
     } else {
       // Fallback if file not generated
       res.json({
-        status: "operational",
-        uptime: "99.98%",
+        status: 'operational',
+        uptime: '99.98%',
         restarts: 0,
         lastUpdated: new Date().toISOString(),
       });
     }
   } catch (error: any) {
-    console.error("[STATUS] Failed to generate status:", error.message);
+    console.error('[STATUS] Failed to generate status:', error.message);
     res.status(500).json({
-      status: "error",
-      uptime: "unknown",
+      status: 'error',
+      uptime: 'unknown',
       restarts: 0,
       error: error.message,
     });
@@ -50,14 +50,14 @@ router.get("/status", async (req: Request, res: Response) => {
  *
  * Returns PM2 process status
  */
-router.get("/pm2/status", async (req: Request, res: Response) => {
+router.get('/pm2/status', async (req: Request, res: Response) => {
   try {
-    const { stdout } = await execAsync("pm2 jlist");
+    const { stdout } = await execAsync('pm2 jlist');
     const pm2Data = JSON.parse(stdout);
 
     // Extract relevant metrics for advancia-backend
     const backendProcess = pm2Data.find(
-      (p: any) => p.name === "advancia-backend"
+      (p: any) => p.name === 'advancia-backend',
     );
     if (backendProcess) {
       res.json({
@@ -70,12 +70,12 @@ router.get("/pm2/status", async (req: Request, res: Response) => {
         cpu: backendProcess.monit.cpu,
       });
     } else {
-      res.status(404).json({ error: "Backend process not found" });
+      res.status(404).json({ error: 'Backend process not found' });
     }
   } catch (error: any) {
-    console.error("[PM2 STATUS] Failed to get status:", error.message);
+    console.error('[PM2 STATUS] Failed to get status:', error.message);
     res.status(500).json({
-      error: "Failed to get PM2 status",
+      error: 'Failed to get PM2 status',
       details: error.message,
     });
   }

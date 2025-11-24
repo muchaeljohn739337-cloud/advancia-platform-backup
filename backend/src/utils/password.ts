@@ -1,15 +1,15 @@
-import argon2 from "argon2";
-import bcrypt from "bcryptjs";
+import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 
 // Detect hash type by prefix
 function isArgon2Hash(hash: string) {
-  return hash.startsWith("$argon2");
+  return hash.startsWith('$argon2');
 }
 function isBcryptHash(hash: string) {
   return (
-    hash.startsWith("$2a$") ||
-    hash.startsWith("$2b$") ||
-    hash.startsWith("$2y$")
+    hash.startsWith('$2a$') ||
+    hash.startsWith('$2b$') ||
+    hash.startsWith('$2y$')
   );
 }
 
@@ -28,7 +28,7 @@ export async function hashPassword(plain: string): Promise<string> {
 
 export async function verifyPassword(
   plain: string,
-  hash: string
+  hash: string,
 ): Promise<boolean> {
   try {
     if (isArgon2Hash(hash)) {
@@ -48,7 +48,7 @@ export async function verifyPassword(
 
 export async function migratePasswordIfNeeded(
   plain: string,
-  storedHash: string
+  storedHash: string,
 ): Promise<string | null> {
   // If bcrypt, rehash to Argon2 on next successful login
   if (isBcryptHash(storedHash)) {

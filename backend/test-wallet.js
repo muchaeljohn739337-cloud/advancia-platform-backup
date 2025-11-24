@@ -35,7 +35,7 @@ async function testWalletSystem() {
       console.log(`   └─ Address: ${wallet.address}`);
       console.log(`   └─ Balance: ${wallet.balance}`);
       console.log(
-        `   └─ Created: ${new Date(wallet.createdAt).toLocaleString()}\n`
+        `   └─ Created: ${new Date(wallet.createdAt).toLocaleString()}\n`,
       );
     });
 
@@ -49,7 +49,7 @@ async function testWalletSystem() {
         const rotateResponse = await axios.post(
           `${BASE_URL}/wallets/rotate/BTC`,
           { reason: "Testing rotation feature" },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
 
         const newWallet = rotateResponse.data.wallet;
@@ -62,7 +62,7 @@ async function testWalletSystem() {
         console.log("4️⃣ Checking rotation history...");
         const historyResponse = await axios.get(
           `${BASE_URL}/wallets/history/BTC`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
 
         const history = historyResponse.data.history;
@@ -72,7 +72,7 @@ async function testWalletSystem() {
           console.log(`   └─ From: ${entry.oldAddress}`);
           console.log(`   └─ Reason: ${entry.rotationReason}`);
           console.log(
-            `   └─ Date: ${new Date(entry.rotatedAt).toLocaleString()}\n`
+            `   └─ Date: ${new Date(entry.rotatedAt).toLocaleString()}\n`,
           );
         });
       }

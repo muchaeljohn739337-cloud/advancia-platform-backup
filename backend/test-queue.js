@@ -82,7 +82,7 @@ async function testQueue() {
     console.error("   - Is RabbitMQ running? (docker-compose up rabbitmq)");
     console.error("   - Is RABBITMQ_URL set in .env?");
     console.error(
-      "   - Default: amqp://advancia:rabbitmq_pass_change_in_prod@localhost:5672"
+      "   - Default: amqp://advancia:rabbitmq_pass_change_in_prod@localhost:5672",
     );
     process.exit(1);
   }

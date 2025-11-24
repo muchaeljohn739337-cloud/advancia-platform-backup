@@ -4,8 +4,8 @@
  * How to use the InputSanitizer in your Advancia Pay backend
  */
 
-import { Router } from "express";
-import { sanitizeAllInputs, sanitizer } from "./utils/sanitization";
+import { Router } from 'express';
+import { sanitizeAllInputs, sanitizer } from './utils/sanitization';
 
 // ============================================
 // 1. AUTOMATIC SANITIZATION (Recommended)
@@ -23,12 +23,12 @@ userRouter.use(sanitizeAllInputs);
 // ============================================
 
 // User Registration Example
-router.post("/register", async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     // Sanitize email
     const email = sanitizer.sanitizeEmail(req.body.email);
     if (!email) {
-      return res.status(400).json({ error: "Invalid email address" });
+      return res.status(400).json({ error: 'Invalid email address' });
     }
 
     // Sanitize username (alphanumeric only)
@@ -36,7 +36,7 @@ router.post("/register", async (req, res) => {
     if (!username) {
       return res
         .status(400)
-        .json({ error: "Invalid username (alphanumeric and underscore only)" });
+        .json({ error: 'Invalid username (alphanumeric and underscore only)' });
     }
 
     // Validate password (don't sanitize passwords!)
@@ -46,8 +46,8 @@ router.post("/register", async (req, res) => {
     }
 
     // Sanitize optional fields
-    const firstName = sanitizer.sanitizeString(req.body.firstName || "");
-    const lastName = sanitizer.sanitizeString(req.body.lastName || "");
+    const firstName = sanitizer.sanitizeString(req.body.firstName || '');
+    const lastName = sanitizer.sanitizeString(req.body.lastName || '');
 
     // Create user with sanitized data
     const user = await prisma.user.create({
@@ -56,7 +56,7 @@ router.post("/register", async (req, res) => {
 
     res.json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ error: "Registration failed" });
+    res.status(500).json({ error: 'Registration failed' });
   }
 });
 
@@ -64,7 +64,7 @@ router.post("/register", async (req, res) => {
 // 3. SANITIZE USER PROFILE UPDATES
 // ============================================
 
-router.put("/profile", authenticateToken, async (req, res) => {
+router.put('/profile', authenticateToken, async (req, res) => {
   try {
     // Sanitize all string fields
     const updates: any = {};
@@ -84,7 +84,7 @@ router.put("/profile", authenticateToken, async (req, res) => {
 
     if (req.body.bio) {
       // Allow basic HTML tags in bio
-      updates.bio = sanitizer.sanitizeHTML(req.body.bio, ["b", "i", "p", "br"]);
+      updates.bio = sanitizer.sanitizeHTML(req.body.bio, ['b', 'i', 'p', 'br']);
     }
 
     const user = await prisma.user.update({
@@ -94,7 +94,7 @@ router.put("/profile", authenticateToken, async (req, res) => {
 
     res.json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ error: "Update failed" });
+    res.status(500).json({ error: 'Update failed' });
   }
 });
 
@@ -102,23 +102,23 @@ router.put("/profile", authenticateToken, async (req, res) => {
 // 4. SANITIZE SEARCH QUERIES
 // ============================================
 
-router.get("/search", async (req, res) => {
+router.get('/search', async (req, res) => {
   try {
     // Sanitize search query to prevent SQL injection
     const query = sanitizer.removeSQLInjection(
-      sanitizer.sanitizeString(req.query.q as string)
+      sanitizer.sanitizeString(req.query.q as string),
     );
 
     if (!query || query.length < 2) {
-      return res.status(400).json({ error: "Search query too short" });
+      return res.status(400).json({ error: 'Search query too short' });
     }
 
     // Safe to use in database query
     const results = await prisma.user.findMany({
       where: {
         OR: [
-          { username: { contains: query, mode: "insensitive" } },
-          { email: { contains: query, mode: "insensitive" } },
+          { username: { contains: query, mode: 'insensitive' } },
+          { email: { contains: query, mode: 'insensitive' } },
         ],
       },
       take: 10,
@@ -126,7 +126,7 @@ router.get("/search", async (req, res) => {
 
     res.json({ results });
   } catch (error) {
-    res.status(500).json({ error: "Search failed" });
+    res.status(500).json({ error: 'Search failed' });
   }
 });
 
@@ -135,19 +135,19 @@ router.get("/search", async (req, res) => {
 // ============================================
 
 router.post(
-  "/upload",
+  '/upload',
   authenticateToken,
-  upload.single("file"),
+  upload.single('file'),
   async (req, res) => {
     try {
       if (!req.file) {
-        return res.status(400).json({ error: "No file provided" });
+        return res.status(400).json({ error: 'No file provided' });
       }
 
       // Sanitize filename to prevent path traversal
       const safeFilename = sanitizer.sanitizeFilename(req.file.originalname);
       if (!safeFilename) {
-        return res.status(400).json({ error: "Invalid filename" });
+        return res.status(400).json({ error: 'Invalid filename' });
       }
 
       // Process file with sanitized name
@@ -155,21 +155,21 @@ router.post(
 
       res.json({ success: true, filename: safeFilename, path: filePath });
     } catch (error) {
-      res.status(500).json({ error: "Upload failed" });
+      res.status(500).json({ error: 'Upload failed' });
     }
-  }
+  },
 );
 
 // ============================================
 // 6. SANITIZE JSON INPUTS
 // ============================================
 
-router.post("/settings", authenticateToken, async (req, res) => {
+router.post('/settings', authenticateToken, async (req, res) => {
   try {
     // Sanitize JSON configuration
     const settings = sanitizer.sanitizeJSON(req.body.settings);
     if (!settings) {
-      return res.status(400).json({ error: "Invalid JSON settings" });
+      return res.status(400).json({ error: 'Invalid JSON settings' });
     }
 
     await prisma.userSettings.update({
@@ -179,7 +179,7 @@ router.post("/settings", authenticateToken, async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ error: "Update failed" });
+    res.status(500).json({ error: 'Update failed' });
   }
 });
 
@@ -187,33 +187,33 @@ router.post("/settings", authenticateToken, async (req, res) => {
 // 7. SANITIZE NUMERIC INPUTS
 // ============================================
 
-router.post("/transfer", authenticateToken, async (req, res) => {
+router.post('/transfer', authenticateToken, async (req, res) => {
   try {
     // Sanitize amount
     const amount = sanitizer.sanitizeNumber(req.body.amount);
     if (!amount || amount <= 0) {
-      return res.status(400).json({ error: "Invalid amount" });
+      return res.status(400).json({ error: 'Invalid amount' });
     }
 
     // Sanitize recipient ID
     const recipientId = sanitizer.sanitizeAlphanumeric(
       req.body.recipientId,
-      false
+      false,
     );
     if (!recipientId) {
-      return res.status(400).json({ error: "Invalid recipient ID" });
+      return res.status(400).json({ error: 'Invalid recipient ID' });
     }
 
     // Process transfer with sanitized values
     const transaction = await createTransfer(
       req.user.userId,
       recipientId,
-      amount
+      amount,
     );
 
     res.json({ success: true, transaction });
   } catch (error) {
-    res.status(500).json({ error: "Transfer failed" });
+    res.status(500).json({ error: 'Transfer failed' });
   }
 });
 
@@ -221,14 +221,14 @@ router.post("/transfer", authenticateToken, async (req, res) => {
 // 8. SANITIZE FOR LOGGING (Security Critical!)
 // ============================================
 
-router.post("/payment", authenticateToken, async (req, res) => {
+router.post('/payment', authenticateToken, async (req, res) => {
   try {
     // NEVER log sensitive data!
     const cardNumber = req.body.cardNumber;
 
     // Mask card number for logging
     logger.info({
-      action: "payment.initiated",
+      action: 'payment.initiated',
       userId: req.user.userId,
       card: sanitizer.maskCreditCard(cardNumber), // ****-****-****-1234
       amount: req.body.amount,
@@ -240,7 +240,7 @@ router.post("/payment", authenticateToken, async (req, res) => {
 
     res.json({ success: true, payment });
   } catch (error) {
-    res.status(500).json({ error: "Payment failed" });
+    res.status(500).json({ error: 'Payment failed' });
   }
 });
 
@@ -248,23 +248,23 @@ router.post("/payment", authenticateToken, async (req, res) => {
 // 9. SANITIZE URL PARAMETERS
 // ============================================
 
-router.get("/redirect", async (req, res) => {
+router.get('/redirect', async (req, res) => {
   try {
     // Sanitize redirect URL to prevent open redirect attacks
     const redirectUrl = sanitizer.sanitizeURL(req.query.url as string);
 
     if (!redirectUrl) {
-      return res.status(400).json({ error: "Invalid redirect URL" });
+      return res.status(400).json({ error: 'Invalid redirect URL' });
     }
 
     // Only allow redirects to your domain
-    if (!redirectUrl.includes("advanciapayledger.com")) {
-      return res.status(403).json({ error: "Redirect not allowed" });
+    if (!redirectUrl.includes('advanciapayledger.com')) {
+      return res.status(403).json({ error: 'Redirect not allowed' });
     }
 
     res.redirect(redirectUrl);
   } catch (error) {
-    res.status(500).json({ error: "Redirect failed" });
+    res.status(500).json({ error: 'Redirect failed' });
   }
 });
 
@@ -273,7 +273,7 @@ router.get("/redirect", async (req, res) => {
 // ============================================
 
 router.post(
-  "/bulk-create",
+  '/bulk-create',
   authenticateToken,
   requireAdmin,
   async (req, res) => {
@@ -288,9 +288,9 @@ router.post(
 
       res.json({ success: true, count: users.count });
     } catch (error) {
-      res.status(500).json({ error: "Bulk creation failed" });
+      res.status(500).json({ error: 'Bulk creation failed' });
     }
-  }
+  },
 );
 
 // ============================================

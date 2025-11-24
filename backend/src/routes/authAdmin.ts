@@ -1,15 +1,15 @@
-import express from "express";
-import jwt from "jsonwebtoken";
-import { sendAlert } from "../utils/mailer";
-import { logAdminLogin } from "../utils/logger";
-import prisma from "../prismaClient";
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import { sendAlert } from '../utils/mailer';
+import { logAdminLogin } from '../utils/logger';
+import prisma from '../prismaClient';
 
 const router = express.Router();
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@advancia.com";
-const ADMIN_PASS = process.env.ADMIN_PASS || "Admin@123";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@advancia.com';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'Admin@123';
 const JWT_SECRET = process.env.JWT_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "refresh_secret_key";
+const REFRESH_SECRET = process.env.REFRESH_SECRET || 'refresh_secret_key';
 
 // Temporary OTP store (in production, use Redis)
 const otpStore: Record<string, { code: string; expires: number }> = {};
@@ -29,13 +29,13 @@ export function setBroadcastSessions(fn: () => void) {
 
 // Generate access and refresh tokens
 function generateTokens(basePayload: any) {
-  const accessToken = jwt.sign({ ...basePayload, type: "access" }, JWT_SECRET, {
-    expiresIn: "1d",
+  const accessToken = jwt.sign({ ...basePayload, type: 'access' }, JWT_SECRET, {
+    expiresIn: '1d',
   });
   const refreshToken = jwt.sign(
-    { ...basePayload, type: "refresh" },
+    { ...basePayload, type: 'refresh' },
     REFRESH_SECRET,
-    { expiresIn: "7d" }
+    { expiresIn: '7d' },
   );
   return { accessToken, refreshToken };
 }
@@ -51,21 +51,21 @@ export function registerSession(token: string, user: any) {
 }
 
 // POST /api/auth/admin/login - Step 1: Verify credentials and send OTP
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password, phone } = req.body;
 
   if (email !== ADMIN_EMAIL || password !== ADMIN_PASS) {
     // Log failed password attempt
-    await logAdminLogin(req, email, "FAILED_PASSWORD", phone);
+    await logAdminLogin(req, email, 'FAILED_PASSWORD', phone);
 
     // Send alert on failed login
     await sendAlert(
-      "🚫 Advancia: Failed Admin Login",
+      '🚫 Advancia: Failed Admin Login',
       `Email: ${email}\nTime: ${new Date().toISOString()}\nIP: ${
-        req.headers["x-forwarded-for"] || req.socket.remoteAddress
-      }`
+        req.headers['x-forwarded-for'] || req.socket.remoteAddress
+      }`,
     );
-    return res.status(401).json({ error: "Invalid credentials" });
+    return res.status(401).json({ error: 'Invalid credentials' });
   }
 
   // Generate and send OTP (console-based, no SMS)
@@ -75,36 +75,36 @@ router.post("/login", async (req, res) => {
 
   // Log OTP to console (no Twilio SMS)
   console.log(
-    `🔐 [ADMIN OTP] Email: ${email} | Code: ${code} | Expires in 5 minutes`
+    `🔐 [ADMIN OTP] Email: ${email} | Code: ${code} | Expires in 5 minutes`,
   );
-  await logAdminLogin(req, email, "OTP_SENT", phone || "console");
+  await logAdminLogin(req, email, 'OTP_SENT', phone || 'console');
 
   res.json({
-    step: "verify_otp",
-    message: "OTP generated (check server console)",
-    ...(process.env.NODE_ENV === "development" && { code }),
+    step: 'verify_otp',
+    message: 'OTP generated (check server console)',
+    ...(process.env.NODE_ENV === 'development' && { code }),
   });
 });
 
 // POST /api/auth/admin/verify-otp - Step 2: Verify OTP and issue JWT
-router.post("/verify-otp", async (req, res) => {
+router.post('/verify-otp', async (req, res) => {
   const { email, code } = req.body;
 
   const entry = otpStore[email];
   if (!entry) {
-    await logAdminLogin(req, email, "FAILED_OTP");
-    return res.status(400).json({ error: "No OTP requested" });
+    await logAdminLogin(req, email, 'FAILED_OTP');
+    return res.status(400).json({ error: 'No OTP requested' });
   }
 
   if (Date.now() > entry.expires) {
     delete otpStore[email];
-    await logAdminLogin(req, email, "FAILED_OTP");
-    return res.status(400).json({ error: "OTP expired" });
+    await logAdminLogin(req, email, 'FAILED_OTP');
+    return res.status(400).json({ error: 'OTP expired' });
   }
 
   if (entry.code !== code) {
-    await logAdminLogin(req, email, "FAILED_OTP");
-    return res.status(400).json({ error: "Invalid code" });
+    await logAdminLogin(req, email, 'FAILED_OTP');
+    return res.status(400).json({ error: 'Invalid code' });
   }
 
   // OTP verified successfully
@@ -112,7 +112,7 @@ router.post("/verify-otp", async (req, res) => {
 
   // Locate an ADMIN user so downstream auth middleware can validate userId
   let adminUser = await prisma.user.findFirst({
-    where: { role: "ADMIN", active: true },
+    where: { role: 'ADMIN', active: true },
     select: { id: true, email: true, role: true },
   });
   if (!adminUser) {
@@ -130,16 +130,16 @@ router.post("/verify-otp", async (req, res) => {
   }
   if (!adminUser) {
     return res.status(500).json({
-      error: "No admin user found in database",
+      error: 'No admin user found in database',
       message:
-        "Seed or create an ADMIN user to enable admin API access (e.g., npm run db:seed)",
+        'Seed or create an ADMIN user to enable admin API access (e.g., npm run db:seed)',
     });
   }
 
   const payload = {
     userId: adminUser.id,
     email: adminUser.email,
-    role: "ADMIN",
+    role: 'ADMIN',
   };
   const { accessToken, refreshToken } = generateTokens(payload);
 
@@ -147,55 +147,55 @@ router.post("/verify-otp", async (req, res) => {
   registerSession(accessToken, payload);
 
   // Log successful login
-  await logAdminLogin(req, email, "SUCCESS");
+  await logAdminLogin(req, email, 'SUCCESS');
 
   // Send success alert
   await sendAlert(
-    "🔐 Advancia: Admin Login",
+    '🔐 Advancia: Admin Login',
     `Admin logged in: ${email}\nTime: ${new Date().toISOString()}\nIP: ${
-      req.headers["x-forwarded-for"] || req.socket.remoteAddress
-    }`
+      req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    }`,
   );
 
   res.json({ accessToken, refreshToken });
 });
 
 // DEV ONLY: Peek current OTP for a given email to facilitate automated tests
-router.get("/dev/get-otp", (req, res) => {
+router.get('/dev/get-otp', (req, res) => {
   try {
-    if (process.env.NODE_ENV !== "development") {
+    if (process.env.NODE_ENV !== 'development') {
       return res
         .status(403)
-        .json({ error: "Forbidden in non-development env" });
+        .json({ error: 'Forbidden in non-development env' });
     }
-    const email = (req.query.email as string) || "";
-    if (!email) return res.status(400).json({ error: "email required" });
+    const email = (req.query.email as string) || '';
+    if (!email) return res.status(400).json({ error: 'email required' });
     const entry = otpStore[email];
-    if (!entry) return res.status(404).json({ error: "No OTP for email" });
+    if (!entry) return res.status(404).json({ error: 'No OTP for email' });
     return res.json({ code: entry.code, expires: entry.expires });
   } catch (e) {
-    console.error("/dev/get-otp failed", e);
-    return res.status(500).json({ error: "Internal error" });
+    console.error('/dev/get-otp failed', e);
+    return res.status(500).json({ error: 'Internal error' });
   }
 });
 
 // GET /api/auth/admin/logs - Get admin login history
-router.get("/logs", async (req, res) => {
+router.get('/logs', async (req, res) => {
   try {
     const logs = await prisma.admin_login_logs.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       take: 100, // Last 100 login attempts
     });
 
     res.json({ logs });
   } catch (error) {
-    console.error("❌ Failed to fetch admin logs:", error);
-    res.status(500).json({ error: "Failed to fetch login logs" });
+    console.error('❌ Failed to fetch admin logs:', error);
+    res.status(500).json({ error: 'Failed to fetch login logs' });
   }
 });
 
 // POST /api/auth/admin/refresh
-router.post("/refresh", (req, res) => {
+router.post('/refresh', (req, res) => {
   const { token } = req.body;
   try {
     const decoded: any = jwt.verify(token, REFRESH_SECRET);
@@ -209,7 +209,7 @@ router.post("/refresh", (req, res) => {
 
     res.json({ accessToken, refreshToken });
   } catch {
-    res.status(403).json({ error: "Invalid refresh token" });
+    res.status(403).json({ error: 'Invalid refresh token' });
   }
 });
 

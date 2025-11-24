@@ -43,7 +43,10 @@ function advanciaBotReply(text: string): string | null {
 // Public endpoint: accept chat message, broadcast to admins, optionally respond
 router.post('/message', async (req: Request, res: Response) => {
   const parsed = MessageSchema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: 'Invalid payload', issues: parsed.error.flatten() });
+  if (!parsed.success)
+    return res
+      .status(400)
+      .json({ error: 'Invalid payload', issues: parsed.error.flatten() });
   const { sessionId, message, from, metadata } = parsed.data;
 
   const payload = {
@@ -66,52 +69,74 @@ router.post('/message', async (req: Request, res: Response) => {
 });
 
 // Auth-only endpoint: allow logged-in user to send with identity context
-router.post('/user/message', authenticateToken as any, async (req: any, res: Response) => {
-  const parsed = MessageSchema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: 'Invalid payload', issues: parsed.error.flatten() });
-  const { sessionId, message, metadata } = parsed.data;
+router.post(
+  '/user/message',
+  authenticateToken as any,
+  async (req: any, res: Response) => {
+    const parsed = MessageSchema.safeParse(req.body);
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: 'Invalid payload', issues: parsed.error.flatten() });
+    const { sessionId, message, metadata } = parsed.data;
 
-  const payload = {
-    sessionId,
-    message,
-    from: 'user' as const,
-    userId: req.user?.userId,
-    metadata: metadata ?? {},
-    at: new Date().toISOString(),
-  };
+    const payload = {
+      sessionId,
+      message,
+      from: 'user' as const,
+      userId: req.user?.userId,
+      metadata: metadata ?? {},
+      at: new Date().toISOString(),
+    };
 
-  try {
-    if (ioRef) {
-      ioRef.to('admins').emit('admin:chat:message', payload);
-    }
-  } catch {}
+    try {
+      if (ioRef) {
+        ioRef.to('admins').emit('admin:chat:message', payload);
+      }
+    } catch {}
 
-  const reply = advanciaBotReply(message);
-  return res.json({ ok: true, reply });
-});
+    const reply = advanciaBotReply(message);
+    return res.json({ ok: true, reply });
+  },
+);
 
 export default router;
 
 // Admin reply endpoint: post a reply to a session (user or guest)
-router.post('/admin/reply', authenticateToken as any, requireAdmin as any, async (req: any, res: Response) => {
-  const Schema = z.object({
-    sessionId: z.string().min(6),
-    message: z.string().min(1).max(5000),
-    userId: z.string().optional(),
-  });
-  const parsed = Schema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: 'Invalid payload', issues: parsed.error.flatten() });
-  const { sessionId, message, userId } = parsed.data;
+router.post(
+  '/admin/reply',
+  authenticateToken as any,
+  requireAdmin as any,
+  async (req: any, res: Response) => {
+    const Schema = z.object({
+      sessionId: z.string().min(6),
+      message: z.string().min(1).max(5000),
+      userId: z.string().optional(),
+    });
+    const parsed = Schema.safeParse(req.body);
+    if (!parsed.success)
+      return res
+        .status(400)
+        .json({ error: 'Invalid payload', issues: parsed.error.flatten() });
+    const { sessionId, message, userId } = parsed.data;
 
-  const payload = { sessionId, message, from: 'admin' as const, at: new Date().toISOString() };
-  try {
-    if (ioRef) {
-      if (userId) {
-        ioRef.to(`user-${userId}`).emit('chat:reply', payload);
+    const payload = {
+      sessionId,
+      message,
+      from: 'admin' as const,
+      at: new Date().toISOString(),
+    };
+    try {
+      if (ioRef) {
+        if (userId) {
+          ioRef.to(`user-${userId}`).emit('chat:reply', payload);
+        }
+        ioRef.to(`chat-session-${sessionId}`).emit('chat:reply', payload);
+        ioRef
+          .to('admins')
+          .emit('admin:chat:message', { ...payload, mirror: true });
       }
-      ioRef.to(`chat-session-${sessionId}`).emit('chat:reply', payload);
-      ioRef.to('admins').emit('admin:chat:message', { ...payload, mirror: true });
-    }
-  } catch {}
-  return res.json({ ok: true });
-});
+    } catch {}
+    return res.json({ ok: true });
+  },
+);

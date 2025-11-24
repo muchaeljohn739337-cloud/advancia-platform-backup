@@ -1,29 +1,29 @@
-import * as amqp from "amqplib";
-import { logger } from "../logger";
+import * as amqp from 'amqplib';
+import { logger } from '../logger';
 
 let connection: amqp.Connection | null = null;
 let channel: amqp.Channel | null = null;
 
 export async function initQueue(): Promise<void> {
   try {
-    const url = process.env.RABBITMQ_URL || "amqp://localhost:5672";
+    const url = process.env.RABBITMQ_URL || 'amqp://localhost:5672';
     connection = await amqp.connect(url);
     channel = await connection.createChannel();
 
     // Assert queues (create if they don't exist)
-    await channel.assertQueue("notifications", { durable: true });
-    await channel.assertQueue("emails", { durable: true });
-    await channel.assertQueue("crypto-payments", { durable: true });
+    await channel.assertQueue('notifications', { durable: true });
+    await channel.assertQueue('emails', { durable: true });
+    await channel.assertQueue('crypto-payments', { durable: true });
 
-    logger.info("RabbitMQ connected and queues asserted");
+    logger.info('RabbitMQ connected and queues asserted');
   } catch (error) {
-    logger.error("RabbitMQ init failed:", error);
+    logger.error('RabbitMQ init failed:', error);
     throw error;
   }
 }
 
 export async function sendToQueue(queue: string, message: any): Promise<void> {
-  if (!channel) throw new Error("Queue not initialized");
+  if (!channel) throw new Error('Queue not initialized');
   channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), {
     persistent: true,
   });
@@ -32,9 +32,9 @@ export async function sendToQueue(queue: string, message: any): Promise<void> {
 
 export async function consumeQueue(
   queue: string,
-  handler: (msg: amqp.Message) => Promise<boolean>
+  handler: (msg: amqp.Message) => Promise<boolean>,
 ): Promise<void> {
-  if (!channel) throw new Error("Queue not initialized");
+  if (!channel) throw new Error('Queue not initialized');
 
   // Set prefetch to limit concurrent processing
   await channel.prefetch(10);
@@ -63,5 +63,5 @@ export async function consumeQueue(
 export async function closeQueue(): Promise<void> {
   if (channel) await channel.close();
   if (connection) await connection.close();
-  logger.info("RabbitMQ connection closed");
+  logger.info('RabbitMQ connection closed');
 }

@@ -1,35 +1,35 @@
 // Seed AdminSettings directly using Prisma (no server required)
-import fs from 'fs'
-import path from 'path'
-import dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
-import { PrismaClient } from '@prisma/client'
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { PrismaClient } from "@prisma/client";
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load .env from backend folder
-dotenv.config({ path: path.join(__dirname, '..', '.env') })
+dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 async function main() {
-  const args = process.argv.slice(2)
+  const args = process.argv.slice(2);
   if (args.length < 1) {
-    console.error('Usage: node scripts/seedAdminSettings.mjs <settings.json>')
-    process.exit(1)
+    console.error("Usage: node scripts/seedAdminSettings.mjs <settings.json>");
+    process.exit(1);
   }
-  const settingsPath = path.resolve(args[0])
+  const settingsPath = path.resolve(args[0]);
   if (!fs.existsSync(settingsPath)) {
-    console.error(`Settings file not found: ${settingsPath}`)
-    process.exit(1)
+    console.error(`Settings file not found: ${settingsPath}`);
+    process.exit(1);
   }
 
-  const raw = fs.readFileSync(settingsPath, 'utf8')
-  const input = JSON.parse(raw)
+  const raw = fs.readFileSync(settingsPath, "utf8");
+  const input = JSON.parse(raw);
 
-  const prisma = new PrismaClient()
+  const prisma = new PrismaClient();
   try {
-    const existing = await prisma.adminSettings.findFirst()
-    let result
+    const existing = await prisma.adminSettings.findFirst();
+    let result;
     if (existing) {
       result = await prisma.adminSettings.update({
         where: { id: existing.id },
@@ -40,10 +40,12 @@ async function main() {
           exchangeRateBtc: input.exchangeRateBtc ?? existing.exchangeRateBtc,
           exchangeRateEth: input.exchangeRateEth ?? existing.exchangeRateEth,
           exchangeRateUsdt: input.exchangeRateUsdt ?? existing.exchangeRateUsdt,
-          processingFeePercent: input.processingFeePercent ?? existing.processingFeePercent,
-          minPurchaseAmount: input.minPurchaseAmount ?? existing.minPurchaseAmount,
-        }
-      })
+          processingFeePercent:
+            input.processingFeePercent ?? existing.processingFeePercent,
+          minPurchaseAmount:
+            input.minPurchaseAmount ?? existing.minPurchaseAmount,
+        },
+      });
     } else {
       result = await prisma.adminSettings.create({
         data: {
@@ -55,22 +57,22 @@ async function main() {
           exchangeRateUsdt: input.exchangeRateUsdt ?? 1.0,
           processingFeePercent: input.processingFeePercent ?? 2.5,
           minPurchaseAmount: input.minPurchaseAmount ?? 10,
-        }
-      })
+        },
+      });
     }
-    console.log('✅ AdminSettings saved:', {
+    console.log("✅ AdminSettings saved:", {
       exchangeRateBtc: result.exchangeRateBtc,
       exchangeRateEth: result.exchangeRateEth,
       exchangeRateUsdt: result.exchangeRateUsdt,
       processingFeePercent: result.processingFeePercent,
       minPurchaseAmount: result.minPurchaseAmount,
-    })
+    });
   } finally {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   }
 }
 
 main().catch((e) => {
-  console.error('❌ Failed to seed AdminSettings:', e)
-  process.exit(1)
-})
+  console.error("❌ Failed to seed AdminSettings:", e);
+  process.exit(1);
+});

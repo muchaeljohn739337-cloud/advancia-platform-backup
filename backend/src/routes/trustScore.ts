@@ -70,7 +70,7 @@ async function calculateTrustScore(userId: string): Promise<TrustScore> {
   const txCount = user.transactions.length;
   const totalVolume = user.transactions.reduce(
     (sum, tx) => sum + parseFloat(tx.amount.toString()),
-    0
+    0,
   );
 
   if (txCount > 0) {
@@ -110,7 +110,7 @@ async function calculateTrustScore(userId: string): Promise<TrustScore> {
 
   // 4. Platform Engagement (0-200)
   const accountAgeDays = Math.floor(
-    (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24)
+    (Date.now() - user.createdAt.getTime()) / (1000 * 60 * 60 * 24),
   );
 
   if (accountAgeDays >= 7) {
@@ -239,7 +239,7 @@ router.get("/leaderboard", authenticateToken, async (req, res) => {
           level: score.level,
           badges: score.badges.slice(0, 3), // Top 3 badges
         };
-      })
+      }),
     );
 
     // Sort by score descending

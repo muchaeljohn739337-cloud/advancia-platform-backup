@@ -1,5 +1,5 @@
-import crypto from "crypto";
-import { envInspector } from "./envInspector";
+import crypto from 'crypto';
+import { envInspector } from './envInspector';
 
 /**
  * Data encryption utilities for sensitive data storage
@@ -7,7 +7,7 @@ import { envInspector } from "./envInspector";
  */
 
 export class DataEncryptor {
-  private algorithm = "aes-256-gcm";
+  private algorithm = 'aes-256-gcm';
   private keyLength = 32; // 256 bits
   private ivLength = 16; // 128 bits for GCM
   private tagLength = 16; // 128 bits auth tag
@@ -20,14 +20,14 @@ export class DataEncryptor {
 
     if (!keyHex) {
       if (envInspector.isProduction()) {
-        throw new Error("DATA_ENCRYPTION_KEY is required in production");
+        throw new Error('DATA_ENCRYPTION_KEY is required in production');
       }
       // Use a default key for development (NOT secure!)
-      console.warn("⚠️  Using default encryption key for development");
-      return crypto.scryptSync("dev-encryption-key", "salt", this.keyLength);
+      console.warn('⚠️  Using default encryption key for development');
+      return crypto.scryptSync('dev-encryption-key', 'salt', this.keyLength);
     }
 
-    return Buffer.from(keyHex, "hex");
+    return Buffer.from(keyHex, 'hex');
   }
 
   /**
@@ -39,8 +39,8 @@ export class DataEncryptor {
       const iv = crypto.randomBytes(this.ivLength);
 
       const cipher = crypto.createCipheriv(this.algorithm, key, iv) as any;
-      let encrypted = cipher.update(plainText, "utf8", "hex");
-      encrypted += cipher.final("hex");
+      let encrypted = cipher.update(plainText, 'utf8', 'hex');
+      encrypted += cipher.final('hex');
 
       const authTag = cipher.getAuthTag();
 
@@ -48,13 +48,13 @@ export class DataEncryptor {
       const result = Buffer.concat([
         iv,
         authTag,
-        Buffer.from(encrypted, "hex"),
+        Buffer.from(encrypted, 'hex'),
       ]);
 
-      return result.toString("base64");
+      return result.toString('base64');
     } catch (error) {
-      console.error("Encryption error:", error);
-      throw new Error("Failed to encrypt data");
+      console.error('Encryption error:', error);
+      throw new Error('Failed to encrypt data');
     }
   }
 
@@ -64,7 +64,7 @@ export class DataEncryptor {
   decrypt(encryptedText: string): string {
     try {
       const key = this.getEncryptionKey();
-      const data = Buffer.from(encryptedText, "base64");
+      const data = Buffer.from(encryptedText, 'base64');
 
       // Extract components
       const iv = data.subarray(0, this.ivLength);
@@ -78,12 +78,12 @@ export class DataEncryptor {
       decipher.setAuthTag(authTag);
 
       let decrypted = decipher.update(encrypted);
-      decrypted += decipher.final("utf8");
+      decrypted += decipher.final('utf8');
 
       return decrypted;
     } catch (error) {
-      console.error("Decryption error:", error);
-      throw new Error("Failed to decrypt data");
+      console.error('Decryption error:', error);
+      throw new Error('Failed to decrypt data');
     }
   }
 
@@ -97,7 +97,7 @@ export class DataEncryptor {
     const encrypted = { ...obj };
 
     for (const field of fieldsToEncrypt) {
-      if (field in encrypted && typeof encrypted[field] === "string") {
+      if (field in encrypted && typeof encrypted[field] === 'string') {
         encrypted[field] = this.encrypt(encrypted[field]) as any;
       }
     }
@@ -115,7 +115,7 @@ export class DataEncryptor {
     const decrypted = { ...obj };
 
     for (const field of fieldsToDecrypt) {
-      if (field in decrypted && typeof decrypted[field] === "string") {
+      if (field in decrypted && typeof decrypted[field] === 'string') {
         try {
           decrypted[field] = this.decrypt(decrypted[field]) as any;
         } catch (error) {
@@ -135,7 +135,7 @@ export class DataEncryptor {
     return new Promise((resolve, reject) => {
       // Use bcrypt for password hashing (already implemented)
       // This is just a wrapper for consistency
-      const bcrypt = require("bcryptjs");
+      const bcrypt = require('bcryptjs');
       bcrypt.hash(data, saltRounds, (err: Error, hash: string) => {
         if (err) reject(err);
         else resolve(hash);
@@ -148,7 +148,7 @@ export class DataEncryptor {
    */
   verifyHash(data: string, hash: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      const bcrypt = require("bcryptjs");
+      const bcrypt = require('bcryptjs');
       bcrypt.compare(data, hash, (err: Error, result: boolean) => {
         if (err) reject(err);
         else resolve(result);
@@ -190,14 +190,14 @@ export class TokenGenerator {
    * Generate a secure random token
    */
   static generate(length: number = 32): string {
-    return crypto.randomBytes(length).toString("hex");
+    return crypto.randomBytes(length).toString('hex');
   }
 
   /**
    * Generate a secure random string (URL-safe)
    */
   static generateUrlSafe(length: number = 32): string {
-    return crypto.randomBytes(length).toString("base64url");
+    return crypto.randomBytes(length).toString('base64url');
   }
 
   /**

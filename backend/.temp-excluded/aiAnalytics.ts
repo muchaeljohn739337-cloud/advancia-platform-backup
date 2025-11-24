@@ -45,7 +45,7 @@ router.get(
         error: error instanceof Error ? error.message : "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
@@ -95,7 +95,7 @@ router.post(
         error: error instanceof Error ? error.message : "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
@@ -143,7 +143,7 @@ router.post(
         error: error instanceof Error ? error.message : "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
@@ -182,7 +182,7 @@ router.get(
         error: error instanceof Error ? error.message : "Internal server error",
       });
     }
-  }
+  },
 );
 
 /**
@@ -210,7 +210,7 @@ router.get(
         error: error instanceof Error ? error.message : "Internal server error",
       });
     }
-  }
+  },
 );
 
 export default router;

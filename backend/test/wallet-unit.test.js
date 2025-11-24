@@ -48,7 +48,7 @@ describe("Custodial Wallet Service - Unit Tests", function () {
       const cipher = crypto.createCipheriv(
         "aes-256-gcm",
         Buffer.from(testKey, "base64"),
-        iv
+        iv,
       );
 
       let encrypted = cipher.update(testData, "utf8", "hex");
@@ -67,7 +67,7 @@ describe("Custodial Wallet Service - Unit Tests", function () {
       const cipher = crypto.createCipheriv(
         "aes-256-gcm",
         Buffer.from(testKey, "base64"),
-        iv
+        iv,
       );
 
       let encrypted = cipher.update(testData, "utf8", "hex");
@@ -78,7 +78,7 @@ describe("Custodial Wallet Service - Unit Tests", function () {
       const decipher = crypto.createDecipheriv(
         "aes-256-gcm",
         Buffer.from(testKey, "base64"),
-        iv
+        iv,
       );
       decipher.setAuthTag(authTag);
 
@@ -96,7 +96,7 @@ describe("Custodial Wallet Service - Unit Tests", function () {
       const cipher = crypto.createCipheriv(
         "aes-256-gcm",
         Buffer.from(testKey, "base64"),
-        iv
+        iv,
       );
       let encrypted = cipher.update(testData, "utf8", "hex");
       encrypted += cipher.final("hex");
@@ -106,7 +106,7 @@ describe("Custodial Wallet Service - Unit Tests", function () {
         const decipher = crypto.createDecipheriv(
           "aes-256-gcm",
           Buffer.from(wrongKey, "base64"),
-          iv
+          iv,
         );
         decipher.setAuthTag(authTag);
         decipher.update(encrypted, "hex", "utf8");

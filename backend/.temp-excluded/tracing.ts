@@ -42,7 +42,7 @@ sdk
     console.log(
       "[tracing] OpenTelemetry SDK started (endpoint:",
       otlpEndpoint,
-      ")"
+      ")",
     );
   })
   .catch((err) => {
@@ -69,7 +69,7 @@ process.on("SIGTERM", () => {
 export function enrichRequestSpan(
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   const span = trace.getSpan(context.active());
   if (span) {
@@ -86,7 +86,7 @@ export function enrichRequestSpan(
 // Helper for manual spans around async work
 export async function withSpan<T>(
   name: string,
-  fn: () => Promise<T>
+  fn: () => Promise<T>,
 ): Promise<T> {
   const tracer = trace.getTracer("advancia-backend");
   const span = tracer.startSpan(name);
