@@ -45,7 +45,7 @@ jobs:
           ./scripts/test-backup-restore.ps1 -DatabaseName advancia_pay -UseDocker:$false -PgHost localhost -PgPort 5432 -PgUser postgres -PgPassword postgres
 
       - name: Upload reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: backup-restore-results
           path: backup-restore-results/*

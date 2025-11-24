@@ -59,7 +59,7 @@ jobs:
             (git commit -m "chore: update status.json [skip ci]" && git push)
 
       - name: Upload status as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: status-report
           path: backend/public/status.json
