@@ -37,7 +37,7 @@
     "formik": "^2.4.9",
     "framer-motion": "^11.3.0",
     "jsonwebtoken": "9.0.2",
-    "lucide-react": "^0.400.0",
+    "lucide-react": "^0.554.0",
     "next": "^14.2.32",
     "next-auth": "^4.24.7",
     "nodemailer": "^7.0.10",
