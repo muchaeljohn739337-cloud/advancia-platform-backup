@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
   AlertCircle,
@@ -16,14 +16,14 @@ import {
   Wallet,
   X,
   Zap,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 interface Chamber {
   id: string;
   name: string;
-  type: "recovery" | "enhancement" | "diagnostic";
-  status: "available" | "in-use";
+  type: 'recovery' | 'enhancement' | 'diagnostic';
+  status: 'available' | 'in-use';
   icon: typeof Heart;
   color: string;
   features: string[];
@@ -31,10 +31,10 @@ interface Chamber {
 
 interface Session {
   id: string;
-  type: "recovery" | "enhancement" | "diagnostic";
+  type: 'recovery' | 'enhancement' | 'diagnostic';
   date: string;
   duration: number;
-  status: "completed" | "scheduled" | "in-progress";
+  status: 'completed' | 'scheduled' | 'in-progress';
   effectiveness: number;
 }
 
@@ -42,51 +42,49 @@ export default function MedBeds() {
   const [activeChamber, setActiveChamber] = useState<string | null>(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedChamber, setSelectedChamber] = useState<Chamber | null>(null);
-  const [bookingDate, setBookingDate] = useState("");
+  const [bookingDate, setBookingDate] = useState('');
   const [bookingDuration, setBookingDuration] = useState(60);
-  const [paymentMethod, setPaymentMethod] = useState<"balance" | "stripe">(
-    "balance"
-  );
+  const [paymentMethod, setPaymentMethod] = useState<'balance' | 'stripe'>('balance');
   const [usdBalance, setUsdBalance] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [sessions, setSessions] = useState<Session[]>([]);
 
-  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const chambers = [
     {
-      id: "chamber-1",
-      name: "Recovery Chamber Alpha",
-      type: "recovery" as const,
-      status: "available" as const,
+      id: 'chamber-1',
+      name: 'Recovery Chamber Alpha',
+      type: 'recovery' as const,
+      status: 'available' as const,
       icon: Heart,
-      color: "from-green-500 to-emerald-600",
-      features: ["Cellular Regeneration", "Pain Relief", "Energy Restoration"],
+      color: 'from-green-500 to-emerald-600',
+      features: ['Cellular Regeneration', 'Pain Relief', 'Energy Restoration'],
     },
     {
-      id: "chamber-2",
-      name: "Enhancement Chamber Beta",
-      type: "enhancement" as const,
-      status: "available" as const,
+      id: 'chamber-2',
+      name: 'Enhancement Chamber Beta',
+      type: 'enhancement' as const,
+      status: 'available' as const,
       icon: Zap,
-      color: "from-purple-500 to-pink-600",
-      features: ["Cognitive Boost", "Physical Enhancement", "Immunity Upgrade"],
+      color: 'from-purple-500 to-pink-600',
+      features: ['Cognitive Boost', 'Physical Enhancement', 'Immunity Upgrade'],
     },
     {
-      id: "chamber-3",
-      name: "Diagnostic Chamber Gamma",
-      type: "diagnostic" as const,
-      status: "in-use" as const,
+      id: 'chamber-3',
+      name: 'Diagnostic Chamber Gamma',
+      type: 'diagnostic' as const,
+      status: 'in-use' as const,
       icon: Brain,
-      color: "from-blue-500 to-cyan-600",
-      features: ["Full Body Scan", "DNA Analysis", "Health Metrics"],
+      color: 'from-blue-500 to-cyan-600',
+      features: ['Full Body Scan', 'DNA Analysis', 'Health Metrics'],
     },
   ];
 
   // Fetch user balance and bookings on mount
   React.useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) return;
 
       try {
@@ -116,20 +114,17 @@ export default function MedBeds() {
                 effectiveness?: number;
               }) => ({
                 id: b.id,
-                type: b.chamberType as
-                  | "recovery"
-                  | "enhancement"
-                  | "diagnostic",
+                type: b.chamberType as 'recovery' | 'enhancement' | 'diagnostic',
                 date: b.sessionDate,
                 duration: b.duration,
-                status: b.status as "completed" | "scheduled" | "in-progress",
+                status: b.status as 'completed' | 'scheduled' | 'in-progress',
                 effectiveness: b.effectiveness || 0,
               })
             )
           );
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -147,11 +142,9 @@ export default function MedBeds() {
 
     const cost = (bookingDuration / 60) * 150;
 
-    if (paymentMethod === "balance" && usdBalance < cost) {
+    if (paymentMethod === 'balance' && usdBalance < cost) {
       alert(
-        `Insufficient balance. You need $${cost.toFixed(
-          2
-        )} but only have $${usdBalance.toFixed(2)}`
+        `Insufficient balance. You need $${cost.toFixed(2)} but only have $${usdBalance.toFixed(2)}`
       );
       return;
     }
@@ -159,16 +152,16 @@ export default function MedBeds() {
     setIsProcessing(true);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
-        alert("Please login to book a session");
+        alert('Please login to book a session');
         return;
       }
 
       const response = await fetch(`${API}/api/medbeds/book-with-payment`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -177,17 +170,17 @@ export default function MedBeds() {
           sessionDate: bookingDate,
           duration: bookingDuration,
           paymentMethod,
-          notes: "",
+          notes: '',
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Booking failed");
+        throw new Error(data.error || 'Booking failed');
       }
 
-      if (paymentMethod === "stripe" && data.checkoutUrl) {
+      if (paymentMethod === 'stripe' && data.checkoutUrl) {
         // Redirect to Stripe checkout
         window.location.href = data.checkoutUrl;
       } else {
@@ -197,7 +190,7 @@ export default function MedBeds() {
           type: selectedChamber.type,
           date: bookingDate,
           duration: bookingDuration,
-          status: "scheduled",
+          status: 'scheduled',
           effectiveness: 0,
         };
 
@@ -205,15 +198,15 @@ export default function MedBeds() {
         setUsdBalance((prev) => prev - cost);
         setShowBookingModal(false);
         setSelectedChamber(null);
-        setBookingDate("");
+        setBookingDate('');
         setBookingDuration(60);
-        setPaymentMethod("balance");
+        setPaymentMethod('balance');
 
-        alert("Booking successful! Payment processed from your balance.");
+        alert('Booking successful! Payment processed from your balance.');
       }
     } catch (error) {
-      console.error("Booking error:", error);
-      alert(error instanceof Error ? error.message : "Failed to book session");
+      console.error('Booking error:', error);
+      alert(error instanceof Error ? error.message : 'Failed to book session');
     } finally {
       setIsProcessing(false);
     }
@@ -221,32 +214,32 @@ export default function MedBeds() {
 
   const biometrics = [
     {
-      label: "Heart Rate",
-      value: "72 bpm",
-      status: "normal",
+      label: 'Heart Rate',
+      value: '72 bpm',
+      status: 'normal',
       icon: Heart,
-      color: "text-green-600",
+      color: 'text-green-600',
     },
     {
-      label: "Energy Level",
-      value: "87%",
-      status: "good",
+      label: 'Energy Level',
+      value: '87%',
+      status: 'good',
       icon: Zap,
-      color: "text-yellow-600",
+      color: 'text-yellow-600',
     },
     {
-      label: "Recovery Score",
-      value: "94/100",
-      status: "excellent",
+      label: 'Recovery Score',
+      value: '94/100',
+      status: 'excellent',
       icon: TrendingUp,
-      color: "text-blue-600",
+      color: 'text-blue-600',
     },
     {
-      label: "Neural Activity",
-      value: "Optimal",
-      status: "normal",
+      label: 'Neural Activity',
+      value: 'Optimal',
+      status: 'normal',
       icon: Brain,
-      color: "text-purple-600",
+      color: 'text-purple-600',
     },
   ];
 
@@ -281,9 +274,7 @@ export default function MedBeds() {
           >
             <div className="flex items-center justify-between mb-2">
               <metric.icon className={metric.color} size={24} />
-              {metric.status === "normal" && (
-                <Shield size={16} className="text-green-500" />
-              )}
+              {metric.status === 'normal' && <Shield size={16} className="text-green-500" />}
             </div>
             <p className="text-2xl font-bold text-slate-900">{metric.value}</p>
             <p className="text-sm text-slate-600">{metric.label}</p>
@@ -293,9 +284,7 @@ export default function MedBeds() {
 
       {/* Available Chambers */}
       <div>
-        <h3 className="text-xl font-bold text-slate-800 mb-4">
-          Available Chambers
-        </h3>
+        <h3 className="text-xl font-bold text-slate-800 mb-4">Available Chambers</h3>
         <div className="grid md:grid-cols-3 gap-4">
           {chambers.map((chamber, index) => (
             <motion.div
@@ -304,21 +293,15 @@ export default function MedBeds() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.02 }}
-              onClick={() =>
-                chamber.status === "available" && setActiveChamber(chamber.id)
-              }
+              onClick={() => chamber.status === 'available' && setActiveChamber(chamber.id)}
               className={`relative overflow-hidden rounded-2xl cursor-pointer ${
-                chamber.status === "in-use"
-                  ? "opacity-60 cursor-not-allowed"
-                  : ""
+                chamber.status === 'in-use' ? 'opacity-60 cursor-not-allowed' : ''
               }`}
             >
-              <div
-                className={`bg-gradient-to-br ${chamber.color} p-6 text-white`}
-              >
+              <div className={`bg-gradient-to-br ${chamber.color} p-6 text-white`}>
                 {/* Status Badge */}
                 <div className="absolute top-4 right-4">
-                  {chamber.status === "available" ? (
+                  {chamber.status === 'available' ? (
                     <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-semibold">
                       Available
                     </span>
@@ -336,17 +319,12 @@ export default function MedBeds() {
 
                 {/* Chamber Info */}
                 <h4 className="text-xl font-bold mb-2">{chamber.name}</h4>
-                <p className="text-sm opacity-90 mb-4 capitalize">
-                  {chamber.type} Session
-                </p>
+                <p className="text-sm opacity-90 mb-4 capitalize">{chamber.type} Session</p>
 
                 {/* Features */}
                 <div className="space-y-2">
                   {chamber.features.map((feature) => (
-                    <div
-                      key={feature}
-                      className="flex items-center gap-2 text-sm"
-                    >
+                    <div key={feature} className="flex items-center gap-2 text-sm">
                       <CheckCircle size={16} />
                       <span>{feature}</span>
                     </div>
@@ -354,14 +332,14 @@ export default function MedBeds() {
                 </div>
 
                 {/* Book Button */}
-                {chamber.status === "available" && (
+                {chamber.status === 'available' && (
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className={`w-full mt-4 py-3 font-semibold rounded-xl transition-colors ${
                       activeChamber === chamber.id
-                        ? "bg-white text-slate-900 hover:bg-white/90"
-                        : "bg-white/20 text-white hover:bg-white/30"
+                        ? 'bg-white text-slate-900 hover:bg-white/90'
+                        : 'bg-white/20 text-white hover:bg-white/30'
                     }`}
                     onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
@@ -372,9 +350,7 @@ export default function MedBeds() {
                       }
                     }}
                   >
-                    {activeChamber === chamber.id
-                      ? "Confirm Booking"
-                      : "Select Chamber"}
+                    {activeChamber === chamber.id ? 'Confirm Booking' : 'Select Chamber'}
                   </motion.button>
                 )}
               </div>
@@ -385,9 +361,7 @@ export default function MedBeds() {
 
       {/* Session History */}
       <div className="bg-white rounded-xl p-6 border-2 border-slate-200 shadow-sm">
-        <h3 className="text-xl font-bold text-slate-800 mb-4">
-          Session History
-        </h3>
+        <h3 className="text-xl font-bold text-slate-800 mb-4">Session History</h3>
         <div className="space-y-3">
           {sessions.map((session, index) => (
             <motion.div
@@ -400,25 +374,23 @@ export default function MedBeds() {
               <div className="flex items-center gap-4">
                 <div
                   className={`p-3 rounded-lg ${
-                    session.status === "completed"
-                      ? "bg-green-100 text-green-600"
-                      : session.status === "in-progress"
-                      ? "bg-blue-100 text-blue-600"
-                      : "bg-yellow-100 text-yellow-600"
+                    session.status === 'completed'
+                      ? 'bg-green-100 text-green-600'
+                      : session.status === 'in-progress'
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'bg-yellow-100 text-yellow-600'
                   }`}
                 >
-                  {session.status === "completed" ? (
+                  {session.status === 'completed' ? (
                     <CheckCircle size={24} />
-                  ) : session.status === "in-progress" ? (
+                  ) : session.status === 'in-progress' ? (
                     <Activity size={24} />
                   ) : (
                     <Calendar size={24} />
                   )}
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-800 capitalize">
-                    {session.type} Session
-                  </p>
+                  <p className="font-semibold text-slate-800 capitalize">{session.type} Session</p>
                   <div className="flex items-center gap-4 text-sm text-slate-600 mt-1">
                     <span className="flex items-center gap-1">
                       <Calendar size={14} />
@@ -432,23 +404,16 @@ export default function MedBeds() {
                 </div>
               </div>
               <div className="text-right">
-                {session.status === "completed" ? (
+                {session.status === 'completed' ? (
                   <div className="flex flex-col gap-2">
                     <div>
-                      <p className="text-2xl font-bold text-green-600">
-                        {session.effectiveness}%
-                      </p>
+                      <p className="text-2xl font-bold text-green-600">{session.effectiveness}%</p>
                       <p className="text-xs text-slate-600">Effectiveness</p>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() =>
-                          alert(
-                            `Cashing out $${(
-                              (session.duration / 60) *
-                              150
-                            ).toFixed(2)} reward`
-                          )
+                          alert(`Cashing out $${((session.duration / 60) * 150).toFixed(2)} reward`)
                         }
                         className="px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg text-xs font-semibold hover:shadow-lg transition-shadow flex items-center gap-1"
                       >
@@ -458,10 +423,7 @@ export default function MedBeds() {
                       <button
                         onClick={() =>
                           alert(
-                            `Withdrawing $${(
-                              (session.duration / 60) *
-                              150
-                            ).toFixed(2)} to wallet`
+                            `Withdrawing $${((session.duration / 60) * 150).toFixed(2)} to wallet`
                           )
                         }
                         className="px-3 py-1.5 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-lg text-xs font-semibold hover:shadow-lg transition-shadow flex items-center gap-1"
@@ -471,7 +433,7 @@ export default function MedBeds() {
                       </button>
                     </div>
                   </div>
-                ) : session.status === "in-progress" ? (
+                ) : session.status === 'in-progress' ? (
                   <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
                     In Progress
                   </span>
@@ -490,13 +452,10 @@ export default function MedBeds() {
       <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 flex items-start gap-3">
         <AlertCircle className="text-blue-600 flex-shrink-0 mt-1" size={20} />
         <div>
-          <p className="font-semibold text-blue-900">
-            Important Safety Information
-          </p>
+          <p className="font-semibold text-blue-900">Important Safety Information</p>
           <p className="text-sm text-blue-800 mt-1">
-            Med Bed sessions are monitored by AI-powered health systems.
-            Emergency protocols are active 24/7. Consult with your health
-            advisor before booking enhancement sessions.
+            Med Bed sessions are monitored by AI-powered health systems. Emergency protocols are
+            active 24/7. Consult with your health advisor before booking enhancement sessions.
           </p>
         </div>
       </div>
@@ -520,9 +479,7 @@ export default function MedBeds() {
             >
               {/* Modal Header */}
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-slate-900">
-                  Book Session
-                </h3>
+                <h3 className="text-2xl font-bold text-slate-900">Book Session</h3>
                 <button
                   onClick={() => setShowBookingModal(false)}
                   className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
@@ -540,20 +497,13 @@ export default function MedBeds() {
                 <div className="flex items-center gap-4 mb-4">
                   <selectedChamber.icon size={40} />
                   <div>
-                    <h4 className="text-xl font-bold">
-                      {selectedChamber.name}
-                    </h4>
-                    <p className="text-sm opacity-90 capitalize">
-                      {selectedChamber.type} Session
-                    </p>
+                    <h4 className="text-xl font-bold">{selectedChamber.name}</h4>
+                    <p className="text-sm opacity-90 capitalize">{selectedChamber.type} Session</p>
                   </div>
                 </div>
                 <div className="space-y-2">
                   {selectedChamber.features.map((feature) => (
-                    <div
-                      key={feature}
-                      className="flex items-center gap-2 text-sm"
-                    >
+                    <div key={feature} className="flex items-center gap-2 text-sm">
                       <CheckCircle size={14} />
                       <span>{feature}</span>
                     </div>
@@ -572,7 +522,7 @@ export default function MedBeds() {
                     title="Session Date"
                     value={bookingDate}
                     onChange={(e) => setBookingDate(e.target.value)}
-                    min={new Date().toISOString().split("T")[0]}
+                    min={new Date().toISOString().split('T')[0]}
                     className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none"
                   />
                 </div>
@@ -602,55 +552,43 @@ export default function MedBeds() {
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
-                      onClick={() => setPaymentMethod("balance")}
+                      onClick={() => setPaymentMethod('balance')}
                       className={`p-4 border-2 rounded-xl transition-all ${
-                        paymentMethod === "balance"
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-slate-200 hover:border-slate-300"
+                        paymentMethod === 'balance'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <Wallet
                         size={24}
-                        className={
-                          paymentMethod === "balance"
-                            ? "text-blue-600"
-                            : "text-slate-600"
-                        }
+                        className={paymentMethod === 'balance' ? 'text-blue-600' : 'text-slate-600'}
                       />
                       <p className="text-sm font-semibold mt-2">USD Balance</p>
-                      <p className="text-xs text-slate-500">
-                        ${usdBalance.toFixed(2)}
-                      </p>
+                      <p className="text-xs text-slate-500">${usdBalance.toFixed(2)}</p>
                     </button>
                     <button
                       type="button"
-                      onClick={() => setPaymentMethod("stripe")}
+                      onClick={() => setPaymentMethod('stripe')}
                       className={`p-4 border-2 rounded-xl transition-all ${
-                        paymentMethod === "stripe"
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-slate-200 hover:border-slate-300"
+                        paymentMethod === 'stripe'
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <DollarSign
                         size={24}
-                        className={
-                          paymentMethod === "stripe"
-                            ? "text-blue-600"
-                            : "text-slate-600"
-                        }
+                        className={paymentMethod === 'stripe' ? 'text-blue-600' : 'text-slate-600'}
                       />
                       <p className="text-sm font-semibold mt-2">Credit Card</p>
                       <p className="text-xs text-slate-500">via Stripe</p>
                     </button>
                   </div>
-                  {paymentMethod === "balance" &&
-                    usdBalance < (bookingDuration / 60) * 150 && (
-                      <p className="text-xs text-red-600 mt-2">
-                        ⚠️ Insufficient balance. Need $
-                        {((bookingDuration / 60) * 150 - usdBalance).toFixed(2)}{" "}
-                        more.
-                      </p>
-                    )}
+                  {paymentMethod === 'balance' && usdBalance < (bookingDuration / 60) * 150 && (
+                    <p className="text-xs text-red-600 mt-2">
+                      ⚠️ Insufficient balance. Need $
+                      {((bookingDuration / 60) * 150 - usdBalance).toFixed(2)} more.
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -670,10 +608,10 @@ export default function MedBeds() {
                   className={`flex-1 px-6 py-3 bg-gradient-to-r ${selectedChamber.color} text-white font-semibold rounded-xl hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   {isProcessing
-                    ? "Processing..."
-                    : paymentMethod === "stripe"
-                    ? "Pay with Card"
-                    : "Confirm Booking"}
+                    ? 'Processing...'
+                    : paymentMethod === 'stripe'
+                      ? 'Pay with Card'
+                      : 'Confirm Booking'}
                 </button>
               </div>
 
@@ -686,9 +624,9 @@ export default function MedBeds() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  {paymentMethod === "balance"
-                    ? "Will be deducted from your USD balance"
-                    : "Secure payment via Stripe"}
+                  {paymentMethod === 'balance'
+                    ? 'Will be deducted from your USD balance'
+                    : 'Secure payment via Stripe'}
                 </p>
               </div>
             </motion.div>

@@ -20,10 +20,10 @@ Complete guide to setting up and managing test databases for Advancia Pay Ledger
 
 **Why a separate test database?**
 
-- ✅ **Isolation** - Tests don't corrupt dev/prod data
-- ✅ **Reproducibility** - Fresh state for every test run
-- ✅ **Speed** - Optimized schema and smaller datasets
-- ✅ **Safety** - No risk of deleting production data
+-   ✅ **Isolation** - Tests don't corrupt dev/prod data
+-   ✅ **Reproducibility** - Fresh state for every test run
+-   ✅ **Speed** - Optimized schema and smaller datasets
+-   ✅ **Safety** - No risk of deleting production data
 
 **Test Database Architecture:**
 
@@ -735,15 +735,15 @@ git push origin main
 
 **Still having issues?**
 
-- Check [Prisma Troubleshooting](https://www.prisma.io/docs/guides/general-guides/troubleshooting)
-- Review [Jest Testing Guide](https://jestjs.io/docs/getting-started)
-- Consult [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+-   Check [Prisma Troubleshooting](https://www.prisma.io/docs/guides/general-guides/troubleshooting)
+-   Review [Jest Testing Guide](https://jestjs.io/docs/getting-started)
+-   Consult [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 
 **Related Documentation:**
 
-- [PROMETHEUS_SETUP_GUIDE.md](PROMETHEUS_SETUP_GUIDE.md) - Monitoring setup
-- [COMPLETE_ALERTING_OPERATIONS_GUIDE.md](COMPLETE_ALERTING_OPERATIONS_GUIDE.md) - Operations manual
-- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Production deployment
+-   [PROMETHEUS_SETUP_GUIDE.md](PROMETHEUS_SETUP_GUIDE.md) - Monitoring setup
+-   [COMPLETE_ALERTING_OPERATIONS_GUIDE.md](COMPLETE_ALERTING_OPERATIONS_GUIDE.md) - Operations manual
+-   [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Production deployment
 
 ---
 

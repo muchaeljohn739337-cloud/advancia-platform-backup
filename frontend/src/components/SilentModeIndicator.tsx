@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { ShieldAlert } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { ShieldAlert } from 'lucide-react';
 
 export default function SilentModeIndicator() {
   const [silentMode, setSilentMode] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/config/silent-mode")
+    fetch('/api/admin/config/silent-mode')
       .then((res) => res.json())
       .then((data) => {
         const isActive = data.silentMode;
@@ -16,20 +16,20 @@ export default function SilentModeIndicator() {
 
         if (isActive) {
           // Suppress console logs in silent mode
-          console.log("🛑 Silent Mode Active — Backend notifications hidden");
+          console.log('🛑 Silent Mode Active — Backend notifications hidden');
           const noop = () => {};
           console.log = noop;
           console.info = noop;
           console.warn = noop;
           // Keep console.error for critical issues
         } else {
-          console.log("✅ Dev Mode — Backend logs visible");
+          console.log('✅ Dev Mode — Backend logs visible');
         }
 
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch silent mode status:", err);
+        console.error('Failed to fetch silent mode status:', err);
         setLoading(false);
       });
   }, []);

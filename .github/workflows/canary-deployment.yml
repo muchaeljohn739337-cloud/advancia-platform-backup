@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       target_environment:
-        description: 'Target environment (blue or green)'
+        description: "Target environment (blue or green)"
         required: true
         type: choice
         options:
@@ -12,8 +12,8 @@ on:
           - blue
 
 env:
-  MONITORING_INTERVAL: 300  # 5 minutes between stages
-  FINAL_MONITORING_INTERVAL: 600  # 10 minutes for later stages
+  MONITORING_INTERVAL: 300 # 5 minutes between stages
+  FINAL_MONITORING_INTERVAL: 600 # 10 minutes for later stages
 
 jobs:
   #############################################
@@ -27,7 +27,7 @@ jobs:
       current_ip: ${{ steps.check.outputs.current_ip }}
       target: ${{ steps.check.outputs.target }}
       target_ip: ${{ steps.check.outputs.target_ip }}
-    
+
     steps:
       - name: Check current live environment
         id: check
@@ -43,9 +43,9 @@ jobs:
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_API" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" | jq -r '.result.content')
-          
+
           echo "current_ip=$CURRENT_IP" >> $GITHUB_OUTPUT
-          
+
           # Determine environments
           if [[ "$CURRENT_IP" == "$BLUE_IP" ]]; then
             echo "current_live=blue" >> $GITHUB_OUTPUT
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: determine-state
     environment: production
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -85,7 +85,7 @@ jobs:
           TARGET_IP: ${{ needs.determine-state.outputs.target_ip }}
         run: |
           echo "🚀 Deploying to $TARGET ($TARGET_IP)"
-          
+
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_DROPLET_USER }}@$TARGET_IP << 'EOF'
             cd /opt/advancia
             git fetch origin main
@@ -105,19 +105,19 @@ jobs:
         run: |
           echo "🏥 Running pre-deployment health checks..."
           sleep 30
-          
+
           # Backend health
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
           if [ "$RESPONSE" != "200" ]; then
             echo "❌ Backend health check failed"
             exit 1
           fi
-          
+
           # Measure baseline metrics
           RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" http://$TARGET_IP:4000/health)
           echo "⏱️  Response time: ${RESPONSE_TIME}s"
           echo "baseline_response_time=${RESPONSE_TIME}" >> $GITHUB_ENV
-          
+
           echo "✅ Pre-deployment health checks passed"
 
   #############################################
@@ -128,7 +128,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state, deploy-target]
     environment: production
-    
+
     steps:
       - name: Configure 10% traffic to ${{ needs.determine-state.outputs.target }}
         env:
@@ -137,7 +137,7 @@ jobs:
           CURRENT_IP: ${{ needs.determine-state.outputs.current_ip }}
         run: |
           echo "🎯 Stage 1: Routing 10% traffic to $TARGET"
-          
+
           # Update load balancer weights (NGINX example)
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_DROPLET_USER }}@${{ secrets.NGINX_LB_IP }} << EOF
             # Backup current config
@@ -164,7 +164,7 @@ jobs:
           CURRENT_IP: ${{ needs.determine-state.outputs.current_ip }}
         run: |
           echo "📊 Monitoring Stage 1 for 5 minutes..."
-          
+
           for i in {1..10}; do
             echo "Check $i/10..."
             
@@ -192,7 +192,7 @@ jobs:
             echo "✅ Check $i passed - Error: $ERROR_RATE%, Latency: ${RESPONSE_TIME}s"
             sleep 30
           done
-          
+
           echo "✅ Stage 1 monitoring complete - All checks passed"
 
   #############################################
@@ -203,7 +203,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state, canary-stage-1]
     environment: production
-    
+
     steps:
       - name: Configure 25% traffic
         env:
@@ -211,7 +211,7 @@ jobs:
           CURRENT_IP: ${{ needs.determine-state.outputs.current_ip }}
         run: |
           echo "🎯 Stage 2: Routing 25% traffic to target"
-          
+
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_DROPLET_USER }}@${{ secrets.NGINX_LB_IP }} << EOF
             cat > /etc/nginx/conf.d/upstream.conf << 'NGINX'
           upstream backend {
@@ -228,7 +228,7 @@ jobs:
           TARGET_IP: ${{ needs.determine-state.outputs.target_ip }}
         run: |
           echo "📊 Monitoring Stage 2 for 5 minutes..."
-          
+
           for i in {1..10}; do
             echo "Check $i/10..."
             
@@ -248,7 +248,7 @@ jobs:
             echo "✅ Check $i passed - Error: $ERROR_RATE%, Latency: ${RESPONSE_TIME}s"
             sleep 30
           done
-          
+
           echo "✅ Stage 2 monitoring complete"
 
   #############################################
@@ -259,7 +259,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state, canary-stage-2]
     environment: production
-    
+
     steps:
       - name: Configure 50% traffic
         env:
@@ -267,7 +267,7 @@ jobs:
           CURRENT_IP: ${{ needs.determine-state.outputs.current_ip }}
         run: |
           echo "🎯 Stage 3: Routing 50% traffic to target"
-          
+
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_DROPLET_USER }}@${{ secrets.NGINX_LB_IP }} << EOF
             cat > /etc/nginx/conf.d/upstream.conf << 'NGINX'
           upstream backend {
@@ -284,7 +284,7 @@ jobs:
           TARGET_IP: ${{ needs.determine-state.outputs.target_ip }}
         run: |
           echo "📊 Monitoring Stage 3 for 10 minutes..."
-          
+
           for i in {1..20}; do
             echo "Check $i/20..."
             
@@ -309,7 +309,7 @@ jobs:
             echo "✅ Check $i passed - Error: $ERROR_RATE%, Latency: ${RESPONSE_TIME}s, CPU: $CPU%"
             sleep 30
           done
-          
+
           echo "✅ Stage 3 monitoring complete"
 
   #############################################
@@ -320,7 +320,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state, canary-stage-3]
     environment: production
-    
+
     steps:
       - name: Configure 75% traffic
         env:
@@ -328,7 +328,7 @@ jobs:
           CURRENT_IP: ${{ needs.determine-state.outputs.current_ip }}
         run: |
           echo "🎯 Stage 4: Routing 75% traffic to target"
-          
+
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_DROPLET_USER }}@${{ secrets.NGINX_LB_IP }} << EOF
             cat > /etc/nginx/conf.d/upstream.conf << 'NGINX'
           upstream backend {
@@ -345,7 +345,7 @@ jobs:
           TARGET_IP: ${{ needs.determine-state.outputs.target_ip }}
         run: |
           echo "📊 Monitoring Stage 4 for 10 minutes..."
-          
+
           for i in {1..20}; do
             echo "Check $i/20..."
             
@@ -364,7 +364,7 @@ jobs:
             echo "✅ Check $i passed - Error: $ERROR_RATE%, Latency: ${RESPONSE_TIME}s"
             sleep 30
           done
-          
+
           echo "✅ Stage 4 monitoring complete"
 
   #############################################
@@ -375,7 +375,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state, canary-stage-4]
     environment: production
-    
+
     steps:
       - name: Configure 100% traffic
         env:
@@ -386,21 +386,21 @@ jobs:
           CF_RECORD_ID_WWW: ${{ secrets.PROD_CF_RECORD_ID_WWW }}
         run: |
           echo "🎯 Stage 5: Routing 100% traffic to target (DNS switch)"
-          
+
           # Update API DNS
           curl -X PATCH \
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_API" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data "{\"type\":\"A\",\"name\":\"api.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}"
-          
+
           # Update WWW DNS
           curl -X PATCH \
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_WWW" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data "{\"type\":\"A\",\"name\":\"www.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}"
-          
+
           echo "✅ DNS switched to target environment"
 
       - name: Final monitoring (30 minutes)
@@ -408,7 +408,7 @@ jobs:
           TARGET_IP: ${{ needs.determine-state.outputs.target_ip }}
         run: |
           echo "📊 Final monitoring for 30 minutes..."
-          
+
           for i in {1..60}; do
             echo "Check $i/60..."
             
@@ -425,7 +425,7 @@ jobs:
             echo "✅ Check $i passed - Error: $ERROR_RATE%, Latency: ${RESPONSE_TIME}s"
             sleep 30
           done
-          
+
           echo "✅ Final monitoring complete - Deployment successful!"
 
   #############################################
@@ -436,7 +436,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state]
     if: failure()
-    
+
     steps:
       - name: Rollback to ${{ needs.determine-state.outputs.current_live }}
         env:
@@ -446,20 +446,20 @@ jobs:
           CF_RECORD_ID_API: ${{ secrets.PROD_CF_RECORD_ID_API }}
         run: |
           echo "🚨 ROLLING BACK TO ${{ needs.determine-state.outputs.current_live }}"
-          
+
           # Revert load balancer to 100% current
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_DROPLET_USER }}@${{ secrets.NGINX_LB_IP }} << EOF
             cp /etc/nginx/conf.d/upstream.conf.backup /etc/nginx/conf.d/upstream.conf
             nginx -t && systemctl reload nginx
           EOF
-          
+
           # Revert DNS
           curl -X PATCH \
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_API" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data "{\"type\":\"A\",\"name\":\"api.advancia.com\",\"content\":\"$CURRENT_IP\",\"ttl\":60,\"proxied\":true}"
-          
+
           echo "✅ Rollback complete"
 
       - name: Notify team
@@ -487,7 +487,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [determine-state, canary-stage-5]
     if: success()
-    
+
     steps:
       - name: Send success notification
         env:

@@ -1,4 +1,4 @@
-# 👋 Welcome to Advancia Pay Ledger!
+# 👋 Welcome to Advancia Pay Ledger
 
 ## 🚀 Developer Onboarding Checklist
 
@@ -10,7 +10,7 @@ This guide will get you from zero to running tests in under 10 minutes.
 
 Install these tools if you don't have them:
 
-- [ ] **Git** - Version control
+-   [ ] **Git** - Version control
 
   ```bash
   # Check if installed
@@ -22,7 +22,7 @@ Install these tools if you don't have them:
   # Windows: https://git-scm.com/download/win
   ```
 
-- [ ] **Docker** - Container runtime
+-   [ ] **Docker** - Container runtime
 
   ```bash
   # Check if installed
@@ -31,7 +31,7 @@ Install these tools if you don't have them:
   # Install: https://docs.docker.com/get-docker/
   ```
 
-- [ ] **Docker Compose** - Multi-container orchestration
+-   [ ] **Docker Compose** - Multi-container orchestration
 
   ```bash
   # Check if installed
@@ -40,7 +40,7 @@ Install these tools if you don't have them:
   # Usually comes with Docker Desktop
   ```
 
-- [ ] **Node.js 18+** - JavaScript runtime
+-   [ ] **Node.js 18+** - JavaScript runtime
 
   ```bash
   # Check version
@@ -49,7 +49,7 @@ Install these tools if you don't have them:
   # Install: https://nodejs.org/ (choose LTS)
   ```
 
-- [ ] **Make** - Build automation (optional but recommended)
+-   [ ] **Make** - Build automation (optional but recommended)
 
   ```bash
   # Check if installed
@@ -169,9 +169,9 @@ After running `make db-setup` or `npm run seed:test`, these accounts are created
 
 | Role      | Email               | Password      | Description          |
 | --------- | ------------------- | ------------- | -------------------- |
-| **Admin** | admin@advancia.test | TestAdmin123! | Full system access   |
-| **User**  | user@advancia.test  | TestUser123!  | Regular user account |
-| **Agent** | agent@advancia.test | TestAgent123! | Support agent        |
+| **Admin** | <admin@advancia.test> | TestAdmin123! | Full system access   |
+| **User**  | <user@advancia.test>  | TestUser123!  | Regular user account |
+| **Agent** | <agent@advancia.test> | TestAgent123! | Support agent        |
 
 **Test these credentials:**
 
@@ -214,24 +214,24 @@ To get better, repo-aware suggestions in VS Code Copilot Chat, we ship `.github/
 
 Steps:
 
-- In VS Code Settings, enable `GitHub Copilot Chat › Experimental: Prompt Files`.
-- In the Chat gear menu, check that `Instructions` shows our file as active.
+-   In VS Code Settings, enable `GitHub Copilot Chat › Experimental: Prompt Files`.
+-   In the Chat gear menu, check that `Instructions` shows our file as active.
 
 Optional verification:
 
-- Run `Developer: Set Log Level...` → Trace.
-- Run `Developer: Show Logs...` → Window, then confirm log lines like `[InstructionsContextComputer] ... Copilot instructions files added` appear.
+-   Run `Developer: Set Log Level...` → Trace.
+-   Run `Developer: Show Logs...` → Window, then confirm log lines like `[InstructionsContextComputer] ... Copilot instructions files added` appear.
 
 Note: If you don’t see the Prompt Files setting, your org may restrict it.
 
 **Expected data:**
 
-- ✅ 3 Users (admin, user, agent)
-- ✅ 2 Token Wallets (admin: 10,000 ADVP, user: 1,000 ADVP)
-- ✅ 1 Crypto Wallet (user: 100 USDT)
-- ✅ 2 Transactions
-- ✅ 2 Support Tickets
-- ✅ 2 Notifications
+-   ✅ 3 Users (admin, user, agent)
+-   ✅ 2 Token Wallets (admin: 10,000 ADVP, user: 1,000 ADVP)
+-   ✅ 1 Crypto Wallet (user: 100 USDT)
+-   ✅ 2 Transactions
+-   ✅ 2 Support Tickets
+-   ✅ 2 Notifications
 
 ---
 
@@ -289,10 +289,10 @@ make docker-down
 
 **Expected results:**
 
-- ✅ All tests pass
-- ✅ PostgreSQL is healthy
-- ✅ Redis is healthy
-- ✅ Backend responds to health checks
+-   ✅ All tests pass
+-   ✅ PostgreSQL is healthy
+-   ✅ Redis is healthy
+-   ✅ Backend responds to health checks
 
 ---
 
@@ -402,10 +402,10 @@ docker-compose -f docker-compose.test.yml down
 
 #### Need help?
 
-- Check logs: `make docker-logs`
-- View status: `make status`
-- See all commands: `make help`
-- Read [TEST_DATABASE_SETUP.md](TEST_DATABASE_SETUP.md) for detailed troubleshooting
+-   Check logs: `make docker-logs`
+-   View status: `make status`
+-   See all commands: `make help`
+-   Read [TEST_DATABASE_SETUP.md](TEST_DATABASE_SETUP.md) for detailed troubleshooting
 
 ---
 
@@ -413,11 +413,11 @@ docker-compose -f docker-compose.test.yml down
 
 You're now ready to:
 
-- ✅ Run tests locally and in Docker
-- ✅ Use test credentials for authentication
-- ✅ Access test database via Prisma Studio
-- ✅ Use Make shortcuts for common tasks
-- ✅ Contribute to the codebase
+-   ✅ Run tests locally and in Docker
+-   ✅ Use test credentials for authentication
+-   ✅ Access test database via Prisma Studio
+-   ✅ Use Make shortcuts for common tasks
+-   ✅ Contribute to the codebase
 
 #### Welcome to the team 🎉
 

@@ -8,33 +8,33 @@ This guide documents the IP and wallet address whitelisting security features im
 
 ### 1. **IP Whitelisting**
 
-- Users can whitelist specific IP addresses
-- Withdrawals are blocked if initiated from non-whitelisted IPs (when whitelist is active)
-- Simple IP format validation
-- Add/remove IPs via API endpoints
+-   Users can whitelist specific IP addresses
+-   Withdrawals are blocked if initiated from non-whitelisted IPs (when whitelist is active)
+-   Simple IP format validation
+-   Add/remove IPs via API endpoints
 
 ### 2. **Wallet Address Whitelisting**
 
-- Users can whitelist cryptocurrency wallet addresses (BTC, ETH, USDT, etc.)
-- Addresses require verification before use
-- Prevents withdrawals to unknown/unverified addresses
-- Support for labels to identify addresses
+-   Users can whitelist cryptocurrency wallet addresses (BTC, ETH, USDT, etc.)
+-   Addresses require verification before use
+-   Prevents withdrawals to unknown/unverified addresses
+-   Support for labels to identify addresses
 
 ### 3. **Enhanced Error Handling**
 
-- Sentry integration for production error tracking
-- Context-rich error logging (user ID, IP, path, method)
-- Sensitive data sanitization in logs
-- Different error responses for development vs production
+-   Sentry integration for production error tracking
+-   Context-rich error logging (user ID, IP, path, method)
+-   Sensitive data sanitization in logs
+-   Different error responses for development vs production
 
 ### 4. **Prometheus Metrics**
 
-- HTTP request duration and count tracking
-- Active users monitoring
-- Withdrawal tracking by currency and status
-- Security alerts counter
-- Database query performance monitoring
-- WebSocket connection tracking
+-   HTTP request duration and count tracking
+-   Active users monitoring
+-   Withdrawal tracking by currency and status
+-   Security alerts counter
+-   Database query performance monitoring
+-   WebSocket connection tracking
 
 ## Database Schema Changes
 
@@ -248,25 +248,22 @@ Response:
 1. **User initiates withdrawal** via `POST /api/withdrawals/request`
 
 2. **IP Whitelist Check**
-
-   - Extract client IP from request headers
-   - If user has whitelisted IPs, verify current IP is in the list
-   - If not whitelisted, reject with 403 and send security alert
+   -   Extract client IP from request headers
+   -   If user has whitelisted IPs, verify current IP is in the list
+   -   If not whitelisted, reject with 403 and send security alert
 
 3. **Address Whitelist Check** (crypto only)
-
-   - Check if withdrawal address exists in user's whitelist
-   - Verify address is marked as verified
-   - If not whitelisted or not verified, reject with 403
+   -   Check if withdrawal address exists in user's whitelist
+   -   Verify address is marked as verified
+   -   If not whitelisted or not verified, reject with 403
 
 4. **Balance Check**
-
-   - Verify user has sufficient balance
+   -   Verify user has sufficient balance
 
 5. **Create Withdrawal Request**
-   - Deduct balance (locked until processed)
-   - Create database records
-   - Notify admins via Socket.IO
+   -   Deduct balance (locked until processed)
+   -   Create database records
+   -   Notify admins via Socket.IO
 
 ## Testing
 
@@ -281,15 +278,15 @@ npm test -- security.test.ts
 
 The test suite covers:
 
-- ✅ IP whitelist management (add, get, remove)
-- ✅ IP format validation
-- ✅ Duplicate IP prevention
-- ✅ Wallet address whitelist management
-- ✅ Address verification flow
-- ✅ Duplicate address prevention
-- ✅ Withdrawal blocking from non-whitelisted IPs
-- ✅ Withdrawal blocking to non-whitelisted addresses
-- ✅ Successful withdrawal after whitelisting
+-   ✅ IP whitelist management (add, get, remove)
+-   ✅ IP format validation
+-   ✅ Duplicate IP prevention
+-   ✅ Wallet address whitelist management
+-   ✅ Address verification flow
+-   ✅ Duplicate address prevention
+-   ✅ Withdrawal blocking from non-whitelisted IPs
+-   ✅ Withdrawal blocking to non-whitelisted addresses
+-   ✅ Successful withdrawal after whitelisting
 
 ## Configuration
 
@@ -477,24 +474,24 @@ rate(errors_total[5m])
 
 ### 1. IP Whitelisting
 
-- ✅ Encourage users to whitelist home/office IPs
-- ✅ Warn users about public WiFi/VPN risks
-- ✅ Allow emergency bypass for locked accounts (via support)
-- ✅ Log all IP whitelist changes for audit
+-   ✅ Encourage users to whitelist home/office IPs
+-   ✅ Warn users about public WiFi/VPN risks
+-   ✅ Allow emergency bypass for locked accounts (via support)
+-   ✅ Log all IP whitelist changes for audit
 
 ### 2. Address Whitelisting
 
-- ✅ Require email verification before marking address as verified
-- ✅ Allow 24-48 hour cooling period for new addresses
-- ✅ Limit number of addresses per user (e.g., 10 per currency)
-- ✅ Provide address verification history
+-   ✅ Require email verification before marking address as verified
+-   ✅ Allow 24-48 hour cooling period for new addresses
+-   ✅ Limit number of addresses per user (e.g., 10 per currency)
+-   ✅ Provide address verification history
 
 ### 3. Monitoring
 
-- ✅ Set up alerts for high security event rates
-- ✅ Monitor withdrawal patterns for anomalies
-- ✅ Track failed authentication attempts
-- ✅ Review Sentry errors daily
+-   ✅ Set up alerts for high security event rates
+-   ✅ Monitor withdrawal patterns for anomalies
+-   ✅ Track failed authentication attempts
+-   ✅ Review Sentry errors daily
 
 ## Troubleshooting
 
@@ -526,61 +523,61 @@ Authorization: Bearer <admin_token>
 
 ## Migration Checklist
 
-- [x] Database schema updated (User.whitelistedIPs, WhitelistedAddress model)
-- [x] Prisma migration applied
-- [x] Security routes enhanced
-- [x] Withdrawal routes updated with security checks
-- [x] Error handler enhanced with Sentry
-- [x] Tests created for whitelist functionality
-- [x] Metrics utility created
-- [x] Metrics route created
-- [ ] Routes registered in index.ts
-- [ ] Frontend UI components created
-- [ ] Email verification for addresses implemented
-- [ ] Monitoring dashboard configured
-- [ ] Production deployment
+-   [x] Database schema updated (User.whitelistedIPs, WhitelistedAddress model)
+-   [x] Prisma migration applied
+-   [x] Security routes enhanced
+-   [x] Withdrawal routes updated with security checks
+-   [x] Error handler enhanced with Sentry
+-   [x] Tests created for whitelist functionality
+-   [x] Metrics utility created
+-   [x] Metrics route created
+-   [ ] Routes registered in index.ts
+-   [ ] Frontend UI components created
+-   [ ] Email verification for addresses implemented
+-   [ ] Monitoring dashboard configured
+-   [ ] Production deployment
 
 ## Next Steps
 
 ### Week 1 (High Priority)
 
-- [x] Add WhitelistedAddress model to Prisma schema
-- [x] Create security routes for IP/address whitelisting
-- [x] Update crypto withdrawal route with security checks
-- [ ] Add email verification for whitelisted addresses
-- [ ] Test withdrawal flow with whitelisted/non-whitelisted IPs
+-   [x] Add WhitelistedAddress model to Prisma schema
+-   [x] Create security routes for IP/address whitelisting
+-   [x] Update crypto withdrawal route with security checks
+-   [ ] Add email verification for whitelisted addresses
+-   [ ] Test withdrawal flow with whitelisted/non-whitelisted IPs
 
 ### Week 2-3 (Medium Priority)
 
-- [x] Enhance error handler with context logging
-- [x] Add Sentry integration for production errors
-- [x] Write security tests (IP whitelist, address whitelist)
-- [ ] Write payment flow tests
-- [ ] Add integration tests for critical paths
+-   [x] Enhance error handler with context logging
+-   [x] Add Sentry integration for production errors
+-   [x] Write security tests (IP whitelist, address whitelist)
+-   [ ] Write payment flow tests
+-   [ ] Add integration tests for critical paths
 
 ### Week 4 (Low Priority)
 
-- [x] Add Prometheus metrics endpoints
-- [ ] Set up Grafana dashboard for monitoring
-- [ ] Optimize database queries with indexes
-- [ ] Add query performance logging
-- [ ] Document new security features in README
+-   [x] Add Prometheus metrics endpoints
+-   [ ] Set up Grafana dashboard for monitoring
+-   [ ] Optimize database queries with indexes
+-   [ ] Add query performance logging
+-   [ ] Document new security features in README
 
 ### Ongoing
 
-- [ ] Monitor error rates in Sentry
-- [ ] Review security alerts weekly
-- [ ] Update dependencies monthly
-- [ ] Review and rotate secrets quarterly
+-   [ ] Monitor error rates in Sentry
+-   [ ] Review security alerts weekly
+-   [ ] Update dependencies monthly
+-   [ ] Review and rotate secrets quarterly
 
 ## Support
 
 For questions or issues:
 
-- Check error logs in Sentry
-- Review test coverage in `__tests__/security.test.ts`
-- Consult API documentation in this file
-- Contact development team
+-   Check error logs in Sentry
+-   Review test coverage in `__tests__/security.test.ts`
+-   Consult API documentation in this file
+-   Contact development team
 
 ---
 

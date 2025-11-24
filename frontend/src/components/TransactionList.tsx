@@ -1,45 +1,45 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { ArrowUpRight, ArrowDownRight, Filter } from 'lucide-react'
-import { useState, ChangeEvent } from 'react'
+import { motion } from 'framer-motion';
+import { ArrowUpRight, ArrowDownRight, Filter } from 'lucide-react';
+import { useState, ChangeEvent } from 'react';
 
 interface Transaction {
-  id: string
-  userId: string
-  amount: number
-  type: 'credit' | 'debit' | 'transfer' | 'bonus'
-  status: 'pending' | 'completed' | 'failed'
-  description?: string
-  timestamp: string
+  id: string;
+  userId: string;
+  amount: number;
+  type: 'credit' | 'debit' | 'transfer' | 'bonus';
+  status: 'pending' | 'completed' | 'failed';
+  description?: string;
+  timestamp: string;
 }
 
 interface TransactionListProps {
-  transactions: Transaction[]
-  loading: boolean
+  transactions: Transaction[];
+  loading: boolean;
 }
 
 export default function TransactionList({ transactions, loading }: TransactionListProps) {
-  const [filter, setFilter] = useState<'all' | 'credit' | 'debit' | 'bonus'>('all')
+  const [filter, setFilter] = useState<'all' | 'credit' | 'debit' | 'bonus'>('all');
 
   const handleFilterChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setFilter(event.target.value as 'all' | 'credit' | 'debit' | 'bonus')
-  }
-  
-  const filteredTransactions = transactions.filter(tx => 
+    setFilter(event.target.value as 'all' | 'credit' | 'debit' | 'bonus');
+  };
+
+  const filteredTransactions = transactions.filter((tx) =>
     filter === 'all' ? true : tx.type === filter
-  )
+  );
 
   if (loading) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6">
         <div className="animate-pulse space-y-4">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <div key={i} className="h-16 bg-slate-200 rounded-lg" />
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -80,41 +80,57 @@ export default function TransactionList({ transactions, loading }: TransactionLi
               className="flex items-center justify-between p-4 rounded-lg hover:bg-slate-50 transition-colors border border-slate-100"
             >
               <div className="flex items-center gap-4">
-                <div className={`
+                <div
+                  className={`
                   p-3 rounded-lg
-                  ${tx.type === 'credit' ? 'bg-green-100' : 
-                    tx.type === 'debit' ? 'bg-red-100' : 'bg-amber-100'}
-                `}>
+                  ${
+                    tx.type === 'credit'
+                      ? 'bg-green-100'
+                      : tx.type === 'debit'
+                        ? 'bg-red-100'
+                        : 'bg-amber-100'
+                  }
+                `}
+                >
                   {tx.type === 'credit' ? (
                     <ArrowUpRight className="w-5 h-5 text-green-600" />
                   ) : (
                     <ArrowDownRight className="w-5 h-5 text-red-600" />
                   )}
                 </div>
-                
+
                 <div>
                   <p className="font-semibold text-slate-800">
-                    {tx.description || `${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} Transaction`}
+                    {tx.description ||
+                      `${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} Transaction`}
                   </p>
                   <p className="text-sm text-slate-500">
                     {new Date(tx.timestamp).toLocaleString()}
                   </p>
-                  <span className={`
+                  <span
+                    className={`
                     inline-block text-xs px-2 py-1 rounded-full mt-1
-                    ${tx.status === 'completed' ? 'bg-green-100 text-green-700' :
-                      tx.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-red-100 text-red-700'}
-                  `}>
+                    ${
+                      tx.status === 'completed'
+                        ? 'bg-green-100 text-green-700'
+                        : tx.status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-red-100 text-red-700'
+                    }
+                  `}
+                  >
                     {tx.status}
                   </span>
                 </div>
               </div>
 
               <div className="text-right">
-                <p className={`
+                <p
+                  className={`
                   text-lg font-bold
                   ${tx.type === 'credit' ? 'text-green-600' : 'text-red-600'}
-                `}>
+                `}
+                >
                   {tx.type === 'credit' ? '+' : '-'}${tx.amount.toFixed(2)}
                 </p>
               </div>
@@ -123,5 +139,5 @@ export default function TransactionList({ transactions, loading }: TransactionLi
         )}
       </div>
     </div>
-  )
+  );
 }

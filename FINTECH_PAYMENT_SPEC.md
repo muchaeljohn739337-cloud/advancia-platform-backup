@@ -9,66 +9,59 @@
 ### ✅ Already Implemented (85% Complete)
 
 1. **Withdrawal Flow** ✅
-
-   - User withdrawal requests with address validation
-   - Admin approval/rejection workflow
-   - Balance locking on request creation
-   - Real-time Socket.IO notifications
-   - Transaction hash recording
-   - Multi-currency support (BTC, ETH, USDT, USD)
-   - Audit logging for all actions
+   -   User withdrawal requests with address validation
+   -   Admin approval/rejection workflow
+   -   Balance locking on request creation
+   -   Real-time Socket.IO notifications
+   -   Transaction hash recording
+   -   Multi-currency support (BTC, ETH, USDT, USD)
+   -   Audit logging for all actions
 
 2. **Payment Infrastructure** ✅
-
-   - Stripe integration with webhooks
-   - Cryptomus crypto payment gateway
-   - Admin wallet tracking (`AdminWalletTransaction`)
-   - User virtual balance system (USD/BTC/ETH/USDT)
-   - Payment verification and signature validation
+   -   Stripe integration with webhooks
+   -   Cryptomus crypto payment gateway
+   -   Admin wallet tracking (`AdminWalletTransaction`)
+   -   User virtual balance system (USD/BTC/ETH/USDT)
+   -   Payment verification and signature validation
 
 3. **Admin Control** ✅
-   - Admin dashboard with full transaction visibility
-   - User account management (freeze, ban, balance adjustment)
-   - Transaction override capabilities
-   - Comprehensive audit logs
+   -   Admin dashboard with full transaction visibility
+   -   User account management (freeze, ban, balance adjustment)
+   -   Transaction override capabilities
+   -   Comprehensive audit logs
 
 ### ⚠️ Missing Features (15% Gap)
 
 1. **Payment Session Management** ❌
-
-   - No `PaymentSession` model for tracking checkout flows
-   - Missing session-based redirects
-   - No expiry handling for abandoned payments
+   -   No `PaymentSession` model for tracking checkout flows
+   -   Missing session-based redirects
+   -   No expiry handling for abandoned payments
 
 2. **KYC System** ❌
-
-   - No tier-based limits (Level 0/1/2)
-   - Missing document upload/verification
-   - No withdrawal limits per KYC tier
+   -   No tier-based limits (Level 0/1/2)
+   -   Missing document upload/verification
+   -   No withdrawal limits per KYC tier
 
 3. **Fraud Detection** ❌
-
-   - No velocity checks (rate limiting per user)
-   - Missing IP reputation checks
-   - No failed payment monitoring
-   - No automatic account locking
+   -   No velocity checks (rate limiting per user)
+   -   Missing IP reputation checks
+   -   No failed payment monitoring
+   -   No automatic account locking
 
 4. **Transaction Fees** ❌
-
-   - Hardcoded withdrawal fees (1.5%)
-   - No configurable deposit fees
-   - Missing admin fee management UI
-   - No revenue tracking dashboard
+   -   Hardcoded withdrawal fees (1.5%)
+   -   No configurable deposit fees
+   -   Missing admin fee management UI
+   -   No revenue tracking dashboard
 
 5. **Internal Messaging** ❌
-
-   - No admin-user communication channel
-   - Missing ticket attachment system
+   -   No admin-user communication channel
+   -   Missing ticket attachment system
 
 6. **Enhanced Audit Trail** ❌
-   - Audit logs lack tamper-proof hashing
-   - No CSV/JSON export functionality
-   - Missing retention policy enforcement
+   -   Audit logs lack tamper-proof hashing
+   -   No CSV/JSON export functionality
+   -   Missing retention policy enforcement
 
 ---
 
@@ -115,9 +108,7 @@ router.post("/session", authenticateToken, async (req, res) => {
   const { amount, currency, paymentMethod } = req.body;
 
   // Generate unique session ID
-  const sessionId = `DEP-${Date.now()}-${randomBytes(3)
-    .toString("hex")
-    .toUpperCase()}`;
+  const sessionId = `DEP-${Date.now()}-${randomBytes(3).toString("hex").toUpperCase()}`;
 
   // Create session with 30-minute expiry
   const session = await prisma.paymentSession.create({
@@ -260,13 +251,7 @@ router.post(
     { name: "addressProof", maxCount: 1 },
   ]),
   async (req, res) => {
-    const {
-      firstName,
-      lastName,
-      dateOfBirth,
-      idDocumentType,
-      idDocumentNumber,
-    } = req.body;
+    const { firstName, lastName, dateOfBirth, idDocumentType, idDocumentNumber } = req.body;
     const files = req.files as Record<string, Express.Multer.File[]>;
 
     // Upload files to S3
@@ -323,43 +308,38 @@ router.post(
     });
 
     res.json({ success: true, kyc });
-  }
+  },
 );
 
 // PATCH /api/kyc/admin/:userId/verify - Admin approval
-router.patch(
-  "/admin/:userId/verify",
-  authenticateToken,
-  requireAdmin,
-  async (req, res) => {
-    const { approved, rejectionReason } = req.body;
+router.patch("/admin/:userId/verify", authenticateToken, requireAdmin, async (req, res) => {
+  const { approved, rejectionReason } = req.body;
 
-    const kyc = await prisma.kYCVerification.update({
-      where: { userId: req.params.userId },
-      data: approved
-        ? {
-            status: "approved",
-            verifiedAt: new Date(),
-            verifiedBy: req.user.userId,
-          }
-        : {
-            status: "rejected",
-            rejectedAt: new Date(),
-            rejectionReason,
-          },
+  const kyc = await prisma.kYCVerification.update({
+    where: { userId: req.params.userId },
+    data: approved
+      ? {
+          status: "approved",
+          verifiedAt: new Date(),
+          verifiedBy: req.user.userId,
+        }
+      : {
+          status: "rejected",
+          rejectedAt: new Date(),
+          rejectionReason,
+        },
+  });
+
+  // Update user tier
+  if (approved) {
+    await prisma.user.update({
+      where: { id: req.params.userId },
+      data: { kycLevel: kyc.kycLevel },
     });
-
-    // Update user tier
-    if (approved) {
-      await prisma.user.update({
-        where: { id: req.params.userId },
-        data: { kycLevel: kyc.kycLevel },
-      });
-    }
-
-    res.json({ success: true, kyc });
   }
-);
+
+  res.json({ success: true, kyc });
+});
 ```
 
 **Withdrawal Limit Enforcement** (modify `backend/src/routes/withdrawals.ts`):
@@ -388,9 +368,7 @@ if (dailyTotal > dailyLimit) {
     error: "Daily withdrawal limit exceeded",
     limit: dailyLimit,
     current: dailyTotal,
-    upgrade: `Verify your identity to increase limits (Level ${
-      (kyc?.kycLevel || 0) + 1
-    })`,
+    upgrade: `Verify your identity to increase limits (Level ${(kyc?.kycLevel || 0) + 1})`,
   });
 }
 ```
@@ -453,11 +431,7 @@ import axios from "axios";
 const prisma = new PrismaClient();
 
 // Velocity check - max 3 withdrawals per 24 hours
-export async function checkWithdrawalVelocity(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function checkWithdrawalVelocity(req: Request, res: Response, next: NextFunction) {
   const userId = req.user?.userId;
   if (!userId) return next();
 
@@ -476,9 +450,7 @@ export async function checkWithdrawalVelocity(
         userId,
         alertType: "velocity_exceeded",
         severity: "high",
-        description: `User attempted ${
-          recentWithdrawals + 1
-        } withdrawals in 24 hours`,
+        description: `User attempted ${recentWithdrawals + 1} withdrawals in 24 hours`,
         ipAddress: req.ip,
         actionTaken: "transaction_blocked",
       },
@@ -494,11 +466,7 @@ export async function checkWithdrawalVelocity(
 }
 
 // IP reputation check
-export async function checkIPReputation(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function checkIPReputation(req: Request, res: Response, next: NextFunction) {
   const ipAddress = req.ip || (req.headers["x-forwarded-for"] as string);
   if (!ipAddress) return next();
 
@@ -508,10 +476,7 @@ export async function checkIPReputation(
   });
 
   // Refresh if older than 7 days
-  if (
-    !ipRep ||
-    Date.now() - ipRep.lastChecked.getTime() > 7 * 24 * 60 * 60 * 1000
-  ) {
+  if (!ipRep || Date.now() - ipRep.lastChecked.getTime() > 7 * 24 * 60 * 60 * 1000) {
     try {
       // Use ipapi.co or similar service
       const response = await axios.get(`https://ipapi.co/${ipAddress}/json/`);
@@ -560,8 +525,7 @@ export async function checkIPReputation(
 
     return res.status(403).json({
       error: "Transaction blocked",
-      message:
-        "Your IP address has been flagged for security reasons. Contact support.",
+      message: "Your IP address has been flagged for security reasons. Contact support.",
     });
   }
 
@@ -569,10 +533,7 @@ export async function checkIPReputation(
 }
 
 // Failed payment monitoring
-export async function monitorFailedPayments(
-  userId: string,
-  paymentMethod: string
-) {
+export async function monitorFailedPayments(userId: string, paymentMethod: string) {
   const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const failedCount = await prisma.paymentSession.count({
     where: {
@@ -612,21 +573,12 @@ export async function monitorFailedPayments(
 **Apply Middleware** (in `backend/src/routes/withdrawals.ts`):
 
 ```typescript
-import {
-  checkWithdrawalVelocity,
-  checkIPReputation,
-} from "../middleware/fraudDetection";
+import { checkWithdrawalVelocity, checkIPReputation } from "../middleware/fraudDetection";
 
 // Add to withdrawal request route
-router.post(
-  "/request",
-  authenticateToken,
-  checkWithdrawalVelocity,
-  checkIPReputation,
-  async (req, res) => {
-    // ... existing withdrawal logic
-  }
-);
+router.post("/request", authenticateToken, checkWithdrawalVelocity, checkIPReputation, async (req, res) => {
+  // ... existing withdrawal logic
+});
 ```
 
 ---
@@ -688,7 +640,7 @@ const prisma = new PrismaClient();
 export async function calculateTransactionFee(
   feeType: string,
   currency: string,
-  amount: number
+  amount: number,
 ): Promise<{
   feePercent: number;
   flatFee: number;
@@ -742,17 +694,7 @@ export async function calculateTransactionFee(
   };
 }
 
-export async function recordFeeRevenue(
-  transactionId: string,
-  transactionType: string,
-  userId: string,
-  currency: string,
-  baseAmount: number,
-  fee: ReturnType<typeof calculateTransactionFee> extends Promise<infer T>
-    ? T
-    : never,
-  usdConversionRate: number = 1
-) {
+export async function recordFeeRevenue(transactionId: string, transactionType: string, userId: string, currency: string, baseAmount: number, fee: ReturnType<typeof calculateTransactionFee> extends Promise<infer T> ? T : never, usdConversionRate: number = 1) {
   await prisma.feeRevenue.create({
     data: {
       transactionId,
@@ -872,15 +814,7 @@ const withdrawal = await prisma.cryptoWithdrawal.create({
 });
 
 // Record fee revenue
-await recordFeeRevenue(
-  withdrawal.id,
-  "withdrawal",
-  userId,
-  cryptoType,
-  amount,
-  fee,
-  await getUSDConversionRate(cryptoType)
-);
+await recordFeeRevenue(withdrawal.id, "withdrawal", userId, cryptoType, amount, fee, await getUSDConversionRate(cryptoType));
 ```
 
 ---
@@ -926,18 +860,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function createAuditLog(data: {
-  userId?: string;
-  action: string;
-  resourceType: string;
-  resourceId: string;
-  changes?: object;
-  previousValues?: object;
-  newValues?: object;
-  metadata?: object;
-  ipAddress?: string;
-  userAgent?: string;
-}) {
+export async function createAuditLog(data: { userId?: string; action: string; resourceType: string; resourceId: string; changes?: object; previousValues?: object; newValues?: object; metadata?: object; ipAddress?: string; userAgent?: string }) {
   // Get previous log entry
   const previousLog = await prisma.auditLog.findFirst({
     orderBy: { createdAt: "desc" },
@@ -970,11 +893,7 @@ export async function createAuditLog(data: {
 }
 
 // Export audit logs to CSV
-export async function exportAuditLogs(
-  startDate: Date,
-  endDate: Date,
-  filters?: { userId?: string; action?: string; resourceType?: string }
-) {
+export async function exportAuditLogs(startDate: Date, endDate: Date, filters?: { userId?: string; action?: string; resourceType?: string }) {
   const logs = await prisma.auditLog.findMany({
     where: {
       createdAt: { gte: startDate, lte: endDate },
@@ -984,29 +903,10 @@ export async function exportAuditLogs(
   });
 
   // Convert to CSV
-  const headers = [
-    "Timestamp",
-    "User ID",
-    "Action",
-    "Resource Type",
-    "Resource ID",
-    "IP Address",
-    "Hash",
-  ];
-  const rows = logs.map((log) => [
-    log.createdAt.toISOString(),
-    log.userId || "system",
-    log.action,
-    log.resourceType,
-    log.resourceId,
-    log.ipAddress || "N/A",
-    log.hash || "N/A",
-  ]);
+  const headers = ["Timestamp", "User ID", "Action", "Resource Type", "Resource ID", "IP Address", "Hash"];
+  const rows = logs.map((log) => [log.createdAt.toISOString(), log.userId || "system", log.action, log.resourceType, log.resourceId, log.ipAddress || "N/A", log.hash || "N/A"]);
 
-  const csvContent = [
-    headers.join(","),
-    ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
-  ].join("\n");
+  const csvContent = [headers.join(","), ...rows.map((row) => row.map((cell) => `"${cell}"`).join(","))].join("\n");
 
   return csvContent;
 }
@@ -1040,27 +940,27 @@ AUDIT_LOG_RETENTION_DAYS=90
 
 ### Frontend Updates
 
-- Add KYC verification modal
-- Create fee calculator display
-- Implement payment session flow
-- Add fraud alert notifications
+-   Add KYC verification modal
+-   Create fee calculator display
+-   Implement payment session flow
+-   Add fraud alert notifications
 
 ### Admin Dashboard Enhancements
 
-- KYC review interface
-- Fee management panel
-- Fraud alert monitoring
-- Revenue analytics dashboard
+-   KYC review interface
+-   Fee management panel
+-   Fraud alert monitoring
+-   Revenue analytics dashboard
 
 ---
 
 ## 📊 Success Metrics
 
-- **Payment Session Success Rate**: Target 95%+
-- **KYC Approval Time**: <2 hours for Level 1, <24 hours for Level 2
-- **Fraud Detection Rate**: Block 99% of high-risk transactions
-- **Fee Revenue**: Track weekly/monthly totals
-- **Audit Log Integrity**: 100% tamper-proof verification
+-   **Payment Session Success Rate**: Target 95%+
+-   **KYC Approval Time**: <2 hours for Level 1, <24 hours for Level 2
+-   **Fraud Detection Rate**: Block 99% of high-risk transactions
+-   **Fee Revenue**: Track weekly/monthly totals
+-   **Audit Log Integrity**: 100% tamper-proof verification
 
 ---
 
@@ -1075,10 +975,10 @@ AUDIT_LOG_RETENTION_DAYS=90
 
 **This specification matches industry standards used by**:
 
-- Coinbase (crypto exchange)
-- Stripe (payment processor)
-- Revolut (fintech bank)
-- PayPal (payment platform)
-- Binance (crypto trading)
+-   Coinbase (crypto exchange)
+-   Stripe (payment processor)
+-   Revolut (fintech bank)
+-   PayPal (payment platform)
+-   Binance (crypto trading)
 
 All features are production-ready and scalable to 100K+ users. 🚀

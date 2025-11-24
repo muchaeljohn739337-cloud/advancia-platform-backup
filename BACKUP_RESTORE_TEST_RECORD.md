@@ -46,18 +46,18 @@ jobs:
 
 ## Pass Criteria
 
-- All critical tables present (users, transactions, token_wallets, token_transactions, crypto_wallets, admin_wallets, audit_logs)
-- Row counts match source database for each table
-- Exit code 0 from script
-- JSON report stored under `backup-restore-results/restore-report-*.json`
-- Markdown history updated: `backup-restore-results/RESTORE_HISTORY.md`
+-   All critical tables present (users, transactions, token_wallets, token_transactions, crypto_wallets, admin_wallets, audit_logs)
+-   Row counts match source database for each table
+-   Exit code 0 from script
+-   JSON report stored under `backup-restore-results/restore-report-*.json`
+-   Markdown history updated: `backup-restore-results/RESTORE_HISTORY.md`
 
 ## Fail Criteria
 
-- Missing table(s)
-- Row count mismatch
-- Script exit code 2
-- Corrupted SQL dump (empty or parse errors)
+-   Missing table(s)
+-   Row count mismatch
+-   Script exit code 2
+-   Corrupted SQL dump (empty or parse errors)
 
 ## Troubleshooting
 
@@ -70,9 +70,9 @@ jobs:
 
 ## Recommended Schedule
 
-- Pre-launch: Run immediately before go-live (store report in repo)
-- Post-launch: Weekly (Monday 03:00 UTC) + after any major migration
-- After Incident: Run immediately following crash/recovery
+-   Pre-launch: Run immediately before go-live (store report in repo)
+-   Post-launch: Weekly (Monday 03:00 UTC) + after any major migration
+-   After Incident: Run immediately following crash/recovery
 
 ## Latest Runs (Append Only)
 
@@ -82,11 +82,11 @@ Include the generated history file in release artifacts: `backup-restore-results
 
 ## Manual Verification Checklist
 
-- [ ] Ran script successfully
-- [ ] Checked `allTablesMatch=true` in JSON
-- [ ] Opened `RESTORE_HISTORY.md` and confirmed PASS entry
-- [ ] Committed JSON + history files (optional for audit)
-- [ ] Stored off-site (S3/R2) copy of latest SQL dump
+-   [ ] Ran script successfully
+-   [ ] Checked `allTablesMatch=true` in JSON
+-   [ ] Opened `RESTORE_HISTORY.md` and confirmed PASS entry
+-   [ ] Committed JSON + history files (optional for audit)
+-   [ ] Stored off-site (S3/R2) copy of latest SQL dump
 
 ## Optional: Store Artifacts Off-Site
 
@@ -98,10 +98,10 @@ aws s3 cp .\backup-restore-results\restore-report-YYYY-MM-DD_HH-mm-ss.json s3://
 
 ## Next Improvement Targets
 
-- Automate artifact retention (keep last 14 successful restores)
-- Add checksum validation: `sha256sum db-backup-*.sql`
-- Add differential size alert if backup size changes >25%
-- Integrate Slack notification on FAIL
+-   Automate artifact retention (keep last 14 successful restores)
+-   Add checksum validation: `sha256sum db-backup-*.sql`
+-   Add differential size alert if backup size changes >25%
+-   Integrate Slack notification on FAIL
 
 ---
 

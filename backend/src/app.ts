@@ -1,7 +1,6 @@
-import express, { Request, Response, NextFunction } from 'express';
-import { helmetMiddleware } from './middleware/security';
-import cors from 'cors';
+import express, { NextFunction, Request, Response } from 'express';
 import { logger } from './logger';
+import { helmetMiddleware } from './middleware/security';
 
 // Initialize express app
 const app = express();

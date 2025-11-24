@@ -1,0 +1,60 @@
+# terraform.tfvars.example
+# Copy this file to terraform.tfvars and fill in your actual values
+# NEVER commit terraform.tfvars to version control!
+
+# Project Configuration
+project_name = "advancia-pay-ledger"
+environment  = "production"
+github_repo  = "muchaeljohn739337-cloud/-modular-saas-platform"
+
+# Vercel Configuration
+# Get your token from: https://vercel.com/account/tokens
+vercel_api_token = "your_vercel_api_token_here"
+vercel_team_id   = null # Optional: your team ID if using Vercel teams
+
+# Domain Configuration
+frontend_domain    = "advanciapayledger.com"
+backend_domain     = "api.advanciapayledger.com"
+frontend_subdomain = "@"
+backend_subdomain  = "api"
+
+# Cloudflare Configuration
+# Create token with Zone:Read and DNS:Edit permissions
+cloudflare_api_token = "your_cloudflare_api_token_here"
+cloudflare_zone      = "advanciapayledger.com"
+
+# Render Backend Configuration
+# Get the IP from your Render service settings
+render_backend_ip = "1.1.1.1"
+
+# PostgreSQL Configuration (Render PostgreSQL or local)
+postgres_host     = "dpg-xxxxx.oregon-postgres.render.com"
+postgres_port     = 5432
+postgres_database = "advancia"
+postgres_username = "advancia_user"
+postgres_password = "your_postgres_password_here"
+postgres_sslmode  = "require"
+
+# Stripe Configuration
+# Get from: https://dashboard.stripe.com/apikeys
+stripe_secret_key     = "sk_live_xxxxx"
+stripe_webhook_secret = "whsec_xxxxx"
+
+# Cryptomus Configuration
+# Get from: https://cryptomus.com/settings
+cryptomus_api_key     = "your_cryptomus_api_key"
+cryptomus_merchant_id = "your_merchant_id"
+
+# Email Configuration (Gmail SMTP)
+email_user     = "your-email@gmail.com"
+email_password = "your_app_password_here"
+smtp_host      = "smtp.gmail.com"
+smtp_port      = 587
+
+# Monitoring (Optional)
+sentry_dsn = "https://xxxxx@xxxxx.ingest.sentry.io/xxxxx"
+
+# Performance Tuning
+api_rate_limit            = 100
+backend_instance_count    = 2
+postgres_max_connections  = 100

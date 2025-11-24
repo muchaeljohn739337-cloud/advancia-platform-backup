@@ -100,39 +100,39 @@ docker exec -it advancia-postgres psql -U postgres -d advancia -f monitor_lockou
 
 ### quick-db-check.ps1
 
-- ✅ Real-time database status
-- ✅ Single-purpose queries (fast)
-- ✅ Reset functionality
-- ✅ Color-coded output
+-   ✅ Real-time database status
+-   ✅ Single-purpose queries (fast)
+-   ✅ Reset functionality
+-   ✅ Color-coded output
 
 ### monitor_lockout.sql
 
-- ✅ Complete security audit
-- ✅ 7 different views:
-  - Basic security state
-  - Lockout timing details
-  - 2FA status
-  - Backup codes
-  - Login history
-  - Recovery codes
-  - Security metrics
-- ✅ Formatted output with borders
-- ✅ Timestamp logging
+-   ✅ Complete security audit
+-   ✅ 7 different views:
+    -   Basic security state
+    -   Lockout timing details
+    -   2FA status
+    -   Backup codes
+    -   Login history
+    -   Recovery codes
+    -   Security metrics
+-   ✅ Formatted output with borders
+-   ✅ Timestamp logging
 
 ### test-lockout.ps1
 
-- ✅ Simulates failed attempts
-- ✅ Triggers lockout
-- ✅ Tests TOTP login
-- ✅ Interactive prompts
-- ✅ Multiple test paths
+-   ✅ Simulates failed attempts
+-   ✅ Triggers lockout
+-   ✅ Tests TOTP login
+-   ✅ Interactive prompts
+-   ✅ Multiple test paths
 
 ### run-sql-monitor.ps1
 
-- ✅ Wrapper for SQL script
-- ✅ Continuous monitoring mode
-- ✅ Configurable refresh
-- ✅ Easy to use
+-   ✅ Wrapper for SQL script
+-   ✅ Continuous monitoring mode
+-   ✅ Configurable refresh
+-   ✅ Easy to use
 
 ---
 
@@ -303,11 +303,11 @@ TOTP Secret: LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3
 
 ## 📚 Full Documentation
 
-- **DATABASE_VERIFICATION_GUIDE.md** - All SQL queries explained
-- **COMPLETE_TEST_WORKFLOW.md** - Step-by-step testing procedures
-- **ADMIN_2FA_SETUP.md** - 2FA setup and usage
-- **IMPLEMENTATION_COMPLETE.md** - Complete project summary
-- **API_TESTING_GUIDE.md** - API endpoint testing
+-   **DATABASE_VERIFICATION_GUIDE.md** - All SQL queries explained
+-   **COMPLETE_TEST_WORKFLOW.md** - Step-by-step testing procedures
+-   **ADMIN_2FA_SETUP.md** - 2FA setup and usage
+-   **IMPLEMENTATION_COMPLETE.md** - Complete project summary
+-   **API_TESTING_GUIDE.md** - API endpoint testing
 
 ---
 

@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ email }),
       });
       const data = await res.json();
-      
+
       if (data.success) {
         setSuccess(true);
       } else {
@@ -38,7 +38,10 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-        <Link href="/auth/login" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6">
+        <Link
+          href="/auth/login"
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
+        >
           <ArrowLeft size={20} className="mr-2" />
           Back to Login
         </Link>
@@ -87,7 +90,7 @@ export default function ForgotPasswordPage() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                Remember your password?{" "}
+                Remember your password?{' '}
                 <Link href="/auth/login" className="text-blue-600 hover:text-blue-800 font-medium">
                   Sign in
                 </Link>
@@ -101,8 +104,8 @@ export default function ForgotPasswordPage() {
             </div>
             <h2 className="text-2xl font-bold text-gray-800 mb-4">✅ Request Submitted!</h2>
             <p className="text-gray-600 mb-6">
-              Your password recovery request has been sent to the admin team. They will review it and
-              provide you with a new password shortly.
+              Your password recovery request has been sent to the admin team. They will review it
+              and provide you with a new password shortly.
             </p>
             <div className="text-sm text-gray-500 bg-blue-50 p-4 rounded-lg mb-6">
               <p className="font-medium mb-2">📧 What happens next?</p>
@@ -124,4 +127,3 @@ export default function ForgotPasswordPage() {
     </div>
   );
 }
-

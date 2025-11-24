@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 
 interface Message {
   id: string;
   consultationId: string;
   senderId: string;
-  senderType: "PATIENT" | "DOCTOR";
+  senderType: 'PATIENT' | 'DOCTOR';
   content: string;
   createdAt: string;
 }
@@ -42,19 +42,19 @@ export default function ConsultationPage() {
 
   const [consultation, setConsultation] = useState<Consultation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [error, setError] = useState('');
+  const [videoUrl, setVideoUrl] = useState('');
   const [showVideo, setShowVideo] = useState(false);
 
   const fetchConsultation = useCallback(async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const token = localStorage.getItem("token");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const token = localStorage.getItem('token');
 
       if (!token) {
-        throw new Error("Please login first");
+        throw new Error('Please login first');
       }
 
       const res = await fetch(`${apiUrl}/api/consultation/${consultationId}`, {
@@ -69,8 +69,7 @@ export default function ConsultationPage() {
       setConsultation(data.consultation);
       setMessages(data.consultation.messages || []);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch consultation";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch consultation';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -89,17 +88,17 @@ export default function ConsultationPage() {
     if (!newMessage.trim()) return;
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const token = localStorage.getItem("token");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const token = localStorage.getItem('token');
 
       if (!token) {
-        throw new Error("Please login first");
+        throw new Error('Please login first');
       }
 
       const res = await fetch(`${apiUrl}/api/consultation/message`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -113,31 +112,27 @@ export default function ConsultationPage() {
 
       // Add new message to list
       setMessages([...messages, data.message]);
-      setNewMessage("");
+      setNewMessage('');
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to send message";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
       alert(errorMessage);
     }
   };
 
   const handleStartVideo = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const token = localStorage.getItem("token");
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const token = localStorage.getItem('token');
 
       if (!token) {
-        throw new Error("Please login first");
+        throw new Error('Please login first');
       }
 
-      const res = await fetch(
-        `${apiUrl}/api/consultation/video/${consultationId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await fetch(`${apiUrl}/api/consultation/video/${consultationId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -145,8 +140,7 @@ export default function ConsultationPage() {
       setVideoUrl(data.videoUrl);
       setShowVideo(true);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to start video";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to start video';
       alert(errorMessage);
     }
   };
@@ -183,40 +177,33 @@ export default function ConsultationPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Consultation Header */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Consultation Details
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Consultation Details</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-600">Patient</p>
               <p className="font-medium text-gray-900">
                 {consultation.patient.firstName} {consultation.patient.lastName}
               </p>
-              <p className="text-sm text-gray-600">
-                {consultation.patient.email}
-              </p>
+              <p className="text-sm text-gray-600">{consultation.patient.email}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Doctor</p>
               <p className="font-medium text-gray-900">
-                Dr. {consultation.doctor.firstName}{" "}
-                {consultation.doctor.lastName}
+                Dr. {consultation.doctor.firstName} {consultation.doctor.lastName}
               </p>
-              <p className="text-sm text-gray-600">
-                {consultation.doctor.specialization}
-              </p>
+              <p className="text-sm text-gray-600">{consultation.doctor.specialization}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Status</p>
               <span
                 className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
-                  consultation.status === "COMPLETED"
-                    ? "bg-green-100 text-green-800"
-                    : consultation.status === "IN_PROGRESS"
-                    ? "bg-blue-100 text-blue-800"
-                    : consultation.status === "CANCELLED"
-                    ? "bg-red-100 text-red-800"
-                    : "bg-yellow-100 text-yellow-800"
+                  consultation.status === 'COMPLETED'
+                    ? 'bg-green-100 text-green-800'
+                    : consultation.status === 'IN_PROGRESS'
+                      ? 'bg-blue-100 text-blue-800'
+                      : consultation.status === 'CANCELLED'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
                 }`}
               >
                 {consultation.status}
@@ -240,7 +227,7 @@ export default function ConsultationPage() {
               onClick={handleStartVideo}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
-              {showVideo ? "Hide Video" : "Start Video Call"}
+              {showVideo ? 'Hide Video' : 'Start Video Call'}
             </button>
           </div>
         </div>
@@ -270,9 +257,7 @@ export default function ConsultationPage() {
 
         {/* Chat Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Chat Messages
-          </h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Chat Messages</h2>
 
           {/* Messages List */}
           <div className="border rounded-lg p-4 mb-4 h-96 overflow-y-auto bg-gray-50">
@@ -286,20 +271,18 @@ export default function ConsultationPage() {
                   <div
                     key={msg.id}
                     className={`flex ${
-                      msg.senderType === "DOCTOR"
-                        ? "justify-start"
-                        : "justify-end"
+                      msg.senderType === 'DOCTOR' ? 'justify-start' : 'justify-end'
                     }`}
                   >
                     <div
                       className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                        msg.senderType === "DOCTOR"
-                          ? "bg-blue-100 text-blue-900"
-                          : "bg-green-100 text-green-900"
+                        msg.senderType === 'DOCTOR'
+                          ? 'bg-blue-100 text-blue-900'
+                          : 'bg-green-100 text-green-900'
                       }`}
                     >
                       <p className="text-xs font-semibold mb-1">
-                        {msg.senderType === "DOCTOR" ? "Doctor" : "Patient"}
+                        {msg.senderType === 'DOCTOR' ? 'Doctor' : 'Patient'}
                       </p>
                       <p className="text-sm">{msg.content}</p>
                       <p className="text-xs text-gray-600 mt-1">

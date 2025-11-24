@@ -1,24 +1,39 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import SidebarLayout from "@/components/SidebarLayout";
-import Logo from "@/components/Logo";
-import DebitCard from "@/components/DebitCard";
-import MedBeds from "@/components/MedBeds";
-import CryptoRecovery from "@/components/CryptoRecovery";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { CreditCard, Activity, Shield, TrendingUp } from "lucide-react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from 'react';
+import SidebarLayout from '@/components/SidebarLayout';
+import Logo from '@/components/Logo';
+import DebitCard from '@/components/DebitCard';
+import MedBeds from '@/components/MedBeds';
+import CryptoRecovery from '@/components/CryptoRecovery';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { CreditCard, Activity, Shield, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function FeaturesPage() {
-  const [activeTab, setActiveTab] = useState<"cards" | "medbeds" | "crypto">("cards");
+  const [activeTab, setActiveTab] = useState<'cards' | 'medbeds' | 'crypto'>('cards');
   const [isLoading, setIsLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
 
   const tabs = [
-    { id: "cards" as const, label: "Debit Cards", icon: CreditCard, color: "from-blue-600 to-purple-600" },
-    { id: "medbeds" as const, label: "Med Beds", icon: Activity, color: "from-purple-600 to-pink-600" },
-    { id: "crypto" as const, label: "Crypto Recovery", icon: Shield, color: "from-green-600 to-emerald-600" },
+    {
+      id: 'cards' as const,
+      label: 'Debit Cards',
+      icon: CreditCard,
+      color: 'from-blue-600 to-purple-600',
+    },
+    {
+      id: 'medbeds' as const,
+      label: 'Med Beds',
+      icon: Activity,
+      color: 'from-purple-600 to-pink-600',
+    },
+    {
+      id: 'crypto' as const,
+      label: 'Crypto Recovery',
+      icon: Shield,
+      color: 'from-green-600 to-emerald-600',
+    },
   ];
 
   // Initial page load
@@ -30,7 +45,7 @@ export default function FeaturesPage() {
   }, []);
 
   // Handle tab change with loading
-  const handleTabChange = (tabId: "cards" | "medbeds" | "crypto") => {
+  const handleTabChange = (tabId: 'cards' | 'medbeds' | 'crypto') => {
     if (tabId !== activeTab) {
       setIsLoading(true);
       setTimeout(() => {
@@ -79,8 +94,8 @@ export default function FeaturesPage() {
                 className={`flex items-center gap-3 px-6 py-4 rounded-xl font-semibold transition-all ${
                   activeTab === tab.id
                     ? `bg-gradient-to-r ${tab.color} text-white shadow-lg`
-                    : "bg-white text-slate-700 border-2 border-slate-200 hover:border-slate-300"
-                } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                    : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-slate-300'
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <tab.icon size={20} />
                 <span>{tab.label}</span>
@@ -99,7 +114,7 @@ export default function FeaturesPage() {
                   transition={{
                     duration: 1.5,
                     repeat: Infinity,
-                    ease: "linear"
+                    ease: 'linear',
                   }}
                 />
                 {/* Spinning Triangle */}
@@ -109,13 +124,13 @@ export default function FeaturesPage() {
                   transition={{
                     duration: 2,
                     repeat: Infinity,
-                    ease: "linear"
+                    ease: 'linear',
                   }}
                 >
-                  <div 
+                  <div
                     className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-b-[35px] border-b-indigo-600"
                     style={{
-                      filter: "drop-shadow(0 0 10px rgba(79, 70, 229, 0.5))"
+                      filter: 'drop-shadow(0 0 10px rgba(79, 70, 229, 0.5))',
                     }}
                   />
                 </motion.div>
@@ -124,12 +139,12 @@ export default function FeaturesPage() {
                   className="absolute inset-0 m-auto w-3 h-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"
                   animate={{
                     scale: [1, 1.5, 1],
-                    opacity: [1, 0.5, 1]
+                    opacity: [1, 0.5, 1],
                   }}
                   transition={{
                     duration: 1.5,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: 'easeInOut',
                   }}
                 />
               </div>
@@ -143,9 +158,9 @@ export default function FeaturesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {activeTab === "cards" && <DebitCard />}
-            {activeTab === "medbeds" && <MedBeds />}
-            {activeTab === "crypto" && <CryptoRecovery />}
+            {activeTab === 'cards' && <DebitCard />}
+            {activeTab === 'medbeds' && <MedBeds />}
+            {activeTab === 'crypto' && <CryptoRecovery />}
           </motion.div>
         </div>
       </div>

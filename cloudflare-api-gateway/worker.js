@@ -46,7 +46,7 @@ export default {
       if (!authResult.valid) {
         return jsonResponse(
           { error: "Unauthorized", message: authResult.error },
-          401
+          401,
         );
       }
 
@@ -54,7 +54,7 @@ export default {
       const rateLimitResult = await checkRateLimit(
         request,
         env,
-        authResult.user
+        authResult.user,
       );
       if (!rateLimitResult.allowed) {
         return jsonResponse(
@@ -63,7 +63,7 @@ export default {
             limit: rateLimitResult.limit,
             reset: rateLimitResult.reset,
           },
-          429
+          429,
         );
       }
 
@@ -84,7 +84,7 @@ export default {
       console.error("Gateway error:", error);
       return jsonResponse(
         { error: "Internal server error", message: error.message },
-        500
+        500,
       );
     }
   },
@@ -133,7 +133,7 @@ async function checkRateLimit(request, env, user) {
   const limit = RATE_LIMITS[tier] || RATE_LIMITS.anonymous;
 
   const key = `rate_limit:${identifier}:${Math.floor(
-    Date.now() / (limit.window * 1000)
+    Date.now() / (limit.window * 1000),
   )}`;
 
   try {
@@ -183,7 +183,7 @@ async function handleDashboardAggregation(request, env, user) {
         }).then((r) => r.json()),
 
         fetch(
-          `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd`
+          `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd`,
         ).then((r) => r.json()),
 
         fetch(`${env.BACKEND_URL}/api/trust-score/me`, {
@@ -210,7 +210,7 @@ async function handleDashboardAggregation(request, env, user) {
     console.error("Dashboard aggregation error:", error);
     return jsonResponse(
       { error: "Failed to fetch dashboard data", message: error.message },
-      500
+      500,
     );
   }
 }
@@ -244,11 +244,11 @@ async function handleCryptoProxy(request, env, user) {
     const [coinGecko, binance] = await Promise.all([
       fetch(
         `https://api.coingecko.com/api/v3/simple/price?ids=${getCoinGeckoId(
-          symbol
-        )}&vs_currencies=usd`
+          symbol,
+        )}&vs_currencies=usd`,
       ).then((r) => r.json()),
       fetch(
-        `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`
+        `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`,
       ).then((r) => r.json()),
     ]);
 
@@ -264,7 +264,7 @@ async function handleCryptoProxy(request, env, user) {
   } catch (error) {
     return jsonResponse(
       { error: "Failed to fetch crypto prices", message: error.message },
-      500
+      500,
     );
   }
 }
@@ -276,13 +276,13 @@ async function handlePricesProxy(request, env, user) {
   try {
     const [btcPrice, ethPrice, usdtPrice] = await Promise.all([
       fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
       ).then((r) => r.json()),
       fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd",
       ).then((r) => r.json()),
       fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd"
+        "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd",
       ).then((r) => r.json()),
     ]);
 
@@ -298,7 +298,7 @@ async function handlePricesProxy(request, env, user) {
   } catch (error) {
     return jsonResponse(
       { error: "Failed to fetch prices", message: error.message },
-      500
+      500,
     );
   }
 }
@@ -352,7 +352,7 @@ async function proxyToBackend(request, env, user) {
   } catch (error) {
     return jsonResponse(
       { error: "Backend proxy failed", message: error.message },
-      502
+      502,
     );
   }
 }
@@ -381,7 +381,7 @@ async function proxyToStripe(request, env, user) {
   } catch (error) {
     return jsonResponse(
       { error: "Stripe proxy failed", message: error.message },
-      502
+      502,
     );
   }
 }
@@ -411,7 +411,7 @@ async function proxyToCryptomus(request, env, user) {
   } catch (error) {
     return jsonResponse(
       { error: "Cryptomus proxy failed", message: error.message },
-      502
+      502,
     );
   }
 }
@@ -423,7 +423,7 @@ function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: addCORSHeaders(
-      new Headers({ "Content-Type": "application/json" })
+      new Headers({ "Content-Type": "application/json" }),
     ),
   });
 }
@@ -440,7 +440,7 @@ function addCORSHeaders(headers) {
   newHeaders.set("Access-Control-Allow-Origin", "*");
   newHeaders.set(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
+    "GET, POST, PUT, DELETE, OPTIONS",
   );
   newHeaders.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   newHeaders.set("Access-Control-Max-Age", "86400");

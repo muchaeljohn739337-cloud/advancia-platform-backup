@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface Balance {
   usdBalance: number;
@@ -38,8 +38,8 @@ export default function BalanceOverview() {
 
   const fetchBalances = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       // Fetch user data
       const userResponse = await fetch(`/api/users/${userId}`, {
@@ -61,10 +61,10 @@ export default function BalanceOverview() {
       };
 
       tokensData.forEach((token: TokenBalance) => {
-        if (token.tokenType === "BTC") tokenBalances.btcBalance = parseFloat(token.balance);
-        if (token.tokenType === "ETH") tokenBalances.ethBalance = parseFloat(token.balance);
-        if (token.tokenType === "USDT") tokenBalances.usdtBalance = parseFloat(token.balance);
-        if (token.tokenType === "LTC") tokenBalances.ltcBalance = parseFloat(token.balance);
+        if (token.tokenType === 'BTC') tokenBalances.btcBalance = parseFloat(token.balance);
+        if (token.tokenType === 'ETH') tokenBalances.ethBalance = parseFloat(token.balance);
+        if (token.tokenType === 'USDT') tokenBalances.usdtBalance = parseFloat(token.balance);
+        if (token.tokenType === 'LTC') tokenBalances.ltcBalance = parseFloat(token.balance);
       });
 
       setBalances({
@@ -72,7 +72,7 @@ export default function BalanceOverview() {
         ...tokenBalances,
       });
     } catch (error) {
-      console.error("Error fetching balances:", error);
+      console.error('Error fetching balances:', error);
     } finally {
       setLoading(false);
     }
@@ -80,16 +80,16 @@ export default function BalanceOverview() {
 
   const fetchPrices = async () => {
     try {
-      const response = await fetch("/api/crypto/prices");
+      const response = await fetch('/api/crypto/prices');
       const data = await response.json();
-      
+
       const priceMap: Record<string, number> = {};
       data.forEach((item: PriceData) => {
         priceMap[item.symbol] = parseFloat(item.price);
       });
       setPrices(priceMap);
     } catch (error) {
-      console.error("Error fetching prices:", error);
+      console.error('Error fetching prices:', error);
     }
   };
 
@@ -98,7 +98,7 @@ export default function BalanceOverview() {
     const ethValue = balances.ethBalance * (prices.ETH || 0);
     const usdtValue = balances.usdtBalance * (prices.USDT || 1);
     const ltcValue = balances.ltcBalance * (prices.LTC || 0);
-    
+
     return balances.usdBalance + btcValue + ethValue + usdtValue + ltcValue;
   };
 
@@ -106,48 +106,48 @@ export default function BalanceOverview() {
 
   const balanceCards = [
     {
-      name: "USD Balance",
-      symbol: "USD",
+      name: 'USD Balance',
+      symbol: 'USD',
       balance: balances.usdBalance,
       value: balances.usdBalance,
-      color: "bg-green-500",
-      icon: "💵",
+      color: 'bg-green-500',
+      icon: '💵',
       decimals: 2,
     },
     {
-      name: "Bitcoin",
-      symbol: "BTC",
+      name: 'Bitcoin',
+      symbol: 'BTC',
       balance: balances.btcBalance,
       value: balances.btcBalance * (prices.BTC || 0),
-      color: "bg-orange-500",
-      icon: "₿",
+      color: 'bg-orange-500',
+      icon: '₿',
       decimals: 8,
     },
     {
-      name: "Ethereum",
-      symbol: "ETH",
+      name: 'Ethereum',
+      symbol: 'ETH',
       balance: balances.ethBalance,
       value: balances.ethBalance * (prices.ETH || 0),
-      color: "bg-blue-500",
-      icon: "Ξ",
+      color: 'bg-blue-500',
+      icon: 'Ξ',
       decimals: 8,
     },
     {
-      name: "Tether",
-      symbol: "USDT",
+      name: 'Tether',
+      symbol: 'USDT',
       balance: balances.usdtBalance,
       value: balances.usdtBalance * (prices.USDT || 1),
-      color: "bg-teal-500",
-      icon: "₮",
+      color: 'bg-teal-500',
+      icon: '₮',
       decimals: 6,
     },
     {
-      name: "Litecoin",
-      symbol: "LTC",
+      name: 'Litecoin',
+      symbol: 'LTC',
       balance: balances.ltcBalance,
       value: balances.ltcBalance * (prices.LTC || 0),
-      color: "bg-gray-500",
-      icon: "Ł",
+      color: 'bg-gray-500',
+      icon: 'Ł',
       decimals: 8,
     },
   ];
@@ -188,12 +188,12 @@ export default function BalanceOverview() {
           >
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  {card.name}
-                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{card.name}</p>
                 <p className="text-xs text-gray-400 dark:text-gray-500">{card.symbol}</p>
               </div>
-              <div className={`${card.color} w-12 h-12 rounded-full flex items-center justify-center text-2xl text-white`}>
+              <div
+                className={`${card.color} w-12 h-12 rounded-full flex items-center justify-center text-2xl text-white`}
+              >
                 {card.icon}
               </div>
             </div>
@@ -201,18 +201,16 @@ export default function BalanceOverview() {
             <div className="space-y-2">
               <div>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {card.symbol === "USD" 
+                  {card.symbol === 'USD'
                     ? `$${card.balance.toFixed(card.decimals)}`
                     : card.balance.toFixed(card.decimals)}
                 </p>
-                {card.symbol !== "USD" && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {card.symbol}
-                  </p>
+                {card.symbol !== 'USD' && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{card.symbol}</p>
                 )}
               </div>
 
-              {card.symbol !== "USD" && (
+              {card.symbol !== 'USD' && (
                 <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
                   <p className="text-xs text-gray-500 dark:text-gray-400">USD Value</p>
                   <p className="text-lg font-semibold text-gray-900 dark:text-white">

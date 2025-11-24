@@ -10,6 +10,7 @@
 ## 📋 Prerequisites Check
 
 ### ✅ What You Have
+
 - Windows with PowerShell
 - WSL2 with Ubuntu-24.04 (Running)
 - Docker Desktop (Running)
@@ -17,6 +18,7 @@
 - Node.js capable environment
 
 ### ⏭️ What We'll Do
+
 1. Copy project to WSL home directory
 2. Install Node.js & npm in WSL
 3. Configure Git in WSL
@@ -316,7 +318,7 @@ cd ~/projects/-modular-saas-platform
 # Go to backend
 backend
 
-# Go to frontend  
+# Go to frontend
 frontend
 
 # Install all dependencies
@@ -338,6 +340,7 @@ gitstatus
 ## 🔍 Troubleshooting WSL Setup
 
 ### Issue: WSL is slow
+
 ```bash
 # Solution: Ensure project is IN WSL, not on Windows disk
 # ✅ Good: ~/projects/-modular-saas-platform
@@ -349,6 +352,7 @@ pwd
 ```
 
 ### Issue: npm commands slow
+
 ```bash
 # Solution: Move to WSL filesystem
 cd ~/projects/-modular-saas-platform
@@ -358,6 +362,7 @@ cd ~/projects/-modular-saas-platform
 ```
 
 ### Issue: Git permission denied
+
 ```bash
 # Solution: Set correct SSH permissions
 chmod 600 ~/.ssh/id_ed25519
@@ -368,6 +373,7 @@ ssh -T git@github.com
 ```
 
 ### Issue: VS Code can't find files
+
 ```bash
 # Solution: Close VS Code, then from WSL terminal:
 code ~/projects/-modular-saas-platform
@@ -376,6 +382,7 @@ code ~/projects/-modular-saas-platform
 ```
 
 ### Issue: Node/npm not found
+
 ```bash
 # Solution: Verify installation
 which node
@@ -487,6 +494,7 @@ code .                # Should open in WSL mode
 ## 🎯 Final Steps
 
 ### 1. Update Git Remote (if needed)
+
 ```bash
 cd ~/projects/-modular-saas-platform
 
@@ -501,12 +509,14 @@ git remote set-url origin git@github.com:pdtribe181-prog/-modular-saas-platform.
 ```
 
 ### 2. Sync Latest Changes
+
 ```bash
 git fetch origin
 git pull origin main
 ```
 
 ### 3. Create Development Branch (optional)
+
 ```bash
 git checkout -b development
 ```
@@ -515,16 +525,16 @@ git checkout -b development
 
 ## 📊 WSL vs Windows Comparison
 
-| Feature | Windows | WSL2 |
-|---------|---------|------|
-| npm speed | Medium | ✅ Fast |
-| Git speed | Medium | ✅ Fast |
-| File operations | Medium | ✅ Fast |
-| Terminal | CMD/PowerShell | ✅ Bash |
-| Docker | Separate install | ✅ Native |
-| Linux tools | ❌ No | ✅ Yes |
-| Production-like | ❌ No | ✅ Yes |
-| Development experience | Medium | ✅ Excellent |
+| Feature                | Windows          | WSL2         |
+| ---------------------- | ---------------- | ------------ |
+| npm speed              | Medium           | ✅ Fast      |
+| Git speed              | Medium           | ✅ Fast      |
+| File operations        | Medium           | ✅ Fast      |
+| Terminal               | CMD/PowerShell   | ✅ Bash      |
+| Docker                 | Separate install | ✅ Native    |
+| Linux tools            | ❌ No            | ✅ Yes       |
+| Production-like        | ❌ No            | ✅ Yes       |
+| Development experience | Medium           | ✅ Excellent |
 
 **Recommendation:** Use WSL for development, Windows for general use
 
@@ -542,6 +552,7 @@ git checkout -b development
 ## 🎊 You're Ready!
 
 After following this guide:
+
 - ✅ Project is in WSL
 - ✅ All tools installed
 - ✅ Git configured with SSH
@@ -549,6 +560,7 @@ After following this guide:
 - ✅ Ready to develop!
 
 **Next Steps:**
+
 1. Run setup script or follow steps manually
 2. Verify everything works
 3. Continue with Step 2 deployment (DNS & SSL)

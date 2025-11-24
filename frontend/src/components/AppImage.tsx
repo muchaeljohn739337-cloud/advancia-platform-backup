@@ -1,5 +1,5 @@
-"use client";
-import Image from "next/image";
+'use client';
+import Image from 'next/image';
 
 interface AppImageProps {
   src: string;
@@ -17,7 +17,7 @@ export default function AppImage({
   height = 300,
 }: AppImageProps) {
   return (
-    <div className={`relative ${className || ""}`}>
+    <div className={`relative ${className || ''}`}>
       <Image
         src={src}
         alt={alt}

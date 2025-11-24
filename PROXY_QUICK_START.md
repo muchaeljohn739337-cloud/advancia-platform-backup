@@ -17,11 +17,11 @@ docker run -d --name socks5-proxy -p 1080:1080 serjs/go-socks5-proxy
 
 **Configuration:**
 
-- Type: SOCKS5
-- Host: 127.0.0.1
-- Port: 1080
-- Auth: None
-- Cost: FREE
+-   Type: SOCKS5
+-   Host: 127.0.0.1
+-   Port: 1080
+-   Auth: None
+-   Cost: FREE
 
 ### Option 2: Residential Proxy (For Production/Testing)
 
@@ -34,10 +34,10 @@ docker run -d --name socks5-proxy -p 1080:1080 serjs/go-socks5-proxy
 
 **Recommended Providers:**
 
-- **IPRoyal**: $14/month (2GB) - Budget option
-- **Smartproxy**: $75/month (8GB) - Good balance
-- **Oxylabs**: $300/month (25GB) - Professional
-- **Bright Data**: $500/month (40GB) - Enterprise
+-   **IPRoyal**: $14/month (2GB) - Budget option
+-   **Smartproxy**: $75/month (8GB) - Good balance
+-   **Oxylabs**: $300/month (25GB) - Professional
+-   **Bright Data**: $500/month (40GB) - Enterprise
 
 ---
 
@@ -45,12 +45,12 @@ docker run -d --name socks5-proxy -p 1080:1080 serjs/go-socks5-proxy
 
 ### Chrome/Edge (Quick Setup)
 
-1. Install FoxyProxy extension: https://chrome.google.com/webstore
+1. Install FoxyProxy extension: <https://chrome.google.com/webstore>
 2. Add proxy configuration:
-   - **Title**: Advancia Dev
-   - **Type**: SOCKS5
-   - **Host**: 127.0.0.1
-   - **Port**: 1080
+   -   **Title**: Advancia Dev
+   -   **Type**: SOCKS5
+   -   **Host**: 127.0.0.1
+   -   **Port**: 1080
 
 ### Firefox (Quick Setup)
 
@@ -161,10 +161,10 @@ docker restart socks5-proxy
 
 ## 📚 Full Documentation
 
-- **Complete Guide**: [PROXY_CONFIGURATION_GUIDE.md](./PROXY_CONFIGURATION_GUIDE.md)
-- **Backend Code**: `backend/src/utils/proxyClient.ts`
-- **Test Script**: `scripts/test-proxy.ps1`
-- **Setup Script**: `scripts/setup-proxy.ps1`
+-   **Complete Guide**: [PROXY_CONFIGURATION_GUIDE.md](./PROXY_CONFIGURATION_GUIDE.md)
+-   **Backend Code**: `backend/src/utils/proxyClient.ts`
+-   **Test Script**: `scripts/test-proxy.ps1`
+-   **Setup Script**: `scripts/setup-proxy.ps1`
 
 ---
 
@@ -172,21 +172,21 @@ docker restart socks5-proxy
 
 ### Free/Development
 
-- **Docker SOCKS5**: FREE (included in setup script)
-- **SSH Tunnel**: FREE (requires SSH server)
+-   **Docker SOCKS5**: FREE (included in setup script)
+-   **SSH Tunnel**: FREE (requires SSH server)
 
 ### Residential Proxies
 
-- **IPRoyal**: https://iproyal.com/ ($14/month)
-- **Smartproxy**: https://smartproxy.com/ ($75/month)
-- **Oxylabs**: https://oxylabs.io/ ($300/month)
-- **Bright Data**: https://brightdata.com/ ($500/month)
+-   **IPRoyal**: <https://iproyal.com/> ($14/month)
+-   **Smartproxy**: <https://smartproxy.com/> ($75/month)
+-   **Oxylabs**: <https://oxylabs.io/> ($300/month)
+-   **Bright Data**: <https://brightdata.com/> ($500/month)
 
 ### Tools
 
-- **FoxyProxy**: https://getfoxyproxy.org/
-- **3proxy**: https://github.com/3proxy/3proxy
-- **Dante**: http://www.inet.no/dante/
+-   **FoxyProxy**: <https://getfoxyproxy.org/>
+-   **3proxy**: <https://github.com/3proxy/3proxy>
+-   **Dante**: <http://www.inet.no/dante/>
 
 ---
 
@@ -223,33 +223,33 @@ docker rm socks5-proxy                       # Remove
 
 ### Development
 
-- Bypass corporate firewalls
-- Test API rate limiting
-- Debug geolocation features
+-   Bypass corporate firewalls
+-   Test API rate limiting
+-   Debug geolocation features
 
 ### Security Testing
 
-- Penetration testing with rotating IPs
-- Security scans without exposing origin
-- Test WAF rules and rate limiting
+-   Penetration testing with rotating IPs
+-   Security scans without exposing origin
+-   Test WAF rules and rate limiting
 
 ### Production
 
-- Webhook delivery through proxies
-- External API calls with IP whitelisting
-- Compliance testing in different regions
+-   Webhook delivery through proxies
+-   External API calls with IP whitelisting
+-   Compliance testing in different regions
 
 ---
 
 ## ✅ Checklist
 
-- [ ] Install Docker (for local proxy)
-- [ ] Run `.\scripts\setup-proxy.ps1 -Method docker`
-- [ ] Update `backend/.env` with proxy settings
-- [ ] Test with `.\scripts\test-proxy.ps1`
-- [ ] Configure browser proxy (FoxyProxy)
-- [ ] Restart backend: `cd backend && npm run dev`
-- [ ] Verify proxy working: Check IP change
+-   [ ] Install Docker (for local proxy)
+-   [ ] Run `.\scripts\setup-proxy.ps1 -Method docker`
+-   [ ] Update `backend/.env` with proxy settings
+-   [ ] Test with `.\scripts\test-proxy.ps1`
+-   [ ] Configure browser proxy (FoxyProxy)
+-   [ ] Restart backend: `cd backend && npm run dev`
+-   [ ] Verify proxy working: Check IP change
 
 ---
 

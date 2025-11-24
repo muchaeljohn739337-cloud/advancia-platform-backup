@@ -10,8 +10,8 @@ npm run template:build
 
 This generates:
 
-- `templates/template.js` (from template.ts)
-- `templates/template.css` (minified from template.scss)
+-   `templates/template.js` (from template.ts)
+-   `templates/template.css` (minified from template.scss)
 
 ### 2️⃣ Open in Browser
 
@@ -23,15 +23,15 @@ This generates:
 npm run template:serve
 ```
 
-Opens http://localhost:8080
+Opens <http://localhost:8080>
 
 ### 3️⃣ Test Features
 
-- ✅ Click moon/sun icon → Dark mode toggle
-- ✅ Click hamburger menu → Mobile navigation
-- ✅ Resize window → Responsive layout changes
-- ✅ Tab through page → Keyboard navigation works
-- ✅ Refresh page → Dark mode preference persists
+-   ✅ Click moon/sun icon → Dark mode toggle
+-   ✅ Click hamburger menu → Mobile navigation
+-   ✅ Resize window → Responsive layout changes
+-   ✅ Tab through page → Keyboard navigation works
+-   ✅ Refresh page → Dark mode preference persists
 
 ---
 
@@ -91,10 +91,7 @@ Then: `npm run template:build`
 Edit `templates/index.html` line 12:
 
 ```html
-<link
-  href="https://fonts.googleapis.com/css2?family=YOUR_FONT"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=YOUR_FONT" rel="stylesheet" />
 ```
 
 Update CSS variable:
@@ -133,17 +130,17 @@ Copy existing section structure from `index.html`:
 
 Target scores after optimization:
 
-- **Performance**: 95+ ⚡
-- **Accessibility**: 100 ♿
-- **Best Practices**: 95+
-- **SEO**: 100 🔍
+-   **Performance**: 95+ ⚡
+-   **Accessibility**: 100 ♿
+-   **Best Practices**: 95+
+-   **SEO**: 100 🔍
 
 Current template scores on local:
 
-- Performance: 98 (preload fonts)
-- Accessibility: 100 (ARIA, semantic HTML)
-- Best Practices: 100 (HTTPS not required locally)
-- SEO: 100 (meta tags, alt text)
+-   Performance: 98 (preload fonts)
+-   Accessibility: 100 (ARIA, semantic HTML)
+-   Best Practices: 100 (HTTPS not required locally)
+-   SEO: 100 (meta tags, alt text)
 
 ---
 

@@ -4,18 +4,18 @@
 
 ### Service Providers
 
-- **Render Support**: https://render.com/support (for database/backend)
-- **Vercel Support**: https://vercel.com/support (for frontend)
-- **Cloudflare Support**: https://www.cloudflare.com/support (for DNS/CDN)
-- **Stripe Support**: https://support.stripe.com (for payments)
-- **Sentry Support**: https://sentry.io/support (for monitoring)
-- **Digital Ocean Support**: https://www.digitalocean.com/support (for backups)
+-   **Render Support**: <https://render.com/support> (for database/backend)
+-   **Vercel Support**: <https://vercel.com/support> (for frontend)
+-   **Cloudflare Support**: <https://www.cloudflare.com/support> (for DNS/CDN)
+-   **Stripe Support**: <https://support.stripe.com> (for payments)
+-   **Sentry Support**: <https://sentry.io/support> (for monitoring)
+-   **Digital Ocean Support**: <https://www.digitalocean.com/support> (for backups)
 
 ### Critical Team Contacts
 
-- **Primary Admin**: [Add email/phone]
-- **Technical Lead**: [Add email/phone]
-- **Database Admin**: [Add email/phone]
+-   **Primary Admin**: [Add email/phone]
+-   **Technical Lead**: [Add email/phone]
+-   **Database Admin**: [Add email/phone]
 
 ---
 
@@ -25,9 +25,9 @@
 
 ✅ **GitHub Actions**: Nightly backups at midnight UTC
 
-- File: `.github/workflows/backup-and-migrate.yml`
-- Destination: Digital Ocean Spaces (S3-compatible)
-- Retention: 30 days
+-   File: `.github/workflows/backup-and-migrate.yml`
+-   Destination: Digital Ocean Spaces (S3-compatible)
+-   Retention: 30 days
 
 ### 2. Manual Backup Before Major Changes
 
@@ -42,13 +42,13 @@ npm run db:backup
 
 Required secrets to backup:
 
-- `DATABASE_URL`
-- `JWT_SECRET` and `JWT_REFRESH_SECRET`
-- `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`
-- `WALLET_ENCRYPTION_KEY` and `WALLET_MASTER_SEED`
-- `ADMIN_BTC_WALLET_ADDRESS`, `ADMIN_ETH_WALLET_ADDRESS`
-- `SENTRY_DSN`
-- All other secrets from `.env.production.template`
+-   `DATABASE_URL`
+-   `JWT_SECRET` and `JWT_REFRESH_SECRET`
+-   `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET`
+-   `WALLET_ENCRYPTION_KEY` and `WALLET_MASTER_SEED`
+-   `ADMIN_BTC_WALLET_ADDRESS`, `ADMIN_ETH_WALLET_ADDRESS`
+-   `SENTRY_DSN`
+-   All other secrets from `.env.production.template`
 
 ---
 
@@ -58,9 +58,9 @@ Required secrets to backup:
 
 #### Detection
 
-- Database connection errors in logs
-- Sentry alerts for database errors
-- Users unable to login/access data
+-   Database connection errors in logs
+-   Sentry alerts for database errors
+-   Users unable to login/access data
 
 #### Recovery Steps
 
@@ -87,9 +87,9 @@ aws s3 cp s3://advancia-backups/backup-YYYY-MM-DD.sql ./backup.sql --endpoint-ur
 
 4. **Create new database instance**
 
-- Go to Render dashboard → PostgreSQL
-- Create new database (or use backup/restore feature)
-- Copy new `DATABASE_URL`
+-   Go to Render dashboard → PostgreSQL
+-   Create new database (or use backup/restore feature)
+-   Copy new `DATABASE_URL`
 
 5. **Restore backup**
 
@@ -106,8 +106,8 @@ npm run db:verify
 
 6. **Update environment variables**
 
-- Render: Update `DATABASE_URL` in backend service
-- Restart backend service
+-   Render: Update `DATABASE_URL` in backend service
+-   Restart backend service
 
 7. **Verify restoration**
 
@@ -127,16 +127,16 @@ npx prisma studio
 
 #### Detection
 
-- Health check failures (`/api/health`)
-- Sentry alerts for server errors
-- Frontend shows connection errors
+-   Health check failures (`/api/health`)
+-   Sentry alerts for server errors
+-   Frontend shows connection errors
 
 #### Recovery Steps
 
 1. **Check Render dashboard**
 
-- View logs for error messages
-- Check if service crashed or suspended
+-   View logs for error messages
+-   Check if service crashed or suspended
 
 2. **Common fixes**
 
@@ -154,7 +154,7 @@ npx prisma studio
 
 3. **Manual restart**
 
-- Render dashboard → Your service → Manual Deploy → Deploy latest commit
+-   Render dashboard → Your service → Manual Deploy → Deploy latest commit
 
 4. **Rollback if needed**
 
@@ -174,27 +174,27 @@ git push origin main
 
 #### Detection
 
-- Domain not resolving
-- SSL certificate errors
-- "DNS_PROBE_FINISHED_NXDOMAIN" errors
+-   Domain not resolving
+-   SSL certificate errors
+-   "DNS_PROBE_FINISHED_NXDOMAIN" errors
 
 #### Recovery Steps
 
 1. **Check Cloudflare dashboard**
 
-- Verify DNS records are present:
-  - `A` record: `@` → Render IP
-  - `CNAME` record: `api` → `your-backend.onrender.com`
+-   Verify DNS records are present:
+    -   `A` record: `@` → Render IP
+    -   `CNAME` record: `api` → `your-backend.onrender.com`
 
 2. **Verify domain registration**
 
-- Check domain hasn't expired
-- Renew if necessary
+-   Check domain hasn't expired
+-   Renew if necessary
 
 3. **Check SSL certificates**
 
-- Cloudflare: SSL/TLS → Full (strict) mode
-- Render: Auto-SSL should be enabled
+-   Cloudflare: SSL/TLS → Full (strict) mode
+-   Render: Auto-SSL should be enabled
 
 4. **Flush DNS cache** (for testing)
 
@@ -223,9 +223,9 @@ dig your-backend.onrender.com
 
 #### Detection
 
-- Unauthorized transactions
-- Unusual API activity
-- Security alerts from Stripe/payment providers
+-   Unauthorized transactions
+-   Unusual API activity
+-   Security alerts from Stripe/payment providers
 
 #### Recovery Steps
 
@@ -245,9 +245,9 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 2. **Update all environment variables**
 
-- Backend (Render): Update all secrets
-- Frontend (Vercel): Update `NEXTAUTH_SECRET`
-- Database: Rotate password if compromised
+-   Backend (Render): Update all secrets
+-   Frontend (Vercel): Update `NEXTAUTH_SECRET`
+-   Database: Rotate password if compromised
 
 3. **Force logout all users**
 
@@ -261,8 +261,8 @@ DELETE FROM sessions;
 
 4. **Notify users**
 
-- Send email about security incident
-- Require password reset for all users
+-   Send email about security incident
+-   Require password reset for all users
 
 5. **Audit logs**
 
@@ -282,17 +282,17 @@ ORDER BY "createdAt" DESC;
 
 #### Detection
 
-- Stripe webhook failures
-- Payment processing errors
-- User reports failed transactions
+-   Stripe webhook failures
+-   Payment processing errors
+-   User reports failed transactions
 
 #### Recovery Steps
 
 1. **Check Stripe dashboard**
 
-- View webhook logs
-- Verify webhook endpoint is reachable
-- Check webhook signing secret
+-   View webhook logs
+-   Verify webhook endpoint is reachable
+-   Check webhook signing secret
 
 2. **Update webhook endpoint**
 
@@ -341,26 +341,26 @@ curl https://api.your-domain.com/api/admin/stats
 
 ### 2. Critical Flows
 
-- [ ] User login works
-- [ ] Payment processing works
-- [ ] Crypto withdrawal requests work
-- [ ] Email notifications send
-- [ ] Admin dashboard accessible
+-   [ ] User login works
+-   [ ] Payment processing works
+-   [ ] Crypto withdrawal requests work
+-   [ ] Email notifications send
+-   [ ] Admin dashboard accessible
 
 ### 3. Monitoring
 
-- [ ] Sentry receiving events
-- [ ] Logs showing in Render
-- [ ] No critical errors in console
+-   [ ] Sentry receiving events
+-   [ ] Logs showing in Render
+-   [ ] No critical errors in console
 
 ---
 
 ## 📚 Documentation References
 
-- **Render Database Docs**: https://render.com/docs/databases
-- **Prisma Backup Guide**: https://www.prisma.io/docs/guides/database/backup-and-restore
-- **Cloudflare DNS**: https://developers.cloudflare.com/dns/
-- **Stripe Webhooks**: https://stripe.com/docs/webhooks
+-   **Render Database Docs**: <https://render.com/docs/databases>
+-   **Prisma Backup Guide**: <https://www.prisma.io/docs/guides/database/backup-and-restore>
+-   **Cloudflare DNS**: <https://developers.cloudflare.com/dns/>
+-   **Stripe Webhooks**: <https://stripe.com/docs/webhooks>
 
 ---
 
@@ -368,49 +368,46 @@ curl https://api.your-domain.com/api/admin/stats
 
 ### Daily
 
-- [ ] Monitor Sentry for errors
-- [ ] Check automated backup success
+-   [ ] Monitor Sentry for errors
+-   [ ] Check automated backup success
 
 ### Weekly
 
-- [ ] Review database size and performance
-- [ ] Test backup restoration process
-- [ ] Audit user activity logs
+-   [ ] Review database size and performance
+-   [ ] Test backup restoration process
+-   [ ] Audit user activity logs
 
 ### Monthly
 
-- [ ] Rotate non-critical secrets
-- [ ] Update dependencies
-- [ ] Review and update this disaster recovery plan
+-   [ ] Rotate non-critical secrets
+-   [ ] Update dependencies
+-   [ ] Review and update this disaster recovery plan
 
 ---
 
 ## 📞 Incident Response Checklist
 
 1. **Identify severity**
-
-   - Critical: Service down, data loss, security breach
-   - High: Payment issues, degraded performance
-   - Medium: Non-critical features broken
-   - Low: Minor bugs, cosmetic issues
+   -   Critical: Service down, data loss, security breach
+   -   High: Payment issues, degraded performance
+   -   Medium: Non-critical features broken
+   -   Low: Minor bugs, cosmetic issues
 
 2. **Communicate**
-
-   - Internal: Notify team immediately
-   - External: Status page update (if applicable)
-   - Users: Email notification (for critical issues)
+   -   Internal: Notify team immediately
+   -   External: Status page update (if applicable)
+   -   Users: Email notification (for critical issues)
 
 3. **Document**
-
-   - Record timeline of events
-   - Note all actions taken
-   - Document root cause
-   - Create post-mortem report
+   -   Record timeline of events
+   -   Note all actions taken
+   -   Document root cause
+   -   Create post-mortem report
 
 4. **Follow up**
-   - Implement preventive measures
-   - Update runbooks
-   - Train team on lessons learned
+   -   Implement preventive measures
+   -   Update runbooks
+   -   Train team on lessons learned
 
 ---
 

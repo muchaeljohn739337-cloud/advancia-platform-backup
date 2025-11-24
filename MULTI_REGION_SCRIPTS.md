@@ -65,7 +65,7 @@ health_check() {
   local ip=$1
   local response
   response=$(curl -s -o /dev/null -w "%{http_code}" "http://$ip:4000/health" || echo "000")
-  
+
   if [[ "$response" == "200" ]]; then
     return 0
   else
@@ -78,9 +78,9 @@ check_error_rate() {
   local ip=$1
   local threshold=$2
   local error_rate
-  
+
   error_rate=$(curl -s "http://$ip:4000/metrics" | grep 'error_rate' | awk '{print $2}' || echo "999")
-  
+
   if (( $(echo "$error_rate < $threshold" | bc -l) )); then
     echo "   ✅ Error rate: $error_rate% (threshold: $threshold%)"
     return 0
@@ -94,7 +94,7 @@ check_error_rate() {
 update_nginx_weights() {
   local green_weight=$1
   local blue_weight=$2
-  
+
   ssh -o StrictHostKeyChecking=no "$DROPLET_USER@$LB_IP" << EOF
     cat > /etc/nginx/conf.d/upstream-$REGION.conf << 'NGINX'
 upstream backend-$REGION {
@@ -208,21 +208,21 @@ OVERALL_HEALTHY=true
 
 for region in "${!REGIONS[@]}"; do
   endpoint="${REGIONS[$region]}"
-  
+
   echo "🔍 Checking $region ($endpoint)..."
-  
+
   # Health check
   http_code=$(curl -s -o /dev/null -w "%{http_code}" "https://$endpoint/health" || echo "000")
-  
+
   if [[ "$http_code" == "200" ]]; then
     # Get detailed metrics
     response=$(curl -s "https://$endpoint/health/regional")
-    
+
     version=$(echo "$response" | jq -r '.version')
     latency=$(echo "$response" | jq -r '.latency')
     error_rate=$(echo "$response" | jq -r '.error_rate')
     uptime=$(echo "$response" | jq -r '.uptime')
-    
+
     echo "   ✅ Status: Healthy"
     echo "   📦 Version: $version"
     echo "   ⏱️  Latency: ${latency}ms"
@@ -232,7 +232,7 @@ for region in "${!REGIONS[@]}"; do
     echo "   ❌ Status: Unhealthy (HTTP $http_code)"
     OVERALL_HEALTHY=false
   fi
-  
+
   echo ""
 done
 
@@ -278,50 +278,50 @@ $REGIONS = @("us-east", "eu-west", "apac-se")
 foreach ($REGION in $REGIONS) {
     Write-Host ""
     Write-Host "🌍 Configuring $REGION region..." -ForegroundColor Yellow
-    
+
     $ENV_NAME = "production-$REGION"
-    
+
     # Cloudflare secrets
     Write-Host "   📝 Cloudflare configuration..."
     $CF_ZONE_ID = Read-Host "     CF_ZONE_ID for $REGION"
     $CF_API_TOKEN = Read-Host "     CF_API_TOKEN for $REGION" -AsSecureString
     $CF_RECORD_ID_API = Read-Host "     CF_RECORD_ID_API for $REGION"
     $CF_RECORD_ID_WWW = Read-Host "     CF_RECORD_ID_WWW for $REGION"
-    
+
     # DigitalOcean secrets
     Write-Host "   📝 DigitalOcean configuration..."
     $DROPLET_IP_BLUE = Read-Host "     DROPLET_IP_BLUE for $REGION"
     $DROPLET_IP_GREEN = Read-Host "     DROPLET_IP_GREEN for $REGION"
     $DROPLET_USER = Read-Host "     DROPLET_USER for $REGION"
     $LB_IP = Read-Host "     LB_IP (load balancer) for $REGION"
-    
+
     # Database secrets
     Write-Host "   📝 Database configuration..."
     $DATABASE_URL = Read-Host "     DATABASE_URL for $REGION"
     $REDIS_URL = Read-Host "     REDIS_URL for $REGION"
-    
+
     # Slack webhook
     Write-Host "   📝 Slack configuration..."
     $SLACK_WEBHOOK = Read-Host "     SLACK_WEBHOOK for $REGION"
-    
+
     # SSH key
     Write-Host "   📝 SSH key..."
     $SSH_KEY_PATH = Read-Host "     Path to SSH private key for $REGION"
-    
+
     if (Test-Path $SSH_KEY_PATH) {
         $DROPLET_SSH_KEY = Get-Content $SSH_KEY_PATH -Raw
     } else {
         Write-Host "     ❌ SSH key not found at $SSH_KEY_PATH" -ForegroundColor Red
         continue
     }
-    
+
     # Create GitHub Environment
     Write-Host "   🔧 Creating GitHub Environment: $ENV_NAME..."
     gh api -X PUT "/repos/$REPO_OWNER/$REPO_NAME/environments/$ENV_NAME"
-    
+
     # Add secrets to environment
     Write-Host "   🔒 Adding secrets to $ENV_NAME..."
-    
+
     gh secret set CF_ZONE_ID -b $CF_ZONE_ID --env $ENV_NAME --repo "$REPO_OWNER/$REPO_NAME"
     gh secret set CF_API_TOKEN -b $CF_API_TOKEN --env $ENV_NAME --repo "$REPO_OWNER/$REPO_NAME"
     gh secret set CF_RECORD_ID_API -b $CF_RECORD_ID_API --env $ENV_NAME --repo "$REPO_OWNER/$REPO_NAME"
@@ -334,7 +334,7 @@ foreach ($REGION in $REGIONS) {
     gh secret set REDIS_URL -b $REDIS_URL --env $ENV_NAME --repo "$REPO_OWNER/$REPO_NAME"
     gh secret set LB_IP -b $LB_IP --env $ENV_NAME --repo "$REPO_OWNER/$REPO_NAME"
     gh secret set SLACK_WEBHOOK -b $SLACK_WEBHOOK --env $ENV_NAME --repo "$REPO_OWNER/$REPO_NAME"
-    
+
     Write-Host "   ✅ $REGION configuration complete!" -ForegroundColor Green
 }
 
@@ -514,12 +514,14 @@ echo "  curl https://api.$DOMAIN/health"
 ## 🔧 Usage Instructions
 
 ### Setup Regional Secrets
+
 ```powershell
 # Windows (PowerShell)
 .\scripts\setup_regional_secrets.ps1
 ```
 
 ### Deploy Canary Rollout
+
 ```bash
 # Linux/macOS
 ./scripts/canary_rollout.sh \
@@ -530,11 +532,13 @@ echo "  curl https://api.$DOMAIN/health"
 ```
 
 ### Check Regional Health
+
 ```bash
 ./scripts/regional_health_check.sh
 ```
 
 ### Setup Cloudflare Global LB
+
 ```bash
 ./scripts/cloudflare_global_lb.sh
 ```

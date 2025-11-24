@@ -1,40 +1,38 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     // Validation
     if (!termsAccepted) {
-      setError(
-        "Please accept the Terms of Service and Privacy Policy to continue."
-      );
+      setError('Please accept the Terms of Service and Privacy Policy to continue.');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
+      setError('Password must be at least 6 characters long.');
       return;
     }
 
@@ -42,14 +40,14 @@ export default function RegisterPage() {
 
     try {
       // Call backend API to register user
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+      const apiKey = process.env.NEXT_PUBLIC_API_KEY || '';
 
       const response = await fetch(`${apiUrl}/api/auth/register`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
         },
         body: JSON.stringify({
           email,
@@ -59,7 +57,7 @@ export default function RegisterPage() {
       });
 
       if (!response.ok) {
-        let msg = "Registration failed";
+        let msg = 'Registration failed';
         try {
           const data = await response.json();
           msg = data?.error || msg;
@@ -69,18 +67,14 @@ export default function RegisterPage() {
 
       // Redirect to login after successful registration
       const url = new URL(window.location.href);
-      const redirect = url.searchParams.get("redirect") || "/dashboard";
+      const redirect = url.searchParams.get('redirect') || '/dashboard';
       router.push(
         `/auth/verify-otp?email=${encodeURIComponent(email)}${
-          redirect ? `&callbackUrl=${encodeURIComponent(redirect)}` : ""
+          redirect ? `&callbackUrl=${encodeURIComponent(redirect)}` : ''
         }`
       );
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Registration failed. Please try again."
-      );
+      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -125,9 +119,7 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
             <input
               type="text"
               value={username}
@@ -139,9 +131,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
               type="email"
               value={email}
@@ -153,12 +143,10 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -171,12 +159,7 @@ export default function RegisterPage() {
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
               >
                 {showPassword ? (
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -185,12 +168,7 @@ export default function RegisterPage() {
                     />
                   </svg>
                 ) : (
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -210,12 +188,10 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm Password
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
             <div className="relative">
               <input
-                type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-2 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -228,12 +204,7 @@ export default function RegisterPage() {
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
               >
                 {showConfirmPassword ? (
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -242,12 +213,7 @@ export default function RegisterPage() {
                     />
                   </svg>
                 ) : (
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -267,9 +233,7 @@ export default function RegisterPage() {
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">
-              {error}
-            </div>
+            <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">{error}</div>
           )}
 
           {/* Terms and Conditions Checkbox */}
@@ -283,20 +247,12 @@ export default function RegisterPage() {
               required
             />
             <label htmlFor="terms" className="text-sm text-gray-600">
-              I accept the{" "}
-              <a
-                href="/terms"
-                target="_blank"
-                className="text-blue-600 hover:underline"
-              >
+              I accept the{' '}
+              <a href="/terms" target="_blank" className="text-blue-600 hover:underline">
                 Terms of Service
-              </a>{" "}
-              and{" "}
-              <a
-                href="/privacy"
-                target="_blank"
-                className="text-blue-600 hover:underline"
-              >
+              </a>{' '}
+              and{' '}
+              <a href="/privacy" target="_blank" className="text-blue-600 hover:underline">
                 Privacy Policy
               </a>
             </label>
@@ -307,17 +263,14 @@ export default function RegisterPage() {
             disabled={loading || !termsAccepted}
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Already have an account?{" "}
-            <a
-              href="/auth/login"
-              className="text-blue-600 hover:underline font-medium"
-            >
+            Already have an account?{' '}
+            <a href="/auth/login" className="text-blue-600 hover:underline font-medium">
               Sign In
             </a>
           </p>

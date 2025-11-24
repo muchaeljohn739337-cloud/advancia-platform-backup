@@ -254,10 +254,10 @@ curl -I https://frontend-theta-three-91.vercel.app
 
 ## 📞 Support
 
-- **Documentation:** See `PRODUCTION_IMPROVEMENTS_COMPLETE.md`
-- **Full Deployment Guide:** See `PRODUCTION_DEPLOYMENT_COMPLETE.md`
-- **Server IP:** 157.245.8.131
-- **SSH Key:** `~/.ssh/advancia_droplet`
+-   **Documentation:** See `PRODUCTION_IMPROVEMENTS_COMPLETE.md`
+-   **Full Deployment Guide:** See `PRODUCTION_DEPLOYMENT_COMPLETE.md`
+-   **Server IP:** 157.245.8.131
+-   **SSH Key:** `~/.ssh/advancia_droplet`
 
 ---
 

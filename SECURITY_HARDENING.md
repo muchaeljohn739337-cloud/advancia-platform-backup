@@ -4,11 +4,11 @@
 
 This system has been hardened against penetration and cracking with **defense-in-depth** security controls across:
 
-- Application layer (authentication, authorization, input validation)
-- Transport layer (TLS, HSTS, secure cookies)
-- Data layer (encryption, audit logging, integrity checks)
-- Infrastructure layer (firewall, WAF, network segmentation)
-- Operational layer (monitoring, incident response, access reviews)
+-   Application layer (authentication, authorization, input validation)
+-   Transport layer (TLS, HSTS, secure cookies)
+-   Data layer (encryption, audit logging, integrity checks)
+-   Infrastructure layer (firewall, WAF, network segmentation)
+-   Operational layer (monitoring, incident response, access reviews)
 
 ---
 
@@ -16,12 +16,12 @@ This system has been hardened against penetration and cracking with **defense-in
 
 ### Assets Protected
 
-- **Alert policies**: Threshold configurations, channel settings, severity levels
-- **Admin accounts**: SuperAdmin credentials with edit permissions
-- **Audit logs**: Tamper-evident trail of all policy changes
-- **Alert channels**: Email, SMS, Slack, Teams webhook URLs
-- **Database**: PostgreSQL with PII and policy data
-- **Secrets**: API keys, SMTP credentials, webhook URLs
+-   **Alert policies**: Threshold configurations, channel settings, severity levels
+-   **Admin accounts**: SuperAdmin credentials with edit permissions
+-   **Audit logs**: Tamper-evident trail of all policy changes
+-   **Alert channels**: Email, SMS, Slack, Teams webhook URLs
+-   **Database**: PostgreSQL with PII and policy data
+-   **Secrets**: API keys, SMTP credentials, webhook URLs
 
 ### Threats Mitigated
 
@@ -66,9 +66,9 @@ export function requireMFA(req, res, next) {
 
 **Implementation**:
 
-- SuperAdmin policy edits require MFA re-verification
-- MFA verification valid for 5 minutes
-- Failed MFA attempts logged to Sentry
+-   SuperAdmin policy edits require MFA re-verification
+-   MFA verification valid for 5 minutes
+-   Failed MFA attempts logged to Sentry
 
 ---
 
@@ -131,15 +131,15 @@ app.use(
       sameSite: "strict", // CSRF protection
       maxAge: 60 * 60 * 1000, // 60 minutes
     },
-  })
+  }),
 );
 ```
 
 **Timeouts**:
 
-- **Idle timeout**: 60 minutes of inactivity
-- **Absolute timeout**: 8 hours max session duration
-- **Force logout**: On privilege change or MFA re-verification
+-   **Idle timeout**: 60 minutes of inactivity
+-   **Absolute timeout**: 8 hours max session duration
+-   **Force logout**: On privilege change or MFA re-verification
 
 ---
 
@@ -151,10 +151,7 @@ app.use(
 
 ```typescript
 // Strict Transport Security (HSTS)
-res.setHeader(
-  "Strict-Transport-Security",
-  "max-age=31536000; includeSubDomains; preload"
-);
+res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 
 // Prevent downgrade attacks
 res.setHeader("Upgrade-Insecure-Requests", "1");
@@ -162,9 +159,9 @@ res.setHeader("Upgrade-Insecure-Requests", "1");
 
 **Deployment**:
 
-- All traffic over TLS 1.2+
-- Weak ciphers disabled (no RC4, 3DES)
-- Certificate pinning for API clients
+-   All traffic over TLS 1.2+
+-   Weak ciphers disabled (no RC4, 3DES)
+-   Certificate pinning for API clients
 
 ---
 
@@ -178,15 +175,15 @@ res.setHeader(
     "style-src 'self' 'unsafe-inline'; " +
     "img-src 'self' data: https:; " +
     "font-src 'self' data:; " +
-    "connect-src 'self' https://sentry.io"
+    "connect-src 'self' https://sentry.io",
 );
 ```
 
 **Protects against**:
 
-- XSS (script injection)
-- Clickjacking (iframe embedding)
-- Data exfiltration (restrict connect-src)
+-   XSS (script injection)
+-   Clickjacking (iframe embedding)
+-   Data exfiltration (restrict connect-src)
 
 ---
 
@@ -194,20 +191,20 @@ res.setHeader(
 
 **At Rest**:
 
-- PostgreSQL transparent data encryption (TDE)
-- Disk-level encryption (LUKS or AWS EBS encryption)
-- Encrypted backups (AES-256)
+-   PostgreSQL transparent data encryption (TDE)
+-   Disk-level encryption (LUKS or AWS EBS encryption)
+-   Encrypted backups (AES-256)
 
 **In Transit**:
 
-- PostgreSQL SSL connections (`sslmode=require`)
-- Redis TLS connections
-- No plaintext database traffic
+-   PostgreSQL SSL connections (`sslmode=require`)
+-   Redis TLS connections
+-   No plaintext database traffic
 
 **Field-Level**:
 
-- Sensitive columns encrypted (e.g., `totpSecret`)
-- Audit log `changesBefore`/`changesAfter` JSON encrypted
+-   Sensitive columns encrypted (e.g., `totpSecret`)
+-   Audit log `changesBefore`/`changesAfter` JSON encrypted
 
 ---
 
@@ -225,10 +222,10 @@ const apiKey = process.env.STRIPE_SECRET_KEY;
 
 **Best practices**:
 
-- Use AWS Secrets Manager or HashiCorp Vault
-- Rotate secrets every 90 days
-- Different secrets per environment (dev/staging/prod)
-- Secrets encrypted at rest
+-   Use AWS Secrets Manager or HashiCorp Vault
+-   Rotate secrets every 90 days
+-   Different secrets per environment (dev/staging/prod)
+-   Secrets encrypted at rest
 
 ---
 
@@ -253,9 +250,9 @@ router.put("/:group", validateBody(updatePolicySchema), async (req, res) => {
 
 **Benefits**:
 
-- Prevents SQL injection (type-safe)
-- Rejects malformed data early
-- Auto-generates TypeScript types
+-   Prevents SQL injection (type-safe)
+-   Rejects malformed data early
+-   Auto-generates TypeScript types
 
 ---
 
@@ -307,12 +304,7 @@ app.use(sanitizeInput);
 
 ```typescript
 function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 ```
 
@@ -341,9 +333,9 @@ await logPolicyChange({
 
 **Integrity checks**:
 
-- Audit logs immutable (no UPDATE/DELETE on `policy_audit_logs`)
-- Hash chain linking logs together (optional)
-- Daily backup to S3 with versioning
+-   Audit logs immutable (no UPDATE/DELETE on `policy_audit_logs`)
+-   Hash chain linking logs together (optional)
+-   Daily backup to S3 with versioning
 
 ---
 
@@ -372,9 +364,9 @@ if (deletions.length > 0) {
 
 **Alerts via**:
 
-- Email (security team)
-- Sentry (high severity)
-- Slack (security channel)
+-   Email (security team)
+-   Sentry (high severity)
+-   Slack (security channel)
 
 ---
 
@@ -402,9 +394,9 @@ captureError(new Error("Unauthorized access attempt"), {
 
 **Alerting rules**:
 
-- Any `level: 'fatal'` → Email security team
-- Any `tags.type: 'security'` → Slack #security channel
-- Any `event: 'unauthorized_*'` → Sentry issue
+-   Any `level: 'fatal'` → Email security team
+-   Any `tags.type: 'security'` → Slack #security channel
+-   Any `event: 'unauthorized_*'` → Sentry issue
 
 ---
 
@@ -421,7 +413,7 @@ app.use(
     windowMs: 60 * 1000,
     max: 1000,
     keyGenerator: (req) => req.ip,
-  })
+  }),
 );
 
 // Admin endpoints: 100 requests/minute per IP
@@ -430,15 +422,15 @@ app.use(
   rateLimit({
     windowMs: 60 * 1000,
     max: 100,
-  })
+  }),
 );
 ```
 
 **Per-user limits**:
 
-- Auth endpoints: 10 requests/minute
-- Admin endpoints: 100 requests/minute
-- Policy edits: 10 requests/minute
+-   Auth endpoints: 10 requests/minute
+-   Admin endpoints: 100 requests/minute
+-   Policy edits: 10 requests/minute
 
 ---
 
@@ -446,10 +438,10 @@ app.use(
 
 **Cloudflare WAF**:
 
-- Challenge bots (Managed Challenge)
-- Block known bad IPs (IP Access Rules)
-- Rate limit at edge (Rate Limiting Rules)
-- DDoS protection (automatic)
+-   Challenge bots (Managed Challenge)
+-   Block known bad IPs (IP Access Rules)
+-   Rate limit at edge (Rate Limiting Rules)
+-   DDoS protection (automatic)
 
 **Firewall rules**:
 
@@ -489,8 +481,8 @@ ufw default allow outgoing
 
 **Uptime monitoring**:
 
-- UptimeRobot (5-minute checks)
-- PagerDuty (on-call alerts)
+-   UptimeRobot (5-minute checks)
+-   PagerDuty (on-call alerts)
 
 ---
 
@@ -510,9 +502,9 @@ logger.info("Policy updated", {
 
 **Shipping**:
 
-- Elasticsearch (search + analytics)
-- CloudWatch Logs (AWS)
-- Splunk (enterprise)
+-   Elasticsearch (search + analytics)
+-   CloudWatch Logs (AWS)
+-   Splunk (enterprise)
 
 ---
 
@@ -520,11 +512,11 @@ logger.info("Policy updated", {
 
 **Grafana visualizations**:
 
-- Policy edit frequency (edits/hour)
-- User activity (by role)
-- Failed MFA attempts
-- Unauthorized access attempts
-- Anomaly detection alerts
+-   Policy edit frequency (edits/hour)
+-   User activity (by role)
+-   Failed MFA attempts
+-   Unauthorized access attempts
+-   Anomaly detection alerts
 
 **Prometheus metrics**:
 
@@ -550,15 +542,15 @@ policyEdits.inc({
 
 **Database users**:
 
-- `app_read_only`: SELECT only (for reporting)
-- `app_read_write`: SELECT, INSERT, UPDATE (no DELETE)
-- `app_superadmin`: Full access (only backend service)
+-   `app_read_only`: SELECT only (for reporting)
+-   `app_read_write`: SELECT, INSERT, UPDATE (no DELETE)
+-   `app_superadmin`: Full access (only backend service)
 
 **IAM roles**:
 
-- Backend service: Secrets Manager read-only
-- CI/CD: ECR push, ECS deploy
-- Developers: No production access (staging only)
+-   Backend service: Secrets Manager read-only
+-   CI/CD: ECR push, ECS deploy
+-   Developers: No production access (staging only)
 
 ---
 
@@ -587,11 +579,11 @@ aws secretsmanager rotate-secret \
 
 **Triggers**:
 
-- Sentry alert: `Unauthorized access attempt`
-- Audit log anomaly: Rapid changes detected
-- Failed MFA attempts: >5 in 10 minutes
-- After-hours policy change
-- Policy deletion
+-   Sentry alert: `Unauthorized access attempt`
+-   Audit log anomaly: Rapid changes detected
+-   Failed MFA attempts: >5 in 10 minutes
+-   After-hours policy change
+-   Policy deletion
 
 ---
 
@@ -638,10 +630,10 @@ VALUES (..., 'restored after incident', ...);
 
 **Step 4: Report (< 24 hours)**
 
-- Document incident timeline
-- Root cause analysis
-- Lessons learned
-- Update runbook
+-   Document incident timeline
+-   Root cause analysis
+-   Lessons learned
+-   Update runbook
 
 ---
 
@@ -649,12 +641,12 @@ VALUES (..., 'restored after incident', ...);
 
 **Actions**:
 
-- Force password reset for affected users
-- Rotate all secrets (API keys, session secrets)
-- Review IAM permissions
-- Update firewall rules
-- Patch vulnerabilities
-- Team training on findings
+-   Force password reset for affected users
+-   Rotate all secrets (API keys, session secrets)
+-   Review IAM permissions
+-   Update firewall rules
+-   Patch vulnerabilities
+-   Team training on findings
 
 ---
 
@@ -662,90 +654,90 @@ VALUES (..., 'restored after incident', ...);
 
 ### Pre-Production
 
-- [ ] **Authentication**
-  - [ ] MFA enforced for all admin accounts
-  - [ ] Password complexity policy (12+ chars, uppercase, lowercase, number, symbol)
-  - [ ] Account lockout after 5 failed attempts
-  - [ ] Session timeouts configured (60 minutes idle)
-- [ ] **Authorization**
-  - [ ] RBAC middleware on all admin routes
-  - [ ] SuperAdmin accounts limited (≤3)
-  - [ ] Regular access reviews scheduled (quarterly)
-- [ ] **Transport Security**
-  - [ ] HTTPS enforced (HSTS header)
-  - [ ] TLS 1.2+ only
-  - [ ] Certificate valid + not expiring soon
-  - [ ] Weak ciphers disabled
-- [ ] **Input Validation**
-  - [ ] Zod schemas for all request bodies
-  - [ ] Sanitization middleware applied globally
-  - [ ] SQL injection tests passed
-  - [ ] XSS tests passed
-- [ ] **Secrets Management**
-  - [ ] No hardcoded secrets in code
-  - [ ] Secrets in environment variables or secrets manager
-  - [ ] Different secrets per environment
-  - [ ] Rotation schedule documented
-- [ ] **Audit Logging**
-  - [ ] All policy changes logged
-  - [ ] Logs immutable (no UPDATE/DELETE)
-  - [ ] Daily backup to S3
-  - [ ] Anomaly detection enabled
-- [ ] **Monitoring**
-  - [ ] Sentry integration tested
-  - [ ] Uptime monitoring configured
-  - [ ] Alerting rules defined
-  - [ ] Grafana dashboard created
-- [ ] **Incident Response**
-  - [ ] Playbook documented
-  - [ ] Emergency contacts updated
-  - [ ] Rollback procedure tested
-  - [ ] Team trained
+-   [ ] **Authentication**
+    -   [ ] MFA enforced for all admin accounts
+    -   [ ] Password complexity policy (12+ chars, uppercase, lowercase, number, symbol)
+    -   [ ] Account lockout after 5 failed attempts
+    -   [ ] Session timeouts configured (60 minutes idle)
+-   [ ] **Authorization**
+    -   [ ] RBAC middleware on all admin routes
+    -   [ ] SuperAdmin accounts limited (≤3)
+    -   [ ] Regular access reviews scheduled (quarterly)
+-   [ ] **Transport Security**
+    -   [ ] HTTPS enforced (HSTS header)
+    -   [ ] TLS 1.2+ only
+    -   [ ] Certificate valid + not expiring soon
+    -   [ ] Weak ciphers disabled
+-   [ ] **Input Validation**
+    -   [ ] Zod schemas for all request bodies
+    -   [ ] Sanitization middleware applied globally
+    -   [ ] SQL injection tests passed
+    -   [ ] XSS tests passed
+-   [ ] **Secrets Management**
+    -   [ ] No hardcoded secrets in code
+    -   [ ] Secrets in environment variables or secrets manager
+    -   [ ] Different secrets per environment
+    -   [ ] Rotation schedule documented
+-   [ ] **Audit Logging**
+    -   [ ] All policy changes logged
+    -   [ ] Logs immutable (no UPDATE/DELETE)
+    -   [ ] Daily backup to S3
+    -   [ ] Anomaly detection enabled
+-   [ ] **Monitoring**
+    -   [ ] Sentry integration tested
+    -   [ ] Uptime monitoring configured
+    -   [ ] Alerting rules defined
+    -   [ ] Grafana dashboard created
+-   [ ] **Incident Response**
+    -   [ ] Playbook documented
+    -   [ ] Emergency contacts updated
+    -   [ ] Rollback procedure tested
+    -   [ ] Team trained
 
 ---
 
 ### Production Hardening
 
-- [ ] **Rate Limiting**
-  - [ ] Redis-backed rate limiter deployed
-  - [ ] Per-route limits configured
-  - [ ] DDoS protection enabled (Cloudflare WAF)
-- [ ] **Firewall**
-  - [ ] Only required ports open (443, 4000, 5432, 6379)
-  - [ ] IP allow-lists for internal services
-  - [ ] Default deny policy
-- [ ] **Database**
-  - [ ] Read replicas for scaling
-  - [ ] Automated backups (daily)
-  - [ ] Point-in-time recovery enabled
-  - [ ] Encryption at rest
-- [ ] **Dependencies**
-  - [ ] Automated dependency scanning (Dependabot)
-  - [ ] SCA tools configured (Snyk, npm audit)
-  - [ ] No critical vulnerabilities
-- [ ] **Compliance**
-  - [ ] GDPR data retention policy (7 days for logs)
-  - [ ] PCI-DSS for payment data (if applicable)
-  - [ ] SOC 2 audit preparation (if applicable)
+-   [ ] **Rate Limiting**
+    -   [ ] Redis-backed rate limiter deployed
+    -   [ ] Per-route limits configured
+    -   [ ] DDoS protection enabled (Cloudflare WAF)
+-   [ ] **Firewall**
+    -   [ ] Only required ports open (443, 4000, 5432, 6379)
+    -   [ ] IP allow-lists for internal services
+    -   [ ] Default deny policy
+-   [ ] **Database**
+    -   [ ] Read replicas for scaling
+    -   [ ] Automated backups (daily)
+    -   [ ] Point-in-time recovery enabled
+    -   [ ] Encryption at rest
+-   [ ] **Dependencies**
+    -   [ ] Automated dependency scanning (Dependabot)
+    -   [ ] SCA tools configured (Snyk, npm audit)
+    -   [ ] No critical vulnerabilities
+-   [ ] **Compliance**
+    -   [ ] GDPR data retention policy (7 days for logs)
+    -   [ ] PCI-DSS for payment data (if applicable)
+    -   [ ] SOC 2 audit preparation (if applicable)
 
 ---
 
 ## 📚 References
 
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [CWE Top 25](https://cwe.mitre.org/top25/)
-- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
-- [PCI DSS Requirements](https://www.pcisecuritystandards.org/)
-- [GDPR Compliance Guide](https://gdpr.eu/)
+-   [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+-   [CWE Top 25](https://cwe.mitre.org/top25/)
+-   [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+-   [PCI DSS Requirements](https://www.pcisecuritystandards.org/)
+-   [GDPR Compliance Guide](https://gdpr.eu/)
 
 ---
 
 ## 📞 Security Contacts
 
-- **Security Team**: security@example.com
-- **On-Call**: PagerDuty #security-oncall
-- **Incident Hotline**: +1-xxx-xxx-xxxx
-- **Bug Bounty**: hackerone.com/your-org
+-   **Security Team**: <security@example.com>
+-   **On-Call**: PagerDuty #security-oncall
+-   **Incident Hotline**: +1-xxx-xxx-xxxx
+-   **Bug Bounty**: hackerone.com/your-org
 
 ---
 

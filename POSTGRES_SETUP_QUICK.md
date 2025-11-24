@@ -71,10 +71,10 @@ npm test                    # Run all tests
 
 This will:
 
-- Show you the exact commands to copy to your droplet
-- Test connection to your droplet
-- Generate .env.test content
-- Run migrations and tests
+-   Show you the exact commands to copy to your droplet
+-   Test connection to your droplet
+-   Generate .env.test content
+-   Run migrations and tests
 
 ---
 
@@ -99,8 +99,8 @@ Tests:       130+ passed, 136 total
 
 Currently we have:
 
-- ✅ 44 tests passing (unit tests, middleware, health checks)
-- ❌ 75 tests failing (need real database)
+-   ✅ 44 tests passing (unit tests, middleware, health checks)
+-   ❌ 75 tests failing (need real database)
 
 After database setup, **all tests will pass**!
 
@@ -144,6 +144,7 @@ EOF
 1. Is PostgreSQL running? `sudo systemctl status postgresql`
 2. Does `.env.test` have the correct droplet IP?
 3. Is firewall blocking port 5432?
+
    ```bash
    sudo ufw allow 5432/tcp
    ```
@@ -154,15 +155,15 @@ EOF
 
 Your test suite validates:
 
-- ✅ **Auth Routes** (register, login, OTP, password reset)
-- ✅ **Transactions** (create, retrieve)
-- ✅ **Rewards** (earning, claiming)
-- ✅ **Tokens** (wallet operations)
-- ✅ **Crypto Payments** (Cryptomus integration)
-- ✅ **Email Notifications** (template rendering)
-- ✅ **Health Checks** (API status)
-- ✅ **Middleware** (authentication, validation)
-- ✅ **Integration Tests** (full API flows)
+-   ✅ **Auth Routes** (register, login, OTP, password reset)
+-   ✅ **Transactions** (create, retrieve)
+-   ✅ **Rewards** (earning, claiming)
+-   ✅ **Tokens** (wallet operations)
+-   ✅ **Crypto Payments** (Cryptomus integration)
+-   ✅ **Email Notifications** (template rendering)
+-   ✅ **Health Checks** (API status)
+-   ✅ **Middleware** (authentication, validation)
+-   ✅ **Integration Tests** (full API flows)
 
 ---
 

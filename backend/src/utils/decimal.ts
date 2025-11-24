@@ -1,5 +1,4 @@
 import { Decimal } from '@prisma/client/runtime/library';
-import crypto from 'crypto';
 
 /**
  * Type guard to check if a value is a Prisma Decimal instance.
@@ -92,7 +91,7 @@ export function serializeDecimalArray<T extends Record<string, any>>(
  *
  * @example
  * const amount = parseToDecimal(req.body.amount);
- * await prisma.transactions.create({ data: { 
+ * await prisma.transactions.create({ data: {
       id: crypto.randomUUID(),
       updatedAt: new Date(),
       amount } });

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface NotificationStats {
   total: number;
@@ -21,13 +21,13 @@ export default function AdminNotifyLite() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
         const response = await fetch(`${apiUrl}/api/notify/stats`);
         const data = await response.json();
         setStats(data);
         setLoading(false);
       } catch (error) {
-        console.error("Failed to fetch notification stats:", error);
+        console.error('Failed to fetch notification stats:', error);
         setLoading(false);
       }
     };
@@ -39,8 +39,8 @@ export default function AdminNotifyLite() {
   }, []);
 
   const handleExport = () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-    window.open(`${apiUrl}/api/notify/export`, "_blank");
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+    window.open(`${apiUrl}/api/notify/export`, '_blank');
   };
 
   if (loading) {
@@ -59,20 +59,13 @@ export default function AdminNotifyLite() {
   return (
     <div className="p-4 bg-white shadow rounded-lg border border-gray-200">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-semibold text-gray-800">
-          📬 Notification Summary
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-800">📬 Notification Summary</h3>
         <button
           onClick={handleExport}
           className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors flex items-center gap-1"
           title="Download CSV report"
         >
-          <svg
-            className="w-3 h-3"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

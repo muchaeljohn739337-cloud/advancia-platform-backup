@@ -2,9 +2,9 @@
 
 Your DigitalOcean droplet details:
 
-- **IP**: 157.245.8.131
-- **OS**: Ubuntu 25.10 x64
-- **Region**: NYC3
+-   **IP**: 157.245.8.131
+-   **OS**: Ubuntu 25.10 x64
+-   **Region**: NYC3
 
 ---
 
@@ -38,13 +38,13 @@ ss -tlnp | grep postgres
 
 This will:
 
-- ✅ Install PostgreSQL
-- ✅ Create database: `advancia_payledger_test`
-- ✅ Create user: `test_user` / password: `test_password_123`
-- ✅ Grant all permissions
-- ✅ Enable remote connections
-- ✅ Restart PostgreSQL
-- ✅ Show you it's running
+-   ✅ Install PostgreSQL
+-   ✅ Create database: `advancia_payledger_test`
+-   ✅ Create user: `test_user` / password: `test_password_123`
+-   ✅ Grant all permissions
+-   ✅ Enable remote connections
+-   ✅ Restart PostgreSQL
+-   ✅ Show you it's running
 
 You should see output like:
 
@@ -75,13 +75,13 @@ npm test
 
 ✅ **Before setup** (current state):
 
-- 44 tests passing
-- 75 tests failing (no database)
+-   44 tests passing
+-   75 tests failing (no database)
 
 ✅ **After setup**:
 
-- **130+ tests passing**
-- **All tests working!**
+-   **130+ tests passing**
+-   **All tests working!**
 
 ---
 
@@ -89,10 +89,10 @@ npm test
 
 If you need more help:
 
-- `POSTGRES_COPY_PASTE.md` - Copy/paste commands
-- `POSTGRES_SETUP_QUICK.md` - Quick reference
-- `DIGITALOCEAN_POSTGRES_SETUP.md` - Full detailed guide
-- `quick-postgres-setup.sh` - Automated bash script
+-   `POSTGRES_COPY_PASTE.md` - Copy/paste commands
+-   `POSTGRES_SETUP_QUICK.md` - Quick reference
+-   `DIGITALOCEAN_POSTGRES_SETUP.md` - Full detailed guide
+-   `quick-postgres-setup.sh` - Automated bash script
 
 ---
 

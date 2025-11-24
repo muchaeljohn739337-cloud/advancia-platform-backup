@@ -9,24 +9,24 @@ It provides authentication, payments, crypto wallets, dashboards, and real-time 
 
 **Stack Overview:**
 
-- **Frontend** → Next.js 14 App Router (Vercel)
-- **Backend** → Node.js + Express + Socket.IO (Render)
-- **Database** → PostgreSQL (Render)
-- **Backups** → Cloudflare R2 (S3-compatible, automated nightly via GitHub Actions)
-- **CDN/DNS** → Cloudflare (WAF, SSL, Rate Limiting, Bot Protection)
-- **Monitoring** → Sentry
-- **CI/CD** → GitHub Actions (tests + automated backups)
+-   **Frontend** → Next.js 14 App Router (Vercel)
+-   **Backend** → Node.js + Express + Socket.IO (Render)
+-   **Database** → PostgreSQL (Render)
+-   **Backups** → Cloudflare R2 (S3-compatible, automated nightly via GitHub Actions)
+-   **CDN/DNS** → Cloudflare (WAF, SSL, Rate Limiting, Bot Protection)
+-   **Monitoring** → Sentry
+-   **CI/CD** → GitHub Actions (tests + automated backups)
 
 ---
 
 ## 🔗 Quick Links
 
-- Deployment checklist: `DEPLOY_CHECKLIST_PRODUCTION.md`
-- Backup workflow guide: `.github/workflows/BACKUP_WORKFLOW.md`
-- DNS cutover plan: `CLOUDFLARE_DNS_PLAN.md`
-- Cloudflare DNS records template: `cloudflare/DNS_RECORDS.template.yml`
-- Render blueprint: `render.yaml`
-- Frontend rewrites: `frontend/next.config.mjs`
+-   Deployment checklist: `DEPLOY_CHECKLIST_PRODUCTION.md`
+-   Backup workflow guide: `.github/workflows/BACKUP_WORKFLOW.md`
+-   DNS cutover plan: `CLOUDFLARE_DNS_PLAN.md`
+-   Cloudflare DNS records template: `cloudflare/DNS_RECORDS.template.yml`
+-   Render blueprint: `render.yaml`
+-   Frontend rewrites: `frontend/next.config.mjs`
 
 ---
 
@@ -34,10 +34,10 @@ It provides authentication, payments, crypto wallets, dashboards, and real-time 
 
 **Production Stack:**
 
-- **Backend**: Render (Web Service + PostgreSQL)
-- **Frontend**: Vercel (Next.js)
-- **Backups**: Cloudflare R2 (automated nightly via GitHub Actions)
-- **CDN**: Cloudflare
+-   **Backend**: Render (Web Service + PostgreSQL)
+-   **Frontend**: Vercel (Next.js)
+-   **Backups**: Cloudflare R2 (automated nightly via GitHub Actions)
+-   **CDN**: Cloudflare
 
 **Quick Deploy:**
 
@@ -66,9 +66,9 @@ npm run dev
 
 **Access:**
 
-- Frontend: <http://localhost:3000>
-- Backend API: <http://localhost:4000/api/health>
-- Prisma Studio: `cd backend && npx prisma studio`
+-   Frontend: <http://localhost:3000>
+-   Backend API: <http://localhost:4000/api/health>
+-   Prisma Studio: `cd backend && npx prisma studio`
 
 Environment variables are stored in `.env` files for backend and frontend.
 See `backend/.env.example` for required keys (JWT_SECRET, STRIPE keys, DATABASE_URL).
@@ -77,16 +77,16 @@ See `backend/.env.example` for required keys (JWT_SECRET, STRIPE keys, DATABASE_
 
 ## 📊 Features
 
-- 🔐 **Authentication** → Email OTP (Gmail SMTP), JWT, 2FA/TOTP, password recovery
-- 💳 **Fiat Payments** → Stripe integration (cards, webhooks)
-- ₿ **Crypto Payments** → Cryptomus (BTC, ETH, USDT), custodial HD wallets
-- 💰 **Multi-Currency** → USD, BTC, ETH, USDT balances per user
-- 🎁 **Rewards System** → Token distribution, user tiers
-- 📈 **Dashboard** → Real-time charts, transaction history, analytics
-- 🔔 **Notifications** → Web Push, Email, Socket.IO real-time updates
-- ⚙️ **Backend** → RESTful API, Prisma ORM, Socket.IO, rate limiting
-- 🔒 **Security** → Cloudflare WAF, Sentry monitoring, audit logs
-- 📦 **DevOps** → GitHub Actions CI/CD, automated DB backups
+-   🔐 **Authentication** → Email OTP (Gmail SMTP), JWT, 2FA/TOTP, password recovery
+-   💳 **Fiat Payments** → Stripe integration (cards, webhooks)
+-   ₿ **Crypto Payments** → Cryptomus (BTC, ETH, USDT), custodial HD wallets
+-   💰 **Multi-Currency** → USD, BTC, ETH, USDT balances per user
+-   🎁 **Rewards System** → Token distribution, user tiers
+-   📈 **Dashboard** → Real-time charts, transaction history, analytics
+-   🔔 **Notifications** → Web Push, Email, Socket.IO real-time updates
+-   ⚙️ **Backend** → RESTful API, Prisma ORM, Socket.IO, rate limiting
+-   🔒 **Security** → Cloudflare WAF, Sentry monitoring, audit logs
+-   📦 **DevOps** → GitHub Actions CI/CD, automated DB backups
 
 ---
 
@@ -94,15 +94,15 @@ See `backend/.env.example` for required keys (JWT_SECRET, STRIPE keys, DATABASE_
 
 **Automated Workflows:**
 
-- **Tests**: Run on every PR (see `.github/workflows/ci.yml`)
-- **Backups**: Nightly database backups to Cloudflare R2
-- **Deployments**: Auto-deploy to Render (backend) and Vercel (frontend) on push to `main`
+-   **Tests**: Run on every PR (see `.github/workflows/ci.yml`)
+-   **Backups**: Nightly database backups to Cloudflare R2
+-   **Deployments**: Auto-deploy to Render (backend) and Vercel (frontend) on push to `main`
 
 **Key Scripts:**
 
-- `deploy-vercel.ps1` - Deploy frontend to Vercel
-- `scripts/trigger-render-deploy.sh` - Trigger backend deploy on Render
-- `scripts/render-smoke.ps1` - Test deployed backend health
+-   `deploy-vercel.ps1` - Deploy frontend to Vercel
+-   `scripts/trigger-render-deploy.sh` - Trigger backend deploy on Render
+-   `scripts/render-smoke.ps1` - Test deployed backend health
 
 ---
 
@@ -112,13 +112,13 @@ This repo includes `.github/copilot-instructions.md` with auto-apply front matte
 
 Enable in VS Code:
 
-- Open Settings and enable `GitHub Copilot Chat › Experimental: Prompt Files`.
-- In the Chat gear menu, ensure `Instructions` shows the file as active.
+-   Open Settings and enable `GitHub Copilot Chat › Experimental: Prompt Files`.
+-   In the Chat gear menu, ensure `Instructions` shows the file as active.
 
 Optional debug:
 
-- Run `Developer: Set Log Level...` → Trace.
-- Run `Developer: Show Logs...` → Window, then confirm log lines mentioning `[InstructionsContextComputer]` show 1 Copilot instructions file added.
+-   Run `Developer: Set Log Level...` → Trace.
+-   Run `Developer: Show Logs...` → Window, then confirm log lines mentioning `[InstructionsContextComputer]` show 1 Copilot instructions file added.
 
 Note: Some organizations disable prompt files; if you do not see the setting, it may be restricted.
 

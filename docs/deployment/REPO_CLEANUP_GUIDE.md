@@ -7,6 +7,7 @@
 You have **TWO git repositories** on your system:
 
 ### Folder 1: ✅ ACTIVE (Main Repository)
+
 ```
 C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\
 ├─ .git/ (Yes, is a git repo!)
@@ -16,13 +17,15 @@ C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\
 ```
 
 **Latest commits:**
+
 ```
 024e6d0 - 📊 Add visual clone location guide
-6ddf8dc - ⚠️ Add GitHub Desktop path clarification  
+6ddf8dc - ⚠️ Add GitHub Desktop path clarification
 84a6baf - ⭐ Add ultra-simple clone reference
 ```
 
 ### Folder 2: ❌ OUTDATED (Copy - Can Delete)
+
 ```
 C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Copy\
 ├─ .git/ (Yes, is a git repo!)
@@ -32,6 +35,7 @@ C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Copy\
 ```
 
 **Latest commits:**
+
 ```
 ab1d4df - docs: Add CI fix TL;DR
 1fa84fa - docs: Add comprehensive CI fix final report
@@ -43,12 +47,14 @@ ab1d4df - docs: Add CI fix TL;DR
 ## 🔍 WHY YOU HAVE TWO REPOS
 
 **Most Likely Cause:**
+
 - You cloned the repo twice
 - GitHub Desktop might have created one
 - You created a backup copy manually
 - Both point to same GitHub repo but are separate local folders
 
 **Both are connected to GitHub:**
+
 ```
 Remote URL (Both):
 https://github.com/pdtribe181-prog/-modular-saas-platform.git
@@ -59,14 +65,18 @@ https://github.com/pdtribe181-prog/-modular-saas-platform.git
 ## ✅ WHAT TO DO
 
 ### The Main Folder is Current ✅
+
 The main `-modular-saas-platform` folder:
+
 - Has the LATEST code ✅
 - Has the LATEST commits ✅
 - Connected to GitHub Desktop ✅
 - Being used actively ✅
 
 ### The Copy Folder is Outdated ❌
+
 The `- Copy` folder:
+
 - Has OLDER code ❌
 - Missing ~20 recent commits ❌
 - Not connected to GitHub Desktop ❌
@@ -79,23 +89,27 @@ The `- Copy` folder:
 ### Option 1: SAFE Delete (Recommended)
 
 **Step 1: Keep Main Folder**
+
 ```
 ✅ Keep: C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\
    (This one has all the latest code)
 ```
 
 **Step 2: Delete Copy Folder**
+
 ```
 ❌ Delete: C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Copy\
 ```
 
 **Why this is safe:**
+
 - Main folder has all current code
 - GitHub has the master copy
 - You can always clone again
 - GitHub Desktop uses the main folder
 
 **How to Delete:**
+
 ```powershell
 # In PowerShell:
 Remove-Item -Path "C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Copy" -Recurse -Force
@@ -121,6 +135,7 @@ Remove-Item -Path "C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Backu
 ### Option 3: Keep Both (Not Recommended)
 
 If you want to keep both:
+
 - Just make sure GitHub Desktop is using the MAIN folder
 - Don't push from the Copy folder
 - It will waste disk space (~500MB+)
@@ -130,6 +145,7 @@ If you want to keep both:
 ## ⚠️ DO NOT
 
 ### ❌ Delete the MAIN Folder
+
 ```
 DO NOT DELETE:
 ❌ C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\
@@ -138,6 +154,7 @@ This folder has all your current code and commits!
 ```
 
 ### ❌ Delete Both Folders
+
 ```
 DO NOT DELETE BOTH:
 ❌ You'll lose your local working copy
@@ -145,6 +162,7 @@ DO NOT DELETE BOTH:
 ```
 
 ### ❌ Use the Copy Folder
+
 ```
 DO NOT USE:
 ❌ C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Copy\
@@ -159,6 +177,7 @@ It's out of date and will cause confusion
 Before you delete the Copy folder, verify:
 
 ### Check 1: Main Folder is Current
+
 ```powershell
 cd "C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform"
 git log --oneline -1
@@ -168,6 +187,7 @@ git log --oneline -1
 **Expected:** ✅ Shows "024e6d0" or newer
 
 ### Check 2: GitHub Desktop Points to Main
+
 ```
 Open GitHub Desktop:
 ├─ Look at the repo selector (top left)
@@ -178,6 +198,7 @@ Open GitHub Desktop:
 **Expected:** ✅ Points to main folder
 
 ### Check 3: Main Folder Has All Files
+
 ```powershell
 ls "C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform" | measure
 
@@ -191,6 +212,7 @@ ls "C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform" | measure
 **Expected:** ✅ Has 30+ items
 
 ### Check 4: Copy Folder is Older
+
 ```powershell
 cd "C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform - Copy"
 git log --oneline -1
@@ -238,18 +260,19 @@ C:\Users\mucha.DESKTOP-H7T9NPM\
 
 ## 🚀 SUMMARY
 
-| Item | Status | Action |
-|------|--------|--------|
-| **Main Folder** | ✅ Current | **KEEP** |
-| **Copy Folder** | ❌ Outdated | **DELETE** |
-| **GitHub Connection** | ✅ Working | No action |
-| **Disk Space** | 💾 Wasting ~500MB | Will free up |
+| Item                  | Status            | Action       |
+| --------------------- | ----------------- | ------------ |
+| **Main Folder**       | ✅ Current        | **KEEP**     |
+| **Copy Folder**       | ❌ Outdated       | **DELETE**   |
+| **GitHub Connection** | ✅ Working        | No action    |
+| **Disk Space**        | 💾 Wasting ~500MB | Will free up |
 
 ---
 
 ## ✅ FINAL VERIFICATION
 
 After cleanup, you should have:
+
 - ✅ ONE repo folder: `-modular-saas-platform`
 - ✅ Latest commits: 024e6d0+
 - ✅ GitHub Desktop working with it
@@ -261,18 +284,23 @@ After cleanup, you should have:
 ## ❓ FAQ
 
 ### Q: Will I lose any code by deleting the Copy folder?
+
 **A:** No! All code is also on GitHub. The main folder has everything. You can always clone again.
 
 ### Q: Should I delete it?
+
 **A:** YES - It's outdated and will only cause confusion.
 
 ### Q: Can I rename the Copy folder instead?
+
 **A:** You could, but there's no reason to keep it. Better to delete.
 
 ### Q: What if I need the old commits from the Copy folder?
+
 **A:** They're on GitHub! You can access them anytime: `https://github.com/pdtribe181-prog/-modular-saas-platform`
 
 ### Q: Will this affect deployment?
+
 **A:** No! Deployment uses GitHub (the master copy), not your local folders.
 
 ---
@@ -290,4 +318,4 @@ After cleanup, you should have:
 
 ---
 
-*Questions? Re-read the FAQ section above.*
+_Questions? Re-read the FAQ section above._

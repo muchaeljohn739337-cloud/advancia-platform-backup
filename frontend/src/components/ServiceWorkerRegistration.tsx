@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export default function ServiceWorkerRegistration() {
   useEffect(() => {
     // Only register service worker in development or when sw.js exists
     // Skip in production until we create a proper service worker
-    if (process.env.NODE_ENV === "development" && "serviceWorker" in navigator) {
+    if (process.env.NODE_ENV === 'development' && 'serviceWorker' in navigator) {
       navigator.serviceWorker
-        .register("/sw.js")
+        .register('/sw.js')
         .then((registration) => {
-          console.log("Service Worker registered successfully:", registration);
+          console.log('Service Worker registered successfully:', registration);
 
           // Handle updates
-          registration.addEventListener("updatefound", () => {
+          registration.addEventListener('updatefound', () => {
             const newWorker = registration.installing;
             if (newWorker) {
-              newWorker.addEventListener("statechange", () => {
-                if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                   // New version available
-                  console.log("New service worker version available");
+                  console.log('New service worker version available');
                   // You could show a notification to the user here
                 }
               });
@@ -27,12 +27,12 @@ export default function ServiceWorkerRegistration() {
           });
         })
         .catch((error) => {
-          console.error("Service Worker registration failed:", error);
+          console.error('Service Worker registration failed:', error);
         });
 
       // Handle messages from service worker
-      navigator.serviceWorker.addEventListener("message", (event) => {
-        console.log("Message from service worker:", event.data);
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        console.log('Message from service worker:', event.data);
       });
     }
   }, []);

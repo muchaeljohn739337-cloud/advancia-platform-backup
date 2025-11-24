@@ -63,6 +63,7 @@ API_SECRET_KEY = your-secret-key-here
 Send test email to: support@advanciapayledger.com
 
 Check:
+
 - ✅ Email arrives in your Gmail
 - ✅ Support ticket created in backend (if API configured)
 - ✅ Check CloudFlare Workers logs
@@ -92,6 +93,7 @@ OR
 ## Worker Code
 
 The worker automatically:
+
 - Forwards emails to Gmail
 - Extracts sender, subject, content
 - Sends to backend API (optional)
@@ -106,4 +108,3 @@ The worker automatically:
 
 Questions? Check CloudFlare docs:
 https://developers.cloudflare.com/email-routing/
-

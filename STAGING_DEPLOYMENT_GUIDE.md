@@ -6,11 +6,11 @@ This guide covers deploying the Advancia Pay Ledger to a staging environment for
 
 ## 📋 Prerequisites
 
-- Docker & Docker Compose installed
-- Domain/subdomain configured (e.g., staging.advancia.com)
-- SSL certificates (Let's Encrypt recommended)
-- Access to staging server (SSH)
-- Environment variables configured
+-   Docker & Docker Compose installed
+-   Domain/subdomain configured (e.g., staging.advancia.com)
+-   SSL certificates (Let's Encrypt recommended)
+-   Access to staging server (SSH)
+-   Environment variables configured
 
 ## 🚀 Quick Start
 
@@ -122,15 +122,15 @@ docker system df
 
 ## 🔐 Security Checklist
 
-- [ ] All secrets generated and stored securely
-- [ ] SSL certificates installed and valid
-- [ ] Firewall configured (only allow 80, 443, SSH)
-- [ ] Database access restricted to internal network
-- [ ] Redis password protected
-- [ ] Rate limiting enabled
-- [ ] CORS properly configured
-- [ ] Sentry monitoring active
-- [ ] Backup automation configured
+-   [ ] All secrets generated and stored securely
+-   [ ] SSL certificates installed and valid
+-   [ ] Firewall configured (only allow 80, 443, SSH)
+-   [ ] Database access restricted to internal network
+-   [ ] Redis password protected
+-   [ ] Rate limiting enabled
+-   [ ] CORS properly configured
+-   [ ] Sentry monitoring active
+-   [ ] Backup automation configured
 
 ## 🧪 Testing in Staging
 
@@ -186,19 +186,19 @@ curl -X POST https://staging-api.advancia.com/api/transactions/deposit \
 
 ### Access Monitoring Dashboards
 
-- **Prometheus**: https://staging-prometheus.advancia.com
-- **Grafana**: https://staging-grafana.advancia.com
-  - Username: admin
-  - Password: (from .env.staging)
+-   **Prometheus**: <https://staging-prometheus.advancia.com>
+-   **Grafana**: <https://staging-grafana.advancia.com>
+    -   Username: admin
+    -   Password: (from .env.staging)
 
 ### Key Metrics to Monitor
 
-- API response times
-- Error rates
-- Database connection pool
-- Redis cache hit rate
-- Transaction success rates
-- Active user sessions
+-   API response times
+-   Error rates
+-   Database connection pool
+-   Redis cache hit rate
+-   Transaction success rates
+-   Active user sessions
 
 ## 🔄 Deployment Pipeline
 
@@ -331,33 +331,34 @@ docker-compose -f docker-compose.staging.yml up -d --build
 
 Before promoting to production:
 
-- [ ] All services healthy and running
-- [ ] Database migrations applied successfully
-- [ ] SSL certificates valid
-- [ ] Monitoring dashboards accessible
-- [ ] API documentation accessible at /api-docs
-- [ ] Authentication flow working
-- [ ] Payment processing tested (test mode)
-- [ ] Email notifications working (test SMTP)
-- [ ] 2FA tested
-- [ ] Rate limiting verified
-- [ ] Error tracking active (Sentry)
-- [ ] Backup automation working
-- [ ] Load testing completed
-- [ ] Security scan completed
-- [ ] All critical user flows tested
+-   [ ] All services healthy and running
+-   [ ] Database migrations applied successfully
+-   [ ] SSL certificates valid
+-   [ ] Monitoring dashboards accessible
+-   [ ] API documentation accessible at /api-docs
+-   [ ] Authentication flow working
+-   [ ] Payment processing tested (test mode)
+-   [ ] Email notifications working (test SMTP)
+-   [ ] 2FA tested
+-   [ ] Rate limiting verified
+-   [ ] Error tracking active (Sentry)
+-   [ ] Backup automation working
+-   [ ] Load testing completed
+-   [ ] Security scan completed
+-   [ ] All critical user flows tested
 
 ## 🆘 Support
 
 For staging environment issues:
-- Check logs: `docker-compose -f docker-compose.staging.yml logs`
-- Review monitoring: Grafana dashboards
-- Contact DevOps team
-- Review [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+-   Check logs: `docker-compose -f docker-compose.staging.yml logs`
+-   Review monitoring: Grafana dashboards
+-   Contact DevOps team
+-   Review [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
 ## 📚 Additional Resources
 
-- [API Documentation](https://staging-api.advancia.com/api-docs)
-- [DEPLOYMENT_ARCHITECTURE.md](DEPLOYMENT_ARCHITECTURE.md)
-- [SECURITY_HARDENING.md](SECURITY_HARDENING.md)
-- [MONITORING_QUICK_REFERENCE.md](MONITORING_QUICK_REFERENCE.md)
+-   [API Documentation](https://staging-api.advancia.com/api-docs)
+-   [DEPLOYMENT_ARCHITECTURE.md](DEPLOYMENT_ARCHITECTURE.md)
+-   [SECURITY_HARDENING.md](SECURITY_HARDENING.md)
+-   [MONITORING_QUICK_REFERENCE.md](MONITORING_QUICK_REFERENCE.md)

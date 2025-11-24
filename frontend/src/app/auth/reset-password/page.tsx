@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 function ResetPasswordForm() {
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [token, setToken] = useState("");
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [token, setToken] = useState('');
 
   const searchParams = useSearchParams();
   const router = useRouter();
 
   useEffect(() => {
-    const tokenParam = searchParams?.get("token");
+    const tokenParam = searchParams?.get('token');
     if (!tokenParam) {
-      setError("Invalid reset link. Please request a new password reset.");
+      setError('Invalid reset link. Please request a new password reset.');
       return;
     }
     setToken(tokenParam);
@@ -29,49 +29,46 @@ function ResetPasswordForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
-    setMessage("");
+    setError('');
+    setMessage('');
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       setIsLoading(false);
       return;
     }
 
     if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError('Password must be at least 6 characters');
       setIsLoading(false);
       return;
     }
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
-          },
-          body: JSON.stringify({
-            token,
-            newPassword,
-          }),
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+        },
+        body: JSON.stringify({
+          token,
+          newPassword,
+        }),
+      });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Password reset successfully! Redirecting to login...");
+        setMessage('Password reset successfully! Redirecting to login...');
         setTimeout(() => {
-          router.push("/auth/login");
+          router.push('/auth/login');
         }, 2000);
       } else {
-        setError(data.error || "Failed to reset password");
+        setError(data.error || 'Failed to reset password');
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError('Network error. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -95,9 +92,7 @@ function ResetPasswordForm() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Reset your password
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Enter your new password below
-          </p>
+          <p className="mt-2 text-center text-sm text-gray-600">Enter your new password below</p>
         </div>
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -110,7 +105,7 @@ function ResetPasswordForm() {
                 <input
                   id="newPassword"
                   name="newPassword"
-                  type={showNewPassword ? "text" : "password"}
+                  type={showNewPassword ? 'text' : 'password'}
                   required
                   className="appearance-none rounded-md relative block w-full px-3 py-2 pr-12 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="New password"
@@ -123,12 +118,7 @@ function ResetPasswordForm() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                 >
                   {showNewPassword ? (
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -137,12 +127,7 @@ function ResetPasswordForm() {
                       />
                     </svg>
                   ) : (
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -169,7 +154,7 @@ function ResetPasswordForm() {
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   required
                   className="appearance-none rounded-md relative block w-full px-3 py-2 pr-12 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   placeholder="Confirm new password"
@@ -182,12 +167,7 @@ function ResetPasswordForm() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                 >
                   {showConfirmPassword ? (
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -196,12 +176,7 @@ function ResetPasswordForm() {
                       />
                     </svg>
                   ) : (
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -221,13 +196,9 @@ function ResetPasswordForm() {
             </div>
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
-          )}
+          {error && <div className="text-red-600 text-sm text-center">{error}</div>}
 
-          {message && (
-            <div className="text-green-600 text-sm text-center">{message}</div>
-          )}
+          {message && <div className="text-green-600 text-sm text-center">{message}</div>}
 
           <div>
             <button
@@ -235,15 +206,12 @@ function ResetPasswordForm() {
               disabled={isLoading || !token}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {isLoading ? "Resetting..." : "Reset Password"}
+              {isLoading ? 'Resetting...' : 'Reset Password'}
             </button>
           </div>
 
           <div className="text-center">
-            <Link
-              href="/auth/login"
-              className="text-indigo-600 hover:text-indigo-500 text-sm"
-            >
+            <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-500 text-sm">
               Back to Login
             </Link>
           </div>

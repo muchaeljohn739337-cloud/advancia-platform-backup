@@ -11,25 +11,22 @@
 
 Render Blueprint will read your `render.yaml` and automatically create the service.
 
-1. **Go to**: https://dashboard.render.com/select-repo?type=blueprint
+1. **Go to**: <https://dashboard.render.com/select-repo?type=blueprint>
 
 2. **Connect GitHub Repository**:
-
-   - Click **"Connect"** next to: `muchaeljohn739337-cloud/-modular-saas-platform`
-   - If not listed, click **"Configure account"** → Grant access to repo
+   -   Click **"Connect"** next to: `muchaeljohn739337-cloud/-modular-saas-platform`
+   -   If not listed, click **"Configure account"** → Grant access to repo
 
 3. **Blueprint Detection**:
-
-   - Render will automatically detect `render.yaml` in your repo
-   - Click **"Apply"** or **"Create New Services"**
+   -   Render will automatically detect `render.yaml` in your repo
+   -   Click **"Apply"** or **"Create New Services"**
 
 4. **Review Configuration**:
-
-   - Service Name: `advancia-backend`
-   - Region: `Oregon (US West)`
-   - Branch: `preview-clean`
-   - Root Directory: `backend`
-   - Runtime: `Node`
+   -   Service Name: `advancia-backend`
+   -   Region: `Oregon (US West)`
+   -   Branch: `preview-clean`
+   -   Root Directory: `backend`
+   -   Runtime: `Node`
 
 5. **Environment Variables to Add**:
 
@@ -55,13 +52,12 @@ Render Blueprint will read your `render.yaml` and automatically create the servi
 
 If Blueprint doesn't work, create manually:
 
-1. **Go to**: https://dashboard.render.com/create?type=webUse our existing ErrorHandler utility class instead of writing custom try-catch blocks for each endpoint.
+1. **Go to**: <https://dashboard.render.com/create?type=webUse> our existing ErrorHandler utility class instead of writing custom try-catch blocks for each endpoint.
 
 2. **Connect Repository**:
-
-   - Click **"Build and deploy from a Git repository"**
-   - Select: `muchaeljohn739337-cloud/-modular-saas-platform`
-   - Click **"Connect"**
+   -   Click **"Build and deploy from a Git repository"**
+   -   Select: `muchaeljohn739337-cloud/-modular-saas-platform`
+   -   Click **"Connect"**
 
 3. **Configure Settings**:
 
@@ -101,8 +97,7 @@ If Blueprint doesn't work, create manually:
    ```
 
 6. **Auto-Deploy**:
-
-   - Toggle **"Auto-Deploy"** to **ON**
+   -   Toggle **"Auto-Deploy"** to **ON**
 
 7. **Click "Create Web Service"**
 
@@ -110,7 +105,7 @@ If Blueprint doesn't work, create manually:
 
 ### Step 3: Monitor Deployment
 
-**Logs URL**: https://dashboard.render.com/
+**Logs URL**: <https://dashboard.render.com/>
 
 Watch for these stages:
 
@@ -130,12 +125,12 @@ Watch for these stages:
 
 **Expected Timeline**:
 
-- Clone: 30 seconds
-- Dependencies: 2-3 minutes
-- Prisma + Migrations: 1-2 minutes
-- Build: 1 minute
-- Start: 10 seconds
-- **Total: 5-7 minutes**
+-   Clone: 30 seconds
+-   Dependencies: 2-3 minutes
+-   Prisma + Migrations: 1-2 minutes
+-   Build: 1 minute
+-   Start: 10 seconds
+-   **Total: 5-7 minutes**
 
 ---
 
@@ -163,17 +158,16 @@ curl https://advancia-backend-[your-id].onrender.com/api/health
 
 ### Step 6: Update Cloudflare DNS
 
-1. **Go to**: https://dash.cloudflare.com/0bff66558872c58ed5b8b7942acc34d9/advanciapayledger.com/dns
+1. **Go to**: <https://dash.cloudflare.com/0bff66558872c58ed5b8b7942acc34d9/advanciapayledger.com/dns>
 
 2. **Find DNS Record**: `api.advanciapayledger.com`
 
 3. **Edit Record**:
-
-   - **Type**: CNAME
-   - **Name**: api
-   - **Target**: `advancia-backend-[your-id].onrender.com` (paste your Render URL without https://)
-   - **Proxy status**: ✅ Proxied (orange cloud)
-   - **TTL**: Auto
+   -   **Type**: CNAME
+   -   **Name**: api
+   -   **Target**: `advancia-backend-[your-id].onrender.com` (paste your Render URL without https://)
+   -   **Proxy status**: ✅ Proxied (orange cloud)
+   -   **TTL**: Auto
 
 4. **Save Changes**
 
@@ -195,37 +189,37 @@ curl https://api.advanciapayledger.com/api/health
 
 ## 📊 Configuration Summary
 
-### What's Automatically Configured:
+### What's Automatically Configured
 
 ✅ **Service Settings**:
 
-- Name: advancia-backend
-- Region: Oregon (matches database)
-- Runtime: Node.js
-- Plan: Free
-- Auto-deploy: Enabled on `preview-clean` branch
+-   Name: advancia-backend
+-   Region: Oregon (matches database)
+-   Runtime: Node.js
+-   Plan: Free
+-   Auto-deploy: Enabled on `preview-clean` branch
 
 ✅ **Build Process**:
 
-- Install dependencies: `npm ci`
-- Generate Prisma Client: `npx prisma generate`
-- Run migrations: `npx prisma migrate deploy`
-- Build TypeScript: `npm run build`
+-   Install dependencies: `npm ci`
+-   Generate Prisma Client: `npx prisma generate`
+-   Run migrations: `npx prisma migrate deploy`
+-   Build TypeScript: `npm run build`
 
 ✅ **Runtime**:
 
-- Start command: `npm start`
-- Port: 4000
-- Health check: `/api/health`
+-   Start command: `npm start`
+-   Port: 4000
+-   Health check: `/api/health`
 
 ✅ **Environment Variables**:
 
-- NODE_ENV=production
-- PORT=4000
-- DATABASE_URL (Render PostgreSQL)
-- FRONTEND_URL, ALLOWED_ORIGINS
-- JWT secrets (5 keys)
-- VAPID_SUBJECT
+-   NODE_ENV=production
+-   PORT=4000
+-   DATABASE_URL (Render PostgreSQL)
+-   FRONTEND_URL, ALLOWED_ORIGINS
+-   JWT secrets (5 keys)
+-   VAPID_SUBJECT
 
 ---
 
@@ -245,11 +239,11 @@ curl https://api.advanciapayledger.com/api/health
    ```
 
 2. **Prisma connection issues**:
-
-   - Verify DATABASE_URL is correct
-   - Check database is in same region (Oregon)
+   -   Verify DATABASE_URL is correct
+   -   Check database is in same region (Oregon)
 
 3. **Missing dependencies**:
+
    ```bash
    # Ensure package-lock.json is committed
    git add backend/package-lock.json
@@ -261,17 +255,17 @@ curl https://api.advanciapayledger.com/api/health
 
 **Verify**:
 
-- Backend starts on port 4000
-- Route `/api/health` exists in `backend/src/index.ts`
-- Server responds within 30 seconds
+-   Backend starts on port 4000
+-   Route `/api/health` exists in `backend/src/index.ts`
+-   Server responds within 30 seconds
 
 ### Database Connection Error
 
 **Check**:
 
-- DATABASE_URL environment variable is set
-- Database ID: `dpg-d4f112trnu6s73doipjg-a`
-- Backend and database in same region (Oregon)
+-   DATABASE_URL environment variable is set
+-   Database ID: `dpg-d4f112trnu6s73doipjg-a`
+-   Backend and database in same region (Oregon)
 
 ---
 
@@ -287,7 +281,7 @@ curl https://api.advanciapayledger.com/api/health
 
 ## 📝 Quick Reference
 
-**Render Dashboard**: https://dashboard.render.com/  
+**Render Dashboard**: <https://dashboard.render.com/>  
 **Database**: dpg-d4f112trnu6s73doipjg-a  
 **Region**: Oregon (US West)  
 **Branch**: preview-clean  

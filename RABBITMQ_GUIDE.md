@@ -24,25 +24,25 @@ RabbitMQ message queue system for handling asynchronous background jobs, startin
 
 Core RabbitMQ wrapper with:
 
-- **initQueue()**: Initialize connection and channels
-- **sendToQueue(queueName, message)**: Publish messages
-- **consumeQueue(queueName, handler)**: Consume messages
-- **closeQueue()**: Graceful shutdown
+-   **initQueue()**: Initialize connection and channels
+-   **sendToQueue(queueName, message)**: Publish messages
+-   **consumeQueue(queueName, handler)**: Consume messages
+-   **closeQueue()**: Graceful shutdown
 
 ### 2. Notification Worker (`backend/src/workers/notificationWorker.ts`)
 
 Processes notification jobs:
 
-- Validates user exists
-- Sends via notification service (Socket.IO, push, email)
-- Records in database
-- Handles failures with retry
+-   Validates user exists
+-   Sends via notification service (Socket.IO, push, email)
+-   Records in database
+-   Handles failures with retry
 
 ### 3. Backend Integration (`backend/src/index.ts`)
 
-- Initializes queue on startup
-- Closes connection on shutdown (SIGINT/SIGTERM)
-- Non-blocking: continues if RabbitMQ unavailable
+-   Initializes queue on startup
+-   Closes connection on shutdown (SIGINT/SIGTERM)
+-   Non-blocking: continues if RabbitMQ unavailable
 
 ## Setup
 
@@ -68,14 +68,14 @@ docker-compose up rabbitmq -d
 
 This starts:
 
-- RabbitMQ server on port **5672** (AMQP)
-- Management UI on port **15672** (HTTP)
+-   RabbitMQ server on port **5672** (AMQP)
+-   Management UI on port **15672** (HTTP)
 
 Access Management UI:
 
-- URL: http://localhost:15672
-- Username: `advancia`
-- Password: `rabbitmq_pass_change_in_prod`
+-   URL: <http://localhost:15672>
+-   Username: `advancia`
+-   Password: `rabbitmq_pass_change_in_prod`
 
 ### 3. Backend Setup
 
@@ -183,25 +183,25 @@ This will:
 
 ### RabbitMQ Management UI
 
-Access: http://localhost:15672
+Access: <http://localhost:15672>
 
 Features:
 
-- View queues and message counts
-- Monitor consumer connections
-- Track message rates
-- Inspect message contents
-- View connection details
+-   View queues and message counts
+-   Monitor consumer connections
+-   Track message rates
+-   Inspect message contents
+-   View connection details
 
 ### Queue Metrics
 
 Important metrics to monitor:
 
-- **Messages Ready**: Queued jobs waiting
-- **Messages Unacknowledged**: Jobs being processed
-- **Consumer Count**: Active workers
-- **Publish Rate**: Jobs/second being added
-- **Delivery Rate**: Jobs/second being processed
+-   **Messages Ready**: Queued jobs waiting
+-   **Messages Unacknowledged**: Jobs being processed
+-   **Consumer Count**: Active workers
+-   **Publish Rate**: Jobs/second being added
+-   **Delivery Rate**: Jobs/second being processed
 
 ### Logs
 
@@ -333,7 +333,7 @@ await sendToQueue(
     message: "Suspicious login detected",
     priority: "high",
   },
-  { priority: 10 } // RabbitMQ priority (0-10)
+  { priority: 10 }, // RabbitMQ priority (0-10)
 );
 ```
 
@@ -344,7 +344,7 @@ await sendToQueue(
 await sendToQueue(
   "notifications",
   { userId: 123, type: "reminder", title: "Reminder", message: "..." },
-  { headers: { "x-delay": 60000 } } // 60 seconds delay
+  { headers: { "x-delay": 60000 } }, // 60 seconds delay
 );
 ```
 
@@ -418,9 +418,9 @@ await channel.prefetch(10); // Process max 10 messages at once
 
 ## Resources
 
-- [RabbitMQ Docs](https://www.rabbitmq.com/documentation.html)
-- [amqplib NPM](https://www.npmjs.com/package/amqplib)
-- [RabbitMQ Management Plugin](https://www.rabbitmq.com/management.html)
+-   [RabbitMQ Docs](https://www.rabbitmq.com/documentation.html)
+-   [amqplib NPM](https://www.npmjs.com/package/amqplib)
+-   [RabbitMQ Management Plugin](https://www.rabbitmq.com/management.html)
 
 ## Team Collaboration
 
@@ -442,9 +442,9 @@ await channel.prefetch(10); // Process max 10 messages at once
 
 Grant team access to Management UI with appropriate roles:
 
-- **Admin**: Full access (production team only)
-- **Monitoring**: Read-only access (all developers)
-- **Management**: Create/delete queues (backend team)
+-   **Admin**: Full access (production team only)
+-   **Monitoring**: Read-only access (all developers)
+-   **Management**: Create/delete queues (backend team)
 
 ---
 

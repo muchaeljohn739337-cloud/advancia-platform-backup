@@ -76,6 +76,7 @@ Basic sanity checks for test environment configuration.
    ```
 
 5. Run tests:
+
    ```bash
    npm test
    ```

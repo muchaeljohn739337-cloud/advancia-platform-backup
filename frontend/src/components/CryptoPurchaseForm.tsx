@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import LiveCryptoPrice from "./LiveCryptoPrice";
+import { useState } from 'react';
+import LiveCryptoPrice from './LiveCryptoPrice';
 
 interface CryptoPurchaseFormProps {
   onSuccess?: () => void;
@@ -16,11 +16,11 @@ interface OrderDetails {
 }
 
 export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProps) {
-  const [cryptoType, setCryptoType] = useState("BTC");
-  const [usdAmount, setUsdAmount] = useState("");
+  const [cryptoType, setCryptoType] = useState('BTC');
+  const [usdAmount, setUsdAmount] = useState('');
   const [currentPrice, setCurrentPrice] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
 
@@ -32,7 +32,7 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
     const fee = (usd * processingFee) / 100;
     const total = usd + fee;
     const cryptoAmount = currentPrice > 0 ? usd / currentPrice : 0;
-    
+
     return { fee, total, cryptoAmount };
   };
 
@@ -40,7 +40,7 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setSuccess(false);
 
     const usd = parseFloat(usdAmount);
@@ -53,11 +53,11 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/crypto/purchase", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/crypto/purchase', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -69,18 +69,18 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create purchase order");
+        throw new Error(data.error || 'Failed to create purchase order');
       }
 
       setSuccess(true);
       setOrderDetails(data);
-      setUsdAmount("");
-      
+      setUsdAmount('');
+
       if (onSuccess) {
         onSuccess();
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to create purchase order";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create purchase order';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -93,21 +93,45 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
       {success && orderDetails && (
         <div className="mb-6 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
           <div className="flex items-start">
-            <svg className="w-6 h-6 text-green-600 dark:text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-6 h-6 text-green-600 dark:text-green-400 mr-3 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">
                 Purchase Order Created! 🎉
               </h3>
               <div className="space-y-2 text-sm text-green-800 dark:text-green-200">
-                <p><strong>Order ID:</strong> {orderDetails.id}</p>
-                <p><strong>Crypto Amount:</strong> {orderDetails.cryptoAmount?.toFixed(8)} {orderDetails.cryptoType}</p>
-                <p><strong>USD Paid:</strong> ${orderDetails.totalUsd?.toFixed(2)}</p>
-                <p><strong>Status:</strong> <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs font-semibold">PENDING</span></p>
+                <p>
+                  <strong>Order ID:</strong> {orderDetails.id}
+                </p>
+                <p>
+                  <strong>Crypto Amount:</strong> {orderDetails.cryptoAmount?.toFixed(8)}{' '}
+                  {orderDetails.cryptoType}
+                </p>
+                <p>
+                  <strong>USD Paid:</strong> ${orderDetails.totalUsd?.toFixed(2)}
+                </p>
+                <p>
+                  <strong>Status:</strong>{' '}
+                  <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs font-semibold">
+                    PENDING
+                  </span>
+                </p>
               </div>
               <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded border border-green-200 dark:border-green-700">
-                <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Admin wallet address:</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                  Admin wallet address:
+                </p>
                 <div className="flex items-center space-x-2">
                   <code className="flex-1 text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded break-all">
                     {orderDetails.adminAddress}
@@ -115,7 +139,7 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(orderDetails.adminAddress);
-                      alert("Address copied!");
+                      alert('Address copied!');
                     }}
                     className="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
                   >
@@ -135,39 +159,52 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
       {error && (
         <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <div className="flex items-center">
-            <svg className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-5 h-5 text-red-600 dark:text-red-400 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-6"
+      >
         {/* Crypto Type Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Select Cryptocurrency
           </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {["BTC", "ETH", "USDT", "LTC"].map((crypto) => (
+            {['BTC', 'ETH', 'USDT', 'LTC'].map((crypto) => (
               <button
                 key={crypto}
                 type="button"
                 onClick={() => setCryptoType(crypto)}
                 className={`p-4 rounded-lg border-2 transition-all ${
                   cryptoType === crypto
-                    ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20"
-                    : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                    ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                 }`}
               >
                 <div className="text-center">
                   <div className="text-2xl font-bold text-gray-900 dark:text-white">{crypto}</div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {crypto === "BTC" && "Bitcoin"}
-                    {crypto === "ETH" && "Ethereum"}
-                    {crypto === "USDT" && "Tether"}
-                    {crypto === "LTC" && "Litecoin"}
+                    {crypto === 'BTC' && 'Bitcoin'}
+                    {crypto === 'ETH' && 'Ethereum'}
+                    {crypto === 'USDT' && 'Tether'}
+                    {crypto === 'LTC' && 'Litecoin'}
                   </div>
                 </div>
               </button>
@@ -177,13 +214,18 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
 
         {/* Live Price Display */}
         <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Current {cryptoType} Price:</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+            Current {cryptoType} Price:
+          </div>
           <LiveCryptoPrice cryptoType={cryptoType} onPriceUpdate={setCurrentPrice} />
         </div>
 
         {/* USD Amount Input */}
         <div>
-          <label htmlFor="usdAmount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label
+            htmlFor="usdAmount"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
             Amount in USD
           </label>
           <div className="relative">
@@ -228,7 +270,9 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
               </div>
               <div className="flex justify-between text-indigo-900 dark:text-indigo-100 font-bold pt-2 border-t border-indigo-200 dark:border-indigo-700">
                 <span>You&apos;ll Receive:</span>
-                <span>{cryptoAmount.toFixed(8)} {cryptoType}</span>
+                <span>
+                  {cryptoAmount.toFixed(8)} {cryptoType}
+                </span>
               </div>
             </div>
           </div>
@@ -242,9 +286,24 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
         >
           {loading ? (
             <>
-              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Processing...
             </>
@@ -254,7 +313,8 @@ export default function CryptoPurchaseForm({ onSuccess }: CryptoPurchaseFormProp
         </button>
 
         <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          Your USD balance will be deducted immediately. Crypto will be credited after admin approval.
+          Your USD balance will be deducted immediately. Crypto will be credited after admin
+          approval.
         </p>
       </form>
     </div>

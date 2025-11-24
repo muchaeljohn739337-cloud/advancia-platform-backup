@@ -23,16 +23,16 @@ Since SSH isn't working from your machine, you MUST use the DigitalOcean web-bas
 
 **Steps:**
 
-1. **Login to DigitalOcean**: https://cloud.digitalocean.com
+1. **Login to DigitalOcean**: <https://cloud.digitalocean.com>
 2. **Navigate to your droplet**: Click on Droplets → Your droplet name
 3. **Open Console**: Click **"Access"** tab → **"Launch Droplet Console"**
 4. **Login**: Enter your root password (set during droplet creation)
 
 If you don't remember the root password:
 
-- Click **"Access"** → **"Reset Root Password"**
-- New password will be emailed to you
-- Use it to login via console
+-   Click **"Access"** → **"Reset Root Password"**
+-   New password will be emailed to you
+-   Use it to login via console
 
 ---
 
@@ -163,15 +163,15 @@ ssh root@157.245.8.131
 1. Go to **Networking** → **Firewalls**
 2. Check if any firewall is applied to your droplet
 3. If yes, ensure these inbound rules exist:
-   - **SSH**: TCP Port 22, Source: All IPv4 or your IP
-   - **HTTP**: TCP Port 80, Source: All IPv4
-   - **HTTPS**: TCP Port 443, Source: All IPv4
+   -   **SSH**: TCP Port 22, Source: All IPv4 or your IP
+   -   **HTTP**: TCP Port 80, Source: All IPv4
+   -   **HTTPS**: TCP Port 443, Source: All IPv4
 
 **To temporarily test:**
 
-- Remove the cloud firewall from the droplet
-- Try SSH connection
-- If it works, add proper rules and re-attach
+-   Remove the cloud firewall from the droplet
+-   Try SSH connection
+-   If it works, add proper rules and re-attach
 
 ---
 
@@ -373,20 +373,18 @@ Then paste it into the droplet's `~/.ssh/authorized_keys` file via the web conso
 If SSH still doesn't work after these steps:
 
 1. **Share the output of:**
-
-   - `ssh -vvv root@157.245.8.131` (from Windows)
-   - `journalctl -u sshd -n 50` (from droplet console)
-   - `ufw status verbose` (from droplet console)
+   -   `ssh -vvv root@157.245.8.131` (from Windows)
+   -   `journalctl -u sshd -n 50` (from droplet console)
+   -   `ufw status verbose` (from droplet console)
 
 2. **Check DigitalOcean support**:
-
-   - Open a support ticket
-   - They can help diagnose droplet-specific issues
+   -   Open a support ticket
+   -   They can help diagnose droplet-specific issues
 
 3. **Consider droplet rebuild**:
-   - Backup any important data
-   - Destroy and recreate droplet
-   - Ensure SSH key is added during creation
+   -   Backup any important data
+   -   Destroy and recreate droplet
+   -   Ensure SSH key is added during creation
 
 ---
 

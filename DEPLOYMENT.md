@@ -4,12 +4,12 @@
 
 **Production Stack:**
 
-- **Backend + Database**: Render
-- **Frontend**: Vercel
-- **Backups**: Digital Ocean Spaces
-- **CDN/DNS**: Cloudflare
-- **Monitoring**: Sentry
-- **Cost**: $19/month
+-   **Backend + Database**: Render
+-   **Frontend**: Vercel
+-   **Backups**: Digital Ocean Spaces
+-   **CDN/DNS**: Cloudflare
+-   **Monitoring**: Sentry
+-   **Cost**: $19/month
 
 ---
 
@@ -19,9 +19,9 @@
 
 1. Go to [Render Dashboard](https://dashboard.render.com) → **New** → **PostgreSQL**
 2. Configure:
-   - **Name**: `advancia-pay-db`
-   - **Region**: Choose closest to your users
-   - **Plan**: Starter ($7/mo) or Free (90-day trial)
+   -   **Name**: `advancia-pay-db`
+   -   **Region**: Choose closest to your users
+   -   **Plan**: Starter ($7/mo) or Free (90-day trial)
 3. Copy **Internal Database URL** (starts with `postgresql://`)
 
 ### B. Create Web Service
@@ -29,11 +29,11 @@
 1. **Render Dashboard** → **New** → **Web Service**
 2. Connect GitHub repo: `your-org/-modular-saas-platform`
 3. Configure:
-   - **Name**: `advancia-pay-backend`
-   - **Root Directory**: Leave empty
-   - **Build Command**: `cd backend && npm install && npx prisma generate && npx prisma migrate deploy`
-   - **Start Command**: `cd backend && npm start`
-   - **Branch**: `main`
+   -   **Name**: `advancia-pay-backend`
+   -   **Root Directory**: Leave empty
+   -   **Build Command**: `cd backend && npm install && npx prisma generate && npx prisma migrate deploy`
+   -   **Start Command**: `cd backend && npm start`
+   -   **Branch**: `main`
 4. Add environment variables (see `backend/.env.example`)
 5. Deploy!
 
@@ -48,13 +48,15 @@
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard) → **Add New** → **Project**
 2. Import from GitHub: `your-org/-modular-saas-platform`
 3. Configure:
-   - **Framework Preset**: Next.js
-   - **Root Directory**: `frontend`
+   -   **Framework Preset**: Next.js
+   -   **Root Directory**: `frontend`
 4. Add environment variables:
+
    ```bash
    NEXT_PUBLIC_API_URL=https://advancia-pay-backend.onrender.com
    NEXT_PUBLIC_WS_URL=https://advancia-pay-backend.onrender.com
    ```
+
 5. Deploy!
 
 **Frontend URL**: `https://advancia-pay.vercel.app`
@@ -67,9 +69,9 @@
 
 1. [Digital Ocean Dashboard](https://cloud.digitalocean.com) → **Spaces** → **Create Space**
 2. Configure:
-   - **Name**: `advancia-backups`
-   - **Region**: New York 3 (or closest)
-   - **CDN**: Disabled
+   -   **Name**: `advancia-backups`
+   -   **Region**: New York 3 (or closest)
+   -   **CDN**: Disabled
 3. **Cost**: $5/month
 
 ### B. Generate Access Keys
@@ -106,23 +108,22 @@ DATABASE_URL=<render-postgresql-internal-url>
 **Cloudflare**:
 
 1. DNS → Add CNAME:
-
-   - **Name**: `app`
-   - **Target**: `cname.vercel-dns.com`
-   - **Proxy**: ✅ Enabled
+   -   **Name**: `app`
+   -   **Target**: `cname.vercel-dns.com`
+   -   **Proxy**: ✅ Enabled
 
 2. Add CNAME for API (optional):
-   - **Name**: `api`
-   - **Target**: `advancia-pay-backend.onrender.com`
-   - **Proxy**: ✅ Enabled
+   -   **Name**: `api`
+   -   **Target**: `advancia-pay-backend.onrender.com`
+   -   **Proxy**: ✅ Enabled
 
 ### B. SSL/TLS Settings
 
 1. **SSL/TLS** → Mode: **Full (strict)**
 2. Enable:
-   - ✅ Always Use HTTPS
-   - ✅ Automatic HTTPS Rewrites
-   - ✅ Minimum TLS 1.2
+   -   ✅ Always Use HTTPS
+   -   ✅ Automatic HTTPS Rewrites
+   -   ✅ Minimum TLS 1.2
 
 ---
 
@@ -158,15 +159,15 @@ Redeploy both services.
 
 ## 7. Post-Deployment Checklist
 
-- [ ] Backend health: `curl https://api.advancia.pay/api/health`
-- [ ] Frontend loads: `https://app.advancia.pay`
-- [ ] User registration works
-- [ ] Login functional
-- [ ] WebSocket connects (check browser console)
-- [ ] Stripe test payment succeeds
-- [ ] Sentry receiving errors
-- [ ] Nightly backups running (check GitHub Actions)
-- [ ] Cloudflare SSL active (green padlock)
+-   [ ] Backend health: `curl https://api.advancia.pay/api/health`
+-   [ ] Frontend loads: `https://app.advancia.pay`
+-   [ ] User registration works
+-   [ ] Login functional
+-   [ ] WebSocket connects (check browser console)
+-   [ ] Stripe test payment succeeds
+-   [ ] Sentry receiving errors
+-   [ ] Nightly backups running (check GitHub Actions)
+-   [ ] Cloudflare SSL active (green padlock)
 
 ---
 
@@ -187,9 +188,9 @@ npm run dev
 
 Access:
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:4000/api/health
-- Database UI: `cd backend && npx prisma studio`
+-   Frontend: <http://localhost:3000>
+-   Backend: <http://localhost:4000/api/health>
+-   Database UI: `cd backend && npx prisma studio`
 
 ---
 
@@ -221,25 +222,25 @@ gunzip -c backup-YYYY-MM-DD.sql.gz | psql $DATABASE_URL
 
 **Render**:
 
-- Real-time logs: Dashboard → Logs tab
-- Export: Last 7 days
+-   Real-time logs: Dashboard → Logs tab
+-   Export: Last 7 days
 
 **Vercel**:
 
-- Real-time logs: Dashboard → Functions → View logs
+-   Real-time logs: Dashboard → Functions → View logs
 
 **Sentry**:
 
-- Errors: https://sentry.io/organizations/your-org/projects/advancia-pay-backend
+-   Errors: <https://sentry.io/organizations/your-org/projects/advancia-pay-backend>
 
 ---
 
 ## Support
 
-- **Render**: https://render.com/docs
-- **Vercel**: https://vercel.com/docs
-- **Cloudflare**: https://developers.cloudflare.com
-- **Digital Ocean**: https://docs.digitalocean.com/products/spaces
+-   **Render**: <https://render.com/docs>
+-   **Vercel**: <https://vercel.com/docs>
+-   **Cloudflare**: <https://developers.cloudflare.com>
+-   **Digital Ocean**: <https://docs.digitalocean.com/products/spaces>
 
 ---
 

@@ -4,25 +4,25 @@
 
 ### 1. **Access Cryptomus Dashboard**
 
-- Log in to your [Cryptomus Merchant Dashboard](https://app.cryptomus.com/)
-- Navigate to **Settings** → **Payment Notifications** or **Webhook Settings**
+-   Log in to your [Cryptomus Merchant Dashboard](https://app.cryptomus.com/)
+-   Navigate to **Settings** → **Payment Notifications** or **Webhook Settings**
 
 ### 2. **Configure Webhook URL**
 
-- **Webhook URL**: `https://advanciapayledger.com/api/cryptomus/webhook`
-- **HTTP Method**: POST
-- **Content Type**: application/json
-- **Events to Send**: `payment.status.paid` (or equivalent)
+-   **Webhook URL**: `https://advanciapayledger.com/api/cryptomus/webhook`
+-   **HTTP Method**: POST
+-   **Content Type**: application/json
+-   **Events to Send**: `payment.status.paid` (or equivalent)
 
 ### 3. **Security Settings**
 
-- Ensure webhook signing is enabled
-- Note: Your backend uses HMAC-SHA256 verification with `CRYPTOMUS_API_KEY`
+-   Ensure webhook signing is enabled
+-   Note: Your backend uses HMAC-SHA256 verification with `CRYPTOMUS_API_KEY`
 
 ### 4. **Save & Test Configuration**
 
-- Save the webhook settings
-- Cryptomus may send a test ping - check your backend logs
+-   Save the webhook settings
+-   Cryptomus may send a test ping - check your backend logs
 
 ---
 
@@ -89,30 +89,30 @@ Expected response:
 
 ### Webhook Not Received
 
-- ✅ Check webhook URL is correct and HTTPS
-- ✅ Verify Cryptomus dashboard shows webhook as "Active"
-- ✅ Check backend is running and route is registered
-- ✅ Review firewall/network settings
+-   ✅ Check webhook URL is correct and HTTPS
+-   ✅ Verify Cryptomus dashboard shows webhook as "Active"
+-   ✅ Check backend is running and route is registered
+-   ✅ Review firewall/network settings
 
 ### Signature Verification Fails
 
-- ✅ Ensure `CRYPTOMUS_API_KEY` environment variable is set
-- ✅ Check webhook signature header name (`sign` vs `cryptomus-signature`)
-- ✅ Verify API key matches the one in Cryptomus dashboard
+-   ✅ Ensure `CRYPTOMUS_API_KEY` environment variable is set
+-   ✅ Check webhook signature header name (`sign` vs `cryptomus-signature`)
+-   ✅ Verify API key matches the one in Cryptomus dashboard
 
 ### Payment Not Processed
 
-- ✅ Check database connection
-- ✅ Verify user exists in database
-- ✅ Review error logs for specific failure reasons
-- ✅ Ensure admin wallet table exists and is accessible
+-   ✅ Check database connection
+-   ✅ Verify user exists in database
+-   ✅ Review error logs for specific failure reasons
+-   ✅ Ensure admin wallet table exists and is accessible
 
 ### Frontend Not Updating
 
-- ✅ Test `/api/payment-status` endpoint directly
-- ✅ Check browser network tab for polling requests
-- ✅ Verify Socket.IO connection for real-time updates
-- ✅ Check for CORS issues
+-   ✅ Test `/api/payment-status` endpoint directly
+-   ✅ Check browser network tab for polling requests
+-   ✅ Verify Socket.IO connection for real-time updates
+-   ✅ Check for CORS issues
 
 ---
 
@@ -146,10 +146,7 @@ const payload = JSON.stringify({
   status: "paid",
   additional_data: '{"user_id": "test-user-123"}',
 });
-const signature = crypto
-  .createHmac("sha256", process.env.CRYPTOMUS_API_KEY)
-  .update(payload)
-  .digest("hex");
+const signature = crypto.createHmac("sha256", process.env.CRYPTOMUS_API_KEY).update(payload).digest("hex");
 console.log("Test signature:", signature);
 ```
 
@@ -165,13 +162,13 @@ console.log("Test signature:", signature);
 
 ## ✅ Success Indicators
 
-- [ ] Webhook URL configured in Cryptomus dashboard
-- [ ] Backend logs show webhook receipt and processing
-- [ ] Database shows new transaction record
-- [ ] Admin wallet balance increased
-- [ ] User crypto wallet credited
-- [ ] Frontend shows "Payment Successful" page
-- [ ] Real-time notifications work via Socket.IO
+-   [ ] Webhook URL configured in Cryptomus dashboard
+-   [ ] Backend logs show webhook receipt and processing
+-   [ ] Database shows new transaction record
+-   [ ] Admin wallet balance increased
+-   [ ] User crypto wallet credited
+-   [ ] Frontend shows "Payment Successful" page
+-   [ ] Real-time notifications work via Socket.IO
 
 ---
 
@@ -188,14 +185,14 @@ CRYPTOMUS_WEBHOOK_URL=https://advanciapayledger.com/api/cryptomus/webhook
 
 ### DNS & SSL
 
-- Ensure `advanciapayledger.com` points to your server
-- SSL certificate must be valid for webhook delivery
+-   Ensure `advanciapayledger.com` points to your server
+-   SSL certificate must be valid for webhook delivery
 
 ### Monitoring
 
-- Set up alerts for webhook failures
-- Monitor admin wallet balance changes
-- Track payment success rates
+-   Set up alerts for webhook failures
+-   Monitor admin wallet balance changes
+-   Track payment success rates
 
 ---
 

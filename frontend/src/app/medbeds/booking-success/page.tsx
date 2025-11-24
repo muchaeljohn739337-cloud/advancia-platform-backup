@@ -1,14 +1,14 @@
-"use client";
-import { Calendar, CheckCircle, Clock, DollarSign } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+'use client';
+import { Calendar, CheckCircle, Clock, DollarSign } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 function BookingSuccessContent() {
   const searchParams = useSearchParams();
-  const bookingId = searchParams?.get("booking_id");
+  const bookingId = searchParams?.get('booking_id');
 
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -17,18 +17,18 @@ function BookingSuccessContent() {
   useEffect(() => {
     const fetchBooking = async () => {
       if (!bookingId) {
-        setError("No booking ID provided");
+        setError('No booking ID provided');
         setLoading(false);
         return;
       }
 
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         const response = await fetch(`${API}/api/medbeds/my-bookings`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
-        if (!response.ok) throw new Error("Failed to fetch booking");
+        if (!response.ok) throw new Error('Failed to fetch booking');
 
         const bookings = await response.json();
         const foundBooking = bookings.find((b: any) => b.id === bookingId);
@@ -36,12 +36,10 @@ function BookingSuccessContent() {
         if (foundBooking) {
           setBooking(foundBooking);
         } else {
-          setError("Booking not found");
+          setError('Booking not found');
         }
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch booking"
-        );
+        setError(err instanceof Error ? err.message : 'Failed to fetch booking');
       } finally {
         setLoading(false);
       }
@@ -83,20 +81,14 @@ function BookingSuccessContent() {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Booking Confirmed!
-          </h1>
-          <p className="text-gray-600">
-            Your MedBed session has been successfully booked.
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking Confirmed!</h1>
+          <p className="text-gray-600">Your MedBed session has been successfully booked.</p>
         </div>
 
         {booking && (
           <div className="space-y-6">
             <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Booking Details
-              </h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Booking Details</h2>
               <div className="space-y-3">
                 <div className="flex items-center text-gray-700">
                   <Calendar className="w-5 h-5 mr-3 text-blue-600" />
@@ -106,13 +98,13 @@ function BookingSuccessContent() {
                 <div className="flex items-center text-gray-700">
                   <Clock className="w-5 h-5 mr-3 text-blue-600" />
                   <span className="font-medium mr-2">Time:</span>
-                  {new Date(booking.startTime).toLocaleTimeString()} -{" "}
+                  {new Date(booking.startTime).toLocaleTimeString()} -{' '}
                   {new Date(booking.endTime).toLocaleTimeString()}
                 </div>
                 <div className="flex items-center text-gray-700">
                   <DollarSign className="w-5 h-5 mr-3 text-blue-600" />
                   <span className="font-medium mr-2">Price:</span>$
-                  {booking.price?.toFixed(2) || "0.00"}
+                  {booking.price?.toFixed(2) || '0.00'}
                 </div>
               </div>
             </div>
@@ -122,8 +114,7 @@ function BookingSuccessContent() {
                 <strong>Booking ID:</strong> {booking.id}
               </p>
               <p className="text-sm text-blue-800 mt-2">
-                A confirmation email has been sent to your registered email
-                address.
+                A confirmation email has been sent to your registered email address.
               </p>
             </div>
 
@@ -145,15 +136,11 @@ function BookingSuccessContent() {
         )}
 
         <div className="mt-8 pt-6 border-t border-gray-200">
-          <h3 className="font-semibold text-gray-900 mb-3">
-            What happens next?
-          </h3>
+          <h3 className="font-semibold text-gray-900 mb-3">What happens next?</h3>
           <ul className="space-y-2 text-sm text-gray-600">
             <li className="flex items-start">
               <span className="mr-2">1.</span>
-              <span>
-                You will receive a confirmation email with all the details.
-              </span>
+              <span>You will receive a confirmation email with all the details.</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">2.</span>
@@ -166,18 +153,14 @@ function BookingSuccessContent() {
             <li className="flex items-start">
               <span className="mr-2">4.</span>
               <span>
-                If you need to reschedule or cancel, please do so at least 24
-                hours in advance.
+                If you need to reschedule or cancel, please do so at least 24 hours in advance.
               </span>
             </li>
           </ul>
         </div>
 
         <div className="mt-6 text-center">
-          <Link
-            href="/dashboard"
-            className="text-blue-600 hover:text-blue-700 font-medium"
-          >
+          <Link href="/dashboard" className="text-blue-600 hover:text-blue-700 font-medium">
             Return to Dashboard →
           </Link>
         </div>

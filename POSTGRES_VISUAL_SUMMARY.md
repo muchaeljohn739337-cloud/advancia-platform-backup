@@ -196,10 +196,10 @@ Once all tests pass, you have:
 
 Then you can:
 
-- 🔄 Set up CI/CD (GitHub Actions)
-- 📦 Deploy to production
-- 🎯 Add more tests as you build features
-- 📊 Monitor test coverage
+-   🔄 Set up CI/CD (GitHub Actions)
+-   📦 Deploy to production
+-   🎯 Add more tests as you build features
+-   📊 Monitor test coverage
 
 ---
 

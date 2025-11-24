@@ -5,61 +5,57 @@
 ### What's Been Implemented
 
 1. **Scam Adviser Service** (`backend/src/services/scamAdviserService.ts`)
-
-   - Domain reputation checking
-   - Trust score calculation (0-100)
-   - Manual verification request submission
-   - Automated trust signal improvements
-   - Trust improvement task recommendations
+   -   Domain reputation checking
+   -   Trust score calculation (0-100)
+   -   Manual verification request submission
+   -   Automated trust signal improvements
+   -   Trust improvement task recommendations
 
 2. **Trustpilot Invitation Service** (`backend/src/services/trustpilotInvitationService.ts`)
-
-   - Automated customer review invitations
-   - Intelligent transaction filtering (7-day delay, $10+ minimum)
-   - Rate limiting (1 second between invitations)
-   - Batch processing (50 transactions per run)
-   - Full audit trail logging
+   -   Automated customer review invitations
+   -   Intelligent transaction filtering (7-day delay, $10+ minimum)
+   -   Rate limiting (1 second between invitations)
+   -   Batch processing (50 transactions per run)
+   -   Full audit trail logging
 
 3. **Trust API Routes** (`backend/src/routes/trust.ts`)
-
-   - `GET /api/trust/report` - Public trust report endpoint
-   - `POST /api/trust/verify` - Admin-only verification request
-   - `GET /api/trust/improvement-tasks` - Admin task recommendations
-   - `POST /api/trust/improve` - Run automated improvements
+   -   `GET /api/trust/report` - Public trust report endpoint
+   -   `POST /api/trust/verify` - Admin-only verification request
+   -   `GET /api/trust/improvement-tasks` - Admin task recommendations
+   -   `POST /api/trust/improve` - Run automated improvements
 
 4. **Frontend Trust Badges** (`frontend/src/components/TrustBadges.tsx`)
-
-   - Real-time trust score display
-   - Scam Adviser score badge
-   - Trustpilot rating badge
-   - SSL certification status
-   - Business verification status
-   - Trust certifications grid
-   - External verification links
+   -   Real-time trust score display
+   -   Scam Adviser score badge
+   -   Trustpilot rating badge
+   -   SSL certification status
+   -   Business verification status
+   -   Trust certifications grid
+   -   External verification links
 
 5. **RPA Scheduler Integration** (`backend/src/rpa/scheduler.ts`)
-   - **Trustpilot Review Sync**: Every 6 hours
-   - **Trustpilot Invitations**: Daily at 10 AM
-   - **Scam Adviser Check**: Weekly (Monday 9 AM)
-   - **Trust Signal Improvement**: Daily at 2 AM
+   -   **Trustpilot Review Sync**: Every 6 hours
+   -   **Trustpilot Invitations**: Daily at 10 AM
+   -   **Scam Adviser Check**: Weekly (Monday 9 AM)
+   -   **Trust Signal Improvement**: Daily at 2 AM
 
 ## 📊 Trust Score Calculation
 
 Your trust score is calculated based on:
 
-- **SSL Certificate** (20 points): Valid HTTPS encryption
-- **Domain Age** (30 points max): 1 point per month, caps at 30
-- **Trustpilot Rating** (40 points max):
-  - 4.0+ stars = 40 points
-  - 3.0+ stars = 20 points
-  - 2.0+ stars = 10 points
-- **Social Presence** (10 points): Verified social media profiles
+-   **SSL Certificate** (20 points): Valid HTTPS encryption
+-   **Domain Age** (30 points max): 1 point per month, caps at 30
+-   **Trustpilot Rating** (40 points max):
+    -   4.0+ stars = 40 points
+    -   3.0+ stars = 20 points
+    -   2.0+ stars = 10 points
+-   **Social Presence** (10 points): Verified social media profiles
 
 **Score Interpretation:**
 
-- 80+ = ✅ Verified (Excellent)
-- 60-79 = ⏳ Pending (Good)
-- < 60 = ⚠️ Needs Attention (Action Required)
+-   80+ = ✅ Verified (Excellent)
+-   60-79 = ⏳ Pending (Good)
+-   < 60 = ⚠️ Needs Attention (Action Required)
 
 ## 🚀 Setup Instructions
 
@@ -86,21 +82,19 @@ RPA_AUTO_START=true
 
 ### Step 2: Get Trustpilot Credentials
 
-1. **API Key**: https://businessapp.b2b.trustpilot.com/integrations
+1. **API Key**: <https://businessapp.b2b.trustpilot.com/integrations>
+   -   Go to Integrations → API
+   -   Create new API key
+   -   Copy the key
 
-   - Go to Integrations → API
-   - Create new API key
-   - Copy the key
+2. **Business Unit ID**: <https://businessapp.b2b.trustpilot.com/account-settings>
+   -   Found in your account settings
+   -   Usually a UUID format
 
-2. **Business Unit ID**: https://businessapp.b2b.trustpilot.com/account-settings
-
-   - Found in your account settings
-   - Usually a UUID format
-
-3. **Template ID**: https://businessapp.b2b.trustpilot.com/invitations/invitation-settings
-   - Go to Invitations → Invitation Settings
-   - Create or select invitation template
-   - Copy template ID from the URL or embed code
+3. **Template ID**: <https://businessapp.b2b.trustpilot.com/invitations/invitation-settings>
+   -   Go to Invitations → Invitation Settings
+   -   Create or select invitation template
+   -   Copy template ID from the URL or embed code
 
 ### Step 3: Install Dependencies
 
@@ -111,8 +105,8 @@ npm install
 
 Dependencies already added:
 
-- `node-cron@^3.0.3` - Task scheduling
-- `@types/node-cron@^3.0.11` - TypeScript types
+-   `node-cron@^3.0.3` - Task scheduling
+-   `@types/node-cron@^3.0.11` - TypeScript types
 
 ### Step 4: Start the System
 
@@ -284,48 +278,45 @@ curl -X POST http://localhost:4000/api/rpa/run/trustSignalImprovement \
      -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
    ```
 
-   Then manually submit at: https://www.scamadviser.com/submit-website
+   Then manually submit at: <https://www.scamadviser.com/submit-website>
 
 2. **Collect More Trustpilot Reviews**
-
-   - System automatically invites customers after 7 days
-   - Focus on getting 50+ reviews with 4.5+ average
-   - Respond to all reviews (shows engagement)
+   -   System automatically invites customers after 7 days
+   -   Focus on getting 50+ reviews with 4.5+ average
+   -   Respond to all reviews (shows engagement)
 
 3. **Add Trust Pages to Website**
-
-   - About Us (with team information)
-   - Contact page (with physical address if possible)
-   - Privacy Policy (comprehensive)
-   - Terms of Service
-   - Security page (explain encryption, certifications)
+   -   About Us (with team information)
+   -   Contact page (with physical address if possible)
+   -   Privacy Policy (comprehensive)
+   -   Terms of Service
+   -   Security page (explain encryption, certifications)
 
 4. **Establish Social Media Presence**
-
-   - LinkedIn Company Page
-   - Twitter/X Business Account
-   - Facebook Business Page
-   - Link all profiles from website footer
+   -   LinkedIn Company Page
+   -   Twitter/X Business Account
+   -   Facebook Business Page
+   -   Link all profiles from website footer
 
 5. **Implement Technical Trust Signals**
-   - Ensure SSL certificate is valid (already done)
-   - Add business schema markup (JSON-LD)
-   - Display security badges
-   - Show payment processor logos (Stripe, etc.)
+   -   Ensure SSL certificate is valid (already done)
+   -   Add business schema markup (JSON-LD)
+   -   Display security badges
+   -   Show payment processor logos (Stripe, etc.)
 
 ### Expected Timeline
 
-- **Week 1**: Submit verification, add trust pages
-- **Week 2-4**: Collect initial reviews (target: 10-20)
-- **Week 4-8**: Build social presence, get more reviews
-- **Week 8-12**: See Scam Adviser score improve (target: 70+)
+-   **Week 1**: Submit verification, add trust pages
+-   **Week 2-4**: Collect initial reviews (target: 10-20)
+-   **Week 4-8**: Build social presence, get more reviews
+-   **Week 8-12**: See Scam Adviser score improve (target: 70+)
 
 ### Success Metrics
 
-- ✅ Scam Adviser Score: 70+ (Good) or 80+ (Excellent)
-- ✅ Trustpilot Rating: 4.5+ stars
-- ✅ Review Count: 50+ reviews
-- ✅ Social Verified: All profiles linked and active
+-   ✅ Scam Adviser Score: 70+ (Good) or 80+ (Excellent)
+-   ✅ Trustpilot Rating: 4.5+ stars
+-   ✅ Review Count: 50+ reviews
+-   ✅ Social Verified: All profiles linked and active
 
 ## 🔍 Monitoring & Debugging
 
@@ -403,28 +394,28 @@ curl -X POST http://localhost:4000/api/trustpilot/sync \
 
 **How it works:**
 
-- Calculates score based on local metrics (SSL, domain age, Trustpilot rating)
-- Manual verification is still required at scamadviser.com
-- Real score updates happen after manual verification on their site
+-   Calculates score based on local metrics (SSL, domain age, Trustpilot rating)
+-   Manual verification is still required at scamadviser.com
+-   Real score updates happen after manual verification on their site
 
 ## 📞 Support Resources
 
-- **Trustpilot API Docs**: https://documentation-apidocumentation.trustpilot.com/
-- **Trustpilot Business Portal**: https://businessapp.b2b.trustpilot.com/
-- **Scam Adviser Submission**: https://www.scamadviser.com/submit-website
-- **Scam Adviser Contact**: https://www.scamadviser.com/contact
+-   **Trustpilot API Docs**: <https://documentation-apidocumentation.trustpilot.com/>
+-   **Trustpilot Business Portal**: <https://businessapp.b2b.trustpilot.com/>
+-   **Scam Adviser Submission**: <https://www.scamadviser.com/submit-website>
+-   **Scam Adviser Contact**: <https://www.scamadviser.com/contact>
 
 ## ✅ Implementation Checklist
 
-- [x] Backend services created (scamAdviserService, trustpilotInvitationService)
-- [x] API routes registered (/api/trust)
-- [x] RPA scheduler integration (4 automated tasks)
-- [x] Frontend component created (TrustBadges)
-- [x] Environment variables documented
-- [x] Audit trail logging
-- [x] Error handling with Winston logger
-- [x] Following Prisma client singleton pattern
-- [x] Following architecture guidelines
+-   [x] Backend services created (scamAdviserService, trustpilotInvitationService)
+-   [x] API routes registered (/api/trust)
+-   [x] RPA scheduler integration (4 automated tasks)
+-   [x] Frontend component created (TrustBadges)
+-   [x] Environment variables documented
+-   [x] Audit trail logging
+-   [x] Error handling with Winston logger
+-   [x] Following Prisma client singleton pattern
+-   [x] Following architecture guidelines
 
 ## 🚀 Next Steps
 
@@ -457,15 +448,14 @@ curl -X POST http://localhost:4000/api/trustpilot/sync \
    ```
 
 5. **Monitor Progress** (Weekly)
-
-   - Check trust score: `GET /api/trust/report`
-   - Review improvement tasks: `GET /api/trust/improvement-tasks`
-   - Check audit logs for automated task execution
+   -   Check trust score: `GET /api/trust/report`
+   -   Review improvement tasks: `GET /api/trust/improvement-tasks`
+   -   Check audit logs for automated task execution
 
 6. **Display on Frontend**
-   - Add `<TrustBadges />` to homepage
-   - Add to footer for global visibility
-   - Consider adding to checkout/pricing pages
+   -   Add `<TrustBadges />` to homepage
+   -   Add to footer for global visibility
+   -   Consider adding to checkout/pricing pages
 
 ---
 

@@ -9,22 +9,22 @@
 
 ### Secrets Check - PASSED ✅
 
-- ✅ No `.env` files in git repository
-- ✅ All secrets moved to environment variables
-- ✅ `.gitignore` properly configured
-- ✅ Exposed credentials removed from documentation
-- ✅ `.env.example` templates provided for all services
+-   ✅ No `.env` files in git repository
+-   ✅ All secrets moved to environment variables
+-   ✅ `.gitignore` properly configured
+-   ✅ Exposed credentials removed from documentation
+-   ✅ `.env.example` templates provided for all services
 
-### Found & Fixed:
+### Found & Fixed
 
 1. ✅ **DEPLOYMENT_MONITOR.md**: Removed Render PostgreSQL credentials
 2. ✅ **VERCEL_DEPLOYMENT_GUIDE.md**: Removed Vercel token
 
-### Security Recommendations:
+### Security Recommendations
 
-- 🔄 Rotate all API keys before launch (Stripe, Cryptomus, Email passwords)
-- 🔐 Use environment variables in Render/Vercel dashboards
-- 🔒 Enable 2FA on all service accounts (Render, Vercel, Stripe, GitHub)
+-   🔄 Rotate all API keys before launch (Stripe, Cryptomus, Email passwords)
+-   🔐 Use environment variables in Render/Vercel dashboards
+-   🔒 Enable 2FA on all service accounts (Render, Vercel, Stripe, GitHub)
 
 ---
 
@@ -41,15 +41,15 @@ Prompt: "Modern fintech logo for 'Advancia Pay', gradient blue to purple, minima
 
 **Option B: Pre-Made Logo Templates** (10 minutes)
 
-- **Canva**: https://www.canva.com/templates/logos/
-- **Looka**: https://looka.com/ (AI logo generator, $20)
-- **Hatchful**: https://www.shopify.com/tools/logo-maker (Free)
+-   **Canva**: <https://www.canva.com/templates/logos/>
+-   **Looka**: <https://looka.com/> (AI logo generator, $20)
+-   **Hatchful**: <https://www.shopify.com/tools/logo-maker> (Free)
 
 **Logo Requirements**:
 
-- Format: SVG (vector), PNG (1024x1024 for high-res)
-- Transparent background
-- Colors: Match your brand (#3B82F6 blue to #9333EA purple gradient)
+-   Format: SVG (vector), PNG (1024x1024 for high-res)
+-   Transparent background
+-   Colors: Match your brand (#3B82F6 blue to #9333EA purple gradient)
 
 ### 2. Add Logo to Project
 
@@ -77,11 +77,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-export default function SplashScreen({
-  onComplete,
-}: {
-  onComplete: () => void;
-}) {
+export default function SplashScreen({ onComplete }: { onComplete: () => void }) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -97,12 +93,7 @@ export default function SplashScreen({
   return (
     <AnimatePresence>
       {show && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-purple-800"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <motion.div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-purple-800" initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
           <div className="text-center">
             {/* Animated Logo */}
             <motion.div
@@ -115,43 +106,21 @@ export default function SplashScreen({
                 duration: 1,
               }}
             >
-              <Image
-                src="/logo.svg"
-                alt="Advancia Pay"
-                width={120}
-                height={120}
-                className="mx-auto mb-6"
-                priority
-              />
+              <Image src="/logo.svg" alt="Advancia Pay" width={120} height={120} className="mx-auto mb-6" priority />
             </motion.div>
 
             {/* Animated Company Name */}
-            <motion.h1
-              className="text-4xl font-bold text-white mb-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
+            <motion.h1 className="text-4xl font-bold text-white mb-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.5 }}>
               Advancia Pay
             </motion.h1>
 
             {/* Animated Tagline */}
-            <motion.p
-              className="text-blue-100 text-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.5 }}
-            >
+            <motion.p className="text-blue-100 text-lg" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.5 }}>
               Secure Crypto Payments Platform
             </motion.p>
 
             {/* Loading Spinner */}
-            <motion.div
-              className="mt-8 flex justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.5 }}
-            >
+            <motion.div className="mt-8 flex justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.5 }}>
               <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
             </motion.div>
           </div>
@@ -172,11 +141,7 @@ export default function SplashScreen({
 import { useState, useEffect } from "react";
 import SplashScreen from "@/components/SplashScreen";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [showSplash, setShowSplash] = useState(true);
   const [isReady, setIsReady] = useState(false);
 
@@ -217,8 +182,7 @@ export default function RootLayout({
 ```tsx
 export const metadata = {
   title: "Advancia Pay - Secure Crypto Payments",
-  description:
-    "Professional crypto payment platform with breach monitoring and IP protection",
+  description: "Professional crypto payment platform with breach monitoring and IP protection",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
@@ -238,25 +202,25 @@ export const metadata = {
 
 ### Step 1: Create Google Business Profile
 
-1. **Go to**: https://business.google.com/create
+1. **Go to**: <https://business.google.com/create>
 2. **Business Name**: Advancia Pay
 3. **Business Category**: Financial Services / Cryptocurrency / Payment Service
 4. **Location**:
-   - If physical: Enter office address
-   - If online only: Check "I deliver goods and services to my customers"
-   - Service Area: Worldwide or specific countries
+   -   If physical: Enter office address
+   -   If online only: Check "I deliver goods and services to my customers"
+   -   Service Area: Worldwide or specific countries
 5. **Contact**:
-   - Website: https://advancia.vercel.app (or your custom domain)
-   - Phone: Your business phone number
-   - Email: support@advanciapayledger.com
+   -   Website: <https://advancia.vercel.app> (or your custom domain)
+   -   Phone: Your business phone number
+   -   Email: <support@advanciapayledger.com>
 
 ### Step 2: Verify Ownership
 
 **Verification Methods**:
 
-- **Email verification** (fastest, 1-2 days)
-- **Phone verification** (instant if available)
-- **Postcard verification** (7-14 days if physical address)
+-   **Email verification** (fastest, 1-2 days)
+-   **Phone verification** (instant if available)
+-   **Postcard verification** (7-14 days if physical address)
 
 ### Step 3: Complete Profile
 
@@ -287,9 +251,9 @@ Photos to Upload:
 
 ### Step 4: Enable Reviews
 
-- Enable Google Reviews (free marketing!)
-- Respond to all reviews within 24 hours
-- Ask satisfied customers to leave reviews
+-   Enable Google Reviews (free marketing!)
+-   Respond to all reviews within 24 hours
+-   Ask satisfied customers to leave reviews
 
 ### Step 5: Add to Website
 
@@ -375,14 +339,11 @@ const handleRegister = async (e: FormEvent) => {
   }
 
   // Step 2: Call backend API
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, username }),
-    }
-  );
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password, username }),
+  });
 
   // Step 3: Handle response
   const data = await response.json();
@@ -428,11 +389,7 @@ router.post("/register", async (req, res) => {
     });
 
     // Step 5: Generate JWT token
-    const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET!, { expiresIn: "7d" });
 
     // Step 6: Return success response
     res.status(201).json({
@@ -458,10 +415,7 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
+    log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
@@ -598,12 +552,7 @@ export const ipRotationLimiter = rateLimit({
 **Apply to routes** (`backend/src/index.ts`):
 
 ```typescript
-import {
-  apiLimiter,
-  authLimiter,
-  paymentLimiter,
-  ipRotationLimiter,
-} from "./middleware/rateLimiter";
+import { apiLimiter, authLimiter, paymentLimiter, ipRotationLimiter } from "./middleware/rateLimiter";
 
 // Apply global rate limit
 app.use("/api", apiLimiter);
@@ -633,12 +582,10 @@ export default function PrivacyPolicy() {
             <strong>Account Data</strong>: Email, username, password (hashed)
           </li>
           <li>
-            <strong>Financial Data</strong>: Crypto wallet addresses,
-            transaction history
+            <strong>Financial Data</strong>: Crypto wallet addresses, transaction history
           </li>
           <li>
-            <strong>Security Data</strong>: IP addresses (for protection), login
-            history
+            <strong>Security Data</strong>: IP addresses (for protection), login history
           </li>
           <li>
             <strong>Usage Data</strong>: Page views, feature usage, API calls
@@ -653,9 +600,7 @@ export default function PrivacyPolicy() {
           <li>Process crypto payments</li>
           <li>Monitor for data breaches (with your consent)</li>
           <li>Protect against fraud and abuse</li>
-          <li>
-            Send service notifications (security alerts, payment confirmations)
-          </li>
+          <li>Send service notifications (security alerts, payment confirmations)</li>
         </ul>
       </section>
 
@@ -663,16 +608,13 @@ export default function PrivacyPolicy() {
         <h2 className="text-2xl font-bold mb-4">3. Data Retention</h2>
         <ul className="list-disc pl-6 space-y-2">
           <li>
-            <strong>Active accounts</strong>: Data retained while subscription
-            is active
+            <strong>Active accounts</strong>: Data retained while subscription is active
           </li>
           <li>
-            <strong>Inactive accounts</strong>: Data deleted after 90 days of
-            inactivity
+            <strong>Inactive accounts</strong>: Data deleted after 90 days of inactivity
           </li>
           <li>
-            <strong>Transaction history</strong>: Retained for 7 years
-            (regulatory requirement)
+            <strong>Transaction history</strong>: Retained for 7 years (regulatory requirement)
           </li>
           <li>
             <strong>Logs</strong>: Deleted after 30 days
@@ -681,20 +623,16 @@ export default function PrivacyPolicy() {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">
-          4. Your Rights (GDPR Compliant)
-        </h2>
+        <h2 className="text-2xl font-bold mb-4">4. Your Rights (GDPR Compliant)</h2>
         <ul className="list-disc pl-6 space-y-2">
           <li>
             <strong>Access</strong>: Request a copy of your data anytime
           </li>
           <li>
-            <strong>Correction</strong>: Update incorrect data in your account
-            settings
+            <strong>Correction</strong>: Update incorrect data in your account settings
           </li>
           <li>
-            <strong>Deletion</strong>: Request account deletion (within 48
-            hours)
+            <strong>Deletion</strong>: Request account deletion (within 48 hours)
           </li>
           <li>
             <strong>Portability</strong>: Export your data in JSON format
@@ -718,9 +656,7 @@ export default function PrivacyPolicy() {
 
       <section className="mb-8">
         <h2 className="text-2xl font-bold mb-4">6. Third-Party Services</h2>
-        <p className="mb-4">
-          We share data with trusted partners only when necessary:
-        </p>
+        <p className="mb-4">We share data with trusted partners only when necessary:</p>
         <ul className="list-disc pl-6 space-y-2">
           <li>
             <strong>Stripe</strong>: Payment processing (PCI-DSS compliant)
@@ -729,8 +665,7 @@ export default function PrivacyPolicy() {
             <strong>Cryptomus</strong>: Crypto payment gateway
           </li>
           <li>
-            <strong>Have I Been Pwned</strong>: Breach monitoring (with your
-            consent)
+            <strong>Have I Been Pwned</strong>: Breach monitoring (with your consent)
           </li>
           <li>
             <strong>ProxyMesh</strong>: IP rotation service
@@ -895,31 +830,31 @@ echo "✅ Mobile tests complete!"
 
 ### Before Launch (30 minutes)
 
-- [ ] Logo uploaded to `frontend/public/`
-- [ ] Splash screen component created
-- [ ] Favicon and meta tags updated
-- [ ] Google Business Profile created
-- [ ] Privacy policy page published
-- [ ] Rate limiting enabled on all routes
-- [ ] Mobile responsiveness tested on 5+ devices
-- [ ] All secrets removed from code (moved to env vars)
-- [ ] .gitignore includes `.env`, `.env.local`, `.env.production`
-- [ ] Database backup script running (daily cron job)
-- [ ] SSL certificate active (HTTPS)
-- [ ] CORS configured for production domains
-- [ ] Error monitoring enabled (Sentry)
-- [ ] Analytics enabled (Google Analytics / Plausible)
+-   [ ] Logo uploaded to `frontend/public/`
+-   [ ] Splash screen component created
+-   [ ] Favicon and meta tags updated
+-   [ ] Google Business Profile created
+-   [ ] Privacy policy page published
+-   [ ] Rate limiting enabled on all routes
+-   [ ] Mobile responsiveness tested on 5+ devices
+-   [ ] All secrets removed from code (moved to env vars)
+-   [ ] .gitignore includes `.env`, `.env.local`, `.env.production`
+-   [ ] Database backup script running (daily cron job)
+-   [ ] SSL certificate active (HTTPS)
+-   [ ] CORS configured for production domains
+-   [ ] Error monitoring enabled (Sentry)
+-   [ ] Analytics enabled (Google Analytics / Plausible)
 
 ### Post-Launch (48 hours)
 
-- [ ] Monitor error logs (backend/frontend)
-- [ ] Check payment success rate (Stripe dashboard)
-- [ ] Verify rate limiting (Redis logs)
-- [ ] Test mobile checkout flow
-- [ ] Respond to initial user feedback
-- [ ] Ask first customers for Google reviews
-- [ ] Monitor server CPU/RAM usage
-- [ ] Scale if needed (upgrade droplet)
+-   [ ] Monitor error logs (backend/frontend)
+-   [ ] Check payment success rate (Stripe dashboard)
+-   [ ] Verify rate limiting (Redis logs)
+-   [ ] Test mobile checkout flow
+-   [ ] Respond to initial user feedback
+-   [ ] Ask first customers for Google reviews
+-   [ ] Monitor server CPU/RAM usage
+-   [ ] Scale if needed (upgrade droplet)
 
 ---
 

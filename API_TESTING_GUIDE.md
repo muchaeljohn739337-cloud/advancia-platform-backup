@@ -319,30 +319,30 @@ chmod +x test-api.sh
 
 This will automatically test:
 
-- ✅ Health check
-- ✅ User signup
-- ✅ Successful login
-- ✅ Failed login attempts
-- ✅ Account lockout
-- ✅ Admin 2FA login
-- ✅ Protected endpoints
+-   ✅ Health check
+-   ✅ User signup
+-   ✅ Successful login
+-   ✅ Failed login attempts
+-   ✅ Account lockout
+-   ✅ Admin 2FA login
+-   ✅ Protected endpoints
 
 ---
 
 ## 📝 Testing Checklist
 
-- [ ] Health endpoint returns 200
-- [ ] User signup creates account
-- [ ] User login with correct credentials succeeds
-- [ ] Failed login increments counter
-- [ ] 5 failed attempts locks account
-- [ ] Locked account rejects login
-- [ ] Admin login requires TOTP
-- [ ] Valid TOTP grants access
-- [ ] Backup codes work (single use)
-- [ ] Successful login resets counter
-- [ ] JWT tokens work for protected routes
-- [ ] Lockout expires after 15 minutes
+-   [ ] Health endpoint returns 200
+-   [ ] User signup creates account
+-   [ ] User login with correct credentials succeeds
+-   [ ] Failed login increments counter
+-   [ ] 5 failed attempts locks account
+-   [ ] Locked account rejects login
+-   [ ] Admin login requires TOTP
+-   [ ] Valid TOTP grants access
+-   [ ] Backup codes work (single use)
+-   [ ] Successful login resets counter
+-   [ ] JWT tokens work for protected routes
+-   [ ] Lockout expires after 15 minutes
 
 ---
 
@@ -386,10 +386,10 @@ UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE email = 'user@ex
 
 After testing, verify:
 
-- ✅ All endpoints respond correctly
-- ✅ Lockout policy enforces after 5 attempts
-- ✅ TOTP validation works
-- ✅ Backup codes provide recovery
-- ✅ Failed attempts reset on success
-- ✅ JWT authentication protects routes
-- ✅ Database columns populated correctly
+-   ✅ All endpoints respond correctly
+-   ✅ Lockout policy enforces after 5 attempts
+-   ✅ TOTP validation works
+-   ✅ Backup codes provide recovery
+-   ✅ Failed attempts reset on success
+-   ✅ JWT authentication protects routes
+-   ✅ Database columns populated correctly

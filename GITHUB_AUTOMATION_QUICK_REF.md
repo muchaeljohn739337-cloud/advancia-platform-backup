@@ -7,6 +7,7 @@
 ## ⚡ Quick Commands
 
 ### Setup (First Time)
+
 ```powershell
 # 1. Copy config template
 cp github-config.json.example github-config.json
@@ -22,6 +23,7 @@ code github-config.json
 ```
 
 ### Update Secrets
+
 ```powershell
 # Edit config with new values
 code github-config.json
@@ -31,6 +33,7 @@ code github-config.json
 ```
 
 ### Verify Configuration
+
 ```powershell
 # List environments
 gh api repos/OWNER/REPO/environments --jq '.environments[].name'
@@ -54,9 +57,7 @@ gh api repos/OWNER/REPO/environments/ENV-NAME --jq '.protection_rules'
     "DROPLET_IP_GREEN": "IP-ADDRESS",
     "CF_ZONE_ID": "zone-id"
   },
-  "reviewers": [
-    { "type": "User", "username": "github-user" }
-  ],
+  "reviewers": [{ "type": "User", "username": "github-user" }],
   "protection": {
     "wait_timer": 30,
     "protected_branches_only": true
@@ -68,20 +69,20 @@ gh api repos/OWNER/REPO/environments/ENV-NAME --jq '.protection_rules'
 
 ## 🔐 Required Secrets (12 Total)
 
-| Secret | Get From |
-|--------|----------|
-| `SLACK_WEBHOOK_URL` | Slack API → Incoming Webhooks |
-| `GLOBAL_SLACK_WEBHOOK` | Slack API → Incoming Webhooks |
-| `TEAMS_WEBHOOK_URL` | Teams → Connectors (optional) |
-| `DROPLET_IP_GREEN` | DigitalOcean → Droplets |
-| `DROPLET_IP_BLUE` | DigitalOcean → Droplets |
-| `LB_IP` | DigitalOcean → Load Balancers |
-| `DROPLET_USER` | SSH user (usually "deploy") |
-| `PROMETHEUS_PUSHGATEWAY_URL` | Monitoring setup |
-| `CF_ZONE_ID` | Cloudflare → Zone Overview |
-| `CF_API_TOKEN` | Cloudflare → API Tokens |
-| `CF_RECORD_ID_API` | Cloudflare API call |
-| `GRAFANA_API_KEY` | Grafana → API Keys |
+| Secret                       | Get From                      |
+| ---------------------------- | ----------------------------- |
+| `SLACK_WEBHOOK_URL`          | Slack API → Incoming Webhooks |
+| `GLOBAL_SLACK_WEBHOOK`       | Slack API → Incoming Webhooks |
+| `TEAMS_WEBHOOK_URL`          | Teams → Connectors (optional) |
+| `DROPLET_IP_GREEN`           | DigitalOcean → Droplets       |
+| `DROPLET_IP_BLUE`            | DigitalOcean → Droplets       |
+| `LB_IP`                      | DigitalOcean → Load Balancers |
+| `DROPLET_USER`               | SSH user (usually "deploy")   |
+| `PROMETHEUS_PUSHGATEWAY_URL` | Monitoring setup              |
+| `CF_ZONE_ID`                 | Cloudflare → Zone Overview    |
+| `CF_API_TOKEN`               | Cloudflare → API Tokens       |
+| `CF_RECORD_ID_API`           | Cloudflare API call           |
+| `GRAFANA_API_KEY`            | Grafana → API Keys            |
 
 ---
 
@@ -107,13 +108,13 @@ gh run watch
 
 ## 🔧 Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| "GitHub CLI not found" | `winget install GitHub.cli` |
-| "Not authenticated" | `gh auth login` |
+| Issue                   | Solution                          |
+| ----------------------- | --------------------------------- |
+| "GitHub CLI not found"  | `winget install GitHub.cli`       |
+| "Not authenticated"     | `gh auth login`                   |
 | "Config file not found" | Check you're in correct directory |
-| "Failed to fetch ID" | Verify username/team exists |
-| "Invalid JSON" | Use https://jsonlint.com/ |
+| "Failed to fetch ID"    | Verify username/team exists       |
+| "Invalid JSON"          | Use <https://jsonlint.com/>         |
 
 ---
 
@@ -137,9 +138,9 @@ gh run list --limit 5
 
 ## 📚 Documentation
 
-- `GITHUB_AUTOMATION_GUIDE.md` - Complete reference
-- `WEBHOOK_CONFIGURATION_GUIDE.md` - Slack/Teams setup
-- `QUICK_START_DEPLOYMENT.md` - Deployment guide
+-   `GITHUB_AUTOMATION_GUIDE.md` - Complete reference
+-   `WEBHOOK_CONFIGURATION_GUIDE.md` - Slack/Teams setup
+-   `QUICK_START_DEPLOYMENT.md` - Deployment guide
 
 ---
 

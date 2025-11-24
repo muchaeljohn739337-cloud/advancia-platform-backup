@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { ShieldAlert, Loader2 } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { ShieldAlert, Loader2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 interface SilentModeConfig {
   silentMode: boolean;
@@ -22,12 +22,12 @@ export default function SilentModeSwitch() {
 
   const fetchConfig = async () => {
     try {
-      const res = await fetch("/api/admin/config/silent-mode");
+      const res = await fetch('/api/admin/config/silent-mode');
       const data = await res.json();
       setConfig(data);
     } catch (error) {
-      console.error("Failed to fetch silent mode config:", error);
-      toast.error("Failed to load configuration");
+      console.error('Failed to fetch silent mode config:', error);
+      toast.error('Failed to load configuration');
     } finally {
       setLoading(false);
     }
@@ -35,17 +35,15 @@ export default function SilentModeSwitch() {
 
   const toggleSilentMode = async (enabled: boolean) => {
     if (config?.autoEnabled && !enabled) {
-      toast.error(
-        "Cannot disable Silent Mode in production. This is enforced for security."
-      );
+      toast.error('Cannot disable Silent Mode in production. This is enforced for security.');
       return;
     }
 
     setUpdating(true);
     try {
-      const res = await fetch("/api/admin/config/silent-mode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/admin/config/silent-mode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled }),
       });
 
@@ -53,16 +51,16 @@ export default function SilentModeSwitch() {
 
       if (res.ok && data.success) {
         setConfig((prev) => (prev ? { ...prev, silentMode: enabled } : null));
-        toast.success(`Silent Mode ${enabled ? "Activated" : "Deactivated"}`);
+        toast.success(`Silent Mode ${enabled ? 'Activated' : 'Deactivated'}`);
 
         // Reload page to apply changes
         setTimeout(() => window.location.reload(), 1000);
       } else {
-        toast.error(data.message || "Failed to update configuration");
+        toast.error(data.message || 'Failed to update configuration');
       }
     } catch (error) {
-      console.error("Failed to update silent mode:", error);
-      toast.error("Failed to update configuration");
+      console.error('Failed to update silent mode:', error);
+      toast.error('Failed to update configuration');
     } finally {
       setUpdating(false);
     }
@@ -94,10 +92,7 @@ export default function SilentModeSwitch() {
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <ShieldAlert
-              size={20}
-              className={isEnabled ? "text-yellow-500" : "text-gray-400"}
-            />
+            <ShieldAlert size={20} className={isEnabled ? 'text-yellow-500' : 'text-gray-400'} />
             <h3 className="text-lg font-semibold">Silent Mode</h3>
             {isLocked && (
               <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
@@ -106,9 +101,8 @@ export default function SilentModeSwitch() {
             )}
           </div>
           <p className="text-sm text-muted-foreground max-w-2xl">
-            When enabled, all backend system notifications, debug logs, and
-            error toasts are hidden from the frontend. This provides a clean
-            user experience in production.
+            When enabled, all backend system notifications, debug logs, and error toasts are hidden
+            from the frontend. This provides a clean user experience in production.
           </p>
         </div>
 
@@ -119,18 +113,14 @@ export default function SilentModeSwitch() {
           disabled={updating || isLocked}
           className={`
             relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-            ${isEnabled ? "bg-yellow-500" : "bg-gray-200 dark:bg-gray-700"}
-            ${
-              updating || isLocked
-                ? "opacity-50 cursor-not-allowed"
-                : "cursor-pointer"
-            }
+            ${isEnabled ? 'bg-yellow-500' : 'bg-gray-200 dark:bg-gray-700'}
+            ${updating || isLocked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           `}
         >
           <span
             className={`
             inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-            ${isEnabled ? "translate-x-6" : "translate-x-1"}
+            ${isEnabled ? 'translate-x-6' : 'translate-x-1'}
           `}
           />
         </button>
@@ -140,12 +130,8 @@ export default function SilentModeSwitch() {
       <div className="grid grid-cols-3 gap-4 pt-4 border-t">
         <div>
           <p className="text-xs text-muted-foreground">Status</p>
-          <p
-            className={`text-sm font-medium ${
-              isEnabled ? "text-yellow-600" : "text-gray-600"
-            }`}
-          >
-            {isEnabled ? "Active" : "Inactive"}
+          <p className={`text-sm font-medium ${isEnabled ? 'text-yellow-600' : 'text-gray-600'}`}>
+            {isEnabled ? 'Active' : 'Inactive'}
           </p>
         </div>
         <div>
@@ -162,9 +148,8 @@ export default function SilentModeSwitch() {
       {isLocked && (
         <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mt-4">
           <p className="text-xs text-yellow-800">
-            <strong>Production Mode:</strong> Silent Mode is automatically
-            enabled and cannot be disabled on Render production for security and
-            user experience.
+            <strong>Production Mode:</strong> Silent Mode is automatically enabled and cannot be
+            disabled on Render production for security and user experience.
           </p>
         </div>
       )}

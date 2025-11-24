@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import { Banknote, Info, TrendingUp } from 'lucide-react'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion';
+import { Banknote, Info, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface LoanCardProps {
-  availableCredit: number
-  interestRate: number
-  delay?: number
+  availableCredit: number;
+  interestRate: number;
+  delay?: number;
 }
 
 export default function LoanCard({ availableCredit, interestRate, delay = 0 }: LoanCardProps) {
-  const [showTooltip, setShowTooltip] = useState(false)
-  const [processing, setProcessing] = useState(false)
-  const router = useRouter()
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const router = useRouter();
 
   const handleApplyLoan = () => {
-    setProcessing(true)
+    setProcessing(true);
     setTimeout(() => {
-      setProcessing(false)
-      router.push('/loans')
-    }, 500)
-  }
+      setProcessing(false);
+      router.push('/loans');
+    }, 500);
+  };
 
   return (
     <motion.div
@@ -36,19 +36,16 @@ export default function LoanCard({ availableCredit, interestRate, delay = 0 }: L
     >
       {/* Background decoration */}
       <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/30 rounded-full blur-2xl" />
-      
+
       <div className="relative flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <p className="text-sm font-medium text-slate-600">Available Credit</p>
-            <motion.div
-              animate={{ rotate: showTooltip ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div animate={{ rotate: showTooltip ? 180 : 0 }} transition={{ duration: 0.3 }}>
               <Info className="w-4 h-4 text-emerald-600" />
             </motion.div>
           </div>
-          
+
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -60,9 +57,7 @@ export default function LoanCard({ availableCredit, interestRate, delay = 0 }: L
             </span>
             <div className="flex items-center gap-2 text-sm">
               <TrendingUp className="w-4 h-4 text-emerald-600" />
-              <span className="text-emerald-600 font-semibold">
-                {interestRate}% APR
-              </span>
+              <span className="text-emerald-600 font-semibold">{interestRate}% APR</span>
             </div>
           </motion.div>
         </div>
@@ -89,7 +84,8 @@ export default function LoanCard({ availableCredit, interestRate, delay = 0 }: L
       >
         <p className="font-semibold mb-1">Feature Coming Soon:</p>
         <p className="text-slate-300">
-          We&apos;re building a loan platform with rates starting at {interestRate}% APR, flexible terms, and instant approvals. Click to see what&apos;s planned!
+          We&apos;re building a loan platform with rates starting at {interestRate}% APR, flexible
+          terms, and instant approvals. Click to see what&apos;s planned!
         </p>
       </motion.div>
 
@@ -108,5 +104,5 @@ export default function LoanCard({ availableCredit, interestRate, delay = 0 }: L
         {processing ? 'Loading...' : 'View Feature Preview'}
       </motion.button>
     </motion.div>
-  )
+  );
 }

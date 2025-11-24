@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 interface HttpClientConfig {
   baseURL: string;
@@ -14,13 +14,7 @@ class SaaSHttpClient {
   private maxBackoff: number;
 
   constructor(config: HttpClientConfig) {
-    const {
-      baseURL,
-      token,
-      timeout = 10000,
-      maxRetries = 3,
-      maxBackoff = 16000,
-    } = config;
+    const { baseURL, token, timeout = 10000, maxRetries = 3, maxBackoff = 16000 } = config;
 
     this.maxRetries = maxRetries;
     this.maxBackoff = maxBackoff;
@@ -30,7 +24,7 @@ class SaaSHttpClient {
       timeout,
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -38,14 +32,14 @@ class SaaSHttpClient {
     this.client.interceptors.response.use(
       (response: AxiosResponse) => response,
       (error) => {
-        console.error("HTTP Error:", error.response?.status, error.message);
+        console.error('HTTP Error:', error.response?.status, error.message);
         return Promise.reject(error);
       }
     );
   }
 
   private async request<T = any>(
-    method: "GET" | "POST" | "PUT" | "DELETE",
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     endpoint: string,
     data: any = {},
     params: any = {}
@@ -64,16 +58,11 @@ class SaaSHttpClient {
       } catch (error: any) {
         attempt++;
         if (attempt > this.maxRetries) {
-          console.error(
-            `Max retries reached for ${method} ${endpoint}: ${error.message}`
-          );
+          console.error(`Max retries reached for ${method} ${endpoint}: ${error.message}`);
           throw error;
         }
 
-        const sleepTime = Math.min(
-          Math.pow(2, attempt) * 1000,
-          this.maxBackoff
-        );
+        const sleepTime = Math.min(Math.pow(2, attempt) * 1000, this.maxBackoff);
         console.warn(
           `Request failed (${error.message}), retrying in ${
             sleepTime / 1000
@@ -83,23 +72,23 @@ class SaaSHttpClient {
       }
     }
 
-    throw new Error("Unexpected error in request loop");
+    throw new Error('Unexpected error in request loop');
   }
 
   async get<T = any>(endpoint: string, params: any = {}): Promise<T> {
-    return this.request<T>("GET", endpoint, {}, params);
+    return this.request<T>('GET', endpoint, {}, params);
   }
 
   async post<T = any>(endpoint: string, data: any = {}): Promise<T> {
-    return this.request<T>("POST", endpoint, data);
+    return this.request<T>('POST', endpoint, data);
   }
 
   async put<T = any>(endpoint: string, data: any = {}): Promise<T> {
-    return this.request<T>("PUT", endpoint, data);
+    return this.request<T>('PUT', endpoint, data);
   }
 
   async delete<T = any>(endpoint: string, data: any = {}): Promise<T> {
-    return this.request<T>("DELETE", endpoint, data);
+    return this.request<T>('DELETE', endpoint, data);
   }
 }
 

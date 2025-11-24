@@ -357,11 +357,11 @@ Windows 10+ includes curl. For older versions:
 
 ## 📚 Related Scripts
 
-- **simple-watchdog.ps1** - Lightweight monitoring with auto-restart
-- **backend-watchdog.ps1** - Production monitoring with notifications
-- **backend-tools.ps1** - Complete backend automation suite
-- **test-api.sh** - Comprehensive API testing
-- **test-watchdog-notifications.ps1** - Notification system tests
+-   **simple-watchdog.ps1** - Lightweight monitoring with auto-restart
+-   **backend-watchdog.ps1** - Production monitoring with notifications
+-   **backend-tools.ps1** - Complete backend automation suite
+-   **test-api.sh** - Comprehensive API testing
+-   **test-watchdog-notifications.ps1** - Notification system tests
 
 ---
 
@@ -369,25 +369,25 @@ Windows 10+ includes curl. For older versions:
 
 **health-check.sh / health-check.ps1**:
 
-- ✅ Simple and fast (< 1 second)
-- ✅ Cross-platform (bash + PowerShell)
-- ✅ Exit codes for automation
-- ✅ Colored output
-- ✅ Single endpoint focus
-- ✅ Perfect for CI/CD and monitoring
+-   ✅ Simple and fast (< 1 second)
+-   ✅ Cross-platform (bash + PowerShell)
+-   ✅ Exit codes for automation
+-   ✅ Colored output
+-   ✅ Single endpoint focus
+-   ✅ Perfect for CI/CD and monitoring
 
 **Best for**:
 
-- Quick manual checks
-- CI/CD pipelines
-- Automated monitoring
-- Pre-deployment validation
-- Integration with other tools
+-   Quick manual checks
+-   CI/CD pipelines
+-   Automated monitoring
+-   Pre-deployment validation
+-   Integration with other tools
 
 **When to use test-api.sh instead**:
 
-- Need comprehensive API testing
-- Testing authentication flows
-- Validating protected endpoints
-- Manual QA testing
-- Learning the API
+-   Need comprehensive API testing
+-   Testing authentication flows
+-   Validating protected endpoints
+-   Manual QA testing
+-   Learning the API

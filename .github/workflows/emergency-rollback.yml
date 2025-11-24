@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Reason for emergency rollback'
+        description: "Reason for emergency rollback"
         required: true
         type: string
       notify_team:
-        description: 'Send urgent notifications to team'
+        description: "Send urgent notifications to team"
         required: true
         type: boolean
         default: true
@@ -17,14 +17,14 @@ jobs:
   emergency-rollback:
     name: Execute Emergency Rollback
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Determine current and target environments
         id: environments
         run: |
           # Get current production IP
           current_ip=$(dig +short api.advancia.com | head -n1)
-          
+
           # Determine which is current and which is rollback target
           if [ "$current_ip" == "${{ secrets.DROPLET_IP_GREEN }}" ]; then
             echo "CURRENT_ENV=🟢 Green" >> $GITHUB_OUTPUT
@@ -64,22 +64,22 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "{\"type\":\"A\",\"name\":\"api.advancia.com\",\"content\":\"${{ steps.environments.outputs.ROLLBACK_IP }}\",\"ttl\":60,\"proxied\":true}"
-          
+
           # Update www
           curl -X PATCH "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/dns_records/${{ secrets.CF_WWW_RECORD_ID }}" \
           -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "{\"type\":\"A\",\"name\":\"www.advancia.com\",\"content\":\"${{ steps.environments.outputs.ROLLBACK_IP }}\",\"ttl\":60,\"proxied\":true}"
-          
+
           echo "✅ DNS switched to rollback environment"
 
       - name: Verify rollback
         run: |
           sleep 15
-          
+
           max_attempts=30
           attempt=0
-          
+
           while [ $attempt -lt $max_attempts ]; do
             if curl -f -s "https://api.advancia.com/api/health" | grep -q "ok"; then
               echo "✅ Rollback successful - production responding"
@@ -89,7 +89,7 @@ jobs:
             sleep 2
             attempt=$((attempt+1))
           done
-          
+
           echo "⚠️ Production verification taking longer than expected"
 
       - name: Rollback success notification
@@ -104,28 +104,28 @@ jobs:
           cat > incident_report.txt << EOF
           EMERGENCY ROLLBACK INCIDENT REPORT
           ==================================
-          
+
           Date/Time: $(date -u +'%Y-%m-%d %H:%M:%S UTC')
           Triggered by: ${{ github.actor }}
           Reason: ${{ github.event.inputs.reason }}
-          
+
           Environment Changes:
           - Previous: ${{ steps.environments.outputs.CURRENT_ENV }}
           - Current: ${{ steps.environments.outputs.ROLLBACK_ENV }}
-          
+
           Actions Taken:
           1. DNS switched to rollback environment
           2. Health checks verified
           3. Production confirmed stable
-          
+
           Status: RESOLVED
-          
+
           Follow-up Required:
           - Root cause analysis
           - Fix issues in rolled-back environment
           - Plan for redeployment
           EOF
-          
+
           echo "Incident report created"
 
       - name: Rollback failure notification

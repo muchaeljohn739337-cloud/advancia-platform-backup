@@ -11,13 +11,11 @@
 ### Phase 1: Registration Approval System (30 minutes)
 
 - [ ] **Update** `backend/src/routes/auth.ts`
-
   - Change registration to create user with `active: false`
   - Add admin notification on new registration
   - Return `status: "pending_approval"` in response
 
 - [ ] **Add to** `backend/src/routes/admin.ts`
-
   - `POST /api/admin/users/approve-registration` - Approve/reject single user
   - `GET /api/admin/users/pending-approvals` - List pending registrations
   - `POST /api/admin/users/bulk-approve` - Approve/reject multiple users
@@ -39,7 +37,6 @@
   ```
 
 - [ ] **Verify protected routes**:
-
   - Admin routes (`/api/admin/*`) → All protected ✓
   - User routes → Protected ✓
   - Public routes → Allowed (health, config, etc.) ✓
@@ -87,7 +84,6 @@
   ```
 
 - [ ] Verify CI/CD workflow passes
-
   - Should trigger GitHub Actions workflow
   - All tests should pass
   - Auto-deploy to Render if successful

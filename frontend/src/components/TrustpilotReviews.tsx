@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Star } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface Review {
   id: string;
@@ -18,10 +18,7 @@ interface TrustpilotReviewsProps {
   showTitle?: boolean;
 }
 
-export default function TrustpilotReviews({
-  limit = 6,
-  showTitle = true,
-}: TrustpilotReviewsProps) {
+export default function TrustpilotReviews({ limit = 6, showTitle = true }: TrustpilotReviewsProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState<{
     total: number;
@@ -47,7 +44,7 @@ export default function TrustpilotReviews({
         setReviews(data.reviews);
       }
     } catch (error) {
-      console.error("Failed to fetch reviews:", error);
+      console.error('Failed to fetch reviews:', error);
     } finally {
       setLoading(false);
     }
@@ -55,16 +52,14 @@ export default function TrustpilotReviews({
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/trustpilot/stats`
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trustpilot/stats`);
       const data = await response.json();
 
       if (data.success) {
         setStats(data.stats);
       }
     } catch (error) {
-      console.error("Failed to fetch stats:", error);
+      console.error('Failed to fetch stats:', error);
     }
   };
 
@@ -75,9 +70,7 @@ export default function TrustpilotReviews({
           <Star
             key={i}
             className={`w-5 h-5 ${
-              i < rating
-                ? "fill-yellow-400 text-yellow-400"
-                : "fill-gray-700 text-gray-700"
+              i < rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-700 text-gray-700'
             }`}
           />
         ))}
@@ -87,10 +80,10 @@ export default function TrustpilotReviews({
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -124,7 +117,7 @@ export default function TrustpilotReviews({
               </div>
               <span className="text-gray-500">•</span>
               <span>
-                {stats.total} review{stats.total !== 1 ? "s" : ""}
+                {stats.total} review{stats.total !== 1 ? 's' : ''}
               </span>
             </div>
           )}
@@ -140,12 +133,8 @@ export default function TrustpilotReviews({
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="font-semibold text-white">
-                  {review.reviewerName}
-                </p>
-                <p className="text-sm text-gray-400">
-                  {formatDate(review.reviewDate)}
-                </p>
+                <p className="font-semibold text-white">{review.reviewerName}</p>
+                <p className="text-sm text-gray-400">{formatDate(review.reviewDate)}</p>
               </div>
               {review.isVerified && (
                 <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
@@ -158,9 +147,7 @@ export default function TrustpilotReviews({
             <div className="mb-3">{renderStars(review.stars)}</div>
 
             {/* Title */}
-            {review.title && (
-              <h3 className="font-semibold text-white mb-2">{review.title}</h3>
-            )}
+            {review.title && <h3 className="font-semibold text-white mb-2">{review.title}</h3>}
 
             {/* Review Text */}
             <p className="text-gray-300 text-sm line-clamp-4">{review.text}</p>
@@ -172,7 +159,7 @@ export default function TrustpilotReviews({
       <div className="mt-8 text-center">
         <a
           href={`https://www.trustpilot.com/review/${
-            process.env.NEXT_PUBLIC_TRUSTPILOT_DOMAIN || ""
+            process.env.NEXT_PUBLIC_TRUSTPILOT_DOMAIN || ''
           }`}
           target="_blank"
           rel="noopener noreferrer"

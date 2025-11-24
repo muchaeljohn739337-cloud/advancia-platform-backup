@@ -23,11 +23,13 @@ The `restore_db.sh` script allows you to restore a PostgreSQL database from a SQ
 ### Example Commands
 
 1. **Restore from a recent backup:**
+
    ```bash
    ./scripts/restore_db.sh backups/backup_20250119_120000.sql
    ```
 
 2. **Restore from a specific backup:**
+
    ```bash
    ./scripts/restore_db.sh backups/production_backup_20250115.sql
    ```
@@ -45,7 +47,7 @@ The `restore_db.sh` script allows you to restore a PostgreSQL database from a SQ
 4. **Loads environment variables:** Reads `.env` file for database configuration
 5. **Asks for confirmation:** Prompts before overwriting data (safety check)
 6. **Stops the app service:** If running, stops the application to prevent conflicts
-7. **Restores the database:** 
+7. **Restores the database:**
    - Drops the existing database
    - Creates a fresh database
    - Restores data from the backup file
@@ -72,11 +74,13 @@ The script uses the following environment variables (from `.env` file):
 ### Safety Recommendations
 
 1. **Always create a backup first:**
+
    ```bash
    ./scripts/backup_db.sh pre-restore-backup
    ```
 
 2. **Verify the backup file:**
+
    ```bash
    # Check backup file size and timestamp
    ls -lh backups/backup_20250119_120000.sql
@@ -99,6 +103,7 @@ The script uses the following environment variables (from `.env` file):
 **Error:** `Database container 'postgres' is not running`
 
 **Solution:**
+
 ```bash
 docker compose up -d postgres
 # Wait a few seconds for the container to start
@@ -110,6 +115,7 @@ docker compose ps
 **Error:** `Permission denied: ./scripts/restore_db.sh`
 
 **Solution:**
+
 ```bash
 chmod +x scripts/restore_db.sh
 ```
@@ -119,6 +125,7 @@ chmod +x scripts/restore_db.sh
 **Error:** `Docker Compose is not installed`
 
 **Solution:**
+
 - Install Docker Compose: https://docs.docker.com/compose/install/
 - Or use `docker-compose` (v1) if already installed
 
@@ -127,6 +134,7 @@ chmod +x scripts/restore_db.sh
 **Error:** `Backup file not found: path/to/backup.sql`
 
 **Solution:**
+
 - Check the file path is correct
 - Ensure the backup file exists:
   ```bash
@@ -138,11 +146,13 @@ chmod +x scripts/restore_db.sh
 If the restoration fails midway:
 
 1. **Check the backup file integrity:**
+
    ```bash
    head -n 20 backups/backup_20250119_120000.sql
    ```
 
 2. **Check database logs:**
+
    ```bash
    docker compose logs postgres
    ```

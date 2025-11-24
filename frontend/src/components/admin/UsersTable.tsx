@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import PaginationControls from "@/components/PaginationControls";
-import RoleBadge from "@/components/RoleBadge";
-import SortControls from "@/components/SortControls";
-import adminApi from "@/lib/adminApi";
-import { Download, Lock, Users, UserX } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import toast from "react-hot-toast";
+import PaginationControls from '@/components/PaginationControls';
+import RoleBadge from '@/components/RoleBadge';
+import SortControls from '@/components/SortControls';
+import adminApi from '@/lib/adminApi';
+import { Users, UserX } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 
 export type AdminUserRow = {
   id: string;
   name: string;
   email: string;
-  role: "USER" | "STAFF" | "ADMIN";
-  status: "ACTIVE" | "SUSPENDED";
+  role: 'USER' | 'STAFF' | 'ADMIN';
+  status: 'ACTIVE' | 'SUSPENDED';
   createdAt: string;
   usdBalance?: string;
 };
@@ -32,14 +32,14 @@ export default function UsersTable() {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [role, setRole] = useState<string>("");
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [role, setRole] = useState<string>('');
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
-  const [bulkAction, setBulkAction] = useState("");
-  const [sortField, setSortField] = useState<string>("createdAt");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [bulkAction, setBulkAction] = useState('');
+  const [sortField, setSortField] = useState<string>('createdAt');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Debounce search
   useEffect(() => {
@@ -61,16 +61,13 @@ export default function UsersTable() {
         };
         if (role) params.role = role;
         if (debouncedSearch) params.search = debouncedSearch;
-        const { data } = await adminApi.get<UsersApiResponse>(
-          "/api/admin/users",
-          { params }
-        );
+        const { data } = await adminApi.get<UsersApiResponse>('/api/admin/users', { params });
         if (!cancelled) {
           setItems(data.items || []);
           setTotal(data.total || 0);
         }
       } catch {
-        if (!cancelled) toast.error("Failed to load users");
+        if (!cancelled) toast.error('Failed to load users');
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -81,13 +78,10 @@ export default function UsersTable() {
     };
   }, [page, pageSize, role, debouncedSearch, sortField, sortOrder]);
 
-  const totalPages = useMemo(
-    () => Math.max(1, Math.ceil(total / pageSize)),
-    [total, pageSize]
-  );
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(total / pageSize)), [total, pageSize]);
 
   async function toggleRole(u: AdminUserRow) {
-    const next = u.role === "ADMIN" ? "USER" : "ADMIN";
+    const next = u.role === 'ADMIN' ? 'USER' : 'ADMIN';
     try {
       await adminApi.patch(`/api/admin/users/${u.id}/role`, { role: next });
       toast.success(`Role updated to ${next}`);
@@ -100,14 +94,11 @@ export default function UsersTable() {
       };
       if (role) params.role = role;
       if (debouncedSearch) params.search = debouncedSearch;
-      const { data } = await adminApi.get<UsersApiResponse>(
-        "/api/admin/users",
-        { params }
-      );
+      const { data } = await adminApi.get<UsersApiResponse>('/api/admin/users', { params });
       setItems(data.items || []);
       setTotal(data.total || 0);
     } catch {
-      toast.error("Failed to update role");
+      toast.error('Failed to update role');
     }
   }
 
@@ -131,7 +122,7 @@ export default function UsersTable() {
 
   async function executeBulkAction() {
     if (!bulkAction || selectedUsers.size === 0) {
-      toast.error("Please select users and an action");
+      toast.error('Please select users and an action');
       return;
     }
 
@@ -141,66 +132,66 @@ export default function UsersTable() {
     if (!confirm(confirmMsg)) return;
 
     try {
-      let endpoint = "";
+      let endpoint = '';
       const body: Record<string, unknown> = { userIds };
 
       switch (bulkAction) {
-        case "activate":
-          endpoint = "/api/admin/bulk/activate-users";
+        case 'activate':
+          endpoint = '/api/admin/bulk/activate-users';
           body.active = true;
           break;
-        case "deactivate":
-          endpoint = "/api/admin/bulk/activate-users";
+        case 'deactivate':
+          endpoint = '/api/admin/bulk/activate-users';
           body.active = false;
           break;
-        case "delete":
-          endpoint = "/api/admin/bulk/delete-users";
+        case 'delete':
+          endpoint = '/api/admin/bulk/delete-users';
           break;
-        case "make-admin":
-          endpoint = "/api/admin/bulk/assign-role";
-          body.role = "ADMIN";
+        case 'make-admin':
+          endpoint = '/api/admin/bulk/assign-role';
+          body.role = 'ADMIN';
           break;
-        case "make-user":
-          endpoint = "/api/admin/bulk/assign-role";
-          body.role = "USER";
+        case 'make-user':
+          endpoint = '/api/admin/bulk/assign-role';
+          body.role = 'USER';
           break;
-        case "reset-password":
-          endpoint = "/api/admin/bulk/reset-password";
+        case 'reset-password':
+          endpoint = '/api/admin/bulk/reset-password';
           break;
-        case "verify-email":
-          endpoint = "/api/admin/bulk/verify-email";
+        case 'verify-email':
+          endpoint = '/api/admin/bulk/verify-email';
           break;
-        case "export":
-          endpoint = "/api/admin/bulk/export-users";
+        case 'export':
+          endpoint = '/api/admin/bulk/export-users';
           break;
-        case "enable-gpt5":
-          endpoint = "/api/admin/bulk/enable-gpt5";
+        case 'enable-gpt5':
+          endpoint = '/api/admin/bulk/enable-gpt5';
           body.gpt5Enabled = true;
           break;
         default:
-          toast.error("Unknown action");
+          toast.error('Unknown action');
           return;
       }
 
       const response = await adminApi.post(endpoint, body);
 
-      if (bulkAction === "export") {
+      if (bulkAction === 'export') {
         // Download CSV
-        const blob = new Blob([response.data.csv], { type: "text/csv" });
+        const blob = new Blob([response.data.csv], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
+        const a = document.createElement('a');
         a.href = url;
         a.download = `users-export-${Date.now()}.csv`;
         a.click();
         window.URL.revokeObjectURL(url);
-        toast.success("Users exported successfully");
+        toast.success('Users exported successfully');
       } else {
-        toast.success(response.data.message || "Action completed");
+        toast.success(response.data.message || 'Action completed');
       }
 
       // Reload table
       setSelectedUsers(new Set());
-      setBulkAction("");
+      setBulkAction('');
       const params: Record<string, string | number> = {
         page,
         pageSize,
@@ -209,14 +200,11 @@ export default function UsersTable() {
       };
       if (role) params.role = role;
       if (debouncedSearch) params.search = debouncedSearch;
-      const { data } = await adminApi.get<UsersApiResponse>(
-        "/api/admin/users",
-        { params }
-      );
+      const { data } = await adminApi.get<UsersApiResponse>('/api/admin/users', { params });
       setItems(data.items || []);
       setTotal(data.total || 0);
     } catch {
-      toast.error("Bulk action failed");
+      toast.error('Bulk action failed');
     }
   }
 
@@ -226,9 +214,7 @@ export default function UsersTable() {
       <div className="rounded-xl overflow-hidden">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
           <h1 className="text-xl font-semibold">User Management</h1>
-          <p className="opacity-80 text-sm">
-            Manage roles and review user status
-          </p>
+          <p className="opacity-80 text-sm">Manage roles and review user status</p>
         </div>
         <div className="bg-white dark:bg-gray-900 p-4 border border-gray-200 dark:border-gray-700">
           <div className="flex flex-col gap-4">
@@ -266,9 +252,7 @@ export default function UsersTable() {
                 </datalist>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  {total} total
-                </span>
+                <span className="text-sm text-gray-600 dark:text-gray-300">{total} total</span>
                 <select
                   aria-label="Items per page"
                   value={pageSize}
@@ -308,52 +292,52 @@ export default function UsersTable() {
               </span>
               <button
                 onClick={() => {
-                  setRole("");
+                  setRole('');
                   setPage(1);
                 }}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  role === ""
-                    ? "bg-indigo-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  role === ''
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 All Users
               </button>
               <button
                 onClick={() => {
-                  setRole("USER");
+                  setRole('USER');
                   setPage(1);
                 }}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  role === "USER"
-                    ? "bg-green-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  role === 'USER'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 👥 Users Only
               </button>
               <button
                 onClick={() => {
-                  setRole("ADMIN");
+                  setRole('ADMIN');
                   setPage(1);
                 }}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  role === "ADMIN"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  role === 'ADMIN'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 👑 Admins Only
               </button>
               <button
                 onClick={() => {
-                  setRole("STAFF");
+                  setRole('STAFF');
                   setPage(1);
                 }}
                 className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-                  role === "STAFF"
-                    ? "bg-orange-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                  role === 'STAFF'
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 🛠️ Staff Only
@@ -383,13 +367,12 @@ export default function UsersTable() {
                   <option value="make-user">⬇ Make User</option>
                   <option value="verify-email">✉ Verify Email</option>
                   <option value="reset-password">Reset Password</option>
-                  <option value="export">Export CSV
-                  </option>
+                  <option value="export">Export CSV</option>
                   <option value="enable-gpt5">🤖 Enable GPT-5</option>
                   <option value="delete">
                     <UserX className="inline w-4 h-4" /> Delete
                   </option>
-                </select>
+                </datalist>
                 <button
                   onClick={executeBulkAction}
                   disabled={!bulkAction}
@@ -418,9 +401,7 @@ export default function UsersTable() {
                 <th className="px-4 py-3 text-sm font-medium w-12">
                   <input
                     type="checkbox"
-                    checked={
-                      selectedUsers.size === items.length && items.length > 0
-                    }
+                    checked={selectedUsers.size === items.length && items.length > 0}
                     onChange={toggleSelectAll}
                     className="w-4 h-4 rounded border-gray-300"
                     aria-label="Select all users"
@@ -450,10 +431,7 @@ export default function UsersTable() {
               )}
               {!loading &&
                 items.map((u) => (
-                  <tr
-                    key={u.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                  >
+                  <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
@@ -464,7 +442,7 @@ export default function UsersTable() {
                       />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="font-medium">{u.name || "—"}</div>
+                      <div className="font-medium">{u.name || '—'}</div>
                       <div className="text-xs text-gray-500">
                         Joined {new Date(u.createdAt).toLocaleDateString()}
                       </div>
@@ -476,9 +454,9 @@ export default function UsersTable() {
                     <td className="px-4 py-3">
                       <span
                         className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
-                          u.status === "ACTIVE"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
+                          u.status === 'ACTIVE'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
                         }`}
                       >
                         {u.status}
@@ -491,7 +469,7 @@ export default function UsersTable() {
                           onClick={() => toggleRole(u)}
                           className="px-3 py-1 border rounded hover:bg-gray-50 dark:hover:bg-gray-800"
                         >
-                          {u.role === "ADMIN" ? "Make User" : "Make Admin"}
+                          {u.role === 'ADMIN' ? 'Make User' : 'Make Admin'}
                         </button>
                         <button
                           aria-label={`View details for ${u.email}`}
@@ -509,11 +487,7 @@ export default function UsersTable() {
         </div>
 
         {/* Pagination */}
-        <PaginationControls
-          page={page}
-          totalPages={totalPages}
-          setPage={setPage}
-        />
+        <PaginationControls page={page} totalPages={totalPages} setPage={setPage} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
 import {
   Eye,
   EyeOff,
@@ -12,8 +12,8 @@ import {
   Shield,
   ShieldAlert,
   Zap,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface IPInfo {
   ip: string;
@@ -28,18 +28,18 @@ interface IPInfo {
 
 export default function IPProtectionPage() {
   const [ipInfo, setIpInfo] = useState<IPInfo>({
-    ip: "197.211.52.75",
-    isp: "Globacom",
-    country: "Nigeria",
-    city: "Lagos",
-    region: "Lagos State",
+    ip: '197.211.52.75',
+    isp: 'Globacom',
+    country: 'Nigeria',
+    city: 'Lagos',
+    region: 'Lagos State',
     protected: false,
     vpnActive: false,
     proxyActive: false,
   });
   const [loading, setLoading] = useState(false);
   const [rotating, setRotating] = useState(false);
-  const [targetCountry, setTargetCountry] = useState("United States");
+  const [targetCountry, setTargetCountry] = useState('United States');
   const [showRealIP, setShowRealIP] = useState(true);
 
   useEffect(() => {
@@ -49,22 +49,22 @@ export default function IPProtectionPage() {
   async function fetchIPInfo() {
     setLoading(true);
     try {
-      const response = await fetch("https://ipapi.co/json/");
+      const response = await fetch('https://ipapi.co/json/');
       if (response.ok) {
         const data = await response.json();
         setIpInfo({
-          ip: data.ip || "197.211.52.75",
-          isp: data.org || "Globacom",
-          country: data.country_name || "Nigeria",
-          city: data.city || "Lagos",
-          region: data.region || "Lagos State",
+          ip: data.ip || '197.211.52.75',
+          isp: data.org || 'Globacom',
+          country: data.country_name || 'Nigeria',
+          city: data.city || 'Lagos',
+          region: data.region || 'Lagos State',
           protected: false,
           vpnActive: false,
           proxyActive: false,
         });
       }
     } catch (error) {
-      console.error("IP fetch error:", error);
+      console.error('IP fetch error:', error);
     } finally {
       setLoading(false);
     }
@@ -73,14 +73,13 @@ export default function IPProtectionPage() {
   async function rotateIP() {
     setRotating(true);
     try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (!token) return;
 
-      const response = await fetch("/api/security/rotate-ip", {
-        method: "POST",
+      const response = await fetch('/api/security/rotate-ip', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ targetCountry }),
@@ -93,7 +92,7 @@ export default function IPProtectionPage() {
           ip: data.newIP || generateRandomIP(),
           country: targetCountry,
           city: data.city || getCityForCountry(targetCountry),
-          region: data.region || "",
+          region: data.region || '',
           protected: true,
           vpnActive: true,
           proxyActive: true,
@@ -105,21 +104,21 @@ export default function IPProtectionPage() {
           ip: generateRandomIP(),
           country: targetCountry,
           city: getCityForCountry(targetCountry),
-          region: "",
+          region: '',
           protected: true,
           vpnActive: true,
           proxyActive: true,
         });
       }
     } catch (error) {
-      console.error("IP rotation error:", error);
+      console.error('IP rotation error:', error);
       // Demo mode fallback
       setIpInfo({
         ...ipInfo,
         ip: generateRandomIP(),
         country: targetCountry,
         city: getCityForCountry(targetCountry),
-        region: "",
+        region: '',
         protected: true,
         vpnActive: true,
         proxyActive: true,
@@ -137,16 +136,16 @@ export default function IPProtectionPage() {
 
   function getCityForCountry(country: string): string {
     const cities: Record<string, string> = {
-      "United States": "New York",
-      "United Kingdom": "London",
-      Germany: "Berlin",
-      France: "Paris",
-      Canada: "Toronto",
-      Australia: "Sydney",
-      Japan: "Tokyo",
-      Singapore: "Singapore",
+      'United States': 'New York',
+      'United Kingdom': 'London',
+      Germany: 'Berlin',
+      France: 'Paris',
+      Canada: 'Toronto',
+      Australia: 'Sydney',
+      Japan: 'Tokyo',
+      Singapore: 'Singapore',
     };
-    return cities[country] || "Unknown";
+    return cities[country] || 'Unknown';
   }
 
   async function toggleProtection() {
@@ -172,11 +171,7 @@ export default function IPProtectionPage() {
           {/* Header */}
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-6">
             <div className="flex items-center gap-4 mb-6">
-              <div
-                className={`p-3 rounded-xl ${
-                  ipInfo.protected ? "bg-green-100" : "bg-red-100"
-                }`}
-              >
+              <div className={`p-3 rounded-xl ${ipInfo.protected ? 'bg-green-100' : 'bg-red-100'}`}>
                 {ipInfo.protected ? (
                   <Shield className="h-8 w-8 text-green-600" />
                 ) : (
@@ -184,24 +179,20 @@ export default function IPProtectionPage() {
                 )}
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-slate-900">
-                  IP Protection
-                </h1>
-                <p className="text-slate-600">
-                  Secure your online identity and location
-                </p>
+                <h1 className="text-3xl font-bold text-slate-900">IP Protection</h1>
+                <p className="text-slate-600">Secure your online identity and location</p>
               </div>
               <button
                 onClick={toggleProtection}
                 disabled={rotating}
                 className={`px-6 py-3 rounded-lg font-bold transition-all flex items-center gap-2 ${
                   ipInfo.protected
-                    ? "bg-red-600 hover:bg-red-700 text-white"
-                    : "bg-green-600 hover:bg-green-700 text-white"
+                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
                 }`}
               >
                 <Power className="h-5 w-5" />
-                {ipInfo.protected ? "Disable Protection" : "Enable Protection"}
+                {ipInfo.protected ? 'Disable Protection' : 'Enable Protection'}
               </button>
             </div>
           </div>
@@ -211,17 +202,13 @@ export default function IPProtectionPage() {
             {/* Current IP Info */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-900">
-                  Your IP Status
-                </h2>
+                <h2 className="text-xl font-bold text-slate-900">Your IP Status</h2>
                 <div
                   className={`px-4 py-2 rounded-full font-bold text-sm ${
-                    ipInfo.protected
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
+                    ipInfo.protected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                   }`}
                 >
-                  {ipInfo.protected ? "Protected" : "Unprotected"}
+                  {ipInfo.protected ? 'Protected' : 'Unprotected'}
                 </div>
               </div>
 
@@ -232,7 +219,7 @@ export default function IPProtectionPage() {
                     <div>
                       <div className="text-xs text-slate-500">Your IP:</div>
                       <div className="font-mono font-bold text-slate-900 flex items-center gap-2">
-                        {showRealIP ? ipInfo.ip : "•••.•••.•••.•••"}
+                        {showRealIP ? ipInfo.ip : '•••.•••.•••.•••'}
                         <button
                           onClick={() => setShowRealIP(!showRealIP)}
                           className="text-blue-600 hover:text-blue-700"
@@ -251,9 +238,7 @@ export default function IPProtectionPage() {
                     disabled={loading}
                     className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
                   >
-                    <RefreshCw
-                      className={`h-5 w-5 ${loading ? "animate-spin" : ""}`}
-                    />
+                    <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
                   </button>
                 </div>
 
@@ -279,9 +264,7 @@ export default function IPProtectionPage() {
 
             {/* IP Rotation */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-xl font-bold text-slate-900 mb-6">
-                IP Rotation
-              </h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-6">IP Rotation</h2>
 
               <div className="space-y-4">
                 <div>
@@ -309,10 +292,8 @@ export default function IPProtectionPage() {
                   disabled={rotating}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 text-white font-bold py-4 px-6 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2"
                 >
-                  <RefreshCw
-                    className={`h-5 w-5 ${rotating ? "animate-spin" : ""}`}
-                  />
-                  {rotating ? "Rotating IP..." : "Rotate IP Now"}
+                  <RefreshCw className={`h-5 w-5 ${rotating ? 'animate-spin' : ''}`} />
+                  {rotating ? 'Rotating IP...' : 'Rotate IP Now'}
                 </button>
 
                 {ipInfo.protected && (
@@ -320,12 +301,9 @@ export default function IPProtectionPage() {
                     <div className="flex items-start gap-3">
                       <Lock className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
                       <div>
-                        <h4 className="font-bold text-green-900 mb-1">
-                          Protection Active
-                        </h4>
+                        <h4 className="font-bold text-green-900 mb-1">Protection Active</h4>
                         <p className="text-sm text-green-800">
-                          Your IP is now masked as {ipInfo.country}. Your real
-                          location is hidden.
+                          Your IP is now masked as {ipInfo.country}. Your real location is hidden.
                         </p>
                       </div>
                     </div>
@@ -339,16 +317,12 @@ export default function IPProtectionPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div
               className={`p-6 rounded-2xl shadow-lg ${
-                ipInfo.vpnActive
-                  ? "bg-green-50 border-2 border-green-500"
-                  : "bg-white"
+                ipInfo.vpnActive ? 'bg-green-50 border-2 border-green-500' : 'bg-white'
               }`}
             >
               <div className="flex items-center justify-between mb-4">
                 <Shield
-                  className={`h-8 w-8 ${
-                    ipInfo.vpnActive ? "text-green-600" : "text-slate-400"
-                  }`}
+                  className={`h-8 w-8 ${ipInfo.vpnActive ? 'text-green-600' : 'text-slate-400'}`}
                 />
                 {ipInfo.vpnActive && (
                   <div className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -356,28 +330,22 @@ export default function IPProtectionPage() {
                   </div>
                 )}
               </div>
-              <h3 className="font-bold text-lg text-slate-900 mb-2">
-                VPN Protection
-              </h3>
+              <h3 className="font-bold text-lg text-slate-900 mb-2">VPN Protection</h3>
               <p className="text-sm text-slate-600">
                 {ipInfo.vpnActive
-                  ? "Your traffic is encrypted and routed through secure servers"
-                  : "Encrypts your internet traffic for security"}
+                  ? 'Your traffic is encrypted and routed through secure servers'
+                  : 'Encrypts your internet traffic for security'}
               </p>
             </div>
 
             <div
               className={`p-6 rounded-2xl shadow-lg ${
-                ipInfo.proxyActive
-                  ? "bg-green-50 border-2 border-green-500"
-                  : "bg-white"
+                ipInfo.proxyActive ? 'bg-green-50 border-2 border-green-500' : 'bg-white'
               }`}
             >
               <div className="flex items-center justify-between mb-4">
                 <Globe
-                  className={`h-8 w-8 ${
-                    ipInfo.proxyActive ? "text-green-600" : "text-slate-400"
-                  }`}
+                  className={`h-8 w-8 ${ipInfo.proxyActive ? 'text-green-600' : 'text-slate-400'}`}
                 />
                 {ipInfo.proxyActive && (
                   <div className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -385,13 +353,11 @@ export default function IPProtectionPage() {
                   </div>
                 )}
               </div>
-              <h3 className="font-bold text-lg text-slate-900 mb-2">
-                Proxy Server
-              </h3>
+              <h3 className="font-bold text-lg text-slate-900 mb-2">Proxy Server</h3>
               <p className="text-sm text-slate-600">
                 {ipInfo.proxyActive
-                  ? "Routing through proxy servers in " + ipInfo.country
-                  : "Masks your IP address through proxy servers"}
+                  ? 'Routing through proxy servers in ' + ipInfo.country
+                  : 'Masks your IP address through proxy servers'}
               </p>
             </div>
 
@@ -399,22 +365,18 @@ export default function IPProtectionPage() {
               <div className="flex items-center justify-between mb-4">
                 <MapPin className="h-8 w-8 text-slate-400" />
               </div>
-              <h3 className="font-bold text-lg text-slate-900 mb-2">
-                Location Masking
-              </h3>
+              <h3 className="font-bold text-lg text-slate-900 mb-2">Location Masking</h3>
               <p className="text-sm text-slate-600">
                 {ipInfo.protected
                   ? `Appearing from ${ipInfo.country}`
-                  : "Hide your real geographical location"}
+                  : 'Hide your real geographical location'}
               </p>
             </div>
           </div>
 
           {/* Information Banner */}
           <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl shadow-lg p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4">
-              🌐 Why IP Protection Matters
-            </h3>
+            <h3 className="text-2xl font-bold mb-4">🌐 Why IP Protection Matters</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h4 className="font-bold mb-2 flex items-center gap-2">
@@ -422,8 +384,8 @@ export default function IPProtectionPage() {
                   Privacy Protection
                 </h4>
                 <p className="text-sm text-blue-100">
-                  Prevent websites, advertisers, and hackers from tracking your
-                  online activity and building a profile about you.
+                  Prevent websites, advertisers, and hackers from tracking your online activity and
+                  building a profile about you.
                 </p>
               </div>
               <div>
@@ -432,8 +394,8 @@ export default function IPProtectionPage() {
                   Access Restrictions
                 </h4>
                 <p className="text-sm text-blue-100">
-                  Bypass geo-blocks and access content that may be restricted in
-                  your region by appearing from different countries.
+                  Bypass geo-blocks and access content that may be restricted in your region by
+                  appearing from different countries.
                 </p>
               </div>
               <div>
@@ -442,8 +404,8 @@ export default function IPProtectionPage() {
                   Security Enhancement
                 </h4>
                 <p className="text-sm text-blue-100">
-                  Protect against DDoS attacks, port scanning, and other
-                  IP-based threats by hiding your real address.
+                  Protect against DDoS attacks, port scanning, and other IP-based threats by hiding
+                  your real address.
                 </p>
               </div>
               <div>
@@ -452,8 +414,8 @@ export default function IPProtectionPage() {
                   Anonymity Online
                 </h4>
                 <p className="text-sm text-blue-100">
-                  Browse the web anonymously without revealing your identity or
-                  location to third parties.
+                  Browse the web anonymously without revealing your identity or location to third
+                  parties.
                 </p>
               </div>
             </div>

@@ -24,27 +24,21 @@ export function traceAPICall<T>(
   return apiCall()
     .then((result) => {
       const duration = performance.now() - startTime;
-      console.log(
-        `[Trace] Success: ${operationName} (${duration.toFixed(2)}ms)`,
-        {
-          ...metadata,
-          duration,
-          status: "success",
-        }
-      );
+      console.log(`[Trace] Success: ${operationName} (${duration.toFixed(2)}ms)`, {
+        ...metadata,
+        duration,
+        status: 'success',
+      });
       return result;
     })
     .catch((error) => {
       const duration = performance.now() - startTime;
-      console.error(
-        `[Trace] Error: ${operationName} (${duration.toFixed(2)}ms)`,
-        {
-          ...metadata,
-          duration,
-          status: "error",
-          error: error.message,
-        }
-      );
+      console.error(`[Trace] Error: ${operationName} (${duration.toFixed(2)}ms)`, {
+        ...metadata,
+        duration,
+        status: 'error',
+        error: error.message,
+      });
       throw error;
     });
 }
@@ -52,20 +46,17 @@ export function traceAPICall<T>(
 /**
  * Track user interactions
  */
-export function traceUserAction(
-  action: string,
-  details?: Record<string, any>
-): void {
+export function traceUserAction(action: string, details?: Record<string, any>): void {
   console.log(`[Trace] User Action: ${action}`, {
     timestamp: new Date().toISOString(),
     ...details,
   });
 
   // You can send this to your backend analytics endpoint
-  if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
+  if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analytics/events`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         eventName: action,
         eventProperties: details,
@@ -82,13 +73,10 @@ export function traceUserAction(
 /**
  * Track page views
  */
-export function tracePageView(
-  pageName: string,
-  metadata?: Record<string, any>
-): void {
+export function tracePageView(pageName: string, metadata?: Record<string, any>): void {
   console.log(`[Trace] Page View: ${pageName}`, metadata);
 
-  traceUserAction("page_view", {
+  traceUserAction('page_view', {
     page: pageName,
     ...metadata,
   });

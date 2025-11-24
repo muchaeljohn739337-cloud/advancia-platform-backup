@@ -41,17 +41,10 @@ const TotpSetup = () => {
       </form>
 
       <div className="qr-code">
-        <Image
-          src="/totp-qr.png"
-          alt="TOTP QR Code"
-          width={200}
-          height={200}
-        />
+        <Image src="/totp-qr.png" alt="TOTP QR Code" width={200} height={200} />
       </div>
 
-      <p>
-        Don&apos;t have an app? Download Google Authenticator or Authy from your app store.
-      </p>
+      <p>Don&apos;t have an app? Download Google Authenticator or Authy from your app store.</p>
     </div>
   );
 };

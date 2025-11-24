@@ -246,13 +246,13 @@ Repository Root/
 
 Once you finish:
 
-- [ ] PostgreSQL running on 157.245.8.131
-- [ ] Database `advancia_payledger_test` created
-- [ ] User `test_user` created with permissions
-- [ ] `.env.test` updated locally
-- [ ] Migrations deployed
-- [ ] Tests running: `npm test`
-- [ ] 130+ tests passing ✅
+-   [ ] PostgreSQL running on 157.245.8.131
+-   [ ] Database `advancia_payledger_test` created
+-   [ ] User `test_user` created with permissions
+-   [ ] `.env.test` updated locally
+-   [ ] Migrations deployed
+-   [ ] Tests running: `npm test`
+-   [ ] 130+ tests passing ✅
 
 ---
 

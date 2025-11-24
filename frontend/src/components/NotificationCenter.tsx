@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useNotifications } from "@/hooks/useNotifications";
-import NotificationItem from "./NotificationItem";
+import { useState } from 'react';
+import { useNotifications } from '@/hooks/useNotifications';
+import NotificationItem from './NotificationItem';
 
 interface NotificationCenterProps {
   userId?: string;
   compact?: boolean;
 }
 
-export default function NotificationCenter({
-  userId,
-  compact = false,
-}: NotificationCenterProps) {
+export default function NotificationCenter({ userId, compact = false }: NotificationCenterProps) {
   const {
     notifications,
     loading,
@@ -22,10 +19,10 @@ export default function NotificationCenter({
     fetchNotifications,
   } = useNotifications(userId);
 
-  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [filter, setFilter] = useState<'all' | 'unread'>('all');
 
   const filteredNotifications = notifications.filter((n) =>
-    filter === "unread" ? !n.isRead : true
+    filter === 'unread' ? !n.isRead : true
   );
 
   const handleMarkAsRead = async (id: string) => {
@@ -44,9 +41,7 @@ export default function NotificationCenter({
             Loading notifications...
           </div>
         ) : filteredNotifications.length === 0 ? (
-          <div className="p-4 text-center text-gray-500 dark:text-gray-400">
-            No notifications
-          </div>
+          <div className="p-4 text-center text-gray-500 dark:text-gray-400">No notifications</div>
         ) : (
           filteredNotifications.map((notification) => (
             <NotificationItem
@@ -67,28 +62,26 @@ export default function NotificationCenter({
         {/* Header */}
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Notifications
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Notifications</h1>
             <div className="flex items-center gap-4">
               {/* Filter Buttons */}
               <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
                 <button
-                  onClick={() => setFilter("all")}
+                  onClick={() => setFilter('all')}
                   className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
-                    filter === "all"
-                      ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                    filter === 'all'
+                      ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   All
                 </button>
                 <button
-                  onClick={() => setFilter("unread")}
+                  onClick={() => setFilter('unread')}
                   className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
-                    filter === "unread"
-                      ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
-                      : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                    filter === 'unread'
+                      ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
                   Unread
@@ -142,8 +135,8 @@ export default function NotificationCenter({
                 No notifications
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                {filter === "unread"
-                  ? "You have no unread notifications."
+                {filter === 'unread'
+                  ? 'You have no unread notifications.'
                   : "You're all caught up!"}
               </p>
             </div>

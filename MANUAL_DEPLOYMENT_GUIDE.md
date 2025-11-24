@@ -1,6 +1,7 @@
 # Manual Deployment Completion Guide
 
 ## Current Status
+
 ✅ Archive uploaded to server (181MB - advancia-deploy.zip)
 ✅ SSH connection working (with password)
 ⚠️ Files need to be extracted and services started
@@ -8,11 +9,13 @@
 ## Quick Fix - Run These Commands
 
 ### Step 1: Connect to Server
+
 ```powershell
 ssh -i $HOME\.ssh\advancia_droplet root@157.245.8.131
 ```
 
 ### Step 2: Extract and Deploy (Copy/Paste All)
+
 ```bash
 # Extract archive
 mkdir -p /var/www/advancia
@@ -55,6 +58,7 @@ pm2 logs --lines 20
 ```
 
 ### Step 3: Test Services
+
 ```bash
 # Test backend
 curl http://localhost:4000/health
@@ -69,11 +73,13 @@ netstat -tlnp | grep -E '(3000|4000)'
 ## If You See Errors
 
 ### Error: "unzip: command not found"
+
 ```bash
 apt-get update && apt-get install -y unzip
 ```
 
 ### Error: "npm: command not found"
+
 ```bash
 # Check if Node.js is installed
 node --version
@@ -85,6 +91,7 @@ apt-get install -y nodejs
 ```
 
 ### Error: Database Connection Failed
+
 ```bash
 # Check PostgreSQL
 systemctl status postgresql
@@ -97,6 +104,7 @@ sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE advancia_prod TO adva
 ```
 
 ### Error: PM2 Processes Keep Crashing
+
 ```bash
 # View detailed logs
 pm2 logs advancia-backend --lines 50
@@ -111,17 +119,17 @@ ls -la /var/www/advancia/frontend/.env.production
 
 After running the commands above, verify:
 
-- [ ] PM2 shows 2 processes online (`pm2 status`)
-- [ ] Backend responds: `curl http://localhost:4000/health` returns `{"status":"ok"}`
-- [ ] Frontend responds: `curl -I http://localhost:3000` returns HTTP 200
-- [ ] Ports listening: `netstat -tlnp | grep 4000` and `netstat -tlnp | grep 3000`
+-   [ ] PM2 shows 2 processes online (`pm2 status`)
+-   [ ] Backend responds: `curl http://localhost:4000/health` returns `{"status":"ok"}`
+-   [ ] Frontend responds: `curl -I http://localhost:3000` returns HTTP 200
+-   [ ] Ports listening: `netstat -tlnp | grep 4000` and `netstat -tlnp | grep 3000`
 
 ## Access Your Application
 
 Once PM2 shows both processes as "online":
 
-- **Frontend:** http://157.245.8.131:3000
-- **Backend:** http://157.245.8.131:4000/health
+-   **Frontend:** <http://157.245.8.131:3000>
+-   **Backend:** <http://157.245.8.131:4000/health>
 
 ## Useful Commands
 
@@ -149,6 +157,7 @@ pm2 startup systemd
 ## If Everything Works
 
 Setup PM2 to start on boot:
+
 ```bash
 pm2 startup systemd
 pm2 save
@@ -157,6 +166,7 @@ pm2 save
 ## Need Help?
 
 If you encounter issues, share the output of:
+
 ```bash
 pm2 status
 pm2 logs --lines 30
@@ -166,5 +176,6 @@ ls -la /var/www/advancia/
 ---
 
 **After successful deployment, access your app at:**
-- http://157.245.8.131:3000 (frontend)
-- http://157.245.8.131:4000 (backend)
+
+-   <http://157.245.8.131:3000> (frontend)
+-   <http://157.245.8.131:4000> (backend)

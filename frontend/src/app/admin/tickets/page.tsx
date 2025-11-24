@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useState } from "react";
-import adminApi from "@/lib/adminApi";
+import { useCallback, useEffect, useState } from 'react';
+import adminApi from '@/lib/adminApi';
 
 type Ticket = {
   id: string;
@@ -14,8 +14,8 @@ type Ticket = {
 
 export default function AdminTicketsPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [status, setStatus] = useState<string>("");
-  const [q, setQ] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
+  const [q, setQ] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
   const [total, setTotal] = useState<number>(0);
@@ -27,7 +27,7 @@ export default function AdminTicketsPage() {
       const params: Record<string, string | number> = { page, pageSize };
       if (status) params.status = status;
       if (q) params.q = q;
-      const { data } = await adminApi.get("/api/support/admin/tickets", {
+      const { data } = await adminApi.get('/api/support/admin/tickets', {
         params,
       });
       setTickets(data.items || []);
@@ -79,26 +79,20 @@ export default function AdminTicketsPage() {
         {!loading &&
           tickets.map((t) => (
             <div key={t.id} className="border rounded p-3">
-              <div className="text-xs text-gray-500">
-                {new Date(t.createdAt).toLocaleString()}
-              </div>
+              <div className="text-xs text-gray-500">{new Date(t.createdAt).toLocaleString()}</div>
               <div className="font-semibold">{t.subject}</div>
               <div className="text-sm">
                 Status: {t.status} • Priority: {t.priority} • User: {t.userId}
               </div>
               <div className="mt-2 flex gap-2">
-                <a
-                  href={`/admin/tickets/${t.id}`}
-                  className="px-3 py-1 border rounded"
-                >
+                <a href={`/admin/tickets/${t.id}`} className="px-3 py-1 border rounded">
                   Details
                 </a>
                 <button
                   onClick={async () => {
-                    await adminApi.post(
-                      `/api/support/admin/tickets/${t.id}/status`,
-                      { status: "IN_PROGRESS" }
-                    );
+                    await adminApi.post(`/api/support/admin/tickets/${t.id}/status`, {
+                      status: 'IN_PROGRESS',
+                    });
                     load();
                   }}
                   className="px-3 py-1 border rounded"
@@ -107,10 +101,9 @@ export default function AdminTicketsPage() {
                 </button>
                 <button
                   onClick={async () => {
-                    await adminApi.post(
-                      `/api/support/admin/tickets/${t.id}/status`,
-                      { status: "RESOLVED" }
-                    );
+                    await adminApi.post(`/api/support/admin/tickets/${t.id}/status`, {
+                      status: 'RESOLVED',
+                    });
                     load();
                   }}
                   className="px-3 py-1 border rounded"
@@ -123,8 +116,7 @@ export default function AdminTicketsPage() {
         {!loading && (
           <div className="flex items-center justify-between pt-2">
             <div className="text-sm text-gray-600">
-              Page {page} of {Math.max(1, Math.ceil(total / pageSize))} •{" "}
-              {total} total
+              Page {page} of {Math.max(1, Math.ceil(total / pageSize))} • {total} total
             </div>
             <div className="flex items-center gap-2">
               <button

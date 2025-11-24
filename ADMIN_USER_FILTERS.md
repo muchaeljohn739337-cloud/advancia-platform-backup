@@ -68,53 +68,53 @@ export default function TransactionTable(props: TransactionTableProps) {
 
 ## Features
 
-- **Quick Role Filters**: One-click buttons to filter users by role
-- **Server-Side Sorting**: Sort by email, role, balance, or creation date
-- **Flexible Sort Order**: Ascending or descending for all sort fields
-- **Combined Filtering**: Search, role filters, and sorting work together
-- **Pagination**: Efficient handling of large user datasets (10-100 per page)
-- **Visual Active States**: Clear indication of active filters and sort options
-- **Responsive Design**: Optimized for both desktop and mobile interfaces
+-   **Quick Role Filters**: One-click buttons to filter users by role
+-   **Server-Side Sorting**: Sort by email, role, balance, or creation date
+-   **Flexible Sort Order**: Ascending or descending for all sort fields
+-   **Combined Filtering**: Search, role filters, and sorting work together
+-   **Pagination**: Efficient handling of large user datasets (10-100 per page)
+-   **Visual Active States**: Clear indication of active filters and sort options
+-   **Responsive Design**: Optimized for both desktop and mobile interfaces
 
 ## Filter Options
 
 ### All Users
 
-- **Button**: "All Users" (purple/indigo when active)
-- **Function**: Shows all users regardless of role
-- **Use Case**: Default view, complete user overview
+-   **Button**: "All Users" (purple/indigo when active)
+-   **Function**: Shows all users regardless of role
+-   **Use Case**: Default view, complete user overview
 
 ### Users Only
 
-- **Button**: "👥 Users Only" (green when active)
-- **Function**: Shows only users with `USER` role
-- **Use Case**: Focus on regular user accounts for support or analysis
+-   **Button**: "👥 Users Only" (green when active)
+-   **Function**: Shows only users with `USER` role
+-   **Use Case**: Focus on regular user accounts for support or analysis
 
 ### Admins Only
 
-- **Button**: "👑 Admins Only" (blue when active)
-- **Function**: Shows only users with `ADMIN` role
-- **Use Case**: Administrative user management and oversight
+-   **Button**: "👑 Admins Only" (blue when active)
+-   **Function**: Shows only users with `ADMIN` role
+-   **Use Case**: Administrative user management and oversight
 
 ### Staff Only
 
-- **Button**: "🛠️ Staff Only" (orange when active)
-- **Function**: Shows only users with `STAFF` role
-- **Use Case**: Staff member management and permissions
+-   **Button**: "🛠️ Staff Only" (orange when active)
+-   **Function**: Shows only users with `STAFF` role
+-   **Use Case**: Staff member management and permissions
 
 ## Sorting Options
 
 ### Sort Fields
 
-- **Created Date**: Sort by account creation timestamp
-- **Email**: Alphabetical sorting by email address
-- **Role**: Sort by user role (USER, STAFF, ADMIN)
-- **Balance**: Sort by USD balance amount
+-   **Created Date**: Sort by account creation timestamp
+-   **Email**: Alphabetical sorting by email address
+-   **Role**: Sort by user role (USER, STAFF, ADMIN)
+-   **Balance**: Sort by USD balance amount
 
 ### Sort Orders
 
-- **Newest First**: Descending order (default for dates)
-- **Oldest First**: Ascending order
+-   **Newest First**: Descending order (default for dates)
+-   **Oldest First**: Ascending order
 
 ## Implementation Details
 
@@ -161,11 +161,7 @@ if (role) params.role = role; // Only add if not empty
     setRole("USER");
     setPage(1); // Reset to first page
   }}
-  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-    role === "USER"
-      ? "bg-green-600 text-white"
-      : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-  }`}
+  className={`px-3 py-1 rounded text-sm font-medium transition-colors ${role === "USER" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"}`}
 >
   👥 Users Only
 </button>
@@ -175,9 +171,7 @@ if (role) params.role = role; // Only add if not empty
 
 ```tsx
 <div className="flex items-center gap-2">
-  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-    Sort by:
-  </span>
+  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</span>
   <select
     value={sortField}
     onChange={(e) => {
@@ -209,23 +203,23 @@ if (role) params.role = role; // Only add if not empty
 
 ### Server-Side Processing
 
-- **Database Indexing**: Ensure indexes on frequently sorted fields (`email`, `role`, `createdAt`, `usdBalance`)
-- **Query Optimization**: Prisma generates efficient SQL with proper `ORDER BY` and `LIMIT` clauses
-- **Pagination Limits**: Maximum 100 users per page to prevent excessive data transfer
+-   **Database Indexing**: Ensure indexes on frequently sorted fields (`email`, `role`, `createdAt`, `usdBalance`)
+-   **Query Optimization**: Prisma generates efficient SQL with proper `ORDER BY` and `LIMIT` clauses
+-   **Pagination Limits**: Maximum 100 users per page to prevent excessive data transfer
 
 ### Client-Side Efficiency
 
-- **Debounced Search**: 500ms delay prevents excessive API calls during typing
-- **Page Reset**: Automatic page reset when filters change prevents empty results
-- **Loading States**: Visual feedback during data fetching operations
+-   **Debounced Search**: 500ms delay prevents excessive API calls during typing
+-   **Page Reset**: Automatic page reset when filters change prevents empty results
+-   **Loading States**: Visual feedback during data fetching operations
 
 ## Security Features
 
 ### Access Control
 
-- **RBAC Protection**: All admin endpoints require `ADMIN` role
-- **JWT Validation**: Token-based authentication with expiration checks
-- **Audit Logging**: All user management actions are logged for compliance
+-   **RBAC Protection**: All admin endpoints require `ADMIN` role
+-   **JWT Validation**: Token-based authentication with expiration checks
+-   **Audit Logging**: All user management actions are logged for compliance
 
 ### Sentry Security Monitoring
 
@@ -234,21 +228,19 @@ The system now integrates RBAC with Sentry to log security events in production:
 #### Logged Security Events
 
 1. **Unauthorized Admin Access**
-
-   - When non-admin users attempt to access admin routes
-   - Captures user details, attempted route, IP address, user agent
-   - Tagged as `security:unauthorized_admin_access`
+   -   When non-admin users attempt to access admin routes
+   -   Captures user details, attempted route, IP address, user agent
+   -   Tagged as `security:unauthorized_admin_access`
 
 2. **Role-Based Access Violations**
-
-   - When users try to access resources requiring specific roles
-   - Logs required vs actual roles, route details
-   - Tagged as `security:unauthorized_role_access`
+   -   When users try to access resources requiring specific roles
+   -   Logs required vs actual roles, route details
+   -   Tagged as `security:unauthorized_role_access`
 
 3. **Authentication Failures**
-   - Invalid or expired JWT tokens
-   - Missing authentication tokens
-   - Tagged as `security:authentication_failure` and `security:missing_auth_token`
+   -   Invalid or expired JWT tokens
+   -   Missing authentication tokens
+   -   Tagged as `security:authentication_failure` and `security:missing_auth_token`
 
 #### Sentry Event Structure
 
@@ -281,24 +273,24 @@ The system now integrates RBAC with Sentry to log security events in production:
 
 The system automatically tags events with route groups:
 
-- **`admin`**: Admin panel routes (`/api/admin/*`)
-- **`payments`**: Payment processing (`/api/payments/*`)
-- **`crypto`**: Cryptocurrency operations (`/api/crypto/*`)
-- **`transactions`**: Transaction management (`/api/transactions/*`)
-- **`auth`**: Authentication routes (`/api/auth/*`)
-- **`users`**: User management (`/api/users/*`)
-- **`other`**: All other routes
+-   **`admin`**: Admin panel routes (`/api/admin/*`)
+-   **`payments`**: Payment processing (`/api/payments/*`)
+-   **`crypto`**: Cryptocurrency operations (`/api/crypto/*`)
+-   **`transactions`**: Transaction management (`/api/transactions/*`)
+-   **`auth`**: Authentication routes (`/api/auth/*`)
+-   **`users`**: User management (`/api/users/*`)
+-   **`other`**: All other routes
 
 #### Production Monitoring Benefits
 
-- **Threat Detection**: Identify patterns of unauthorized access attempts
-- **Security Alerts**: Get notified of potential security breaches
-- **Audit Trail**: Complete log of all access control events
-- **User Behavior Analysis**: Monitor which routes are frequently targeted
-- **IP Tracking**: Identify suspicious IP addresses or patterns
-- **Route Group Filtering**: Filter Sentry dashboard by route type (admin, payments, crypto, etc.)
-- **Targeted Monitoring**: Focus on specific system areas being attacked
-- **Trend Analysis**: See which route groups have the most security events
+-   **Threat Detection**: Identify patterns of unauthorized access attempts
+-   **Security Alerts**: Get notified of potential security breaches
+-   **Audit Trail**: Complete log of all access control events
+-   **User Behavior Analysis**: Monitor which routes are frequently targeted
+-   **IP Tracking**: Identify suspicious IP addresses or patterns
+-   **Route Group Filtering**: Filter Sentry dashboard by route type (admin, payments, crypto, etc.)
+-   **Targeted Monitoring**: Focus on specific system areas being attacked
+-   **Trend Analysis**: See which route groups have the most security events
 
 #### Using Route Groups in Sentry Dashboard
 
@@ -328,9 +320,9 @@ tags.routeGroup:payments AND tags.severity:error
 
 ### Data Protection
 
-- **Field Selection**: Only necessary user fields exposed in API responses
-- **Input Sanitization**: Search queries properly escaped to prevent injection
-- **Rate Limiting**: API endpoints protected against abuse
+-   **Field Selection**: Only necessary user fields exposed in API responses
+-   **Input Sanitization**: Search queries properly escaped to prevent injection
+-   **Rate Limiting**: API endpoints protected against abuse
 
 ## Testing Strategy
 
@@ -353,9 +345,7 @@ describe("User Filters", () => {
 ```typescript
 describe("Admin User API", () => {
   test("sorting parameters work correctly", async () => {
-    const response = await request(app)
-      .get("/api/admin/users?sortField=email&sortOrder=asc")
-      .set("Authorization", `Bearer ${adminToken}`);
+    const response = await request(app).get("/api/admin/users?sortField=email&sortOrder=asc").set("Authorization", `Bearer ${adminToken}`);
 
     expect(response.status).toBe(200);
     // Verify users are sorted by email ascending
@@ -397,15 +387,15 @@ apiRateLimiter: {
 
 **Authentication Routes:**
 
-- `/api/auth/login` - 5 attempts per 15 minutes (strict)
-- `/api/auth/register` - 5 attempts per 15 minutes (strict)
-- `/api/auth/forgot-password` - 5 attempts per 15 minutes (strict)
+-   `/api/auth/login` - 5 attempts per 15 minutes (strict)
+-   `/api/auth/register` - 5 attempts per 15 minutes (strict)
+-   `/api/auth/forgot-password` - 5 attempts per 15 minutes (strict)
 
 **Admin Routes:**
 
-- `/api/admin/users` - 20 requests per minute
-- `/api/admin/transactions` - 20 requests per minute
-- `/api/admin/dashboard` - 20 requests per minute
+-   `/api/admin/users` - 20 requests per minute
+-   `/api/admin/transactions` - 20 requests per minute
+-   `/api/admin/dashboard` - 20 requests per minute
 
 ### Sentry Event Logging
 
@@ -459,9 +449,9 @@ The rate limiter intelligently detects client IPs:
 
 **In-Memory Store (Current):**
 
-- Fast and simple for single-server deployments
-- Auto-cleanup every 5 minutes removes expired entries
-- Suitable for development and small production deployments
+-   Fast and simple for single-server deployments
+-   Auto-cleanup every 5 minutes removes expired entries
+-   Suitable for development and small production deployments
 
 **Redis Store (Recommended for Scale):**
 
@@ -495,55 +485,55 @@ tags.event:rate_limit_exceeded groupBy:extra.ip
 
 ### Security Benefits
 
-- **Brute Force Protection**: Prevents password guessing attacks
-- **DDoS Mitigation**: Limits impact of request flooding
-- **Resource Protection**: Prevents API abuse and overload
-- **Suspicious Activity Detection**: Identifies automated attacks
-- **Audit Trail**: Complete log of rate limit violations
+-   **Brute Force Protection**: Prevents password guessing attacks
+-   **DDoS Mitigation**: Limits impact of request flooding
+-   **Resource Protection**: Prevents API abuse and overload
+-   **Suspicious Activity Detection**: Identifies automated attacks
+-   **Audit Trail**: Complete log of rate limit violations
 
 ## Future Enhancements
 
 ### Potential Additions
 
-- **Advanced Filters**: Date range filters, balance range filters
-- **Export Functionality**: CSV export with current filters applied
-- **Bulk Sort Operations**: Apply sorting to bulk selection operations
-- **Saved Filter Sets**: Allow admins to save and reuse filter combinations
-- **Real-time Updates**: WebSocket integration for live user status updates
-- **IP Whitelisting**: Allow trusted IPs to bypass rate limits
-- **Dynamic Rate Limiting**: Adjust limits based on threat level
+-   **Advanced Filters**: Date range filters, balance range filters
+-   **Export Functionality**: CSV export with current filters applied
+-   **Bulk Sort Operations**: Apply sorting to bulk selection operations
+-   **Saved Filter Sets**: Allow admins to save and reuse filter combinations
+-   **Real-time Updates**: WebSocket integration for live user status updates
+-   **IP Whitelisting**: Allow trusted IPs to bypass rate limits
+-   **Dynamic Rate Limiting**: Adjust limits based on threat level
 
 ### Performance Optimizations
 
-- **Cursor-based Pagination**: For extremely large datasets
-- **Search Indexing**: Full-text search capabilities
-- **Caching Layer**: Redis caching for frequently accessed user lists
-- **Background Processing**: Async export operations for large datasets
-- **Redis Rate Limiting**: Distributed rate limiting for multi-server deployments
-- **Adaptive Throttling**: Machine learning-based rate adjustments
+-   **Cursor-based Pagination**: For extremely large datasets
+-   **Search Indexing**: Full-text search capabilities
+-   **Caching Layer**: Redis caching for frequently accessed user lists
+-   **Background Processing**: Async export operations for large datasets
+-   **Redis Rate Limiting**: Distributed rate limiting for multi-server deployments
+-   **Adaptive Throttling**: Machine learning-based rate adjustments
 
 ## User Experience
 
 ### Visual Design
 
-- **Active Filter**: Bright, colored background with white text
-- **Inactive Filter**: Subtle gray background with hover effects
-- **Icons**: Emoji icons for quick visual recognition
-- **Spacing**: Consistent padding and margins
+-   **Active Filter**: Bright, colored background with white text
+-   **Inactive Filter**: Subtle gray background with hover effects
+-   **Icons**: Emoji icons for quick visual recognition
+-   **Spacing**: Consistent padding and margins
 
 ### Interaction Patterns
 
-- **Single Click**: Instant filter application
-- **Page Reset**: Automatically returns to page 1 when filter changes
-- **State Persistence**: Filter state maintained during session
-- **Search Integration**: Filters work with search functionality
+-   **Single Click**: Instant filter application
+-   **Page Reset**: Automatically returns to page 1 when filter changes
+-   **State Persistence**: Filter state maintained during session
+-   **Search Integration**: Filters work with search functionality
 
 ### Accessibility
 
-- **ARIA Labels**: Screen reader support for filter buttons
-- **Keyboard Navigation**: Tab navigation through filter options
-- **Color Contrast**: High contrast ratios for visibility
-- **Focus Indicators**: Clear focus states for keyboard users
+-   **ARIA Labels**: Screen reader support for filter buttons
+-   **Keyboard Navigation**: Tab navigation through filter options
+-   **Color Contrast**: High contrast ratios for visibility
+-   **Focus Indicators**: Clear focus states for keyboard users
 
 ## API Integration
 
@@ -563,91 +553,86 @@ const params = {
 // Backend query
 const where: any = {};
 if (role) where.role = role;
-if (search)
-  where.OR = [
-    { email: { contains: search, mode: "insensitive" } },
-    { firstName: { contains: search, mode: "insensitive" } },
-    { lastName: { contains: search, mode: "insensitive" } },
-  ];
+if (search) where.OR = [{ email: { contains: search, mode: "insensitive" } }, { firstName: { contains: search, mode: "insensitive" } }, { lastName: { contains: search, mode: "insensitive" } }];
 ```
 
 ### Performance Considerations
 
-- **Debounced Search**: 500ms delay prevents excessive API calls
-- **Pagination Reset**: Page reset on filter change for consistent UX
-- **Loading States**: Visual feedback during data fetching
-- **Caching**: Browser caching for improved performance
+-   **Debounced Search**: 500ms delay prevents excessive API calls
+-   **Pagination Reset**: Page reset on filter change for consistent UX
+-   **Loading States**: Visual feedback during data fetching
+-   **Caching**: Browser caching for improved performance
 
 ## Use Cases
 
 ### Administrative Tasks
 
-- **User Support**: Quickly find regular users needing assistance
-- **Admin Audit**: Review all administrative accounts
-- **Staff Management**: Monitor staff permissions and access
-- **Bulk Operations**: Select users by role for mass actions
+-   **User Support**: Quickly find regular users needing assistance
+-   **Admin Audit**: Review all administrative accounts
+-   **Staff Management**: Monitor staff permissions and access
+-   **Bulk Operations**: Select users by role for mass actions
 
 ### Business Intelligence
 
-- **User Demographics**: Analyze user distribution by role
-- **Growth Tracking**: Monitor admin/staff hiring patterns
-- **Access Patterns**: Understand role-based system usage
+-   **User Demographics**: Analyze user distribution by role
+-   **Growth Tracking**: Monitor admin/staff hiring patterns
+-   **Access Patterns**: Understand role-based system usage
 
 ### Security Management
 
-- **Permission Review**: Audit who has elevated access
-- **Role Changes**: Track role transition patterns
-- **Access Control**: Verify appropriate role assignments
+-   **Permission Review**: Audit who has elevated access
+-   **Role Changes**: Track role transition patterns
+-   **Access Control**: Verify appropriate role assignments
 
 ## Integration with Existing Features
 
 ### Search Functionality
 
-- **Combined Filtering**: Search works within role filters
-- **Real-time Updates**: Search results update as you type
-- **Filter Persistence**: Role filter maintained during search
+-   **Combined Filtering**: Search works within role filters
+-   **Real-time Updates**: Search results update as you type
+-   **Filter Persistence**: Role filter maintained during search
 
 ### Bulk Actions
 
-- **Role-based Selection**: Bulk actions respect current filter
-- **Cross-role Operations**: Ability to act across role boundaries
-- **Confirmation Dialogs**: Clear confirmation for bulk operations
+-   **Role-based Selection**: Bulk actions respect current filter
+-   **Cross-role Operations**: Ability to act across role boundaries
+-   **Confirmation Dialogs**: Clear confirmation for bulk operations
 
 ### Table Display
 
-- **Role Badges**: Visual role indicators in table rows
-- **Status Indicators**: Active/suspended status display
-- **Action Buttons**: Context-appropriate action buttons
+-   **Role Badges**: Visual role indicators in table rows
+-   **Status Indicators**: Active/suspended status display
+-   **Action Buttons**: Context-appropriate action buttons
 
 ## Future Enhancements
 
 ### Advanced Filtering
 
-- **Multi-role Selection**: Filter by multiple roles simultaneously
-- **Date Range Filters**: Filter by account creation date
-- **Activity Filters**: Filter by last login or activity
-- **Custom Filters**: Saved filter presets
+-   **Multi-role Selection**: Filter by multiple roles simultaneously
+-   **Date Range Filters**: Filter by account creation date
+-   **Activity Filters**: Filter by last login or activity
+-   **Custom Filters**: Saved filter presets
 
 ### Export Features
 
-- **Filtered Exports**: Export only filtered results
-- **Role-based Reports**: Generate reports by role
-- **CSV/Excel Output**: Multiple export formats
+-   **Filtered Exports**: Export only filtered results
+-   **Role-based Reports**: Generate reports by role
+-   **CSV/Excel Output**: Multiple export formats
 
 ### Analytics Integration
 
-- **Filter Analytics**: Track which filters are most used
-- **Usage Patterns**: Understand admin workflow patterns
-- **Performance Metrics**: Monitor filter performance
+-   **Filter Analytics**: Track which filters are most used
+-   **Usage Patterns**: Understand admin workflow patterns
+-   **Performance Metrics**: Monitor filter performance
 
 ## Troubleshooting
 
 ### Common Issues
 
-- **Filter Not Applying**: Check network connectivity and API status
-- **Page Not Resetting**: Manual page navigation may be needed
-- **Search Conflicts**: Clear search when changing role filters
-- **State Persistence**: Refresh page if filter state seems incorrect
+-   **Filter Not Applying**: Check network connectivity and API status
+-   **Page Not Resetting**: Manual page navigation may be needed
+-   **Search Conflicts**: Clear search when changing role filters
+-   **State Persistence**: Refresh page if filter state seems incorrect
 
 ### Debug Steps
 
@@ -660,21 +645,21 @@ if (search)
 
 ### User Experience
 
-- **Intuitive Labels**: Clear, descriptive button labels
-- **Visual Hierarchy**: Active states clearly distinguishable
-- **Responsive Behavior**: Works on all screen sizes
-- **Performance**: Fast filter application and results
+-   **Intuitive Labels**: Clear, descriptive button labels
+-   **Visual Hierarchy**: Active states clearly distinguishable
+-   **Responsive Behavior**: Works on all screen sizes
+-   **Performance**: Fast filter application and results
 
 ### Technical Implementation
 
-- **State Management**: Centralized filter state handling
-- **Error Handling**: Graceful failure for API errors
-- **Loading States**: Clear feedback during operations
-- **Accessibility**: WCAG compliance for all interactions
+-   **State Management**: Centralized filter state handling
+-   **Error Handling**: Graceful failure for API errors
+-   **Loading States**: Clear feedback during operations
+-   **Accessibility**: WCAG compliance for all interactions
 
 ### Maintenance
 
-- **Code Organization**: Clean separation of filter logic
-- **Documentation**: Comprehensive inline documentation
-- **Testing**: Unit and integration tests for filter functionality
-- **Monitoring**: Performance monitoring and error tracking
+-   **Code Organization**: Clean separation of filter logic
+-   **Documentation**: Comprehensive inline documentation
+-   **Testing**: Unit and integration tests for filter functionality
+-   **Monitoring**: Performance monitoring and error tracking

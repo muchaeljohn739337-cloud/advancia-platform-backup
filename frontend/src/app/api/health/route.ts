@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 /**
  * Health Check API Route
  * GET /api/health
- * 
+ *
  * Returns the health status of the application including uptime, timestamp, and memory usage.
  */
 export async function GET() {

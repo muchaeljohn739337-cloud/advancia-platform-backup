@@ -1,0 +1,17 @@
+name: Auto Assign Moderators
+on:
+  discussion:
+    types: [created]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-assign discussion
+        uses: pozil/auto-assign-issue@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          assignees: |
+            muchaeljohn739337-cloud
+            another-moderator
+          numOfAssignee: 1

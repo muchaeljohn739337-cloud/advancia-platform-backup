@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useState } from "react";
-import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { useState } from 'react';
+import * as Yup from 'yup';
 
 // ✅ FORMIK EXAMPLE - For your KYC, payment, and registration forms
 // Benefits: Auto validation, error handling, loading states, clean code
@@ -12,35 +12,28 @@ interface FormValues {
   amount: string;
   cryptoAddress: string;
   consent: boolean;
-  paymentProvider: "cryptomus" | "nowpayments";
+  paymentProvider: 'cryptomus' | 'nowpayments';
 }
 
 const withdrawalSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
+  email: Yup.string().email('Invalid email address').required('Email is required'),
   amount: Yup.number()
-    .positive("Amount must be positive")
-    .min(10, "Minimum withdrawal is $10")
-    .max(100000, "Maximum withdrawal is $100,000")
-    .required("Amount is required"),
+    .positive('Amount must be positive')
+    .min(10, 'Minimum withdrawal is $10')
+    .max(100000, 'Maximum withdrawal is $100,000')
+    .required('Amount is required'),
   cryptoAddress: Yup.string()
-    .matches(/^(0x)?[0-9a-fA-F]{40}$/, "Invalid Ethereum address")
-    .required("Crypto address is required"),
-  consent: Yup.boolean()
-    .oneOf([true], "You must accept the terms")
-    .required("Consent is required"),
+    .matches(/^(0x)?[0-9a-fA-F]{40}$/, 'Invalid Ethereum address')
+    .required('Crypto address is required'),
+  consent: Yup.boolean().oneOf([true], 'You must accept the terms').required('Consent is required'),
 });
 
 export default function EnhancedFormExample() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  const handleSubmit = async (
-    values: FormValues,
-    { setSubmitting, resetForm }: any
-  ) => {
+  const handleSubmit = async (values: FormValues, { setSubmitting, resetForm }: any) => {
     try {
-      console.log("Form submitted:", values);
+      console.log('Form submitted:', values);
 
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -50,7 +43,7 @@ export default function EnhancedFormExample() {
 
       setTimeout(() => setSubmitSuccess(false), 3000);
     } catch (error) {
-      console.error("Submission failed:", error);
+      console.error('Submission failed:', error);
     } finally {
       setSubmitting(false);
     }
@@ -87,11 +80,11 @@ export default function EnhancedFormExample() {
 
           <Formik
             initialValues={{
-              email: "",
-              amount: "",
-              cryptoAddress: "",
+              email: '',
+              amount: '',
+              cryptoAddress: '',
               consent: false,
-              paymentProvider: "nowpayments" as const,
+              paymentProvider: 'nowpayments' as const,
             }}
             validationSchema={withdrawalSchema}
             onSubmit={handleSubmit}
@@ -101,9 +94,7 @@ export default function EnhancedFormExample() {
                 {/* Email Field with DaisyUI styling */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">
-                      Email Address
-                    </span>
+                    <span className="label-text font-semibold">Email Address</span>
                   </label>
                   <Field
                     name="email"
@@ -111,8 +102,8 @@ export default function EnhancedFormExample() {
                     placeholder="you@example.com"
                     className={`input input-bordered w-full transition-all duration-300 ${
                       errors.email && touched.email
-                        ? "input-error border-error border-2 shadow-lg shadow-error/30 animate-shake"
-                        : "focus:border-primary focus:shadow-lg focus:shadow-primary/20"
+                        ? 'input-error border-error border-2 shadow-lg shadow-error/30 animate-shake'
+                        : 'focus:border-primary focus:shadow-lg focus:shadow-primary/20'
                     }`}
                   />
                   <ErrorMessage name="email">
@@ -131,9 +122,7 @@ export default function EnhancedFormExample() {
                             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg>
-                        <span className="text-xs text-error font-medium">
-                          {msg}
-                        </span>
+                        <span className="text-xs text-error font-medium">{msg}</span>
                       </div>
                     )}
                   </ErrorMessage>
@@ -142,9 +131,7 @@ export default function EnhancedFormExample() {
                 {/* Amount Field */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">
-                      Withdrawal Amount (USD)
-                    </span>
+                    <span className="label-text font-semibold">Withdrawal Amount (USD)</span>
                   </label>
                   <Field
                     name="amount"
@@ -152,8 +139,8 @@ export default function EnhancedFormExample() {
                     placeholder="100.00"
                     className={`input input-bordered w-full transition-all duration-300 ${
                       errors.amount && touched.amount
-                        ? "input-error border-error border-2 shadow-lg shadow-error/30 animate-shake"
-                        : "focus:border-secondary focus:shadow-lg focus:shadow-secondary/20"
+                        ? 'input-error border-error border-2 shadow-lg shadow-error/30 animate-shake'
+                        : 'focus:border-secondary focus:shadow-lg focus:shadow-secondary/20'
                     }`}
                   />
                   <ErrorMessage name="amount">
@@ -172,9 +159,7 @@ export default function EnhancedFormExample() {
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg>
-                        <span className="text-xs text-error font-medium">
-                          {msg}
-                        </span>
+                        <span className="text-xs text-error font-medium">{msg}</span>
                       </div>
                     )}
                   </ErrorMessage>
@@ -183,9 +168,7 @@ export default function EnhancedFormExample() {
                 {/* Payment Provider Selector */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">
-                      💳 Payment Provider
-                    </span>
+                    <span className="label-text font-semibold">💳 Payment Provider</span>
                     <span className="label-text-alt text-info">
                       Choose your crypto payment gateway
                     </span>
@@ -196,52 +179,40 @@ export default function EnhancedFormExample() {
                         {/* NOWPayments Option */}
                         <label
                           className={`cursor-pointer transition-all duration-300 ${
-                            field.value === "nowpayments"
-                              ? "scale-105"
-                              : "hover:scale-[1.02]"
+                            field.value === 'nowpayments' ? 'scale-105' : 'hover:scale-[1.02]'
                           }`}
                         >
                           <input
                             type="radio"
                             {...field}
                             value="nowpayments"
-                            checked={field.value === "nowpayments"}
+                            checked={field.value === 'nowpayments'}
                             className="sr-only"
                           />
                           <div
                             className={`card border-2 transition-all duration-300 ${
-                              field.value === "nowpayments"
-                                ? "border-success bg-success/10 shadow-lg shadow-success/20"
-                                : "border-base-300 hover:border-success/50"
+                              field.value === 'nowpayments'
+                                ? 'border-success bg-success/10 shadow-lg shadow-success/20'
+                                : 'border-base-300 hover:border-success/50'
                             }`}
                           >
                             <div className="card-body p-4">
                               <div className="flex items-center justify-between mb-2">
                                 <h3 className="font-bold">NOWPayments</h3>
-                                {field.value === "nowpayments" && (
-                                  <div className="badge badge-success badge-sm">
-                                    ✓ Selected
-                                  </div>
+                                {field.value === 'nowpayments' && (
+                                  <div className="badge badge-success badge-sm">✓ Selected</div>
                                 )}
                               </div>
                               <div className="space-y-1 text-xs">
                                 <div className="flex justify-between">
-                                  <span className="text-base-content/70">
-                                    Fees:
-                                  </span>
-                                  <span className="font-semibold text-success">
-                                    0.5%
-                                  </span>
+                                  <span className="text-base-content/70">Fees:</span>
+                                  <span className="font-semibold text-success">0.5%</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-base-content/70">
-                                    Coins:
-                                  </span>
+                                  <span className="text-base-content/70">Coins:</span>
                                   <span className="font-semibold">200+</span>
                                 </div>
-                                <div className="badge badge-success badge-xs mt-2">
-                                  Recommended
-                                </div>
+                                <div className="badge badge-success badge-xs mt-2">Recommended</div>
                               </div>
                             </div>
                           </div>
@@ -250,50 +221,40 @@ export default function EnhancedFormExample() {
                         {/* Cryptomus Option */}
                         <label
                           className={`cursor-pointer transition-all duration-300 ${
-                            field.value === "cryptomus"
-                              ? "scale-105"
-                              : "hover:scale-[1.02]"
+                            field.value === 'cryptomus' ? 'scale-105' : 'hover:scale-[1.02]'
                           }`}
                         >
                           <input
                             type="radio"
                             {...field}
                             value="cryptomus"
-                            checked={field.value === "cryptomus"}
+                            checked={field.value === 'cryptomus'}
                             className="sr-only"
                           />
                           <div
                             className={`card border-2 transition-all duration-300 ${
-                              field.value === "cryptomus"
-                                ? "border-primary bg-primary/10 shadow-lg shadow-primary/20"
-                                : "border-base-300 hover:border-primary/50"
+                              field.value === 'cryptomus'
+                                ? 'border-primary bg-primary/10 shadow-lg shadow-primary/20'
+                                : 'border-base-300 hover:border-primary/50'
                             }`}
                           >
                             <div className="card-body p-4">
                               <div className="flex items-center justify-between mb-2">
                                 <h3 className="font-bold">Cryptomus</h3>
-                                {field.value === "cryptomus" && (
-                                  <div className="badge badge-primary badge-sm">
-                                    ✓ Selected
-                                  </div>
+                                {field.value === 'cryptomus' && (
+                                  <div className="badge badge-primary badge-sm">✓ Selected</div>
                                 )}
                               </div>
                               <div className="space-y-1 text-xs">
                                 <div className="flex justify-between">
-                                  <span className="text-base-content/70">
-                                    Fees:
-                                  </span>
+                                  <span className="text-base-content/70">Fees:</span>
                                   <span className="font-semibold">~1%</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-base-content/70">
-                                    Coins:
-                                  </span>
+                                  <span className="text-base-content/70">Coins:</span>
                                   <span className="font-semibold">50+</span>
                                 </div>
-                                <div className="badge badge-ghost badge-xs mt-2">
-                                  Alternative
-                                </div>
+                                <div className="badge badge-ghost badge-xs mt-2">Alternative</div>
                               </div>
                             </div>
                           </div>
@@ -303,8 +264,7 @@ export default function EnhancedFormExample() {
                   </Field>
                   <label className="label">
                     <span className="label-text-alt text-base-content/60">
-                      💡 NOWPayments offers lower fees and more cryptocurrency
-                      options
+                      💡 NOWPayments offers lower fees and more cryptocurrency options
                     </span>
                   </label>
                 </div>
@@ -312,9 +272,7 @@ export default function EnhancedFormExample() {
                 {/* Crypto Address Field */}
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-semibold">
-                      Ethereum Address
-                    </span>
+                    <span className="label-text font-semibold">Ethereum Address</span>
                   </label>
                   <Field
                     name="cryptoAddress"
@@ -322,8 +280,8 @@ export default function EnhancedFormExample() {
                     placeholder="0x..."
                     className={`input input-bordered w-full font-mono text-sm transition-all duration-300 ${
                       errors.cryptoAddress && touched.cryptoAddress
-                        ? "input-error border-error border-2 shadow-lg shadow-error/30 animate-shake"
-                        : "focus:border-accent focus:shadow-lg focus:shadow-accent/20"
+                        ? 'input-error border-error border-2 shadow-lg shadow-error/30 animate-shake'
+                        : 'focus:border-accent focus:shadow-lg focus:shadow-accent/20'
                     }`}
                   />
                   <ErrorMessage name="cryptoAddress">
@@ -342,9 +300,7 @@ export default function EnhancedFormExample() {
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                           />
                         </svg>
-                        <span className="text-xs text-error font-medium">
-                          {msg}
-                        </span>
+                        <span className="text-xs text-error font-medium">{msg}</span>
                       </div>
                     )}
                   </ErrorMessage>
@@ -355,8 +311,8 @@ export default function EnhancedFormExample() {
                   <div
                     className={`card bg-gradient-to-br from-primary/5 to-secondary/5 border-2 transition-all duration-300 ${
                       errors.consent && touched.consent
-                        ? "border-error shadow-lg shadow-error/20"
-                        : "border-primary/20 hover:border-primary/40"
+                        ? 'border-error shadow-lg shadow-error/20'
+                        : 'border-primary/20 hover:border-primary/40'
                     }`}
                   >
                     <div className="card-body p-4">
@@ -368,14 +324,8 @@ export default function EnhancedFormExample() {
                                 {...field}
                                 type="checkbox"
                                 className={`checkbox checkbox-lg ${
-                                  field.value
-                                    ? "checkbox-success"
-                                    : "checkbox-primary"
-                                } ${
-                                  errors.consent && touched.consent
-                                    ? "checkbox-error"
-                                    : ""
-                                }`}
+                                  field.value ? 'checkbox-success' : 'checkbox-primary'
+                                } ${errors.consent && touched.consent ? 'checkbox-error' : ''}`}
                               />
                             )}
                           </Field>
@@ -398,21 +348,15 @@ export default function EnhancedFormExample() {
                           </h3>
                           <div className="text-sm space-y-1 opacity-90">
                             <p className="flex items-center gap-2">
-                              <span className="badge badge-sm badge-primary">
-                                📊
-                              </span>
-                              I understand withdrawal fees and processing times
+                              <span className="badge badge-sm badge-primary">📊</span>I understand
+                              withdrawal fees and processing times
                             </p>
                             <p className="flex items-center gap-2">
-                              <span className="badge badge-sm badge-secondary">
-                                🔒
-                              </span>
+                              <span className="badge badge-sm badge-secondary">🔒</span>
                               Transactions are irreversible once confirmed
                             </p>
                             <p className="flex items-center gap-2">
-                              <span className="badge badge-sm badge-accent">
-                                ⏱️
-                              </span>
+                              <span className="badge badge-sm badge-accent">⏱️</span>
                               Processing may take 24-72 hours
                             </p>
                           </div>
@@ -448,11 +392,9 @@ export default function EnhancedFormExample() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`btn btn-primary w-full ${
-                      isSubmitting ? "loading" : ""
-                    }`}
+                    className={`btn btn-primary w-full ${isSubmitting ? 'loading' : ''}`}
                   >
-                    {isSubmitting ? "Processing..." : "Submit Withdrawal"}
+                    {isSubmitting ? 'Processing...' : 'Submit Withdrawal'}
                   </button>
                 </div>
               </Form>
@@ -474,9 +416,7 @@ export default function EnhancedFormExample() {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>
-              This form uses Formik for validation and DaisyUI for styling
-            </span>
+            <span>This form uses Formik for validation and DaisyUI for styling</span>
           </div>
         </div>
       </div>

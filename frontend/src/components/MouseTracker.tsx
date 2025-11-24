@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface ClickPoint {
   x: number;
@@ -13,14 +13,14 @@ interface MouseTrackerProps {
   enabled?: boolean;
   showHeatmap?: boolean;
   showClickAnimation?: boolean;
-  trackingArea?: "fullscreen" | "component";
+  trackingArea?: 'fullscreen' | 'component';
 }
 
 export default function MouseTracker({
   enabled = true,
   showHeatmap = false,
   showClickAnimation = true,
-  trackingArea = "fullscreen",
+  trackingArea = 'fullscreen',
 }: MouseTrackerProps) {
   const [clicks, setClicks] = useState<ClickPoint[]>([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -33,7 +33,7 @@ export default function MouseTracker({
       if (!isTracking) return;
 
       const rect =
-        trackingArea === "component" && containerRef.current
+        trackingArea === 'component' && containerRef.current
           ? containerRef.current.getBoundingClientRect()
           : { left: 0, top: 0 };
 
@@ -51,7 +51,7 @@ export default function MouseTracker({
       if (!isTracking || !showClickAnimation) return;
 
       const rect =
-        trackingArea === "component" && containerRef.current
+        trackingArea === 'component' && containerRef.current
           ? containerRef.current.getBoundingClientRect()
           : { left: 0, top: 0 };
 
@@ -77,16 +77,14 @@ export default function MouseTracker({
     if (!isTracking) return;
 
     const target =
-      trackingArea === "component" && containerRef.current
-        ? containerRef.current
-        : window;
+      trackingArea === 'component' && containerRef.current ? containerRef.current : window;
 
-    target.addEventListener("mousemove", handleMouseMove as any);
-    target.addEventListener("click", handleClick as any);
+    target.addEventListener('mousemove', handleMouseMove as any);
+    target.addEventListener('click', handleClick as any);
 
     return () => {
-      target.removeEventListener("mousemove", handleMouseMove as any);
-      target.removeEventListener("click", handleClick as any);
+      target.removeEventListener('mousemove', handleMouseMove as any);
+      target.removeEventListener('click', handleClick as any);
     };
   }, [isTracking, handleMouseMove, handleClick, trackingArea]);
 
@@ -96,9 +94,9 @@ export default function MouseTracker({
     <div
       ref={containerRef}
       className={`pointer-events-none fixed inset-0 z-50 ${
-        trackingArea === "component" ? "relative" : ""
+        trackingArea === 'component' ? 'relative' : ''
       }`}
-      style={{ mixBlendMode: "difference" }}
+      style={{ mixBlendMode: 'difference' }}
     >
       {/* Mouse position indicator */}
       <div
@@ -148,12 +146,10 @@ export default function MouseTracker({
             <button
               onClick={() => setIsTracking(!isTracking)}
               className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
-                isTracking
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "bg-gray-600 hover:bg-gray-700"
+                isTracking ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700'
               }`}
             >
-              {isTracking ? "ON" : "OFF"}
+              {isTracking ? 'ON' : 'OFF'}
             </button>
           </div>
           <div className="border-t border-gray-700 pt-2">

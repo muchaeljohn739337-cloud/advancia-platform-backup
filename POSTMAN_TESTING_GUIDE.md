@@ -27,7 +27,7 @@ Click on the environment and edit these values:
 | Variable        | Current Value           | What to Set                                               |
 | --------------- | ----------------------- | --------------------------------------------------------- |
 | `baseUrl`       | `http://localhost:4000` | ✅ Leave as-is for local testing                          |
-| `adminEmail`    | `admin@advancia.com`   | ✅ Leave as-is                                            |
+| `adminEmail`    | `admin@advancia.com`    | ✅ Leave as-is                                            |
 | `adminPassword` | `admin123`              | ✅ Leave as-is (development only!)                        |
 | `validTOTP`     | `000000`                | ⚠️ **UPDATE** with current TOTP from Google Authenticator |
 | `backupCode`    | empty                   | ⚠️ Optional: Set one of your backup codes                 |
@@ -44,8 +44,8 @@ Click on the environment and edit these values:
 1. Click on the collection name
 2. Click "Run" button
 3. In Collection Runner:
-   - Select your environment
-   - Click "Run Advancia Lockout Tests"
+   -   Select your environment
+   -   Click "Run Advancia Lockout Tests"
 4. Watch the results in real-time
 
 ### Option 2: Run Individual Requests
@@ -90,10 +90,10 @@ Execute requests one-by-one in this order:
 
 **Postman Test Results:**
 
-- ✅ Status code is 200
-- ✅ Response has token
-- ✅ JWT token saved to environment
-- ✅ Response has user data
+-   ✅ Status code is 200
+-   ✅ Response has token
+-   ✅ JWT token saved to environment
+-   ✅ Response has user data
 
 **Database Verification:**
 
@@ -155,11 +155,11 @@ locked_until: NULL
 
 **Expected DB Progression:**
 
-- After attempt 1: `failed_attempts = 1`
-- After attempt 2: `failed_attempts = 2`
-- After attempt 3: `failed_attempts = 3`
-- After attempt 4: `failed_attempts = 4`
-- After attempt 5: `failed_attempts = 5, locked_until = [15 min future]`
+-   After attempt 1: `failed_attempts = 1`
+-   After attempt 2: `failed_attempts = 2`
+-   After attempt 3: `failed_attempts = 3`
+-   After attempt 4: `failed_attempts = 4`
+-   After attempt 5: `failed_attempts = 5, locked_until = [15 min future]`
 
 ---
 
@@ -265,8 +265,8 @@ last_login_at: [recent timestamp]
 
 **Prerequisites:**
 
-- Must have valid JWT token from successful login
-- Token is automatically set in environment after login
+-   Must have valid JWT token from successful login
+-   Token is automatically set in environment after login
 
 **Expected Response (With Valid Token):**
 
@@ -499,23 +499,23 @@ Write-Host "`nTest workflow complete!" -ForegroundColor Green
 
 All tests pass when:
 
-- ✅ Health check returns `200 OK`
-- ✅ Valid TOTP login succeeds with JWT
-- ✅ 5 failed attempts trigger lockout
-- ✅ Lockout persists even with correct credentials
-- ✅ Account unlocks after 15 minutes (or manual reset)
-- ✅ Backup code works and is consumed
-- ✅ Protected endpoints accessible with valid JWT
-- ✅ Database state matches expected values at each step
+-   ✅ Health check returns `200 OK`
+-   ✅ Valid TOTP login succeeds with JWT
+-   ✅ 5 failed attempts trigger lockout
+-   ✅ Lockout persists even with correct credentials
+-   ✅ Account unlocks after 15 minutes (or manual reset)
+-   ✅ Backup code works and is consumed
+-   ✅ Protected endpoints accessible with valid JWT
+-   ✅ Database state matches expected values at each step
 
 ---
 
 ## 📖 Additional Resources
 
-- **QUICK_TEST_REFERENCE.md** - Command cheatsheet
-- **DATABASE_VERIFICATION_GUIDE.md** - SQL queries for verification
-- **COMPLETE_TEST_WORKFLOW.md** - Step-by-step testing procedures
-- **ADMIN_2FA_SETUP.md** - 2FA configuration guide
+-   **QUICK_TEST_REFERENCE.md** - Command cheatsheet
+-   **DATABASE_VERIFICATION_GUIDE.md** - SQL queries for verification
+-   **COMPLETE_TEST_WORKFLOW.md** - Step-by-step testing procedures
+-   **ADMIN_2FA_SETUP.md** - 2FA configuration guide
 
 ---
 

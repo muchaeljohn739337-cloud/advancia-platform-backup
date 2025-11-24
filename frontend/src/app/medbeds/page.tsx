@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import SidebarLayout from "@/components/SidebarLayout";
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import SidebarLayout from '@/components/SidebarLayout';
 import {
   Heart,
   Brain,
@@ -14,9 +14,9 @@ import {
   Zap,
   ArrowRight,
   CheckCircle,
-} from "lucide-react";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
+} from 'lucide-react';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 interface Booking {
   id: string;
@@ -46,33 +46,28 @@ export default function MedBedsPage() {
   }, []);
 
   const fetchBookings = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
       setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/medbeds/my-bookings`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/medbeds/my-bookings`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (res.ok) {
         const data = await res.json();
         setBookings(data);
 
         // Calculate stats
-        const completed = data.filter((b: Booking) => b.status === "completed");
-        const upcoming = data.filter((b: Booking) => b.status === "scheduled");
+        const completed = data.filter((b: Booking) => b.status === 'completed');
+        const upcoming = data.filter((b: Booking) => b.status === 'scheduled');
         const avgEff =
           completed.length > 0
-            ? completed.reduce(
-                (sum: number, b: Booking) => sum + (b.effectiveness || 0),
-                0
-              ) / completed.length
+            ? completed.reduce((sum: number, b: Booking) => sum + (b.effectiveness || 0), 0) /
+              completed.length
             : 0;
 
         setStats({
@@ -83,7 +78,7 @@ export default function MedBedsPage() {
         });
       }
     } catch (error) {
-      console.error("Failed to fetch bookings:", error);
+      console.error('Failed to fetch bookings:', error);
     } finally {
       setLoading(false);
     }
@@ -91,49 +86,49 @@ export default function MedBedsPage() {
 
   const chamberTypes = [
     {
-      id: "recovery",
-      name: "Recovery Chamber",
+      id: 'recovery',
+      name: 'Recovery Chamber',
       icon: Heart,
-      color: "from-green-500 to-emerald-600",
-      description: "Cellular regeneration and healing optimization",
-      features: ["Tissue Repair", "Pain Relief", "Immune Boost"],
-      duration: "60-90 min",
-      price: "$150/session",
+      color: 'from-green-500 to-emerald-600',
+      description: 'Cellular regeneration and healing optimization',
+      features: ['Tissue Repair', 'Pain Relief', 'Immune Boost'],
+      duration: '60-90 min',
+      price: '$150/session',
     },
     {
-      id: "enhancement",
-      name: "Enhancement Chamber",
+      id: 'enhancement',
+      name: 'Enhancement Chamber',
       icon: Zap,
-      color: "from-purple-500 to-pink-600",
-      description: "Performance enhancement and vitality boost",
-      features: ["Energy Boost", "Mental Clarity", "Stress Relief"],
-      duration: "45-60 min",
-      price: "$120/session",
+      color: 'from-purple-500 to-pink-600',
+      description: 'Performance enhancement and vitality boost',
+      features: ['Energy Boost', 'Mental Clarity', 'Stress Relief'],
+      duration: '45-60 min',
+      price: '$120/session',
     },
     {
-      id: "diagnostic",
-      name: "Diagnostic Scanner",
+      id: 'diagnostic',
+      name: 'Diagnostic Scanner',
       icon: Brain,
-      color: "from-blue-500 to-cyan-600",
-      description: "Comprehensive health analysis and monitoring",
-      features: ["Full Body Scan", "DNA Analysis", "Health Metrics"],
-      duration: "30-45 min",
-      price: "$100/session",
+      color: 'from-blue-500 to-cyan-600',
+      description: 'Comprehensive health analysis and monitoring',
+      features: ['Full Body Scan', 'DNA Analysis', 'Health Metrics'],
+      duration: '30-45 min',
+      price: '$100/session',
     },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-100 text-green-700";
-      case "in-progress":
-        return "bg-blue-100 text-blue-700";
-      case "scheduled":
-        return "bg-yellow-100 text-yellow-700";
-      case "cancelled":
-        return "bg-red-100 text-red-700";
+      case 'completed':
+        return 'bg-green-100 text-green-700';
+      case 'in-progress':
+        return 'bg-blue-100 text-blue-700';
+      case 'scheduled':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'cancelled':
+        return 'bg-red-100 text-red-700';
       default:
-        return "bg-gray-100 text-gray-700";
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -153,13 +148,11 @@ export default function MedBedsPage() {
                 <span className="font-semibold">Med-Bed Health Analytics</span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold">
-                Advanced Health Monitoring
-              </h1>
+              <h1 className="text-5xl md:text-6xl font-bold">Advanced Health Monitoring</h1>
 
               <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-                Experience cutting-edge health technology with AI-powered
-                diagnostics and personalized wellness solutions
+                Experience cutting-edge health technology with AI-powered diagnostics and
+                personalized wellness solutions
               </p>
 
               <Link
@@ -179,28 +172,28 @@ export default function MedBedsPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[
                 {
-                  label: "Total Sessions",
+                  label: 'Total Sessions',
                   value: stats.totalSessions,
                   icon: Activity,
-                  color: "blue",
+                  color: 'blue',
                 },
                 {
-                  label: "Completed",
+                  label: 'Completed',
                   value: stats.completedSessions,
                   icon: CheckCircle,
-                  color: "green",
+                  color: 'green',
                 },
                 {
-                  label: "Avg Effectiveness",
+                  label: 'Avg Effectiveness',
                   value: `${stats.avgEffectiveness}%`,
                   icon: TrendingUp,
-                  color: "purple",
+                  color: 'purple',
                 },
                 {
-                  label: "Upcoming",
+                  label: 'Upcoming',
                   value: stats.upcomingSessions,
                   icon: Calendar,
-                  color: "orange",
+                  color: 'orange',
                 },
               ].map((stat, index) => (
                 <motion.div
@@ -212,9 +205,7 @@ export default function MedBedsPage() {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <stat.icon className={`h-8 w-8 text-${stat.color}-600`} />
-                    <span
-                      className={`text-3xl font-bold text-${stat.color}-600`}
-                    >
+                    <span className={`text-3xl font-bold text-${stat.color}-600`}>
                       {stat.value}
                     </span>
                   </div>
@@ -247,9 +238,7 @@ export default function MedBedsPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-200 hover:shadow-2xl transition-shadow"
               >
-                <div
-                  className={`bg-gradient-to-br ${chamber.color} p-8 text-white`}
-                >
+                <div className={`bg-gradient-to-br ${chamber.color} p-8 text-white`}>
                   <chamber.icon className="h-12 w-12 mb-4" />
                   <h3 className="text-2xl font-bold mb-2">{chamber.name}</h3>
                   <p className="text-white/90">{chamber.description}</p>
@@ -270,9 +259,7 @@ export default function MedBedsPage() {
                       <Clock className="h-4 w-4" />
                       {chamber.duration}
                     </span>
-                    <span className="text-lg font-bold text-purple-600">
-                      {chamber.price}
-                    </span>
+                    <span className="text-lg font-bold text-purple-600">{chamber.price}</span>
                   </div>
 
                   <Link
@@ -292,9 +279,7 @@ export default function MedBedsPage() {
           <div className="max-w-7xl mx-auto px-6 pb-16">
             <div className="bg-white rounded-2xl p-8 shadow-xl border border-slate-200">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-3xl font-bold text-slate-900">
-                  Your Sessions
-                </h2>
+                <h2 className="text-3xl font-bold text-slate-900">Your Sessions</h2>
                 <Link
                   href="/medbeds/book"
                   className="text-blue-600 hover:text-blue-700 font-semibold"
@@ -312,25 +297,23 @@ export default function MedBedsPage() {
                     <div className="flex items-center gap-4">
                       <div
                         className={`p-3 rounded-lg ${
-                          booking.status === "completed"
-                            ? "bg-green-100 text-green-600"
-                            : booking.status === "in-progress"
-                            ? "bg-blue-100 text-blue-600"
-                            : "bg-yellow-100 text-yellow-600"
+                          booking.status === 'completed'
+                            ? 'bg-green-100 text-green-600'
+                            : booking.status === 'in-progress'
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'bg-yellow-100 text-yellow-600'
                         }`}
                       >
-                        {booking.status === "completed" ? (
+                        {booking.status === 'completed' ? (
                           <CheckCircle />
-                        ) : booking.status === "in-progress" ? (
+                        ) : booking.status === 'in-progress' ? (
                           <Activity />
                         ) : (
                           <Calendar />
                         )}
                       </div>
                       <div>
-                        <p className="font-semibold text-slate-900">
-                          {booking.chamberName}
-                        </p>
+                        <p className="font-semibold text-slate-900">{booking.chamberName}</p>
                         <div className="flex items-center gap-4 text-sm text-slate-600">
                           <span className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
@@ -376,14 +359,11 @@ export default function MedBedsPage() {
             <div className="flex items-start gap-4">
               <Shield className="h-8 w-8 text-blue-600 flex-shrink-0 mt-1" />
               <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  Safety First
-                </h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">Safety First</h3>
                 <p className="text-slate-700 leading-relaxed">
-                  All Med-Bed sessions are monitored by AI-powered health
-                  systems and comply with international medical standards.
-                  Consult with your healthcare provider before booking if you
-                  have any pre-existing conditions.
+                  All Med-Bed sessions are monitored by AI-powered health systems and comply with
+                  international medical standards. Consult with your healthcare provider before
+                  booking if you have any pre-existing conditions.
                 </p>
               </div>
             </div>

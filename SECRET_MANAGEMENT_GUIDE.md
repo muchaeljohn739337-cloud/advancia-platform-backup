@@ -2,7 +2,7 @@
 
 ## ⚠️ CRITICAL RULES
 
-### ❌ NEVER Do This:
+### ❌ NEVER Do This
 
 ```bash
 # DON'T commit real secrets
@@ -15,7 +15,7 @@ DATABASE_URL=postgresql://admin:MyP@ssw0rd123@localhost:5432/db
 git add .env.production
 ```
 
-### ✅ ALWAYS Do This:
+### ✅ ALWAYS Do This
 
 ```bash
 # Use placeholders in documentation
@@ -167,28 +167,28 @@ node -e "console.log(require('crypto').randomBytes(20).toString('base64').slice(
 
 ## 🛡️ Security Checklist
 
-### Before Every Commit:
+### Before Every Commit
 
-- [ ] No `.env` files in git status
-- [ ] No hardcoded passwords in code
-- [ ] No API keys in documentation
-- [ ] All secrets use placeholders like `YOUR_KEY_HERE`
-- [ ] Run: `git grep -E "(sk_live_|sk_test_|ghp_|AKIA)" -- ':!SECURITY_AUDIT_*'`
+-   [ ] No `.env` files in git status
+-   [ ] No hardcoded passwords in code
+-   [ ] No API keys in documentation
+-   [ ] All secrets use placeholders like `YOUR_KEY_HERE`
+-   [ ] Run: `git grep -E "(sk_live_|sk_test_|ghp_|AKIA)" -- ':!SECURITY_AUDIT_*'`
 
-### Before Every Deploy:
+### Before Every Deploy
 
-- [ ] Production secrets are in GitHub Secrets
-- [ ] Server has correct environment variables
-- [ ] JWT_SECRET is different from dev
-- [ ] Database credentials are strong
-- [ ] Stripe is using live keys (not test)
+-   [ ] Production secrets are in GitHub Secrets
+-   [ ] Server has correct environment variables
+-   [ ] JWT_SECRET is different from dev
+-   [ ] Database credentials are strong
+-   [ ] Stripe is using live keys (not test)
 
-### Monthly:
+### Monthly
 
-- [ ] Rotate JWT secrets
-- [ ] Rotate database passwords
-- [ ] Check for leaked secrets: https://github.com/settings/security
-- [ ] Review GitHub Actions logs for exposed secrets
+-   [ ] Rotate JWT secrets
+-   [ ] Rotate database passwords
+-   [ ] Check for leaked secrets: <https://github.com/settings/security>
+-   [ ] Review GitHub Actions logs for exposed secrets
 
 ---
 
@@ -306,9 +306,9 @@ gitleaks protect --staged --verbose
 
 ## 📖 References
 
-- GitHub Secrets Management: https://docs.github.com/en/actions/security-guides/encrypted-secrets
-- OWASP Secrets Management: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
-- Digital Ocean Environment Variables: https://docs.digitalocean.com/products/app-platform/how-to/use-environment-variables/
+-   GitHub Secrets Management: <https://docs.github.com/en/actions/security-guides/encrypted-secrets>
+-   OWASP Secrets Management: <https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html>
+-   Digital Ocean Environment Variables: <https://docs.digitalocean.com/products/app-platform/how-to/use-environment-variables/>
 
 ---
 

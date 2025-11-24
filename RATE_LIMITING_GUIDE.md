@@ -24,17 +24,17 @@ Comprehensive guide to implementing and using different rate limiting algorithms
 
 **How it works:**
 
-- Bucket holds tokens (e.g., 100 tokens)
-- Each request consumes 1 token
-- Tokens refill at steady rate (e.g., 10/second)
-- Allows bursts up to bucket capacity
+-   Bucket holds tokens (e.g., 100 tokens)
+-   Each request consumes 1 token
+-   Tokens refill at steady rate (e.g., 10/second)
+-   Allows bursts up to bucket capacity
 
 **Characteristics:**
 
-- ✅ Allows traffic bursts
-- ✅ Good user experience
-- ✅ Flexible for varying loads
-- ❌ Can be exploited if not tuned properly
+-   ✅ Allows traffic bursts
+-   ✅ Good user experience
+-   ✅ Flexible for varying loads
+-   ❌ Can be exploited if not tuned properly
 
 ```typescript
 // Token Bucket Example
@@ -69,18 +69,18 @@ User uploads 10 more → ✅ Allowed
 
 **How it works:**
 
-- Requests enter bucket (queue)
-- Processed at fixed rate (leak rate)
-- Excess requests overflow and rejected
-- No bursts - strictly controlled
+-   Requests enter bucket (queue)
+-   Processed at fixed rate (leak rate)
+-   Excess requests overflow and rejected
+-   No bursts - strictly controlled
 
 **Characteristics:**
 
-- ✅ Smooth, predictable flow
-- ✅ Protects downstream services
-- ✅ No traffic spikes
-- ❌ Rejects bursts
-- ❌ Less flexible
+-   ✅ Smooth, predictable flow
+-   ✅ Protects downstream services
+-   ✅ No traffic spikes
+-   ❌ Rejects bursts
+-   ❌ Less flexible
 
 ```typescript
 // Leaky Bucket Example
@@ -116,16 +116,16 @@ Payment processing: Must handle exactly 5/second to avoid overload
 
 **How it works:**
 
-- Count requests in fixed time window
-- Reset counter when window expires
-- Fast and memory efficient
+-   Count requests in fixed time window
+-   Reset counter when window expires
+-   Fast and memory efficient
 
 **Characteristics:**
 
-- ✅ Simple to implement
-- ✅ Memory efficient
-- ✅ Fast
-- ❌ Edge case: 2x burst at window boundaries
+-   ✅ Simple to implement
+-   ✅ Memory efficient
+-   ✅ Fast
+-   ❌ Edge case: 2x burst at window boundaries
 
 ```typescript
 // Fixed Window Example
@@ -158,18 +158,18 @@ Result: 200 requests in 1 second! (edge case)
 
 **How it works:**
 
-- Store timestamp of every request
-- Count requests in sliding time window
-- No edge cases, perfectly accurate
-- More memory intensive
+-   Store timestamp of every request
+-   Count requests in sliding time window
+-   No edge cases, perfectly accurate
+-   More memory intensive
 
 **Characteristics:**
 
-- ✅ Most accurate
-- ✅ No edge cases
-- ✅ Fair to all users
-- ❌ Higher memory usage
-- ❌ Slightly slower
+-   ✅ Most accurate
+-   ✅ No edge cases
+-   ✅ Fair to all users
+-   ❌ Higher memory usage
+-   ❌ Slightly slower
 
 ```typescript
 // Sliding Window Log Example
@@ -207,18 +207,18 @@ At 10:01:01:
 
 **How it works:**
 
-- Adjusts limits based on user behavior
-- Higher limits for trusted users
-- Lower limits for suspicious activity
-- Considers system load
+-   Adjusts limits based on user behavior
+-   Higher limits for trusted users
+-   Lower limits for suspicious activity
+-   Considers system load
 
 **Characteristics:**
 
-- ✅ Smart and flexible
-- ✅ Protects against abuse
-- ✅ Better UX for good users
-- ❌ More complex
-- ❌ Requires tuning
+-   ✅ Smart and flexible
+-   ✅ Protects against abuse
+-   ✅ Better UX for good users
+-   ❌ More complex
+-   ❌ Requires tuning
 
 ```typescript
 // Adaptive Example
@@ -247,13 +247,13 @@ High system load (80%+): All limits * 0.7
 
 ## 🎯 When to Use Each Algorithm
 
-### Use Token Bucket When:
+### Use Token Bucket When
 
-- ✅ Handling API endpoints
-- ✅ File uploads/downloads
-- ✅ Batch operations
-- ✅ User-facing features
-- ✅ Need to allow occasional bursts
+-   ✅ Handling API endpoints
+-   ✅ File uploads/downloads
+-   ✅ Batch operations
+-   ✅ User-facing features
+-   ✅ Need to allow occasional bursts
 
 **Examples:**
 
@@ -266,7 +266,7 @@ router.post(
     refillRate: 5,
     windowMs: 60000,
     max: 50,
-  }).middleware()
+  }).middleware(),
 );
 
 // Dashboard API (bursty data fetching)
@@ -277,17 +277,17 @@ router.get(
     refillRate: 20,
     windowMs: 60000,
     max: 100,
-  }).middleware()
+  }).middleware(),
 );
 ```
 
-### Use Leaky Bucket When:
+### Use Leaky Bucket When
 
-- ✅ Payment processing
-- ✅ Database writes
-- ✅ External API calls
-- ✅ Email sending
-- ✅ Need smooth, predictable flow
+-   ✅ Payment processing
+-   ✅ Database writes
+-   ✅ External API calls
+-   ✅ Email sending
+-   ✅ Need smooth, predictable flow
 
 **Examples:**
 
@@ -300,7 +300,7 @@ router.post(
     bucketSize: 20, // Queue up to 20
     windowMs: 60000,
     max: 20,
-  }).middleware()
+  }).middleware(),
 );
 
 // Email sending (avoid spam filters)
@@ -311,7 +311,7 @@ router.post(
     bucketSize: 50,
     windowMs: 60000,
     max: 50,
-  }).middleware()
+  }).middleware(),
 );
 
 // Database write operations
@@ -322,16 +322,16 @@ router.post(
     bucketSize: 100,
     windowMs: 60000,
     max: 100,
-  }).middleware()
+  }).middleware(),
 );
 ```
 
-### Use Fixed Window When:
+### Use Fixed Window When
 
-- ✅ Simple protection needed
-- ✅ Public endpoints
-- ✅ Memory constrained
-- ✅ Edge cases acceptable
+-   ✅ Simple protection needed
+-   ✅ Public endpoints
+-   ✅ Memory constrained
+-   ✅ Edge cases acceptable
 
 **Examples:**
 
@@ -342,7 +342,7 @@ router.use(
   new FixedWindowRateLimiter({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100,
-  }).middleware()
+  }).middleware(),
 );
 
 // Health check endpoint
@@ -351,16 +351,16 @@ router.get(
   new FixedWindowRateLimiter({
     windowMs: 60 * 1000,
     max: 60, // 1 per second average
-  }).middleware()
+  }).middleware(),
 );
 ```
 
-### Use Sliding Window When:
+### Use Sliding Window When
 
-- ✅ Critical operations
-- ✅ Security-sensitive endpoints
-- ✅ Need precise control
-- ✅ Fair enforcement required
+-   ✅ Critical operations
+-   ✅ Security-sensitive endpoints
+-   ✅ Need precise control
+-   ✅ Fair enforcement required
 
 **Examples:**
 
@@ -371,7 +371,7 @@ router.post(
   new SlidingWindowLogRateLimiter({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 3, // Only 3 attempts per hour
-  }).middleware()
+  }).middleware(),
 );
 
 // Admin operations
@@ -380,7 +380,7 @@ router.use(
   new SlidingWindowLogRateLimiter({
     windowMs: 60 * 1000,
     max: 50,
-  }).middleware()
+  }).middleware(),
 );
 
 // 2FA verification
@@ -389,16 +389,16 @@ router.post(
   new SlidingWindowLogRateLimiter({
     windowMs: 5 * 60 * 1000, // 5 minutes
     max: 5, // 5 attempts
-  }).middleware()
+  }).middleware(),
 );
 ```
 
-### Use Adaptive When:
+### Use Adaptive When
 
-- ✅ Production systems
-- ✅ Multiple user types
-- ✅ Need DDoS protection
-- ✅ Want smart behavior
+-   ✅ Production systems
+-   ✅ Multiple user types
+-   ✅ Need DDoS protection
+-   ✅ Want smart behavior
 
 **Examples:**
 
@@ -409,7 +409,7 @@ router.use(
   new AdaptiveRateLimiter({
     windowMs: 60 * 1000,
     max: 100, // Base limit, auto-adjusted
-  }).middleware()
+  }).middleware(),
 );
 ```
 
@@ -686,7 +686,7 @@ const productionLimiter = new TokenBucketRateLimiter(
     windowMs: 60000,
     max: 100,
   },
-  redisStore // Use Redis instead of memory
+  redisStore, // Use Redis instead of memory
 );
 ```
 
@@ -749,7 +749,7 @@ const globalLimiter = new AdaptiveRateLimiter(
     max: 100,
     message: "Too many requests from this IP",
   },
-  redisStore
+  redisStore,
 );
 
 app.use(globalLimiter.middleware());
@@ -762,7 +762,7 @@ const apiLimiter = new TokenBucketRateLimiter(
     windowMs: 60000,
     max: 100,
   },
-  redisStore
+  redisStore,
 );
 
 app.use("/api", apiLimiter.middleware());
@@ -775,7 +775,7 @@ const paymentLimiter = new LeakyBucketRateLimiter(
     windowMs: 60000,
     max: 20,
   },
-  redisStore
+  redisStore,
 );
 
 app.use("/api/payments", paymentLimiter.middleware());
@@ -786,7 +786,7 @@ const authLimiter = new SlidingWindowLogRateLimiter(
     windowMs: 60 * 60 * 1000,
     max: 5,
   },
-  redisStore
+  redisStore,
 );
 
 app.use("/api/auth", authLimiter.middleware());

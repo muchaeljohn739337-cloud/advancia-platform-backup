@@ -28,8 +28,8 @@ cd frontend && pnpm run dev
 
 ## 📁 Environment Files Created
 
-- `backend/.env` - Backend configuration (database, JWT, payments, wallets)
-- `frontend/.env.local` - Frontend configuration (API URL, Stripe public key)
+-   `backend/.env` - Backend configuration (database, JWT, payments, wallets)
+-   `frontend/.env.local` - Frontend configuration (API URL, Stripe public key)
 
 ## 🔑 Critical Secrets to Configure
 
@@ -82,24 +82,24 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 1. Go to [Stripe Dashboard](https://dashboard.stripe.com)
 2. Switch to **Test Mode**
 3. Get keys from **Developers → API Keys**:
-   - `STRIPE_SECRET_KEY` → backend/.env
-   - `STRIPE_PUBLISHABLE_KEY` → frontend/.env.local
+   -   `STRIPE_SECRET_KEY` → backend/.env
+   -   `STRIPE_PUBLISHABLE_KEY` → frontend/.env.local
 4. Setup webhook:
-   - **Developers → Webhooks → Add endpoint**
-   - URL: `https://your-domain.com/api/payments/webhook`
-   - Events: Select all `payment_intent` and `charge` events
-   - Copy webhook secret to `STRIPE_WEBHOOK_SECRET`
+   -   **Developers → Webhooks → Add endpoint**
+   -   URL: `https://your-domain.com/api/payments/webhook`
+   -   Events: Select all `payment_intent` and `charge` events
+   -   Copy webhook secret to `STRIPE_WEBHOOK_SECRET`
 
 ## 🔐 Wallet Security Checklist
 
-- [ ] Generate new master seed (24 words) using `generate-secrets.js`
-- [ ] Write seed on paper and store in physical vault
-- [ ] Generate new encryption key (32 bytes base64)
-- [ ] Store encryption key in password manager (1Password, KeePass)
-- [ ] Add admin wallet addresses (Coinbase, Binance, etc.)
-- [ ] Never commit .env files to git (.gitignore already configured)
-- [ ] Use different secrets for dev/staging/production
-- [ ] Test wallet generation before production deployment
+-   [ ] Generate new master seed (24 words) using `generate-secrets.js`
+-   [ ] Write seed on paper and store in physical vault
+-   [ ] Generate new encryption key (32 bytes base64)
+-   [ ] Store encryption key in password manager (1Password, KeePass)
+-   [ ] Add admin wallet addresses (Coinbase, Binance, etc.)
+-   [ ] Never commit .env files to git (.gitignore already configured)
+-   [ ] Use different secrets for dev/staging/production
+-   [ ] Test wallet generation before production deployment
 
 ## 🐳 Database Setup (Local Development)
 
@@ -136,11 +136,11 @@ pnpm test
 
 ## 📚 Detailed Documentation
 
-- **ENV_SETUP_GUIDE.md** - Complete environment variable reference
-- **WALLET_DEPLOYMENT_GUIDE.md** - Production deployment checklist
-- **DEV_SETUP_GUIDE.md** - Full development setup guide
-- **backend/.env.example** - All available backend variables
-- **frontend/.env.example** - All available frontend variables
+-   **ENV_SETUP_GUIDE.md** - Complete environment variable reference
+-   **WALLET_DEPLOYMENT_GUIDE.md** - Production deployment checklist
+-   **DEV_SETUP_GUIDE.md** - Full development setup guide
+-   **backend/.env.example** - All available backend variables
+-   **frontend/.env.example** - All available frontend variables
 
 ## 🚨 Common Issues
 
@@ -159,9 +159,9 @@ docker-compose up -d postgres
 
 ### "Email not sending"
 
-- Use Gmail **App Password**, not your regular password
-- Enable 2FA on Google account first
-- Check `SMTP_HOST=smtp.gmail.com` and `SMTP_PORT=587`
+-   Use Gmail **App Password**, not your regular password
+-   Enable 2FA on Google account first
+-   Check `SMTP_HOST=smtp.gmail.com` and `SMTP_PORT=587`
 
 ### "Wallet generation failed"
 
@@ -176,9 +176,9 @@ node -e "console.log(Buffer.from('your-key-here', 'base64').length)"
 
 ### "JWT malformed"
 
-- Ensure `JWT_SECRET` has no spaces or newlines
-- Should be 64+ characters hex string
-- Re-generate: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
+-   Ensure `JWT_SECRET` has no spaces or newlines
+-   Should be 64+ characters hex string
+-   Re-generate: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
 
 ## 🎯 Next Steps After Setup
 
@@ -203,12 +203,12 @@ node -e "console.log(Buffer.from('your-key-here', 'base64').length)"
    ```
 
 4. **Deploy to Production**
-   - Follow `WALLET_DEPLOYMENT_GUIDE.md`
-   - SSH to droplet: `ssh root@157.245.8.131`
+   -   Follow `WALLET_DEPLOYMENT_GUIDE.md`
+   -   SSH to droplet: `ssh root@157.245.8.131`
 
 ## 💬 Need Help?
 
-- Check `ENV_SETUP_GUIDE.md` for detailed troubleshooting
-- Review `.env.example` files for all available options
-- Test with `backend/test-wallet.js` script
-- Run unit tests: `cd backend && pnpm test:unit`
+-   Check `ENV_SETUP_GUIDE.md` for detailed troubleshooting
+-   Review `.env.example` files for all available options
+-   Test with `backend/test-wallet.js` script
+-   Run unit tests: `cd backend && pnpm test:unit`

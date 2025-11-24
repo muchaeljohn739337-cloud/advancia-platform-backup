@@ -4,7 +4,7 @@
  * Protects against XSS, clickjacking, token leakage, and third-party script abuse
  */
 
-import DOMPurify from "dompurify";
+import DOMPurify from 'dompurify';
 
 // ============================================
 // 1. USER INPUT ESCAPING & SANITIZATION
@@ -15,7 +15,7 @@ export class InputSecurity {
    * Escape HTML to prevent XSS
    */
   static escapeHTML(text: string): string {
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
@@ -24,9 +24,7 @@ export class InputSecurity {
    * Sanitize HTML content using DOMPurify
    */
   static sanitizeHTML(dirty: string, allowedTags?: string[]): string {
-    const config = allowedTags
-      ? { ALLOWED_TAGS: allowedTags }
-      : { ALLOWED_TAGS: [] }; // Strip all HTML by default
+    const config = allowedTags ? { ALLOWED_TAGS: allowedTags } : { ALLOWED_TAGS: [] }; // Strip all HTML by default
 
     return DOMPurify.sanitize(dirty, config);
   }
@@ -35,19 +33,16 @@ export class InputSecurity {
    * Sanitize user input for safe rendering
    */
   static sanitizeInput(input: string): string {
-    if (!input) return "";
+    if (!input) return '';
 
     // Remove control characters
-    let sanitized = input.replace(/[\x00-\x1F\x7F]/g, "");
+    let sanitized = input.replace(/[\x00-\x1F\x7F]/g, '');
 
     // Escape HTML
     sanitized = this.escapeHTML(sanitized);
 
     // Remove script-like patterns
-    sanitized = sanitized.replace(
-      /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-      ""
-    );
+    sanitized = sanitized.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
 
     return sanitized.trim();
   }
@@ -61,7 +56,7 @@ export class InputSecurity {
     const trimmed = url.trim().toLowerCase();
 
     // Block dangerous protocols
-    const dangerousProtocols = ["javascript:", "data:", "vbscript:", "file:"];
+    const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:'];
     if (dangerousProtocols.some((protocol) => trimmed.startsWith(protocol))) {
       return null;
     }
@@ -79,9 +74,9 @@ export class InputSecurity {
    */
   static escapeJSON(data: any): string {
     return JSON.stringify(data)
-      .replace(/</g, "\\u003c")
-      .replace(/>/g, "\\u003e")
-      .replace(/&/g, "\\u0026");
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026');
   }
 
   /**
@@ -98,9 +93,9 @@ export class InputSecurity {
 // ============================================
 
 export class TokenManager {
-  private static readonly TOKEN_KEY = "__auth_token";
-  private static readonly REFRESH_KEY = "__refresh_token";
-  private static readonly TOKEN_EXPIRY_KEY = "__token_expiry";
+  private static readonly TOKEN_KEY = '__auth_token';
+  private static readonly REFRESH_KEY = '__refresh_token';
+  private static readonly TOKEN_EXPIRY_KEY = '__token_expiry';
 
   /**
    * Store JWT in httpOnly-like manner (best effort in browser)
@@ -121,9 +116,9 @@ export class TokenManager {
       sessionStorage.setItem(this.TOKEN_EXPIRY_KEY, expiryTime.toString());
 
       // Set flag for token presence (for quick checks)
-      sessionStorage.setItem("__has_auth", "1");
+      sessionStorage.setItem('__has_auth', '1');
     } catch (error) {
-      console.error("Failed to store token securely");
+      console.error('Failed to store token securely');
     }
   }
 
@@ -133,7 +128,7 @@ export class TokenManager {
   static getToken(): string | null {
     try {
       // Check if token exists
-      if (!sessionStorage.getItem("__has_auth")) {
+      if (!sessionStorage.getItem('__has_auth')) {
         return null;
       }
 
@@ -150,7 +145,7 @@ export class TokenManager {
 
       return this.decryptToken(encrypted);
     } catch (error) {
-      console.error("Failed to retrieve token");
+      console.error('Failed to retrieve token');
       return null;
     }
   }
@@ -163,7 +158,7 @@ export class TokenManager {
       const encrypted = this.encryptToken(token);
       localStorage.setItem(this.REFRESH_KEY, encrypted);
     } catch (error) {
-      console.error("Failed to store refresh token");
+      console.error('Failed to store refresh token');
     }
   }
 
@@ -187,7 +182,7 @@ export class TokenManager {
     sessionStorage.removeItem(this.TOKEN_KEY);
     sessionStorage.removeItem(this.REFRESH_KEY);
     sessionStorage.removeItem(this.TOKEN_EXPIRY_KEY);
-    sessionStorage.removeItem("__has_auth");
+    sessionStorage.removeItem('__has_auth');
     localStorage.removeItem(this.REFRESH_KEY);
   }
 
@@ -200,13 +195,9 @@ export class TokenManager {
     const key = this.getDeviceFingerprint();
     return btoa(
       token
-        .split("")
-        .map((char, i) =>
-          String.fromCharCode(
-            char.charCodeAt(0) ^ key.charCodeAt(i % key.length)
-          )
-        )
-        .join("")
+        .split('')
+        .map((char, i) => String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(i % key.length)))
+        .join('')
     );
   }
 
@@ -215,15 +206,11 @@ export class TokenManager {
       const key = this.getDeviceFingerprint();
       const decoded = atob(encrypted);
       return decoded
-        .split("")
-        .map((char, i) =>
-          String.fromCharCode(
-            char.charCodeAt(0) ^ key.charCodeAt(i % key.length)
-          )
-        )
-        .join("");
+        .split('')
+        .map((char, i) => String.fromCharCode(char.charCodeAt(0) ^ key.charCodeAt(i % key.length)))
+        .join('');
     } catch {
-      return "";
+      return '';
     }
   }
 
@@ -235,10 +222,10 @@ export class TokenManager {
       navigator.userAgent,
       navigator.language,
       new Date().getTimezoneOffset().toString(),
-      screen.width + "x" + screen.height,
+      screen.width + 'x' + screen.height,
     ];
 
-    return btoa(components.join("|")).substring(0, 32);
+    return btoa(components.join('|')).substring(0, 32);
   }
 
   /**
@@ -255,8 +242,8 @@ export class TokenManager {
    */
   static decodeToken(token: string): any {
     try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       return JSON.parse(atob(base64));
     } catch {
       return null;
@@ -290,23 +277,23 @@ export class ClickjackingProtection {
    * Add CSS to prevent UI redressing
    */
   private static addFrameBustingCSS(): void {
-    const style = document.createElement("style");
+    const style = document.createElement('style');
     style.innerHTML = `
       html {
         display: none !important;
       }
     `;
-    style.id = "antiClickjack";
+    style.id = 'antiClickjack';
     document.head.appendChild(style);
 
     // Remove after page loads if not in frame
     if (window.self === window.top) {
-      document.addEventListener("DOMContentLoaded", () => {
-        const antiClickjack = document.getElementById("antiClickjack");
+      document.addEventListener('DOMContentLoaded', () => {
+        const antiClickjack = document.getElementById('antiClickjack');
         if (antiClickjack) {
           antiClickjack.remove();
         }
-        document.documentElement.style.display = "block";
+        document.documentElement.style.display = 'block';
       });
     }
   }
@@ -317,9 +304,9 @@ export class ClickjackingProtection {
   private static monitorFraming(): void {
     setInterval(() => {
       if (window.self !== window.top) {
-        console.warn("Clickjacking attempt detected!");
+        console.warn('Clickjacking attempt detected!');
         // Report to security endpoint
-        this.reportSecurityEvent("clickjacking_attempt");
+        this.reportSecurityEvent('clickjacking_attempt');
       }
     }, 1000);
   }
@@ -329,9 +316,9 @@ export class ClickjackingProtection {
    */
   private static reportSecurityEvent(eventType: string): void {
     try {
-      fetch("/api/security/report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      fetch('/api/security/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: eventType,
           timestamp: new Date().toISOString(),
@@ -382,14 +369,12 @@ export class ScriptProtection {
 
     // Allow same-origin scripts
     const currentOrigin = window.location.origin;
-    if (scriptSrc.startsWith(currentOrigin) || scriptSrc.startsWith("/")) {
+    if (scriptSrc.startsWith(currentOrigin) || scriptSrc.startsWith('/')) {
       return true;
     }
 
     // Check against whitelist
-    return Array.from(this.allowedScripts).some((allowed) =>
-      scriptSrc.includes(allowed)
-    );
+    return Array.from(this.allowedScripts).some((allowed) => scriptSrc.includes(allowed));
   }
 
   /**
@@ -399,12 +384,12 @@ export class ScriptProtection {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
-          if (node.nodeName === "SCRIPT") {
+          if (node.nodeName === 'SCRIPT') {
             const scriptElement = node as HTMLScriptElement;
             const src = scriptElement.src;
 
             if (src && !this.isScriptAllowed(src)) {
-              console.error("Unauthorized script blocked:", src);
+              console.error('Unauthorized script blocked:', src);
               scriptElement.remove();
               this.reportScriptViolation(src);
             }
@@ -423,8 +408,8 @@ export class ScriptProtection {
    * Setup CSP violation reporting
    */
   private static setupCSPReporting(): void {
-    document.addEventListener("securitypolicyviolation", (e) => {
-      console.warn("CSP Violation:", {
+    document.addEventListener('securitypolicyviolation', (e) => {
+      console.warn('CSP Violation:', {
         violatedDirective: e.violatedDirective,
         blockedURI: e.blockedURI,
         documentURI: e.documentURI,
@@ -444,11 +429,11 @@ export class ScriptProtection {
    */
   private static reportScriptViolation(src: string): void {
     try {
-      fetch("/api/security/script-violation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      fetch('/api/security/script-violation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: "unauthorized_script",
+          type: 'unauthorized_script',
           src,
           timestamp: new Date().toISOString(),
           userAgent: navigator.userAgent,
@@ -464,9 +449,9 @@ export class ScriptProtection {
    */
   private static reportCSPViolation(violation: any): void {
     try {
-      fetch("/api/security/csp-violation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      fetch('/api/security/csp-violation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...violation,
           timestamp: new Date().toISOString(),
@@ -504,7 +489,7 @@ export class TokenLeakageProtection {
     const url = new URL(window.location.href);
 
     // Check for tokens in URL params
-    const sensitiveParams = ["token", "access_token", "auth", "jwt", "apikey"];
+    const sensitiveParams = ['token', 'access_token', 'auth', 'jwt', 'apikey'];
     let cleaned = false;
 
     sensitiveParams.forEach((param) => {
@@ -547,8 +532,8 @@ export class TokenLeakageProtection {
       const storage = { ...localStorage, ...sessionStorage };
 
       Object.entries(storage).forEach(([key, value]) => {
-        if (this.looksLikeToken(value) && !key.startsWith("__")) {
-          console.warn("Potential token exposure detected:", key);
+        if (this.looksLikeToken(value) && !key.startsWith('__')) {
+          console.warn('Potential token exposure detected:', key);
           // Report security issue
           this.reportTokenExposure(key);
         }
@@ -562,7 +547,7 @@ export class TokenLeakageProtection {
    * Check if string looks like a JWT
    */
   private static looksLikeToken(value: string): boolean {
-    if (!value || typeof value !== "string") return false;
+    if (!value || typeof value !== 'string') return false;
 
     // JWT pattern: xxx.yyy.zzz
     const jwtPattern = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/;
@@ -573,14 +558,14 @@ export class TokenLeakageProtection {
    * Setup cleanup on page hide
    */
   private static setupPageHideCleanup(): void {
-    document.addEventListener("visibilitychange", () => {
+    document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         // Clear sensitive data when page is hidden
         this.clearSensitiveData();
       }
     });
 
-    window.addEventListener("beforeunload", () => {
+    window.addEventListener('beforeunload', () => {
       // Clear on page unload
       this.clearSensitiveData();
     });
@@ -591,11 +576,9 @@ export class TokenLeakageProtection {
    */
   private static clearSensitiveData(): void {
     // Clear any form inputs with sensitive data
-    document
-      .querySelectorAll('input[type="password"], input[data-sensitive]')
-      .forEach((input) => {
-        (input as HTMLInputElement).value = "";
-      });
+    document.querySelectorAll('input[type="password"], input[data-sensitive]').forEach((input) => {
+      (input as HTMLInputElement).value = '';
+    });
   }
 
   /**
@@ -603,9 +586,9 @@ export class TokenLeakageProtection {
    */
   private static reportTokenExposure(key: string): void {
     try {
-      fetch("/api/security/token-exposure", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      fetch('/api/security/token-exposure', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           key,
           timestamp: new Date().toISOString(),
@@ -626,7 +609,7 @@ export function initializeSecurity(config?: {
   enableClickjackingProtection?: boolean;
   enableTokenLeakageProtection?: boolean;
 }): void {
-  console.log("🔒 Initializing frontend security...");
+  console.log('🔒 Initializing frontend security...');
 
   // Clickjacking protection
   if (config?.enableClickjackingProtection !== false) {
@@ -635,11 +618,7 @@ export function initializeSecurity(config?: {
 
   // Script protection
   ScriptProtection.init(
-    config?.allowedScriptDomains || [
-      "vercel.live",
-      "cdn.jsdelivr.net",
-      "unpkg.com",
-    ]
+    config?.allowedScriptDomains || ['vercel.live', 'cdn.jsdelivr.net', 'unpkg.com']
   );
 
   // Token leakage protection
@@ -647,7 +626,7 @@ export function initializeSecurity(config?: {
     TokenLeakageProtection.init();
   }
 
-  console.log("✅ Frontend security initialized");
+  console.log('✅ Frontend security initialized');
 }
 
 // Export all utilities

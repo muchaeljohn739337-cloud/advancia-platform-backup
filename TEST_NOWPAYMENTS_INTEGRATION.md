@@ -1,6 +1,6 @@
 # NOWPayments Integration - Testing Guide
 
-## ✅ Implementation Complete!
+## ✅ Implementation Complete
 
 The NOWPayments payment provider has been fully integrated into your withdrawal system. Users can now choose between **Cryptomus** and **NOWPayments** when requesting withdrawals.
 
@@ -10,10 +10,10 @@ The NOWPayments payment provider has been fully integrated into your withdrawal 
 
 ### 1. **Database Migration** ✅
 
-- **Migration**: `20251122121401_add_payment_provider_to_withdrawals`
-- **Field Added**: `paymentProvider` to `crypto_withdrawals` table
-- **Default Value**: `'cryptomus'` (backward compatible)
-- **Status**: Applied and Prisma client regenerated
+-   **Migration**: `20251122121401_add_payment_provider_to_withdrawals`
+-   **Field Added**: `paymentProvider` to `crypto_withdrawals` table
+-   **Default Value**: `'cryptomus'` (backward compatible)
+-   **Status**: Applied and Prisma client regenerated
 
 ### 2. **Backend API Endpoints** ✅
 
@@ -121,8 +121,8 @@ curl http://localhost:4000/api/withdrawals/methods \
 
 ✅ Should show:
 
-- Cryptomus: 50+ coins, 1% fees
-- NOWPayments: 200+ coins, 0.5% fees (recommended)
+-   Cryptomus: 50+ coins, 1% fees
+-   NOWPayments: 200+ coins, 0.5% fees (recommended)
 
 ### Test 2: Create Withdrawal with Cryptomus (Default)
 
@@ -363,7 +363,7 @@ CREATE INDEX "crypto_withdrawals_paymentProvider_idx"
 ON "crypto_withdrawals"("paymentProvider");
 ```
 
-### Current Schema:
+### Current Schema
 
 ```prisma
 model crypto_withdrawals {
@@ -408,53 +408,45 @@ model crypto_withdrawals {
 ## 🔄 Complete User Flow
 
 1. **User opens withdrawal form**
-
-   - Calls `GET /api/withdrawals/methods`
-   - Sees Cryptomus and NOWPayments options
+   -   Calls `GET /api/withdrawals/methods`
+   -   Sees Cryptomus and NOWPayments options
 
 2. **User selects NOWPayments** (or Cryptomus)
-
-   - Fills amount, currency, wallet address
-   - Submits form with `paymentProvider: "nowpayments"`
+   -   Fills amount, currency, wallet address
+   -   Submits form with `paymentProvider: "nowpayments"`
 
 3. **Backend creates withdrawal**
-
-   - Validates provider is 'cryptomus' or 'nowpayments'
-   - Deducts from user balance
-   - Creates record with `status: "pending"` and selected provider
-   - Notifies admins via Socket.IO
+   -   Validates provider is 'cryptomus' or 'nowpayments'
+   -   Deducts from user balance
+   -   Creates record with `status: "pending"` and selected provider
+   -   Notifies admins via Socket.IO
 
 4. **Admin reviews withdrawal**
-
-   - Sees withdrawal with provider badge
-   - Approves or rejects
+   -   Sees withdrawal with provider badge
+   -   Approves or rejects
 
 5. **Admin processes approved withdrawals**
-
-   - Filters by provider if needed
-   - Selects NOWPayments withdrawals
-   - Calls `POST /api/nowpayments/process-withdrawals`
+   -   Filters by provider if needed
+   -   Selects NOWPayments withdrawals
+   -   Calls `POST /api/nowpayments/process-withdrawals`
 
 6. **Backend sends to NOWPayments**
-
-   - Creates batch payout request
-   - Updates status to `processing`
-   - Stores batch ID in `adminNotes`
+   -   Creates batch payout request
+   -   Updates status to `processing`
+   -   Stores batch ID in `adminNotes`
 
 7. **NOWPayments processes payout**
-
-   - Sends crypto from merchant account
-   - Fires webhook to `/api/nowpayments/payout-ipn`
+   -   Sends crypto from merchant account
+   -   Fires webhook to `/api/nowpayments/payout-ipn`
 
 8. **Webhook updates status**
-
-   - Verifies HMAC signature
-   - Updates withdrawal to `completed`
-   - Sets `txHash` and `completedAt`
+   -   Verifies HMAC signature
+   -   Updates withdrawal to `completed`
+   -   Sets `txHash` and `completedAt`
 
 9. **User sees completed withdrawal**
-   - Can view transaction on blockchain explorer
-   - Balance updated correctly
+   -   Can view transaction on blockchain explorer
+   -   Balance updated correctly
 
 ---
 
@@ -472,20 +464,20 @@ BACKEND_URL=https://api.yourdomn.com
 
 ### 2. NOWPayments Dashboard Setup
 
-- Add production IPN callback URL: `https://api.yourdomain.com/api/nowpayments/payout-ipn`
-- Configure 2FA for payouts (optional but recommended)
+-   Add production IPN callback URL: `https://api.yourdomain.com/api/nowpayments/payout-ipn`
+-   Configure 2FA for payouts (optional but recommended)
 
 ### 3. Admin Dashboard
 
-- Add provider filter to withdrawal list
-- Show provider badge on each withdrawal
-- Add bulk selection by provider
+-   Add provider filter to withdrawal list
+-   Show provider badge on each withdrawal
+-   Add bulk selection by provider
 
 ### 4. Monitoring
 
-- Set up alerts for failed payouts
-- Monitor webhook delivery success rate
-- Track provider usage (Cryptomus vs NOWPayments)
+-   Set up alerts for failed payouts
+-   Monitor webhook delivery success rate
+-   Track provider usage (Cryptomus vs NOWPayments)
 
 ---
 
@@ -502,6 +494,6 @@ BACKEND_URL=https://api.yourdomn.com
 
 Users can now choose their preferred payment provider based on:
 
-- **Fees**: NOWPayments 0.5% vs Cryptomus 1%
-- **Coins**: NOWPayments 200+ vs Cryptomus 50+
-- **Speed**: Cryptomus faster (5-30min) vs NOWPayments (10-60min)
+-   **Fees**: NOWPayments 0.5% vs Cryptomus 1%
+-   **Coins**: NOWPayments 200+ vs Cryptomus 50+
+-   **Speed**: Cryptomus faster (5-30min) vs NOWPayments (10-60min)

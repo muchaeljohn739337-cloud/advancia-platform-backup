@@ -1,4 +1,4 @@
 packages:
-  - 'frontend'
-  - 'backend'
-  - 'cloudflare-email-worker'
+  - "frontend"
+  - "backend"
+  - "cloudflare-email-worker"

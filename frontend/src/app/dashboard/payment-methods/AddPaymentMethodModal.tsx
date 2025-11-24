@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { CreditCard, X, Lock } from "lucide-react";
+import { useState } from 'react';
+import { CreditCard, X, Lock } from 'lucide-react';
 
 interface AddPaymentMethodModalProps {
   onClose: () => void;
@@ -9,16 +9,16 @@ interface AddPaymentMethodModalProps {
 }
 
 export default function AddPaymentMethodModal({ onClose, onSuccess }: AddPaymentMethodModalProps) {
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvc, setCvc] = useState("");
-  const [cardholderName, setCardholderName] = useState("");
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvc, setCvc] = useState('');
+  const [cardholderName, setCardholderName] = useState('');
   const [loading, setLoading] = useState(false);
 
   const formatCardNumber = (value: string) => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     const matches = v.match(/\d{4,16}/g);
-    const match = (matches && matches[0]) || "";
+    const match = (matches && matches[0]) || '';
     const parts = [];
 
     for (let i = 0, len = match.length; i < len; i += 4) {
@@ -26,16 +26,16 @@ export default function AddPaymentMethodModal({ onClose, onSuccess }: AddPayment
     }
 
     if (parts.length) {
-      return parts.join(" ");
+      return parts.join(' ');
     } else {
       return value;
     }
   };
 
   const formatExpiry = (value: string) => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
     if (v.length >= 2) {
-      return v.substring(0, 2) + (v.length > 2 ? " / " + v.substring(2, 4) : "");
+      return v.substring(0, 2) + (v.length > 2 ? ' / ' + v.substring(2, 4) : '');
     }
     return v;
   };
@@ -49,7 +49,7 @@ export default function AddPaymentMethodModal({ onClose, onSuccess }: AddPayment
   };
 
   const handleCvcChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, "");
+    const value = e.target.value.replace(/[^0-9]/g, '');
     setCvc(value.substring(0, 4));
   };
 
@@ -58,16 +58,16 @@ export default function AddPaymentMethodModal({ onClose, onSuccess }: AddPayment
     setLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       // In production, use Stripe.js to create a token/payment method
       // For demo purposes, we'll use a test payment method
-      const testPaymentMethod = "pm_card_visa"; // Stripe test payment method
+      const testPaymentMethod = 'pm_card_visa'; // Stripe test payment method
 
-      const res = await fetch("/api/payments/save-method", {
-        method: "POST",
+      const res = await fetch('/api/payments/save-method', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -77,15 +77,15 @@ export default function AddPaymentMethodModal({ onClose, onSuccess }: AddPayment
       });
 
       if (res.ok) {
-        alert("Payment method added successfully!");
+        alert('Payment method added successfully!');
         onSuccess();
         onClose();
       } else {
         const error = await res.json();
-        alert(error.error || "Failed to add payment method");
+        alert(error.error || 'Failed to add payment method');
       }
     } catch {
-      alert("Error adding payment method");
+      alert('Error adding payment method');
     } finally {
       setLoading(false);
     }
@@ -215,7 +215,7 @@ export default function AddPaymentMethodModal({ onClose, onSuccess }: AddPayment
               disabled={loading}
               className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Adding..." : "Add Card"}
+              {loading ? 'Adding...' : 'Add Card'}
             </button>
           </div>
         </form>

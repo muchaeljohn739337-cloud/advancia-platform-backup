@@ -26,6 +26,7 @@ export default [
     rules: {
       semi: ["error", "always"],
       quotes: ["error", "single"],
+      "no-console": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
@@ -53,6 +54,7 @@ export default [
     rules: {
       semi: ["error", "always"],
       quotes: ["error", "single"],
+      "no-console": "off",
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
   },
@@ -67,6 +69,8 @@ export default [
       "**/__tests__/**", // Ignore test files for now
       "src/**/*.test.ts",
       "src/**/*.spec.ts",
+      "src/routes/trustScore.ts", // Excluded from tsconfig
+      "src/services/trustpilotInvitationService.ts", // Excluded from tsconfig
     ],
   },
 ];

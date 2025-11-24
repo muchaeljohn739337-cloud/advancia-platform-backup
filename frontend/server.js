@@ -18,7 +18,7 @@ if (fs.existsSync(standaloneServer)) {
 } else {
   // Fallback to regular Next.js server (development)
   console.log('⚙️ Starting Next.js dev/production server');
-  
+
   const app = next({ dev, hostname, port });
   const handle = app.getRequestHandler();
 

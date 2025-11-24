@@ -1,6 +1,6 @@
-import React from "react";
-import TrustScoreComponent from "../components/TrustScoreComponent";
-import "./TrustScoreDemoPage.css";
+import React from 'react';
+import TrustScoreComponent from '../components/TrustScoreComponent';
+import './TrustScoreDemoPage.css';
 
 const TrustScoreDemoPage: React.FC = () => {
   return (
@@ -9,9 +9,7 @@ const TrustScoreDemoPage: React.FC = () => {
         {/* Header */}
         <div className="demo-header">
           <h1>🔒 Advanced Trust Scoring System</h1>
-          <p>
-            Comprehensive domain trust analysis with real-time security scoring
-          </p>
+          <p>Comprehensive domain trust analysis with real-time security scoring</p>
         </div>
 
         {/* Demo Components */}
@@ -152,27 +150,22 @@ function MyComponent() {
             <div className="feature-card">
               <div className="feature-icon">📊</div>
               <h3>Real-time Scoring</h3>
-              <p>
-                Dynamic trust scores based on SSL status, domain age, and
-                security indicators
-              </p>
+              <p>Dynamic trust scores based on SSL status, domain age, and security indicators</p>
             </div>
 
             <div className="feature-card">
               <div className="feature-icon">🔍</div>
               <h3>Security Analysis</h3>
               <p>
-                Comprehensive security checks including certificate validation
-                and reputation analysis
+                Comprehensive security checks including certificate validation and reputation
+                analysis
               </p>
             </div>
 
             <div className="feature-card">
               <div className="feature-icon">🔧</div>
               <h3>Improvement Tasks</h3>
-              <p>
-                Actionable recommendations to enhance domain trust and security
-              </p>
+              <p>Actionable recommendations to enhance domain trust and security</p>
             </div>
 
             <div className="feature-card">
@@ -190,10 +183,7 @@ function MyComponent() {
             <div className="feature-card">
               <div className="feature-icon">🎨</div>
               <h3>Customizable</h3>
-              <p>
-                Flexible styling options and configuration for different use
-                cases
-              </p>
+              <p>Flexible styling options and configuration for different use cases</p>
             </div>
           </div>
         </div>
@@ -206,27 +196,21 @@ function MyComponent() {
             <h3>Trust Report</h3>
             <code>GET /api/trust/report?domain=example.com</code>
             <p>
-              Returns comprehensive trust analysis including score, SSL status,
-              and verification details
+              Returns comprehensive trust analysis including score, SSL status, and verification
+              details
             </p>
           </div>
 
           <div className="endpoint-card">
             <h3>Improvement Tasks</h3>
             <code>GET /api/trust/improvement-tasks?domain=example.com</code>
-            <p>
-              Provides actionable security recommendations based on current
-              trust status
-            </p>
+            <p>Provides actionable security recommendations based on current trust status</p>
           </div>
 
           <div className="endpoint-card">
             <h3>Cache Refresh (Admin)</h3>
             <code>POST /api/trust/refresh</code>
-            <p>
-              Forces refresh of cached trust data (requires admin
-              authentication)
-            </p>
+            <p>Forces refresh of cached trust data (requires admin authentication)</p>
           </div>
         </div>
 
@@ -239,10 +223,7 @@ function MyComponent() {
               <div className="score-badge">85-100</div>
               <div className="score-details">
                 <h4>Verified & Trusted</h4>
-                <p>
-                  Excellent security practices, valid certificates, established
-                  domain
-                </p>
+                <p>Excellent security practices, valid certificates, established domain</p>
               </div>
             </div>
 
@@ -258,9 +239,7 @@ function MyComponent() {
               <div className="score-badge">50-69</div>
               <div className="score-details">
                 <h4>Some Concerns</h4>
-                <p>
-                  Mixed security signals, may need attention to improve trust
-                </p>
+                <p>Mixed security signals, may need attention to improve trust</p>
               </div>
             </div>
 
@@ -268,10 +247,7 @@ function MyComponent() {
               <div className="score-badge">0-49</div>
               <div className="score-details">
                 <h4>High Risk</h4>
-                <p>
-                  Multiple security issues detected, immediate attention
-                  required
-                </p>
+                <p>Multiple security issues detected, immediate attention required</p>
               </div>
             </div>
           </div>

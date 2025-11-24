@@ -10,20 +10,20 @@ This guide shows how to test and use the admin panel for managing withdrawals wi
 
 ### Authentication
 
-- **POST** `/api/auth/admin-login` - Admin login
-- **POST** `/api/auth/admin-recovery` - Request admin password recovery
-- **POST** `/api/auth/admin-recover` - Complete admin password reset
+-   **POST** `/api/auth/admin-login` - Admin login
+-   **POST** `/api/auth/admin-recovery` - Request admin password recovery
+-   **POST** `/api/auth/admin-recover` - Complete admin password reset
 
 ### Withdrawal Management
 
-- **GET** `/api/withdrawals/admin/all` - Get all withdrawals (with filters)
-- **POST** `/api/withdrawals/admin/:id/approve` - Approve withdrawal
-- **POST** `/api/withdrawals/admin/:id/reject` - Reject withdrawal
+-   **GET** `/api/withdrawals/admin/all` - Get all withdrawals (with filters)
+-   **POST** `/api/withdrawals/admin/:id/approve` - Approve withdrawal
+-   **POST** `/api/withdrawals/admin/:id/reject` - Reject withdrawal
 
 ### NOWPayments Processing
 
-- **GET** `/api/nowpayments/balance` - Check merchant balance
-- **POST** `/api/nowpayments/process-withdrawals` - Process batch payouts
+-   **GET** `/api/nowpayments/balance` - Check merchant balance
+-   **POST** `/api/nowpayments/process-withdrawals` - Process batch payouts
 
 ---
 
@@ -33,8 +33,8 @@ This guide shows how to test and use the admin panel for managing withdrawals wi
 
 **Files Created:**
 
-- `Advancia_NOWPayments_Integration.postman_collection.json`
-- `Advancia_Local_Dev.postman_environment.json`
+-   `Advancia_NOWPayments_Integration.postman_collection.json`
+-   `Advancia_Local_Dev.postman_environment.json`
 
 **Import Steps:**
 
@@ -50,10 +50,10 @@ Select "Advancia - Local Development" from environment dropdown (top right)
 
 **Variables:**
 
-- `base_url`: `http://localhost:4000`
-- `auth_token`: (auto-filled after login)
-- `admin_token`: (auto-filled after admin login)
-- `withdrawal_id`: (auto-filled after creating withdrawal)
+-   `base_url`: `http://localhost:4000`
+-   `auth_token`: (auto-filled after login)
+-   `admin_token`: (auto-filled after admin login)
+-   `withdrawal_id`: (auto-filled after creating withdrawal)
 
 ### 3. Enable Mock Server (Optional)
 
@@ -67,9 +67,9 @@ Select "Advancia - Local Development" from environment dropdown (top right)
 
 **Benefits:**
 
-- Test without backend running
-- Simulate responses before implementation
-- Share with frontend team
+-   Test without backend running
+-   Simulate responses before implementation
+-   Share with frontend team
 
 ---
 
@@ -289,9 +289,9 @@ Based on the backend routes, the admin panel should have these pages:
 
 #### `/admin/dashboard`
 
-- Overview stats
-- Pending withdrawals count
-- Recent activity
+-   Overview stats
+-   Pending withdrawals count
+-   Recent activity
 
 #### `/admin/withdrawals`
 
@@ -306,46 +306,46 @@ Based on the backend routes, the admin panel should have these pages:
 
 **Filters:**
 
-- Payment Provider (All / Cryptomus / NOWPayments)
-- Date Range
-- Amount Range
-- User Search
+-   Payment Provider (All / Cryptomus / NOWPayments)
+-   Date Range
+-   Amount Range
+-   User Search
 
 **Actions:**
 
-- ✅ Approve (single)
-- ❌ Reject (single)
-- 💸 Process (batch - only NOWPayments)
+-   ✅ Approve (single)
+-   ❌ Reject (single)
+-   💸 Process (batch - only NOWPayments)
 
 #### `/admin/withdrawals/:id`
 
 **Withdrawal Details Page:**
 
-- User information (name, email, KYC status)
-- Withdrawal details (amount, currency, address)
-- Payment provider selection
-- Status history timeline
-- Admin notes section
-- Approve/Reject buttons
-- Blockchain explorer link (after completion)
+-   User information (name, email, KYC status)
+-   Withdrawal details (amount, currency, address)
+-   Payment provider selection
+-   Status history timeline
+-   Admin notes section
+-   Approve/Reject buttons
+-   Blockchain explorer link (after completion)
 
 #### `/admin/nowpayments`
 
 **NOWPayments Management:**
 
-- Merchant balance display (all currencies)
-- Approved withdrawals ready for processing
-- Batch payout interface with checkboxes
-- Recent payout history
-- Failed payout retry option
+-   Merchant balance display (all currencies)
+-   Approved withdrawals ready for processing
+-   Batch payout interface with checkboxes
+-   Recent payout history
+-   Failed payout retry option
 
 #### `/admin/users`
 
 **User Management:**
 
-- User list with withdrawal history
-- Filter by users with pending withdrawals
-- User details → withdrawals tab
+-   User list with withdrawal history
+-   Filter by users with pending withdrawals
+-   User details → withdrawals tab
 
 ---
 
@@ -368,13 +368,13 @@ interface Column {
 
 **Features:**
 
-- Sortable columns
-- Provider badge with color coding
-  - 🟢 NOWPayments (green, 0.5% fees)
-  - 🔵 Cryptomus (blue, 1% fees)
-- Status badge
-- Quick approve/reject actions
-- Checkbox for batch selection
+-   Sortable columns
+-   Provider badge with color coding
+    -   🟢 NOWPayments (green, 0.5% fees)
+    -   🔵 Cryptomus (blue, 1% fees)
+-   Status badge
+-   Quick approve/reject actions
+-   Checkbox for batch selection
 
 ### 2. Provider Comparison Card
 
@@ -465,40 +465,40 @@ All admin endpoints check:
 
 ### Setup
 
-- [ ] Import collection
-- [ ] Import environment
-- [ ] Start local backend server
-- [ ] Set environment to "Advancia - Local Development"
+-   [ ] Import collection
+-   [ ] Import environment
+-   [ ] Start local backend server
+-   [ ] Set environment to "Advancia - Local Development"
 
 ### Authentication
 
-- [ ] Login as admin (saves token)
-- [ ] Verify token saved to `{{admin_token}}`
+-   [ ] Login as admin (saves token)
+-   [ ] Verify token saved to `{{admin_token}}`
 
 ### View Withdrawals
 
-- [ ] Get all pending withdrawals
-- [ ] Filter by provider (NOWPayments)
-- [ ] Filter by status (approved)
+-   [ ] Get all pending withdrawals
+-   [ ] Filter by provider (NOWPayments)
+-   [ ] Filter by status (approved)
 
 ### Approve/Reject
 
-- [ ] Approve a withdrawal
-- [ ] Reject a withdrawal with notes
-- [ ] Verify status changes
+-   [ ] Approve a withdrawal
+-   [ ] Reject a withdrawal with notes
+-   [ ] Verify status changes
 
 ### NOWPayments Processing
 
-- [ ] Check merchant balance
-- [ ] Get approved NOWPayments withdrawals
-- [ ] Process batch (3+ withdrawals)
-- [ ] Verify status updates to "processing"
+-   [ ] Check merchant balance
+-   [ ] Get approved NOWPayments withdrawals
+-   [ ] Process batch (3+ withdrawals)
+-   [ ] Verify status updates to "processing"
 
 ### Monitor
 
-- [ ] Get processing withdrawals
-- [ ] Wait for webhook (or trigger mock)
-- [ ] Verify completion status
+-   [ ] Get processing withdrawals
+-   [ ] Wait for webhook (or trigger mock)
+-   [ ] Verify completion status
 
 ---
 
@@ -563,16 +563,16 @@ All admin endpoints check:
 
 ### NOWPayments Support
 
-- Dashboard: https://account.nowpayments.io/
-- API Docs: https://documenter.getpostman.com/view/7907941/S1a32n38
-- Support: support@nowpayments.io
+-   Dashboard: <https://account.nowpayments.io/>
+-   API Docs: <https://documenter.getpostman.com/view/7907941/S1a32n38>
+-   Support: <support@nowpayments.io>
 
 ### Testing Resources
 
-- Postman Collection: `Advancia_NOWPayments_Integration.postman_collection.json`
-- Environment: `Advancia_Local_Dev.postman_environment.json`
-- Documentation: `NOWPAYMENTS_WITHDRAWAL_SYSTEM.md`
-- Server Fix: `SERVER_SHUTDOWN_FIX.md`
+-   Postman Collection: `Advancia_NOWPayments_Integration.postman_collection.json`
+-   Environment: `Advancia_Local_Dev.postman_environment.json`
+-   Documentation: `NOWPAYMENTS_WITHDRAWAL_SYSTEM.md`
+-   Server Fix: `SERVER_SHUTDOWN_FIX.md`
 
 ---
 

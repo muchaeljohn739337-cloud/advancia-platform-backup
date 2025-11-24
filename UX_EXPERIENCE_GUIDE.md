@@ -204,7 +204,7 @@ function DeleteWithUndo({ onDelete }) {
           </Button>
         </div>
       ),
-      { duration: 5000 }
+      { duration: 5000 },
     );
 
     // Actually delete after 5 seconds
@@ -349,8 +349,7 @@ function RegistrationFlow() {
       </form>
 
       <p className="text-center mt-4 text-sm text-gray-600">
-        Already have an account?{" "}
-        <Link href="/login" className="text-blue-600 hover:underline">
+        Already have an account? <Link href="/login" className="text-blue-600 hover:underline">
           Log in
         </Link>
       </p>
@@ -400,8 +399,7 @@ function RegistrationFlow() {
       <OTPInput length={6} onComplete={handleVerify} />
 
       <p className="mt-6 text-sm text-gray-600">
-        Didn't receive the code?{" "}
-        <button className="text-blue-600 hover:underline" onClick={handleResend}>
+        Didn't receive the code? <button className="text-blue-600 hover:underline" onClick={handleResend}>
           Resend
         </button>
       </p>
@@ -1057,8 +1055,8 @@ function MultiStepProgress({ steps, currentStep }) {
               index < currentStep
                 ? "bg-green-600 text-white" // Completed
                 : index === currentStep
-                ? "bg-blue-600 text-white" // Current
-                : "bg-gray-200 text-gray-600" // Upcoming
+                  ? "bg-blue-600 text-white" // Current
+                  : "bg-gray-200 text-gray-600" // Upcoming
             }
           `}
           >

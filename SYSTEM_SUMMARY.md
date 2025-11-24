@@ -19,16 +19,16 @@ graph LR
 
 **Protection Mechanism:**
 
-- `backend/src/routes/auth.ts` creates users with `approved: false`
-- `backend/src/middleware/auth.ts` blocks access if `approved !== true`
-- Only ADMIN role bypasses approval check
+-   `backend/src/routes/auth.ts` creates users with `approved: false`
+-   `backend/src/middleware/auth.ts` blocks access if `approved !== true`
+-   Only ADMIN role bypasses approval check
 
 **Key Fields:**
 
-- `active` (Boolean) - Account enabled/disabled
-- `approved` (Boolean) - Admin approval status
-- `emailVerified` (Boolean) - Email confirmation
-- `role` (Enum) - USER, STAFF, ADMIN, SUPERADMIN
+-   `active` (Boolean) - Account enabled/disabled
+-   `approved` (Boolean) - Admin approval status
+-   `emailVerified` (Boolean) - Email confirmation
+-   `role` (Enum) - USER, STAFF, ADMIN, SUPERADMIN
 
 ---
 
@@ -101,7 +101,7 @@ Issue: Render service not responding
 
 **Fix:**
 
-1. Go to https://dashboard.render.com
+1. Go to <https://dashboard.render.com>
 2. Find your backend service
 3. Click "Manual Deploy" → "Clear build cache & deploy"
 4. Wait 5-10 minutes
@@ -142,41 +142,41 @@ npx prisma studio # Verify tables created
 
 ### **1. Breach Alert System** `/security/breach-alert`
 
-- Shows 317 data breaches (demo)
-- Email breach list with counts
-- Detailed leak sources
-- 24/7 monitoring activation
-- Protection recommendations
+-   Shows 317 data breaches (demo)
+-   Email breach list with counts
+-   Detailed leak sources
+-   24/7 monitoring activation
+-   Protection recommendations
 
 ### **2. IP Protection System** `/security/ip-protection`
 
-- Current IP display (197.211.52.75 → Nigeria)
-- Country selector (US, UK, DE, FR, CA, AU, JP, SG)
-- IP rotation with random generation
-- VPN/Proxy/Location masking toggles
-- Protection status (Unprotected/Protected)
+-   Current IP display (197.211.52.75 → Nigeria)
+-   Country selector (US, UK, DE, FR, CA, AU, JP, SG)
+-   IP rotation with random generation
+-   VPN/Proxy/Location masking toggles
+-   Protection status (Unprotected/Protected)
 
 ### **3. Support System** `/support`
 
-- Comprehensive ticket form
-- Floating chat widget (bottom-right)
-- Quick action buttons
-- File upload support
-- VeePN-style footer
+-   Comprehensive ticket form
+-   Floating chat widget (bottom-right)
+-   Quick action buttons
+-   File upload support
+-   VeePN-style footer
 
 ### **4. Backend API Routes** `/api/security`
 
-- `GET /breach-check` - Check email for breaches
-- `POST /activate-monitoring` - Enable 24/7 monitoring
-- `POST /rotate-ip` - Rotate IP to target country
-- `GET /ip-info` - Get current client IP
+-   `GET /breach-check` - Check email for breaches
+-   `POST /activate-monitoring` - Enable 24/7 monitoring
+-   `POST /rotate-ip` - Rotate IP to target country
+-   `GET /ip-info` - Get current client IP
 
 ### **5. Navigation Integration**
 
-- 🛡️ Breach Alert link
-- 🌍 IP Protection link
-- 💬 Support link
-- All in SidebarLayout.tsx
+-   🛡️ Breach Alert link
+-   🌍 IP Protection link
+-   💬 Support link
+-   All in SidebarLayout.tsx
 
 ---
 
@@ -204,7 +204,7 @@ Invoke-RestMethod -Uri "https://api.advanciapayledger.com/api/auth/register" `
 
 ### **Step 3: Test Security Features**
 
-1. Navigate to https://advanciapayledger.com/security/breach-alert
+1. Navigate to <https://advanciapayledger.com/security/breach-alert>
 2. Click email to view breach sources
 3. Click "Activate" button
 4. Navigate to /security/ip-protection
@@ -217,40 +217,36 @@ Invoke-RestMethod -Uri "https://api.advanciapayledger.com/api/auth/register" `
 ## 📁 Documentation Files Created
 
 1. **AUTH_SYSTEM_ANALYSIS.md** (4,500+ words)
-
-   - Current auth system explained
-   - 3 implementation options for free access
-   - Freemium model guide
-   - Subscription tier implementation
-   - Database schema changes
-   - Migration guide
+   -   Current auth system explained
+   -   3 implementation options for free access
+   -   Freemium model guide
+   -   Subscription tier implementation
+   -   Database schema changes
+   -   Migration guide
 
 2. **DEPLOYMENT_TEST_CHECKLIST.md** (3,000+ words)
-
-   - Backend troubleshooting
-   - Database migration steps
-   - Complete testing protocol
-   - PowerShell test scripts
-   - Expected responses
-   - Troubleshooting guide
+   -   Backend troubleshooting
+   -   Database migration steps
+   -   Complete testing protocol
+   -   PowerShell test scripts
+   -   Expected responses
+   -   Troubleshooting guide
 
 3. **SECURITY_FEATURES_GUIDE.md** (Existing)
-
-   - HIBP API integration
-   - ProxyMesh/Luminati setup
-   - Production deployment
+   -   HIBP API integration
+   -   ProxyMesh/Luminati setup
+   -   Production deployment
 
 4. **backend/prisma/migrations/add_security_features.sql**
-
-   - SQL migration script
-   - Creates 3 new tables
-   - Adds indexes
+   -   SQL migration script
+   -   Creates 3 new tables
+   -   Adds indexes
 
 5. **backend/prisma/schema.prisma** (Updated)
-   - BreachAlert model
-   - IPRotationLog model
-   - SecuritySettings model
-   - SubscriptionTier enum
+   -   BreachAlert model
+   -   IPRotationLog model
+   -   SecuritySettings model
+   -   SubscriptionTier enum
 
 ---
 
@@ -259,22 +255,20 @@ Invoke-RestMethod -Uri "https://api.advanciapayledger.com/api/auth/register" `
 ### **🔴 Critical - Do First:**
 
 1. **Fix Backend Deployment**
-
-   - Check Render dashboard
-   - Restart service
-   - Verify environment variables
-   - Test `/api/health` endpoint
+   -   Check Render dashboard
+   -   Restart service
+   -   Verify environment variables
+   -   Test `/api/health` endpoint
 
 2. **Choose Auth Model**
-
-   - Option 1: Auto-approve (change 1 line)
-   - Option 2: Email verification only
-   - Option 3: Freemium with limits
+   -   Option 1: Auto-approve (change 1 line)
+   -   Option 2: Email verification only
+   -   Option 3: Freemium with limits
 
 3. **Update Auth Code**
-   - Edit `backend/src/routes/auth.ts`
-   - OR edit `backend/src/middleware/auth.ts`
-   - Commit and deploy
+   -   Edit `backend/src/routes/auth.ts`
+   -   OR edit `backend/src/middleware/auth.ts`
+   -   Commit and deploy
 
 ### **🟡 Important - Do Next:**
 
@@ -286,22 +280,21 @@ Invoke-RestMethod -Uri "https://api.advanciapayledger.com/api/auth/register" `
    ```
 
 5. **Test Full Flow**
-   - Register → Login → Access features
-   - Test breach alert page
-   - Test IP protection page
-   - Test support chat
+   -   Register → Login → Access features
+   -   Test breach alert page
+   -   Test IP protection page
+   -   Test support chat
 
 ### **🟢 Optional - Do Later:**
 
 6. **Production API Integration**
-
-   - HIBP API ($3.50/month)
-   - ProxyMesh ($10/month)
+   -   HIBP API ($3.50/month)
+   -   ProxyMesh ($10/month)
 
 7. **Monitoring Setup**
-   - Sentry error tracking
-   - Usage analytics
-   - Performance monitoring
+   -   Sentry error tracking
+   -   Usage analytics
+   -   Performance monitoring
 
 ---
 
@@ -319,17 +312,17 @@ Invoke-RestMethod -Uri "https://api.advanciapayledger.com/api/auth/register" `
 
 VeePN allows:
 
-- ✅ Instant sign-up (free trial)
-- ✅ Immediate feature access
-- ✅ Breach monitoring (free)
-- ✅ IP masking (paid)
+-   ✅ Instant sign-up (free trial)
+-   ✅ Immediate feature access
+-   ✅ Breach monitoring (free)
+-   ✅ IP masking (paid)
 
 Your system currently:
 
-- ❌ Requires admin approval
-- ❌ No free access
-- ✅ Better security features
-- ✅ More comprehensive dashboard
+-   ❌ Requires admin approval
+-   ❌ No free access
+-   ✅ Better security features
+-   ✅ More comprehensive dashboard
 
 ### **Recommended Configuration:**
 
@@ -343,17 +336,17 @@ subscriptionStatus: "active"
 
 **Free Tier Limits:**
 
-- 5 breach checks/day
-- 10 IP rotations/day
-- Support chat access
-- 1,000 API calls/month
+-   5 breach checks/day
+-   10 IP rotations/day
+-   Support chat access
+-   1,000 API calls/month
 
 **Pro Tier ($9.99/month):**
 
-- Unlimited breach monitoring
-- Unlimited IP rotations
-- Priority support
-- Advanced analytics
+-   Unlimited breach monitoring
+-   Unlimited IP rotations
+-   Priority support
+-   Advanced analytics
 
 ---
 
@@ -402,10 +395,10 @@ SENTRY_DSN=... (error tracking)
 
 ## 📞 Support Resources
 
-- **Auth Analysis:** `AUTH_SYSTEM_ANALYSIS.md`
-- **Testing Guide:** `DEPLOYMENT_TEST_CHECKLIST.md`
-- **Security Setup:** `SECURITY_FEATURES_GUIDE.md`
-- **Migration SQL:** `backend/prisma/migrations/add_security_features.sql`
+-   **Auth Analysis:** `AUTH_SYSTEM_ANALYSIS.md`
+-   **Testing Guide:** `DEPLOYMENT_TEST_CHECKLIST.md`
+-   **Security Setup:** `SECURITY_FEATURES_GUIDE.md`
+-   **Migration SQL:** `backend/prisma/migrations/add_security_features.sql`
 
 ---
 
@@ -413,24 +406,24 @@ SENTRY_DSN=... (error tracking)
 
 **What You Have:**
 
-- ✅ Complete breach monitoring system
-- ✅ IP protection with country selection
-- ✅ Professional support system
-- ✅ All features in navigation
-- ✅ Database models ready
-- ✅ Backend API routes ready
+-   ✅ Complete breach monitoring system
+-   ✅ IP protection with country selection
+-   ✅ Professional support system
+-   ✅ All features in navigation
+-   ✅ Database models ready
+-   ✅ Backend API routes ready
 
 **What You Need:**
 
-- ⚠️ Fix backend deployment (502 error)
-- ⚠️ Enable free user access (1-line change)
-- ⚠️ Run database migration
-- ⚠️ Test end-to-end
+-   ⚠️ Fix backend deployment (502 error)
+-   ⚠️ Enable free user access (1-line change)
+-   ⚠️ Run database migration
+-   ⚠️ Test end-to-end
 
 **Total Implementation Time:**
 
-- Auth change: 5 minutes
-- Database migration: 10 minutes
-- Backend restart: 10 minutes
-- Testing: 30 minutes
-- **Total: ~1 hour to launch** 🚀
+-   Auth change: 5 minutes
+-   Database migration: 10 minutes
+-   Backend restart: 10 minutes
+-   Testing: 30 minutes
+-   **Total: ~1 hour to launch** 🚀

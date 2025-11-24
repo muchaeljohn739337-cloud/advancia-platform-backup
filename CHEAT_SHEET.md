@@ -113,21 +113,21 @@ make full-ci
 
 | Role  | Email               | Password      |
 | ----- | ------------------- | ------------- |
-| Admin | admin@advancia.test | TestAdmin123! |
-| User  | user@advancia.test  | TestUser123!  |
-| Agent | agent@advancia.test | TestAgent123! |
+| Admin | <admin@advancia.test> | TestAdmin123! |
+| User  | <user@advancia.test>  | TestUser123!  |
+| Agent | <agent@advancia.test> | TestAgent123! |
 
 ---
 
 ## Key Files
 
-- `DEVELOPER_ONBOARDING.md` - Complete onboarding guide
-- `TEST_DATABASE_SETUP.md` - Test database setup
-- `TEST_DATABASE_QUICK_REFERENCE.md` - Quick troubleshooting
-- `docker-compose.test.yml` - Docker test setup
-- `Makefile` - All commands
-- `backend/.env.test` - Test environment
-- `backend/jest.config.js` - Jest configuration
+-   `DEVELOPER_ONBOARDING.md` - Complete onboarding guide
+-   `TEST_DATABASE_SETUP.md` - Test database setup
+-   `TEST_DATABASE_QUICK_REFERENCE.md` - Quick troubleshooting
+-   `docker-compose.test.yml` - Docker test setup
+-   `Makefile` - All commands
+-   `backend/.env.test` - Test environment
+-   `backend/jest.config.js` - Jest configuration
 
 ---
 

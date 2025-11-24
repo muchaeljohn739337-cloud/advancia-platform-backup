@@ -10,8 +10,8 @@ import {
   FormValidator,
   SecureFormHandler,
   ValidationRule,
-} from "@/lib/formSecurity";
-import { useCallback, useRef, useState } from "react";
+} from '@/lib/formSecurity';
+import { useCallback, useRef, useState } from 'react';
 
 export interface UseSecureFormOptions {
   formId: string;
@@ -60,11 +60,7 @@ export function useSecureForm(
 
       // Real-time validation if enabled
       if (validate && options.validationRules?.[name]) {
-        const error = FormValidator.validateField(
-          name,
-          value,
-          options.validationRules[name]
-        );
+        const error = FormValidator.validateField(name, value, options.validationRules[name]);
 
         if (error) {
           setErrors((prev) => ({ ...prev, [name]: error }));
@@ -128,11 +124,7 @@ export function useSecureForm(
         return true;
       }
 
-      const error = FormValidator.validateField(
-        name,
-        values[name],
-        options.validationRules[name]
-      );
+      const error = FormValidator.validateField(name, values[name], options.validationRules[name]);
 
       if (error) {
         setErrors((prev) => ({ ...prev, [name]: error }));
@@ -235,10 +227,8 @@ export function useSecureForm(
  * Hook for password strength validation
  */
 export function usePasswordStrength(password: string) {
-  const [strength, setStrength] = useState<"weak" | "medium" | "strong">(
-    "weak"
-  );
-  const [message, setMessage] = useState("");
+  const [strength, setStrength] = useState<'weak' | 'medium' | 'strong'>('weak');
+  const [message, setMessage] = useState('');
   const [isValid, setIsValid] = useState(false);
 
   const validate = useCallback(() => {

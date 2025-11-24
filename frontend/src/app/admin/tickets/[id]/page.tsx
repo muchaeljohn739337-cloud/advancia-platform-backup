@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import adminApi from "@/lib/adminApi";
+import { useEffect, useState, useCallback } from 'react';
+import adminApi from '@/lib/adminApi';
 
 type Ticket = {
   id: string;
@@ -16,7 +16,7 @@ type Ticket = {
 type ChatMsg = {
   id: string;
   sessionId: string;
-  senderType: "user" | "admin" | "bot";
+  senderType: 'user' | 'admin' | 'bot';
   content: string;
   createdAt: string;
 };
@@ -54,11 +54,7 @@ type Related = {
   }>;
 };
 
-export default function AdminTicketDetail({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function AdminTicketDetail({ params }: { params: { id: string } }) {
   const id = params.id;
   const [ticket, setTicket] = useState<Ticket | null>(null);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
@@ -71,8 +67,8 @@ export default function AdminTicketDetail({
     setLoading(true);
     try {
       const params: Record<string, string> = {};
-      if (includeMessages) params.includeMessages = "1";
-      if (includeRelated) params.includeRelated = "1";
+      if (includeMessages) params.includeMessages = '1';
+      if (includeRelated) params.includeRelated = '1';
       const r = await adminApi.get(`/api/support/admin/tickets/${id}`, {
         params,
       });
@@ -130,17 +126,14 @@ export default function AdminTicketDetail({
             </div>
             <div className="font-semibold">{ticket.subject}</div>
             <div className="text-sm mb-2">
-              Status: {ticket.status} • Priority: {ticket.priority} • User:{" "}
-              {ticket.userId}
+              Status: {ticket.status} • Priority: {ticket.priority} • User: {ticket.userId}
             </div>
             <div className="text-sm whitespace-pre-wrap">{ticket.message}</div>
           </div>
           <div className="border rounded p-3">
             <div className="font-semibold mb-2">Chat History</div>
             {messages.length === 0 && (
-              <div className="text-sm text-gray-600">
-                No messages or persistence disabled.
-              </div>
+              <div className="text-sm text-gray-600">No messages or persistence disabled.</div>
             )}
             {messages.length > 0 && (
               <div className="space-y-2">
@@ -148,7 +141,7 @@ export default function AdminTicketDetail({
                   <div key={m.id} className="text-sm">
                     <span className="text-gray-500">
                       [{new Date(m.createdAt).toLocaleString()}] {m.senderType}:
-                    </span>{" "}
+                    </span>{' '}
                     {m.content}
                   </div>
                 ))}
@@ -157,18 +150,15 @@ export default function AdminTicketDetail({
           </div>
           <div className="border rounded p-3">
             <div className="font-semibold mb-2">Related User & Crypto</div>
-            {!related && (
-              <div className="text-sm text-gray-600">Not requested.</div>
-            )}
+            {!related && <div className="text-sm text-gray-600">Not requested.</div>}
             {related && (
               <div className="space-y-3">
                 <div>
                   <div className="font-medium">User</div>
                   {related.user ? (
                     <div className="text-sm text-gray-800">
-                      {related.user.username || related.user.email} •{" "}
-                      {related.user.email} • Balance: ${related.user.usdBalance}{" "}
-                      • Joined{" "}
+                      {related.user.username || related.user.email} • {related.user.email} •
+                      Balance: ${related.user.usdBalance} • Joined{' '}
                       {new Date(related.user.createdAt).toLocaleDateString()}
                     </div>
                   ) : (
@@ -183,9 +173,8 @@ export default function AdminTicketDetail({
                     <ul className="text-sm list-disc pl-5">
                       {related.transactions.map((t) => (
                         <li key={t.id}>
-                          {new Date(t.createdAt).toLocaleString()}: {t.type}{" "}
-                          {t.amount} • {t.status}{" "}
-                          {t.description ? `• ${t.description}` : ""}
+                          {new Date(t.createdAt).toLocaleString()}: {t.type} {t.amount} • {t.status}{' '}
+                          {t.description ? `• ${t.description}` : ''}
                         </li>
                       ))}
                     </ul>
@@ -199,9 +188,8 @@ export default function AdminTicketDetail({
                     <ul className="text-sm list-disc pl-5">
                       {related.cryptoOrders.map((o) => (
                         <li key={o.id}>
-                          {new Date(o.createdAt).toLocaleString()}:{" "}
-                          {o.cryptoType} ${o.usdAmount} • {o.status}{" "}
-                          {o.txHash ? `• ${o.txHash}` : ""}
+                          {new Date(o.createdAt).toLocaleString()}: {o.cryptoType} ${o.usdAmount} •{' '}
+                          {o.status} {o.txHash ? `• ${o.txHash}` : ''}
                         </li>
                       ))}
                     </ul>
@@ -215,9 +203,8 @@ export default function AdminTicketDetail({
                     <ul className="text-sm list-disc pl-5">
                       {related.cryptoWithdrawals.map((w) => (
                         <li key={w.id}>
-                          {new Date(w.createdAt).toLocaleString()}:{" "}
-                          {w.cryptoType} {w.cryptoAmount} • {w.status}{" "}
-                          {w.txHash ? `• ${w.txHash}` : ""}
+                          {new Date(w.createdAt).toLocaleString()}: {w.cryptoType} {w.cryptoAmount}{' '}
+                          • {w.status} {w.txHash ? `• ${w.txHash}` : ''}
                         </li>
                       ))}
                     </ul>

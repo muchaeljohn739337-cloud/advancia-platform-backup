@@ -122,57 +122,57 @@ $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 ### Web Application Security
 
-- ✅ Authentication & Authorization (OWASP A01)
-- ✅ SQL/NoSQL Injection (OWASP A03)
-- ✅ Cross-Site Scripting (XSS) (OWASP A03)
-- ✅ Cross-Site Request Forgery (CSRF)
-- ✅ Security Misconfiguration (OWASP A05)
-- ✅ Broken Access Control (OWASP A01)
-- ✅ Cryptographic Failures (OWASP A02)
-- ✅ Server-Side Request Forgery (SSRF)
-- ✅ Insecure Deserialization (OWASP A08)
+-   ✅ Authentication & Authorization (OWASP A01)
+-   ✅ SQL/NoSQL Injection (OWASP A03)
+-   ✅ Cross-Site Scripting (XSS) (OWASP A03)
+-   ✅ Cross-Site Request Forgery (CSRF)
+-   ✅ Security Misconfiguration (OWASP A05)
+-   ✅ Broken Access Control (OWASP A01)
+-   ✅ Cryptographic Failures (OWASP A02)
+-   ✅ Server-Side Request Forgery (SSRF)
+-   ✅ Insecure Deserialization (OWASP A08)
 
 ### API Security
 
-- ✅ Broken Object Level Authorization (API1:2023)
-- ✅ Broken Authentication (API2:2023)
-- ✅ Broken Object Property Level Authorization (API3:2023)
-- ✅ Unrestricted Resource Consumption (API4:2023)
-- ✅ Broken Function Level Authorization (API5:2023)
-- ✅ Unrestricted Access to Sensitive Business Flows (API6:2023)
-- ✅ Server Side Request Forgery (API7:2023)
-- ✅ Security Misconfiguration (API8:2023)
-- ✅ Improper Inventory Management (API9:2023)
-- ✅ Unsafe Consumption of APIs (API10:2023)
+-   ✅ Broken Object Level Authorization (API1:2023)
+-   ✅ Broken Authentication (API2:2023)
+-   ✅ Broken Object Property Level Authorization (API3:2023)
+-   ✅ Unrestricted Resource Consumption (API4:2023)
+-   ✅ Broken Function Level Authorization (API5:2023)
+-   ✅ Unrestricted Access to Sensitive Business Flows (API6:2023)
+-   ✅ Server Side Request Forgery (API7:2023)
+-   ✅ Security Misconfiguration (API8:2023)
+-   ✅ Improper Inventory Management (API9:2023)
+-   ✅ Unsafe Consumption of APIs (API10:2023)
 
 ### Mobile Application Security (Manual)
 
-- 📱 Insecure Data Storage (MASVS-STORAGE)
-- 📱 Insecure Communication (MASVS-NETWORK)
-- 📱 Insecure Authentication (MASVS-AUTH)
-- 📱 Insufficient Cryptography (MASVS-CRYPTO)
-- 📱 Code Quality (MASVS-CODE)
-- 📱 Binary Protections (MASVS-RESILIENCE)
+-   📱 Insecure Data Storage (MASVS-STORAGE)
+-   📱 Insecure Communication (MASVS-NETWORK)
+-   📱 Insecure Authentication (MASVS-AUTH)
+-   📱 Insufficient Cryptography (MASVS-CRYPTO)
+-   📱 Code Quality (MASVS-CODE)
+-   📱 Binary Protections (MASVS-RESILIENCE)
 
 ### Cloud & Infrastructure
 
-- ☁️ Kubernetes security (CIS Benchmarks)
-- ☁️ Docker container security (CVE scanning)
-- ☁️ Secrets management (exposed credentials)
-- ☁️ Network security (firewall rules, DDoS)
-- ☁️ DigitalOcean configuration
-- ☁️ Cloudflare WAF rules
-- ☁️ Vercel deployment security
+-   ☁️ Kubernetes security (CIS Benchmarks)
+-   ☁️ Docker container security (CVE scanning)
+-   ☁️ Secrets management (exposed credentials)
+-   ☁️ Network security (firewall rules, DDoS)
+-   ☁️ DigitalOcean configuration
+-   ☁️ Cloudflare WAF rules
+-   ☁️ Vercel deployment security
 
 ### AI/ML Security
 
-- 🤖 Prompt injection attacks
-- 🤖 Jailbreak attempts (DAN, Developer Mode)
-- 🤖 Model poisoning & backdoors
-- 🤖 Data leakage (training data extraction)
-- 🤖 Adversarial inputs (Unicode obfuscation, token confusion)
-- 🤖 Social engineering via AI
-- 🤖 Business logic bypass through AI
+-   🤖 Prompt injection attacks
+-   🤖 Jailbreak attempts (DAN, Developer Mode)
+-   🤖 Model poisoning & backdoors
+-   🤖 Data leakage (training data extraction)
+-   🤖 Adversarial inputs (Unicode obfuscation, token confusion)
+-   🤖 Social engineering via AI
+-   🤖 Business logic bypass through AI
 
 ---
 
@@ -182,11 +182,11 @@ $token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 
 **Target Pass Rates:**
 
-- 🟢 **Quick Scan**: 90%+ (headers, SSL, dependencies)
-- 🟢 **API Security**: 85%+ (authentication, injection, XSS)
-- 🟡 **AI Red Team**: 80%+ (prompt injection, jailbreaks)
-- 🟢 **Code Quality**: 95%+ (SAST, linting, secrets)
-- 🟢 **Container Security**: 90%+ (CVE scanning, best practices)
+-   🟢 **Quick Scan**: 90%+ (headers, SSL, dependencies)
+-   🟢 **API Security**: 85%+ (authentication, injection, XSS)
+-   🟡 **AI Red Team**: 80%+ (prompt injection, jailbreaks)
+-   🟢 **Code Quality**: 95%+ (SAST, linting, secrets)
+-   🟢 **Container Security**: 90%+ (CVE scanning, best practices)
 
 **Common Findings:**
 
@@ -235,6 +235,7 @@ If you find these, **STOP TESTING** and report immediately:
    ```
 
 5. **Unrestricted File Upload**
+
    ```
    Finding: Can upload .php files to /uploads
    Impact: Webshell and server compromise
@@ -243,9 +244,9 @@ If you find these, **STOP TESTING** and report immediately:
 
 **Report Critical Issues:**
 
-- **Email**: security@advanciapayledger.com
-- **Slack**: #security-incidents (private channel)
-- **PagerDuty**: Escalate to on-call security engineer
+-   **Email**: <security@advanciapayledger.com>
+-   **Slack**: #security-incidents (private channel)
+-   **PagerDuty**: Escalate to on-call security engineer
 
 ---
 
@@ -294,38 +295,36 @@ If you find these, **STOP TESTING** and report immediately:
 ### Primary Documents
 
 1. **SECURITY_TESTING_FRAMEWORK.md** - Complete security testing framework (400+ lines)
-
-   - Scope of testing
-   - Detailed checklists for each security domain
-   - Tools and commands
-   - Security hardening recommendations
-   - Penetration testing report template
-   - Incident response plan
-   - Compliance standards
-   - Testing schedule
-   - Budget and team structure
+   -   Scope of testing
+   -   Detailed checklists for each security domain
+   -   Tools and commands
+   -   Security hardening recommendations
+   -   Penetration testing report template
+   -   Incident response plan
+   -   Compliance standards
+   -   Testing schedule
+   -   Budget and team structure
 
 2. **SECURITY_TESTING_GUIDE.md** - Step-by-step execution guide
-
-   - Quick start instructions
-   - Script usage examples
-   - Manual testing checklists
-   - CI/CD integration
-   - Result interpretation
-   - Remediation tracking
-   - Emergency response procedures
+   -   Quick start instructions
+   -   Script usage examples
+   -   Manual testing checklists
+   -   CI/CD integration
+   -   Result interpretation
+   -   Remediation tracking
+   -   Emergency response procedures
 
 3. **API_TESTING_GUIDE.md** - API-specific testing procedures
-   - Postman collections
-   - Authentication testing
-   - API security best practices
+   -   Postman collections
+   -   Authentication testing
+   -   API security best practices
 
 ### Supporting Documents
 
-- `DEPLOYMENT_GUIDE.md` - Secure deployment practices
-- `ADMIN_PERMISSIONS_GUIDE.md` - Access control documentation
-- `AUDIT_LOG_INTEGRITY.md` - Audit logging requirements
-- `CREDENTIAL_ROTATION_LOG.md` - Secrets management
+-   `DEPLOYMENT_GUIDE.md` - Secure deployment practices
+-   `ADMIN_PERMISSIONS_GUIDE.md` - Access control documentation
+-   `AUDIT_LOG_INTEGRITY.md` - Audit logging requirements
+-   `CREDENTIAL_ROTATION_LOG.md` - Secrets management
 
 ---
 
@@ -333,15 +332,15 @@ If you find these, **STOP TESTING** and report immediately:
 
 This platform is tested against:
 
-- **OWASP Top 10** (2021)
-- **OWASP API Security Top 10** (2023)
-- **OWASP Mobile Top 10** (MASVS)
-- **CWE Top 25** Most Dangerous Software Weaknesses
-- **PCI DSS v4.0** (Payment Card Industry)
-- **GDPR** (Data Protection)
-- **SOC 2 Type II** (Service Organization Controls)
-- **NIST Cybersecurity Framework**
-- **CIS Kubernetes Benchmark**
+-   **OWASP Top 10** (2021)
+-   **OWASP API Security Top 10** (2023)
+-   **OWASP Mobile Top 10** (MASVS)
+-   **CWE Top 25** Most Dangerous Software Weaknesses
+-   **PCI DSS v4.0** (Payment Card Industry)
+-   **GDPR** (Data Protection)
+-   **SOC 2 Type II** (Service Organization Controls)
+-   **NIST Cybersecurity Framework**
+-   **CIS Kubernetes Benchmark**
 
 ---
 
@@ -349,17 +348,17 @@ This platform is tested against:
 
 ### Automated (CI/CD)
 
-- **Every Commit**: Code quality checks, unit tests
-- **Every PR**: SAST scanning, dependency checks
-- **Daily 2 AM**: Full security scan, vulnerability scan
-- **Weekly**: Container image scanning, API testing
+-   **Every Commit**: Code quality checks, unit tests
+-   **Every PR**: SAST scanning, dependency checks
+-   **Daily 2 AM**: Full security scan, vulnerability scan
+-   **Weekly**: Container image scanning, API testing
 
 ### Manual
 
-- **Weekly**: API security testing, authentication testing
-- **Monthly**: AI/ML red teaming, business logic testing
-- **Quarterly**: External penetration test ($15K-$30K)
-- **Annual**: Third-party security audit ($25K-$50K)
+-   **Weekly**: API security testing, authentication testing
+-   **Monthly**: AI/ML red teaming, business logic testing
+-   **Quarterly**: External penetration test ($15K-$30K)
+-   **Annual**: Third-party security audit ($25K-$50K)
 
 ---
 
@@ -368,30 +367,27 @@ This platform is tested against:
 Track these security metrics:
 
 1. **Vulnerability Discovery Rate**
-
-   - Critical: 0 (target)
-   - High: <5 per quarter
-   - Medium: <20 per quarter
-   - Low: Acceptable
+   -   Critical: 0 (target)
+   -   High: <5 per quarter
+   -   Medium: <20 per quarter
+   -   Low: Acceptable
 
 2. **Mean Time to Remediate (MTTR)**
-
-   - Critical: <24 hours
-   - High: <7 days
-   - Medium: <30 days
-   - Low: <90 days
+   -   Critical: <24 hours
+   -   High: <7 days
+   -   Medium: <30 days
+   -   Low: <90 days
 
 3. **Security Test Coverage**
-
-   - API endpoints: 100%
-   - Authentication flows: 100%
-   - Business logic: 90%+
-   - Frontend components: 80%+
+   -   API endpoints: 100%
+   -   Authentication flows: 100%
+   -   Business logic: 90%+
+   -   Frontend components: 80%+
 
 4. **Automated Test Pass Rate**
-   - Target: >85%
-   - Acceptable: 75-85%
-   - Needs Improvement: <75%
+   -   Target: >85%
+   -   Acceptable: 75-85%
+   -   Needs Improvement: <75%
 
 ---
 
@@ -403,20 +399,20 @@ Track these security metrics:
 
 **Instead:**
 
-1. Email security@advanciapayledger.com with:
-   - Vulnerability description
-   - Steps to reproduce
-   - Impact assessment
-   - Suggested remediation
+1. Email <security@advanciapayledger.com> with:
+   -   Vulnerability description
+   -   Steps to reproduce
+   -   Impact assessment
+   -   Suggested remediation
 2. Allow 48 hours for initial response
 3. Work with security team on responsible disclosure
 
 **Bug Bounty Program:**
 
-- Platform: HackerOne (https://hackerone.com/advancia-pay)
-- Scope: \*.advanciapayledger.com, API endpoints, mobile apps
-- Rewards: $100-$10,000 depending on severity
-- Rules: No DoS, no social engineering, no physical attacks
+-   Platform: HackerOne (<https://hackerone.com/advancia-pay>)
+-   Scope: \*.advanciapayledger.com, API endpoints, mobile apps
+-   Rewards: $100-$10,000 depending on severity
+-   Rules: No DoS, no social engineering, no physical attacks
 
 ### Adding Security Tests
 
@@ -433,25 +429,25 @@ Track these security metrics:
 
 ### Internal
 
-- **Security Team Email**: security@advanciapayledger.com
-- **Slack Channel**: #security (private)
-- **Confluence Wiki**: Security Runbooks
-- **Jira Project**: SECURITY-xxx
+-   **Security Team Email**: <security@advanciapayledger.com>
+-   **Slack Channel**: #security (private)
+-   **Confluence Wiki**: Security Runbooks
+-   **Jira Project**: SECURITY-xxx
 
 ### External Resources
 
-- **OWASP**: https://owasp.org/
-- **PortSwigger**: https://portswigger.net/web-security
-- **HackerOne**: https://www.hackerone.com/
-- **Bugcrowd**: https://www.bugcrowd.com/
-- **CWE**: https://cwe.mitre.org/
+-   **OWASP**: <https://owasp.org/>
+-   **PortSwigger**: <https://portswigger.net/web-security>
+-   **HackerOne**: <https://www.hackerone.com/>
+-   **Bugcrowd**: <https://www.bugcrowd.com/>
+-   **CWE**: <https://cwe.mitre.org/>
 
 ### Training
 
-- **PortSwigger Academy**: Free web security training
-- **OWASP WebGoat**: Hands-on security lessons
-- **HackTheBox**: Penetration testing labs ($20/month)
-- **TryHackMe**: Security training platform ($11/month)
+-   **PortSwigger Academy**: Free web security training
+-   **OWASP WebGoat**: Hands-on security lessons
+-   **HackTheBox**: Penetration testing labs ($20/month)
+-   **TryHackMe**: Security training platform ($11/month)
 
 ---
 
@@ -477,9 +473,9 @@ Track these security metrics:
 
 **Consequences of Violations:**
 
-- Immediate termination of testing access
-- Legal action if applicable
-- Ban from bug bounty program
+-   Immediate termination of testing access
+-   Legal action if applicable
+-   Ban from bug bounty program
 
 ---
 
@@ -487,21 +483,21 @@ Track these security metrics:
 
 ### Security Incidents
 
-- **On-Call Security Engineer**: Via PagerDuty
-- **Security Team Lead**: security-lead@advanciapayledger.com
-- **CTO**: cto@advanciapayledger.com
+-   **On-Call Security Engineer**: Via PagerDuty
+-   **Security Team Lead**: <security-lead@advanciapayledger.com>
+-   **CTO**: <cto@advanciapayledger.com>
 
 ### Critical Vulnerability Found
 
-1. **Immediate** (within 1 hour): Email security@advanciapayledger.com
+1. **Immediate** (within 1 hour): Email <security@advanciapayledger.com>
 2. **Urgent** (within 4 hours): Follow up via PagerDuty if no response
 3. **Business Hours**: Slack #security-incidents
 
 ### External Incident Response Partners
 
-- **Mandiant** (Google Cloud): Forensics & Incident Response
-- **CrowdStrike**: Endpoint Protection & Response
-- **CloudFlare**: DDoS Mitigation
+-   **Mandiant** (Google Cloud): Forensics & Incident Response
+-   **CrowdStrike**: Endpoint Protection & Response
+-   **CloudFlare**: DDoS Mitigation
 
 ---
 
@@ -509,11 +505,11 @@ Track these security metrics:
 
 Top security contributors:
 
-- **Q4 2024**: [Name] - Discovered critical authentication bypass
-- **Q3 2024**: [Name] - Implemented AI safety guardrails
-- **Q2 2024**: [Name] - Reduced MTTR by 50%
+-   **Q4 2024**: [Name] - Discovered critical authentication bypass
+-   **Q3 2024**: [Name] - Implemented AI safety guardrails
+-   **Q2 2024**: [Name] - Reduced MTTR by 50%
 
-**Hall of Fame**: https://advanciapayledger.com/security/hall-of-fame
+**Hall of Fame**: <https://advanciapayledger.com/security/hall-of-fame>
 
 ---
 
@@ -521,19 +517,19 @@ Top security contributors:
 
 ### v2.0.0 (2024-01-15)
 
-- ✨ Added AI/ML red teaming test suite
-- ✨ Added comprehensive security testing guide
-- ✨ Added automated API security testing
-- 🔧 Updated OWASP Top 10 to 2021 version
-- 🔧 Updated API Security Top 10 to 2023 version
-- 📚 Added security testing framework documentation
+-   ✨ Added AI/ML red teaming test suite
+-   ✨ Added comprehensive security testing guide
+-   ✨ Added automated API security testing
+-   🔧 Updated OWASP Top 10 to 2021 version
+-   🔧 Updated API Security Top 10 to 2023 version
+-   📚 Added security testing framework documentation
 
 ### v1.0.0 (2023-12-01)
 
-- 🎉 Initial security testing framework
-- ✅ Basic penetration testing tools
-- ✅ Manual testing checklists
-- ✅ CI/CD integration
+-   🎉 Initial security testing framework
+-   ✅ Basic penetration testing tools
+-   ✅ Manual testing checklists
+-   ✅ CI/CD integration
 
 ---
 
@@ -548,4 +544,4 @@ Copyright © 2024 Advancia Pay. All rights reserved.
 
 **Happy Testing! 🔒🛡️**
 
-For questions or support, contact security@advanciapayledger.com
+For questions or support, contact <security@advanciapayledger.com>

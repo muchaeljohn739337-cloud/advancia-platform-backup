@@ -9,17 +9,17 @@
 
 Your server is now configured to accept requests from:
 
-- `advanciapayledger.com`
-- `www.advanciapayledger.com`
-- `api.advanciapayledger.com`
-- Plus your existing IPs and Vercel frontend
+-   `advanciapayledger.com`
+-   `www.advanciapayledger.com`
+-   `api.advanciapayledger.com`
+-   Plus your existing IPs and Vercel frontend
 
 ---
 
 ## Step 1: Add DNS Records in Cloudflare
 
 Go to your Cloudflare dashboard:
-https://dash.cloudflare.com → Select `advanciapayledger.com` → DNS
+<https://dash.cloudflare.com> → Select `advanciapayledger.com` → DNS
 
 **Add these records:**
 
@@ -41,20 +41,20 @@ https://dash.cloudflare.com → Select `advanciapayledger.com` → DNS
 
 **Set encryption mode:**
 
-- ✅ **Full** or **Full (strict)**
-  - Full: Works immediately
-  - Full (strict): Best security (requires valid cert on server)
+-   ✅ **Full** or **Full (strict)**
+    -   Full: Works immediately
+    -   Full (strict): Best security (requires valid cert on server)
 
 **Enable these settings:**
 
-- ✅ Always Use HTTPS → ON
-- ✅ Automatic HTTPS Rewrites → ON
-- ✅ Minimum TLS Version → 1.2
+-   ✅ Always Use HTTPS → ON
+-   ✅ Automatic HTTPS Rewrites → ON
+-   ✅ Minimum TLS Version → 1.2
 
 ### Go to: SSL/TLS → Edge Certificates
 
-- ✅ Always Use HTTPS → ON
-- ✅ HTTP Strict Transport Security (HSTS) → Enable
+-   ✅ Always Use HTTPS → ON
+-   ✅ HTTP Strict Transport Security (HSTS) → Enable
 
 ---
 
@@ -66,21 +66,21 @@ Go to: Security → WAF
 
 Create a rule to allow your IP:
 
-- Rule name: "Allow Admin"
-- Field: IP Address
-- Operator: equals
-- Value: Your IP
-- Action: Allow
+-   Rule name: "Allow Admin"
+-   Field: IP Address
+-   Operator: equals
+-   Value: Your IP
+-   Action: Allow
 
 ### DDoS Protection
 
-- Already enabled by default with Cloudflare
+-   Already enabled by default with Cloudflare
 
 ### Bot Protection
 
 Go to: Security → Bots
 
-- Enable Bot Fight Mode (Free) or Super Bot Fight Mode (Pro+)
+-   Enable Bot Fight Mode (Free) or Super Bot Fight Mode (Pro+)
 
 ---
 
@@ -90,7 +90,7 @@ Update your frontend to use the custom domain:
 
 ### Option A: Via Vercel Dashboard
 
-1. Go to: https://vercel.com/advanciapayledger/frontend/settings/environment-variables
+1. Go to: <https://vercel.com/advanciapayledger/frontend/settings/environment-variables>
 2. Edit `NEXT_PUBLIC_API_URL`
 3. Change to: `https://advanciapayledger.com`
 4. Save and redeploy
@@ -112,16 +112,16 @@ vercel --prod
 
 To use `app.advanciapayledger.com` instead of Vercel's default:
 
-### In Cloudflare:
+### In Cloudflare
 
 Add CNAME record:
 | Type | Name | Content | Proxy Status |
 |------|------|---------|--------------|
 | CNAME | app | cname.vercel-dns.com | ⚪ DNS Only |
 
-### In Vercel:
+### In Vercel
 
-1. Go to: https://vercel.com/advanciapayledger/frontend/settings/domains
+1. Go to: <https://vercel.com/advanciapayledger/frontend/settings/domains>
 2. Click "Add Domain"
 3. Enter: `app.advanciapayledger.com`
 4. Follow verification steps
@@ -150,13 +150,13 @@ curl https://api.advanciapayledger.com/api/health
 
 ### ✅ Server (DigitalOcean)
 
-- IP: `157.245.8.131`
-- Nginx configured for custom domain
-- Backend CORS updated with:
-  - `https://advanciapayledger.com`
-  - `https://www.advanciapayledger.com`
-  - `https://api.advanciapayledger.com`
-  - `https://frontend-theta-three-91.vercel.app`
+-   IP: `157.245.8.131`
+-   Nginx configured for custom domain
+-   Backend CORS updated with:
+    -   `https://advanciapayledger.com`
+    -   `https://www.advanciapayledger.com`
+    -   `https://api.advanciapayledger.com`
+    -   `https://frontend-theta-three-91.vercel.app`
 
 ### ⏳ Pending (Your Actions)
 
@@ -208,9 +208,9 @@ nslookup advanciapayledger.com 1.1.1.1
 
 ### SSL errors
 
-- Make sure Cloudflare SSL mode is "Full" not "Flexible"
-- Check that orange cloud (Proxied) is enabled
-- Wait 5 minutes after changing settings
+-   Make sure Cloudflare SSL mode is "Full" not "Flexible"
+-   Check that orange cloud (Proxied) is enabled
+-   Wait 5 minutes after changing settings
 
 ### 502 Bad Gateway
 
@@ -224,9 +224,9 @@ ssh -i ~/.ssh/advancia_droplet root@157.245.8.131 "nginx -t && systemctl status 
 
 ### Mixed content warnings
 
-- Ensure all resources use HTTPS
-- Update `NEXT_PUBLIC_API_URL` to use HTTPS
-- Enable "Automatic HTTPS Rewrites" in Cloudflare
+-   Ensure all resources use HTTPS
+-   Update `NEXT_PUBLIC_API_URL` to use HTTPS
+-   Enable "Automatic HTTPS Rewrites" in Cloudflare
 
 ---
 
@@ -263,17 +263,17 @@ ssh -i ~/.ssh/advancia_droplet root@157.245.8.131 "pm2 restart advancia-backend 
 
 **Cloudflare acts as a proxy:**
 
-- All traffic goes through Cloudflare first
-- SSL termination happens at Cloudflare
-- Cloudflare connects to your server (port 80 is fine)
-- Your server IP is hidden from attackers
+-   All traffic goes through Cloudflare first
+-   SSL termination happens at Cloudflare
+-   Cloudflare connects to your server (port 80 is fine)
+-   Your server IP is hidden from attackers
 
 **Recommended Cloudflare settings:**
 
-- Enable "Under Attack Mode" if you get DDoS
-- Set up Rate Limiting rules
-- Configure Page Rules for caching
-- Enable Bot Fight Mode
+-   Enable "Under Attack Mode" if you get DDoS
+-   Set up Rate Limiting rules
+-   Configure Page Rules for caching
+-   Enable Bot Fight Mode
 
 ---
 

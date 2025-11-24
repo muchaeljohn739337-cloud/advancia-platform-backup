@@ -43,9 +43,9 @@ docker run -d -p 6379:6379 --name redis redis:7-alpine
 
 #### Production (Managed Service)
 
-- **AWS ElastiCache**: Redis-compatible managed service
-- **Azure Cache for Redis**: Enterprise-grade Redis
-- **Redis Cloud**: Official managed Redis
+-   **AWS ElastiCache**: Redis-compatible managed service
+-   **Azure Cache for Redis**: Enterprise-grade Redis
+-   **Redis Cloud**: Official managed Redis
 
 ### 3. Environment Configuration
 
@@ -92,8 +92,8 @@ export const strictRateLimiter = rateLimiter({
 
 **Applied to:**
 
-- `/api/auth/login`
-- `/api/auth/login-doctor`
+-   `/api/auth/login`
+-   `/api/auth/login-doctor`
 
 #### 2. Admin Rate Limiter
 
@@ -109,10 +109,10 @@ export const adminRateLimiter = rateLimiter({
 
 **Applied to:**
 
-- `/api/admin/users`
-- `/api/admin/rate-limits`
-- `/api/admin/rate-limits/groups`
-- `/api/admin/rate-limits/clear`
+-   `/api/admin/users`
+-   `/api/admin/rate-limits`
+-   `/api/admin/rate-limits/groups`
+-   `/api/admin/rate-limits/clear`
 
 #### 3. General API Rate Limiter
 
@@ -200,8 +200,8 @@ Get rate limit offenders for monitoring dashboard.
 
 **Query Parameters:**
 
-- `group` (optional): Route group to monitor (default: "admin")
-- `limit` (optional): Maximum offenders to return (default: 20, max: 100)
+-   `group` (optional): Route group to monitor (default: "admin")
+-   `limit` (optional): Maximum offenders to return (default: 20, max: 100)
 
 **Response:**
 
@@ -392,11 +392,7 @@ describe("Rate Limiter", () => {
   it("should block after max attempts", async () => {
     const requests = Array(6)
       .fill(null)
-      .map(() =>
-        request(app)
-          .post("/api/auth/login")
-          .send({ email: "test@example.com", password: "wrong" })
-      );
+      .map(() => request(app).post("/api/auth/login").send({ email: "test@example.com", password: "wrong" }));
 
     const responses = await Promise.all(requests);
     expect(responses[5].status).toBe(429);
@@ -449,16 +445,16 @@ If legitimate users are blocked:
 
 ### Redis Optimization
 
-- **Connection Pooling**: ioredis auto-manages connections
-- **Pipeline Commands**: Batch Redis operations
-- **TTL Management**: Keys auto-expire
-- **Memory Monitoring**: Track Redis memory usage
+-   **Connection Pooling**: ioredis auto-manages connections
+-   **Pipeline Commands**: Batch Redis operations
+-   **TTL Management**: Keys auto-expire
+-   **Memory Monitoring**: Track Redis memory usage
 
 ### Scaling
 
-- **Single Instance**: Up to 50,000 req/sec
-- **Redis Cluster**: Horizontal scaling for millions of req/sec
-- **Read Replicas**: For read-heavy workloads
+-   **Single Instance**: Up to 50,000 req/sec
+-   **Redis Cluster**: Horizontal scaling for millions of req/sec
+-   **Read Replicas**: For read-heavy workloads
 
 ## Security Benefits
 

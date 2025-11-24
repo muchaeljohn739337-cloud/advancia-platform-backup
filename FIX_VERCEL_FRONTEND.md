@@ -9,20 +9,20 @@
 
 ### 1. **API URL Typo** ❌ FIXED
 
-- ~~**Previous Wrong URLs**~~: `advancia-backend-upnf` and `advancia-backend-upnrf`
-- **Correct**: `https://advancia-backend.onrender.com`
-- **Impact**: Frontend must use this exact URL (from render.yaml line 3)
+-   ~~**Previous Wrong URLs**~~: `advancia-backend-upnf` and `advancia-backend-upnrf`
+-   **Correct**: `https://advancia-backend.onrender.com`
+-   **Impact**: Frontend must use this exact URL (from render.yaml line 3)
 
 ### 2. **Missing Environment Variables** (7 variables)
 
 Without these, the following features won't work:
 
-- ❌ Stripe payments
-- ❌ Push notifications
-- ❌ Admin panel
-- ❌ Chatbot
-- ❌ Currency support
-- ❌ Feature flags
+-   ❌ Stripe payments
+-   ❌ Push notifications
+-   ❌ Admin panel
+-   ❌ Chatbot
+-   ❌ Currency support
+-   ❌ Feature flags
 
 ---
 
@@ -32,7 +32,7 @@ Without these, the following features won't work:
 
 #### Step 1: Access Vercel Dashboard
 
-1. Go to https://vercel.com/dashboard
+1. Go to <https://vercel.com/dashboard>
 2. Sign in with your account
 3. Find and click on your project (likely named `modular-saas-platform-frontend` or similar)
 
@@ -46,13 +46,17 @@ Without these, the following features won't work:
 1. Find `NEXT_PUBLIC_API_URL` in the list
 2. Click the **⋯** (three dots) menu → **Edit**
 3. Change the value from:
+
    ```
    https://advancia-backend.onrender.com
    ```
+
    to:
+
    ```
    https://advancia-backend.onrender.com
    ```
+
 4. Select environments: **Production**, **Preview**, **Development** (check all)
 5. Click **Save**
 
@@ -128,7 +132,7 @@ Environments: Production, Preview, Development ✓✓✓
 
 Once deployed, check:
 
-1. Visit your frontend URL (e.g., https://your-frontend.vercel.app)
+1. Visit your frontend URL (e.g., <https://your-frontend.vercel.app>)
 2. Open browser Developer Tools (F12)
 3. Check Console tab for errors
 4. Try to register/login to test backend connection
@@ -187,14 +191,14 @@ vercel --prod
 
 After redeployment, verify these work:
 
-- [ ] Frontend loads without console errors
-- [ ] API calls reach backend (check Network tab in DevTools)
-- [ ] Stripe payment form appears (if applicable)
-- [ ] Push notification prompt works
-- [ ] Admin panel accessible
-- [ ] Chatbot widget loads
-- [ ] Currency selector shows all currencies
-- [ ] Feature flags are active
+-   [ ] Frontend loads without console errors
+-   [ ] API calls reach backend (check Network tab in DevTools)
+-   [ ] Stripe payment form appears (if applicable)
+-   [ ] Push notification prompt works
+-   [ ] Admin panel accessible
+-   [ ] Chatbot widget loads
+-   [ ] Currency selector shows all currencies
+-   [ ] Feature flags are active
 
 ---
 
@@ -276,9 +280,9 @@ After fixes, your Vercel project should have:
 | NEXT_PUBLIC_APP_NAME               | Advancia PayLedger                      | ➕ Added       |
 | NEXT_PUBLIC_CURRENCY_LIST          | USD,EUR,BTC...                          | ➕ Added       |
 | NEXT_PUBLIC_FEATURE_FLAGS          | notifications...                        | ➕ Added       |
-| NEXTAUTH_URL                       | https://advanciapayledger.com           | ✅ Already set |
+| NEXTAUTH_URL                       | <https://advanciapayledger.com>           | ✅ Already set |
 | NEXTAUTH_SECRET                    | G25OYIKT...                             | ✅ Already set |
-| GMAIL_EMAIL                        | advanciapayledger@gmail.com             | ✅ Already set |
+| GMAIL_EMAIL                        | <advanciapayledger@gmail.com>             | ✅ Already set |
 | GMAIL_APP_PASSWORD                 | qmbkdljx...                             | ✅ Already set |
 | RESEND_API_KEY                     | re_placeholder                          | ✅ Already set |
 
@@ -289,22 +293,20 @@ After fixes, your Vercel project should have:
 Once Vercel frontend is fixed:
 
 1. **Test full user flow**:
-
-   - Register new account
-   - Login with credentials
-   - Try a payment (if applicable)
-   - Test notifications
+   -   Register new account
+   -   Login with credentials
+   -   Try a payment (if applicable)
+   -   Test notifications
 
 2. **Update Backend CORS** (if needed):
-
-   - Go to Render → advancia-backend → Environment
-   - Update `ALLOWED_ORIGINS` to include your Vercel URL
-   - Redeploy backend
+   -   Go to Render → advancia-backend → Environment
+   -   Update `ALLOWED_ORIGINS` to include your Vercel URL
+   -   Redeploy backend
 
 3. **Custom Domain Setup** (optional):
-   - Add `advanciapayledger.com` to Vercel
-   - Update `NEXTAUTH_URL` to use custom domain
-   - Update backend `ALLOWED_ORIGINS`
+   -   Add `advanciapayledger.com` to Vercel
+   -   Update `NEXTAUTH_URL` to use custom domain
+   -   Update backend `ALLOWED_ORIGINS`
 
 ---
 

@@ -43,9 +43,9 @@ Quarterly ───────────────────────�
 
 ## ✅ Quick Reference
 
-- **Daily**: Health checks, monitoring, errors, security
-- **Weekly**: Backups, logs, updates, rules, pipeline
-- **Monthly**: Scaling, security, compliance, recovery
-- **Quarterly**: Planning, upgrades, security, costs
+-   **Daily**: Health checks, monitoring, errors, security
+-   **Weekly**: Backups, logs, updates, rules, pipeline
+-   **Monthly**: Scaling, security, compliance, recovery
+-   **Quarterly**: Planning, upgrades, security, costs
 
 ⚡ Print this chart or keep it open — it's your operational rhythm at a glance!

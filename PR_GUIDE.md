@@ -76,18 +76,18 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/) format:
 
 ### Types
 
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style/formatting (no logic change)
-- `refactor`: Code refactoring
-- `perf`: Performance improvements
-- `test`: Adding/updating tests
-- `build`: Build system changes
-- `ci`: CI/CD changes
-- `chore`: Maintenance tasks
-- `revert`: Reverting previous changes
-- `hotfix`: Critical production fix
+-   `feat`: New feature
+-   `fix`: Bug fix
+-   `docs`: Documentation changes
+-   `style`: Code style/formatting (no logic change)
+-   `refactor`: Code refactoring
+-   `perf`: Performance improvements
+-   `test`: Adding/updating tests
+-   `build`: Build system changes
+-   `ci`: CI/CD changes
+-   `chore`: Maintenance tasks
+-   `revert`: Reverting previous changes
+-   `hotfix`: Critical production fix
 
 ### Examples
 
@@ -266,33 +266,33 @@ Part of #156
 
 #### 1. Auto-Labeling
 
-- **File-based:** Labels added based on changed files
-- **Size-based:** `size/xs`, `size/s`, `size/m`, `size/l`, `size/xl`
-- **Branch-based:** Labels from branch name prefix
+-   **File-based:** Labels added based on changed files
+-   **Size-based:** `size/xs`, `size/s`, `size/m`, `size/l`, `size/xl`
+-   **Branch-based:** Labels from branch name prefix
 
 #### 2. Auto-Assignment
 
-- **CODEOWNERS:** Reviewers auto-assigned based on files
-- **Team-based:** Backend/frontend teams assigned automatically
+-   **CODEOWNERS:** Reviewers auto-assigned based on files
+-   **Team-based:** Backend/frontend teams assigned automatically
 
 #### 3. Quality Checks
 
-- ✅ Linting (ESLint)
-- ✅ Type checking (TypeScript)
-- ✅ Build verification
-- ✅ Test execution
-- ✅ Security scanning
+-   ✅ Linting (ESLint)
+-   ✅ Type checking (TypeScript)
+-   ✅ Build verification
+-   ✅ Test execution
+-   ✅ Security scanning
 
 #### 4. Duplicate Detection
 
-- Checks for duplicate PRs from same branch
-- Adds `duplicate` label if found
+-   Checks for duplicate PRs from same branch
+-   Adds `duplicate` label if found
 
 #### 5. PR Title Validation
 
-- Enforces Conventional Commits format
-- Must start with valid type
-- Subject must be capitalized
+-   Enforces Conventional Commits format
+-   Must start with valid type
+-   Subject must be capitalized
 
 ### Check Status
 
@@ -312,9 +312,9 @@ View checks at bottom of PR:
 
 **Auto-assigned based on:**
 
-- CODEOWNERS file
-- Changed files
-- Team membership
+-   CODEOWNERS file
+-   Changed files
+-   Team membership
 
 **Manual requests:**
 
@@ -521,8 +521,8 @@ npx prisma migrate dev --name add_crypto_wallets
 
 ## Performance
 
-- Wallet generation: ~200ms average
-- No impact on existing endpoints
+-   Wallet generation: ~200ms average
+-   No impact on existing endpoints
 
 ## Rollback Plan
 
@@ -625,14 +625,14 @@ Related to #123 (webhook monitoring)
 
 ### Test Cases Added
 
-- [x] Webhook timeout handling
-- [x] Background job execution
-- [x] Database query performance
+-   [x] Webhook timeout handling
+-   [x] Background job execution
+-   [x] Database query performance
 
 ## Performance Impact
 
-- Webhook processing: 16s → 8s (50% improvement)
-- Database query: 5s → 0.5s (indexed)
+-   Webhook processing: 16s → 8s (50% improvement)
+-   Database query: 5s → 0.5s (indexed)
 
 ## Rollback Plan
 
@@ -648,9 +648,9 @@ npm run build && pm2 restart advancia-backend
 
 Watch these metrics for 24 hours:
 
-- Webhook success rate (target: >98%)
-- Payment confirmation time (target: <10s)
-- Database query time (target: <1s)
+-   Webhook success rate (target: >98%)
+-   Payment confirmation time (target: <10s)
+-   Database query time (target: <1s)
 
 ```
 
@@ -732,22 +732,22 @@ npm run build && pm2 restart
 
 Watch for 1 hour:
 
-- Payment success rate: target >95%
-- Gateway response time: target <3s
-- Error rate: target <1%
+-   Payment success rate: target >95%
+-   Gateway response time: target <3s
+-   Error rate: target <1%
 
 ## Follow-up Tasks
 
-- [ ] Post-mortem (#790)
-- [ ] Improve monitoring (#791)
-- [ ] Add redundancy tests (#792)
+-   [ ] Post-mortem (#790)
+-   [ ] Improve monitoring (#791)
+-   [ ] Add redundancy tests (#792)
 
 ## Communication
 
-- [x] Engineering team notified
-- [x] Product team notified
-- [x] Support team notified
-- [ ] Customer email (if >2 hour outage)
+-   [x] Engineering team notified
+-   [x] Product team notified
+-   [x] Support team notified
+-   [ ] Customer email (if >2 hour outage)
 
 Incident channel: #incident-2024-11-20
 
@@ -848,9 +848,9 @@ Implements feature X with tests and documentation
 
 **Tip:** Break large PRs into smaller, focused ones:
 
-- PR #1: Add feature X
-- PR #2: Fix related bug Y
-- PR #3: Update documentation
+-   PR #1: Add feature X
+-   PR #2: Fix related bug Y
+-   PR #3: Update documentation
 
 ### 6. Mixing Concerns
 
@@ -935,19 +935,19 @@ Before creating your PR:
 
 ## 🎓 Additional Resources
 
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [GitHub PR Documentation](https://docs.github.com/en/pull-requests)
-- [Code Review Best Practices](../docs/CODE_REVIEW.md)
-- [Git Workflow Guide](../docs/GIT_WORKFLOW.md)
-- [CODEOWNERS Guide](../docs/CODEOWNERS.md)
+-   [Conventional Commits](https://www.conventionalcommits.org/)
+-   [GitHub PR Documentation](https://docs.github.com/en/pull-requests)
+-   [Code Review Best Practices](../docs/CODE_REVIEW.md)
+-   [Git Workflow Guide](../docs/GIT_WORKFLOW.md)
+-   [CODEOWNERS Guide](../docs/CODEOWNERS.md)
 
 ---
 
 ## 🆘 Need Help?
 
-- 💬 Ask in Slack: #dev-help
-- 📧 Email: dev-team@advancia.com
-- 📚 Wiki: https://wiki.advancia.com/pr-guide
+-   💬 Ask in Slack: #dev-help
+-   📧 Email: <dev-team@advancia.com>
+-   📚 Wiki: <https://wiki.advancia.com/pr-guide>
 
 ---
 

@@ -195,17 +195,14 @@ After a doctor registers with `status: "PENDING"`, an admin must verify them:
 ### Admin API Endpoints (Already Implemented)
 
 1. **GET** `/api/admin/doctors?status=PENDING`
-
    - Lists all doctors (filter by status)
    - Requires `x-admin-key: supersecureadminkey123` header
 
 2. **POST** `/api/admin/doctor/:id/verify`
-
    - Verifies a doctor (sets status = VERIFIED)
    - Requires `x-admin-key` header
 
 3. **POST** `/api/admin/doctor/:id/suspend`
-
    - Suspends a doctor (sets status = SUSPENDED)
    - Requires `x-admin-key` header
 
@@ -327,11 +324,7 @@ const doctor = await prisma.doctor.create({
 });
 
 // 6. Generate JWT token
-const token = jwt.sign(
-  { doctorId: doctor.id, email: doctor.email, type: "doctor" },
-  config.jwtSecret,
-  { expiresIn: "7d" }
-);
+const token = jwt.sign({ doctorId: doctor.id, email: doctor.email, type: "doctor" }, config.jwtSecret, { expiresIn: "7d" });
 ```
 
 ### Frontend: Registration Form

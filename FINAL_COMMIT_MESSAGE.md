@@ -9,33 +9,38 @@ This commit introduces a comprehensive, automated deployment system for multi-re
 ## ✨ Features
 
 ### 1. Flexible Deployment Orchestration
-- **Sequential Mode**: US East → EU West → APAC Southeast with auto-cascading health gates
-- **Delayed Mode**: Configurable observation periods (30min - 4 hours) between regions
-- **Parallel Mode**: Simultaneous deployment to all regions (~45 minutes)
+
+-   **Sequential Mode**: US East → EU West → APAC Southeast with auto-cascading health gates
+-   **Delayed Mode**: Configurable observation periods (30min - 4 hours) between regions
+-   **Parallel Mode**: Simultaneous deployment to all regions (~45 minutes)
 
 ### 2. Progressive Canary Rollouts
-- 5-stage progression: 10% → 25% → 50% → 75% → 100%
-- Adaptive thresholds per stage (stricter at lower percentages)
-- 5 minutes monitoring per stage, 30 minutes validation at 100%
-- Automatic rollback on any threshold breach
+
+-   5-stage progression: 10% → 25% → 50% → 75% → 100%
+-   Adaptive thresholds per stage (stricter at lower percentages)
+-   5 minutes monitoring per stage, 30 minutes validation at 100%
+-   Automatic rollback on any threshold breach
 
 ### 3. Automated Incident Response
-- Real-time Slack Quick Cards with incident details
-- Metrics-based cause analysis (error rate, latency spike detection)
-- Dashboard and log links included in every alert
-- Microsoft Teams webhook support
+
+-   Real-time Slack Quick Cards with incident details
+-   Metrics-based cause analysis (error rate, latency spike detection)
+-   Dashboard and log links included in every alert
+-   Microsoft Teams webhook support
 
 ### 4. Regional Isolation & Safety
-- Independent rollback per region (failing region doesn't affect others)
-- Downstream deployment protection (stop chain on failure)
-- Immutable artifact promotion (build once, deploy everywhere)
-- Backward-compatible schema changes enforced
+
+-   Independent rollback per region (failing region doesn't affect others)
+-   Downstream deployment protection (stop chain on failure)
+-   Immutable artifact promotion (build once, deploy everywhere)
+-   Backward-compatible schema changes enforced
 
 ### 5. Enterprise-Grade Observability
-- Prometheus metrics pushed at every canary stage
-- Grafana dashboard annotations with deployment markers
-- Correlation IDs for distributed tracing
-- Verbose logging with structured output
+
+-   Prometheus metrics pushed at every canary stage
+-   Grafana dashboard annotations with deployment markers
+-   Correlation IDs for distributed tracing
+-   Verbose logging with structured output
 
 ---
 
@@ -93,12 +98,12 @@ gh workflow run multi-region-deployment-with-monitoring.yml \
 ## 📊 Canary Thresholds
 
 | Stage | Traffic Distribution | Error Rate | Latency P95 | Monitoring Time |
-|-------|---------------------|------------|-------------|-----------------|
-| 10%   | 10% Green / 90% Blue | ≤ 1.0% | ≤ 500ms | 5 minutes |
-| 25%   | 25% Green / 75% Blue | ≤ 0.8% | ≤ 450ms | 5 minutes |
-| 50%   | 50% Green / 50% Blue | ≤ 0.5% | ≤ 400ms | 5 minutes |
-| 75%   | 75% Green / 25% Blue | ≤ 0.3% | ≤ 350ms | 5 minutes |
-| 100%  | 100% Green / 0% Blue | ≤ 0.2% | ≤ 300ms | 30 minutes |
+| ----- | -------------------- | ---------- | ----------- | --------------- |
+| 10%   | 10% Green / 90% Blue | ≤ 1.0%     | ≤ 500ms     | 5 minutes       |
+| 25%   | 25% Green / 75% Blue | ≤ 0.8%     | ≤ 450ms     | 5 minutes       |
+| 50%   | 50% Green / 50% Blue | ≤ 0.5%     | ≤ 400ms     | 5 minutes       |
+| 75%   | 75% Green / 25% Blue | ≤ 0.3%     | ≤ 350ms     | 5 minutes       |
+| 100%  | 100% Green / 0% Blue | ≤ 0.2%     | ≤ 300ms     | 30 minutes      |
 
 **Auto-rollback:** Triggered immediately on any threshold breach
 
@@ -121,8 +126,9 @@ gh workflow run multi-region-deployment-with-monitoring.yml \
 ```
 
 **Channels:**
-- `#deployments` - Success notifications
-- `#incidents-deployments` - Failure alerts with Quick Cards
+
+-   `#deployments` - Success notifications
+-   `#incidents-deployments` - Failure alerts with Quick Cards
 
 ---
 
@@ -131,23 +137,23 @@ gh workflow run multi-region-deployment-with-monitoring.yml \
 Before first deployment:
 
 1. **Create GitHub Environments** (5 minutes)
-   - `production-us-east`
-   - `production-eu-west`
-   - `production-apac-se`
+   -   `production-us-east`
+   -   `production-eu-west`
+   -   `production-apac-se`
 
 2. **Configure Repository Secrets** (10 minutes)
-   - `SLACK_WEBHOOK_URL` - Incident Quick Cards
-   - `GLOBAL_SLACK_WEBHOOK` - Deployment summaries
-   - `DROPLET_IP_GREEN` / `DROPLET_IP_BLUE` - Environment targets
-   - `LB_IP` - Load balancer IP
-   - `DROPLET_USER` - SSH deployment user
-   - `PROMETHEUS_PUSHGATEWAY_URL` - Metrics endpoint
-   - `CF_ZONE_ID` / `CF_API_TOKEN` / `CF_RECORD_ID_API` - Cloudflare DNS
-   - `GRAFANA_API_KEY` - Dashboard annotations
+   -   `SLACK_WEBHOOK_URL` - Incident Quick Cards
+   -   `GLOBAL_SLACK_WEBHOOK` - Deployment summaries
+   -   `DROPLET_IP_GREEN` / `DROPLET_IP_BLUE` - Environment targets
+   -   `LB_IP` - Load balancer IP
+   -   `DROPLET_USER` - SSH deployment user
+   -   `PROMETHEUS_PUSHGATEWAY_URL` - Metrics endpoint
+   -   `CF_ZONE_ID` / `CF_API_TOKEN` / `CF_RECORD_ID_API` - Cloudflare DNS
+   -   `GRAFANA_API_KEY` - Dashboard annotations
 
 3. **Configure Environment Protection Rules** (5 minutes)
-   - Required reviewers: 1 functional + 1 SRE per environment
-   - Branch restrictions: Only `main` or `release/*` branches
+   -   Required reviewers: 1 functional + 1 SRE per environment
+   -   Branch restrictions: Only `main` or `release/*` branches
 
 ---
 
@@ -165,26 +171,28 @@ Before first deployment:
 
 ## 📚 Documentation
 
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| `PRODUCTION_PACKAGE_README.md` | Complete system overview + quick start | All teams |
-| `DEPLOYMENT_QUICK_REFERENCE.md` | Fast-access deployment day card | Engineers |
-| `PRODUCTION_READINESS_CHECKLIST.md` | Pre-deployment validation | SRE/Ops |
-| `DEPLOYMENT_DEBUGGING_GUIDE.md` | Troubleshooting + incident response | On-call engineers |
-| `AUTOMATED_REGIONAL_CHAINING_GUIDE.md` | Regional orchestration patterns | Platform team |
+| Document                               | Purpose                                | Audience          |
+| -------------------------------------- | -------------------------------------- | ----------------- |
+| `PRODUCTION_PACKAGE_README.md`         | Complete system overview + quick start | All teams         |
+| `DEPLOYMENT_QUICK_REFERENCE.md`        | Fast-access deployment day card        | Engineers         |
+| `PRODUCTION_READINESS_CHECKLIST.md`    | Pre-deployment validation              | SRE/Ops           |
+| `DEPLOYMENT_DEBUGGING_GUIDE.md`        | Troubleshooting + incident response    | On-call engineers |
+| `AUTOMATED_REGIONAL_CHAINING_GUIDE.md` | Regional orchestration patterns        | Platform team     |
 
 ---
 
 ## 🔄 Rollback Procedures
 
 ### Automated (Default)
-- Triggers on threshold breach
-- Reverts DNS to Blue environment
-- Updates load balancer configuration
-- Posts Quick Card to Slack
-- Stops downstream deployments
+
+-   Triggers on threshold breach
+-   Reverts DNS to Blue environment
+-   Updates load balancer configuration
+-   Posts Quick Card to Slack
+-   Stops downstream deployments
 
 ### Manual (Emergency)
+
 ```bash
 gh workflow run emergency-rollback.yml -f region=us
 # Or use script directly:
@@ -196,27 +204,28 @@ gh workflow run emergency-rollback.yml -f region=us
 ## 📈 Success Criteria
 
 Per-region validation:
-- ✅ All canary stages passed (10% → 100%)
-- ✅ Error rate < 0.2%
-- ✅ Latency P95 < 300ms
-- ✅ CPU < 70%, Memory < 70%
-- ✅ Health check: 200 OK for 30 minutes at 100%
-- ✅ No rollback triggered
+
+-   ✅ All canary stages passed (10% → 100%)
+-   ✅ Error rate < 0.2%
+-   ✅ Latency P95 < 300ms
+-   ✅ CPU < 70%, Memory < 70%
+-   ✅ Health check: 200 OK for 30 minutes at 100%
+-   ✅ No rollback triggered
 
 ---
 
 ## 🎓 Migration Path
 
 1. **Delayed Mode (First 5 deployments)**
-   - Maximum safety with observation periods
-   - Learn from US East before EU/APAC
-   - Duration: ~5.5 hours
+   -   Maximum safety with observation periods
+   -   Learn from US East before EU/APAC
+   -   Duration: ~5.5 hours
 
 2. **Transition to Parallel**
-   - After 5 successful delayed runs
-   - Verify rollback drills completed
-   - Confirm regional independence
-   - Duration: ~45 minutes
+   -   After 5 successful delayed runs
+   -   Verify rollback drills completed
+   -   Confirm regional independence
+   -   Duration: ~45 minutes
 
 ---
 
@@ -227,6 +236,7 @@ Per-region validation:
 **Escalation Path:** Slack mention → P1 JIRA ticket → Page VP Engineering
 
 **Emergency Rollback:**
+
 ```bash
 gh workflow run emergency-rollback.yml -f region=<us|eu|apac>
 ```
@@ -235,46 +245,49 @@ gh workflow run emergency-rollback.yml -f region=<us|eu|apac>
 
 ## 🧪 Testing
 
-- ✅ Staging deployments validated (all strategies)
-- ✅ Canary threshold validation tested
-- ✅ Rollback scenarios verified
-- ✅ Slack notification integration confirmed
-- ✅ Metrics collection and alerting validated
-- ✅ Regional isolation confirmed
-- ✅ Documentation reviewed by SRE team
+-   ✅ Staging deployments validated (all strategies)
+-   ✅ Canary threshold validation tested
+-   ✅ Rollback scenarios verified
+-   ✅ Slack notification integration confirmed
+-   ✅ Metrics collection and alerting validated
+-   ✅ Regional isolation confirmed
+-   ✅ Documentation reviewed by SRE team
 
 ---
 
 ## 📊 Impact Assessment
 
 ### Performance
-- **Deployment time (delayed):** 5.5 hours (US → EU → APAC with observation)
-- **Deployment time (parallel):** 45 minutes (all regions simultaneously)
-- **Rollback time:** <90 seconds (automated)
-- **Detection time:** <5 minutes (per canary stage)
+
+-   **Deployment time (delayed):** 5.5 hours (US → EU → APAC with observation)
+-   **Deployment time (parallel):** 45 minutes (all regions simultaneously)
+-   **Rollback time:** <90 seconds (automated)
+-   **Detection time:** <5 minutes (per canary stage)
 
 ### Reliability
-- **Regional isolation:** ✅ Single region failure contained
-- **Auto-rollback success rate:** 100% (tested in staging)
-- **Zero-downtime deployments:** ✅ Blue/Green strategy
-- **Backward compatibility:** ✅ Schema changes validated
+
+-   **Regional isolation:** ✅ Single region failure contained
+-   **Auto-rollback success rate:** 100% (tested in staging)
+-   **Zero-downtime deployments:** ✅ Blue/Green strategy
+-   **Backward compatibility:** ✅ Schema changes validated
 
 ### Observability
-- **Metrics collected:** Error rate, latency P95, CPU, memory, traffic distribution
-- **Dashboards:** Global overview + 3 regional views
-- **Alerts:** Automated Slack Quick Cards on all events
-- **Traceability:** Correlation IDs, deployment annotations, audit logs
+
+-   **Metrics collected:** Error rate, latency P95, CPU, memory, traffic distribution
+-   **Dashboards:** Global overview + 3 regional views
+-   **Alerts:** Automated Slack Quick Cards on all events
+-   **Traceability:** Correlation IDs, deployment annotations, audit logs
 
 ---
 
 ## 🔐 Security Considerations
 
-- ✅ Secrets scoped per environment
-- ✅ Least privilege access enforced
-- ✅ Required reviewer approvals configured
-- ✅ Branch protection rules active
-- ✅ Immutable artifacts (no rebuilds in production)
-- ✅ Audit trail maintained (GitHub Actions logs + Grafana annotations)
+-   ✅ Secrets scoped per environment
+-   ✅ Least privilege access enforced
+-   ✅ Required reviewer approvals configured
+-   ✅ Branch protection rules active
+-   ✅ Immutable artifacts (no rebuilds in production)
+-   ✅ Audit trail maintained (GitHub Actions logs + Grafana annotations)
 
 ---
 

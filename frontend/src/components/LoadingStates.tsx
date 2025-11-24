@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React from 'react';
+import { motion } from 'framer-motion';
 
 interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg'
-  message?: string
-  fullScreen?: boolean
+  size?: 'sm' | 'md' | 'lg';
+  message?: string;
+  fullScreen?: boolean;
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
@@ -18,7 +18,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     sm: 'w-6 h-6',
     md: 'w-12 h-12',
     lg: 'w-16 h-16',
-  }
+  };
 
   const spinner = (
     <div className="flex flex-col items-center gap-4">
@@ -29,24 +29,24 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       />
       {message && <p className="text-gray-600 text-sm font-medium">{message}</p>}
     </div>
-  )
+  );
 
   if (fullScreen) {
     return (
       <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
         {spinner}
       </div>
-    )
+    );
   }
 
-  return spinner
-}
+  return spinner;
+};
 
 interface ErrorAlertProps {
-  title?: string
-  message: string
-  onDismiss?: () => void
-  type?: 'error' | 'warning' | 'info'
+  title?: string;
+  message: string;
+  onDismiss?: () => void;
+  type?: 'error' | 'warning' | 'info';
 }
 
 export const ErrorAlert: React.FC<ErrorAlertProps> = ({
@@ -59,25 +59,25 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({
     error: 'bg-red-50 border-red-200',
     warning: 'bg-yellow-50 border-yellow-200',
     info: 'bg-blue-50 border-blue-200',
-  }
+  };
 
   const textColors = {
     error: 'text-red-800',
     warning: 'text-yellow-800',
     info: 'text-blue-800',
-  }
+  };
 
   const iconColors = {
     error: 'text-red-600',
     warning: 'text-yellow-600',
     info: 'text-blue-600',
-  }
+  };
 
   const icons = {
     error: '⚠️',
     warning: '⚠️',
     info: 'ℹ️',
-  }
+  };
 
   return (
     <motion.div
@@ -103,12 +103,12 @@ export const ErrorAlert: React.FC<ErrorAlertProps> = ({
         )}
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
 interface SkeletonProps {
-  count?: number
-  height?: string
+  count?: number;
+  height?: string;
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({ count = 3, height = 'h-4' }) => {
@@ -123,5 +123,5 @@ export const Skeleton: React.FC<SkeletonProps> = ({ count = 3, height = 'h-4' })
         />
       ))}
     </div>
-  )
-}
+  );
+};

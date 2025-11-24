@@ -84,10 +84,10 @@ curl https://advancia-backend.onrender.com/joke
 
 ## 🎯 What This Fixes
 
-- ✅ **502 Bad Gateway** → Backend will start successfully
-- ✅ **Web Push Notifications** → VAPID keys now valid
-- ✅ **Stripe Webhooks** → Payment events will be received and verified
-- ✅ **Real-time Updates** → Socket.IO will work for payment status
+-   ✅ **502 Bad Gateway** → Backend will start successfully
+-   ✅ **Web Push Notifications** → VAPID keys now valid
+-   ✅ **Stripe Webhooks** → Payment events will be received and verified
+-   ✅ **Real-time Updates** → Socket.IO will work for payment status
 
 Note: Build failures caused by Prisma 7 (P1012: datasource url in schema) are mitigated by pinning Prisma CLI and client to 5.22.0 in `backend/package.json`.
 
@@ -100,9 +100,9 @@ Once your custom domain is active, switch to: `https://api.advanciapayledger.com
 
 **Events Configured**:
 
-- ✅ `payment_intent.succeeded`
-- ✅ `payment_intent.payment_failed`
-- ✅ `payment_intent.canceled`
+-   ✅ `payment_intent.succeeded`
+-   ✅ `payment_intent.payment_failed`
+-   ✅ `payment_intent.canceled`
 
 **Webhook Secret**: `whsec_yCcQbvfb1lH1JEeUTyNvhvATXMc2kcUl`
 

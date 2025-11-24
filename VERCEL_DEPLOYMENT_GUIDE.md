@@ -18,19 +18,20 @@ vercel --prod
 
 ### Step 2: Configure Render PostgreSQL
 
-1. **Go to**: https://dashboard.render.com/
+1. **Go to**: <https://dashboard.render.com/>
 2. **Create PostgreSQL Database**:
-   - Name: `advancia-db`
-   - Region: `Oregon (US West)` or closest to your users
-   - Plan: `Starter` ($7/month) or `Free` (expires after 90 days)
+   -   Name: `advancia-db`
+   -   Region: `Oregon (US West)` or closest to your users
+   -   Plan: `Starter` ($7/month) or `Free` (expires after 90 days)
 3. **Copy Connection String**:
+
    ```
    postgresql://username:password@host:5432/database
    ```
 
 ### Step 3: Update Environment Variables
 
-#### Vercel Frontend Environment Variables:
+#### Vercel Frontend Environment Variables
 
 ```bash
 # Go to: https://vercel.com/your-project/settings/environment-variables
@@ -40,7 +41,7 @@ NEXT_PUBLIC_FRONTEND_URL=https://advancia.vercel.app
 NODE_ENV=production
 ```
 
-#### Render Backend Environment Variables:
+#### Render Backend Environment Variables
 
 ```bash
 # In Render Dashboard → Your Web Service → Environment
@@ -123,34 +124,34 @@ vercel --prod --env NEXT_PUBLIC_API_URL=https://api.example.com
 
 ### 1. Create Database
 
-**Dashboard**: https://dashboard.render.com/new/database
+**Dashboard**: <https://dashboard.render.com/new/database>
 
-- **Name**: `advancia-db`
-- **Database**: `advancia_db`
-- **User**: Auto-generated
-- **Region**: Oregon (US West)
-- **PostgreSQL Version**: 16
-- **Plan**: Starter ($7/mo) or Free
+-   **Name**: `advancia-db`
+-   **Database**: `advancia_db`
+-   **User**: Auto-generated
+-   **Region**: Oregon (US West)
+-   **PostgreSQL Version**: 16
+-   **Plan**: Starter ($7/mo) or Free
 
 ### 2. Get Connection Details
 
 After creation, copy:
 
-- **Internal Database URL** (for Render services): `postgresql://...`
-- **External Database URL** (for local dev): `postgresql://...`
+-   **Internal Database URL** (for Render services): `postgresql://...`
+-   **External Database URL** (for local dev): `postgresql://...`
 
 ### 3. Connect Backend to Render PostgreSQL
 
 #### Option A: Deploy Backend to Render
 
-1. **Create Web Service**: https://dashboard.render.com/new/web
+1. **Create Web Service**: <https://dashboard.render.com/new/web>
 2. **Connect Repository**: Link your GitHub repo
 3. **Configure**:
-   - Name: `advancia-backend`
-   - Region: Same as database (Oregon)
-   - Branch: `main` or `preview`
-   - Build Command: `cd backend && npm install && npm run build`
-   - Start Command: `cd backend && npm start`
+   -   Name: `advancia-backend`
+   -   Region: Same as database (Oregon)
+   -   Branch: `main` or `preview`
+   -   Build Command: `cd backend && npm install && npm run build`
+   -   Start Command: `cd backend && npm start`
 4. **Environment Variables**: Add `DATABASE_URL` from Render PostgreSQL
 
 #### Option B: Deploy Backend to Digital Ocean
@@ -189,19 +190,19 @@ cd backend && npm install && npx prisma migrate deploy && npm run build
 
 ### Vercel Security
 
-- ✅ Use environment variables for all secrets
-- ✅ Enable "Automatically expose System Environment Variables" (OFF)
-- ✅ Add custom domains with SSL
-- ✅ Configure CORS headers in `vercel.json`
-- ✅ Enable DDoS protection (automatic)
+-   ✅ Use environment variables for all secrets
+-   ✅ Enable "Automatically expose System Environment Variables" (OFF)
+-   ✅ Add custom domains with SSL
+-   ✅ Configure CORS headers in `vercel.json`
+-   ✅ Enable DDoS protection (automatic)
 
 ### Render PostgreSQL Security
 
-- ✅ Use internal database URL for Render services
-- ✅ Whitelist IPs for external access
-- ✅ Enable SSL connections (required)
-- ✅ Regular backups (automatic on paid plans)
-- ✅ Rotate database credentials periodically
+-   ✅ Use internal database URL for Render services
+-   ✅ Whitelist IPs for external access
+-   ✅ Enable SSL connections (required)
+-   ✅ Regular backups (automatic on paid plans)
+-   ✅ Rotate database credentials periodically
 
 ---
 
@@ -295,36 +296,34 @@ allowedOrigins: [
 
 ### Vercel
 
-- **Hobby Plan**: $0/month
+-   **Hobby Plan**: $0/month
+    -   100GB bandwidth
+    -   Serverless functions
+    -   Custom domains
+    -   Automatic SSL
 
-  - 100GB bandwidth
-  - Serverless functions
-  - Custom domains
-  - Automatic SSL
-
-- **Pro Plan**: $20/month
-  - More bandwidth
-  - Team collaboration
-  - Advanced analytics
+-   **Pro Plan**: $20/month
+    -   More bandwidth
+    -   Team collaboration
+    -   Advanced analytics
 
 ### Render PostgreSQL
 
-- **Free Plan**: $0/month
+-   **Free Plan**: $0/month
+    -   90-day expiry
+    -   1GB storage
+    -   Good for testing
 
-  - 90-day expiry
-  - 1GB storage
-  - Good for testing
-
-- **Starter Plan**: $7/month
-  - No expiry
-  - 10GB storage
-  - Daily backups
-  - 99.9% uptime SLA
+-   **Starter Plan**: $7/month
+    -   No expiry
+    -   10GB storage
+    -   Daily backups
+    -   99.9% uptime SLA
 
 ### Total Cost Estimate
 
-- **Development**: $0/month (Vercel Hobby + Render Free)
-- **Production**: $27/month (Vercel Hobby + Render Starter $7 + Render Web Service $7)
+-   **Development**: $0/month (Vercel Hobby + Render Free)
+-   **Production**: $27/month (Vercel Hobby + Render Starter $7 + Render Web Service $7)
 
 ---
 
@@ -334,38 +333,38 @@ Before going live:
 
 ### Frontend (Vercel)
 
-- [ ] Custom domain configured
-- [ ] SSL certificate active
-- [ ] Environment variables set
-- [ ] API proxy configured
-- [ ] CORS headers added
-- [ ] Analytics enabled
+-   [ ] Custom domain configured
+-   [ ] SSL certificate active
+-   [ ] Environment variables set
+-   [ ] API proxy configured
+-   [ ] CORS headers added
+-   [ ] Analytics enabled
 
 ### Backend (Render/Digital Ocean)
 
-- [ ] Database connection tested
-- [ ] Prisma migrations run
-- [ ] Environment variables set
-- [ ] Health check endpoint working
-- [ ] Logs monitoring enabled
-- [ ] PM2 or Render auto-restart configured
+-   [ ] Database connection tested
+-   [ ] Prisma migrations run
+-   [ ] Environment variables set
+-   [ ] Health check endpoint working
+-   [ ] Logs monitoring enabled
+-   [ ] PM2 or Render auto-restart configured
 
 ### Database (Render PostgreSQL)
 
-- [ ] Connection string secured
-- [ ] Backups enabled
-- [ ] SSL enforced
-- [ ] IP whitelist configured
-- [ ] Connection pooling enabled
+-   [ ] Connection string secured
+-   [ ] Backups enabled
+-   [ ] SSL enforced
+-   [ ] IP whitelist configured
+-   [ ] Connection pooling enabled
 
 ---
 
 ## 📚 Additional Resources
 
-- **Vercel Docs**: https://vercel.com/docs
-- **Render PostgreSQL Docs**: https://render.com/docs/databases
-- **Next.js Deployment**: https://nextjs.org/docs/deployment
-- **Prisma with PostgreSQL**: https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/postgresql
+-   **Vercel Docs**: <https://vercel.com/docs>
+-   **Render PostgreSQL Docs**: <https://render.com/docs/databases>
+-   **Next.js Deployment**: <https://nextjs.org/docs/deployment>
+-   **Prisma with PostgreSQL**: <https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/postgresql>
 
 ---
 

@@ -14,10 +14,10 @@
 .\simple-watchdog.ps1 -Action watchdog
 ```
 
-- Monitors backend on port 4000
-- Checks every 60 seconds
-- Logs to `~\backend-watchdog.log`
-- Auto-restarts on failure
+-   Monitors backend on port 4000
+-   Checks every 60 seconds
+-   Logs to `~\backend-watchdog.log`
+-   Auto-restarts on failure
 
 ### With Custom Log File
 
@@ -83,24 +83,24 @@
 
 ### ✅ Included
 
-- **Health Monitoring**: Checks `/api/health` endpoint
-- **Auto-Restart**: Uses PM2 to restart backend on failure
-- **Logging**: All events written to log file with timestamps
-- **Slack Notifications**: Optional webhook integration
-- **Email Alerts**: Optional SMTP notifications
-- **Statistics Tracking**: Uptime, check count, restart count
-- **Graceful Shutdown**: Ctrl+C handler with summary stats
-- **Colored Console Output**: Easy-to-read status messages
+-   **Health Monitoring**: Checks `/api/health` endpoint
+-   **Auto-Restart**: Uses PM2 to restart backend on failure
+-   **Logging**: All events written to log file with timestamps
+-   **Slack Notifications**: Optional webhook integration
+-   **Email Alerts**: Optional SMTP notifications
+-   **Statistics Tracking**: Uptime, check count, restart count
+-   **Graceful Shutdown**: Ctrl+C handler with summary stats
+-   **Colored Console Output**: Easy-to-read status messages
 
 ### ❌ Not Included (Use `backend-watchdog.ps1` Instead)
 
-- Advanced PM2 management options
-- Configurable retry thresholds
-- Multiple failure tracking
-- Detailed statistics dashboard
-- Background execution mode
-- PID tracking and process management
-- Alert system placeholders for SMS/PagerDuty
+-   Advanced PM2 management options
+-   Configurable retry thresholds
+-   Multiple failure tracking
+-   Detailed statistics dashboard
+-   Background execution mode
+-   PID tracking and process management
+-   Alert system placeholders for SMS/PagerDuty
 
 ---
 
@@ -128,22 +128,22 @@
 
 ## When to Use
 
-### Use `simple-watchdog.ps1` If:
+### Use `simple-watchdog.ps1` If
 
-- ✅ You want quick setup (< 5 minutes)
-- ✅ You need basic monitoring and restart
-- ✅ You're testing the notification system
-- ✅ You prefer a single-file solution
-- ✅ You don't need advanced statistics
+-   ✅ You want quick setup (< 5 minutes)
+-   ✅ You need basic monitoring and restart
+-   ✅ You're testing the notification system
+-   ✅ You prefer a single-file solution
+-   ✅ You don't need advanced statistics
 
-### Use `backend-watchdog.ps1` If:
+### Use `backend-watchdog.ps1` If
 
-- ✅ You need production-grade monitoring
-- ✅ You want configurable retry thresholds
-- ✅ You need detailed statistics and reporting
-- ✅ You want alert level filtering
-- ✅ You need background execution
-- ✅ You want PID tracking
+-   ✅ You need production-grade monitoring
+-   ✅ You want configurable retry thresholds
+-   ✅ You need detailed statistics and reporting
+-   ✅ You want alert level filtering
+-   ✅ You need background execution
+-   ✅ You want PID tracking
 
 ---
 
@@ -311,38 +311,38 @@ Send-MailMessage -To "test@example.com" -From "sender@example.com" -Subject "Tes
 **Problem**: Script errors on startup
 **Solution**:
 
-- Check PowerShell execution policy: `Get-ExecutionPolicy`
-- Set if needed: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
-- Verify PM2 is installed: `pm2 --version`
+-   Check PowerShell execution policy: `Get-ExecutionPolicy`
+-   Set if needed: `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
+-   Verify PM2 is installed: `pm2 --version`
 
 ### Notifications Not Sending
 
 **Problem**: No Slack/Email alerts received
 **Solution**:
 
-- Verify webhook URL is correct (Slack)
-- Check SMTP credentials (Email)
-- Test manually (see tips above)
-- Check log file for error messages
+-   Verify webhook URL is correct (Slack)
+-   Check SMTP credentials (Email)
+-   Test manually (see tips above)
+-   Check log file for error messages
 
 ### Health Checks Always Fail
 
 **Problem**: Continuous restart loops
 **Solution**:
 
-- Verify backend is actually running: `pm2 status`
-- Check correct port: `netstat -ano | findstr :4000`
-- Test health endpoint manually: `curl http://localhost:4000/api/health`
-- Check backend logs: `pm2 logs advancia-backend`
+-   Verify backend is actually running: `pm2 status`
+-   Check correct port: `netstat -ano | findstr :4000`
+-   Test health endpoint manually: `curl http://localhost:4000/api/health`
+-   Check backend logs: `pm2 logs advancia-backend`
 
 ### Log File Permission Denied
 
 **Problem**: Can't write to log file
 **Solution**:
 
-- Use a path you have write access to
-- Try `$env:USERPROFILE\watchdog.log` (user home directory)
-- Or `.\watchdog.log` (current directory)
+-   Use a path you have write access to
+-   Try `$env:USERPROFILE\watchdog.log` (user home directory)
+-   Or `.\watchdog.log` (current directory)
 
 ---
 
@@ -366,18 +366,18 @@ Send-MailMessage -To "test@example.com" -From "sender@example.com" -Subject "Tes
 
 `simple-watchdog.ps1` provides:
 
-- ✅ Quick 2-minute setup
-- ✅ Essential monitoring features
-- ✅ Slack & Email notifications
-- ✅ File logging with timestamps
-- ✅ Single-file simplicity
+-   ✅ Quick 2-minute setup
+-   ✅ Essential monitoring features
+-   ✅ Slack & Email notifications
+-   ✅ File logging with timestamps
+-   ✅ Single-file simplicity
 
 Perfect for:
 
-- 🎯 Quick testing
-- 🎯 Development environments
-- 🎯 Learning the system
-- 🎯 Small deployments
+-   🎯 Quick testing
+-   🎯 Development environments
+-   🎯 Learning the system
+-   🎯 Small deployments
 
 For production environments with advanced needs, upgrade to `backend-watchdog.ps1`.
 
@@ -385,6 +385,6 @@ For production environments with advanced needs, upgrade to `backend-watchdog.ps
 
 **Related Documentation**:
 
-- [WATCHDOG_NOTIFICATIONS.md](./WATCHDOG_NOTIFICATIONS.md) - Complete watchdog guide
-- [WATCHDOG_QUICK_START.md](./WATCHDOG_QUICK_START.md) - Full watchdog quick start
-- [WATCHDOG_IMPLEMENTATION.md](./WATCHDOG_IMPLEMENTATION.md) - Implementation overview
+-   [WATCHDOG_NOTIFICATIONS.md](./WATCHDOG_NOTIFICATIONS.md) - Complete watchdog guide
+-   [WATCHDOG_QUICK_START.md](./WATCHDOG_QUICK_START.md) - Full watchdog quick start
+-   [WATCHDOG_IMPLEMENTATION.md](./WATCHDOG_IMPLEMENTATION.md) - Implementation overview

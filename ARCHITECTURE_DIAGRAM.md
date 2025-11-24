@@ -127,30 +127,30 @@ Visual representation of the complete system architecture with security layers a
 
 ### Layer 1: Cloudflare WAF (Edge)
 
-- Blocks SQLi, XSS, path traversal attacks
-- OWASP Core Ruleset + Custom rules
-- Rate limiting (10 req/min on login)
-- Bot protection & CAPTCHA challenges
+-   Blocks SQLi, XSS, path traversal attacks
+-   OWASP Core Ruleset + Custom rules
+-   Rate limiting (10 req/min on login)
+-   Bot protection & CAPTCHA challenges
 
 ### Layer 2: UFW Firewall (Network)
 
-- Port-level access control
-- SSH key-based authentication only
-- Blocks direct access to app ports (3000, 4000)
+-   Port-level access control
+-   SSH key-based authentication only
+-   Blocks direct access to app ports (3000, 4000)
 
 ### Layer 3: Nginx (Gateway)
 
-- SSL/TLS encryption (Let's Encrypt)
-- Security headers injection
-- Request validation & routing
-- HTTP → HTTPS enforcement
+-   SSL/TLS encryption (Let's Encrypt)
+-   Security headers injection
+-   Request validation & routing
+-   HTTP → HTTPS enforcement
 
 ### Layer 4: PM2 Process Manager
 
-- Auto-restart on crashes
-- Memory limit enforcement (500MB)
-- Cluster mode for load distribution
-- Health monitoring
+-   Auto-restart on crashes
+-   Memory limit enforcement (500MB)
+-   Cluster mode for load distribution
+-   Health monitoring
 
 ---
 
@@ -158,31 +158,31 @@ Visual representation of the complete system architecture with security layers a
 
 ### 🚀 Scalable
 
-- Vertical: Resize droplet (2GB → 4GB → 8GB RAM)
-- Horizontal: Add droplets behind load balancer
-- CDN: Static assets cached globally
-- Database: Migrate to managed PostgreSQL when needed
+-   Vertical: Resize droplet (2GB → 4GB → 8GB RAM)
+-   Horizontal: Add droplets behind load balancer
+-   CDN: Static assets cached globally
+-   Database: Migrate to managed PostgreSQL when needed
 
 ### 🔒 Secure
 
-- Multi-layered security (5 layers)
-- PCI DSS & SOC2 compliance-ready
-- Audit logging for all transactions
-- Zero Trust access for admin routes
+-   Multi-layered security (5 layers)
+-   PCI DSS & SOC2 compliance-ready
+-   Audit logging for all transactions
+-   Zero Trust access for admin routes
 
 ### ✅ Compliant
 
-- GDPR: Data encryption, user consent
-- PCI DSS: Secure payment processing
-- SOC2: Audit logs, access controls
-- HIPAA-ready: Encrypted data storage
+-   GDPR: Data encryption, user consent
+-   PCI DSS: Secure payment processing
+-   SOC2: Audit logs, access controls
+-   HIPAA-ready: Encrypted data storage
 
 ### ⚡ Performant
 
-- CDN: <50ms response for static assets
-- HTTP/2: Multiplexed connections
-- PM2 Clustering: Multi-core CPU usage
-- Database Indexing: <10ms queries
+-   CDN: <50ms response for static assets
+-   HTTP/2: Multiplexed connections
+-   PM2 Clustering: Multi-core CPU usage
+-   Database Indexing: <10ms queries
 
 ---
 
@@ -198,10 +198,10 @@ Visual representation of the complete system architecture with security layers a
 
 **Optional Add-ons:**
 
-- Sentry Team: +$26/month
-- Mixpanel: $0-25/month
-- SendGrid: $0-20/month
-- Twilio SMS: ~$10/month
+-   Sentry Team: +$26/month
+-   Mixpanel: $0-25/month
+-   SendGrid: $0-20/month
+-   Twilio SMS: ~$10/month
 
 **Full Stack Total**: $70-125/month
 
@@ -209,19 +209,19 @@ Visual representation of the complete system architecture with security layers a
 
 ## 📐 Deployment Time
 
-- **Initial Setup**: 1-2 hours (manual)
-- **Automated Setup**: 30 minutes (using scripts)
-- **CI/CD Deployment**: 3-5 minutes (zero downtime)
+-   **Initial Setup**: 1-2 hours (manual)
+-   **Automated Setup**: 30 minutes (using scripts)
+-   **CI/CD Deployment**: 3-5 minutes (zero downtime)
 
 ---
 
 ## 🔗 Related Documentation
 
-- [Complete Architecture Guide](./ARCHITECTURE.md) - Detailed technical specs
-- [DigitalOcean Deployment](./DIGITALOCEAN_DROPLET_DEPLOYMENT.md) - Step-by-step setup
-- [Cloudflare Security](./CLOUDFLARE_SECURITY_GUIDE.md) - WAF & rate limiting
-- [Nginx Configuration](./NGINX_CONFIG_REFERENCE.md) - Reverse proxy setup
-- [Environment Variables](./ENV_SETUP_GUIDE.md) - Configuration guide
+-   [Complete Architecture Guide](./ARCHITECTURE.md) - Detailed technical specs
+-   [DigitalOcean Deployment](./DIGITALOCEAN_DROPLET_DEPLOYMENT.md) - Step-by-step setup
+-   [Cloudflare Security](./CLOUDFLARE_SECURITY_GUIDE.md) - WAF & rate limiting
+-   [Nginx Configuration](./NGINX_CONFIG_REFERENCE.md) - Reverse proxy setup
+-   [Environment Variables](./ENV_SETUP_GUIDE.md) - Configuration guide
 
 ---
 

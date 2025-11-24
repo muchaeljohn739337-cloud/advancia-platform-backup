@@ -1,19 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import {
-  Copy,
-  Check,
-  AlertCircle,
-  ExternalLink,
-  QrCode,
-  ArrowLeft,
-  Loader2,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
-import QRCode from "qrcode";
-import { Toaster, toast } from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { Copy, Check, AlertCircle, ExternalLink, QrCode, ArrowLeft, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
+import QRCode from 'qrcode';
+import { Toaster, toast } from 'react-hot-toast';
 
 interface DepositTransaction {
   id: string;
@@ -27,13 +19,13 @@ interface DepositTransaction {
 
 export default function EthDepositPage() {
   const router = useRouter();
-  const [userAddress, setUserAddress] = useState<string>("");
+  const [userAddress, setUserAddress] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [ethPrice, setEthPrice] = useState(0);
   const [recentDeposits, setRecentDeposits] = useState<DepositTransaction[]>([]);
   const [showQR, setShowQR] = useState(false);
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
   const [qrLoading, setQrLoading] = useState(false);
   const [qrError, setQrError] = useState<string | null>(null);
   const [depositLoading, setDepositLoading] = useState(false);
@@ -51,7 +43,7 @@ export default function EthDepositPage() {
 
   useEffect(() => {
     if (!showQR || !userAddress) {
-      setQrCodeDataUrl("");
+      setQrCodeDataUrl('');
       setQrError(null);
       return;
     }
@@ -63,10 +55,10 @@ export default function EthDepositPage() {
         const dataUrl = await QRCode.toDataURL(userAddress, {
           width: 256,
           margin: 1,
-          errorCorrectionLevel: "M",
+          errorCorrectionLevel: 'M',
           color: {
-            dark: "#0f172a",
-            light: "#ffffff",
+            dark: '#0f172a',
+            light: '#ffffff',
           },
         });
         if (isActive) {
@@ -74,10 +66,10 @@ export default function EthDepositPage() {
           setQrError(null);
         }
       } catch (error) {
-        console.error("Failed to generate QR code:", error);
+        console.error('Failed to generate QR code:', error);
         if (isActive) {
-          setQrError("Failed to generate QR code");
-          toast.error("Failed to generate QR code. Please try again.");
+          setQrError('Failed to generate QR code');
+          toast.error('Failed to generate QR code. Please try again.');
         }
       } finally {
         if (isActive) {
@@ -95,13 +87,13 @@ export default function EthDepositPage() {
 
   const fetchUserWalletAddress = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
-       if (!token || !userId) {
-        setUserAddress("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+      if (!token || !userId) {
+        setUserAddress('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
         setLoading(false);
-        toast("Using demo wallet address", { icon: "ℹ️" });
+        toast('Using demo wallet address', { icon: 'ℹ️' });
         return;
       }
 
@@ -112,15 +104,15 @@ export default function EthDepositPage() {
       if (response.ok) {
         const data = await response.json();
         // For demo, use a sample address if none exists
-        setUserAddress(data.ethWalletAddress || "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+        setUserAddress(data.ethWalletAddress || '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
       } else {
-        toast.error("Unable to load wallet address");
-        setUserAddress("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+        toast.error('Unable to load wallet address');
+        setUserAddress('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
       }
     } catch (error) {
-      console.error("Error fetching wallet address:", error);
-      toast.error("Error fetching wallet address");
-      setUserAddress("0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045");
+      console.error('Error fetching wallet address:', error);
+      toast.error('Error fetching wallet address');
+      setUserAddress('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
     } finally {
       setLoading(false);
     }
@@ -129,33 +121,33 @@ export default function EthDepositPage() {
   const fetchEthPrice = async () => {
     try {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
       );
       const data = await response.json();
       setEthPrice(data.ethereum.usd);
     } catch (error) {
-      console.error("Error fetching ETH price:", error);
-      toast.error("Unable to fetch ETH price");
+      console.error('Error fetching ETH price:', error);
+      toast.error('Unable to fetch ETH price');
     }
   };
 
   const fetchRecentDeposits = async (address: string) => {
     try {
       setDepositLoading(true);
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
       const response = await fetch(
         `${API_URL}/api/eth/deposits?address=${encodeURIComponent(address)}`
       );
 
       if (!response.ok) {
-        throw new Error("Failed to load deposits");
+        throw new Error('Failed to load deposits');
       }
 
       const data = await response.json();
       setRecentDeposits(data.deposits || []);
     } catch (error) {
-      console.error("Error fetching deposits:", error);
-      toast.error("Unable to load recent deposits");
+      console.error('Error fetching deposits:', error);
+      toast.error('Unable to load recent deposits');
       setRecentDeposits([]);
     } finally {
       setDepositLoading(false);
@@ -166,37 +158,37 @@ export default function EthDepositPage() {
     try {
       await navigator.clipboard.writeText(userAddress);
       setCopied(true);
-      toast.success("Deposit address copied to clipboard");
+      toast.success('Deposit address copied to clipboard');
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      console.error("Failed to copy:", error);
-      toast.error("Unable to copy address");
+      console.error('Failed to copy:', error);
+      toast.error('Unable to copy address');
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "CONFIRMED":
-        return "text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400";
-      case "PENDING":
-        return "text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 dark:text-yellow-400";
-      case "FAILED":
-        return "text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400";
+      case 'CONFIRMED':
+        return 'text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400';
+      case 'PENDING':
+        return 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'FAILED':
+        return 'text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400';
       default:
-        return "text-gray-600 bg-gray-50 dark:bg-gray-900/20 dark:text-gray-400";
+        return 'text-gray-600 bg-gray-50 dark:bg-gray-900/20 dark:text-gray-400';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "CONFIRMED":
-        return "✓";
-      case "PENDING":
-        return "⏳";
-      case "FAILED":
-        return "✗";
+      case 'CONFIRMED':
+        return '✓';
+      case 'PENDING':
+        return '⏳';
+      case 'FAILED':
+        return '✗';
       default:
-        return "?";
+        return '?';
     }
   };
 
@@ -207,7 +199,7 @@ export default function EthDepositPage() {
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
 
-    if (minutes < 1) return "Just now";
+    if (minutes < 1) return 'Just now';
     if (minutes < 60) return `${minutes}m ago`;
     if (hours < 24) return `${hours}h ago`;
     return date.toLocaleDateString();
@@ -301,7 +293,9 @@ export default function EthDepositPage() {
                       )}
                     </div>
                     {qrError ? (
-                      <p className="text-sm text-red-500 dark:text-red-400 text-center">{qrError}</p>
+                      <p className="text-sm text-red-500 dark:text-red-400 text-center">
+                        {qrError}
+                      </p>
                     ) : (
                       <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
                         Scan this QR code with your wallet app
@@ -405,7 +399,7 @@ export default function EthDepositPage() {
 
                         <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                           <p className="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">
-                            {deposit.txHash ? `TX: ${deposit.txHash}` : "Awaiting broadcast"}
+                            {deposit.txHash ? `TX: ${deposit.txHash}` : 'Awaiting broadcast'}
                           </p>
                           {deposit.memo && (
                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -436,15 +430,11 @@ export default function EthDepositPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Minimum Deposit</p>
-                    <p className="text-base font-medium text-gray-900 dark:text-white">
-                      0.001 ETH
-                    </p>
+                    <p className="text-base font-medium text-gray-900 dark:text-white">0.001 ETH</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Confirmations</p>
-                    <p className="text-base font-medium text-gray-900 dark:text-white">
-                      12 blocks
-                    </p>
+                    <p className="text-base font-medium text-gray-900 dark:text-white">12 blocks</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Est. Time</p>
@@ -481,19 +471,19 @@ export default function EthDepositPage() {
                 </h3>
                 <div className="space-y-2">
                   <button
-                    onClick={() => router.push("/dashboard")}
+                    onClick={() => router.push('/dashboard')}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                   >
                     View Balance
                   </button>
                   <button
-                    onClick={() => router.push("/eth/withdraw")}
+                    onClick={() => router.push('/eth/withdraw')}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                   >
                     Withdraw ETH
                   </button>
                   <button
-                    onClick={() => router.push("/eth/transactions")}
+                    onClick={() => router.push('/eth/transactions')}
                     className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-700 dark:text-gray-300"
                   >
                     Transaction History

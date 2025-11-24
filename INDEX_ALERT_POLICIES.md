@@ -20,27 +20,25 @@ A **production-ready, secure alert policy management system** with:
 ### 🚀 Getting Started
 
 1. **[ALERT_POLICY_SETUP.md](./ALERT_POLICY_SETUP.md)** - Quick setup guide
-
-   - Database migration steps
-   - Seed initial policies
-   - Create SuperAdmin user
-   - Test end-to-end flow
-   - **Start here** if you're new to the system
+   -   Database migration steps
+   -   Seed initial policies
+   -   Create SuperAdmin user
+   -   Test end-to-end flow
+   -   **Start here** if you're new to the system
 
 2. **[ALERT_POLICY_MANAGEMENT.md](./ALERT_POLICY_MANAGEMENT.md)** - Full system documentation
-
-   - Architecture overview
-   - Database schema reference
-   - API endpoint documentation
-   - Frontend component guide
-   - Production deployment checklist
+   -   Architecture overview
+   -   Database schema reference
+   -   API endpoint documentation
+   -   Frontend component guide
+   -   Production deployment checklist
 
 3. **[SECURITY_HARDENING.md](./SECURITY_HARDENING.md)** - Security controls
-   - Threat model and mitigations
-   - Authentication & authorization
-   - Transport & data protection
-   - Audit logging & monitoring
-   - Incident response playbooks
+   -   Threat model and mitigations
+   -   Authentication & authorization
+   -   Transport & data protection
+   -   Audit logging & monitoring
+   -   Incident response playbooks
 
 ---
 
@@ -97,9 +95,9 @@ root/
 
 **Benefits**:
 
-- Edit policies without redeploying
-- Audit trail of all changes
-- Role-based editing (SuperAdmins only)
+-   Edit policies without redeploying
+-   Audit trail of all changes
+-   Role-based editing (SuperAdmins only)
 
 **Usage**:
 
@@ -121,18 +119,18 @@ WHERE route_group = 'auth';
 
 **Features**:
 
-- 📊 Table view of all policies
-- ✏️ Inline editing (SuperAdmins)
-- 🔒 Read-only mode (Admins)
-- ⏸ Enable/disable toggles
-- 📋 Audit log viewer
-- 🎨 Color-coded severity badges
+-   📊 Table view of all policies
+-   ✏️ Inline editing (SuperAdmins)
+-   🔒 Read-only mode (Admins)
+-   ⏸ Enable/disable toggles
+-   📋 Audit log viewer
+-   🎨 Color-coded severity badges
 
 **Screenshots**:
 
-- View-only mode (ADMIN role)
-- Edit mode (SUPERADMIN role)
-- Audit log timeline
+-   View-only mode (ADMIN role)
+-   Edit mode (SUPERADMIN role)
+-   Audit log timeline
 
 ---
 
@@ -176,12 +174,12 @@ router.put("/:group", requireSuperAdmin, async (req, res) => {
 
 **What's logged**:
 
-- ✅ Who: User ID, email, role
-- ✅ What: Action (created/updated/deleted/enabled/disabled)
-- ✅ When: Timestamp (UTC)
-- ✅ Where: IP address, user agent
-- ✅ Why: Mandatory reason field
-- ✅ Before/After: Full JSON snapshots
+-   ✅ Who: User ID, email, role
+-   ✅ What: Action (created/updated/deleted/enabled/disabled)
+-   ✅ When: Timestamp (UTC)
+-   ✅ Where: IP address, user agent
+-   ✅ Why: Mandatory reason field
+-   ✅ Before/After: Full JSON snapshots
 
 **Example**:
 
@@ -224,12 +222,12 @@ WHERE action = 'deleted';
 
 **Channels supported**:
 
-- 📧 **Email** (SMTP/Gmail)
-- 📱 **SMS** (Twilio)
-- 💬 **Slack** (Webhooks)
-- 👥 **Teams** (Webhooks)
-- 🔔 **WebSocket** (Real-time dashboard)
-- 🐛 **Sentry** (Error tracking)
+-   📧 **Email** (SMTP/Gmail)
+-   📱 **SMS** (Twilio)
+-   💬 **Slack** (Webhooks)
+-   👥 **Teams** (Webhooks)
+-   🔔 **WebSocket** (Real-time dashboard)
+-   🐛 **Sentry** (Error tracking)
 
 **Configuration**:
 
@@ -267,14 +265,14 @@ TEAMS_WEBHOOK_URL=https://outlook.office.com/webhook/...
 
 **Controls implemented**:
 
-- 🔐 **MFA enforcement** for SuperAdmins
-- 🛡️ **CSRF protection** on all state-changing requests
-- 🔒 **HTTPS enforced** with HSTS header
-- 🚫 **Input sanitization** against XSS
-- 📊 **Rate limiting** on admin endpoints
-- 🔍 **Anomaly detection** (rapid changes, unusual times)
-- 📝 **Audit logging** of all policy changes
-- 🔑 **Secrets management** (no hardcoded keys)
+-   🔐 **MFA enforcement** for SuperAdmins
+-   🛡️ **CSRF protection** on all state-changing requests
+-   🔒 **HTTPS enforced** with HSTS header
+-   🚫 **Input sanitization** against XSS
+-   📊 **Rate limiting** on admin endpoints
+-   🔍 **Anomaly detection** (rapid changes, unusual times)
+-   📝 **Audit logging** of all policy changes
+-   🔑 **Secrets management** (no hardcoded keys)
 
 **Security headers**:
 
@@ -455,31 +453,31 @@ CSRF_SECRET=another-strong-secret
 
 ## 🛡️ Production Checklist
 
-- [ ] **Database**
-  - [ ] Migrations applied (`prisma migrate deploy`)
-  - [ ] Policies seeded
-  - [ ] Backups configured (daily)
-- [ ] **Authentication**
-  - [ ] MFA enforced for all admin accounts
-  - [ ] Session timeouts configured (60 min)
-  - [ ] CSRF tokens enabled
-- [ ] **Authorization**
-  - [ ] RBAC middleware on all admin routes
-  - [ ] SuperAdmin accounts limited (≤3)
-  - [ ] Access reviews scheduled (quarterly)
-- [ ] **Transport Security**
-  - [ ] HTTPS enforced (HSTS)
-  - [ ] TLS 1.2+ only
-  - [ ] Security headers configured
-- [ ] **Monitoring**
-  - [ ] Sentry integration tested
-  - [ ] Alert channels verified
-  - [ ] Anomaly detection enabled
-  - [ ] Grafana dashboard created
-- [ ] **Incident Response**
-  - [ ] Playbook documented
-  - [ ] Emergency contacts updated
-  - [ ] Rollback procedure tested
+-   [ ] **Database**
+    -   [ ] Migrations applied (`prisma migrate deploy`)
+    -   [ ] Policies seeded
+    -   [ ] Backups configured (daily)
+-   [ ] **Authentication**
+    -   [ ] MFA enforced for all admin accounts
+    -   [ ] Session timeouts configured (60 min)
+    -   [ ] CSRF tokens enabled
+-   [ ] **Authorization**
+    -   [ ] RBAC middleware on all admin routes
+    -   [ ] SuperAdmin accounts limited (≤3)
+    -   [ ] Access reviews scheduled (quarterly)
+-   [ ] **Transport Security**
+    -   [ ] HTTPS enforced (HSTS)
+    -   [ ] TLS 1.2+ only
+    -   [ ] Security headers configured
+-   [ ] **Monitoring**
+    -   [ ] Sentry integration tested
+    -   [ ] Alert channels verified
+    -   [ ] Anomaly detection enabled
+    -   [ ] Grafana dashboard created
+-   [ ] **Incident Response**
+    -   [ ] Playbook documented
+    -   [ ] Emergency contacts updated
+    -   [ ] Rollback procedure tested
 
 ---
 
@@ -525,10 +523,10 @@ node -e "require('./src/services/alertService').sendAlert({identifier:'test',gro
 
 ## 📚 Additional Resources
 
-- **[ALERT_SYSTEM_GUIDE.md](./ALERT_SYSTEM_GUIDE.md)** - Original alert system docs
-- **[ADMIN_PERMISSIONS_GUIDE.md](./ADMIN_PERMISSIONS_GUIDE.md)** - RBAC overview
-- **[PRISMA_SETUP.md](./backend/PRISMA_SETUP.md)** - Database migration guide
-- **[SENTRY_SETUP.md](./backend/SENTRY_SETUP.md)** - Error tracking setup
+-   **[ALERT_SYSTEM_GUIDE.md](./ALERT_SYSTEM_GUIDE.md)** - Original alert system docs
+-   **[ADMIN_PERMISSIONS_GUIDE.md](./ADMIN_PERMISSIONS_GUIDE.md)** - RBAC overview
+-   **[PRISMA_SETUP.md](./backend/PRISMA_SETUP.md)** - Database migration guide
+-   **[SENTRY_SETUP.md](./backend/SENTRY_SETUP.md)** - Error tracking setup
 
 ---
 

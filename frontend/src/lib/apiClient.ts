@@ -49,7 +49,9 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
 
     // If 401 and not already retried
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -108,7 +110,8 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch (refreshError: unknown) {
         // Refresh failed, clear storage and redirect
-        const errorObj: Error = refreshError instanceof Error ? refreshError : new Error(String(refreshError));
+        const errorObj: Error =
+          refreshError instanceof Error ? refreshError : new Error(String(refreshError));
         processQueue(errorObj, null);
         isRefreshing = false;
         localStorage.clear();

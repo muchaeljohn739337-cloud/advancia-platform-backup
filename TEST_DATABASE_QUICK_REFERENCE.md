@@ -56,23 +56,23 @@ Created by seed script (`npm run seed:test`):
 
 | Role  | Email               | Password      |
 | ----- | ------------------- | ------------- |
-| Admin | admin@advancia.test | TestAdmin123! |
-| User  | user@advancia.test  | TestUser123!  |
-| Agent | agent@advancia.test | TestAgent123! |
+| Admin | <admin@advancia.test> | TestAdmin123! |
+| User  | <user@advancia.test>  | TestUser123!  |
+| Agent | <agent@advancia.test> | TestAgent123! |
 
 ## 📊 Test Data Seeded
 
 After running `npm run seed:test`:
 
-- ✅ 3 Users (admin, user, agent)
-- ✅ 2 Token Wallets (admin, user)
-- ✅ 1 Crypto Wallet (user)
-- ✅ 2 Transactions (deposit, withdrawal)
-- ✅ 2 Token Transactions (credit, debit)
-- ✅ 1 Reward (referral)
-- ✅ 2 Support Tickets (open, resolved)
-- ✅ 2 Notifications (unread, read)
-- ✅ 1 Audit Log
+-   ✅ 3 Users (admin, user, agent)
+-   ✅ 2 Token Wallets (admin, user)
+-   ✅ 1 Crypto Wallet (user)
+-   ✅ 2 Transactions (deposit, withdrawal)
+-   ✅ 2 Token Transactions (credit, debit)
+-   ✅ 1 Reward (referral)
+-   ✅ 2 Support Tickets (open, resolved)
+-   ✅ 2 Notifications (unread, read)
+-   ✅ 1 Audit Log
 
 ## 🔧 Troubleshooting
 
@@ -254,11 +254,11 @@ CODECOV_TOKEN=your_codecov_token
 
 ## 🔗 Related Documentation
 
-- [TEST_DATABASE_SETUP.md](TEST_DATABASE_SETUP.md) - Complete setup guide
-- [backend/.env.test](backend/.env.test) - Environment configuration
-- [backend/jest.config.js](backend/jest.config.js) - Jest configuration
-- [backend/scripts/seed-test-data.js](backend/scripts/seed-test-data.js) - Seed script
-- [backend/scripts/setup-test-db.js](backend/scripts/setup-test-db.js) - Setup script
+-   [TEST_DATABASE_SETUP.md](TEST_DATABASE_SETUP.md) - Complete setup guide
+-   [backend/.env.test](backend/.env.test) - Environment configuration
+-   [backend/jest.config.js](backend/jest.config.js) - Jest configuration
+-   [backend/scripts/seed-test-data.js](backend/scripts/seed-test-data.js) - Seed script
+-   [backend/scripts/setup-test-db.js](backend/scripts/setup-test-db.js) - Setup script
 
 ---
 

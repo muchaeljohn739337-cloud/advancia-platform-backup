@@ -35,9 +35,9 @@ NEXTAUTH_SECRET=ef59414fa7f7c39a520b57bc0877ae4a68c8a1dae3aba2e48c26922dd7ace7f2
 
 Advancia uses multiple email providers for different purposes:
 
-- **Gmail SMTP** (Free tier): OTP codes and critical transactional emails
-- **Resend**: HTML email templates and marketing campaigns
-- **SendGrid**: Bulk communications and newsletters
+-   **Gmail SMTP** (Free tier): OTP codes and critical transactional emails
+-   **Resend**: HTML email templates and marketing campaigns
+-   **SendGrid**: Bulk communications and newsletters
 
 #### Gmail SMTP Setup (Required for OTP Authentication)
 
@@ -113,11 +113,10 @@ SENDGRID_API_KEY=<YOUR_SENDGRID_API_KEY>
    ```
 
 4. Create webhook:
-
-   - Go to **Developers → Webhooks → Add Endpoint**
-   - URL: `https://api.advancia.com/api/payments/webhook`
-   - Events: `payment_intent.succeeded`, `payment_intent.failed`
-   - Copy webhook signing secret:
+   -   Go to **Developers → Webhooks → Add Endpoint**
+   -   URL: `https://api.advancia.com/api/payments/webhook`
+   -   Events: `payment_intent.succeeded`, `payment_intent.failed`
+   -   Copy webhook signing secret:
 
      ```env
      STRIPE_WEBHOOK_SECRET=whsec_xxxxx  # Backend
@@ -158,11 +157,11 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_xxxxx
 
 #### Security Best Practices
 
-- ⚠️ **NEVER** commit to git
-- ⚠️ **NEVER** share via email/Slack
-- ✅ Store in password manager (1Password, LastPass)
-- ✅ Keep offline backup in physical safe
-- ✅ Test derivation with small amounts first
+-   ⚠️ **NEVER** commit to git
+-   ⚠️ **NEVER** share via email/Slack
+-   ✅ Store in password manager (1Password, LastPass)
+-   ✅ Keep offline backup in physical safe
+-   ✅ Test derivation with small amounts first
 
 **Render Configuration:**
 
@@ -288,10 +287,9 @@ S3_BACKUPS_BUCKET=advancia-db-backups
    ```
 
 5. Set up webhook URL in Cryptomus dashboard:
-
-   - URL: `https://api.advancia.com/api/cryptomus/webhook`
-   - Enable events: `payment.success`, `payment.failed`, `payment.pending`
-   - Copy webhook secret (if provided):
+   -   URL: `https://api.advancia.com/api/cryptomus/webhook`
+   -   Enable events: `payment.success`, `payment.failed`, `payment.pending`
+   -   Copy webhook secret (if provided):
 
    ```env
    CRYPTOMUS_WEBHOOK_SECRET=your_webhook_secret
@@ -364,18 +362,18 @@ NEXT_PUBLIC_VAPID_PUBLIC_KEY=<GENERATED_PUBLIC_KEY>
 
 ### Storage
 
-- ✅ Store in 1Password/LastPass team vault
-- ✅ Limit access to 2-3 senior engineers only
-- ✅ Enable 2FA on all third-party services
-- ✅ Rotate secrets every 90 days (except wallet seeds)
+-   ✅ Store in 1Password/LastPass team vault
+-   ✅ Limit access to 2-3 senior engineers only
+-   ✅ Enable 2FA on all third-party services
+-   ✅ Rotate secrets every 90 days (except wallet seeds)
 
 ### Monitoring
 
-- ✅ Enable Sentry alerts for auth failures
-- ✅ Set up AWS CloudWatch for S3 access logs
-- ✅ Monitor Stripe webhook delivery failures
-- ✅ Monitor Cryptomus webhook delivery and payment status
-- ✅ Weekly audit of environment variable access logs
+-   ✅ Enable Sentry alerts for auth failures
+-   ✅ Set up AWS CloudWatch for S3 access logs
+-   ✅ Monitor Stripe webhook delivery failures
+-   ✅ Monitor Cryptomus webhook delivery and payment status
+-   ✅ Weekly audit of environment variable access logs
 
 ### Incident Response
 
@@ -422,14 +420,14 @@ PRODUCTION READINESS: 100%
 
 ## 🔗 Quick Links
 
-- [Stripe Dashboard](https://dashboard.stripe.com)
-- [Cryptomus Dashboard](https://app.cryptomus.com)
-- [Render Dashboard](https://dashboard.render.com)
-- [Vercel Dashboard](https://vercel.com/dashboard)
-- [Sentry Dashboard](https://sentry.io)
-- [AWS Console](https://console.aws.amazon.com)
-- [Resend Dashboard](https://resend.com/dashboard)
-- [SendGrid Dashboard](https://app.sendgrid.com)
+-   [Stripe Dashboard](https://dashboard.stripe.com)
+-   [Cryptomus Dashboard](https://app.cryptomus.com)
+-   [Render Dashboard](https://dashboard.render.com)
+-   [Vercel Dashboard](https://vercel.com/dashboard)
+-   [Sentry Dashboard](https://sentry.io)
+-   [AWS Console](https://console.aws.amazon.com)
+-   [Resend Dashboard](https://resend.com/dashboard)
+-   [SendGrid Dashboard](https://app.sendgrid.com)
 
 ---
 

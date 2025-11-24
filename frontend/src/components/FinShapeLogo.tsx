@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 interface FinShapeLogoProps {
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   animated?: boolean;
   showText?: boolean;
   className?: string;
 }
 
 const sizeClasses = {
-  sm: "w-8 h-8",
-  md: "w-12 h-12",
-  lg: "w-16 h-16",
-  xl: "w-24 h-24",
+  sm: 'w-8 h-8',
+  md: 'w-12 h-12',
+  lg: 'w-16 h-16',
+  xl: 'w-24 h-24',
 };
 
 const textSizeClasses = {
-  sm: "text-lg",
-  md: "text-xl",
-  lg: "text-2xl",
-  xl: "text-4xl",
+  sm: 'text-lg',
+  md: 'text-xl',
+  lg: 'text-2xl',
+  xl: 'text-4xl',
 };
 
 export default function FinShapeLogo({
-  size = "md",
+  size = 'md',
   animated = true,
   showText = true,
-  className = "",
+  className = '',
 }: FinShapeLogoProps) {
   const logoVariants = {
     initial: { scale: 0.8, opacity: 0 },
@@ -36,7 +36,7 @@ export default function FinShapeLogo({
       opacity: 1,
       transition: {
         duration: 0.5,
-        ease: "easeOut",
+        ease: 'easeOut',
       },
     },
     hover: {
@@ -54,7 +54,7 @@ export default function FinShapeLogo({
       opacity: 1,
       transition: {
         duration: 1.5,
-        ease: "easeInOut",
+        ease: 'easeInOut',
       },
     },
   };
@@ -75,9 +75,9 @@ export default function FinShapeLogo({
     <motion.div
       className={`flex items-center gap-3 ${className}`}
       variants={animated ? logoVariants : undefined}
-      initial={animated ? "initial" : undefined}
-      animate={animated ? "animate" : undefined}
-      whileHover={animated ? "hover" : undefined}
+      initial={animated ? 'initial' : undefined}
+      animate={animated ? 'animate' : undefined}
+      whileHover={animated ? 'hover' : undefined}
     >
       {/* Logo Icon */}
       <div className={`relative ${sizeClasses[size]}`}>
@@ -94,8 +94,8 @@ export default function FinShapeLogo({
             strokeWidth="3"
             fill="none"
             variants={animated ? shapeVariants : undefined}
-            initial={animated ? "initial" : undefined}
-            animate={animated ? "animate" : undefined}
+            initial={animated ? 'initial' : undefined}
+            animate={animated ? 'animate' : undefined}
           />
 
           {/* Inner geometric shapes - Financial chart inspired */}
@@ -107,15 +107,15 @@ export default function FinShapeLogo({
             strokeLinecap="round"
             strokeLinejoin="round"
             variants={animated ? shapeVariants : undefined}
-            initial={animated ? "initial" : undefined}
-            animate={animated ? "animate" : undefined}
+            initial={animated ? 'initial' : undefined}
+            animate={animated ? 'animate' : undefined}
           />
 
           {/* Currency symbol - Dollar/Crypto inspired */}
           <motion.g
             variants={animated ? shapeVariants : undefined}
-            initial={animated ? "initial" : undefined}
-            animate={animated ? "animate" : undefined}
+            initial={animated ? 'initial' : undefined}
+            animate={animated ? 'animate' : undefined}
           >
             <path
               d="M50 25 L50 75"
@@ -168,7 +168,7 @@ export default function FinShapeLogo({
             transition={{
               duration: 2,
               repeat: Infinity,
-              ease: "easeInOut",
+              ease: 'easeInOut',
             }}
           />
         )}
@@ -179,17 +179,15 @@ export default function FinShapeLogo({
         <motion.div
           className="flex flex-col"
           variants={animated ? textVariants : undefined}
-          initial={animated ? "initial" : undefined}
-          animate={animated ? "animate" : undefined}
+          initial={animated ? 'initial' : undefined}
+          animate={animated ? 'animate' : undefined}
         >
           <span
             className={`font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 bg-clip-text text-transparent ${textSizeClasses[size]}`}
           >
             FinShape
           </span>
-          <span className="text-xs text-gray-500 -mt-1">
-            Crypto Trading Platform
-          </span>
+          <span className="text-xs text-gray-500 -mt-1">Crypto Trading Platform</span>
         </motion.div>
       )}
     </motion.div>

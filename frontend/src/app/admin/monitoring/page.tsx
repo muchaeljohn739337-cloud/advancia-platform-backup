@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import AdminNav from "@/components/AdminNav";
-import { Server, CheckCircle, AlertCircle, Activity } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import AdminNav from '@/components/AdminNav';
+import { Server, CheckCircle, AlertCircle, Activity } from 'lucide-react';
 
 export default function AdminMonitoringPage() {
   const router = useRouter();
@@ -11,13 +11,13 @@ export default function AdminMonitoringPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      router.push("/admin/login");
+      router.push('/admin/login');
       return;
     }
 
-    fetch("http://localhost:4000/api/admin/system/health", {
+    fetch('http://localhost:4000/api/admin/system/health', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())

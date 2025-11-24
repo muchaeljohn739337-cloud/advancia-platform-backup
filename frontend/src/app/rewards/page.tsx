@@ -1,18 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import {
-  Trophy,
-  Star,
-  Award,
-  Gift,
-  Crown,
-  Zap,
-  Target,
-  Users,
-  Medal,
-} from "lucide-react";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Trophy, Star, Award, Gift, Crown, Zap, Target, Users, Medal } from 'lucide-react';
 
 interface UserTier {
   id: string;
@@ -56,11 +46,41 @@ interface LeaderboardEntry {
 }
 
 const TIER_CONFIG = {
-  bronze: { name: "Bronze", color: "from-amber-600 to-orange-700", icon: Medal, min: 0, max: 999 },
-  silver: { name: "Silver", color: "from-gray-300 to-gray-500", icon: Award, min: 1000, max: 4999 },
-  gold: { name: "Gold", color: "from-yellow-400 to-yellow-600", icon: Star, min: 5000, max: 14999 },
-  platinum: { name: "Platinum", color: "from-cyan-400 to-blue-500", icon: Trophy, min: 15000, max: 49999 },
-  diamond: { name: "Diamond", color: "from-purple-400 to-pink-600", icon: Crown, min: 50000, max: Infinity },
+  bronze: {
+    name: 'Bronze',
+    color: 'from-amber-600 to-orange-700',
+    icon: Medal,
+    min: 0,
+    max: 999,
+  },
+  silver: {
+    name: 'Silver',
+    color: 'from-gray-300 to-gray-500',
+    icon: Award,
+    min: 1000,
+    max: 4999,
+  },
+  gold: {
+    name: 'Gold',
+    color: 'from-yellow-400 to-yellow-600',
+    icon: Star,
+    min: 5000,
+    max: 14999,
+  },
+  platinum: {
+    name: 'Platinum',
+    color: 'from-cyan-400 to-blue-500',
+    icon: Trophy,
+    min: 15000,
+    max: 49999,
+  },
+  diamond: {
+    name: 'Diamond',
+    color: 'from-purple-400 to-pink-600',
+    icon: Crown,
+    min: 50000,
+    max: Infinity,
+  },
 };
 
 export default function RewardsPage() {
@@ -68,7 +88,9 @@ export default function RewardsPage() {
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"overview" | "achievements" | "leaderboard">("overview");
+  const [activeTab, setActiveTab] = useState<'overview' | 'achievements' | 'leaderboard'>(
+    'overview'
+  );
 
   useEffect(() => {
     fetchRewardsData();
@@ -76,8 +98,8 @@ export default function RewardsPage() {
 
   const fetchRewardsData = async () => {
     try {
-      const userId = localStorage.getItem("userId") || "demo-user";
-      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem('userId') || 'demo-user';
+      const token = localStorage.getItem('token');
 
       const [tierRes, rewardsRes, leaderboardRes] = await Promise.all([
         fetch(`http://localhost:4000/api/rewards/tier/${userId}`, {
@@ -86,7 +108,7 @@ export default function RewardsPage() {
         fetch(`http://localhost:4000/api/rewards/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch("http://localhost:4000/api/rewards/leaderboard", {
+        fetch('http://localhost:4000/api/rewards/leaderboard', {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -106,7 +128,7 @@ export default function RewardsPage() {
         setLeaderboard(data.leaderboard || []);
       }
     } catch (error) {
-      console.error("Error fetching rewards data:", error);
+      console.error('Error fetching rewards data:', error);
     } finally {
       setLoading(false);
     }
@@ -114,13 +136,13 @@ export default function RewardsPage() {
 
   const handleClaimReward = async (rewardId: string) => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       const response = await fetch(`http://localhost:4000/api/rewards/claim/${rewardId}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userId }),
@@ -128,14 +150,14 @@ export default function RewardsPage() {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Reward claimed successfully!");
+        alert('Reward claimed successfully!');
         fetchRewardsData();
       } else {
-        alert(data.error || "Failed to claim reward");
+        alert(data.error || 'Failed to claim reward');
       }
     } catch (error) {
-      console.error("Error claiming reward:", error);
-      alert("Failed to claim reward");
+      console.error('Error claiming reward:', error);
+      alert('Failed to claim reward');
     }
   };
 
@@ -147,9 +169,10 @@ export default function RewardsPage() {
     );
   }
 
-  const currentTier = tierInfo?.tier.currentTier || "bronze";
+  const currentTier = tierInfo?.tier.currentTier || 'bronze';
   const TierIcon = TIER_CONFIG[currentTier as keyof typeof TIER_CONFIG]?.icon || Medal;
-  const tierColor = TIER_CONFIG[currentTier as keyof typeof TIER_CONFIG]?.color || "from-gray-500 to-gray-700";
+  const tierColor =
+    TIER_CONFIG[currentTier as keyof typeof TIER_CONFIG]?.color || 'from-gray-500 to-gray-700';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-6">
@@ -181,7 +204,7 @@ export default function RewardsPage() {
               </div>
               <div>
                 <h2 className="text-3xl font-bold text-white">
-                  {TIER_CONFIG[currentTier as keyof typeof TIER_CONFIG]?.name || "Bronze"} Tier
+                  {TIER_CONFIG[currentTier as keyof typeof TIER_CONFIG]?.name || 'Bronze'} Tier
                 </h2>
                 <p className="text-white/80 text-lg">
                   {tierInfo?.tier.points.toLocaleString()} points
@@ -191,7 +214,7 @@ export default function RewardsPage() {
             <div className="text-right">
               <div className="text-white/80 text-sm mb-1">Lifetime Earned</div>
               <div className="text-3xl font-bold text-white">
-                ${parseFloat(tierInfo?.tier.lifetimeRewards || "0").toFixed(2)}
+                ${parseFloat(tierInfo?.tier.lifetimeRewards || '0').toFixed(2)}
               </div>
             </div>
           </div>
@@ -207,7 +230,7 @@ export default function RewardsPage() {
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${tierInfo.progress}%` }}
-                  transition={{ duration: 1, ease: "easeOut" }}
+                  transition={{ duration: 1, ease: 'easeOut' }}
                   className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"
                 />
               </div>
@@ -230,9 +253,7 @@ export default function RewardsPage() {
               <Zap className="w-6 h-6 text-yellow-400" />
               <span className="text-white/80 text-sm">Current Streak</span>
             </div>
-            <div className="text-3xl font-bold text-white">
-              {tierInfo?.tier.streak || 0} days
-            </div>
+            <div className="text-3xl font-bold text-white">{tierInfo?.tier.streak || 0} days</div>
           </motion.div>
 
           <motion.div
@@ -283,14 +304,14 @@ export default function RewardsPage() {
 
         {/* Tabs */}
         <div className="flex gap-4 mb-6">
-          {["overview", "achievements", "leaderboard"].map((tab) => (
+          {['overview', 'achievements', 'leaderboard'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as any)}
               className={`px-6 py-3 rounded-lg font-semibold transition-all ${
                 activeTab === tab
-                  ? "bg-white text-purple-900"
-                  : "bg-white/10 text-white hover:bg-white/20"
+                  ? 'bg-white text-purple-900'
+                  : 'bg-white/10 text-white hover:bg-white/20'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -299,7 +320,7 @@ export default function RewardsPage() {
         </div>
 
         {/* Content Sections */}
-        {activeTab === "overview" && (
+        {activeTab === 'overview' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -310,13 +331,13 @@ export default function RewardsPage() {
               Available Rewards
             </h3>
             <div className="space-y-4">
-              {rewards.filter(r => r.status === "pending").length === 0 ? (
+              {rewards.filter((r) => r.status === 'pending').length === 0 ? (
                 <p className="text-blue-200 text-center py-8">
                   No pending rewards. Keep earning to unlock more!
                 </p>
               ) : (
                 rewards
-                  .filter(r => r.status === "pending")
+                  .filter((r) => r.status === 'pending')
                   .map((reward) => (
                     <div
                       key={reward.id}
@@ -347,7 +368,7 @@ export default function RewardsPage() {
           </motion.div>
         )}
 
-        {activeTab === "achievements" && (
+        {activeTab === 'achievements' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -359,25 +380,57 @@ export default function RewardsPage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                { name: "First Transaction", desc: "Complete your first transaction", points: 100, achieved: true },
-                { name: "Week Warrior", desc: "7-day login streak", points: 250, achieved: (tierInfo?.tier.streak || 0) >= 7 },
-                { name: "High Roller", desc: "Transaction over $1000", points: 500, achieved: false },
-                { name: "Social Butterfly", desc: "Refer 5 friends", points: 1000, achieved: (tierInfo?.tier.totalReferrals || 0) >= 5 },
-                { name: "Token Master", desc: "Earn 10,000 tokens", points: 2000, achieved: (tierInfo?.tier.lifetimePoints || 0) >= 10000 },
-                { name: "Diamond Hands", desc: "Reach Diamond tier", points: 5000, achieved: currentTier === "diamond" },
+                {
+                  name: 'First Transaction',
+                  desc: 'Complete your first transaction',
+                  points: 100,
+                  achieved: true,
+                },
+                {
+                  name: 'Week Warrior',
+                  desc: '7-day login streak',
+                  points: 250,
+                  achieved: (tierInfo?.tier.streak || 0) >= 7,
+                },
+                {
+                  name: 'High Roller',
+                  desc: 'Transaction over $1000',
+                  points: 500,
+                  achieved: false,
+                },
+                {
+                  name: 'Social Butterfly',
+                  desc: 'Refer 5 friends',
+                  points: 1000,
+                  achieved: (tierInfo?.tier.totalReferrals || 0) >= 5,
+                },
+                {
+                  name: 'Token Master',
+                  desc: 'Earn 10,000 tokens',
+                  points: 2000,
+                  achieved: (tierInfo?.tier.lifetimePoints || 0) >= 10000,
+                },
+                {
+                  name: 'Diamond Hands',
+                  desc: 'Reach Diamond tier',
+                  points: 5000,
+                  achieved: currentTier === 'diamond',
+                },
               ].map((achievement, idx) => (
                 <div
                   key={idx}
                   className={`p-4 rounded-lg ${
                     achievement.achieved
-                      ? "bg-gradient-to-br from-green-500/20 to-emerald-600/20 border-2 border-green-400/50"
-                      : "bg-white/5 border border-white/10"
+                      ? 'bg-gradient-to-br from-green-500/20 to-emerald-600/20 border-2 border-green-400/50'
+                      : 'bg-white/5 border border-white/10'
                   }`}
                 >
                   <div className="flex items-center gap-3 mb-2">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      achievement.achieved ? "bg-green-500" : "bg-gray-600"
-                    }`}>
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        achievement.achieved ? 'bg-green-500' : 'bg-gray-600'
+                      }`}
+                    >
                       <Award className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -386,7 +439,7 @@ export default function RewardsPage() {
                     </div>
                   </div>
                   <div className="text-yellow-400 font-semibold text-sm">
-                    {achievement.achieved ? "✓ Unlocked" : `${achievement.points} points`}
+                    {achievement.achieved ? '✓ Unlocked' : `${achievement.points} points`}
                   </div>
                 </div>
               ))}
@@ -394,7 +447,7 @@ export default function RewardsPage() {
           </motion.div>
         )}
 
-        {activeTab === "leaderboard" && (
+        {activeTab === 'leaderboard' && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -414,12 +467,12 @@ export default function RewardsPage() {
                     <div
                       className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${
                         idx === 0
-                          ? "bg-gradient-to-br from-yellow-400 to-orange-500 text-white"
+                          ? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-white'
                           : idx === 1
-                          ? "bg-gradient-to-br from-gray-300 to-gray-500 text-white"
-                          : idx === 2
-                          ? "bg-gradient-to-br from-amber-600 to-orange-700 text-white"
-                          : "bg-white/10 text-white"
+                            ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white'
+                            : idx === 2
+                              ? 'bg-gradient-to-br from-amber-600 to-orange-700 text-white'
+                              : 'bg-white/10 text-white'
                       }`}
                     >
                       #{idx + 1}

@@ -127,7 +127,11 @@ class AnalyticsService {
   }
 
   // Track user interactions
-  async trackInteraction(action: string, element: string, properties?: Record<string, any>): Promise<void> {
+  async trackInteraction(
+    action: string,
+    element: string,
+    properties?: Record<string, any>
+  ): Promise<void> {
     await this.track({
       eventName: 'user_interaction',
       eventProperties: {
@@ -139,7 +143,11 @@ class AnalyticsService {
   }
 
   // Track form submissions
-  async trackFormSubmit(formName: string, success: boolean, properties?: Record<string, any>): Promise<void> {
+  async trackFormSubmit(
+    formName: string,
+    success: boolean,
+    properties?: Record<string, any>
+  ): Promise<void> {
     await this.track({
       eventName: 'form_submit',
       eventProperties: {
@@ -151,7 +159,11 @@ class AnalyticsService {
   }
 
   // Track conversions
-  async trackConversion(conversionType: string, value?: number, properties?: Record<string, any>): Promise<void> {
+  async trackConversion(
+    conversionType: string,
+    value?: number,
+    properties?: Record<string, any>
+  ): Promise<void> {
     await this.track({
       eventName: 'conversion',
       eventProperties: {
@@ -171,11 +183,7 @@ class AnalyticsService {
   }
 
   // Get funnel analysis
-  async getFunnels(params?: {
-    startDate?: string;
-    endDate?: string;
-    segment?: string;
-  }): Promise<{
+  async getFunnels(params?: { startDate?: string; endDate?: string; segment?: string }): Promise<{
     funnels: FunnelData[];
     insights: {
       bestPerformingStep: string;
@@ -183,15 +191,14 @@ class AnalyticsService {
       overallConversionRate: number;
     };
   }> {
-    const response = await apiClient.get('/api/analytics/amplitude/funnels', { params });
+    const response = await apiClient.get('/api/analytics/amplitude/funnels', {
+      params,
+    });
     return response.data;
   }
 
   // Get cohort analysis
-  async getCohorts(params?: {
-    period?: string;
-    months?: number;
-  }): Promise<{
+  async getCohorts(params?: { period?: string; months?: number }): Promise<{
     cohorts: CohortData[];
     insights: {
       bestCohort: string;
@@ -199,7 +206,9 @@ class AnalyticsService {
       recommendations: string[];
     };
   }> {
-    const response = await apiClient.get('/api/analytics/amplitude/cohorts', { params });
+    const response = await apiClient.get('/api/analytics/amplitude/cohorts', {
+      params,
+    });
     return response.data;
   }
 
@@ -223,7 +232,11 @@ class AnalyticsService {
   private storeFailedEvent(event: AnalyticsEvent): void {
     try {
       const failedEvents = JSON.parse(localStorage.getItem('analytics_failed_events') || '[]');
-      failedEvents.push({ ...event, timestamp: new Date().toISOString(), retryCount: 0 });
+      failedEvents.push({
+        ...event,
+        timestamp: new Date().toISOString(),
+        retryCount: 0,
+      });
 
       // Keep only last 50 failed events
       if (failedEvents.length > 50) {
@@ -255,7 +268,7 @@ class AnalyticsService {
       }
 
       // Remove successfully retried events
-      successfulRetries.reverse().forEach(index => {
+      successfulRetries.reverse().forEach((index) => {
         failedEvents.splice(index, 1);
       });
 

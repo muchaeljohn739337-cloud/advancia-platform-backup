@@ -600,10 +600,10 @@ pm2 stop advancia-backend                       # Stop
 
 ## 📞 Support
 
-- **PM2 Docs**: https://pm2.keymetrics.io/docs/usage/quick-start/
-- **Cluster Mode**: https://pm2.keymetrics.io/docs/usage/cluster-mode/
-- **Log Rotation**: https://github.com/keymetrics/pm2-logrotate
-- **PM2 Plus**: https://pm2.io/
+- **PM2 Docs**: <https://pm2.keymetrics.io/docs/usage/quick-start/>
+- **Cluster Mode**: <https://pm2.keymetrics.io/docs/usage/cluster-mode/>
+- **Log Rotation**: <https://github.com/keymetrics/pm2-logrotate>
+- **PM2 Plus**: <https://pm2.io/>
 
 ---
 

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname } from 'next/navigation';
 import {
   Users,
   Shield,
@@ -17,25 +17,25 @@ import {
   Monitor,
   CreditCard,
   Globe,
-} from "lucide-react";
+} from 'lucide-react';
 
 const navItems = [
-  { name: "Sessions", path: "/admin/sessions", icon: Shield },
-  { name: "Subscribers", path: "/admin/subscribers", icon: Users },
-  { name: "Users", path: "/admin/users", icon: Users },
-  { name: "Dashboard", path: "/admin/dashboard", icon: BarChart3 },
-  { name: "Analytics", path: "/admin/analytics", icon: Activity },
-  { name: "Withdrawals", path: "/admin/withdrawals", icon: Wallet },
-  { name: "Crypto", path: "/admin/crypto", icon: Database },
-  { name: "Crypto Balances", path: "/admin/crypto-balances", icon: Wallet },
-  { name: "Debit Cards", path: "/admin/debit-card", icon: CreditCard },
-  { name: "Events", path: "/admin/events", icon: Globe },
-  { name: "IP Blocks", path: "/admin/ip-blocks", icon: Lock },
-  { name: "Logs", path: "/admin/logs", icon: FileText },
-  { name: "Monitoring", path: "/admin/monitoring", icon: Monitor },
-  { name: "Tickets", path: "/admin/tickets", icon: Ticket },
-  { name: "Chat", path: "/admin/chat", icon: MessageSquare },
-  { name: "Settings", path: "/admin/settings", icon: Settings },
+  { name: 'Sessions', path: '/admin/sessions', icon: Shield },
+  { name: 'Subscribers', path: '/admin/subscribers', icon: Users },
+  { name: 'Users', path: '/admin/users', icon: Users },
+  { name: 'Dashboard', path: '/admin/dashboard', icon: BarChart3 },
+  { name: 'Analytics', path: '/admin/analytics', icon: Activity },
+  { name: 'Withdrawals', path: '/admin/withdrawals', icon: Wallet },
+  { name: 'Crypto', path: '/admin/crypto', icon: Database },
+  { name: 'Crypto Balances', path: '/admin/crypto-balances', icon: Wallet },
+  { name: 'Debit Cards', path: '/admin/debit-card', icon: CreditCard },
+  { name: 'Events', path: '/admin/events', icon: Globe },
+  { name: 'IP Blocks', path: '/admin/ip-blocks', icon: Lock },
+  { name: 'Logs', path: '/admin/logs', icon: FileText },
+  { name: 'Monitoring', path: '/admin/monitoring', icon: Monitor },
+  { name: 'Tickets', path: '/admin/tickets', icon: Ticket },
+  { name: 'Chat', path: '/admin/chat', icon: MessageSquare },
+  { name: 'Settings', path: '/admin/settings', icon: Settings },
 ];
 
 export default function AdminNav() {
@@ -43,11 +43,11 @@ export default function AdminNav() {
   const pathname = usePathname();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userRole");
-    router.push("/admin/login");
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userRole');
+    router.push('/admin/login');
   };
 
   return (
@@ -78,14 +78,12 @@ export default function AdminNav() {
                 onClick={() => router.push(item.path)}
                 className={`flex flex-col items-center gap-2 p-3 rounded-lg transition-all ${
                   isActive
-                    ? "bg-purple-500/30 border-2 border-purple-500 text-purple-300"
-                    : "bg-slate-800/50 hover:bg-slate-800 border border-purple-500/10 text-gray-400 hover:text-white"
+                    ? 'bg-purple-500/30 border-2 border-purple-500 text-purple-300'
+                    : 'bg-slate-800/50 hover:bg-slate-800 border border-purple-500/10 text-gray-400 hover:text-white'
                 }`}
               >
                 <Icon className="w-5 h-5" />
-                <span className="text-xs font-medium text-center">
-                  {item.name}
-                </span>
+                <span className="text-xs font-medium text-center">{item.name}</span>
               </button>
             );
           })}

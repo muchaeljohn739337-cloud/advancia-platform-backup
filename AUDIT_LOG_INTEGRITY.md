@@ -38,9 +38,9 @@ Entry 3:
 
 **If Entry 2 is modified**:
 
-- Its hash changes from `def456...` to something else
-- Entry 3's `prevHash` still expects `def456...`
-- **Chain broken** ❌ Tampering detected!
+-   Its hash changes from `def456...` to something else
+-   Entry 3's `prevHash` still expects `def456...`
+-   **Chain broken** ❌ Tampering detected!
 
 ---
 
@@ -59,9 +59,9 @@ CREATE INDEX idx_entry_hash ON policy_audit_logs(entry_hash);
 
 **Fields**:
 
-- `entry_hash`: SHA-256 hash (64 hex chars) of this entry + prev_hash
-- `prev_hash`: Hash of previous entry ("genesis" for first entry)
-- `signature`: Digital signature (optional, for enhanced security)
+-   `entry_hash`: SHA-256 hash (64 hex chars) of this entry + prev_hash
+-   `prev_hash`: Hash of previous entry ("genesis" for first entry)
+-   `signature`: Digital signature (optional, for enhanced security)
 
 ---
 
@@ -170,10 +170,7 @@ await prisma.policyAuditLog.create({
   "success": true,
   "valid": false,
   "totalEntries": 47,
-  "errors": [
-    "Entry abc-123 has invalid prevHash (expected: def456, got: xyz789)",
-    "Entry abc-124 has invalid hash (expected: ghi789, got: jkl012)"
-  ],
+  "errors": ["Entry abc-123 has invalid prevHash (expected: def456, got: xyz789)", "Entry abc-124 has invalid hash (expected: ghi789, got: jkl012)"],
   "message": "⚠️ TAMPERING DETECTED - audit log has been modified"
 }
 ```
@@ -224,10 +221,10 @@ node backend/test-alert-flow.js
 
 Test includes:
 
-- ✅ Rate limit triggering
-- ✅ Alert sending
-- ✅ Cooldown verification
-- ✅ **Audit log integrity check**
+-   ✅ Rate limit triggering
+-   ✅ Alert sending
+-   ✅ Cooldown verification
+-   ✅ **Audit log integrity check**
 
 ---
 
@@ -286,19 +283,19 @@ const isValid = crypto.verify(
     key: publicKey,
     padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
   },
-  Buffer.from(signature, "base64")
+  Buffer.from(signature, "base64"),
 );
 ```
 
 **Benefits**:
 
-- Proves authenticity (only private key holder can sign)
-- Even DB admin cannot forge entries without private key
+-   Proves authenticity (only private key holder can sign)
+-   Even DB admin cannot forge entries without private key
 
 **Drawbacks**:
 
-- More complex key management
-- Performance overhead (sign/verify operations)
+-   More complex key management
+-   Performance overhead (sign/verify operations)
 
 ---
 
@@ -351,28 +348,25 @@ spec:
 **If tampering detected**:
 
 1. **Immediately**:
-
-   - Lock down database access (revoke credentials)
-   - Preserve current database state (snapshot)
-   - Alert security team + management
+   -   Lock down database access (revoke credentials)
+   -   Preserve current database state (snapshot)
+   -   Alert security team + management
 
 2. **Investigate**:
-
-   - Check database access logs (who modified?)
-   - Review application logs (any unauthorized access?)
-   - Identify which entries were tampered with
+   -   Check database access logs (who modified?)
+   -   Review application logs (any unauthorized access?)
+   -   Identify which entries were tampered with
 
 3. **Restore**:
-
-   - Restore from last known-good backup
-   - Re-verify integrity after restore
-   - Implement additional access controls
+   -   Restore from last known-good backup
+   -   Re-verify integrity after restore
+   -   Implement additional access controls
 
 4. **Post-Incident**:
-   - Rotate database credentials
-   - Review IAM permissions (least privilege)
-   - Implement digital signatures (if not already)
-   - Update runbook with lessons learned
+   -   Rotate database credentials
+   -   Review IAM permissions (least privilege)
+   -   Implement digital signatures (if not already)
+   -   Update runbook with lessons learned
 
 ---
 
@@ -380,24 +374,24 @@ spec:
 
 ### Database Access
 
-- ✅ **Read-only replicas** for reporting
-- ✅ **Separate service accounts** (app vs admin)
-- ✅ **No direct DB access** for developers (use admin UI)
-- ✅ **Audit all DB queries** (PostgreSQL logs)
+-   ✅ **Read-only replicas** for reporting
+-   ✅ **Separate service accounts** (app vs admin)
+-   ✅ **No direct DB access** for developers (use admin UI)
+-   ✅ **Audit all DB queries** (PostgreSQL logs)
 
 ### Backup Strategy
 
-- ✅ **Daily backups** with retention (30 days)
-- ✅ **Encrypted backups** (AES-256)
-- ✅ **Offsite storage** (S3 with versioning)
-- ✅ **Test restores** monthly
+-   ✅ **Daily backups** with retention (30 days)
+-   ✅ **Encrypted backups** (AES-256)
+-   ✅ **Offsite storage** (S3 with versioning)
+-   ✅ **Test restores** monthly
 
 ### Monitoring
 
-- ✅ **Daily integrity checks** (cron job)
-- ✅ **Alert on failures** (email/Slack/PagerDuty)
-- ✅ **Dashboard metrics** (Grafana)
-- ✅ **Sentry integration** (for critical events)
+-   ✅ **Daily integrity checks** (cron job)
+-   ✅ **Alert on failures** (email/Slack/PagerDuty)
+-   ✅ **Dashboard metrics** (Grafana)
+-   ✅ **Sentry integration** (for critical events)
 
 ---
 
@@ -407,47 +401,47 @@ spec:
 
 **Benchmark** (Node.js crypto module):
 
-- SHA-256 hash: ~0.1ms per entry
-- Negligible overhead for audit logging
+-   SHA-256 hash: ~0.1ms per entry
+-   Negligible overhead for audit logging
 
 **Optimization**:
 
-- Hash computed once during insert (not on every read)
-- Integrity verification runs daily (not on every request)
+-   Hash computed once during insert (not on every read)
+-   Integrity verification runs daily (not on every request)
 
 ### Database Impact
 
 **Storage**:
 
-- `entry_hash`: 64 bytes per entry
-- `prev_hash`: 64 bytes per entry
-- **Total**: 128 bytes overhead (~0.1 KB)
+-   `entry_hash`: 64 bytes per entry
+-   `prev_hash`: 64 bytes per entry
+-   **Total**: 128 bytes overhead (~0.1 KB)
 
 **Queries**:
 
-- Index on `entry_hash` for fast lookups
-- Verification queries sequential (acceptable for daily checks)
+-   Index on `entry_hash` for fast lookups
+-   Verification queries sequential (acceptable for daily checks)
 
 ---
 
 ## ✅ Verification Checklist
 
-- [ ] **Schema migrated**: `entry_hash`, `prev_hash`, `signature` columns exist
-- [ ] **Automatic hashing**: New entries include hash chain
-- [ ] **Integrity endpoint**: `/verify-integrity` returns valid status
-- [ ] **Daily checks**: Cron job or CronJob scheduled
-- [ ] **Alerting**: Security team notified on tampering
-- [ ] **Backups**: Daily encrypted backups with offsite storage
-- [ ] **Access controls**: Database access limited to service account
-- [ ] **Documentation**: Team trained on audit log procedures
+-   [ ] **Schema migrated**: `entry_hash`, `prev_hash`, `signature` columns exist
+-   [ ] **Automatic hashing**: New entries include hash chain
+-   [ ] **Integrity endpoint**: `/verify-integrity` returns valid status
+-   [ ] **Daily checks**: Cron job or CronJob scheduled
+-   [ ] **Alerting**: Security team notified on tampering
+-   [ ] **Backups**: Daily encrypted backups with offsite storage
+-   [ ] **Access controls**: Database access limited to service account
+-   [ ] **Documentation**: Team trained on audit log procedures
 
 ---
 
 ## 🤝 Support
 
-- **Questions**: See [ALERT_POLICY_MANAGEMENT.md](./ALERT_POLICY_MANAGEMENT.md)
-- **Issues**: Open GitHub issue with `[audit-log]` tag
-- **Security**: Email security@example.com for vulnerabilities
+-   **Questions**: See [ALERT_POLICY_MANAGEMENT.md](./ALERT_POLICY_MANAGEMENT.md)
+-   **Issues**: Open GitHub issue with `[audit-log]` tag
+-   **Security**: Email <security@example.com> for vulnerabilities
 
 ---
 

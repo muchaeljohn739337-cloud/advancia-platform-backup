@@ -10,23 +10,23 @@ This guide covers proxy configuration for the Advancia Pay Ledger platform, incl
 
 ### Development & Testing
 
-- **Local development** behind corporate firewalls
-- **API testing** from different geographic locations
-- **Load testing** with distributed IPs
-- **Geolocation testing** for regional features
+-   **Local development** behind corporate firewalls
+-   **API testing** from different geographic locations
+-   **Load testing** with distributed IPs
+-   **Geolocation testing** for regional features
 
 ### Security & Privacy
 
-- **Penetration testing** with rotating IPs
-- **Security scans** without exposing origin IP
-- **Scraping protection** testing
-- **Rate limiting** validation
+-   **Penetration testing** with rotating IPs
+-   **Security scans** without exposing origin IP
+-   **Scraping protection** testing
+-   **Rate limiting** validation
 
 ### Production Operations
 
-- **Webhook delivery** through proxies
-- **External API calls** with IP whitelisting
-- **Compliance testing** in different regions
+-   **Webhook delivery** through proxies
+-   **External API calls** with IP whitelisting
+-   **Compliance testing** in different regions
 
 ---
 
@@ -75,8 +75,8 @@ This guide covers proxy configuration for the Advancia Pay Ledger platform, incl
 
 **Install:**
 
-- Chrome: https://chrome.google.com/webstore (search "FoxyProxy")
-- Firefox: https://addons.mozilla.org/firefox/addon/foxyproxy-standard/
+-   Chrome: <https://chrome.google.com/webstore> (search "FoxyProxy")
+-   Firefox: <https://addons.mozilla.org/firefox/addon/foxyproxy-standard/>
 
 ### System-Wide SOCKS Proxy (Windows)
 
@@ -233,9 +233,7 @@ export class ProxyClient {
   }
 
   private buildProxyUrl(config: ProxyConfig): string {
-    const auth = config.auth
-      ? `${config.auth.username}:${config.auth.password}@`
-      : "";
+    const auth = config.auth ? `${config.auth.username}:${config.auth.password}@` : "";
     return `${config.type}://${auth}${config.host}:${config.port}`;
   }
 
@@ -320,10 +318,7 @@ module.exports = {
     return [
       {
         source: "/api/:path*",
-        destination:
-          process.env.PROXY_ENABLED === "true"
-            ? "https://advanciapayledger.com/api/:path*"
-            : "http://localhost:4000/api/:path*",
+        destination: process.env.PROXY_ENABLED === "true" ? "https://advanciapayledger.com/api/:path*" : "http://localhost:4000/api/:path*",
       },
     ];
   },
@@ -447,9 +442,7 @@ const proxyConfig = {
 
 async function testProxy() {
   console.log("🔍 Testing Proxy Configuration\n");
-  console.log(
-    `Proxy: ${proxyConfig.type}://${proxyConfig.host}:${proxyConfig.port}\n`
-  );
+  console.log(`Proxy: ${proxyConfig.type}://${proxyConfig.host}:${proxyConfig.port}\n`);
 
   // Create proxy agent
   const proxyUrl = `${proxyConfig.type}://${proxyConfig.host}:${proxyConfig.port}`;
@@ -470,9 +463,7 @@ async function testProxy() {
       httpAgent: agent,
       httpsAgent: agent,
     });
-    console.log(
-      `✅ Location: ${geoResponse.data.city}, ${geoResponse.data.country_name}`
-    );
+    console.log(`✅ Location: ${geoResponse.data.city}, ${geoResponse.data.country_name}`);
     console.log(`   ISP: ${geoResponse.data.org}\n`);
 
     // Test 3: Backend API Test
@@ -617,11 +608,7 @@ function getNextProxy() {
 }
 
 async function runSecurityScanWithRotation() {
-  const targets = [
-    "https://advanciapayledger.com/api/auth/login",
-    "https://advanciapayledger.com/api/users",
-    "https://advanciapayledger.com/api/transactions",
-  ];
+  const targets = ["https://advanciapayledger.com/api/auth/login", "https://advanciapayledger.com/api/users", "https://advanciapayledger.com/api/transactions"];
 
   for (const target of targets) {
     const client = getNextProxy();
@@ -735,11 +722,11 @@ $env:PROXY_PASSWORD = "YOUR_PASSWORD"
 
 ## 📚 Additional Resources
 
-- **Proxy Protocols**: https://en.wikipedia.org/wiki/Proxy_server
-- **SOCKS5 RFC**: https://tools.ietf.org/html/rfc1928
-- **FoxyProxy Docs**: https://getfoxyproxy.org/help/
-- **Axios Proxy**: https://axios-http.com/docs/req_config
-- **Node.js Proxy Agents**: https://www.npmjs.com/package/proxy-agent
+-   **Proxy Protocols**: <https://en.wikipedia.org/wiki/Proxy_server>
+-   **SOCKS5 RFC**: <https://tools.ietf.org/html/rfc1928>
+-   **FoxyProxy Docs**: <https://getfoxyproxy.org/help/>
+-   **Axios Proxy**: <https://axios-http.com/docs/req_config>
+-   **Node.js Proxy Agents**: <https://www.npmjs.com/package/proxy-agent>
 
 ---
 
@@ -747,8 +734,8 @@ $env:PROXY_PASSWORD = "YOUR_PASSWORD"
 
 For proxy configuration issues:
 
-- **DevOps Team**: devops@advanciapayledger.com
-- **Slack**: #infrastructure (private channel)
+-   **DevOps Team**: <devops@advanciapayledger.com>
+-   **Slack**: #infrastructure (private channel)
 
 ---
 

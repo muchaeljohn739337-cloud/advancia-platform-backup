@@ -1,25 +1,26 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Wallet, Shield, Zap } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Wallet, Shield, Zap } from 'lucide-react';
 
 interface LogoProps {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
-  variant?: "light" | "dark" | "gradient";
+  variant?: 'light' | 'dark' | 'gradient';
 }
 
-export default function Logo({ size = "md", showText = true, variant = "gradient" }: LogoProps) {
+export default function Logo({ size = 'md', showText = true, variant = 'gradient' }: LogoProps) {
   const sizes = {
-    sm: { icon: 24, text: "text-lg", container: "w-8 h-8" },
-    md: { icon: 32, text: "text-xl", container: "w-10 h-10" },
-    lg: { icon: 40, text: "text-2xl", container: "w-12 h-12" },
+    sm: { icon: 24, text: 'text-lg', container: 'w-8 h-8' },
+    md: { icon: 32, text: 'text-xl', container: 'w-10 h-10' },
+    lg: { icon: 40, text: 'text-2xl', container: 'w-12 h-12' },
   };
 
   const variants = {
-    light: "bg-white text-blue-600 border-blue-200",
-    dark: "bg-slate-900 text-white border-slate-700",
-    gradient: "bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white border-transparent",
+    light: 'bg-white text-blue-600 border-blue-200',
+    dark: 'bg-slate-900 text-white border-slate-700',
+    gradient:
+      'bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white border-transparent',
   };
 
   return (
@@ -30,20 +31,22 @@ export default function Logo({ size = "md", showText = true, variant = "gradient
       transition={{ duration: 0.5 }}
     >
       {/* Logo Icon */}
-      <div className={`${sizes[size].container} ${variants[variant]} border-2 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden`}>
+      <div
+        className={`${sizes[size].container} ${variants[variant]} border-2 rounded-xl flex items-center justify-center shadow-lg relative overflow-hidden`}
+      >
         {/* Animated background shimmer */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
           animate={{
-            x: ["-100%", "200%"],
+            x: ['-100%', '200%'],
           }}
           transition={{
             duration: 3,
             repeat: Infinity,
-            ease: "linear",
+            ease: 'linear',
           }}
         />
-        
+
         {/* Triple icon stack for fintech feel */}
         <div className="relative flex items-center justify-center">
           <Wallet size={sizes[size].icon * 0.6} className="absolute opacity-30 -translate-x-1" />
@@ -64,7 +67,7 @@ export default function Logo({ size = "md", showText = true, variant = "gradient
             ADVANCIA
           </motion.span>
           <motion.span
-            className={`${size === "sm" ? "text-xs" : size === "md" ? "text-sm" : "text-base"} font-semibold tracking-wider text-slate-600`}
+            className={`${size === 'sm' ? 'text-xs' : size === 'md' ? 'text-sm' : 'text-base'} font-semibold tracking-wider text-slate-600`}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}

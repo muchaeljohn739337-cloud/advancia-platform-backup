@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 interface FormData {
   email: string;
@@ -20,9 +20,9 @@ interface InteractionMetrics {
 
 export default function InteractiveFormDemo() {
   const [formData, setFormData] = useState<FormData>({
-    email: "",
-    amount: "",
-    paymentMethod: "",
+    email: '',
+    amount: '',
+    paymentMethod: '',
     acceptTerms: false,
   });
 
@@ -31,14 +31,12 @@ export default function InteractiveFormDemo() {
     mouseLeaveCount: 0,
     clicksOnButton: 0,
     formFocusTime: 0,
-    lastInteraction: "None",
+    lastInteraction: 'None',
   });
 
   const [isMouseOverButton, setIsMouseOverButton] = useState(false);
   const [isMouseDown, setIsMouseDown] = useState(false);
-  const [ripples, setRipples] = useState<
-    Array<{ x: number; y: number; id: number }>
-  >([]);
+  const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
   const focusTimeRef = useRef<number>(0);
   const focusIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -59,7 +57,7 @@ export default function InteractiveFormDemo() {
         setMetrics((prev) => ({ ...prev, formFocusTime: elapsed }));
       }
     }, 1000);
-    setMetrics((prev) => ({ ...prev, lastInteraction: "Form focused" }));
+    setMetrics((prev) => ({ ...prev, lastInteraction: 'Form focused' }));
   };
 
   const handleFormBlur = () => {
@@ -74,7 +72,7 @@ export default function InteractiveFormDemo() {
     setMetrics((prev) => ({
       ...prev,
       mouseEnterCount: prev.mouseEnterCount + 1,
-      lastInteraction: "Mouse entered submit button",
+      lastInteraction: 'Mouse entered submit button',
     }));
   };
 
@@ -83,7 +81,7 @@ export default function InteractiveFormDemo() {
     setMetrics((prev) => ({
       ...prev,
       mouseLeaveCount: prev.mouseLeaveCount + 1,
-      lastInteraction: "Mouse left submit button",
+      lastInteraction: 'Mouse left submit button',
     }));
   };
 
@@ -111,7 +109,7 @@ export default function InteractiveFormDemo() {
     setIsMouseDown(false);
     setMetrics((prev) => ({
       ...prev,
-      lastInteraction: "Mouse up",
+      lastInteraction: 'Mouse up',
     }));
   };
 
@@ -119,7 +117,7 @@ export default function InteractiveFormDemo() {
     setMetrics((prev) => ({
       ...prev,
       clicksOnButton: prev.clicksOnButton + 1,
-      lastInteraction: "Submit button clicked",
+      lastInteraction: 'Submit button clicked',
     }));
   };
 
@@ -127,26 +125,26 @@ export default function InteractiveFormDemo() {
     e.preventDefault();
 
     if (!formData.email || !formData.amount || !formData.paymentMethod) {
-      toast.error("Please fill in all fields");
+      toast.error('Please fill in all fields');
       return;
     }
 
     if (!formData.acceptTerms) {
-      toast.error("Please accept terms and conditions");
+      toast.error('Please accept terms and conditions');
       return;
     }
 
     toast.success(`Payment of $${formData.amount} submitted! (Demo)`);
     setMetrics((prev) => ({
       ...prev,
-      lastInteraction: "Form submitted successfully",
+      lastInteraction: 'Form submitted successfully',
     }));
 
     // Reset form
     setFormData({
-      email: "",
-      amount: "",
-      paymentMethod: "",
+      email: '',
+      amount: '',
+      paymentMethod: '',
       acceptTerms: false,
     });
   };
@@ -188,7 +186,7 @@ export default function InteractiveFormDemo() {
                     setFormData({ ...formData, email: e.target.value });
                     setMetrics((prev) => ({
                       ...prev,
-                      lastInteraction: "Email input changed",
+                      lastInteraction: 'Email input changed',
                     }));
                   }}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -209,7 +207,7 @@ export default function InteractiveFormDemo() {
                     setFormData({ ...formData, amount: e.target.value });
                     setMetrics((prev) => ({
                       ...prev,
-                      lastInteraction: "Amount input changed",
+                      lastInteraction: 'Amount input changed',
                     }));
                   }}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
@@ -232,7 +230,7 @@ export default function InteractiveFormDemo() {
                     setFormData({ ...formData, paymentMethod: e.target.value });
                     setMetrics((prev) => ({
                       ...prev,
-                      lastInteraction: "Payment method selected",
+                      lastInteraction: 'Payment method selected',
                     }));
                   }}
                   list="payment-methods"
@@ -258,9 +256,7 @@ export default function InteractiveFormDemo() {
                     setFormData({ ...formData, acceptTerms: e.target.checked });
                     setMetrics((prev) => ({
                       ...prev,
-                      lastInteraction: e.target.checked
-                        ? "Terms accepted"
-                        : "Terms unchecked",
+                      lastInteraction: e.target.checked ? 'Terms accepted' : 'Terms unchecked',
                     }));
                   }}
                   className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
@@ -284,10 +280,10 @@ export default function InteractiveFormDemo() {
                   transition-all duration-200 transform
                   ${
                     isMouseOverButton
-                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 scale-105 shadow-xl"
-                      : "bg-gradient-to-r from-blue-500 to-indigo-500 shadow-lg"
+                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 scale-105 shadow-xl'
+                      : 'bg-gradient-to-r from-blue-500 to-indigo-500 shadow-lg'
                   }
-                  ${isMouseDown ? "scale-95" : ""}
+                  ${isMouseDown ? 'scale-95' : ''}
                   hover:shadow-2xl
                   focus:ring-4 focus:ring-blue-300 focus:outline-none
                   active:transform active:scale-95
@@ -301,15 +297,15 @@ export default function InteractiveFormDemo() {
                     style={{
                       left: ripple.x,
                       top: ripple.y,
-                      width: "10px",
-                      height: "10px",
-                      transform: "translate(-50%, -50%)",
+                      width: '10px',
+                      height: '10px',
+                      transform: 'translate(-50%, -50%)',
                     }}
                   />
                 ))}
 
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  {isMouseDown ? "⬇️" : isMouseOverButton ? "👆" : "💳"}
+                  {isMouseDown ? '⬇️' : isMouseOverButton ? '👆' : '💳'}
                   Submit Payment
                 </span>
               </button>
@@ -368,9 +364,7 @@ export default function InteractiveFormDemo() {
               <h3 className="text-xl font-bold mb-4">🎬 Last Interaction</h3>
               <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
                 <p className="font-mono text-sm">{metrics.lastInteraction}</p>
-                <p className="text-xs mt-2 opacity-75">
-                  {new Date().toLocaleTimeString()}
-                </p>
+                <p className="text-xs mt-2 opacity-75">{new Date().toLocaleTimeString()}</p>
               </div>
             </div>
 
@@ -385,14 +379,12 @@ export default function InteractiveFormDemo() {
                   p-4 rounded-lg text-center transition-all duration-200
                   ${
                     isMouseOverButton
-                      ? "bg-green-100 dark:bg-green-900/30 ring-2 ring-green-500"
-                      : "bg-gray-100 dark:bg-gray-700"
+                      ? 'bg-green-100 dark:bg-green-900/30 ring-2 ring-green-500'
+                      : 'bg-gray-100 dark:bg-gray-700'
                   }
                 `}
                 >
-                  <div className="text-2xl mb-1">
-                    {isMouseOverButton ? "✅" : "⬜"}
-                  </div>
+                  <div className="text-2xl mb-1">{isMouseOverButton ? '✅' : '⬜'}</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Hovering
                   </div>
@@ -403,14 +395,12 @@ export default function InteractiveFormDemo() {
                   p-4 rounded-lg text-center transition-all duration-200
                   ${
                     isMouseDown
-                      ? "bg-red-100 dark:bg-red-900/30 ring-2 ring-red-500"
-                      : "bg-gray-100 dark:bg-gray-700"
+                      ? 'bg-red-100 dark:bg-red-900/30 ring-2 ring-red-500'
+                      : 'bg-gray-100 dark:bg-gray-700'
                   }
                 `}
                 >
-                  <div className="text-2xl mb-1">
-                    {isMouseDown ? "⬇️" : "⬜"}
-                  </div>
+                  <div className="text-2xl mb-1">{isMouseDown ? '⬇️' : '⬜'}</div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Pressing
                   </div>

@@ -55,38 +55,38 @@ Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I
 
 ### Stripe Keys (3 values)
 
-📍 Go to: https://dashboard.stripe.com/test/apikeys
+📍 Go to: <https://dashboard.stripe.com/test/apikeys>
 
 **8. STRIPE_SECRET_KEY**
 
-- Click "Reveal test key"
-- Format: `sk_test_...`
+-   Click "Reveal test key"
+-   Format: `sk_test_...`
 
 **9. STRIPE_PUBLISHABLE_KEY**
 
-- Already visible
-- Format: `pk_test_...`
+-   Already visible
+-   Format: `pk_test_...`
 
 **10. STRIPE_WEBHOOK_SECRET**
 
-- Go to: https://dashboard.stripe.com/test/webhooks
-- Add endpoint: `https://advancia-backend.onrender.com/api/payments/webhook`
-- Select events: `payment_intent.*` and `charge.*`
-- Copy signing secret: `whsec_...`
+-   Go to: <https://dashboard.stripe.com/test/webhooks>
+-   Add endpoint: `https://advancia-backend.onrender.com/api/payments/webhook`
+-   Select events: `payment_intent.*` and `charge.*`
+-   Copy signing secret: `whsec_...`
 
 ---
 
 ### Cryptomus Keys (2 values)
 
-📍 Go to: https://cryptomus.com/dashboard
+📍 Go to: <https://cryptomus.com/dashboard>
 
 **11. CRYPTOMUS_API_KEY**
 
-- Dashboard → API Keys → Copy
+-   Dashboard → API Keys → Copy
 
 **12. CRYPTOMUS_MERCHANT_ID**
 
-- Dashboard → Merchant Settings → Copy ID
+-   Dashboard → Merchant Settings → Copy ID
 
 ⚠️ **Optional**: Skip if not using crypto payments initially
 
@@ -94,12 +94,12 @@ Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I
 
 ### Sentry (1 value)
 
-📍 Go to: https://sentry.io
+📍 Go to: <https://sentry.io>
 
 **13. SENTRY_DSN**
 
-- Create project → Settings → Client Keys (DSN)
-- Format: `https://...@sentry.io/...`
+-   Create project → Settings → Client Keys (DSN)
+-   Format: `https://...@sentry.io/...`
 
 ⚠️ **Optional**: Can leave empty or skip for now
 
@@ -107,17 +107,17 @@ Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I
 
 ### Gmail SMTP (2 values)
 
-📍 Go to: https://myaccount.google.com/apppasswords
+📍 Go to: <https://myaccount.google.com/apppasswords>
 
 **14. EMAIL_USER**
 
-- Your Gmail address (e.g., `your-email@gmail.com`)
+-   Your Gmail address (e.g., `your-email@gmail.com`)
 
 **15. EMAIL_PASSWORD**
 
-- Create app password: "Advancia Backend"
-- Copy 16-character password (e.g., `abcd efgh ijkl mnop`)
-- ⚠️ Use App Password, NOT your regular Gmail password
+-   Create app password: "Advancia Backend"
+-   Copy 16-character password (e.g., `abcd efgh ijkl mnop`)
+-   ⚠️ Use App Password, NOT your regular Gmail password
 
 ---
 
@@ -141,9 +141,9 @@ Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I
 
 ❌ Skip for now:
 
-- Stripe (add later when ready for payments)
-- Cryptomus (add later for crypto)
-- Sentry (add later for monitoring)
+-   Stripe (add later when ready for payments)
+-   Cryptomus (add later for crypto)
+-   Sentry (add later for monitoring)
 
 **Result**: Backend will deploy and work for basic features
 
@@ -163,38 +163,35 @@ Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I
 ## 📝 RENDER DASHBOARD STEPS
 
 1. **Paste Generated Secrets** (7 values above)
-
-   - JWT_SECRET → Paste: `>Q2mYL24HFVR$!Y00mY^J<=sK4Rc2YceU2v%7cl,C=z|:&)R>G,u6Z*19W4-[70,`
-   - SESSION_SECRET → Paste: `29fIHi#UKpOW04K#@au8,^I96f)0tksnhf-oaE3TqOz]oFSH5-Dgv$=HpLp1YH?W`
-   - JWT_SECRET_ENCRYPTED → Paste: `{M*xo>i;=}5tv^=q_9+xi!X.3P&lRbp@nA}S(uz9AFtj17yCrwBsp^@XD*;NlU.i`
-   - JWT_ENCRYPTION_KEY → Paste: `fea5dbaa4d1801cab8593923e42cb97e3b436ee30ac3c5d211b1fddf306348f2`
-   - JWT_ENCRYPTION_IV → Paste: `hgFrH0Ro2wfqOWXmQvtQ1Q==`
-   - VAPID_PUBLIC_KEY → Paste: `BLlPxsf0wmOuUE1jmEckN5NUpPmXsxpVivC12nZxdAUFX34T-5RqPq5z8Vj3ZDM7TJqQ-YqJ1gIGVWY8KMqkG3Y`
-   - VAPID_PRIVATE_KEY → Paste: `Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I`
+   -   JWT_SECRET → Paste: `>Q2mYL24HFVR$!Y00mY^J<=sK4Rc2YceU2v%7cl,C=z|:&)R>G,u6Z*19W4-[70,`
+   -   SESSION_SECRET → Paste: `29fIHi#UKpOW04K#@au8,^I96f)0tksnhf-oaE3TqOz]oFSH5-Dgv$=HpLp1YH?W`
+   -   JWT_SECRET_ENCRYPTED → Paste: `{M*xo>i;=}5tv^=q_9+xi!X.3P&lRbp@nA}S(uz9AFtj17yCrwBsp^@XD*;NlU.i`
+   -   JWT_ENCRYPTION_KEY → Paste: `fea5dbaa4d1801cab8593923e42cb97e3b436ee30ac3c5d211b1fddf306348f2`
+   -   JWT_ENCRYPTION_IV → Paste: `hgFrH0Ro2wfqOWXmQvtQ1Q==`
+   -   VAPID_PUBLIC_KEY → Paste: `BLlPxsf0wmOuUE1jmEckN5NUpPmXsxpVivC12nZxdAUFX34T-5RqPq5z8Vj3ZDM7TJqQ-YqJ1gIGVWY8KMqkG3Y`
+   -   VAPID_PRIVATE_KEY → Paste: `Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I`
 
 2. **Add Email Keys** (2 values)
-
-   - EMAIL_USER → Your Gmail
-   - EMAIL_PASSWORD → Gmail App Password
+   -   EMAIL_USER → Your Gmail
+   -   EMAIL_PASSWORD → Gmail App Password
 
 3. **Add External Keys** (Optional, 6 values)
-
-   - STRIPE_SECRET_KEY
-   - STRIPE_PUBLISHABLE_KEY
-   - STRIPE_WEBHOOK_SECRET
-   - CRYPTOMUS_API_KEY
-   - CRYPTOMUS_MERCHANT_ID
-   - SENTRY_DSN
+   -   STRIPE_SECRET_KEY
+   -   STRIPE_PUBLISHABLE_KEY
+   -   STRIPE_WEBHOOK_SECRET
+   -   CRYPTOMUS_API_KEY
+   -   CRYPTOMUS_MERCHANT_ID
+   -   SENTRY_DSN
 
 4. **Click "Deploy Blueprint"**
 
 5. **Monitor Logs**
-
-   - Dashboard → advancia-backend → Logs
-   - Wait 3-5 minutes
-   - Look for: `Server running on port 4000`
+   -   Dashboard → advancia-backend → Logs
+   -   Wait 3-5 minutes
+   -   Look for: `Server running on port 4000`
 
 6. **Test Backend**
+
    ```bash
    curl https://advancia-backend.onrender.com/api/health
    ```
@@ -205,7 +202,7 @@ Aoza9d-LSPv-XAXbf_2kH8sWSFqWGBQKPklMKVwDK1I
 
 ### Update Vercel Frontend
 
-Go to: https://vercel.com/dashboard → Your Project → Settings → Environment Variables
+Go to: <https://vercel.com/dashboard> → Your Project → Settings → Environment Variables
 
 Add for **Production, Preview, Development**:
 
@@ -222,17 +219,17 @@ Plus 5 more variables (see DEPLOYMENT_IMPLEMENTATION_GUIDE.md)
 
 ## ✅ SUCCESS CHECKLIST
 
-- [ ] Paste 7 generated secrets to Render
-- [ ] Add Gmail email credentials (2 values)
-- [ ] Add Stripe keys (3 values) OR skip for now
-- [ ] Add Cryptomus keys (2 values) OR skip for now
-- [ ] Add Sentry DSN (1 value) OR skip for now
-- [ ] Click "Deploy Blueprint"
-- [ ] Wait 3-5 minutes for deployment
-- [ ] Check logs for "Server running"
-- [ ] Test: `curl https://advancia-backend.onrender.com/api/health`
-- [ ] Update Vercel environment variables
-- [ ] Test full stack integration
+-   [ ] Paste 7 generated secrets to Render
+-   [ ] Add Gmail email credentials (2 values)
+-   [ ] Add Stripe keys (3 values) OR skip for now
+-   [ ] Add Cryptomus keys (2 values) OR skip for now
+-   [ ] Add Sentry DSN (1 value) OR skip for now
+-   [ ] Click "Deploy Blueprint"
+-   [ ] Wait 3-5 minutes for deployment
+-   [ ] Check logs for "Server running"
+-   [ ] Test: `curl https://advancia-backend.onrender.com/api/health`
+-   [ ] Update Vercel environment variables
+-   [ ] Test full stack integration
 
 ---
 
@@ -240,21 +237,21 @@ Plus 5 more variables (see DEPLOYMENT_IMPLEMENTATION_GUIDE.md)
 
 ### "Build Failed" in Render Logs
 
-- Check if all required variables are set
-- Verify DATABASE_URL is configured
-- Check for Prisma migration errors
+-   Check if all required variables are set
+-   Verify DATABASE_URL is configured
+-   Check for Prisma migration errors
 
 ### "Cannot connect to database"
 
-- DATABASE_URL should be auto-configured by Render
-- Verify PostgreSQL service is running
-- Check Render Dashboard → Databases
+-   DATABASE_URL should be auto-configured by Render
+-   Verify PostgreSQL service is running
+-   Check Render Dashboard → Databases
 
 ### "Missing JWT_SECRET" error
 
-- Ensure all JWT-related variables are set
-- No extra spaces in values
-- Values must be exactly as generated
+-   Ensure all JWT-related variables are set
+-   No extra spaces in values
+-   Values must be exactly as generated
 
 ---
 
@@ -269,8 +266,8 @@ Plus 5 more variables (see DEPLOYMENT_IMPLEMENTATION_GUIDE.md)
 
 **Files Created**:
 
-- ✅ `.env.render.generated` - Full reference with all values
-- ✅ `scripts/generate-secrets.ps1` - Script to regenerate secrets
-- ✅ `RENDER_SECRETS_QUICK_REFERENCE.md` - This file
+-   ✅ `.env.render.generated` - Full reference with all values
+-   ✅ `scripts/generate-secrets.ps1` - Script to regenerate secrets
+-   ✅ `RENDER_SECRETS_QUICK_REFERENCE.md` - This file
 
 **Status**: ✅ Ready to deploy!

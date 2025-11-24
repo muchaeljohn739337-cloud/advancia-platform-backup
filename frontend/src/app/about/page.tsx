@@ -1,39 +1,40 @@
-'use client'
+'use client';
 
-import SidebarLayout from '@/components/SidebarLayout'
-import { motion } from 'framer-motion'
-import { Building2, Users, Target, Shield, Globe, Heart } from 'lucide-react'
+import SidebarLayout from '@/components/SidebarLayout';
+import { motion } from 'framer-motion';
+import { Building2, Users, Target, Shield, Globe, Heart } from 'lucide-react';
 
 export default function AboutPage() {
   const features = [
     {
       icon: Shield,
-      title: "Secure Platform",
-      description: "Bank-grade encryption and security protocols protect your financial data 24/7."
+      title: 'Secure Platform',
+      description: 'Bank-grade encryption and security protocols protect your financial data 24/7.',
     },
     {
       icon: Globe,
-      title: "Global Reach",
-      description: "Support for multiple currencies and international transactions across 50+ countries."
+      title: 'Global Reach',
+      description:
+        'Support for multiple currencies and international transactions across 50+ countries.',
     },
     {
       icon: Users,
-      title: "Community Driven",
-      description: "Built with feedback from thousands of users to create the best experience."
+      title: 'Community Driven',
+      description: 'Built with feedback from thousands of users to create the best experience.',
     },
     {
       icon: Heart,
-      title: "Customer First",
-      description: "24/7 customer support and dedicated account managers for premium users."
-    }
-  ]
+      title: 'Customer First',
+      description: '24/7 customer support and dedicated account managers for premium users.',
+    },
+  ];
 
   const stats = [
-    { label: "Active Users", value: "10K+" },
-    { label: "Transactions", value: "$5M+" },
-    { label: "Countries", value: "50+" },
-    { label: "Uptime", value: "99.9%" }
-  ]
+    { label: 'Active Users', value: '10K+' },
+    { label: 'Transactions', value: '$5M+' },
+    { label: 'Countries', value: '50+' },
+    { label: 'Uptime', value: '99.9%' },
+  ];
 
   return (
     <SidebarLayout>
@@ -51,7 +52,7 @@ export default function AboutPage() {
                 <Building2 className="h-6 w-6 text-blue-600" />
                 <span className="text-blue-900 font-semibold">About Advancia Pay</span>
               </div>
-              
+
               <h1 className="text-5xl md:text-6xl font-bold">
                 <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
                   Revolutionizing
@@ -59,9 +60,9 @@ export default function AboutPage() {
                 <br />
                 Digital Finance
               </h1>
-              
+
               <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                Advancia Pay Ledger is a modern fintech platform designed to make financial 
+                Advancia Pay Ledger is a modern fintech platform designed to make financial
                 management simple, secure, and accessible to everyone.
               </p>
             </motion.div>
@@ -100,18 +101,19 @@ export default function AboutPage() {
               <Target className="h-8 w-8 text-purple-600" />
               <h2 className="text-3xl font-bold text-slate-900">Our Mission</h2>
             </div>
-            
+
             <p className="text-lg text-slate-600 leading-relaxed mb-6">
-              At Advancia Pay, we believe that everyone deserves access to powerful financial tools 
-              that are both easy to use and secure. Our mission is to democratize financial services 
-              by providing a platform that combines the best of traditional banking with cutting-edge 
-              blockchain technology.
+              At Advancia Pay, we believe that everyone deserves access to powerful financial tools
+              that are both easy to use and secure. Our mission is to democratize financial services
+              by providing a platform that combines the best of traditional banking with
+              cutting-edge blockchain technology.
             </p>
-            
+
             <p className="text-lg text-slate-600 leading-relaxed">
-              We&apos;re committed to transparency, security, and putting our users first in everything we do. 
-              Whether you&apos;re managing your daily expenses, investing in cryptocurrency, or building your 
-              financial future, Advancia Pay is here to help you succeed.
+              We&apos;re committed to transparency, security, and putting our users first in
+              everything we do. Whether you&apos;re managing your daily expenses, investing in
+              cryptocurrency, or building your financial future, Advancia Pay is here to help you
+              succeed.
             </p>
           </motion.div>
         </div>
@@ -123,7 +125,7 @@ export default function AboutPage() {
               Why Choose Us
             </span>
           </h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             {features.map((feature, index) => (
               <motion.div
@@ -136,14 +138,10 @@ export default function AboutPage() {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 mb-4">
                   <feature.icon className="h-7 w-7 text-white" />
                 </div>
-                
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
-                  {feature.title}
-                </h3>
-                
-                <p className="text-slate-600 leading-relaxed">
-                  {feature.description}
-                </p>
+
+                <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
+
+                <p className="text-slate-600 leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -158,17 +156,15 @@ export default function AboutPage() {
             className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl"
           >
             <Users className="h-16 w-16 mx-auto mb-6 opacity-90" />
-            
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Built by Fintech Experts
-            </h2>
-            
+
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Built by Fintech Experts</h2>
+
             <p className="text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed mb-8">
-              Our team brings decades of combined experience from leading financial institutions, 
-              tech companies, and blockchain projects. We&apos;re passionate about creating tools that 
-              empower users to take control of their financial future.
+              Our team brings decades of combined experience from leading financial institutions,
+              tech companies, and blockchain projects. We&apos;re passionate about creating tools
+              that empower users to take control of their financial future.
             </p>
-            
+
             <button className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
               Join Our Team
             </button>
@@ -176,5 +172,5 @@ export default function AboutPage() {
         </div>
       </div>
     </SidebarLayout>
-  )
+  );
 }

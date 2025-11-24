@@ -1,6 +1,6 @@
-"use client";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+'use client';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function SplashScreen() {
   const [isVisible, setIsVisible] = useState(true);
@@ -55,7 +55,7 @@ export default function SplashScreen() {
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
               className="relative"
             >
               {/* Glowing ring effect */}
@@ -68,7 +68,7 @@ export default function SplashScreen() {
                 transition={{
                   duration: 2,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                 }}
               />
 

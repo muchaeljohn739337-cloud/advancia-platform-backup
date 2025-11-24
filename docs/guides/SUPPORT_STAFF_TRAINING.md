@@ -61,8 +61,9 @@ This guide will help you provide excellent customer support using our AI-powered
 
 **Template Response:**
 
-`	ext
+` ext
 To check your balance:
+
 1. Navigate to your Dashboard
 2. Your balances are displayed at the top:
    - USD Balance (for fiat transactions)
@@ -71,7 +72,7 @@ To check your balance:
    - USDT Balance (Tether stablecoin)
 
 You can also view detailed transaction history in the Transactions section.
-`	ext
+` ext
 
 #### Adding Funds
 
@@ -79,7 +80,7 @@ You can also view detailed transaction history in the Transactions section.
 
 **Template Response:**
 
-`	ext
+` ext
 To add funds to your Advancia account:
 
 1. CRYPTO DEPOSIT:
@@ -101,7 +102,7 @@ To add funds to your Advancia account:
    - 2.5% processing fee applies
 
 Need additional help? I'm here!
-`	ext
+` ext
 
 #### Transaction Issues
 
@@ -109,23 +110,25 @@ Need additional help? I'm here!
 
 **Template Response:**
 
-`	ext
+` ext
 Let's troubleshoot your failed transaction:
 
 COMMON CAUSES:
+
 1. Insufficient Balance - Check you have enough USD/crypto
 2. Network Issues - Try refreshing and attempting again
 3. Authentication Expired - Re-login to refresh your session
 4. Daily Limit Reached - Check your tier limits
 
 WHAT TO DO:
+
 1. Check your Transaction History for error details
 2. Verify your balance covers the amount + fees
 3. Ensure you're logged in (check top right corner)
 4. Try a smaller amount to test
 
 If issue persists, I can create a priority support ticket for you. Would you like me to do that?
-`	ext
+` ext
 
 #### Crypto Trading
 
@@ -133,10 +136,11 @@ If issue persists, I can create a priority support ticket for you. Would you lik
 
 **Template Response:**
 
-`	ext
+` ext
 Buying Bitcoin on Advancia is simple:
 
 STEP-BY-STEP:
+
 1. Ensure you have USD balance in your account
 2. Go to Crypto Trading → Buy Bitcoin
 3. Enter amount in USD you want to spend
@@ -150,12 +154,13 @@ FEES:
 • No withdrawal fees for amounts over $100
 
 TIPS:
+
 - Start small to familiarize yourself
 - Monitor market trends in the Market Insights section
 - Set price alerts for your target buy price
 
 We also support Ethereum (ETH), Tether (USDT), and ADVANCIA Token!
-`	ext
+` ext
 
 #### Med Beds Booking
 
@@ -163,10 +168,11 @@ We also support Ethereum (ETH), Tether (USDT), and ADVANCIA Token!
 
 **Template Response:**
 
-`	ext
+` ext
 Booking your Med Bed session is easy:
 
 STEP-BY-STEP:
+
 1. Navigate to Med Beds → Book Session
 2. SELECT CHAMBER TYPE:
    □ Standard ($50) - General wellness & recovery
@@ -192,7 +198,7 @@ CANCELLATION POLICY:
 • No refund within 24 hours
 
 Need help selecting the right chamber for your needs?
-`	ext
+` ext
 
 #### Debit Card Requests
 
@@ -200,7 +206,7 @@ Need help selecting the right chamber for your needs?
 
 **Template Response:**
 
-`	ext
+` ext
 Get your Advancia Virtual Debit Card instantly:
 
 💳 CARD DETAILS:
@@ -210,6 +216,7 @@ Get your Advancia Virtual Debit Card instantly:
 • Integrated with your USD balance
 
 HOW TO PURCHASE:
+
 1. Go to Debit Card → Purchase Card
 2. Ensure $1,000 USD in your balance
 3. Review terms and conditions
@@ -222,7 +229,7 @@ USING YOUR CARD:
 • Balance: Your card balance = Your USD balance
 
 The card number, expiration, and CVV will be displayed immediately after purchase.
-`	ext
+` ext
 
 #### 2FA Setup
 
@@ -230,33 +237,35 @@ The card number, expiration, and CVV will be displayed immediately after purchas
 
 **Template Response:**
 
-`	ext
+` ext
 Secure your account with Two-Factor Authentication:
 
 SETUP PROCESS:
+
 1. Go to Settings → Security
 2. Click "Enable 2FA"
 3. CHOOSE METHOD:
 
    A) TOTP AUTHENTICATOR APP (Recommended):
-      - Download Google Authenticator or Authy
-      - Scan QR code shown on screen
-      - Enter 6-digit code to verify
-      - Save backup codes (IMPORTANT!)
+   - Download Google Authenticator or Authy
+   - Scan QR code shown on screen
+   - Enter 6-digit code to verify
+   - Save backup codes (IMPORTANT!)
 
    B) EMAIL OTP:
-      - Enter your email
-      - Receive 6-digit code
-      - Verify code
-      - 2FA active on next login
+   - Enter your email
+   - Receive 6-digit code
+   - Verify code
+   - 2FA active on next login
 
 ⚠️ CRITICAL: Save your 8 backup codes
+
 - Use if you lose your phone
 - Each code works once
 - Store securely offline
 
 Enable 2FA now for maximum security!
-`	ext
+` ext
 
 #### Password Reset
 
@@ -264,10 +273,11 @@ Enable 2FA now for maximum security!
 
 **Template Response:**
 
-`	ext
+` ext
 Reset your Advancia password easily:
 
 STEP-BY-STEP:
+
 1. Go to Login Page
 2. Click "Forgot Password?"
 3. Enter your registered email
@@ -289,7 +299,7 @@ EMAIL NOT RECEIVED?
 • Request new reset link
 
 If you still can't access your account, I can escalate this to our account recovery team.
-`	ext
+` ext
 
 ---
 
@@ -298,25 +308,21 @@ If you still can't access your account, I can escalate this to our account recov
 ### When to Escalate to Tier 2 Support
 
 1. **Account Access Issues**
-
    - User locked out after multiple failed attempts
    - Lost access to 2FA device and backup codes
    - Suspected account compromise
 
 2. **Large Transaction Disputes**
-
    - Disputes over $10,000
    - Suspected fraud or unauthorized transactions
    - Crypto withdrawal issues
 
 3. **Technical Bugs**
-
    - System errors preventing core functionality
    - Data loss or corruption
    - Security vulnerabilities
 
 4. **Legal/Compliance**
-
    - KYC verification problems
    - Regulatory questions
    - Legal document requests
@@ -329,14 +335,12 @@ If you still can't access your account, I can escalate this to our account recov
 ### How to Escalate
 
 1. **Create Priority Ticket**
-
    - Mark as "HIGH" or "CRITICAL" priority
    - Include all relevant details
    - Attach screenshots if available
    - Tag appropriate team (Security, Technical, Legal)
 
 2. **Notify Team Lead**
-
    - Immediate notification for critical issues
    - Include ticket ID and summary
    - Recommend immediate action if needed
@@ -353,7 +357,6 @@ If you still can't access your account, I can escalate this to our account recov
 ### Admin Dashboard Features
 
 1. **User Management** (`/admin/users`)
-
    - Search and view user accounts
    - Check verification status
    - View balance and transaction history
@@ -361,14 +364,12 @@ If you still can't access your account, I can escalate this to our account recov
    - Lock/unlock accounts
 
 2. **Transaction Monitoring** (`/admin/transactions`)
-
    - View all platform transactions
    - Filter by date, amount, type
    - Check transaction status
    - Refund processing
 
 3. **Support Tickets** (`/admin/support`)
-
    - View all open tickets
    - Assign tickets to team members
    - Update ticket status
@@ -376,7 +377,6 @@ If you still can't access your account, I can escalate this to our account recov
    - Close resolved tickets
 
 4. **Live Chat Monitor** (`/admin/chat`)
-
    - View active chat sessions
    - Join conversations
    - Send replies to users
@@ -384,7 +384,6 @@ If you still can't access your account, I can escalate this to our account recov
    - See new ticket notifications
 
 5. **IP Blocking** (`/admin/ip-blocks`)
-
    - View blocked IPs
    - Add new blocks
    - Unblock IPs
@@ -401,40 +400,40 @@ If you still can't access your account, I can escalate this to our account recov
 
 #### Check User Wallet
 
-`	ext
+` ext
 GET /api/ai-analytics/wallet/:userId
 Authorization: Bearer {admin_token}
 
 Response: Crypto portfolio analysis, order history, recommendations
-`	ext
+` ext
 
 #### Cash-Out Eligibility
 
-`	ext
+` ext
 POST /api/ai-analytics/cashout/:userId
 Authorization: Bearer {admin_token}
 Body: { "requestedAmount": 5000 }
 
 Response: Eligibility assessment, risk analysis, recommendations
-`	ext
+` ext
 
 #### Product Recommendations
 
-`	ext
+` ext
 GET /api/ai-analytics/recommendations/:userId
 Authorization: Bearer {admin_token}
 
 Response: Personalized service recommendations based on user activity
-`	ext
+` ext
 
 #### Market Insights
 
-`	ext
+` ext
 GET /api/ai-analytics/market-insights
 Authorization: Bearer {admin_token}
 
 Response: Platform-wide analytics and trends
-`	ext
+` ext
 
 ---
 
@@ -529,22 +528,18 @@ Response: Platform-wide analytics and trends
 ### Key Performance Indicators (KPIs)
 
 1. **Response Time**
-
    - Target: < 5 minutes for initial response
    - Measured: Time from message received to first reply
 
 2. **Resolution Time**
-
    - Target: < 24 hours for 80% of tickets
    - Measured: Time from ticket creation to closure
 
 3. **Customer Satisfaction (CSAT)**
-
    - Target: > 90% satisfaction rate
    - Measured: Post-interaction survey
 
 4. **First Contact Resolution (FCR)**
-
    - Target: > 70% resolved on first contact
    - Measured: Tickets resolved without escalation
 
@@ -657,25 +652,21 @@ Before making account changes:
 ## 💡 Pro Tips for Success
 
 1. **Be Proactive**
-
    - Anticipate user needs
    - Offer additional help before they ask
    - Suggest relevant features they might not know about
 
 2. **Use Positive Language**
-
    - "I can help you with that" instead of "I can't..."
    - "Let's fix this together" instead of "You need to..."
    - "This will be resolved soon" instead of "This might take a while"
 
 3. **Personalize Responses**
-
    - Use user's name
    - Reference their specific situation
    - Show empathy and understanding
 
 4. **Stay Updated**
-
    - Review knowledge base updates weekly
    - Attend team training sessions
    - Share learnings with the team

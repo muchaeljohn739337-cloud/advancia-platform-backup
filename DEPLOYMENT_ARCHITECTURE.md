@@ -25,26 +25,28 @@
 ## 🌐 Current Configuration
 
 ### **Frontend - Vercel**
-- **Platform**: Vercel.com
-- **Repository**: Connected to GitHub
-- **Auto-Deploy**: Yes (on push to `main`)
-- **Current URL**: `https://frontend-qyq8901ns-advanciapayledger.vercel.app`
-- **Target Domain**: `advanciapayledger.com`
-- **Framework**: Next.js 14
-- **Build**: Automatic on git push
-- **CDN**: Global edge network
-- **SSL**: Auto-provisioned (free)
+
+-   **Platform**: Vercel.com
+-   **Repository**: Connected to GitHub
+-   **Auto-Deploy**: Yes (on push to `main`)
+-   **Current URL**: `https://frontend-qyq8901ns-advanciapayledger.vercel.app`
+-   **Target Domain**: `advanciapayledger.com`
+-   **Framework**: Next.js 14
+-   **Build**: Automatic on git push
+-   **CDN**: Global edge network
+-   **SSL**: Auto-provisioned (free)
 
 ### **Backend - Render**
-- **Platform**: Render.com
-- **Service**: `advancia-backend-upnrf`
-- **Region**: Oregon
-- **Current URL**: `https://advancia-backend-upnrf.onrender.com`
-- **Target Domain**: `api.advanciapayledger.com`
-- **Database**: PostgreSQL on Render (`dpg-d3tqp46uk2gs73dcu2dg-a`)
-- **Auto-Deploy**: Yes (configured in `render.yaml`)
-- **Health Check**: `/api/health`
-- **SSL**: Auto-provisioned (free)
+
+-   **Platform**: Render.com
+-   **Service**: `advancia-backend-upnrf`
+-   **Region**: Oregon
+-   **Current URL**: `https://advancia-backend-upnrf.onrender.com`
+-   **Target Domain**: `api.advanciapayledger.com`
+-   **Database**: PostgreSQL on Render (`dpg-d3tqp46uk2gs73dcu2dg-a`)
+-   **Auto-Deploy**: Yes (configured in `render.yaml`)
+-   **Health Check**: `/api/health`
+-   **SSL**: Auto-provisioned (free)
 
 ---
 
@@ -67,6 +69,7 @@
 Vercel will show you which records to add. Typically:
 
 **For Root Domain (advanciapayledger.com):**
+
 ```
 Type: A
 Name: @
@@ -75,6 +78,7 @@ TTL: 3600
 ```
 
 **OR (if your DNS supports CNAME flattening):**
+
 ```
 Type: CNAME
 Name: @
@@ -83,6 +87,7 @@ TTL: 3600
 ```
 
 **For WWW:**
+
 ```
 Type: CNAME
 Name: www
@@ -93,9 +98,10 @@ TTL: 3600
 #### C. Verify in Vercel
 
 After DNS propagates (5-30 minutes):
-- Vercel will show ✅ Domain verified
-- SSL certificate auto-issued
-- Both `advanciapayledger.com` and `www.advanciapayledger.com` will work
+
+-   Vercel will show ✅ Domain verified
+-   SSL certificate auto-issued
+-   Both `advanciapayledger.com` and `www.advanciapayledger.com` will work
 
 ### **Step 2: Backend Domain on Render**
 
@@ -120,15 +126,17 @@ TTL: 3600
 #### C. Wait for SSL
 
 Render will automatically:
-- Verify DNS
-- Issue Let's Encrypt SSL certificate (5-15 min)
-- Show ✅ SSL certificate issued
+
+-   Verify DNS
+-   Issue Let's Encrypt SSL certificate (5-15 min)
+-   Show ✅ SSL certificate issued
 
 ### **Step 3: Update CORS Configuration**
 
 Once domains are active, update backend CORS:
 
 **In Render Dashboard:**
+
 ```
 1. Go to: advancia-backend-upnrf
 2. Environment → Edit
@@ -138,6 +146,7 @@ Once domains are active, update backend CORS:
 ```
 
 **In `backend/.env` (local development):**
+
 ```env
 ALLOWED_ORIGINS=https://advanciapayledger.com,https://www.advanciapayledger.com,http://localhost:3000
 ```
@@ -145,6 +154,7 @@ ALLOWED_ORIGINS=https://advanciapayledger.com,https://www.advanciapayledger.com,
 ### **Step 4: Verify Frontend Environment**
 
 **In Vercel Dashboard:**
+
 ```
 1. Project Settings → Environment Variables
 2. Verify NEXT_PUBLIC_API_URL is set to:
@@ -178,6 +188,7 @@ curl https://api.advanciapayledger.com/api/health
 ```
 
 **Browser Tests:**
+
 1. Visit `https://advanciapayledger.com` → Should load app
 2. Login should work (no CORS errors)
 3. Admin panel accessible
@@ -188,18 +199,20 @@ curl https://api.advanciapayledger.com/api/health
 ## 🔒 Current Security Status
 
 **Frontend (Vercel):**
-- ✅ HTTPS enforced
-- ✅ SSL auto-renewed
-- ✅ Global CDN (DDoS protection)
-- ✅ Automatic firewall
-- ✅ Edge caching
+
+-   ✅ HTTPS enforced
+-   ✅ SSL auto-renewed
+-   ✅ Global CDN (DDoS protection)
+-   ✅ Automatic firewall
+-   ✅ Edge caching
 
 **Backend (Render):**
-- ✅ HTTPS enforced
-- ✅ SSL auto-renewed (Let's Encrypt)
-- ✅ Health monitoring
-- ✅ Automatic restarts
-- ✅ Rate limiting configured in code
+
+-   ✅ HTTPS enforced
+-   ✅ SSL auto-renewed (Let's Encrypt)
+-   ✅ Health monitoring
+-   ✅ Automatic restarts
+-   ✅ Rate limiting configured in code
 
 ---
 
@@ -217,22 +230,24 @@ curl https://api.advanciapayledger.com/api/health
 ### **Limits on Free Tier:**
 
 **Vercel Free:**
-- 100 GB bandwidth/month
-- Unlimited sites
-- 100 GB-hours serverless execution
-- Good for: 10,000-50,000 page views/month
+
+-   100 GB bandwidth/month
+-   Unlimited sites
+-   100 GB-hours serverless execution
+-   Good for: 10,000-50,000 page views/month
 
 **Render Free:**
-- 750 hours/month
-- 512 MB RAM
-- Sleeps after 15 min inactivity
-- Good for: Development/testing, low traffic
+
+-   750 hours/month
+-   512 MB RAM
+-   Sleeps after 15 min inactivity
+-   Good for: Development/testing, low traffic
 
 ---
 
 ## 🚀 Deployment Workflow
 
-### Current Auto-Deploy Setup:
+### Current Auto-Deploy Setup
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -249,6 +264,7 @@ curl https://api.advanciapayledger.com/api/health
 ```
 
 **To Deploy Updates:**
+
 ```bash
 # Make changes locally
 git add .
@@ -259,8 +275,9 @@ git push origin main
 ```
 
 **Monitor Deployments:**
-- Vercel: https://vercel.com/dashboard
-- Render: https://dashboard.render.com
+
+-   Vercel: <https://vercel.com/dashboard>
+-   Render: <https://dashboard.render.com>
 
 ---
 
@@ -269,35 +286,40 @@ git push origin main
 ### Option 1: Keep Split Architecture (Recommended)
 
 **Pros:**
-- ✅ FREE hosting
-- ✅ Best performance (Vercel CDN for frontend)
-- ✅ Automatic scaling
-- ✅ Zero maintenance
-- ✅ Each service optimized for its purpose
+
+-   ✅ FREE hosting
+-   ✅ Best performance (Vercel CDN for frontend)
+-   ✅ Automatic scaling
+-   ✅ Zero maintenance
+-   ✅ Each service optimized for its purpose
 
 **Cons:**
-- ⚠️ Backend sleeps after 15 min (Render free tier)
-- ⚠️ Limited to free tier resources
+
+-   ⚠️ Backend sleeps after 15 min (Render free tier)
+-   ⚠️ Limited to free tier resources
 
 **When to use:** Development, MVP, early-stage (< 1000 users)
 
 ### Option 2: All-in-One Docker (VPS)
 
 Use the production Docker setup I built for:
-- DigitalOcean Droplet
-- AWS EC2
-- Linode
+
+-   DigitalOcean Droplet
+-   AWS EC2
+-   Linode
 
 **Pros:**
-- ✅ Full control
-- ✅ No sleep/downtime
-- ✅ Dedicated resources
-- ✅ Better for high traffic
+
+-   ✅ Full control
+-   ✅ No sleep/downtime
+-   ✅ Dedicated resources
+-   ✅ Better for high traffic
 
 **Cons:**
-- 💰 Costs $6-20/month
-- ⚠️ Requires server management
-- ⚠️ Manual SSL renewal setup
+
+-   💰 Costs $6-20/month
+-   ⚠️ Requires server management
+-   ⚠️ Manual SSL renewal setup
 
 **When to use:** Production with paying customers, high traffic (> 500 users)
 
@@ -306,9 +328,10 @@ Use the production Docker setup I built for:
 Keep Vercel for frontend, move backend to VPS:
 
 **Benefits:**
-- Best frontend performance (Vercel CDN)
-- No backend sleep (VPS)
-- Cost: ~$6-10/month (just backend VPS)
+
+-   Best frontend performance (Vercel CDN)
+-   No backend sleep (VPS)
+-   Cost: ~$6-10/month (just backend VPS)
 
 ---
 
@@ -333,65 +356,70 @@ MX      @       mail.advanciapayledger.com  3600
 
 ## 🎯 Next Steps
 
-### Immediate (After Domain Purchase):
+### Immediate (After Domain Purchase)
 
 1. **Add Domain to Vercel**
-   - Dashboard → Domains → Add `advanciapayledger.com`
+   -   Dashboard → Domains → Add `advanciapayledger.com`
    
 2. **Add API Subdomain to Render**
-   - Backend service → Custom Domain → Add `api.advanciapayledger.com`
+   -   Backend service → Custom Domain → Add `api.advanciapayledger.com`
 
 3. **Configure DNS Records**
-   - Point root to Vercel
-   - Point `api` to Render
+   -   Point root to Vercel
+   -   Point `api` to Render
 
 4. **Update CORS**
-   - Render environment: `ALLOWED_ORIGINS=https://advanciapayledger.com`
+   -   Render environment: `ALLOWED_ORIGINS=https://advanciapayledger.com`
 
 5. **Wait for SSL** (15-30 minutes)
-   - Both Vercel and Render auto-issue certificates
+   -   Both Vercel and Render auto-issue certificates
 
-### Optional Enhancements:
+### Optional Enhancements
 
-- **Email**: Set up Resend with custom domain
-- **Analytics**: Add Google Analytics
-- **Monitoring**: Set up Sentry for error tracking
-- **Backups**: Configure database backups on Render
+-   **Email**: Set up Resend with custom domain
+-   **Analytics**: Add Google Analytics
+-   **Monitoring**: Set up Sentry for error tracking
+-   **Backups**: Configure database backups on Render
 
 ---
 
 ## 🆘 Support Resources
 
 **Vercel:**
-- Dashboard: https://vercel.com/dashboard
-- Docs: https://vercel.com/docs
-- Support: https://vercel.com/support
+
+-   Dashboard: <https://vercel.com/dashboard>
+-   Docs: <https://vercel.com/docs>
+-   Support: <https://vercel.com/support>
 
 **Render:**
-- Dashboard: https://dashboard.render.com
-- Docs: https://render.com/docs
-- Support: https://render.com/docs/support
+
+-   Dashboard: <https://dashboard.render.com>
+-   Docs: <https://render.com/docs>
+-   Support: <https://render.com/docs/support>
 
 **DNS Tools:**
-- DNS Checker: https://dnschecker.org
-- SSL Test: https://www.ssllabs.com/ssltest
+
+-   DNS Checker: <https://dnschecker.org>
+-   SSL Test: <https://www.ssllabs.com/ssltest>
 
 ---
 
 ## 🎉 Summary
 
 **Current Setup:**
-- ✅ Frontend on Vercel (auto-deploy from GitHub)
-- ✅ Backend on Render (auto-deploy from GitHub)  
-- ✅ PostgreSQL on Render
-- ✅ Both platforms FREE tier
-- ✅ Auto-scaling and SSL included
-- ✅ Total cost: ~$1/month (just domain)
+
+-   ✅ Frontend on Vercel (auto-deploy from GitHub)
+-   ✅ Backend on Render (auto-deploy from GitHub)  
+-   ✅ PostgreSQL on Render
+-   ✅ Both platforms FREE tier
+-   ✅ Auto-scaling and SSL included
+-   ✅ Total cost: ~$1/month (just domain)
 
 **Custom Domain Setup:**
-- Frontend: `advanciapayledger.com` (on Vercel)
-- Backend: `api.advanciapayledger.com` (on Render)
-- SSL: Automatic on both platforms
-- Time: 30-60 minutes total
+
+-   Frontend: `advanciapayledger.com` (on Vercel)
+-   Backend: `api.advanciapayledger.com` (on Render)
+-   SSL: Automatic on both platforms
+-   Time: 30-60 minutes total
 
 **This is the RECOMMENDED setup for your current stage - FREE, scalable, and production-ready!**

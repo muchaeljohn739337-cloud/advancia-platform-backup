@@ -4,14 +4,14 @@
  * Implements CSP, clickjacking protection, and security headers
  */
 
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // Get current environment
-  const isDev = process.env.NODE_ENV === "development";
+  const isDev = process.env.NODE_ENV === 'development';
   const domain = request.nextUrl.hostname;
 
   // ============================================
@@ -37,9 +37,7 @@ export function middleware(request: NextRequest) {
     "font-src 'self' https://fonts.gstatic.com data:",
 
     // AJAX, WebSocket: self + API domain
-    `connect-src 'self' ${
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
-    } wss: ws:`,
+    `connect-src 'self' ${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'} wss: ws:`,
 
     // Media: self + trusted sources
     "media-src 'self' https:",
@@ -57,19 +55,19 @@ export function middleware(request: NextRequest) {
     "frame-ancestors 'none'",
 
     // Upgrade insecure requests in production
-    !isDev ? "upgrade-insecure-requests" : "",
+    !isDev ? 'upgrade-insecure-requests' : '',
 
     // Block mixed content
-    "block-all-mixed-content",
+    'block-all-mixed-content',
   ]
     .filter(Boolean)
-    .join("; ");
+    .join('; ');
 
-  response.headers.set("Content-Security-Policy", cspDirectives);
+  response.headers.set('Content-Security-Policy', cspDirectives);
 
   // CSP Report-Only for testing (optional)
   if (isDev) {
-    response.headers.set("Content-Security-Policy-Report-Only", cspDirectives);
+    response.headers.set('Content-Security-Policy-Report-Only', cspDirectives);
   }
 
   // ============================================
@@ -77,40 +75,40 @@ export function middleware(request: NextRequest) {
   // ============================================
 
   // X-Frame-Options: Prevent page from being framed
-  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set('X-Frame-Options', 'DENY');
 
   // ============================================
   // 3. XSS PROTECTION
   // ============================================
 
   // X-XSS-Protection: Enable browser XSS filtering
-  response.headers.set("X-XSS-Protection", "1; mode=block");
+  response.headers.set('X-XSS-Protection', '1; mode=block');
 
   // X-Content-Type-Options: Prevent MIME sniffing
-  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set('X-Content-Type-Options', 'nosniff');
 
   // ============================================
   // 4. REFERRER POLICY
   // ============================================
 
   // Referrer-Policy: Control referrer information
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
   // ============================================
   // 5. PERMISSIONS POLICY
   // ============================================
 
   const permissionsPolicy = [
-    "camera=()",
-    "microphone=()",
-    "geolocation=()",
-    "interest-cohort=()", // Disable FLoC
-    "payment=(self)",
-    "usb=()",
-    "bluetooth=()",
-  ].join(", ");
+    'camera=()',
+    'microphone=()',
+    'geolocation=()',
+    'interest-cohort=()', // Disable FLoC
+    'payment=(self)',
+    'usb=()',
+    'bluetooth=()',
+  ].join(', ');
 
-  response.headers.set("Permissions-Policy", permissionsPolicy);
+  response.headers.set('Permissions-Policy', permissionsPolicy);
 
   // ============================================
   // 6. STRICT TRANSPORT SECURITY (HSTS)
@@ -119,8 +117,8 @@ export function middleware(request: NextRequest) {
   if (!isDev) {
     // HSTS: Force HTTPS for 2 years
     response.headers.set(
-      "Strict-Transport-Security",
-      "max-age=63072000; includeSubDomains; preload"
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload'
     );
   }
 
@@ -129,30 +127,25 @@ export function middleware(request: NextRequest) {
   // ============================================
 
   // CORP: Protect against Spectre attacks
-  response.headers.set("Cross-Origin-Resource-Policy", "same-origin");
+  response.headers.set('Cross-Origin-Resource-Policy', 'same-origin');
 
   // COOP: Isolate browsing context
-  response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
 
   // COEP: Require explicit permission for cross-origin resources
-  response.headers.set("Cross-Origin-Embedder-Policy", "require-corp");
+  response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
 
   // ============================================
   // 8. CACHE CONTROL FOR SENSITIVE PAGES
   // ============================================
 
-  const sensitivePaths = ["/dashboard", "/admin", "/profile", "/settings"];
-  const isSensitivePath = sensitivePaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  const sensitivePaths = ['/dashboard', '/admin', '/profile', '/settings'];
+  const isSensitivePath = sensitivePaths.some((path) => request.nextUrl.pathname.startsWith(path));
 
   if (isSensitivePath) {
-    response.headers.set(
-      "Cache-Control",
-      "no-store, no-cache, must-revalidate, proxy-revalidate"
-    );
-    response.headers.set("Pragma", "no-cache");
-    response.headers.set("Expires", "0");
+    response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    response.headers.set('Pragma', 'no-cache');
+    response.headers.set('Expires', '0');
   }
 
   // ============================================
@@ -160,10 +153,10 @@ export function middleware(request: NextRequest) {
   // ============================================
 
   // Remove server information
-  response.headers.delete("X-Powered-By");
+  response.headers.delete('X-Powered-By');
 
   // Add custom security header
-  response.headers.set("X-Content-Security-Policy", cspDirectives);
+  response.headers.set('X-Content-Security-Policy', cspDirectives);
 
   return response;
 }
@@ -178,6 +171,6 @@ export const config = {
      * - favicon.ico (favicon)
      * - public folder
      */
-    "/((?!_next/static|_next/image|favicon.ico|public).*)",
+    '/((?!_next/static|_next/image|favicon.ico|public).*)',
   ],
 };

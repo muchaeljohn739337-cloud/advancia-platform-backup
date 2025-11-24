@@ -4,21 +4,21 @@
 
 **YES - ABSOLUTELY REQUIRED** for Advancia Pay fintech platform.
 
-### Why You Need It:
+### Why You Need It
 
 ❌ **Without Job Queue:**
 
-- Password reset emails delayed by weekly exports (users locked out for 5+ minutes)
-- Cryptomus/NOWPayments webhooks timeout (lose payment confirmations)
-- Database backups make site unresponsive (users see errors)
-- Bulk email sends block payment processing (revenue loss)
+-   Password reset emails delayed by weekly exports (users locked out for 5+ minutes)
+-   Cryptomus/NOWPayments webhooks timeout (lose payment confirmations)
+-   Database backups make site unresponsive (users see errors)
+-   Bulk email sends block payment processing (revenue loss)
 
 ✅ **With Job Queue:**
 
-- Password resets respond in < 50ms (emails sent in background)
-- Webhooks process instantly (no timeouts, no lost payments)
-- Exports/backups run in background (site stays fast)
-- All operations isolated by priority (critical paths never blocked)
+-   Password resets respond in < 50ms (emails sent in background)
+-   Webhooks process instantly (no timeouts, no lost payments)
+-   Exports/backups run in background (site stays fast)
+-   All operations isolated by priority (critical paths never blocked)
 
 ---
 
@@ -57,13 +57,14 @@ choco install redis-64
 
 **Option C: Production (Render)**
 
-1. Go to https://dashboard.render.com
+1. Go to <https://dashboard.render.com>
 2. Click "New +" → "Redis"
 3. Name: `advancia-redis`
 4. Plan: Starter ($7/month) or Free tier
 5. Click "Create Redis"
 6. Copy "Internal Redis URL"
 7. Add to backend environment variables:
+
    ```
    REDIS_HOST=your-redis.render.com
    REDIS_PORT=6379
@@ -257,11 +258,11 @@ https://advanciapayledger.com/admin/jobs (Production)
 
 Shows:
 
-- Waiting jobs (queued)
-- Active jobs (processing)
-- Completed jobs (successful)
-- Failed jobs (errors)
-- Total jobs per priority
+-   Waiting jobs (queued)
+-   Active jobs (processing)
+-   Completed jobs (successful)
+-   Failed jobs (errors)
+-   Total jobs per priority
 
 ### Failed Jobs
 
@@ -287,16 +288,16 @@ await jobQueue.addJob(failedJob.type as JobType, failedJob.priority as JobPriori
 
 ## Deployment Checklist
 
-- [ ] Install npm dependencies (`bull`, `ioredis`)
-- [ ] Run Prisma migration (`add_job_queue_system`)
-- [ ] Set up Redis (local or Render)
-- [ ] Add Redis env vars to `.env` and Render dashboard
-- [ ] Update `backend/src/index.ts` with job routes and shutdown handler
-- [ ] Replace blocking operations with job queue calls
-- [ ] Test locally (verify metrics endpoint)
-- [ ] Deploy to Render (backend + Redis)
-- [ ] Verify production metrics
-- [ ] Monitor failed jobs in admin dashboard
+-   [ ] Install npm dependencies (`bull`, `ioredis`)
+-   [ ] Run Prisma migration (`add_job_queue_system`)
+-   [ ] Set up Redis (local or Render)
+-   [ ] Add Redis env vars to `.env` and Render dashboard
+-   [ ] Update `backend/src/index.ts` with job routes and shutdown handler
+-   [ ] Replace blocking operations with job queue calls
+-   [ ] Test locally (verify metrics endpoint)
+-   [ ] Deploy to Render (backend + Redis)
+-   [ ] Verify production metrics
+-   [ ] Monitor failed jobs in admin dashboard
 
 ---
 
@@ -304,12 +305,12 @@ await jobQueue.addJob(failedJob.type as JobType, failedJob.priority as JobPriori
 
 **Development:**
 
-- Redis: Free (local Docker/Windows installation)
+-   Redis: Free (local Docker/Windows installation)
 
 **Production (Render):**
 
-- Redis Starter: $7/month (256MB RAM, 100 connections)
-- Redis Standard: $15/month (1GB RAM, 1000 connections)
+-   Redis Starter: $7/month (256MB RAM, 100 connections)
+-   Redis Standard: $15/month (1GB RAM, 1000 connections)
 
 **Recommended:** Start with Starter plan, upgrade to Standard if metrics show high usage.
 
@@ -337,10 +338,10 @@ await jobQueue.addJob(failedJob.type as JobType, failedJob.priority as JobPriori
 
 **Result:**
 
-- **40-100x faster** API responses
-- **Zero blocking** on critical operations
-- **100% uptime** during background jobs
-- **No webhook timeouts** (no lost payments)
+-   **40-100x faster** API responses
+-   **Zero blocking** on critical operations
+-   **100% uptime** during background jobs
+-   **No webhook timeouts** (no lost payments)
 
 ---
 
@@ -348,12 +349,12 @@ await jobQueue.addJob(failedJob.type as JobType, failedJob.priority as JobPriori
 
 For detailed documentation, see:
 
-- `JOB_QUEUE_GUIDE.md` - Complete usage guide
-- `backend/src/services/jobQueue.ts` - Implementation
-- `backend/src/routes/jobs.ts` - Admin API
+-   `JOB_QUEUE_GUIDE.md` - Complete usage guide
+-   `backend/src/services/jobQueue.ts` - Implementation
+-   `backend/src/routes/jobs.ts` - Admin API
 
 Questions? Check existing routes in:
 
-- `backend/src/routes/auth.ts` - Password reset examples
-- `backend/src/routes/payments.ts` - Webhook examples
-- `backend/src/routes/email.ts` - Email sending examples
+-   `backend/src/routes/auth.ts` - Password reset examples
+-   `backend/src/routes/payments.ts` - Webhook examples
+-   `backend/src/routes/email.ts` - Email sending examples

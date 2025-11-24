@@ -8,12 +8,12 @@ Complete production deployment workflow using PM2 with built-in log rotation, en
 
 ### Server Requirements
 
-- Ubuntu 20.04+ or CentOS 7+
-- Node.js 18+ installed
-- PM2 installed globally (`npm install -g pm2`)
-- Git repository cloned
-- SSL certificates configured
-- Environment files prepared
+-   Ubuntu 20.04+ or CentOS 7+
+-   Node.js 18+ installed
+-   PM2 installed globally (`npm install -g pm2`)
+-   Git repository cloned
+-   SSL certificates configured
+-   Environment files prepared
 
 ### Environment Setup
 
@@ -106,11 +106,11 @@ pm2 monit
 
 #### 1. Pre-Deployment Checklist
 
-- [ ] Environment variables configured
-- [ ] SSL certificates valid
-- [ ] Database backups created
-- [ ] Previous deployment logs archived
-- [ ] Monitoring alerts configured
+-   [ ] Environment variables configured
+-   [ ] SSL certificates valid
+-   [ ] Database backups created
+-   [ ] Previous deployment logs archived
+-   [ ] Monitoring alerts configured
 
 #### 2. Zero-Downtime Deployment
 
@@ -151,10 +151,10 @@ openssl s_client -connect advanciapayledger.com:443 -servername advanciapayledge
 
 ### Key Features
 
-- **Log Rotation**: 10MB max, 7 day retention, gzip compression
-- **Auto-Restart**: Memory limits, health checks, graceful restarts
-- **Environment Management**: Separate configs for staging/production
-- **Process Monitoring**: Built-in monitoring and alerting
+-   **Log Rotation**: 10MB max, 7 day retention, gzip compression
+-   **Auto-Restart**: Memory limits, health checks, graceful restarts
+-   **Environment Management**: Separate configs for staging/production
+-   **Process Monitoring**: Built-in monitoring and alerting
 
 ### Configuration Details
 
@@ -403,9 +403,9 @@ pm2 start ecosystem.config.js
 
 ### Database Scaling
 
-- Implement connection pooling
-- Add read replicas
-- Consider database clustering
+-   Implement connection pooling
+-   Add read replicas
+-   Consider database clustering
 
 ---
 
@@ -413,18 +413,18 @@ pm2 start ecosystem.config.js
 
 ### Pre-Deployment
 
-- [ ] SSL certificates valid and current
-- [ ] Environment variables encrypted
-- [ ] Database credentials rotated
-- [ ] Firewall rules configured
-- [ ] SSH keys updated
+-   [ ] SSL certificates valid and current
+-   [ ] Environment variables encrypted
+-   [ ] Database credentials rotated
+-   [ ] Firewall rules configured
+-   [ ] SSH keys updated
 
 ### Post-Deployment
 
-- [ ] Security headers enabled
-- [ ] Rate limiting active
-- [ ] CORS properly configured
-- [ ] Sensitive data not in logs
+-   [ ] Security headers enabled
+-   [ ] Rate limiting active
+-   [ ] CORS properly configured
+-   [ ] Sensitive data not in logs
 
 ---
 
@@ -446,9 +446,9 @@ pm2 link <secret> <public>
 
 ### Contact Information
 
-- **DevOps Team**: devops@advanciapayledger.com
-- **Emergency**: +1-XXX-XXX-XXXX
-- **Documentation**: https://github.com/muchaeljohn739337-cloud/-modular-saas-platform
+-   **DevOps Team**: <devops@advanciapayledger.com>
+-   **Emergency**: +1-XXX-XXX-XXXX
+-   **Documentation**: <https://github.com/muchaeljohn739337-cloud/-modular-saas-platform>
 
 ---
 
@@ -456,13 +456,13 @@ pm2 link <secret> <public>
 
 After successful deployment, verify:
 
-- [ ] All services running (pm2 list)
-- [ ] Health checks passing
-- [ ] Logs rotating properly
-- [ ] SSL certificates valid
-- [ ] External URLs accessible
-- [ ] Monitoring alerts configured
-- [ ] Backup procedures tested
+-   [ ] All services running (pm2 list)
+-   [ ] Health checks passing
+-   [ ] Logs rotating properly
+-   [ ] SSL certificates valid
+-   [ ] External URLs accessible
+-   [ ] Monitoring alerts configured
+-   [ ] Backup procedures tested
 
 ---
 

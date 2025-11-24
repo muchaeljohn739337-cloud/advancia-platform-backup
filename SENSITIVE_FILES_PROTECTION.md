@@ -39,10 +39,10 @@ rm test.txt
 
 The security scan workflow runs automatically on:
 
-- Every push
-- Every pull request
-- Daily at 2 AM UTC
-- Manual trigger
+-   Every push
+-   Every pull request
+-   Daily at 2 AM UTC
+-   Manual trigger
 
 View: `.github/workflows/security-scan-sensitive-files.yml`
 
@@ -52,30 +52,28 @@ View: `.github/workflows/security-scan-sensitive-files.yml`
 
 ### Sensitive File Patterns
 
-- ❌ `.env`, `.env.local`, `.env.production`
-- ❌ `*.pem`, `*.key`, `*.p12`, `*.pfx`
-- ❌ `*secrets*.json`, `*credentials*.json`
-- ❌ `*.sql`, `*.dump`, `*.backup`
-- ❌ `id_rsa*`, SSH/GPG keys
+-   ❌ `.env`, `.env.local`, `.env.production`
+-   ❌ `*.pem`, `*.key`, `*.p12`, `*.pfx`
+-   ❌ `*secrets*.json`, `*credentials*.json`
+-   ❌ `*.sql`, `*.dump`, `*.backup`
+-   ❌ `id_rsa*`, SSH/GPG keys
 
 ### Sensitive Content Patterns
 
-- 🔴 **CRITICAL:**
+-   🔴 **CRITICAL:**
+    -   AWS Access Keys (`AKIA...`)
+    -   GitHub Tokens (`ghp_...`, `gho_...`)
+    -   Stripe Live Keys (`sk_live_...`)
+    -   Private Keys (`-----BEGIN PRIVATE KEY-----`)
 
-  - AWS Access Keys (`AKIA...`)
-  - GitHub Tokens (`ghp_...`, `gho_...`)
-  - Stripe Live Keys (`sk_live_...`)
-  - Private Keys (`-----BEGIN PRIVATE KEY-----`)
+-   🟡 **HIGH:**
+    -   Hardcoded passwords
+    -   JWT secrets
+    -   Database URLs with credentials
 
-- 🟡 **HIGH:**
-
-  - Hardcoded passwords
-  - JWT secrets
-  - Database URLs with credentials
-
-- 🔵 **MEDIUM:**
-  - Stripe Test Keys
-  - Generic secret keys
+-   🔵 **MEDIUM:**
+    -   Stripe Test Keys
+    -   Generic secret keys
 
 ---
 
@@ -144,10 +142,10 @@ Git hook that blocks commits with sensitive data.
 
 **Features:**
 
-- Scans staged files only (fast)
-- Blocks .env files
-- Detects common secret patterns
-- Provides actionable feedback
+-   Scans staged files only (fast)
+-   Blocks .env files
+-   Detects common secret patterns
+-   Provides actionable feedback
 
 **Install:**
 
@@ -168,12 +166,12 @@ git commit --no-verify -m "Emergency fix"
 
 ### Features
 
-- ✅ Custom scanner integration
-- ✅ Gitleaks secret detection
-- ✅ File pattern validation
-- ✅ .gitignore verification
-- ✅ Automated reports
-- ✅ Artifact uploads
+-   ✅ Custom scanner integration
+-   ✅ Gitleaks secret detection
+-   ✅ File pattern validation
+-   ✅ .gitignore verification
+-   ✅ Automated reports
+-   ✅ Artifact uploads
 
 ### Workflow Triggers
 
@@ -232,10 +230,9 @@ Update `.github/CODEOWNERS` with your team names!
 ### If Already Pushed
 
 1. **Revoke credentials immediately:**
-
-   - GitHub: https://github.com/settings/tokens
-   - Stripe: https://dashboard.stripe.com/apikeys
-   - AWS: IAM Console
+   -   GitHub: <https://github.com/settings/tokens>
+   -   Stripe: <https://dashboard.stripe.com/apikeys>
+   -   AWS: IAM Console
 
 2. **Remove from git history:**
 
@@ -307,29 +304,29 @@ Review and fix all issues above before committing!
 
 ### DO ✅
 
-- ✅ Use environment variables for secrets
-- ✅ Keep secrets in GitHub Secrets / Azure Key Vault
-- ✅ Run scans before committing
-- ✅ Enable pre-commit hooks
-- ✅ Use `.env.example` files with placeholders
-- ✅ Rotate credentials regularly
+-   ✅ Use environment variables for secrets
+-   ✅ Keep secrets in GitHub Secrets / Azure Key Vault
+-   ✅ Run scans before committing
+-   ✅ Enable pre-commit hooks
+-   ✅ Use `.env.example` files with placeholders
+-   ✅ Rotate credentials regularly
 
 ### DON'T ❌
 
-- ❌ Commit .env files
-- ❌ Hardcode passwords in code
-- ❌ Share secrets in Slack/Email
-- ❌ Use production keys in development
-- ❌ Skip security scans
-- ❌ Disable pre-commit hooks without reason
+-   ❌ Commit .env files
+-   ❌ Hardcode passwords in code
+-   ❌ Share secrets in Slack/Email
+-   ❌ Use production keys in development
+-   ❌ Skip security scans
+-   ❌ Disable pre-commit hooks without reason
 
 ---
 
 ## 🔗 Related Documentation
 
-- **[SECRET_MANAGEMENT_GUIDE.md](../SECRET_MANAGEMENT_GUIDE.md)** - Complete secret management guide
-- **[SECURITY_AUDIT_2025-11-17.md](../SECURITY_AUDIT_2025-11-17.md)** - Latest security audit
-- **[BRANCH_PROTECTION_GUIDE.md](../BRANCH_PROTECTION_GUIDE.md)** - Branch protection setup
+-   **[SECRET_MANAGEMENT_GUIDE.md](../SECRET_MANAGEMENT_GUIDE.md)** - Complete secret management guide
+-   **[SECURITY_AUDIT_2025-11-17.md](../SECURITY_AUDIT_2025-11-17.md)** - Latest security audit
+-   **[BRANCH_PROTECTION_GUIDE.md](../BRANCH_PROTECTION_GUIDE.md)** - Branch protection setup
 
 ---
 

@@ -12,9 +12,9 @@ This guide covers packet capture, Bluetooth handshake analysis, and Wi-Fi packet
 
 ### Prerequisites
 
-- **Windows**: Administrator rights, compatible Wi-Fi adapter
-- **Tools**: Wireshark, npcap driver
-- **Knowledge**: OSI Model, 802.11 protocol
+-   **Windows**: Administrator rights, compatible Wi-Fi adapter
+-   **Tools**: Wireshark, npcap driver
+-   **Knowledge**: OSI Model, 802.11 protocol
 
 ### Setup Wireshark on Windows
 
@@ -67,11 +67,11 @@ wlan.fc.type_subtype == 0x08
 
 ### Bluetooth Stack Layers
 
-- **HCI (Host Controller Interface)** - Commands/events between host and controller
-- **L2CAP** - Logical Link Control and Adaptation Protocol
-- **RFCOMM** - Serial port emulation
-- **SDP** - Service Discovery Protocol
-- **ATT/GATT** - Attribute Protocol (BLE)
+-   **HCI (Host Controller Interface)** - Commands/events between host and controller
+-   **L2CAP** - Logical Link Control and Adaptation Protocol
+-   **RFCOMM** - Serial port emulation
+-   **SDP** - Service Discovery Protocol
+-   **ATT/GATT** - Attribute Protocol (BLE)
 
 ### Tools
 
@@ -101,9 +101,9 @@ btgatt         # BLE GATT
 
 #### C. Hardware Sniffers
 
-- **Ubertooth One** ($120) - Open source Bluetooth sniffer
-- **nRF52840 Dongle** ($10) - Nordic BLE sniffer
-- **Ellisys Bluetooth Analyzer** ($$$$) - Professional grade
+-   **Ubertooth One** ($120) - Open source Bluetooth sniffer
+-   **nRF52840 Dongle** ($10) - Nordic BLE sniffer
+-   **Ellisys Bluetooth Analyzer** ($$$$) - Professional grade
 
 ### BLE Packet Structure
 
@@ -117,10 +117,10 @@ Preamble (1 byte)
 
 ### Common Bluetooth Attacks to Monitor
 
-- **Bluejacking** - Sending unsolicited messages
-- **Bluesnarfing** - Unauthorized data access
-- **KNOB Attack** - Key negotiation downgrade
-- **BIAS Attack** - Bypassing secure pairing
+-   **Bluejacking** - Sending unsolicited messages
+-   **Bluesnarfing** - Unauthorized data access
+-   **KNOB Attack** - Key negotiation downgrade
+-   **BIAS Attack** - Bypassing secure pairing
 
 ---
 
@@ -304,19 +304,19 @@ export default function NetworkMonitor() {
 
 ### Ethical Guidelines
 
-- ✅ Only capture packets on **your own network**
-- ✅ Get **written permission** for penetration testing
-- ✅ Comply with **local laws** (Computer Fraud and Abuse Act, GDPR)
-- ❌ Never capture/decrypt others' traffic without consent
-- ❌ Don't use captured data for unauthorized access
+-   ✅ Only capture packets on **your own network**
+-   ✅ Get **written permission** for penetration testing
+-   ✅ Comply with **local laws** (Computer Fraud and Abuse Act, GDPR)
+-   ❌ Never capture/decrypt others' traffic without consent
+-   ❌ Don't use captured data for unauthorized access
 
 ### Legal Packet Capture Use Cases
 
-- **Your own network diagnostics**
-- **IoT device development/debugging**
-- **Security auditing (authorized)**
-- **Educational/research purposes**
-- **Troubleshooting application issues**
+-   **Your own network diagnostics**
+-   **IoT device development/debugging**
+-   **Security auditing (authorized)**
+-   **Educational/research purposes**
+-   **Troubleshooting application issues**
 
 ---
 
@@ -369,11 +369,11 @@ Test-NetConnection -ComputerName localhost -Port 4000
 
 ## 8️⃣ Learning Resources
 
-- **Wireshark University** - https://www.wireshark.org/docs/
-- **Bluetooth SIG** - https://www.bluetooth.com/specifications/
-- **802.11 Standard** - Wi-Fi protocol documentation
-- **RFC 793** - TCP specification
-- **RFC 768** - UDP specification
+-   **Wireshark University** - <https://www.wireshark.org/docs/>
+-   **Bluetooth SIG** - <https://www.bluetooth.com/specifications/>
+-   **802.11 Standard** - Wi-Fi protocol documentation
+-   **RFC 793** - TCP specification
+-   **RFC 768** - UDP specification
 
 ---
 
@@ -386,5 +386,5 @@ This guide is for **educational and authorized security research only**. Unautho
 **Last Updated:** November 22, 2025
 **Related Files:**
 
-- `backend/src/routes/network-monitor.ts` (if implemented)
-- `frontend/src/components/admin/NetworkMonitor.tsx` (if implemented)
+-   `backend/src/routes/network-monitor.ts` (if implemented)
+-   `frontend/src/components/admin/NetworkMonitor.tsx` (if implemented)

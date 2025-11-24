@@ -85,13 +85,13 @@ netstat -tlnp | grep -E '(3000|4000)'
 
 ## 🔧 Quick Fixes
 
-### If unzip not found:
+### If unzip not found
 
 ```bash
 apt-get update && apt-get install -y unzip
 ```
 
-### If database issues:
+### If database issues
 
 ```bash
 systemctl start postgresql
@@ -100,7 +100,7 @@ sudo -u postgres psql -c "CREATE USER advancia_user WITH PASSWORD 'AdvanciaSecur
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE advancia_prod TO advancia_user;"
 ```
 
-### If PM2 errors:
+### If PM2 errors
 
 ```bash
 pm2 logs --lines 50
@@ -110,8 +110,8 @@ pm2 logs --lines 50
 
 Your application will be accessible at:
 
-- **Frontend:** http://157.245.8.131:3000
-- **Backend:** http://157.245.8.131:4000/health
+-   **Frontend:** <http://157.245.8.131:3000>
+-   **Backend:** <http://157.245.8.131:4000/health>
 
 Setup auto-start:
 
@@ -122,9 +122,9 @@ pm2 save
 
 ## 📖 Additional Resources
 
-- `MANUAL_DEPLOYMENT_GUIDE.md` - Detailed deployment guide
-- `DEPLOYMENT_STATUS_CHECK.md` - Troubleshooting guide
-- `DEPLOYMENT_TROUBLESHOOTING.md` - SSH and connection issues
+-   `MANUAL_DEPLOYMENT_GUIDE.md` - Detailed deployment guide
+-   `DEPLOYMENT_STATUS_CHECK.md` - Troubleshooting guide
+-   `DEPLOYMENT_TROUBLESHOOTING.md` - SSH and connection issues
 
 ## 🆘 Need Help?
 

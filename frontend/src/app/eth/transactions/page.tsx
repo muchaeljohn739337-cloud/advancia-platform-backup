@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowLeft,
   ArrowDownLeft,
@@ -8,14 +8,14 @@ import {
   ExternalLink,
   Filter,
   Loader2,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
-import { Toaster, toast } from "react-hot-toast";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
+import { Toaster, toast } from 'react-hot-toast';
 
 interface EthActivityItem {
   id: string;
-  type: "DEPOSIT" | "WITHDRAWAL";
+  type: 'DEPOSIT' | 'WITHDRAWAL';
   txHash: string | null;
   amountEth: number;
   status: string;
@@ -31,35 +31,35 @@ const humanizeTime = (timestamp: string) => {
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
-  if (minutes < 1) return "Just now";
+  if (minutes < 1) return 'Just now';
   if (minutes < 60) return `${minutes}m ago`;
   if (hours < 24) return `${hours}h ago`;
   return `${days}d ago`;
 };
 
 const statusStyles: Record<string, string> = {
-  CONFIRMED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-  COMPLETED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-  PENDING: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300",
-  PROCESSING: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-  FAILED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+  CONFIRMED: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  COMPLETED: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  PENDING: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
+  PROCESSING: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  FAILED: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
 };
 
-const typeStyles: Record<"DEPOSIT" | "WITHDRAWAL", string> = {
-  DEPOSIT: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
-  WITHDRAWAL: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300",
+const typeStyles: Record<'DEPOSIT' | 'WITHDRAWAL', string> = {
+  DEPOSIT: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
+  WITHDRAWAL: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
 };
 
-const defaultAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";
+const defaultAddress = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 
-type FilterOption = "ALL" | "DEPOSIT" | "WITHDRAWAL";
+type FilterOption = 'ALL' | 'DEPOSIT' | 'WITHDRAWAL';
 
 export default function EthTransactionsPage() {
   const router = useRouter();
   const [transactions, setTransactions] = useState<EthActivityItem[]>([]);
-  const [filter, setFilter] = useState<FilterOption>("ALL");
+  const [filter, setFilter] = useState<FilterOption>('ALL');
   const [loading, setLoading] = useState(true);
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
 
   useEffect(() => {
     loadTransactions();
@@ -73,12 +73,12 @@ export default function EthTransactionsPage() {
 
   const loadTransactions = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       if (!token || !userId) {
         setAddress(defaultAddress);
-        toast("Using demo wallet address", { icon: "ℹ️" });
+        toast('Using demo wallet address', { icon: 'ℹ️' });
         setLoading(false);
         return;
       }
@@ -89,7 +89,7 @@ export default function EthTransactionsPage() {
 
       if (!response.ok) {
         setAddress(defaultAddress);
-        toast.error("Unable to load wallet address");
+        toast.error('Unable to load wallet address');
         setLoading(false);
         return;
       }
@@ -97,8 +97,8 @@ export default function EthTransactionsPage() {
       const data = await response.json();
       setAddress(data.ethWalletAddress || defaultAddress);
     } catch (error) {
-      console.error("Error loading user address:", error);
-      toast.error("Error loading user data");
+      console.error('Error loading user address:', error);
+      toast.error('Error loading user data');
       setAddress(defaultAddress);
     }
   };
@@ -106,22 +106,22 @@ export default function EthTransactionsPage() {
   const fetchTransactions = async (walletAddress: string) => {
     setLoading(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
       const response = await fetch(
         `${API_URL}/api/eth/transactions?address=${encodeURIComponent(walletAddress)}`
       );
 
       if (!response.ok) {
         const errorBody = await response.json().catch(() => null);
-        const message = errorBody?.error || "Failed to fetch activity";
+        const message = errorBody?.error || 'Failed to fetch activity';
         throw new Error(message);
       }
 
       const data = await response.json();
       setTransactions(data.transactions || []);
     } catch (error) {
-      console.error("Error fetching transactions:", error);
-      toast.error((error as Error).message || "Unable to load activity");
+      console.error('Error fetching transactions:', error);
+      toast.error((error as Error).message || 'Unable to load activity');
       setTransactions([]);
     } finally {
       setLoading(false);
@@ -129,7 +129,7 @@ export default function EthTransactionsPage() {
   };
 
   const filteredTransactions = useMemo(() => {
-    if (filter === "ALL") {
+    if (filter === 'ALL') {
       return transactions;
     }
     return transactions.filter((item) => item.type === filter);
@@ -137,7 +137,7 @@ export default function EthTransactionsPage() {
 
   const renderStatusBadge = (status: string) => {
     const normalizedStatus = status.toUpperCase();
-    const style = statusStyles[normalizedStatus] || "bg-gray-100 text-gray-600";
+    const style = statusStyles[normalizedStatus] || 'bg-gray-100 text-gray-600';
     return (
       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${style}`}>
         {normalizedStatus}
@@ -145,8 +145,13 @@ export default function EthTransactionsPage() {
     );
   };
 
-  const renderTypeBadge = (type: "DEPOSIT" | "WITHDRAWAL") => {
-    const icon = type === "DEPOSIT" ? <ArrowDownLeft className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />;
+  const renderTypeBadge = (type: 'DEPOSIT' | 'WITHDRAWAL') => {
+    const icon =
+      type === 'DEPOSIT' ? (
+        <ArrowDownLeft className="w-4 h-4" />
+      ) : (
+        <ArrowUpRight className="w-4 h-4" />
+      );
     return (
       <span
         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${typeStyles[type]}`}
@@ -186,17 +191,17 @@ export default function EthTransactionsPage() {
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500 dark:text-gray-400">Filter</span>
                 <div className="inline-flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                  {["ALL", "DEPOSIT", "WITHDRAWAL"].map((option) => (
+                  {['ALL', 'DEPOSIT', 'WITHDRAWAL'].map((option) => (
                     <button
                       key={option}
                       onClick={() => setFilter(option as FilterOption)}
                       className={`flex items-center gap-1 px-3 py-1.5 text-sm font-medium transition-colors ${
                         filter === option
-                          ? "bg-indigo-600 text-white"
-                          : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
                     >
-                      {option === "ALL" && <Filter className="w-3.5 h-3.5" />}
+                      {option === 'ALL' && <Filter className="w-3.5 h-3.5" />}
                       {option}
                     </button>
                   ))}
@@ -269,7 +274,7 @@ export default function EthTransactionsPage() {
                         </span>
                       )}
                       <div className="text-xs text-gray-500 dark:text-gray-400 font-mono break-all">
-                        {item.txHash ? `TX: ${item.txHash}` : "Awaiting broadcast"}
+                        {item.txHash ? `TX: ${item.txHash}` : 'Awaiting broadcast'}
                       </div>
                     </div>
                   </div>

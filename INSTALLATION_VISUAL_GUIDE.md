@@ -7,7 +7,7 @@
 **Location:** Project root folder  
 **File:** `install-dependencies.bat`
 
-### What You'll See:
+### What You'll See
 
 ```
 ========================================
@@ -68,11 +68,12 @@ Press any key to continue...
 **Location:** Project root folder  
 **File:** `setup-redis.bat`
 
-### Prerequisites:
-- ✅ Docker Desktop installed and running
-- ✅ Port 6379 available
+### Prerequisites
 
-### What You'll See:
+-   ✅ Docker Desktop installed and running
+-   ✅ Port 6379 available
+
+### What You'll See
 
 ```
 ========================================
@@ -111,14 +112,15 @@ Press any key to continue...
 **Location:** Project root folder  
 **File:** `start-dev.bat`
 
-### What Happens:
+### What Happens
+
 1. ✅ Checks dependencies (installs if missing)
 2. ✅ Checks Redis (starts if not running)
 3. ✅ Opens 2 new command windows:
-   - Backend window (port 4000)
-   - Frontend window (port 3000)
+   -   Backend window (port 4000)
+   -   Frontend window (port 3000)
 
-### Backend Window:
+### Backend Window
 
 ```
 > advancia-pay-backend@1.0.0 dev
@@ -131,7 +133,7 @@ Connected to Redis
 Socket.IO initialized
 ```
 
-### Frontend Window:
+### Frontend Window
 
 ```
 > advancia-pay-frontend@1.0.0 dev
@@ -151,9 +153,11 @@ Socket.IO initialized
 ## ✅ Verification Checklist
 
 ### 1. Backend is Running
-Open: http://localhost:4000/api/health
+
+Open: <http://localhost:4000/api/health>
 
 **Expected:**
+
 ```json
 {
   "status": "ok",
@@ -162,10 +166,12 @@ Open: http://localhost:4000/api/health
 ```
 
 ### 2. Job Queue is Working
-Open: http://localhost:4000/api/jobs/metrics  
-*(Need admin token in Authorization header)*
+
+Open: <http://localhost:4000/api/jobs/metrics>  
+_(Need admin token in Authorization header)_
 
 **Expected:**
+
 ```json
 {
   "success": true,
@@ -180,17 +186,21 @@ Open: http://localhost:4000/api/jobs/metrics
 ```
 
 ### 3. Frontend is Running
-Open: http://localhost:3000
+
+Open: <http://localhost:3000>
 
 **Expected:** Advancia Pay login page loads
 
 ### 4. Redis is Running
+
 Run in command prompt:
+
 ```cmd
 docker ps
 ```
 
 **Expected:**
+
 ```
 CONTAINER ID   IMAGE          STATUS        PORTS                    NAMES
 abc123def456   redis:alpine   Up 5 minutes  0.0.0.0:6379->6379/tcp   advancia-redis
@@ -203,7 +213,8 @@ abc123def456   redis:alpine   Up 5 minutes  0.0.0.0:6379->6379/tcp   advancia-re
 ### Issue 1: "Docker is not installed"
 
 **Solution:**
-1. Download: https://www.docker.com/products/docker-desktop
+
+1. Download: <https://www.docker.com/products/docker-desktop>
 2. Install Docker Desktop
 3. Restart computer
 4. Start Docker Desktop
@@ -214,7 +225,8 @@ abc123def456   redis:alpine   Up 5 minutes  0.0.0.0:6379->6379/tcp   advancia-re
 ### Issue 2: "npm is not recognized"
 
 **Solution:**
-1. Download Node.js: https://nodejs.org/ (LTS version)
+
+1. Download Node.js: <https://nodejs.org/> (LTS version)
 2. Run installer (default settings)
 3. Restart computer
 4. Run `install-dependencies.bat` again
@@ -224,6 +236,7 @@ abc123def456   redis:alpine   Up 5 minutes  0.0.0.0:6379->6379/tcp   advancia-re
 ### Issue 3: "Port 4000 already in use"
 
 **Solution A - Find and kill process:**
+
 ```cmd
 netstat -ano | findstr :4000
 taskkill /PID <process_id> /F
@@ -231,6 +244,7 @@ taskkill /PID <process_id> /F
 
 **Solution B - Change port:**
 Edit `backend/.env`:
+
 ```env
 PORT=4001
 ```
@@ -240,10 +254,12 @@ PORT=4001
 ### Issue 4: "Port 6379 already in use"
 
 **Solution:**
+
 ```cmd
 docker stop advancia-redis
 docker rm advancia-redis
 ```
+
 Then run `setup-redis.bat` again
 
 ---
@@ -251,6 +267,7 @@ Then run `setup-redis.bat` again
 ### Issue 5: Prisma migration fails
 
 **Solution:**
+
 ```cmd
 cd backend
 npx prisma migrate reset
@@ -294,15 +311,17 @@ npx prisma migrate dev --name initial
 
 ## 📊 System Resources
 
-### During Installation:
-- 💾 Disk space: +150MB
-- 🌐 Network: ~2MB download
-- ⏱️ Time: 2-3 minutes
+### During Installation
 
-### During Development:
-- 💾 RAM: ~500MB (backend + frontend + Redis)
-- 🔌 Ports: 3000, 4000, 6379
-- 💻 CPU: Low (~5%)
+-   💾 Disk space: +150MB
+-   🌐 Network: ~2MB download
+-   ⏱️ Time: 2-3 minutes
+
+### During Development
+
+-   💾 RAM: ~500MB (backend + frontend + Redis)
+-   🔌 Ports: 3000, 4000, 6379
+-   💻 CPU: Low (~5%)
 
 ---
 
@@ -311,6 +330,7 @@ npx prisma migrate dev --name initial
 After successful installation:
 
 ### 1. Test Job Queue
+
 ```cmd
 curl -X POST http://localhost:4000/api/jobs/test/otp ^
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN" ^
@@ -319,19 +339,23 @@ curl -X POST http://localhost:4000/api/jobs/test/otp ^
 ```
 
 ### 2. Update Your Routes
+
 Replace blocking operations with job queue:
 
 **Before:**
+
 ```typescript
 await sendPasswordResetEmail(email, token); // Blocks 2-5 seconds
 ```
 
 **After:**
+
 ```typescript
 await sendPasswordResetJob(email, token); // Returns in < 50ms
 ```
 
 ### 3. Deploy to Production
+
 1. Set up Redis on Render ($7/month)
 2. Push to GitHub
 3. Configure environment variables
@@ -341,28 +365,31 @@ await sendPasswordResetJob(email, token); // Returns in < 50ms
 
 ## 📞 Support
 
-### Documentation:
-- `SETUP_SCRIPTS_README.md` ← Overview (this file)
-- `JOB_QUEUE_QUICK_START.md` ← Quick reference
-- `JOB_QUEUE_GUIDE.md` ← Complete guide
-- `RATE_LIMITING_GUIDE.md` ← Rate limiting patterns
-- `FORM_SECURITY_GUIDE.md` ← Form security
+### Documentation
 
-### Code:
-- `backend/src/services/jobQueue.ts` ← Job queue implementation
-- `backend/src/routes/jobs.ts` ← Admin API
-- `backend/src/middleware/rateLimiting.ts` ← Rate limiters
+-   `SETUP_SCRIPTS_README.md` ← Overview (this file)
+-   `JOB_QUEUE_QUICK_START.md` ← Quick reference
+-   `JOB_QUEUE_GUIDE.md` ← Complete guide
+-   `RATE_LIMITING_GUIDE.md` ← Rate limiting patterns
+-   `FORM_SECURITY_GUIDE.md` ← Form security
+
+### Code
+
+-   `backend/src/services/jobQueue.ts` ← Job queue implementation
+-   `backend/src/routes/jobs.ts` ← Admin API
+-   `backend/src/middleware/rateLimiting.ts` ← Rate limiters
 
 ---
 
-## 🎉 Success!
+## 🎉 Success
 
 When you see:
-- ✅ "Installation Complete!" message
-- ✅ Backend running on port 4000
-- ✅ Frontend running on port 3000
-- ✅ Redis container running
-- ✅ Job queue metrics accessible
+
+-   ✅ "Installation Complete!" message
+-   ✅ Backend running on port 4000
+-   ✅ Frontend running on port 3000
+-   ✅ Redis container running
+-   ✅ Job queue metrics accessible
 
 **You're ready to develop!**
 

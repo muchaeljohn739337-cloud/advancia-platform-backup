@@ -39,9 +39,9 @@ ssh -i "$env:USERPROFILE\.ssh\id_ed25519_mucha" -vvv root@157.245.8.131
 
 **C. Check droplet IP address**
 
-- Log into DigitalOcean dashboard
-- Verify droplet is running
-- Confirm IP address matches script parameter
+-   Log into DigitalOcean dashboard
+-   Verify droplet is running
+-   Confirm IP address matches script parameter
 
 **D. Check firewall rules**
 
@@ -196,11 +196,11 @@ docker-compose -f docker-compose.demo.yml up -d
 
 **B. Upgrade droplet to 4GB RAM**
 
-- DigitalOcean dashboard → Resize → $24/month (4GB)
-- Power off droplet first
-- Resize
-- Power on
-- Re-run deployment
+-   DigitalOcean dashboard → Resize → $24/month (4GB)
+-   Power off droplet first
+-   Resize
+-   Power on
+-   Re-run deployment
 
 **C. Build frontend locally and copy**
 
@@ -371,8 +371,8 @@ echo '/swapfile none swap sw 0 0' >> /etc/fstab
 
 **C. Upgrade droplet**
 
-- Minimum: $24/month (4GB RAM)
-- Recommended for production: $48/month (8GB RAM)
+-   Minimum: $24/month (4GB RAM)
+-   Recommended for production: $48/month (8GB RAM)
 
 **D. Reduce running services**
 
@@ -439,8 +439,8 @@ git clone https://github.com/muchaeljohn739337-cloud/-modular-saas-platform.git 
 
 **B. Check GitHub repository is public**
 
-- Go to GitHub repository settings
-- Ensure visibility is "Public"
+-   Go to GitHub repository settings
+-   Ensure visibility is "Public"
 
 **C. Use GitHub personal access token**
 
@@ -588,11 +588,12 @@ curl -fsSL https://raw.githubusercontent.com/muchaeljohn739337-cloud/-modular-sa
    ```
 
 2. **Document the error**:
-   - Full error message
-   - When it occurred (which step)
-   - What you tried already
+   -   Full error message
+   -   When it occurred (which step)
+   -   What you tried already
 
 3. **Check system info**:
+
    ```bash
    uname -a
    docker --version
@@ -603,9 +604,9 @@ curl -fsSL https://raw.githubusercontent.com/muchaeljohn739337-cloud/-modular-sa
 
 ### Support Channels
 
-- **GitHub Issues**: https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/issues
-- **Email**: support@advanciapayledger.com
-- **Discord**: [Join server](#)
+-   **GitHub Issues**: <https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/issues>
+-   **Email**: <support@advanciapayledger.com>
+-   **Discord**: [Join server](#)
 
 ### Information to Include
 
@@ -645,17 +646,17 @@ curl -fsSL https://raw.githubusercontent.com/muchaeljohn739337-cloud/-modular-sa
 
 After resolving issues, verify everything works:
 
-- [ ] SSH into droplet: `ssh root@157.245.8.131`
-- [ ] All containers running: `docker-compose ps`
-- [ ] Backend health: `curl http://157.245.8.131:4000/api/health`
-- [ ] Frontend loads: `curl http://157.245.8.131:3000`
-- [ ] MailHog UI: `curl http://157.245.8.131:8025`
-- [ ] Database accessible: `psql "postgresql://demo_user:demo_pass_2024@157.245.8.131:5432/advancia_demo"`
-- [ ] Redis accessible: `redis-cli -h 157.245.8.131 -p 6379 -a demo_redis_pass ping`
-- [ ] No ERROR logs: `docker-compose logs | grep -i error`
-- [ ] CPU < 80%: `htop`
-- [ ] Memory < 80%: `free -h`
-- [ ] Disk < 80%: `df -h`
+-   [ ] SSH into droplet: `ssh root@157.245.8.131`
+-   [ ] All containers running: `docker-compose ps`
+-   [ ] Backend health: `curl http://157.245.8.131:4000/api/health`
+-   [ ] Frontend loads: `curl http://157.245.8.131:3000`
+-   [ ] MailHog UI: `curl http://157.245.8.131:8025`
+-   [ ] Database accessible: `psql "postgresql://demo_user:demo_pass_2024@157.245.8.131:5432/advancia_demo"`
+-   [ ] Redis accessible: `redis-cli -h 157.245.8.131 -p 6379 -a demo_redis_pass ping`
+-   [ ] No ERROR logs: `docker-compose logs | grep -i error`
+-   [ ] CPU < 80%: `htop`
+-   [ ] Memory < 80%: `free -h`
+-   [ ] Disk < 80%: `df -h`
 
 ---
 

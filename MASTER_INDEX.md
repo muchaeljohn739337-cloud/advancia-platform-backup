@@ -233,25 +233,25 @@ npm test
 
 ### Before You Start
 
-- [ ] Have access to DigitalOcean droplet at 157.245.8.131
-- [ ] Can SSH to droplet
-- [ ] Downloaded latest code locally
-- [ ] Can edit .env.test
+-   [ ] Have access to DigitalOcean droplet at 157.245.8.131
+-   [ ] Can SSH to droplet
+-   [ ] Downloaded latest code locally
+-   [ ] Can edit .env.test
 
 ### During Setup
 
-- [ ] SSH successful
-- [ ] Installation completed
-- [ ] PostgreSQL running on port 5432
-- [ ] Database created
-- [ ] User created with permissions
+-   [ ] SSH successful
+-   [ ] Installation completed
+-   [ ] PostgreSQL running on port 5432
+-   [ ] Database created
+-   [ ] User created with permissions
 
 ### After Setup
 
-- [ ] .env.test updated
-- [ ] Migrations deployed
-- [ ] Tests running
-- [ ] 130+ tests passing
+-   [ ] .env.test updated
+-   [ ] Migrations deployed
+-   [ ] Tests running
+-   [ ] 130+ tests passing
 
 ---
 
@@ -352,10 +352,10 @@ Read guide   → Setup ready  → Tests pass    → Celebrate!
 
 All guides reference each other with:
 
-- Next steps to take
-- Files to read when stuck
-- Complementary documentation
-- Related procedures
+-   Next steps to take
+-   Files to read when stuck
+-   Complementary documentation
+-   Related procedures
 
 You can jump between guides as needed!
 

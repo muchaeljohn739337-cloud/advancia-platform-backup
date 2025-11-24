@@ -43,12 +43,12 @@ Sentry is already initialized for error tracking. For unified tracing, add the S
 
 ## Troubleshooting
 
-- No spans: verify import order (tracing imported before Express routes).
-- Export errors: confirm OTLP endpoint reachable.
-- High cardinality: avoid adding raw user emails or large payloads as attributes.
+-   No spans: verify import order (tracing imported before Express routes).
+-   Export errors: confirm OTLP endpoint reachable.
+-   High cardinality: avoid adding raw user emails or large payloads as attributes.
 
 ## Next Steps
 
-- Add metrics (`@opentelemetry/sdk-metrics`) if needed.
-- Forward traces to production collector.
-- Define sampling strategy (default always-on). Adjust via environment or SDK config.
+-   Add metrics (`@opentelemetry/sdk-metrics`) if needed.
+-   Forward traces to production collector.
+-   Define sampling strategy (default always-on). Adjust via environment or SDK config.

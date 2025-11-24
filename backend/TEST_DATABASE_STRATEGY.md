@@ -147,13 +147,13 @@ Time:        ~3-5 seconds
 Status:      ✅ Production Ready
 ```
 
-### Passing Tests (15/15):
+### Passing Tests (15/15)
 
 - ✅ Auth registration (8 tests)
 - ✅ Health checks (2 tests)
 - ✅ Smoke tests (5 tests)
 
-### Skipped Tests (21):
+### Skipped Tests (21)
 
 - ⏭️ Integration tests (require test DB setup)
 

@@ -20,12 +20,12 @@ export function usePageTracking() {
       const originalPushState = history.pushState;
       const originalReplaceState = history.replaceState;
 
-      history.pushState = function(...args) {
+      history.pushState = function (...args) {
         originalPushState.apply(this, args);
         handleRouteChange();
       };
 
-      history.replaceState = function(...args) {
+      history.replaceState = function (...args) {
         originalReplaceState.apply(this, args);
         handleRouteChange();
       };
@@ -54,17 +54,26 @@ export function useAnalytics() {
     analytics.track(event);
   }, []);
 
-  const trackInteraction = useCallback((action: string, element: string, properties?: Record<string, any>) => {
-    analytics.trackInteraction(action, element, properties);
-  }, []);
+  const trackInteraction = useCallback(
+    (action: string, element: string, properties?: Record<string, any>) => {
+      analytics.trackInteraction(action, element, properties);
+    },
+    []
+  );
 
-  const trackFormSubmit = useCallback((formName: string, success: boolean, properties?: Record<string, any>) => {
-    analytics.trackFormSubmit(formName, success, properties);
-  }, []);
+  const trackFormSubmit = useCallback(
+    (formName: string, success: boolean, properties?: Record<string, any>) => {
+      analytics.trackFormSubmit(formName, success, properties);
+    },
+    []
+  );
 
-  const trackConversion = useCallback((conversionType: string, value?: number, properties?: Record<string, any>) => {
-    analytics.trackConversion(conversionType, value, properties);
-  }, []);
+  const trackConversion = useCallback(
+    (conversionType: string, value?: number, properties?: Record<string, any>) => {
+      analytics.trackConversion(conversionType, value, properties);
+    },
+    []
+  );
 
   return {
     trackEvent,
@@ -75,24 +84,33 @@ export function useAnalytics() {
 }
 
 // Hook for button click tracking
-export function useTrackButtonClick(buttonName: string, additionalProperties?: Record<string, any>) {
+export function useTrackButtonClick(
+  buttonName: string,
+  additionalProperties?: Record<string, any>
+) {
   const { trackInteraction } = useAnalytics();
 
-  return useCallback((event?: React.MouseEvent) => {
-    trackInteraction('click', 'button', {
-      buttonName,
-      ...additionalProperties,
-    });
-  }, [trackInteraction, buttonName, additionalProperties]);
+  return useCallback(
+    (event?: React.MouseEvent) => {
+      trackInteraction('click', 'button', {
+        buttonName,
+        ...additionalProperties,
+      });
+    },
+    [trackInteraction, buttonName, additionalProperties]
+  );
 }
 
 // Hook for form tracking
 export function useTrackForm(formName: string) {
   const { trackFormSubmit } = useAnalytics();
 
-  const trackSubmit = useCallback((success: boolean, additionalProperties?: Record<string, any>) => {
-    trackFormSubmit(formName, success, additionalProperties);
-  }, [trackFormSubmit, formName]);
+  const trackSubmit = useCallback(
+    (success: boolean, additionalProperties?: Record<string, any>) => {
+      trackFormSubmit(formName, success, additionalProperties);
+    },
+    [trackFormSubmit, formName]
+  );
 
   return { trackSubmit };
 }
@@ -101,9 +119,12 @@ export function useTrackForm(formName: string) {
 export function useTrackConversion(conversionType: string) {
   const { trackConversion } = useAnalytics();
 
-  return useCallback((value?: number, properties?: Record<string, any>) => {
-    trackConversion(conversionType, value, properties);
-  }, [trackConversion, conversionType]);
+  return useCallback(
+    (value?: number, properties?: Record<string, any>) => {
+      trackConversion(conversionType, value, properties);
+    },
+    [trackConversion, conversionType]
+  );
 }
 
 // Hook for admin analytics data
@@ -112,18 +133,14 @@ export function useAdminAnalytics() {
     return analytics.getUserJourney(userId, days);
   }, []);
 
-  const getFunnels = useCallback(async (params?: {
-    startDate?: string;
-    endDate?: string;
-    segment?: string;
-  }) => {
-    return analytics.getFunnels(params);
-  }, []);
+  const getFunnels = useCallback(
+    async (params?: { startDate?: string; endDate?: string; segment?: string }) => {
+      return analytics.getFunnels(params);
+    },
+    []
+  );
 
-  const getCohorts = useCallback(async (params?: {
-    period?: string;
-    months?: number;
-  }) => {
+  const getCohorts = useCallback(async (params?: { period?: string; months?: number }) => {
     return analytics.getCohorts(params);
   }, []);
 

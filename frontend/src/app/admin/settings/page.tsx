@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import AdminNav from "@/components/AdminNav";
-import { Settings, Save, RefreshCw } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import AdminNav from '@/components/AdminNav';
+import { Settings, Save, RefreshCw } from 'lucide-react';
 
 export default function AdminSettingsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      router.push("/admin/login");
+      router.push('/admin/login');
     }
   }, [router]);
 
@@ -115,7 +115,7 @@ export default function AdminSettingsPage() {
               className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-purple-500 hover:bg-purple-600 disabled:bg-purple-500/50 text-white font-semibold rounded-lg transition-colors"
             >
               <Save className="w-5 h-5" />
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </div>

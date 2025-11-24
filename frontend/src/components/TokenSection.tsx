@@ -1,5 +1,5 @@
-"use client";
-import { motion } from "framer-motion";
+'use client';
+import { motion } from 'framer-motion';
 
 export default function TokenSection() {
   return (
@@ -19,12 +19,20 @@ export default function TokenSection() {
         <p className="text-3xl font-bold text-teal-600 mb-4">₦12,450.00</p>
 
         <div className="flex justify-center gap-4">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Withdraw</button>
-          <button className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition">Cash-Out</button>
-          <button className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">Recovery</button>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+            Withdraw
+          </button>
+          <button className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition">
+            Cash-Out
+          </button>
+          <button className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 transition">
+            Recovery
+          </button>
         </div>
 
-        <p className="mt-4 text-sm text-gray-500">Actions simulate token movement; no blockchain involved.</p>
+        <p className="mt-4 text-sm text-gray-500">
+          Actions simulate token movement; no blockchain involved.
+        </p>
       </motion.div>
     </section>
   );

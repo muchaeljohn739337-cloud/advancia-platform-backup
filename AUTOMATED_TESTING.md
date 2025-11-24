@@ -23,10 +23,10 @@ The test validates the complete alert flow:
 
 ### Prerequisites
 
-- Node.js 18+
-- Redis running (`redis-server`)
-- Backend running (`npm run dev`)
-- Environment variables configured (`.env`)
+-   Node.js 18+
+-   Redis running (`redis-server`)
+-   Backend running (`npm run dev`)
+-   Environment variables configured (`.env`)
 
 ---
 
@@ -112,16 +112,16 @@ The test checks for these variables:
 
 **Required**:
 
-- `EMAIL_USER` - SMTP username
-- `SMTP_HOST` - SMTP server (e.g., smtp.gmail.com)
-- `REDIS_URL` - Redis connection string
+-   `EMAIL_USER` - SMTP username
+-   `SMTP_HOST` - SMTP server (e.g., smtp.gmail.com)
+-   `REDIS_URL` - Redis connection string
 
 **Optional** (for multi-channel alerts):
 
-- `TWILIO_ACCOUNT_SID` - Twilio SMS
-- `SLACK_WEBHOOK_URL` - Slack alerts
-- `TEAMS_WEBHOOK_URL` - Teams alerts
-- `SENTRY_DSN` - Sentry error tracking
+-   `TWILIO_ACCOUNT_SID` - Twilio SMS
+-   `SLACK_WEBHOOK_URL` - Slack alerts
+-   `TEAMS_WEBHOOK_URL` - Teams alerts
+-   `SENTRY_DSN` - Sentry error tracking
 
 ---
 
@@ -140,11 +140,11 @@ const COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
 
 **Variables**:
 
-- `API_BASE`: Backend URL (default: `http://localhost:4000`)
-- `TEST_ENDPOINT`: Route to test (default: `/api/auth/login`)
-- `THRESHOLD`: Rate limit threshold (must match policy)
-- `TEST_REQUESTS`: Number of requests to send (must exceed threshold)
-- `COOLDOWN_MS`: Cooldown duration (must match policy)
+-   `API_BASE`: Backend URL (default: `http://localhost:4000`)
+-   `TEST_ENDPOINT`: Route to test (default: `/api/auth/login`)
+-   `THRESHOLD`: Rate limit threshold (must match policy)
+-   `TEST_REQUESTS`: Number of requests to send (must exceed threshold)
+-   `COOLDOWN_MS`: Cooldown duration (must match policy)
 
 ---
 
@@ -376,9 +376,11 @@ pipeline {
 
 1. Check `TEST_REQUESTS > THRESHOLD` in test config
 2. Verify policy threshold in database:
+
    ```sql
    SELECT * FROM alert_policies WHERE route_group = 'auth';
    ```
+
 3. Ensure rate limiter middleware applied to test endpoint
 
 ---
@@ -403,9 +405,11 @@ pipeline {
 
 1. Re-run migration: `npx prisma migrate dev`
 2. Clear existing logs (test environment only):
+
    ```sql
    TRUNCATE TABLE policy_audit_logs;
    ```
+
 3. Re-seed policies: `npx ts-node prisma/seed-alert-policies.ts`
 
 ---
@@ -418,6 +422,7 @@ pipeline {
 
 1. Increase sleep duration after starting backend (e.g., `sleep 20`)
 2. Add health check loop:
+
    ```bash
    for i in {1..30}; do
      curl -f http://localhost:4000/api/health && break
@@ -433,20 +438,20 @@ pipeline {
 
 **Expected durations** (local):
 
-- Rate limit triggering: ~1-2 seconds
-- Redis checks: ~0.1 seconds
-- Duplicate suppression: ~0.5 seconds
-- Integrity verification: ~0.2 seconds
-- **Total**: 3-5 seconds
+-   Rate limit triggering: ~1-2 seconds
+-   Redis checks: ~0.1 seconds
+-   Duplicate suppression: ~0.5 seconds
+-   Integrity verification: ~0.2 seconds
+-   **Total**: 3-5 seconds
 
 **Expected durations** (CI/CD):
 
-- Setup (Redis + Postgres): ~10-15 seconds
-- Dependencies: ~20-30 seconds
-- Migration + seeding: ~5 seconds
-- Backend startup: ~10 seconds
-- Test execution: ~5 seconds
-- **Total**: 50-65 seconds
+-   Setup (Redis + Postgres): ~10-15 seconds
+-   Dependencies: ~20-30 seconds
+-   Migration + seeding: ~5 seconds
+-   Backend startup: ~10 seconds
+-   Test execution: ~5 seconds
+-   **Total**: 50-65 seconds
 
 ---
 
@@ -467,22 +472,22 @@ gh run list --workflow test-alerts.yml --limit 100 --json conclusion | jq '[.[] 
 
 ### Local Development
 
-- ✅ Run test before pushing commits
-- ✅ Test against local Redis/Postgres
-- ✅ Check logs for detailed error info
+-   ✅ Run test before pushing commits
+-   ✅ Test against local Redis/Postgres
+-   ✅ Check logs for detailed error info
 
 ### CI/CD Integration
 
-- ✅ Run on every PR (pre-merge validation)
-- ✅ Run nightly (catch environmental issues)
-- ✅ Fail fast (stop pipeline on test failure)
-- ✅ Archive logs on failure (for debugging)
+-   ✅ Run on every PR (pre-merge validation)
+-   ✅ Run nightly (catch environmental issues)
+-   ✅ Fail fast (stop pipeline on test failure)
+-   ✅ Archive logs on failure (for debugging)
 
 ### Production Monitoring
 
-- ✅ Run weekly in staging (smoke test)
-- ✅ Alert on consecutive failures (>3)
-- ✅ Track metrics (duration, success rate)
+-   ✅ Run weekly in staging (smoke test)
+-   ✅ Alert on consecutive failures (>3)
+-   ✅ Track metrics (duration, success rate)
 
 ---
 
@@ -497,10 +502,10 @@ gh run list --workflow test-alerts.yml --limit 100 --json conclusion | jq '[.[] 
 
 ## 📚 Related Documentation
 
-- [ALERT_POLICY_SETUP.md](./ALERT_POLICY_SETUP.md) - Initial setup guide
-- [ALERT_POLICY_MANAGEMENT.md](./ALERT_POLICY_MANAGEMENT.md) - Full system docs
-- [AUDIT_LOG_INTEGRITY.md](./AUDIT_LOG_INTEGRITY.md) - Hash chain verification
-- [SECURITY_HARDENING.md](./SECURITY_HARDENING.md) - Security controls
+-   [ALERT_POLICY_SETUP.md](./ALERT_POLICY_SETUP.md) - Initial setup guide
+-   [ALERT_POLICY_MANAGEMENT.md](./ALERT_POLICY_MANAGEMENT.md) - Full system docs
+-   [AUDIT_LOG_INTEGRITY.md](./AUDIT_LOG_INTEGRITY.md) - Hash chain verification
+-   [SECURITY_HARDENING.md](./SECURITY_HARDENING.md) - Security controls
 
 ---
 

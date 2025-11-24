@@ -1,11 +1,10 @@
-import news from "@/lib/news.json";
+import news from '@/lib/news.json';
 
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 
 export default function NewsPage() {
   const items = (news as any[]).sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
   return (
@@ -15,9 +14,7 @@ export default function NewsPage() {
         {items.map((n) => (
           <li key={n.id} className="border-b pb-4">
             <h2 className="text-lg font-medium">{n.title}</h2>
-            <p className="text-sm text-gray-600">
-              {new Date(n.publishedAt).toLocaleString()}
-            </p>
+            <p className="text-sm text-gray-600">{new Date(n.publishedAt).toLocaleString()}</p>
             <p className="mt-2">{n.summary}</p>
           </li>
         ))}

@@ -323,28 +323,24 @@ cd backend && tsx test-ai-service-direct.ts
 ### What the AI Should Understand
 
 1. **User Intent Recognition**
-
    - Identify when users ask about transactions, balances, crypto, med beds, loans
    - Understand financial terminology (credit, debit, withdrawal, deposit)
    - Recognize health-related queries (booking, chambers, wellness)
    - Detect support requests (issues, problems, help needed)
 
 2. **Context Awareness**
-
    - Know which services are available on the platform
    - Understand relationships between services (e.g., need balance for debit card)
    - Recognize user tier impacts on features
    - Understand authentication requirements for actions
 
 3. **Response Patterns**
-
    - Provide accurate information about service availability
    - Guide users to correct endpoints/pages
    - Explain requirements for each service
    - Suggest relevant alternatives when primary request can't be fulfilled
 
 4. **Technical Knowledge**
-
    - Understand the API structure and endpoint purposes
    - Know authentication requirements
    - Recognize error patterns and provide solutions

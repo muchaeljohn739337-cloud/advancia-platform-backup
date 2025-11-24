@@ -32,16 +32,16 @@ Quick reference to help you choose the right watchdog script for your needs.
 
 ## 🎯 Decision Matrix
 
-### Use `simple-watchdog.ps1` If You:
+### Use `simple-watchdog.ps1` If You
 
-- ✅ Need quick setup (< 5 minutes)
-- ✅ Want a single-file solution
-- ✅ Are testing notifications
-- ✅ Prefer simplicity over features
-- ✅ Don't need retry thresholds
-- ✅ Want to learn the system
-- ✅ Have basic monitoring needs
-- ✅ Are running in development
+-   ✅ Need quick setup (< 5 minutes)
+-   ✅ Want a single-file solution
+-   ✅ Are testing notifications
+-   ✅ Prefer simplicity over features
+-   ✅ Don't need retry thresholds
+-   ✅ Want to learn the system
+-   ✅ Have basic monitoring needs
+-   ✅ Are running in development
 
 **Command**:
 
@@ -51,17 +51,17 @@ Quick reference to help you choose the right watchdog script for your needs.
 
 ---
 
-### Use `backend-watchdog.ps1` If You:
+### Use `backend-watchdog.ps1` If You
 
-- ✅ Need production-grade monitoring
-- ✅ Want configurable retry thresholds
-- ✅ Need detailed statistics
-- ✅ Want alert level filtering
-- ✅ Need consecutive failure tracking
-- ✅ Want background execution
-- ✅ Need PID tracking
-- ✅ Require audit trails
-- ✅ Are running in production
+-   ✅ Need production-grade monitoring
+-   ✅ Want configurable retry thresholds
+-   ✅ Need detailed statistics
+-   ✅ Want alert level filtering
+-   ✅ Need consecutive failure tracking
+-   ✅ Want background execution
+-   ✅ Need PID tracking
+-   ✅ Require audit trails
+-   ✅ Are running in production
 
 **Command**:
 
@@ -71,16 +71,16 @@ Quick reference to help you choose the right watchdog script for your needs.
 
 ---
 
-### Use `backend-tools.ps1` If You:
+### Use `backend-tools.ps1` If You
 
-- ✅ Need complete backend automation
-- ✅ Want database operations (migrate/seed/backup)
-- ✅ Need PM2 lifecycle management
-- ✅ Want development tools (test/lint/build)
-- ✅ Need port management utilities
-- ✅ Want a unified toolset
-- ✅ Prefer launching watchdog as needed
-- ✅ Need multiple operation types
+-   ✅ Need complete backend automation
+-   ✅ Want database operations (migrate/seed/backup)
+-   ✅ Need PM2 lifecycle management
+-   ✅ Want development tools (test/lint/build)
+-   ✅ Need port management utilities
+-   ✅ Want a unified toolset
+-   ✅ Prefer launching watchdog as needed
+-   ✅ Need multiple operation types
 
 **Commands**:
 
@@ -283,28 +283,28 @@ Copy-Item watchdog-config.template.ps1 watchdog-config.ps1
 
 **Recommended**: `simple-watchdog.ps1`
 
-- Fast setup
-- Minimal overhead
-- Easy to understand
-- Sufficient for small teams
+-   Fast setup
+-   Minimal overhead
+-   Easy to understand
+-   Sufficient for small teams
 
 ### Medium Projects (5-20 developers)
 
 **Recommended**: `backend-tools.ps1` + `backend-watchdog.ps1`
 
-- Unified tooling
-- Professional monitoring
-- Team collaboration features
-- Scalable as project grows
+-   Unified tooling
+-   Professional monitoring
+-   Team collaboration features
+-   Scalable as project grows
 
 ### Large Projects (20+ developers)
 
 **Recommended**: `backend-tools.ps1` + `backend-watchdog.ps1` + External Monitoring
 
-- Professional-grade automation
-- Comprehensive monitoring
-- Integration with external tools (Grafana, Prometheus, PagerDuty)
-- Audit trails and compliance
+-   Professional-grade automation
+-   Comprehensive monitoring
+-   Integration with external tools (Grafana, Prometheus, PagerDuty)
+-   Audit trails and compliance
 
 ---
 
@@ -312,27 +312,27 @@ Copy-Item watchdog-config.template.ps1 watchdog-config.ps1
 
 ### simple-watchdog.ps1
 
-- **Maintenance**: ⭐ Low
-- **Updates**: Rare
-- **Customization**: Easy (single file)
-- **Debugging**: Simple
-- **Learning Curve**: Minimal
+-   **Maintenance**: ⭐ Low
+-   **Updates**: Rare
+-   **Customization**: Easy (single file)
+-   **Debugging**: Simple
+-   **Learning Curve**: Minimal
 
 ### backend-watchdog.ps1
 
-- **Maintenance**: ⭐⭐ Medium
-- **Updates**: Occasional
-- **Customization**: Moderate (multiple functions)
-- **Debugging**: Detailed logs help
-- **Learning Curve**: Moderate
+-   **Maintenance**: ⭐⭐ Medium
+-   **Updates**: Occasional
+-   **Customization**: Moderate (multiple functions)
+-   **Debugging**: Detailed logs help
+-   **Learning Curve**: Moderate
 
 ### backend-tools.ps1
 
-- **Maintenance**: ⭐⭐⭐ Higher
-- **Updates**: Regular (many features)
-- **Customization**: Complex (many actions)
-- **Debugging**: Comprehensive logs
-- **Learning Curve**: Steeper
+-   **Maintenance**: ⭐⭐⭐ Higher
+-   **Updates**: Regular (many features)
+-   **Customization**: Complex (many actions)
+-   **Debugging**: Comprehensive logs
+-   **Learning Curve**: Steeper
 
 ---
 
@@ -362,20 +362,20 @@ Copy-Item watchdog-config.template.ps1 watchdog-config.ps1
 
 ### For simple-watchdog.ps1
 
-- [SIMPLE_WATCHDOG.md](./SIMPLE_WATCHDOG.md)
-- Script comments (inline documentation)
+-   [SIMPLE_WATCHDOG.md](./SIMPLE_WATCHDOG.md)
+-   Script comments (inline documentation)
 
 ### For backend-watchdog.ps1
 
-- [WATCHDOG_NOTIFICATIONS.md](./WATCHDOG_NOTIFICATIONS.md)
-- [WATCHDOG_QUICK_START.md](./WATCHDOG_QUICK_START.md)
-- [WATCHDOG_IMPLEMENTATION.md](./WATCHDOG_IMPLEMENTATION.md)
+-   [WATCHDOG_NOTIFICATIONS.md](./WATCHDOG_NOTIFICATIONS.md)
+-   [WATCHDOG_QUICK_START.md](./WATCHDOG_QUICK_START.md)
+-   [WATCHDOG_IMPLEMENTATION.md](./WATCHDOG_IMPLEMENTATION.md)
 
 ### For backend-tools.ps1
 
-- Built-in help: `.\backend-tools.ps1 -Action help`
-- Script header documentation
-- All watchdog docs (manages watchdog scripts)
+-   Built-in help: `.\backend-tools.ps1 -Action help`
+-   Script header documentation
+-   All watchdog docs (manages watchdog scripts)
 
 ---
 
@@ -424,6 +424,6 @@ START
 
 **Quick Decision**:
 
-- **I want it working NOW** → `simple-watchdog.ps1`
-- **I want production-ready** → `backend-watchdog.ps1`
-- **I want everything automated** → `backend-tools.ps1`
+-   **I want it working NOW** → `simple-watchdog.ps1`
+-   **I want production-ready** → `backend-watchdog.ps1`
+-   **I want everything automated** → `backend-tools.ps1`

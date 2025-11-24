@@ -18,6 +18,7 @@ Run the backup script from the project root:
 ```
 
 This will:
+
 - Create a timestamped backup file in `./db_backups/`
 - Automatically clean up old backups (keeps last 10)
 - Show backup file size and location
@@ -83,6 +84,7 @@ Add to your crontab (`crontab -e`):
 ### Schedule Daily Backups (Windows)
 
 Create a scheduled task:
+
 1. Open Task Scheduler
 2. Create Basic Task
 3. Set trigger (e.g., Daily at 2:00 AM)
@@ -108,6 +110,7 @@ Error: Database container 'postgres' is not running.
 ```
 
 **Solution**: Start the database container:
+
 ```bash
 docker-compose up -d postgres
 ```
@@ -119,6 +122,7 @@ Error: Permission denied
 ```
 
 **Solution**: Ensure the script is executable:
+
 ```bash
 chmod +x scripts/backup_db.sh
 ```
@@ -126,11 +130,13 @@ chmod +x scripts/backup_db.sh
 ### Disk Space Issues
 
 Check available disk space:
+
 ```bash
 df -h
 ```
 
 Clean up old backups manually:
+
 ```bash
 rm ./db_backups/backup_*.sql
 ```

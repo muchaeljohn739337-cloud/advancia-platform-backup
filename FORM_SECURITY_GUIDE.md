@@ -57,7 +57,7 @@ function MyForm() {
       enableCSRF: true,
       enableRateLimit: true,
       sanitizeInputs: true,
-    }
+    },
   );
 
   return (
@@ -91,7 +91,7 @@ router.post(
   async (req, res) => {
     // Your login logic here
     res.json({ success: true });
-  }
+  },
 );
 
 export default router;
@@ -157,7 +157,7 @@ function LoginForm() {
       onError: (error) => {
         console.error("Error:", error);
       },
-    }
+    },
   );
 
   return (
@@ -384,13 +384,13 @@ router.post(
   upload.single("file"),
   validateFileUpload(
     ["image/jpeg", "image/png", "application/pdf"], // Allowed types
-    5 * 1024 * 1024 // 5MB max size
+    5 * 1024 * 1024, // 5MB max size
   ),
   async (req, res) => {
     // File is validated
     const file = req.file;
     res.json({ success: true, filename: file.filename });
-  }
+  },
 );
 ```
 
@@ -420,7 +420,7 @@ router.post(
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
     }
-  }
+  },
 );
 
 export default router;
@@ -463,7 +463,7 @@ export default function RegistrationForm() {
       onSuccess: () => {
         alert("Registration successful!");
       },
-    }
+    },
   );
 
   return (
@@ -555,7 +555,7 @@ export default function TransactionForm() {
       },
       enableCSRF: true,
       sanitizeInputs: true,
-    }
+    },
   );
 
   return (
@@ -596,21 +596,21 @@ export default function TransactionForm() {
 
 Before deploying:
 
-- [ ] Install crypto-js for frontend encryption
-- [ ] Install express-validator and express-rate-limit for backend
-- [ ] Enable CSRF protection on all POST/PUT/DELETE routes
-- [ ] Add rate limiting to all form endpoints
-- [ ] Validate all inputs on both client and server
-- [ ] Sanitize all user inputs
-- [ ] Encrypt sensitive fields (passwords, SSN, credit cards)
-- [ ] Add honeypot fields to detect bots
-- [ ] Implement proper error messages (don't leak info)
-- [ ] Test all validation rules
-- [ ] Test rate limiting
-- [ ] Test CSRF protection
-- [ ] Add security headers
-- [ ] Enable HTTPS in production
-- [ ] Monitor for suspicious activity
+-   [ ] Install crypto-js for frontend encryption
+-   [ ] Install express-validator and express-rate-limit for backend
+-   [ ] Enable CSRF protection on all POST/PUT/DELETE routes
+-   [ ] Add rate limiting to all form endpoints
+-   [ ] Validate all inputs on both client and server
+-   [ ] Sanitize all user inputs
+-   [ ] Encrypt sensitive fields (passwords, SSN, credit cards)
+-   [ ] Add honeypot fields to detect bots
+-   [ ] Implement proper error messages (don't leak info)
+-   [ ] Test all validation rules
+-   [ ] Test rate limiting
+-   [ ] Test CSRF protection
+-   [ ] Add security headers
+-   [ ] Enable HTTPS in production
+-   [ ] Monitor for suspicious activity
 
 ---
 

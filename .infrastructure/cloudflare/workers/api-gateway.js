@@ -42,7 +42,7 @@ async function handleRequest(request) {
   console.log(
     `[${new Date().toISOString()}] ${request.method} ${
       url.pathname
-    } from ${clientIP}`
+    } from ${clientIP}`,
   );
 
   // Handle CORS preflight
@@ -126,11 +126,11 @@ async function proxyToBackend(request, url, clientIP, origin) {
     modifiedResponse.headers.set("Access-Control-Allow-Credentials", "true");
     modifiedResponse.headers.set(
       "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+      "GET, POST, PUT, DELETE, OPTIONS, PATCH",
     );
     modifiedResponse.headers.set(
       "Access-Control-Allow-Headers",
-      "Content-Type, Authorization, X-API-Key, X-Admin-Key"
+      "Content-Type, Authorization, X-API-Key, X-Admin-Key",
     );
     modifiedResponse.headers.set("Access-Control-Max-Age", "86400"); // 24 hours
   }
@@ -138,7 +138,7 @@ async function proxyToBackend(request, url, clientIP, origin) {
   // Add caching headers (no cache for API)
   modifiedResponse.headers.set(
     "Cache-Control",
-    "no-store, no-cache, must-revalidate, proxy-revalidate"
+    "no-store, no-cache, must-revalidate, proxy-revalidate",
   );
   modifiedResponse.headers.set("Pragma", "no-cache");
   modifiedResponse.headers.set("Expires", "0");

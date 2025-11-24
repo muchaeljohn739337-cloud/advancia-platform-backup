@@ -49,11 +49,11 @@ A comprehensive guide to creating exceptional look, feel, functionality, and usa
 
 **Key Principles:**
 
-- ✅ Always show security status
-- ✅ Use green for secure, red for warnings
-- ✅ Display certifications/compliance badges
-- ✅ Show real-time verification states
-- ✅ Provide clear error messages
+-   ✅ Always show security status
+-   ✅ Use green for secure, red for warnings
+-   ✅ Display certifications/compliance badges
+-   ✅ Show real-time verification states
+-   ✅ Provide clear error messages
 
 ### 2. Clarity Over Cleverness
 
@@ -1031,10 +1031,10 @@ module.exports = {
   px-4           /* Mobile: 16px padding */
   sm:px-6        /* Tablet: 24px padding */
   lg:px-8        /* Desktop: 32px padding */
-  
+
   text-base      /* Mobile: 16px */
   lg:text-lg     /* Desktop: 18px */
-  
+
   grid-cols-1    /* Mobile: 1 column */
   md:grid-cols-2 /* Tablet: 2 columns */
   lg:grid-cols-3 /* Desktop: 3 columns */

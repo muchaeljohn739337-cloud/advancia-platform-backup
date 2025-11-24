@@ -1,11 +1,13 @@
 # Webhook Configuration Guide
+
 # Complete setup for Slack and Microsoft Teams notifications
 
 ## 📋 Table of Contents
-- [Slack Webhook Setup](#slack-webhook-setup)
-- [Microsoft Teams Webhook Setup](#microsoft-teams-webhook-setup)
-- [Testing Webhooks](#testing-webhooks)
-- [Troubleshooting](#troubleshooting)
+
+-   [Slack Webhook Setup](#slack-webhook-setup)
+-   [Microsoft Teams Webhook Setup](#microsoft-teams-webhook-setup)
+-   [Testing Webhooks](#testing-webhooks)
+-   [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -14,34 +16,34 @@
 ### Step 1: Create Slack App
 
 1. **Go to Slack API Portal:**
-   - Visit: https://api.slack.com/apps
-   - Click "Create New App"
-   - Select "From scratch"
+   -   Visit: <https://api.slack.com/apps>
+   -   Click "Create New App"
+   -   Select "From scratch"
 
 2. **Configure App:**
-   - **App Name:** `Advancia Deployment Alerts`
-   - **Workspace:** Select your workspace
-   - Click "Create App"
+   -   **App Name:** `Advancia Deployment Alerts`
+   -   **Workspace:** Select your workspace
+   -   Click "Create App"
 
 ### Step 2: Enable Incoming Webhooks
 
 1. **Navigate to Incoming Webhooks:**
-   - In your app settings, click "Incoming Webhooks" in the left sidebar
-   - Toggle "Activate Incoming Webhooks" to **ON**
+   -   In your app settings, click "Incoming Webhooks" in the left sidebar
+   -   Toggle "Activate Incoming Webhooks" to **ON**
 
 2. **Add Webhook URLs:**
 
    **For Incident Alerts:**
-   - Click "Add New Webhook to Workspace"
-   - Select channel: `#incidents-deployments` (create if doesn't exist)
-   - Click "Allow"
-   - **Copy webhook URL** → Save as `SLACK_WEBHOOK_URL` secret
+   -   Click "Add New Webhook to Workspace"
+   -   Select channel: `#incidents-deployments` (create if doesn't exist)
+   -   Click "Allow"
+   -   **Copy webhook URL** → Save as `SLACK_WEBHOOK_URL` secret
 
    **For Deployment Summaries:**
-   - Click "Add New Webhook to Workspace" again
-   - Select channel: `#deployments`
-   - Click "Allow"
-   - **Copy webhook URL** → Save as `GLOBAL_SLACK_WEBHOOK` secret
+   -   Click "Add New Webhook to Workspace" again
+   -   Select channel: `#deployments`
+   -   Click "Allow"
+   -   **Copy webhook URL** → Save as `GLOBAL_SLACK_WEBHOOK` secret
 
 ### Step 3: Configure Slack Channels
 
@@ -58,9 +60,10 @@ Members: On-call SRE, Engineering leads, VP Engineering
 ```
 
 **Channel Settings:**
-- Enable notifications for all messages
-- Pin important runbooks and dashboard links
-- Set channel topic with relevant links
+
+-   Enable notifications for all messages
+-   Pin important runbooks and dashboard links
+-   Set channel topic with relevant links
 
 ### Step 4: Add Secrets to GitHub
 
@@ -96,20 +99,20 @@ echo "https://hooks.slack.com/services/YOUR/WEBHOOK/URL2" | gh secret set GLOBAL
 ### Step 1: Configure Incoming Webhook in Teams
 
 1. **Open Microsoft Teams:**
-   - Navigate to the channel where you want alerts
-   - Example channels: `Deployments` or `Incidents`
+   -   Navigate to the channel where you want alerts
+   -   Example channels: `Deployments` or `Incidents`
 
 2. **Add Connector:**
-   - Click the `•••` (three dots) next to the channel name
-   - Select "Connectors" or "Manage connectors"
-   - Search for "Incoming Webhook"
-   - Click "Configure"
+   -   Click the `•••` (three dots) next to the channel name
+   -   Select "Connectors" or "Manage connectors"
+   -   Search for "Incoming Webhook"
+   -   Click "Configure"
 
 3. **Configure Webhook:**
-   - **Name:** `Advancia Deployment Alerts`
-   - **Upload Image:** (optional) Add company logo
-   - Click "Create"
-   - **Copy webhook URL** → Save as `TEAMS_WEBHOOK_URL` secret
+   -   **Name:** `Advancia Deployment Alerts`
+   -   **Upload Image:** (optional) Add company logo
+   -   Click "Create"
+   -   **Copy webhook URL** → Save as `TEAMS_WEBHOOK_URL` secret
 
 ### Step 2: Add Secret to GitHub
 
@@ -187,7 +190,7 @@ echo "https://your-tenant.webhook.office.com/..." | gh secret set TEAMS_WEBHOOK_
     }
     TEAMSJSON
     )
-    
+
     curl -X POST "$TEAMS_WEBHOOK_URL" \
       -H "Content-Type: application/json" \
       -d "$TEAMS_MESSAGE"
@@ -515,9 +518,10 @@ Solution:
 ### Rate Limiting
 
 **Slack Rate Limits:**
-- 1 message per second per webhook
-- Bursts up to 100 messages allowed
-- Throttle if sending many notifications
+
+-   1 message per second per webhook
+-   Bursts up to 100 messages allowed
+-   Throttle if sending many notifications
 
 ```yaml
 - name: Send notification with rate limiting
@@ -537,7 +541,7 @@ Solution:
   run: |
     MAX_RETRIES=3
     RETRY_COUNT=0
-    
+
     while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
       HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
         -X POST "$SLACK_WEBHOOK_URL" \
@@ -565,10 +569,10 @@ Solution:
     {
       "color": "danger",
       "fields": [
-        {"title": "Region", "value": "US East", "short": true},
-        {"title": "Stage", "value": "Canary 25%", "short": true},
-        {"title": "Error Rate", "value": "1.2%", "short": true},
-        {"title": "Latency", "value": "475ms", "short": true}
+        { "title": "Region", "value": "US East", "short": true },
+        { "title": "Stage", "value": "Canary 25%", "short": true },
+        { "title": "Error Rate", "value": "1.2%", "short": true },
+        { "title": "Latency", "value": "475ms", "short": true }
       ],
       "actions": [
         {
@@ -593,27 +597,27 @@ Solution:
 
 After setup, verify:
 
-- [ ] Slack webhook URL added to `SLACK_WEBHOOK_URL` secret
-- [ ] Global Slack webhook added to `GLOBAL_SLACK_WEBHOOK` secret
-- [ ] Teams webhook added to `TEAMS_WEBHOOK_URL` secret (if using Teams)
-- [ ] Test message sent successfully to Slack
-- [ ] Test message sent successfully to Teams (if configured)
-- [ ] `#deployments` channel created and members added
-- [ ] `#incidents-deployments` channel created and members added
-- [ ] Webhook test workflow runs successfully
-- [ ] Quick Card format displays correctly
-- [ ] Dashboard and log links work in notifications
-- [ ] Rate limiting configured (1 msg/sec)
-- [ ] Error handling and retries implemented
+-   [ ] Slack webhook URL added to `SLACK_WEBHOOK_URL` secret
+-   [ ] Global Slack webhook added to `GLOBAL_SLACK_WEBHOOK` secret
+-   [ ] Teams webhook added to `TEAMS_WEBHOOK_URL` secret (if using Teams)
+-   [ ] Test message sent successfully to Slack
+-   [ ] Test message sent successfully to Teams (if configured)
+-   [ ] `#deployments` channel created and members added
+-   [ ] `#incidents-deployments` channel created and members added
+-   [ ] Webhook test workflow runs successfully
+-   [ ] Quick Card format displays correctly
+-   [ ] Dashboard and log links work in notifications
+-   [ ] Rate limiting configured (1 msg/sec)
+-   [ ] Error handling and retries implemented
 
 ---
 
 ## 📚 Related Documentation
 
-- **Setup Script:** `setup-github-config.ps1` - Automated configuration
-- **Deployment Guide:** `DEPLOYMENT_LIFECYCLE.md` - Configure → Deploy → Monitor → Celebrate
-- **Quick Reference:** `DEPLOYMENT_QUICK_REFERENCE.md` - Day-of deployment card
-- **Debugging:** `DEPLOYMENT_DEBUGGING_GUIDE.md` - Troubleshooting runbooks
+-   **Setup Script:** `setup-github-config.ps1` - Automated configuration
+-   **Deployment Guide:** `DEPLOYMENT_LIFECYCLE.md` - Configure → Deploy → Monitor → Celebrate
+-   **Quick Reference:** `DEPLOYMENT_QUICK_REFERENCE.md` - Day-of deployment card
+-   **Debugging:** `DEPLOYMENT_DEBUGGING_GUIDE.md` - Troubleshooting runbooks
 
 ---
 

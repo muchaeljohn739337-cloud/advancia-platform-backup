@@ -1,6 +1,6 @@
-"use client";
-import AdminNav from "@/components/AdminNav";
-import UsersTable from "@/components/admin/UsersTable";
+'use client';
+import AdminNav from '@/components/AdminNav';
+import UsersTable from '@/components/admin/UsersTable';
 
 export default function AdminUsersPage() {
   return (
@@ -14,4 +14,3 @@ export default function AdminUsersPage() {
     </div>
   );
 }
-

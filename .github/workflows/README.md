@@ -14,7 +14,6 @@ This directory contains GitHub Actions workflows for automated testing, building
 **Jobs:**
 
 1. **🔍 Lint → 📝 Typecheck → 🏗️ Build** (15 min timeout)
-
    - Installs dependencies with `npm ci`
    - Runs ESLint
    - Runs TypeScript type checking (`tsc --noEmit`)
@@ -22,11 +21,9 @@ This directory contains GitHub Actions workflows for automated testing, building
    - Uploads build artifacts (7-day retention)
 
 2. **🔒 Security Audit** (parallel, 5 min timeout)
-
    - Runs `npm audit` to check for vulnerabilities
 
 3. **🚀 Deploy to Render** (only on `main` push, after CI passes)
-
    - Triggers Render deployment via webhook
    - Requires `RENDER_DEPLOY_HOOK_FRONTEND` secret
 
@@ -45,7 +42,6 @@ This directory contains GitHub Actions workflows for automated testing, building
 **Jobs:**
 
 1. **🔍 Lint → 📝 Typecheck → 🏗️ Build** (15 min timeout)
-
    - Installs dependencies with `npm ci`
    - Runs ESLint (if configured)
    - Runs TypeScript type checking (`tsc --noEmit`)
@@ -53,20 +49,16 @@ This directory contains GitHub Actions workflows for automated testing, building
    - Uploads build artifacts (7-day retention)
 
 2. **🗄️ Validate Prisma Schema** (parallel, 5 min timeout)
-
    - Validates Prisma schema with `npx prisma validate`
    - Checks for schema drift with `npx prisma format --check`
 
 3. **🔒 Security Audit** (parallel, 5 min timeout)
-
    - Runs `npm audit --audit-level=high`
 
 4. **🧪 Run Tests** (parallel, 10 min timeout)
-
    - Runs `npm test` if available
 
 5. **🚀 Deploy to Render** (only on `main` push, after all checks pass)
-
    - Triggers Render deployment via webhook
    - Requires `RENDER_DEPLOY_HOOK_BACKEND` secret
 

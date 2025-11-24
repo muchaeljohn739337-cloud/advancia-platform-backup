@@ -8,12 +8,12 @@
 
 **Features:**
 
-- ✅ **InputSecurity** - XSS prevention with HTML escaping, sanitization
-- ✅ **TokenManager** - Secure JWT storage with encryption, expiry checking
-- ✅ **ClickjackingProtection** - Frame-busting and monitoring
-- ✅ **ScriptProtection** - Third-party script monitoring and CSP reporting
-- ✅ **TokenLeakageProtection** - URL cleaning, storage scanning, sensitive data clearing
-- ✅ **initializeSecurity()** - One-line setup for all protections
+-   ✅ **InputSecurity** - XSS prevention with HTML escaping, sanitization
+-   ✅ **TokenManager** - Secure JWT storage with encryption, expiry checking
+-   ✅ **ClickjackingProtection** - Frame-busting and monitoring
+-   ✅ **ScriptProtection** - Third-party script monitoring and CSP reporting
+-   ✅ **TokenLeakageProtection** - URL cleaning, storage scanning, sensitive data clearing
+-   ✅ **initializeSecurity()** - One-line setup for all protections
 
 ### 2. React Hooks
 
@@ -21,13 +21,13 @@
 
 **Hooks:**
 
-- `useSecurityInit()` - Initialize security on app mount
-- `useSafeInput()` - Input sanitization helpers
-- `useAuth()` - JWT token management with login/logout
-- `useSecureAPI()` - Secure fetch with automatic token injection
-- `useSecurityMonitor()` - Track CSP violations
-- `useSafeLink()` - Safe external link handling
-- `useSafeHTML()` - Safe HTML rendering
+-   `useSecurityInit()` - Initialize security on app mount
+-   `useSafeInput()` - Input sanitization helpers
+-   `useAuth()` - JWT token management with login/logout
+-   `useSecureAPI()` - Secure fetch with automatic token injection
+-   `useSecurityMonitor()` - Track CSP violations
+-   `useSafeLink()` - Safe external link handling
+-   `useSafeHTML()` - Safe HTML rendering
 
 ### 3. Next.js Middleware
 
@@ -35,16 +35,16 @@
 
 **Security Headers:**
 
-- ✅ Content-Security-Policy (CSP)
-- ✅ X-Frame-Options: DENY (clickjacking prevention)
-- ✅ X-XSS-Protection: 1; mode=block
-- ✅ X-Content-Type-Options: nosniff
-- ✅ Referrer-Policy: strict-origin-when-cross-origin
-- ✅ Permissions-Policy (camera, microphone, etc.)
-- ✅ Strict-Transport-Security (HSTS)
-- ✅ Cross-Origin-Resource-Policy
-- ✅ Cross-Origin-Opener-Policy
-- ✅ Cross-Origin-Embedder-Policy
+-   ✅ Content-Security-Policy (CSP)
+-   ✅ X-Frame-Options: DENY (clickjacking prevention)
+-   ✅ X-XSS-Protection: 1; mode=block
+-   ✅ X-Content-Type-Options: nosniff
+-   ✅ Referrer-Policy: strict-origin-when-cross-origin
+-   ✅ Permissions-Policy (camera, microphone, etc.)
+-   ✅ Strict-Transport-Security (HSTS)
+-   ✅ Cross-Origin-Resource-Policy
+-   ✅ Cross-Origin-Opener-Policy
+-   ✅ Cross-Origin-Embedder-Policy
 
 ### 4. Backend Security Endpoints
 
@@ -52,26 +52,26 @@
 
 **Endpoints:**
 
-- `POST /api/security/csp-violation` - CSP violation reporting
-- `POST /api/security/script-violation` - Unauthorized script detection
-- `POST /api/security/report` - General security events (clickjacking)
-- `POST /api/security/token-exposure` - Token leakage alerts
+-   `POST /api/security/csp-violation` - CSP violation reporting
+-   `POST /api/security/script-violation` - Unauthorized script detection
+-   `POST /api/security/report` - General security events (clickjacking)
+-   `POST /api/security/token-exposure` - Token leakage alerts
 
 ### 5. Example Components
 
 **Files:**
 
-- `frontend/src/components/examples/SecureLogin.tsx` (161 lines)
-- `frontend/src/components/examples/SafeUserProfile.tsx` (223 lines)
+-   `frontend/src/components/examples/SecureLogin.tsx` (161 lines)
+-   `frontend/src/components/examples/SafeUserProfile.tsx` (223 lines)
 
 **Demonstrates:**
 
-- Input sanitization in forms
-- Secure token storage
-- Protected API calls
-- Safe HTML rendering
-- URL validation
-- External link handling
+-   Input sanitization in forms
+-   Secure token storage
+-   Protected API calls
+-   Safe HTML rendering
+-   URL validation
+-   External link handling
 
 ### 6. Comprehensive Guide
 
@@ -79,15 +79,15 @@
 
 **Sections:**
 
-- Quick start setup
-- Input sanitization examples
-- JWT token management
-- Security headers & CSP
-- React component examples
-- Testing security
-- Monitoring & alerts
-- Troubleshooting
-- Security checklist
+-   Quick start setup
+-   Input sanitization examples
+-   JWT token management
+-   Security headers & CSP
+-   React component examples
+-   Testing security
+-   Monitoring & alerts
+-   Troubleshooting
+-   Security checklist
 
 ---
 
@@ -95,10 +95,10 @@
 
 ### 1. **XSS Prevention** ✅
 
-- HTML escaping and sanitization
-- DOMPurify integration for safe HTML
-- Input validation before API calls
-- Safe JSON escaping
+-   HTML escaping and sanitization
+-   DOMPurify integration for safe HTML
+-   Input validation before API calls
+-   Safe JSON escaping
 
 **Example:**
 
@@ -110,12 +110,12 @@ const safe = InputSecurity.sanitizeInput(userInput);
 
 ### 2. **JWT Security** ✅
 
-- Encrypted storage (not plain text)
-- Device fingerprint binding
-- Automatic expiry checking
-- SessionStorage for extra security
-- Token refresh handling
-- Secure clearing on logout
+-   Encrypted storage (not plain text)
+-   Device fingerprint binding
+-   Automatic expiry checking
+-   SessionStorage for extra security
+-   Token refresh handling
+-   Secure clearing on logout
 
 **Example:**
 
@@ -132,11 +132,11 @@ TokenManager.clearTokens();
 
 ### 3. **Clickjacking Prevention** ✅
 
-- X-Frame-Options: DENY header
-- CSP frame-ancestors: 'none'
-- JavaScript frame-busting
-- Continuous monitoring
-- Frame attempt detection and reporting
+-   X-Frame-Options: DENY header
+-   CSP frame-ancestors: 'none'
+-   JavaScript frame-busting
+-   Continuous monitoring
+-   Frame attempt detection and reporting
 
 **Example:**
 
@@ -148,11 +148,11 @@ initializeSecurity({ enableClickjackingProtection: true });
 
 ### 4. **Token Leakage Protection** ✅
 
-- URL parameter cleaning (removes tokens from URLs)
-- Storage monitoring for exposed tokens
-- Sensitive data clearing on page hide
-- JWT pattern detection
-- Automatic reporting
+-   URL parameter cleaning (removes tokens from URLs)
+-   Storage monitoring for exposed tokens
+-   Sensitive data clearing on page hide
+-   JWT pattern detection
+-   Automatic reporting
 
 **Example:**
 
@@ -163,11 +163,11 @@ initializeSecurity({ enableClickjackingProtection: true });
 
 ### 5. **Third-Party Script Protection** ✅
 
-- Script domain whitelisting
-- MutationObserver for injection detection
-- CSP violation reporting
-- Unauthorized script blocking
-- Real-time monitoring
+-   Script domain whitelisting
+-   MutationObserver for injection detection
+-   CSP violation reporting
+-   Unauthorized script blocking
+-   Real-time monitoring
 
 **Example:**
 
@@ -180,11 +180,11 @@ initializeSecurity({
 
 ### 6. **Content Security Policy** ✅
 
-- Restricts script sources
-- Blocks inline scripts (production)
-- Controls API endpoints
-- Prevents mixed content
-- Upgrades insecure requests
+-   Restricts script sources
+-   Blocks inline scripts (production)
+-   Controls API endpoints
+-   Prevents mixed content
+-   Upgrades insecure requests
 
 **CSP Directives:**
 
@@ -360,18 +360,18 @@ function SecurityDashboard() {
 
 Before going to production:
 
-- [ ] Install DOMPurify: `npm install dompurify`
-- [ ] Add `initializeSecurity()` to app root
-- [ ] Update all auth flows to use `TokenManager`
-- [ ] Replace `fetch()` with `secureFetch()`
-- [ ] Sanitize all user inputs with `InputSecurity`
-- [ ] Test XSS prevention with malicious inputs
-- [ ] Test clickjacking protection in iframe
-- [ ] Verify CSP headers in browser DevTools
-- [ ] Check security logs for violations
-- [ ] Test token expiry and refresh
-- [ ] Verify HTTPS enforced in production
-- [ ] No secrets in localStorage or cookies
+-   [ ] Install DOMPurify: `npm install dompurify`
+-   [ ] Add `initializeSecurity()` to app root
+-   [ ] Update all auth flows to use `TokenManager`
+-   [ ] Replace `fetch()` with `secureFetch()`
+-   [ ] Sanitize all user inputs with `InputSecurity`
+-   [ ] Test XSS prevention with malicious inputs
+-   [ ] Test clickjacking protection in iframe
+-   [ ] Verify CSP headers in browser DevTools
+-   [ ] Check security logs for violations
+-   [ ] Test token expiry and refresh
+-   [ ] Verify HTTPS enforced in production
+-   [ ] No secrets in localStorage or cookies
 
 ---
 

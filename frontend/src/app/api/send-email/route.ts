@@ -35,18 +35,18 @@ export async function POST(request: NextRequest) {
       text: text,
     });
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       messageId: info.messageId,
-      message: 'Email sent successfully via Gmail SMTP' 
+      message: 'Email sent successfully via Gmail SMTP',
     });
   } catch (error: unknown) {
     console.error('Email send error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to send email';
     return NextResponse.json(
-      { 
+      {
         error: errorMessage,
-        details: process.env.NODE_ENV === 'development' ? error : undefined
+        details: process.env.NODE_ENV === 'development' ? error : undefined,
       },
       { status: 500 }
     );
@@ -58,18 +58,21 @@ export async function GET() {
   try {
     const transporter = createTransporter();
     await transporter.verify();
-    
+
     return NextResponse.json({
       status: 'ready',
       provider: 'Gmail SMTP',
       message: 'Email service is configured and ready',
     });
   } catch (error) {
-    return NextResponse.json({
-      status: 'error',
-      provider: 'Gmail SMTP',
-      message: 'Gmail SMTP connection failed - check credentials',
-      error: error instanceof Error ? error.message : 'Unknown error',
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        status: 'error',
+        provider: 'Gmail SMTP',
+        message: 'Gmail SMTP connection failed - check credentials',
+        error: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }

@@ -10,19 +10,19 @@
 
 **Current Status:** Your project has a **solid foundation** with most core features already implemented:
 
-- ✅ Authentication, JWT, password reset, 2FA/TOTP
-- ✅ Transaction logging, crypto wallets, token system
-- ✅ Rate limiting, fraud detection, IP tracking
-- ✅ Health checks, graceful shutdown, maintenance mode
-- ✅ Prisma ORM with PostgreSQL, Redis caching
-- ✅ Scheduled tasks (node-cron), RPA automation
+-   ✅ Authentication, JWT, password reset, 2FA/TOTP
+-   ✅ Transaction logging, crypto wallets, token system
+-   ✅ Rate limiting, fraud detection, IP tracking
+-   ✅ Health checks, graceful shutdown, maintenance mode
+-   ✅ Prisma ORM with PostgreSQL, Redis caching
+-   ✅ Scheduled tasks (node-cron), RPA automation
 
 **Risk Assessment:** Some requested features will introduce:
 
-- **Performance bottlenecks** (file storage without CDN, excessive analytics)
-- **Maintenance overhead** (multi-tenancy, partner dashboards)
-- **Compliance complexity** (KYC automation, financial regulations)
-- **Security risks** (improper file upload handling, avatar storage)
+-   **Performance bottlenecks** (file storage without CDN, excessive analytics)
+-   **Maintenance overhead** (multi-tenancy, partner dashboards)
+-   **Compliance complexity** (KYC automation, financial regulations)
+-   **Security risks** (improper file upload handling, avatar storage)
 
 ---
 
@@ -158,10 +158,7 @@ export async function rollbackTransaction(transactionId: string) {
     include: { relatedTransactions: true },
   });
 
-  if (
-    tx.status === "completed" &&
-    tx.createdAt < new Date(Date.now() - 24 * 60 * 60 * 1000)
-  ) {
+  if (tx.status === "completed" && tx.createdAt < new Date(Date.now() - 24 * 60 * 60 * 1000)) {
     throw new Error("Cannot rollback transactions older than 24 hours");
   }
 
@@ -208,20 +205,15 @@ export async function rollbackTransaction(transactionId: string) {
 
 **Why Needed:**
 
-- Ensures `sum(debits) = sum(credits)` for audit compliance
-- Catches errors before they compound
-- Industry standard for financial systems
+-   Ensures `sum(debits) = sum(credits)` for audit compliance
+-   Catches errors before they compound
+-   Industry standard for financial systems
 
 **Implementation Plan:**
 
 ```typescript
 // backend/src/services/ledgerService.ts
-export async function recordDoubleEntry(params: {
-  debitAccount: string;
-  creditAccount: string;
-  amount: Decimal;
-  description: string;
-}) {
+export async function recordDoubleEntry(params: { debitAccount: string; creditAccount: string; amount: Decimal; description: string }) {
   return await prisma.$transaction(async (tx) => {
     // Debit entry
     await tx.ledgerEntry.create({
@@ -319,9 +311,7 @@ export async function dailyReconciliation() {
   });
 
   // 3. Check for discrepancies
-  const diff = new Decimal(walletSum._sum.balance || 0).sub(
-    new Decimal(txSum._sum.amount || 0)
-  );
+  const diff = new Decimal(walletSum._sum.balance || 0).sub(new Decimal(txSum._sum.amount || 0));
 
   if (diff.abs().gt(0.01)) {
     // More than 1 cent difference
@@ -344,9 +334,7 @@ export async function dailyReconciliation() {
     // Alert admins
     await sendAdminAlert({
       subject: "Reconciliation Discrepancy Detected",
-      message: `Balance mismatch of $${diff.toFixed(
-        2
-      )} on ${today.toISOString()}`,
+      message: `Balance mismatch of $${diff.toFixed(2)} on ${today.toISOString()}`,
     });
   }
 
@@ -401,10 +389,7 @@ export async function uploadAvatar(userId: string, file: Buffer) {
   }
 
   // 2. Resize and optimize
-  const processed = await sharp(file)
-    .resize(256, 256, { fit: "cover" })
-    .jpeg({ quality: 85 })
-    .toBuffer();
+  const processed = await sharp(file).resize(256, 256, { fit: "cover" }).jpeg({ quality: 85 }).toBuffer();
 
   // 3. Upload to S3/R2
   const key = `avatars/${userId}/${Date.now()}.jpg`;
@@ -415,7 +400,7 @@ export async function uploadAvatar(userId: string, file: Buffer) {
       Body: processed,
       ContentType: "image/jpeg",
       CacheControl: "public, max-age=31536000",
-    })
+    }),
   );
 
   // 4. Store CDN URL in database
@@ -428,9 +413,9 @@ export async function uploadAvatar(userId: string, file: Buffer) {
 
 **Costs:**
 
-- Cloudflare R2: $0.015/GB storage, $0.36/million requests
-- AWS S3: $0.023/GB storage, $0.40/1000 PUT requests
-- Image processing: 200-300ms latency per upload
+-   Cloudflare R2: $0.015/GB storage, $0.36/million requests
+-   AWS S3: $0.023/GB storage, $0.40/1000 PUT requests
+-   Image processing: 200-300ms latency per upload
 
 **Recommendation:** ⚠️ **DEFER** to Phase 3 (post-MVP). Use Gravatar URLs instead for now.
 
@@ -442,9 +427,9 @@ export async function uploadAvatar(userId: string, file: Buffer) {
 
 **Current Implementation:**
 
-- User model has `btcBalance`, `ethBalance`, `usdtBalance` fields
-- CryptoWallet model for additional currencies
-- Token system for internal currency
+-   User model has `btcBalance`, `ethBalance`, `usdtBalance` fields
+-   CryptoWallet model for additional currencies
+-   Token system for internal currency
 
 **Gap:** No unified wallet aggregation view.
 
@@ -492,10 +477,10 @@ router.get("/wallets/summary/:userId", async (req, res) => {
 
 **Current Coverage:**
 
-- ✅ BTC, ETH, USDT payments via Cryptomus
-- ✅ Crypto wallet management
-- ✅ Withdrawals with address validation
-- ✅ Swap functionality (crypto-to-crypto)
+-   ✅ BTC, ETH, USDT payments via Cryptomus
+-   ✅ Crypto wallet management
+-   ✅ Withdrawals with address validation
+-   ✅ Swap functionality (crypto-to-crypto)
 
 **Recommendation:** ✅ **KEEP** - Already complete. No additional work needed.
 
@@ -534,9 +519,9 @@ model KYCVerification {
 
 **Recommendation:** ⚠️ **DEFER** automation until you have:
 
-- Legal counsel confirming KYC requirements for your jurisdictions
-- $50K+ monthly transaction volume (to justify $2K/month provider cost)
-- Dedicated compliance officer
+-   Legal counsel confirming KYC requirements for your jurisdictions
+-   $50K+ monthly transaction volume (to justify $2K/month provider cost)
+-   Dedicated compliance officer
 
 **For Now:** Keep manual KYC with admin dashboard. Add KYC status to user profile UI.
 
@@ -555,11 +540,11 @@ model KYCVerification {
 
 **Implementation Estimate:**
 
-- Payment method tokenization (Stripe): 1-2 days
-- Recurring billing logic: 2-3 days
-- Failure retry logic: 1-2 days
-- Testing & edge cases: 2-3 days
-- **Total:** 1-2 weeks
+-   Payment method tokenization (Stripe): 1-2 days
+-   Recurring billing logic: 2-3 days
+-   Failure retry logic: 1-2 days
+-   Testing & edge cases: 2-3 days
+-   **Total:** 1-2 weeks
 
 **Recommendation:** ⚠️ **DEFER** to Phase 3. Focus on one-time payments first.
 
@@ -578,11 +563,11 @@ model KYCVerification {
 
 **Implementation Estimate:**
 
-- API key generation/rotation: 1 day
-- Per-key rate limiting: 1 day
-- Usage dashboard: 2-3 days
-- API documentation portal: 3-5 days
-- **Total:** 1-2 weeks
+-   API key generation/rotation: 1 day
+-   Per-key rate limiting: 1 day
+-   Usage dashboard: 2-3 days
+-   API documentation portal: 3-5 days
+-   **Total:** 1-2 weeks
 
 **Recommendation:** ⚠️ **DEFER** until you have 1000+ active users requesting API access.
 
@@ -665,9 +650,9 @@ await prisma.user.findMany({
 
 **Why Defer (Not Remove):**
 
-- **Use Case Unclear:** What do partners need? White-label access? Transaction reporting? Commission tracking?
-- **High Effort:** 2-3 weeks for full partner portal
-- **Low Priority:** Build after you have 5+ partners asking for it
+-   **Use Case Unclear:** What do partners need? White-label access? Transaction reporting? Commission tracking?
+-   **High Effort:** 2-3 weeks for full partner portal
+-   **Low Priority:** Build after you have 5+ partners asking for it
 
 **If You Must Implement:**
 
@@ -704,9 +689,9 @@ model Partner {
 
 **Current Admin Dashboard (Sufficient):**
 
-- User count, transaction volume, revenue
-- Recent transactions list
-- Health check status
+-   User count, transaction volume, revenue
+-   Recent transactions list
+-   Health check status
 
 **Recommendation:** ⚠️ **DEFER** advanced analytics. Use Metabase (free, open-source) to query read replica instead:
 
@@ -789,44 +774,44 @@ docker run -d -p 3001:3000 --name metabase metabase/metabase
 **Total Effort:** 2-3 days
 
 1. **Transaction Rollback Logic** (2-3 hours)
-   - File: `backend/src/services/transactionRollback.ts`
-   - Admin endpoint: `POST /api/admin/transactions/rollback/:id`
+   -   File: `backend/src/services/transactionRollback.ts`
+   -   Admin endpoint: `POST /api/admin/transactions/rollback/:id`
 2. **Double-Entry Accounting** (1-2 days)
-   - Prisma schema: Add `LedgerEntry` and `LedgerAccount` models
-   - Service: `backend/src/services/ledgerService.ts`
-   - Migration: Convert existing transactions to double-entry
+   -   Prisma schema: Add `LedgerEntry` and `LedgerAccount` models
+   -   Service: `backend/src/services/ledgerService.ts`
+   -   Migration: Convert existing transactions to double-entry
 3. **Reconciliation Automation** (4-6 hours)
-   - Service: `backend/src/services/reconciliationService.ts`
-   - Cron job: Daily at 2 AM
-   - Alert: Email admins on discrepancies
+   -   Service: `backend/src/services/reconciliationService.ts`
+   -   Cron job: Daily at 2 AM
+   -   Alert: Email admins on discrepancies
 4. **Manual Transaction Override** (15 min)
-   - Endpoint: `POST /api/admin/transactions/override/:id`
-   - Audit log entry for all overrides
+   -   Endpoint: `POST /api/admin/transactions/override/:id`
+   -   Audit log entry for all overrides
 
 ### Phase 2: Stability & Performance (Next 2 Weeks)
 
 1. **Load Testing** (2-3 days)
-   - k6 or Artillery for 10K concurrent users
-   - Database query optimization
-   - Redis caching for hot paths
+   -   k6 or Artillery for 10K concurrent users
+   -   Database query optimization
+   -   Redis caching for hot paths
 2. **Read Replica Setup** (1 day)
-   - Separate Postgres read replica for analytics
-   - Point admin dashboard to replica
+   -   Separate Postgres read replica for analytics
+   -   Point admin dashboard to replica
 3. **Backup Verification** (1 day)
-   - Automated restore testing
-   - S3 glacier archival for old backups
+   -   Automated restore testing
+   -   S3 glacier archival for old backups
 
 ### Phase 3: User Experience (Next 4 Weeks)
 
 1. **Scheduled Payments** (1-2 weeks)
-   - Stripe tokenization for cards
-   - Recurring billing logic
+   -   Stripe tokenization for cards
+   -   Recurring billing logic
 2. **User Avatars** (3-5 days)
-   - Cloudflare R2 setup
-   - Image processing with Sharp
+   -   Cloudflare R2 setup
+   -   Image processing with Sharp
 3. **Advanced Analytics** (3-5 days)
-   - Metabase deployment
-   - Pre-built dashboards
+   -   Metabase deployment
+   -   Pre-built dashboards
 
 ---
 
@@ -925,13 +910,13 @@ curl http://localhost:4000/api/admin/ledger/verify \
 
 ### Technical Decisions
 
-- **Double-Entry Migration:** Should we migrate existing transactions or start fresh? → **Recommendation:** Migrate existing, flag any imbalances for manual review.
-- **Rollback Time Limit:** 24 hours or 7 days? → **Recommendation:** 24 hours for user-initiated, unlimited for admin (with audit trail).
+-   **Double-Entry Migration:** Should we migrate existing transactions or start fresh? → **Recommendation:** Migrate existing, flag any imbalances for manual review.
+-   **Rollback Time Limit:** 24 hours or 7 days? → **Recommendation:** 24 hours for user-initiated, unlimited for admin (with audit trail).
 
 ### Business Decisions
 
-- **KYC Timing:** When to add automation? → **Recommendation:** Wait until transaction volume justifies $2K/month cost (typically 50K users).
-- **Partner Dashboard:** Which partners? What features? → **Recommendation:** Survey 5+ partners before building.
+-   **KYC Timing:** When to add automation? → **Recommendation:** Wait until transaction volume justifies $2K/month cost (typically 50K users).
+-   **Partner Dashboard:** Which partners? What features? → **Recommendation:** Survey 5+ partners before building.
 
 ---
 

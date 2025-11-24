@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface Transaction {
   id: string;
@@ -26,22 +26,22 @@ export default function TransactionsPage() {
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem('userId');
       if (!userId) {
-        setError("User not authenticated");
+        setError('User not authenticated');
         return;
       }
 
       const response = await fetch(`/api/transactions?userId=${userId}`);
       if (!response.ok) {
-        throw new Error("Failed to fetch transactions");
+        throw new Error('Failed to fetch transactions');
       }
 
       const data = await response.json();
       setTransactions(data);
     } catch (err) {
-      console.error("Error fetching transactions:", err);
-      setError("Failed to load transactions");
+      console.error('Error fetching transactions:', err);
+      setError('Failed to load transactions');
     } finally {
       setLoading(false);
     }
@@ -78,9 +78,7 @@ export default function TransactionsPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                📊 My Transactions
-              </h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">📊 My Transactions</h1>
               <p className="text-gray-300">
                 View your complete payment history across all providers.
               </p>
@@ -97,9 +95,7 @@ export default function TransactionsPage() {
         {/* Transactions Table */}
         {transactions.length === 0 ? (
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 text-center">
-            <div className="text-gray-400 text-lg mb-4">
-              No transactions yet
-            </div>
+            <div className="text-gray-400 text-lg mb-4">No transactions yet</div>
             <p className="text-gray-500 mb-6">
               Your payment history will appear here once you make transactions.
             </p>
@@ -138,24 +134,21 @@ export default function TransactionsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-600/50">
                   {transactions.map((tx) => (
-                    <tr
-                      key={tx.id}
-                      className="hover:bg-slate-700/30 transition-colors"
-                    >
+                    <tr key={tx.id} className="hover:bg-slate-700/30 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {tx.orderId || "N/A"}
+                        {tx.orderId || 'N/A'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            tx.provider === "stripe"
-                              ? "bg-blue-100 text-blue-800"
-                              : tx.provider === "cryptomus"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
+                            tx.provider === 'stripe'
+                              ? 'bg-blue-100 text-blue-800'
+                              : tx.provider === 'cryptomus'
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-gray-100 text-gray-800'
                           }`}
                         >
-                          {tx.provider || "N/A"}
+                          {tx.provider || 'N/A'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
@@ -167,12 +160,11 @@ export default function TransactionsPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            tx.status === "completed" ||
-                            tx.status === "confirmed"
-                              ? "bg-green-100 text-green-800"
-                              : tx.status === "pending"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
+                            tx.status === 'completed' || tx.status === 'confirmed'
+                              ? 'bg-green-100 text-green-800'
+                              : tx.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-red-100 text-red-800'
                           }`}
                         >
                           {tx.status}

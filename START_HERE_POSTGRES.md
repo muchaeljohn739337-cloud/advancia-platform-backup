@@ -6,10 +6,10 @@ Your DigitalOcean droplet is ready. Here's exactly what to do.
 
 ## Your Droplet
 
-- **IP**: 157.245.8.131
-- **OS**: Ubuntu 25.10 x64
-- **Location**: NYC3
-- **Status**: ✅ Running
+-   **IP**: 157.245.8.131
+-   **OS**: Ubuntu 25.10 x64
+-   **Location**: NYC3
+-   **Status**: ✅ Running
 
 ---
 
@@ -124,11 +124,11 @@ Check `POSTGRES_COMPLETE_REFERENCE.md` for full troubleshooting guide.
 
 For more detailed help, see:
 
-- `POSTGRES_COPY_PASTE.md` - All commands ready to copy
-- `POSTGRES_SETUP_CHECKLIST.md` - Step-by-step checklist
-- `POSTGRES_COMPLETE_REFERENCE.md` - Full reference
-- `DIGITALOCEAN_POSTGRES_SETUP.md` - Detailed explanation
-- `POSTGRES_VISUAL_SUMMARY.md` - Diagrams and visuals
+-   `POSTGRES_COPY_PASTE.md` - All commands ready to copy
+-   `POSTGRES_SETUP_CHECKLIST.md` - Step-by-step checklist
+-   `POSTGRES_COMPLETE_REFERENCE.md` - Full reference
+-   `DIGITALOCEAN_POSTGRES_SETUP.md` - Detailed explanation
+-   `POSTGRES_VISUAL_SUMMARY.md` - Diagrams and visuals
 
 ---
 
@@ -147,18 +147,18 @@ For more detailed help, see:
 
 You'll have:
 
-- ✅ PostgreSQL database running on DigitalOcean
-- ✅ All 130+ tests passing
-- ✅ Complete test coverage of your API
-- ✅ Confidence in code quality
-- ✅ Ready for production deployment
+-   ✅ PostgreSQL database running on DigitalOcean
+-   ✅ All 130+ tests passing
+-   ✅ Complete test coverage of your API
+-   ✅ Confidence in code quality
+-   ✅ Ready for production deployment
 
 Then you can:
 
-- Deploy to production (Render, Vercel, etc.)
-- Set up CI/CD pipeline
-- Add more tests as you build
-- Monitor and scale
+-   Deploy to production (Render, Vercel, etc.)
+-   Set up CI/CD pipeline
+-   Add more tests as you build
+-   Monitor and scale
 
 ---
 

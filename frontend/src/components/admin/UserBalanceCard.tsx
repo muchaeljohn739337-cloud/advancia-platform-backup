@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 interface UserBalances {
   usd: string;
@@ -21,23 +21,20 @@ interface UserBalanceCardProps {
   tier: UserTier;
 }
 
-export default function UserBalanceCard({
-  balances,
-  tier,
-}: UserBalanceCardProps) {
+export default function UserBalanceCard({ balances, tier }: UserBalanceCardProps) {
   const formatCurrency = (value: string) => {
-    const num = parseFloat(value || "0");
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+    const num = parseFloat(value || '0');
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(num);
   };
 
   const formatTokens = (value: string) => {
-    const num = parseFloat(value || "0");
-    return new Intl.NumberFormat("en-US", {
+    const num = parseFloat(value || '0');
+    return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     }).format(num);
@@ -45,13 +42,13 @@ export default function UserBalanceCard({
 
   const getTierColor = (tierName: string) => {
     const colors: Record<string, string> = {
-      bronze: "bg-amber-100 text-amber-800",
-      silver: "bg-gray-100 text-gray-800",
-      gold: "bg-yellow-100 text-yellow-800",
-      platinum: "bg-blue-100 text-blue-800",
-      diamond: "bg-purple-100 text-purple-800",
+      bronze: 'bg-amber-100 text-amber-800',
+      silver: 'bg-gray-100 text-gray-800',
+      gold: 'bg-yellow-100 text-yellow-800',
+      platinum: 'bg-blue-100 text-blue-800',
+      diamond: 'bg-purple-100 text-purple-800',
     };
-    return colors[tierName.toLowerCase()] || "bg-gray-100 text-gray-800";
+    return colors[tierName.toLowerCase()] || 'bg-gray-100 text-gray-800';
   };
 
   return (
@@ -67,12 +64,8 @@ export default function UserBalanceCard({
       <div className="p-6 space-y-6">
         {/* USD Balance */}
         <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4">
-          <label className="block text-sm font-medium text-green-700 mb-1">
-            USD Balance
-          </label>
-          <p className="text-3xl font-bold text-green-900">
-            {formatCurrency(balances.usd)}
-          </p>
+          <label className="block text-sm font-medium text-green-700 mb-1">USD Balance</label>
+          <p className="text-3xl font-bold text-green-900">{formatCurrency(balances.usd)}</p>
         </div>
 
         {/* Token Balances */}
@@ -86,9 +79,7 @@ export default function UserBalanceCard({
             </p>
           </div>
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
-            <label className="block text-sm font-medium text-purple-700 mb-1">
-              Locked Tokens
-            </label>
+            <label className="block text-sm font-medium text-purple-700 mb-1">Locked Tokens</label>
             <p className="text-2xl font-bold text-purple-900">
               {formatTokens(balances.lockedBalance)}
             </p>
@@ -108,9 +99,7 @@ export default function UserBalanceCard({
         {/* Tier Information */}
         <div className="pt-4 border-t border-gray-200">
           <div className="flex items-center justify-between mb-3">
-            <label className="block text-sm font-medium text-gray-700">
-              Current Tier
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Current Tier</label>
             <span
               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase ${getTierColor(
                 tier.currentTier
@@ -122,17 +111,11 @@ export default function UserBalanceCard({
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
               <label className="block text-gray-500 mb-1">Current Points</label>
-              <p className="font-semibold text-gray-900">
-                {tier.points.toLocaleString()}
-              </p>
+              <p className="font-semibold text-gray-900">{tier.points.toLocaleString()}</p>
             </div>
             <div>
-              <label className="block text-gray-500 mb-1">
-                Lifetime Points
-              </label>
-              <p className="font-semibold text-gray-900">
-                {tier.lifetimePoints.toLocaleString()}
-              </p>
+              <label className="block text-gray-500 mb-1">Lifetime Points</label>
+              <p className="font-semibold text-gray-900">{tier.lifetimePoints.toLocaleString()}</p>
             </div>
           </div>
         </div>

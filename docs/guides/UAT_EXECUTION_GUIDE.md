@@ -606,12 +606,12 @@ Before marking UAT complete:
 
 **QA Lead Sign-Off**:
 
-- Name: ********\_******** Date: **\_\_\_**
+- Name: **\*\*\*\***\_**\*\*\*\*** Date: **\_\_\_**
 - Status: [ ] APPROVED [ ] APPROVED WITH WAIVERS [ ] REJECTED
 
 **Product Owner Sign-Off**:
 
-- Name: ********\_******** Date: **\_\_\_**
+- Name: **\*\*\*\***\_**\*\*\*\*** Date: **\_\_\_**
 - Status: [ ] GO-LIVE [ ] HOLD [ ] ROLLBACK
 
 ---

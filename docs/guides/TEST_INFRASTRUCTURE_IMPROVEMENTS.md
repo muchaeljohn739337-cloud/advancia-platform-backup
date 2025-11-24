@@ -17,10 +17,7 @@ Successfully improved the test infrastructure for Advancia PayLedger with focus 
 ```typescript
 export const validateApiKey: RequestHandler = (req, res, next) => {
   // Skip API key validation in dev/test environments
-  if (
-    process.env.NODE_ENV === "development" ||
-    process.env.NODE_ENV === "test"
-  ) {
+  if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
     return next();
   }
   // ... rest of validation logic
@@ -104,12 +101,10 @@ To complete the test infrastructure:
    ```
 
 2. **Add Test Models to Schema:**
-
    - If token/reward tests needed, add `TokenWallet`, `TokenTransaction`, `UserTier` to Prisma schema
    - Or keep tests focused on core User/Transaction models only
 
 3. **Update Remaining Backend Tests:**
-
    - Review failing integration tests
    - Update to use `server.ts` test app
    - Ensure proper beforeAll/afterAll database setup

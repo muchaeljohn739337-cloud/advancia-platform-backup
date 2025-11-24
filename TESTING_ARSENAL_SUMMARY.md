@@ -10,10 +10,10 @@ This document summarizes all testing tools, documentation, and workflows deliver
 
 ### Total Files: **25+**
 
-- **5** Postman collections/environments
-- **6** PowerShell automation scripts
-- **3** SQL monitoring scripts
-- **11** Documentation guides
+-   **5** Postman collections/environments
+-   **6** PowerShell automation scripts
+-   **3** SQL monitoring scripts
+-   **11** Documentation guides
 
 ---
 
@@ -285,17 +285,17 @@ After running tests, you should see:
 
 ### ✅ Postman Results
 
-- Tests passed: 6/6
-- Duration: ~6 seconds
-- Lockout triggered: Yes (iteration 5)
-- Lockout persists: Yes (iteration 6)
+-   Tests passed: 6/6
+-   Duration: ~6 seconds
+-   Lockout triggered: Yes (iteration 5)
+-   Lockout persists: Yes (iteration 6)
 
 ### ✅ Database State
 
-- `failed_attempts`: 5
-- `locked_until`: [timestamp ~15 min in future]
-- `lock_status`: 🔒 LOCKED
-- `minutes_remaining`: ~15
+-   `failed_attempts`: 5
+-   `locked_until`: [timestamp ~15 min in future]
+-   `lock_status`: 🔒 LOCKED
+-   `minutes_remaining`: ~15
 
 ### ✅ Console Output
 
@@ -355,28 +355,28 @@ Final Summary: Lockout policy triggered successfully!
 
 **Quick Start:**
 
-- RUNNER_QUICK_REF.md - 1-page Postman Runner guide
-- QUICK_TEST_REFERENCE.md - All commands cheat sheet
+-   RUNNER_QUICK_REF.md - 1-page Postman Runner guide
+-   QUICK_TEST_REFERENCE.md - All commands cheat sheet
 
 **Detailed Guides:**
 
-- POSTMAN_RUNNER_GUIDE.md - Complete Runner configuration (7 pages)
-- POSTMAN_TESTING_GUIDE.md - Manual testing guide
-- COMPLETE_TEST_WORKFLOW.md - Step-by-step procedures
+-   POSTMAN_RUNNER_GUIDE.md - Complete Runner configuration (7 pages)
+-   POSTMAN_TESTING_GUIDE.md - Manual testing guide
+-   COMPLETE_TEST_WORKFLOW.md - Step-by-step procedures
 
 **Visual References:**
 
-- POSTMAN_RUNNER_WORKFLOW.md - Workflow diagrams and timelines
+-   POSTMAN_RUNNER_WORKFLOW.md - Workflow diagrams and timelines
 
 **Technical:**
 
-- DATABASE_VERIFICATION_GUIDE.md - SQL queries (30+ examples)
-- TEST_IMPLEMENTATION_GUIDE.md - Infrastructure details
+-   DATABASE_VERIFICATION_GUIDE.md - SQL queries (30+ examples)
+-   TEST_IMPLEMENTATION_GUIDE.md - Infrastructure details
 
 **Setup:**
 
-- ADMIN_2FA_SETUP.md - 2FA configuration
-- ADMIN_LOGIN_GUIDE.md - Authentication guide
+-   ADMIN_2FA_SETUP.md - 2FA configuration
+-   ADMIN_LOGIN_GUIDE.md - Authentication guide
 
 ---
 

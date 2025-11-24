@@ -8,11 +8,11 @@ Complete security hardening guide for Advancia Pay Ledger using Cloudflare WAF, 
 
 This guide configures **enterprise-grade security** for your fintech SaaS platform using Cloudflare's security features:
 
-- 🛡️ **WAF Managed Rules** - Block common exploits (SQLi, XSS, path traversal)
-- ⏱️ **Rate Limiting** - Prevent brute force and API abuse
-- 🤖 **Bot Protection** - Block malicious bots and scrapers
-- 🔐 **Zero Trust Access** - Secure admin routes with SSO/MFA
-- 📊 **Security Analytics** - Monitor and audit all security events
+-   🛡️ **WAF Managed Rules** - Block common exploits (SQLi, XSS, path traversal)
+-   ⏱️ **Rate Limiting** - Prevent brute force and API abuse
+-   🤖 **Bot Protection** - Block malicious bots and scrapers
+-   🔐 **Zero Trust Access** - Secure admin routes with SSO/MFA
+-   📊 **Security Analytics** - Monitor and audit all security events
 
 **Compliance Coverage**: PCI DSS, SOC2, GDPR, HIPAA-ready
 
@@ -20,10 +20,10 @@ This guide configures **enterprise-grade security** for your fintech SaaS platfo
 
 ## ✅ Prerequisites
 
-- [ ] Cloudflare account (Free or Pro plan minimum)
-- [ ] Domain added to Cloudflare
-- [ ] DNS records pointing to your DigitalOcean droplet
-- [ ] Cloudflare proxy enabled (orange cloud icon)
+-   [ ] Cloudflare account (Free or Pro plan minimum)
+-   [ ] Domain added to Cloudflare
+-   [ ] DNS records pointing to your DigitalOcean droplet
+-   [ ] Cloudflare proxy enabled (orange cloud icon)
 
 ---
 
@@ -40,22 +40,22 @@ This guide configures **enterprise-grade security** for your fintech SaaS platfo
 3. Go to **Security → WAF**
 4. Click **Managed Rules** tab
 5. Enable **Cloudflare OWASP Core Ruleset**
-   - Toggle to **ON**
-   - Set mode to **Block** (not just Log)
-   - Review and enable all rule groups
+   -   Toggle to **ON**
+   -   Set mode to **Block** (not just Log)
+   -   Review and enable all rule groups
 
 **Recommended Rule Groups:**
 
-- ✅ SQL Injection
-- ✅ Cross-site Scripting (XSS)
-- ✅ Local File Inclusion (LFI)
-- ✅ Remote File Inclusion (RFI)
-- ✅ Remote Code Execution (RCE)
-- ✅ PHP Injection
-- ✅ Session Fixation
-- ✅ Scanner Detection
-- ✅ Protocol Attack
-- ✅ Generic Attack
+-   ✅ SQL Injection
+-   ✅ Cross-site Scripting (XSS)
+-   ✅ Local File Inclusion (LFI)
+-   ✅ Remote File Inclusion (RFI)
+-   ✅ Remote Code Execution (RCE)
+-   ✅ PHP Injection
+-   ✅ Session Fixation
+-   ✅ Scanner Detection
+-   ✅ Protocol Attack
+-   ✅ Generic Attack
 
 ### 1.2 Enable Cloudflare Managed Ruleset
 
@@ -65,11 +65,11 @@ This guide configures **enterprise-grade security** for your fintech SaaS platfo
 
 1. In **WAF → Managed Rules**
 2. Enable **Cloudflare Managed Ruleset**
-   - Toggle to **ON**
-   - Set action to **Block**
+   -   Toggle to **ON**
+   -   Set action to **Block**
 3. Review anomaly score settings
-   - Set threshold to **Medium** (score: 40)
-   - Increase to **Low** (score: 20) for sensitive endpoints
+   -   Set threshold to **Medium** (score: 40)
+   -   Increase to **Low** (score: 20) for sensitive endpoints
 
 ### 1.3 Create Custom WAF Rules
 
@@ -269,34 +269,34 @@ Rate Limit:
 1. Go to **Security → Bots**
 2. Toggle **Bot Fight Mode** to **ON**
 3. Configure settings:
-   - ✅ **Definitely Automated**: Block
-   - ✅ **Likely Automated**: Challenge
-   - ✅ **Verified Bots**: Allow (Google, Bing, etc.)
+   -   ✅ **Definitely Automated**: Block
+   -   ✅ **Likely Automated**: Challenge
+   -   ✅ **Verified Bots**: Allow (Google, Bing, etc.)
 
 **What it blocks:**
 
-- Known bad bots and scrapers
-- Headless browsers (Puppeteer, Selenium)
-- Automated tools (curl, wget without proper headers)
+-   Known bad bots and scrapers
+-   Headless browsers (Puppeteer, Selenium)
+-   Automated tools (curl, wget without proper headers)
 
 ### 3.2 Super Bot Fight Mode (Pro/Business Plans)
 
 **Advanced features:**
 
-- Machine learning bot detection
-- JavaScript fingerprinting
-- Anomaly detection
-- Static resource protection
+-   Machine learning bot detection
+-   JavaScript fingerprinting
+-   Anomaly detection
+-   Static resource protection
 
 **Configuration:**
 
 1. Go to **Security → Bots**
 2. Upgrade to **Super Bot Fight Mode**
 3. Configure actions:
-   - **Definitely Automated**: Block
-   - **Likely Automated**: Managed Challenge
-   - **Verified Bots**: Allow
-   - **Static Resources**: Allow
+   -   **Definitely Automated**: Block
+   -   **Likely Automated**: Managed Challenge
+   -   **Verified Bots**: Allow
+   -   **Static Resources**: Allow
 
 ### 3.3 Challenge Configuration
 
@@ -342,8 +342,8 @@ Action: Block
 
 **Prerequisites:**
 
-- Cloudflare Zero Trust account (formerly Cloudflare for Teams)
-- Domain configured in Cloudflare
+-   Cloudflare Zero Trust account (formerly Cloudflare for Teams)
+-   Domain configured in Cloudflare
 
 ### 4.2 Create Access Application
 
@@ -436,11 +436,11 @@ Purpose: Access to internal tools
 
 **Supported SSO Providers:**
 
-- Google Workspace
-- Microsoft Azure AD
-- Okta
-- GitHub
-- LinkedIn
+-   Google Workspace
+-   Microsoft Azure AD
+-   Okta
+-   GitHub
+-   LinkedIn
 
 **Setup (Google Workspace example):**
 
@@ -455,11 +455,11 @@ Purpose: Access to internal tools
 
 **Require secure devices:**
 
-- ✅ Disk encryption enabled
-- ✅ Firewall enabled
-- ✅ OS up to date
-- ✅ Antivirus running
-- ✅ Company MDM enrolled
+-   ✅ Disk encryption enabled
+-   ✅ Firewall enabled
+-   ✅ OS up to date
+-   ✅ Antivirus running
+-   ✅ Company MDM enrolled
 
 ---
 
@@ -525,10 +525,10 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones/{zone_id}/logs/received"
 
 **Store logs in:**
 
-- AWS S3
-- Google Cloud Storage
-- Azure Blob Storage
-- Elasticsearch
+-   AWS S3
+-   Google Cloud Storage
+-   Azure Blob Storage
+-   Elasticsearch
 
 ### 5.5 Security Dashboard
 
@@ -621,33 +621,33 @@ curl -H "CF-Access-JWT-Assertion: valid-token" https://admin.yourdomain.com
 
 ### Security Verification
 
-- [ ] All WAF managed rulesets enabled (OWASP + Cloudflare)
-- [ ] Custom WAF rules created for sensitive endpoints
-- [ ] Rate limiting active on login, register, password reset
-- [ ] Bot Fight Mode or Super Bot Fight Mode enabled
-- [ ] Challenge configured appropriately (CAPTCHA vs JS Challenge)
-- [ ] Zero Trust Access protecting admin routes
-- [ ] SSO integrated for admin authentication
-- [ ] MFA required for high-privilege accounts
-- [ ] Security analytics and logging enabled
-- [ ] Alerts configured for critical security events
+-   [ ] All WAF managed rulesets enabled (OWASP + Cloudflare)
+-   [ ] Custom WAF rules created for sensitive endpoints
+-   [ ] Rate limiting active on login, register, password reset
+-   [ ] Bot Fight Mode or Super Bot Fight Mode enabled
+-   [ ] Challenge configured appropriately (CAPTCHA vs JS Challenge)
+-   [ ] Zero Trust Access protecting admin routes
+-   [ ] SSO integrated for admin authentication
+-   [ ] MFA required for high-privilege accounts
+-   [ ] Security analytics and logging enabled
+-   [ ] Alerts configured for critical security events
 
 ### Compliance Verification
 
-- [ ] Firewall events logged for 30+ days (PCI DSS requirement)
-- [ ] Access logs exported to secure storage (SOC2 requirement)
-- [ ] Audit trail enabled for all admin actions
-- [ ] IP geolocation blocking configured if needed (GDPR)
-- [ ] Data encryption in transit (SSL/TLS) verified
-- [ ] Security policies documented and reviewed
+-   [ ] Firewall events logged for 30+ days (PCI DSS requirement)
+-   [ ] Access logs exported to secure storage (SOC2 requirement)
+-   [ ] Audit trail enabled for all admin actions
+-   [ ] IP geolocation blocking configured if needed (GDPR)
+-   [ ] Data encryption in transit (SSL/TLS) verified
+-   [ ] Security policies documented and reviewed
 
 ### Performance Verification
 
-- [ ] Page load time < 3 seconds with WAF enabled
-- [ ] API response time < 200ms with rate limiting
-- [ ] No false positives blocking legitimate users
-- [ ] Bot challenge solve rate acceptable (>90% for humans)
-- [ ] CDN cache hit ratio > 80% for static assets
+-   [ ] Page load time < 3 seconds with WAF enabled
+-   [ ] API response time < 200ms with rate limiting
+-   [ ] No false positives blocking legitimate users
+-   [ ] Bot challenge solve rate acceptable (>90% for humans)
+-   [ ] CDN cache hit ratio > 80% for static assets
 
 ---
 
@@ -655,26 +655,26 @@ curl -H "CF-Access-JWT-Assertion: valid-token" https://admin.yourdomain.com
 
 ### Weekly Tasks
 
-- [ ] Review firewall event logs for anomalies
-- [ ] Check rate limiting effectiveness
-- [ ] Monitor bot traffic patterns
-- [ ] Review failed authentication attempts
+-   [ ] Review firewall event logs for anomalies
+-   [ ] Check rate limiting effectiveness
+-   [ ] Monitor bot traffic patterns
+-   [ ] Review failed authentication attempts
 
 ### Monthly Tasks
 
-- [ ] Audit WAF rule effectiveness
-- [ ] Update IP allowlists/blocklists
-- [ ] Review and tune rate limit thresholds
-- [ ] Test disaster recovery procedures
-- [ ] Review compliance audit logs
+-   [ ] Audit WAF rule effectiveness
+-   [ ] Update IP allowlists/blocklists
+-   [ ] Review and tune rate limit thresholds
+-   [ ] Test disaster recovery procedures
+-   [ ] Review compliance audit logs
 
 ### Quarterly Tasks
 
-- [ ] Security policy review with team
-- [ ] Penetration testing (external firm)
-- [ ] Update security documentation
-- [ ] Review and renew SSL certificates
-- [ ] Compliance audit preparation
+-   [ ] Security policy review with team
+-   [ ] Penetration testing (external firm)
+-   [ ] Update security documentation
+-   [ ] Review and renew SSL certificates
+-   [ ] Compliance audit preparation
 
 ---
 
@@ -705,25 +705,25 @@ Action: Skip WAF
 **Issue:** Slow page loads after enabling WAF  
 **Solution:**
 
-- Reduce WAF sensitivity from High to Medium
-- Enable Cloudflare caching for static assets
-- Use Argo Smart Routing (paid feature)
+-   Reduce WAF sensitivity from High to Medium
+-   Enable Cloudflare caching for static assets
+-   Use Argo Smart Routing (paid feature)
 
 **Issue:** High bot challenge rate  
 **Solution:**
 
-- Lower bot score threshold for challenges
-- Use JS Challenge instead of Interactive Challenge
-- Whitelist verified bots properly
+-   Lower bot score threshold for challenges
+-   Use JS Challenge instead of Interactive Challenge
+-   Whitelist verified bots properly
 
 ### Rate Limiting Issues
 
 **Issue:** Legitimate users hit rate limits  
 **Solution:**
 
-- Increase rate limit threshold
-- Use shorter blocking duration (5 min instead of 15)
-- Add IP whitelist for known good IPs
+-   Increase rate limit threshold
+-   Use shorter blocking duration (5 min instead of 15)
+-   Add IP whitelist for known good IPs
 
 ---
 
@@ -742,11 +742,11 @@ Action: Skip WAF
 
 ## 🔗 Additional Resources
 
-- [Cloudflare WAF Documentation](https://developers.cloudflare.com/waf/)
-- [Cloudflare Rate Limiting Guide](https://developers.cloudflare.com/waf/rate-limiting-rules/)
-- [Cloudflare Zero Trust Docs](https://developers.cloudflare.com/cloudflare-one/)
-- [Bot Management Best Practices](https://developers.cloudflare.com/bots/)
-- [PCI DSS Compliance Guide](https://www.cloudflare.com/pci-compliance/)
+-   [Cloudflare WAF Documentation](https://developers.cloudflare.com/waf/)
+-   [Cloudflare Rate Limiting Guide](https://developers.cloudflare.com/waf/rate-limiting-rules/)
+-   [Cloudflare Zero Trust Docs](https://developers.cloudflare.com/cloudflare-one/)
+-   [Bot Management Best Practices](https://developers.cloudflare.com/bots/)
+-   [PCI DSS Compliance Guide](https://www.cloudflare.com/pci-compliance/)
 
 ---
 

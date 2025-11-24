@@ -135,29 +135,29 @@ curl https://yourdomain.com
 
 ### HTTP → HTTPS Redirect
 
-- All traffic on port 80 (HTTP) automatically redirects to port 443 (HTTPS)
-- Enforces secure connections
+-   All traffic on port 80 (HTTP) automatically redirects to port 443 (HTTPS)
+-   Enforces secure connections
 
 ### Backend API Routing
 
-- `https://yourdomain.com/api/*` → `http://localhost:4000/api/*`
-- `https://yourdomain.com/socket.io/*` → `http://localhost:4000/socket.io/*`
-- Supports WebSocket connections for real-time features
+-   `https://yourdomain.com/api/*` → `http://localhost:4000/api/*`
+-   `https://yourdomain.com/socket.io/*` → `http://localhost:4000/socket.io/*`
+-   Supports WebSocket connections for real-time features
 
 ### Frontend Routing
 
-- `https://yourdomain.com/*` → `http://localhost:3000/*`
-- Caches static assets (images, Next.js bundles)
-- Optimizes performance with proper cache headers
+-   `https://yourdomain.com/*` → `http://localhost:3000/*`
+-   Caches static assets (images, Next.js bundles)
+-   Optimizes performance with proper cache headers
 
 ### Security Features
 
-- ✅ TLS 1.2/1.3 only
-- ✅ Strong cipher suites
-- ✅ X-Frame-Options (prevents clickjacking)
-- ✅ X-Content-Type-Options (prevents MIME sniffing)
-- ✅ XSS Protection
-- ✅ Referrer Policy
+-   ✅ TLS 1.2/1.3 only
+-   ✅ Strong cipher suites
+-   ✅ X-Frame-Options (prevents clickjacking)
+-   ✅ X-Content-Type-Options (prevents MIME sniffing)
+-   ✅ XSS Protection
+-   ✅ Referrer Policy
 
 ---
 
@@ -303,25 +303,25 @@ Nginx (Port 80/443)
 
 ## 📚 Additional Resources
 
-- [Nginx Documentation](https://nginx.org/en/docs/)
-- [Let's Encrypt Documentation](https://letsencrypt.org/docs/)
-- [SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - Check SSL security
-- [DigitalOcean Nginx Guide](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-22-04)
+-   [Nginx Documentation](https://nginx.org/en/docs/)
+-   [Let's Encrypt Documentation](https://letsencrypt.org/docs/)
+-   [SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - Check SSL security
+-   [DigitalOcean Nginx Guide](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-22-04)
 
 ---
 
 ## ✅ Checklist
 
-- [ ] Nginx installed (`sudo apt install nginx`)
-- [ ] Config file created (`/etc/nginx/sites-available/advancia`)
-- [ ] Config enabled (`sudo ln -s ...`)
-- [ ] Syntax tested (`sudo nginx -t`)
-- [ ] Nginx reloaded (`sudo systemctl reload nginx`)
-- [ ] DNS configured (A records for domain)
-- [ ] SSL installed (`sudo certbot --nginx`)
-- [ ] HTTPS working (`curl https://yourdomain.com`)
-- [ ] Backend API accessible (`curl https://yourdomain.com/api/health`)
-- [ ] WebSocket working (test in browser console)
+-   [ ] Nginx installed (`sudo apt install nginx`)
+-   [ ] Config file created (`/etc/nginx/sites-available/advancia`)
+-   [ ] Config enabled (`sudo ln -s ...`)
+-   [ ] Syntax tested (`sudo nginx -t`)
+-   [ ] Nginx reloaded (`sudo systemctl reload nginx`)
+-   [ ] DNS configured (A records for domain)
+-   [ ] SSL installed (`sudo certbot --nginx`)
+-   [ ] HTTPS working (`curl https://yourdomain.com`)
+-   [ ] Backend API accessible (`curl https://yourdomain.com/api/health`)
+-   [ ] WebSocket working (test in browser console)
 
 ---
 

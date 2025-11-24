@@ -205,26 +205,26 @@ netstat -tlnp
 
 ## 🎯 Test Checklist
 
-- [ ] Frontend loads: `http://157.245.8.131:3000`
-- [ ] Backend health OK: `http://157.245.8.131:4000/api/health`
-- [ ] MailHog UI loads: `http://157.245.8.131:8025`
-- [ ] Can create new user account
-- [ ] Email verification appears in MailHog
-- [ ] Can log in with demo credentials
-- [ ] Can create test transaction
-- [ ] Admin dashboard accessible
-- [ ] Logs show no critical errors
+-   [ ] Frontend loads: `http://157.245.8.131:3000`
+-   [ ] Backend health OK: `http://157.245.8.131:4000/api/health`
+-   [ ] MailHog UI loads: `http://157.245.8.131:8025`
+-   [ ] Can create new user account
+-   [ ] Email verification appears in MailHog
+-   [ ] Can log in with demo credentials
+-   [ ] Can create test transaction
+-   [ ] Admin dashboard accessible
+-   [ ] Logs show no critical errors
 
 ---
 
 ## ⚠️ Demo Limitations
 
-- ❌ No SSL/HTTPS (HTTP only)
-- ❌ Test Stripe keys (no real payments)
-- ❌ MailHog only (no real email delivery)
-- ❌ No S3 backups
-- ❌ No CloudFlare CDN
-- ❌ Demo credentials (change for production)
+-   ❌ No SSL/HTTPS (HTTP only)
+-   ❌ Test Stripe keys (no real payments)
+-   ❌ MailHog only (no real email delivery)
+-   ❌ No S3 backups
+-   ❌ No CloudFlare CDN
+-   ❌ Demo credentials (change for production)
 
 ---
 
@@ -244,21 +244,21 @@ netstat -tlnp
 
 **Documentation**: `ONE_HOUR_MIGRATION_GUIDE.md`
 
-**Issues**: https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/issues
+**Issues**: <https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/issues>
 
-**Email**: support@advanciapayledger.com
+**Email**: <support@advanciapayledger.com>
 
 ---
 
 ## ✅ Success Criteria
 
-- ✅ All services running (`docker ps`)
-- ✅ Backend health returns 200
-- ✅ Frontend accessible
-- ✅ Can log in with demo user
-- ✅ MailHog receives emails
-- ✅ No ERROR logs
-- ✅ Completed in under 1 hour
+-   ✅ All services running (`docker ps`)
+-   ✅ Backend health returns 200
+-   ✅ Frontend accessible
+-   ✅ Can log in with demo user
+-   ✅ MailHog receives emails
+-   ✅ No ERROR logs
+-   ✅ Completed in under 1 hour
 
 ---
 

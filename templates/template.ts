@@ -75,7 +75,7 @@ const themeManager: ThemeManager = {
     if (metaThemeColor) {
       metaThemeColor.setAttribute(
         "content",
-        theme === "dark" ? "#0f172a" : "#4F46E5"
+        theme === "dark" ? "#0f172a" : "#4F46E5",
       );
     }
 
@@ -334,24 +334,24 @@ const performanceMonitor = {
     ) {
       window.addEventListener("load", () => {
         const perfData = performance.getEntriesByType(
-          "navigation"
+          "navigation",
         )[0] as PerformanceNavigationTiming;
 
         console.log("📊 Performance Metrics:");
         console.log(
           "  - DOM Content Loaded:",
           Math.round(perfData.domContentLoadedEventEnd),
-          "ms"
+          "ms",
         );
         console.log(
           "  - Load Complete:",
           Math.round(perfData.loadEventEnd),
-          "ms"
+          "ms",
         );
         console.log(
           "  - Time to Interactive:",
           Math.round(perfData.domInteractive),
-          "ms"
+          "ms",
         );
       });
     }

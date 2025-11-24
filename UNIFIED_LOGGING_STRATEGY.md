@@ -29,11 +29,11 @@ backend/logs/
 
 **What's captured:**
 
-- Application startup/shutdown
-- Uncaught exceptions
-- Console.log/console.error output
-- PM2 restart events
-- Memory threshold warnings
+-   Application startup/shutdown
+-   Uncaught exceptions
+-   Console.log/console.error output
+-   PM2 restart events
+-   Memory threshold warnings
 
 ### Watchdog Logs (Health Monitoring)
 
@@ -43,11 +43,11 @@ backend/logs/watchdog.log
 
 **What's captured:**
 
-- Health check results (/api/health endpoint)
-- Backend restart triggers
-- Health check failures with reasons
-- Uptime statistics
-- Critical alerts
+-   Health check results (/api/health endpoint)
+-   Backend restart triggers
+-   Health check failures with reasons
+-   Uptime statistics
+-   Critical alerts
 
 ### Winston Logs (Application Logging)
 
@@ -59,11 +59,11 @@ backend/logs/
 
 **What's captured:**
 
-- HTTP request/response details
-- Database queries (if enabled)
-- Business logic events
-- User authentication attempts
-- API errors with stack traces
+-   HTTP request/response details
+-   Database queries (if enabled)
+-   Business logic events
+-   User authentication attempts
+-   API errors with stack traces
 
 ---
 
@@ -122,10 +122,10 @@ Write-UnifiedLog "Critical: Multiple failures detected" "ERROR"
 
 **Benefits:**
 
-- Single `combined.log` file contains everything
-- Chronological order across all sources
-- Easier to grep/search for specific events
-- Simplified log rotation and archival
+-   Single `combined.log` file contains everything
+-   Chronological order across all sources
+-   Easier to grep/search for specific events
+-   Simplified log rotation and archival
 
 ### Option C: PM2 Log Aggregation
 
@@ -200,10 +200,10 @@ pm2 restart Advancia-backend
 
 ### What It Does
 
-- **Every 30 seconds**: PM2 pings `http://localhost:4000/api/health`
-- **On failure**: Increments failure counter
-- **After 3 consecutive failures**: Restarts backend automatically
-- **Logs everything**: Events appear in `out.log` and `combined.log`
+-   **Every 30 seconds**: PM2 pings `http://localhost:4000/api/health`
+-   **On failure**: Increments failure counter
+-   **After 3 consecutive failures**: Restarts backend automatically
+-   **Logs everything**: Events appear in `out.log` and `combined.log`
 
 ### Testing
 
@@ -327,16 +327,16 @@ Write-Host "`n══════════════════════
 
 **Tools:**
 
-- ✅ PM2 with auto-restart (`ecosystem.config.cjs`)
-- ✅ Basic error/output logging
-- ✅ PM2 health checks (just added)
+-   ✅ PM2 with auto-restart (`ecosystem.config.cjs`)
+-   ✅ Basic error/output logging
+-   ✅ PM2 health checks (just added)
 
 **Capabilities:**
 
-- Backend stays alive on crashes
-- Memory management (500MB limit)
-- Auto-restart after 3 health check failures
-- Basic logs for debugging
+-   Backend stays alive on crashes
+-   Memory management (500MB limit)
+-   Auto-restart after 3 health check failures
+-   Basic logs for debugging
 
 **When:** Right now — baseline for any production system
 
@@ -346,16 +346,16 @@ Write-Host "`n══════════════════════
 
 **Tools:**
 
-- ✅ PowerShell Watchdog (`simple-watchdog.ps1` or `backend-watchdog.ps1`)
-- ✅ Slack/Email notifications
-- ✅ Unified logging (`combined.log`)
+-   ✅ PowerShell Watchdog (`simple-watchdog.ps1` or `backend-watchdog.ps1`)
+-   ✅ Slack/Email notifications
+-   ✅ Unified logging (`combined.log`)
 
 **Capabilities:**
 
-- External health monitoring (independent of PM2)
-- Alert engineers on failures
-- Restart backend if health checks fail
-- Consolidated logs for debugging
+-   External health monitoring (independent of PM2)
+-   Alert engineers on failures
+-   Restart backend if health checks fail
+-   Consolidated logs for debugging
 
 **When:** Already implemented — good for team collaboration
 
@@ -365,16 +365,16 @@ Write-Host "`n══════════════════════
 
 **Tools to add:**
 
-- 📦 **Winston structured logging** (already in place)
-- 📦 **Log aggregation** (pm2-logrotate)
-- 📦 **Automated reports** (parse-watchdog.ps1 + scheduled task)
+-   📦 **Winston structured logging** (already in place)
+-   📦 **Log aggregation** (pm2-logrotate)
+-   📦 **Automated reports** (parse-watchdog.ps1 + scheduled task)
 
 **Capabilities:**
 
-- Structured JSON logs for parsing
-- Automatic log rotation (7 days retention)
-- Daily/weekly uptime reports via email
-- Historical trend analysis
+-   Structured JSON logs for parsing
+-   Automatic log rotation (7 days retention)
+-   Daily/weekly uptime reports via email
+-   Historical trend analysis
 
 **When:** Before launch to real users
 
@@ -394,20 +394,20 @@ pm2 set pm2-logrotate:retain 7
 
 ---
 
-### Stage 4: Production Launch (When Users Arrive) ✅ READY!
+### Stage 4: Production Launch (When Users Arrive) ✅ READY
 
 **Tools to add:**
 
-- ✅ **Sentry** (Error tracking with stack traces) - **INSTALLED!**
-- 🎯 **Uptime monitoring** (Pingdom, StatusCake, or UptimeRobot)
+-   ✅ **Sentry** (Error tracking with stack traces) - **INSTALLED!**
+-   🎯 **Uptime monitoring** (Pingdom, StatusCake, or UptimeRobot)
 
 **Capabilities:**
 
-- Real-time error alerts with context
-- User-specific error tracking
-- Release version tracking
-- Performance monitoring
-- External uptime checks (from multiple locations)
+-   Real-time error alerts with context
+-   User-specific error tracking
+-   Release version tracking
+-   Performance monitoring
+-   External uptime checks (from multiple locations)
 
 **When:** Add when real users are hitting the system
 
@@ -415,12 +415,12 @@ pm2 set pm2-logrotate:retain 7
 
 Sentry already integrated in `backend/src/`:
 
-- ✅ `utils/sentry.js` - Full Sentry wrapper
-- ✅ `index.js` - Middleware integrated
-- ✅ Global error handlers
-- ✅ Request context capture
-- ✅ Performance monitoring
-- ✅ User tracking utilities
+-   ✅ `utils/sentry.js` - Full Sentry wrapper
+-   ✅ `index.js` - Middleware integrated
+-   ✅ Global error handlers
+-   ✅ Request context capture
+-   ✅ Performance monitoring
+-   ✅ User tracking utilities
 
 **Setup steps:**
 
@@ -440,16 +440,16 @@ Sentry already integrated in `backend/src/`:
 
 **Tools to add:**
 
-- 📈 **Datadog** or **New Relic** (Full observability)
-- 📈 **Grafana + Prometheus** (Open-source alternative)
+-   📈 **Datadog** or **New Relic** (Full observability)
+-   📈 **Grafana + Prometheus** (Open-source alternative)
 
 **Capabilities:**
 
-- Custom dashboards (uptime %, response times, error rates)
-- Infrastructure metrics (CPU, memory, disk, network)
-- Distributed tracing (track requests across services)
-- Alerting rules (PagerDuty integration)
-- SLA compliance tracking
+-   Custom dashboards (uptime %, response times, error rates)
+-   Infrastructure metrics (CPU, memory, disk, network)
+-   Distributed tracing (track requests across services)
+-   Alerting rules (PagerDuty integration)
+-   SLA compliance tracking
 
 **When:** When uptime guarantees matter (SLAs, investors, enterprise customers)
 
@@ -473,16 +473,16 @@ require('dd-trace').init({
 
 **Tools to add:**
 
-- 📊 **Automated executive reports** (Weekly/Monthly)
-- 📊 **Custom analytics dashboard** (for stakeholders)
-- 📊 **Compliance logging** (SOC2, PCI-DSS requirements)
+-   📊 **Automated executive reports** (Weekly/Monthly)
+-   📊 **Custom analytics dashboard** (for stakeholders)
+-   📊 **Compliance logging** (SOC2, PCI-DSS requirements)
 
 **Capabilities:**
 
-- Polished weekly summaries for investors
-- Uptime % charts for marketing
-- Audit trails for compliance
-- Custom KPIs (transaction success rate, user growth, etc.)
+-   Polished weekly summaries for investors
+-   Uptime % charts for marketing
+-   Audit trails for compliance
+-   Custom KPIs (transaction success rate, user growth, etc.)
 
 **When:** Need investor-friendly metrics or compliance certifications
 
@@ -615,11 +615,11 @@ curl http://localhost:4000/api/health
 
 **Current Setup (Excellent!):**
 
-- ✅ PM2 keeps backend alive
-- ✅ Health checks restart on failures
-- ✅ Unified logging in `combined.log`
-- ✅ Watchdog provides external monitoring
-- ✅ parse-watchdog.ps1 analyzes trends
+-   ✅ PM2 keeps backend alive
+-   ✅ Health checks restart on failures
+-   ✅ Unified logging in `combined.log`
+-   ✅ Watchdog provides external monitoring
+-   ✅ parse-watchdog.ps1 analyzes trends
 
 **Next Steps:**
 

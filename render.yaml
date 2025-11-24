@@ -1,10 +1,11 @@
-seservices:
+services:
   - type: web
     name: advancia-backend
     runtime: node
+    plan: starter
     rootDir: backend
     autoDeploy: true
-    buildCommand: npm ci && npm run prisma:generate && npm run build
+    buildCommand: npm install && npm run prisma:generate && npm run build
     startCommand: node dist/index.js
     healthCheckPath: /api/health
     envVars:
@@ -12,11 +13,10 @@ seservices:
         value: production
       - key: PORT
         value: "4000"
-      # Provide real values in Render dashboard (kept out of repo)
       - key: DATABASE_URL
-        sync: false
+        value: postgresql://database_advancia:W9vl0keXJcw6zTFH0VQDGG9evLwMPyNP@dpg-d4f112trnu6s73doipjg-a/db_adnan_postrl
       - key: FRONTEND_URL
-        sync: false
+        value: https://advanciapayledger.com
       - key: ALLOWED_ORIGINS
         sync: false
       - key: JWT_SECRET

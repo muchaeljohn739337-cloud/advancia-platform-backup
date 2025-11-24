@@ -53,16 +53,16 @@ for i in $(seq 1 $CHECKS); do
   echo ""
   echo "Check $i/$CHECKS ($(date '+%H:%M:%S'))"
   echo "----------------------------------------"
-  
+
   # Fetch metrics
   METRICS=$(curl -s "https://$API/metrics" 2>/dev/null || echo "")
-  
+
   if [[ -z "$METRICS" ]]; then
     echo "❌ Failed to fetch metrics"
     ((FAILED++))
     continue
   fi
-  
+
   # Parse metrics
   ERROR_RATE=$(echo "$METRICS" | grep 'error_rate_percent' | awk '{print $2}' | head -1)
   LATENCY_P50=$(echo "$METRICS" | grep 'http_request_duration_seconds{quantile="0.5"}' | awk '{print $2}' | awk '{printf "%.0f", $1 * 1000}')
@@ -70,7 +70,7 @@ for i in $(seq 1 $CHECKS); do
   CPU=$(echo "$METRICS" | grep 'system_cpu_usage_percent' | awk '{print $2}' | head -1)
   MEMORY=$(echo "$METRICS" | grep 'system_memory_usage_percent' | awk '{print $2}' | head -1)
   REQUEST_COUNT=$(echo "$METRICS" | grep 'http_requests_total' | awk '{sum+=$2} END {print sum}')
-  
+
   # Display metrics
   echo "  Error Rate:   ${ERROR_RATE}%"
   echo "  Latency P50:  ${LATENCY_P50}ms"
@@ -78,7 +78,7 @@ for i in $(seq 1 $CHECKS); do
   echo "  CPU Usage:    ${CPU}%"
   echo "  Memory:       ${MEMORY}%"
   echo "  Requests:     $REQUEST_COUNT"
-  
+
   # Determine thresholds based on stage
   case $STAGE in
     10) MAX_ERROR=1.0; MAX_LATENCY=500 ;;
@@ -88,34 +88,34 @@ for i in $(seq 1 $CHECKS); do
     100) MAX_ERROR=0.2; MAX_LATENCY=300 ;;
     *) MAX_ERROR=1.0; MAX_LATENCY=500 ;;
   esac
-  
+
   # Check thresholds
   WARNINGS=0
-  
+
   if (( $(echo "$ERROR_RATE > $MAX_ERROR" | bc -l) )); then
     echo "  ❌ ERROR: Error rate ${ERROR_RATE}% exceeds ${MAX_ERROR}%"
     exit 1
   fi
-  
+
   if [ "$LATENCY_P95" -gt "$MAX_LATENCY" ]; then
     echo "  ❌ ERROR: P95 latency ${LATENCY_P95}ms exceeds ${MAX_LATENCY}ms"
     exit 1
   fi
-  
+
   if (( $(echo "$CPU > 85" | bc -l) )); then
     echo "  ⚠️  WARNING: High CPU usage ${CPU}%"
     ((WARNINGS++))
   fi
-  
+
   if (( $(echo "$MEMORY > 90" | bc -l) )); then
     echo "  ⚠️  WARNING: High memory usage ${MEMORY}%"
     ((WARNINGS++))
   fi
-  
+
   if [ $WARNINGS -eq 0 ]; then
     echo "  ✅ All metrics within acceptable ranges"
   fi
-  
+
   sleep $INTERVAL
 done
 
@@ -157,20 +157,20 @@ echo "------------------------------------------------------------------------"
 for i in "${!REGIONS[@]}"; do
   REGION="${REGIONS[$i]}"
   API="${APIS[$i]}"
-  
+
   METRICS=$(curl -s "https://$API/metrics" 2>/dev/null || echo "")
-  
+
   if [[ -z "$METRICS" ]]; then
     printf "%-15s %-10s %-10s %-10s %-8s %-8s\n" "$REGION" "N/A" "N/A" "N/A" "N/A" "N/A"
     continue
   fi
-  
+
   ERROR=$(echo "$METRICS" | grep 'error_rate_percent' | awk '{print $2}' | head -1)
   P95=$(echo "$METRICS" | grep 'http_request_duration_seconds{quantile="0.95"}' | awk '{print $2}' | awk '{printf "%.0f", $1 * 1000}')
   P99=$(echo "$METRICS" | grep 'http_request_duration_seconds{quantile="0.99"}' | awk '{print $2}' | awk '{printf "%.0f", $1 * 1000}')
   CPU=$(echo "$METRICS" | grep 'system_cpu_usage_percent' | awk '{print $2}' | head -1)
   MEM=$(echo "$METRICS" | grep 'system_memory_usage_percent' | awk '{print $2}' | head -1)
-  
+
   printf "%-15s %-10s %-10s %-10s %-8s %-8s\n" "$REGION" "${ERROR}%" "${P95}ms" "${P99}ms" "${CPU}%" "${MEM}%"
 done
 
@@ -419,7 +419,7 @@ fi
 
 if [[ -n "$ALERTS" ]]; then
   echo -e "$ALERTS"
-  
+
   # Send Slack alert
   curl -X POST "$SLACK_WEBHOOK" \
     -H 'Content-Type: application/json' \
@@ -431,7 +431,7 @@ if [[ -n "$ALERTS" ]]; then
         "footer": "Deployment Monitor"
       }]
     }'
-  
+
   exit 1
 else
   echo "✅ All thresholds OK"
@@ -444,6 +444,7 @@ fi
 ## 📋 Usage Examples
 
 ### Monitor a Deployment Stage
+
 ```bash
 ./scripts/monitor_deployment.sh \
   --region us-east \
@@ -452,11 +453,13 @@ fi
 ```
 
 ### Compare All Regions
+
 ```bash
 ./scripts/compare_regions.sh
 ```
 
 ### Push Metrics to Prometheus
+
 ```bash
 ./scripts/push_metrics_prometheus.sh \
   --region us-east \
@@ -464,6 +467,7 @@ fi
 ```
 
 ### Send Metrics to Datadog
+
 ```bash
 export DATADOG_API_KEY="your-api-key"
 ./scripts/send_datadog_metrics.sh \
@@ -472,6 +476,7 @@ export DATADOG_API_KEY="your-api-key"
 ```
 
 ### Check Thresholds
+
 ```bash
 export SLACK_WEBHOOK_URL="your-webhook-url"
 ./scripts/check_thresholds.sh \

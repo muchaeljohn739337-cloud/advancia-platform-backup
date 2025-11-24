@@ -4,18 +4,18 @@
 
 **✅ What's Ready:**
 
-- Breach Alert system (317 breaches displayed)
-- IP Protection system (Nigeria → US rotation)
-- Support page with chat widget
-- Navigation links added
-- Backend API routes created
-- Database models defined
+-   Breach Alert system (317 breaches displayed)
+-   IP Protection system (Nigeria → US rotation)
+-   Support page with chat widget
+-   Navigation links added
+-   Backend API routes created
+-   Database models defined
 
 **❌ What's Blocking Launch:**
 
-- Backend server is DOWN (502 error)
-- Users cannot sign in (admin approval required)
-- Database migration not run
+-   Backend server is DOWN (502 error)
+-   Users cannot sign in (admin approval required)
+-   Database migration not run
 
 ---
 
@@ -198,7 +198,7 @@ $breachResponse | ConvertTo-Json
 
 **Manual Test:**
 
-1. Go to: https://advanciapayledger.com/security/breach-alert
+1. Go to: <https://advanciapayledger.com/security/breach-alert>
 2. Should see: "317 data breaches detected"
 3. Click email: See breach sources (forum.btcsec.com, etc.)
 4. Click "Activate": Badge shows "24/7 ACTIVE"
@@ -225,7 +225,7 @@ Write-Host "Country: $($ipResponse.country)"
 
 **Manual Test:**
 
-1. Go to: https://advanciapayledger.com/security/ip-protection
+1. Go to: <https://advanciapayledger.com/security/ip-protection>
 2. Should see: Current IP (197.211.52.75), Location: Nigeria
 3. Select: "United States" from dropdown
 4. Click: "Rotate IP Now"
@@ -238,12 +238,12 @@ Write-Host "Country: $($ipResponse.country)"
 
 **Manual Test:**
 
-1. Go to: https://advanciapayledger.com/support
+1. Go to: <https://advanciapayledger.com/support>
 2. Fill form:
-   - Email: test@yourdomain.com
-   - Subject: "Test ticket"
-   - Category: "Technical"
-   - Description: "Testing support system"
+   -   Email: <test@yourdomain.com>
+   -   Subject: "Test ticket"
+   -   Category: "Technical"
+   -   Description: "Testing support system"
 3. Click: Floating chat button (bottom-right, green dot)
 4. Type: "Hello, I need help"
 5. Should get: AI response
@@ -255,20 +255,20 @@ Write-Host "Country: $($ipResponse.country)"
 
 **Check sidebar has these links:**
 
-- 🏠 Dashboard
-- 📊 Analytics
-- 💼 My Assets
-- ⚡ ETH Activity
-- 💵 Loans
-- ⭐ Features
-- **🛡️ Breach Alert** ← NEW
-- **🌍 IP Protection** ← NEW
-- **💬 Support** ← NEW
-- ℹ️ About
-- 💲 Pricing
-- 📖 Docs
-- ⚙️ Settings
-- 👤 Profile
+-   🏠 Dashboard
+-   📊 Analytics
+-   💼 My Assets
+-   ⚡ ETH Activity
+-   💵 Loans
+-   ⭐ Features
+-   **🛡️ Breach Alert** ← NEW
+-   **🌍 IP Protection** ← NEW
+-   **💬 Support** ← NEW
+-   ℹ️ About
+-   💲 Pricing
+-   📖 Docs
+-   ⚙️ Settings
+-   👤 Profile
 
 ---
 
@@ -276,14 +276,14 @@ Write-Host "Country: $($ipResponse.country)"
 
 After completing all tests, you should have:
 
-- [✅] Backend health check returns 200 OK
-- [✅] User can register without admin approval
-- [✅] User can login immediately
-- [✅] Breach alert page loads with 317 breaches
-- [✅] IP rotation changes IP from Nigeria to US
-- [✅] Support chat widget opens and responds
-- [✅] All navigation links work
-- [✅] Database has 3 new tables (breach_alerts, ip_rotation_logs, security_settings)
+-   [✅] Backend health check returns 200 OK
+-   [✅] User can register without admin approval
+-   [✅] User can login immediately
+-   [✅] Breach alert page loads with 317 breaches
+-   [✅] IP rotation changes IP from Nigeria to US
+-   [✅] Support chat widget opens and responds
+-   [✅] All navigation links work
+-   [✅] Database has 3 new tables (breach_alerts, ip_rotation_logs, security_settings)
 
 ---
 
@@ -321,10 +321,10 @@ git push origin main
 
 **You didn't complete Step 2.** Go back and:
 
-- Edit `backend/src/routes/auth.ts` → Change `approved: false` to `approved: true`
-- OR remove approval check from `backend/src/middleware/auth.ts`
-- Commit and push
-- Wait for Render to deploy
+-   Edit `backend/src/routes/auth.ts` → Change `approved: false` to `approved: true`
+-   OR remove approval check from `backend/src/middleware/auth.ts`
+-   Commit and push
+-   Wait for Render to deploy
 
 ---
 
@@ -423,11 +423,10 @@ Add 10 minutes for unexpected issues = **~1 hour total**
    npx prisma studio
    ```
 
-   Opens at http://localhost:5555
+   Opens at <http://localhost:5555>
 
 2. **Monitor Render Logs** in real-time:
-
-   - Render Dashboard → Logs tab → "Live tail"
+   -   Render Dashboard → Logs tab → "Live tail"
 
 3. **Test in Incognito** to avoid auth token caching
 
@@ -464,16 +463,16 @@ Add 10 minutes for unexpected issues = **~1 hour total**
 
 **Quick Reference:**
 
-- Backend down? → Check Render logs
-- Login fails? → Check auth.ts approved field
-- Migration fails? → Run `npx prisma migrate reset`
-- Frontend error? → Check NEXT_PUBLIC_API_URL
+-   Backend down? → Check Render logs
+-   Login fails? → Check auth.ts approved field
+-   Migration fails? → Run `npx prisma migrate reset`
+-   Frontend error? → Check NEXT_PUBLIC_API_URL
 
 **Full Guides:**
 
-- Authentication: `AUTH_SYSTEM_ANALYSIS.md`
-- Testing: `DEPLOYMENT_TEST_CHECKLIST.md`
-- Security APIs: `SECURITY_FEATURES_GUIDE.md`
+-   Authentication: `AUTH_SYSTEM_ANALYSIS.md`
+-   Testing: `DEPLOYMENT_TEST_CHECKLIST.md`
+-   Security APIs: `SECURITY_FEATURES_GUIDE.md`
 
 **Command Cheat Sheet:**
 

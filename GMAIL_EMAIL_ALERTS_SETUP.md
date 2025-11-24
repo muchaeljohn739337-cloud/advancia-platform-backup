@@ -6,10 +6,10 @@ Complete guide for setting up email alerts via Gmail and Nodemailer to complemen
 
 ## 📋 Prerequisites
 
-- **Gmail Account** (recommended: dedicated account for alerts)
-- **Node.js** with npm (for Nodemailer package)
-- **2-Step Verification** enabled on Gmail account
-- **5 minutes** to complete setup
+-   **Gmail Account** (recommended: dedicated account for alerts)
+-   **Node.js** with npm (for Nodemailer package)
+-   **2-Step Verification** enabled on Gmail account
+-   **5 minutes** to complete setup
 
 ---
 
@@ -19,10 +19,10 @@ Complete guide for setting up email alerts via Gmail and Nodemailer to complemen
 
 **Why a dedicated account?**
 
-- Isolates credentials from personal accounts
-- Easier to manage and rotate credentials
-- Clearer audit trail for automated emails
-- No risk of personal data exposure
+-   Isolates credentials from personal accounts
+-   Easier to manage and rotate credentials
+-   Clearer audit trail for automated emails
+-   No risk of personal data exposure
 
 **Recommended naming:**
 
@@ -51,9 +51,9 @@ ops-alerts@advanciapayledger.com
 4. Under **Signing in to Google**, find **2-Step Verification**
 5. Click **Get Started**
 6. Follow prompts:
-   - Verify phone number
-   - Choose verification method (text, call, or authenticator app)
-   - Complete verification
+   -   Verify phone number
+   -   Choose verification method (text, call, or authenticator app)
+   -   Complete verification
 7. Click **Turn On** to enable 2-Step Verification
 
 **✅ Success:** You'll see "2-Step Verification is on"
@@ -66,18 +66,18 @@ ops-alerts@advanciapayledger.com
 
 1. Still in **Google Account → Security**
 2. Under **Signing in to Google**, find **App Passwords**
-   - If you don't see it, ensure 2-Step Verification is enabled
+   -   If you don't see it, ensure 2-Step Verification is enabled
 3. Click **App Passwords**
 4. You may need to re-enter your Gmail password
 5. Select app dropdown:
-   - Choose **Mail**
+   -   Choose **Mail**
 6. Select device dropdown:
-   - Choose **Other (Custom name)**
-   - Enter: "Advancia Monitoring System"
+   -   Choose **Other (Custom name)**
+   -   Enter: "Advancia Monitoring System"
 7. Click **Generate**
 8. Copy the **16-character password** displayed
-   - Format: `xxxx xxxx xxxx xxxx`
-   - **Important:** This appears only once!
+   -   Format: `xxxx xxxx xxxx xxxx`
+   -   **Important:** This appears only once!
 
 **Example App Password:**
 
@@ -187,9 +187,7 @@ async function sendEmailAlert(subject, body, html = null) {
 
     // Email options
     const mailOptions = {
-      from: `"${process.env.ALERT_FROM_NAME || "Advancia Monitor"}" <${
-        process.env.ALERT_EMAIL
-      }>`,
+      from: `"${process.env.ALERT_FROM_NAME || "Advancia Monitor"}" <${process.env.ALERT_EMAIL}>`,
       to: process.env.ALERT_RECIPIENTS,
       subject: subject,
       text: body,
@@ -405,12 +403,8 @@ async function checkAndSendAlerts(status) {
   const state = loadAlertState();
 
   // 1. Low Uptime Alert
-  const uptime24h =
-    status.components.find((c) => c.id === "backend-api")?.uptime24h || 100;
-  if (
-    uptime24h < ALERT_UPTIME_THRESHOLD &&
-    shouldSendAlert("low-uptime", state)
-  ) {
+  const uptime24h = status.components.find((c) => c.id === "backend-api")?.uptime24h || 100;
+  if (uptime24h < ALERT_UPTIME_THRESHOLD && shouldSendAlert("low-uptime", state)) {
     const slackMsg = `🚨 *Advancia Alert: Low Uptime*\n\nBackend uptime dropped to ${uptime24h}%...`;
     alerts.push(sendSlackAlert(slackMsg));
     alerts.push(sendLowUptimeAlert(uptime24h, ALERT_UPTIME_THRESHOLD));
@@ -419,10 +413,7 @@ async function checkAndSendAlerts(status) {
 
   // 2. High Error Rate Alert
   const errorCount = status.metrics.totalErrors24h || 0;
-  if (
-    errorCount > ALERT_ERROR_THRESHOLD &&
-    shouldSendAlert("high-errors", state)
-  ) {
+  if (errorCount > ALERT_ERROR_THRESHOLD && shouldSendAlert("high-errors", state)) {
     const slackMsg = `⚠️ *Advancia Alert: High Error Rate*\n\nDetected ${errorCount} errors...`;
     alerts.push(sendSlackAlert(slackMsg));
     alerts.push(sendHighErrorRateAlert(errorCount, ALERT_ERROR_THRESHOLD));
@@ -430,9 +421,7 @@ async function checkAndSendAlerts(status) {
   }
 
   // 3. Critical Incidents
-  const criticalIncidents = status.incidents.filter(
-    (i) => i.severity === "outage" && i.status !== "resolved"
-  );
+  const criticalIncidents = status.incidents.filter((i) => i.severity === "outage" && i.status !== "resolved");
 
   for (const incident of criticalIncidents) {
     const alertKey = `incident-${incident.id}`;
@@ -473,17 +462,9 @@ async function testEmailSetup() {
   // Check environment variables
   console.log("Environment Variables:");
   console.log(`✓ ALERT_EMAIL: ${process.env.ALERT_EMAIL || "❌ Not set"}`);
-  console.log(
-    `✓ ALERT_EMAIL_PASS: ${
-      process.env.ALERT_EMAIL_PASS ? "****** (set)" : "❌ Not set"
-    }`
-  );
-  console.log(
-    `✓ ALERT_RECIPIENTS: ${process.env.ALERT_RECIPIENTS || "❌ Not set"}`
-  );
-  console.log(
-    `✓ SMTP_HOST: ${process.env.SMTP_HOST || "smtp.gmail.com (default)"}`
-  );
+  console.log(`✓ ALERT_EMAIL_PASS: ${process.env.ALERT_EMAIL_PASS ? "****** (set)" : "❌ Not set"}`);
+  console.log(`✓ ALERT_RECIPIENTS: ${process.env.ALERT_RECIPIENTS || "❌ Not set"}`);
+  console.log(`✓ SMTP_HOST: ${process.env.SMTP_HOST || "smtp.gmail.com (default)"}`);
   console.log(`✓ SMTP_PORT: ${process.env.SMTP_PORT || "587 (default)"}\n`);
 
   if (!process.env.ALERT_EMAIL || !process.env.ALERT_EMAIL_PASS) {
@@ -549,9 +530,7 @@ https://status.advanciapayledger.com
               <li><strong>Sent from:</strong> ${process.env.ALERT_EMAIL}</li>
               <li><strong>Sent to:</strong> ${process.env.ALERT_RECIPIENTS}</li>
               <li><strong>Time:</strong> ${new Date().toLocaleString()}</li>
-              <li><strong>SMTP Host:</strong> ${
-                process.env.SMTP_HOST || "smtp.gmail.com"
-              }</li>
+              <li><strong>SMTP Host:</strong> ${process.env.SMTP_HOST || "smtp.gmail.com"}</li>
             </ul>
             <p style="color: #6b7280; font-style: italic;">
               Next time you receive an email, it will be a real alert about your system health.
@@ -645,10 +624,10 @@ ALERT_RECIPIENTS=all@advancia.com,everyone@advancia.com
 
 ### 4. Use Dedicated Account
 
-- ✅ Create `advancia.alerts@gmail.com`
-- ✅ Separate from personal email
-- ✅ Easier to audit and manage
-- ❌ Don't use personal Gmail account
+-   ✅ Create `advancia.alerts@gmail.com`
+-   ✅ Separate from personal email
+-   ✅ Easier to audit and manage
+-   ❌ Don't use personal Gmail account
 
 ---
 
@@ -743,17 +722,17 @@ const mailOptions = {
 
 **Slack (Real-time, conversational):**
 
-- ✅ Routine alerts
-- ✅ Team discussions
-- ✅ Quick acknowledgments
-- ✅ Ongoing incidents (threaded updates)
+-   ✅ Routine alerts
+-   ✅ Team discussions
+-   ✅ Quick acknowledgments
+-   ✅ Ongoing incidents (threaded updates)
 
 **Email (Persistent, formal):**
 
-- ✅ Critical incidents (paper trail)
-- ✅ Audit logs
-- ✅ Compliance requirements
-- ✅ After-hours alerts (email notifications work offline)
+-   ✅ Critical incidents (paper trail)
+-   ✅ Audit logs
+-   ✅ Compliance requirements
+-   ✅ After-hours alerts (email notifications work offline)
 
 ### Redundancy Strategy
 
@@ -763,13 +742,7 @@ async function sendDualAlert(alertType, details) {
 
   // Always send both
   alerts.push(sendSlackAlert(formatSlackMessage(alertType, details)));
-  alerts.push(
-    sendEmailAlert(
-      formatEmailSubject(alertType, details),
-      formatEmailBody(alertType, details),
-      formatEmailHTML(alertType, details)
-    )
-  );
+  alerts.push(sendEmailAlert(formatEmailSubject(alertType, details), formatEmailBody(alertType, details), formatEmailHTML(alertType, details)));
 
   // Send in parallel
   const results = await Promise.allSettled(alerts);
@@ -795,11 +768,11 @@ async function sendDualAlert(alertType, details) {
 
 After completing this setup:
 
-- ✅ **Slack + Email redundancy** - No single point of failure
-- ✅ **Persistent audit trail** - Email archive for compliance
-- ✅ **Offline notifications** - Email works when Slack is down
-- ✅ **Flexible routing** - Different recipients per channel
-- ✅ **Professional formatting** - HTML emails with branding
+-   ✅ **Slack + Email redundancy** - No single point of failure
+-   ✅ **Persistent audit trail** - Email archive for compliance
+-   ✅ **Offline notifications** - Email works when Slack is down
+-   ✅ **Flexible routing** - Different recipients per channel
+-   ✅ **Professional formatting** - HTML emails with branding
 
 Your monitoring system now has **enterprise-grade alerting** with multiple notification channels! 🚀
 
@@ -807,10 +780,10 @@ Your monitoring system now has **enterprise-grade alerting** with multiple notif
 
 ## 📚 Additional Resources
 
-- **Nodemailer Docs:** https://nodemailer.com/about/
-- **Gmail SMTP Settings:** https://support.google.com/mail/answer/7126229
-- **App Passwords Guide:** https://support.google.com/accounts/answer/185833
-- **Email HTML Best Practices:** https://www.campaignmonitor.com/css/
+-   **Nodemailer Docs:** <https://nodemailer.com/about/>
+-   **Gmail SMTP Settings:** <https://support.google.com/mail/answer/7126229>
+-   **App Passwords Guide:** <https://support.google.com/accounts/answer/185833>
+-   **Email HTML Best Practices:** <https://www.campaignmonitor.com/css/>
 
 ---
 

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, XCircle, CheckCircle, X } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertTriangle, XCircle, CheckCircle, X } from 'lucide-react';
 
 interface SystemStatus {
   overall: {
-    status: "operational" | "degraded" | "down";
-    alertLevel: "none" | "warning" | "danger";
+    status: 'operational' | 'degraded' | 'down';
+    alertLevel: 'none' | 'warning' | 'danger';
     timestamp: string;
   };
   services: Array<{
@@ -46,17 +46,17 @@ export default function SystemFeedbackBanner() {
         if (response.ok) {
           const data = await response.json();
           setSystemStatus(data);
-          
+
           // Only show banner if there's an issue
-          if (data.overall.alertLevel === "none" && data.overall.status === "operational") {
+          if (data.overall.alertLevel === 'none' && data.overall.status === 'operational') {
             setIsVisible(false);
           } else {
             setIsVisible(true);
             setIsDismissed(false); // Reset dismissed state when new issue appears
-            
+
             // 🤖 Trigger RPA workers to handle the issue automatically
             // RPA workers will attempt to resolve backend issues without user intervention
-            if (data.overall.status === "down" || data.overall.alertLevel === "danger") {
+            if (data.overall.status === 'down' || data.overall.alertLevel === 'danger') {
               triggerRpaWorkers(data);
             }
           }
@@ -66,24 +66,24 @@ export default function SystemFeedbackBanner() {
         // Don't show error banner to regular users - only admins
         const issueData: SystemStatus = {
           overall: {
-            status: "down" as const,
-            alertLevel: "danger" as const,
+            status: 'down' as const,
+            alertLevel: 'danger' as const,
             timestamp: new Date().toISOString(),
           },
           services: [
             {
-              serviceName: "backend",
-              status: "down",
-              statusMessage: "Cannot connect to server",
-              alertLevel: "danger",
+              serviceName: 'backend',
+              status: 'down',
+              statusMessage: 'Cannot connect to server',
+              alertLevel: 'danger',
             },
           ],
         };
-        
+
         setSystemStatus(issueData);
         setIsVisible(true);
         setIsDismissed(false);
-        
+
         // 🤖 Let RPA workers handle backend connection issues
         triggerRpaWorkers(issueData);
       }
@@ -129,30 +129,30 @@ export default function SystemFeedbackBanner() {
   }
 
   const { overall } = systemStatus;
-  const shouldShow = overall.alertLevel !== "none" || overall.status !== "operational";
+  const shouldShow = overall.alertLevel !== 'none' || overall.status !== 'operational';
 
   if (!shouldShow) {
     return null;
   }
 
   // Determine banner color and icon
-  let bgColor = "bg-blue-500";
+  let bgColor = 'bg-blue-500';
   let icon = <CheckCircle className="w-5 h-5" />;
-  let message = "All systems operational";
+  let message = 'All systems operational';
 
-  if (overall.alertLevel === "danger" || overall.status === "down") {
-    bgColor = "bg-red-500";
+  if (overall.alertLevel === 'danger' || overall.status === 'down') {
+    bgColor = 'bg-red-500';
     icon = <XCircle className="w-5 h-5" />;
-    message = "System experiencing issues";
-  } else if (overall.alertLevel === "warning" || overall.status === "degraded") {
-    bgColor = "bg-yellow-500";
+    message = 'System experiencing issues';
+  } else if (overall.alertLevel === 'warning' || overall.status === 'degraded') {
+    bgColor = 'bg-yellow-500';
     icon = <AlertTriangle className="w-5 h-5" />;
-    message = "System performance degraded";
+    message = 'System performance degraded';
   }
 
   // Get affected services
   const affectedServices = systemStatus.services.filter(
-    (s) => s.alertLevel !== "none" || s.status !== "operational"
+    (s) => s.alertLevel !== 'none' || s.status !== 'operational'
   );
 
   return (
@@ -161,7 +161,7 @@ export default function SystemFeedbackBanner() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -100, opacity: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className={`${bgColor} text-white shadow-lg fixed top-0 left-0 right-0 z-50`}
       >
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -172,7 +172,8 @@ export default function SystemFeedbackBanner() {
                 <p className="font-semibold">🔧 Admin Alert: {message}</p>
                 {affectedServices.length > 0 && (
                   <p className="text-sm opacity-90 mt-1">
-                    Affected services: {affectedServices.map((s) => s.serviceName).join(", ")} • RPA workers handling automatically
+                    Affected services: {affectedServices.map((s) => s.serviceName).join(', ')} • RPA
+                    workers handling automatically
                   </p>
                 )}
               </div>

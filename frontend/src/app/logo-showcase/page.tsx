@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import FinShapeLogo from "@/components/FinShapeLogo";
-import { motion } from "framer-motion";
+import FinShapeLogo from '@/components/FinShapeLogo';
+import { motion } from 'framer-motion';
 
 export default function LogoShowcase() {
   return (
@@ -83,7 +83,7 @@ export default function LogoShowcase() {
         <div className="space-y-6">
           <h2 className="text-3xl font-bold text-gray-800">Icon Only</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {(["sm", "md", "lg", "xl"] as const).map((size, index) => (
+            {(['sm', 'md', 'lg', 'xl'] as const).map((size, index) => (
               <motion.div
                 key={size}
                 className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 flex flex-col items-center gap-4"
@@ -150,9 +150,7 @@ export default function LogoShowcase() {
           >
             <FinShapeLogo size="xl" animated={true} showText={true} />
           </motion.div>
-          <p className="text-center text-gray-600">
-            Refresh the page to see the entry animation
-          </p>
+          <p className="text-center text-gray-600">Refresh the page to see the entry animation</p>
         </div>
 
         {/* Logo Concept */}
@@ -164,19 +162,29 @@ export default function LogoShowcase() {
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Hexagon:</strong> Represents structure, stability, and blockchain technology</span>
+                  <span>
+                    <strong>Hexagon:</strong> Represents structure, stability, and blockchain
+                    technology
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Chart Line:</strong> Symbolizes financial growth and market analysis</span>
+                  <span>
+                    <strong>Chart Line:</strong> Symbolizes financial growth and market analysis
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Dollar Sign:</strong> Merges traditional finance with modern crypto</span>
+                  <span>
+                    <strong>Dollar Sign:</strong> Merges traditional finance with modern crypto
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Gradient Colors:</strong> Blue → Cyan → Teal represents trust, innovation, and growth</span>
+                  <span>
+                    <strong>Gradient Colors:</strong> Blue → Cyan → Teal represents trust,
+                    innovation, and growth
+                  </span>
                 </li>
               </ul>
             </div>
@@ -185,19 +193,27 @@ export default function LogoShowcase() {
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Professional:</strong> Clean, modern design</span>
+                  <span>
+                    <strong>Professional:</strong> Clean, modern design
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Trustworthy:</strong> Stable geometric shapes</span>
+                  <span>
+                    <strong>Trustworthy:</strong> Stable geometric shapes
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Innovative:</strong> Tech-forward aesthetic</span>
+                  <span>
+                    <strong>Innovative:</strong> Tech-forward aesthetic
+                  </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-teal-500 mt-1">•</span>
-                  <span><strong>Dynamic:</strong> Growth-oriented imagery</span>
+                  <span>
+                    <strong>Dynamic:</strong> Growth-oriented imagery
+                  </span>
                 </li>
               </ul>
             </div>
@@ -208,10 +224,22 @@ export default function LogoShowcase() {
         <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100 space-y-4">
           <h2 className="text-3xl font-bold text-gray-800">Usage Guidelines</h2>
           <div className="space-y-3 text-gray-700">
-            <p><strong>Clear Space:</strong> Maintain minimum padding equal to the height of one letter around the logo.</p>
-            <p><strong>Minimum Size:</strong> Never display the logo smaller than 24px height for digital or 0.5 inches for print.</p>
-            <p><strong>Color Variations:</strong> Use the gradient version on light backgrounds, white version on dark backgrounds.</p>
-            <p><strong>Animation:</strong> Use animated version for splash screens and main landing pages only.</p>
+            <p>
+              <strong>Clear Space:</strong> Maintain minimum padding equal to the height of one
+              letter around the logo.
+            </p>
+            <p>
+              <strong>Minimum Size:</strong> Never display the logo smaller than 24px height for
+              digital or 0.5 inches for print.
+            </p>
+            <p>
+              <strong>Color Variations:</strong> Use the gradient version on light backgrounds,
+              white version on dark backgrounds.
+            </p>
+            <p>
+              <strong>Animation:</strong> Use animated version for splash screens and main landing
+              pages only.
+            </p>
           </div>
         </div>
 
@@ -222,7 +250,12 @@ export default function LogoShowcase() {
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
             </svg>
             Back to Dashboard
           </a>

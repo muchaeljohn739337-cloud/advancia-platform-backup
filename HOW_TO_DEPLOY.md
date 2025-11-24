@@ -7,11 +7,12 @@ Step-by-step guide to get your deployment pipeline running.
 ## 📋 Prerequisites
 
 Before starting, ensure you have:
-- [ ] GitHub repository access (admin permissions)
-- [ ] DigitalOcean account (or cloud provider)
-- [ ] Cloudflare account with domain configured
-- [ ] Slack workspace (for notifications)
-- [ ] Local development environment setup
+
+-   [ ] GitHub repository access (admin permissions)
+-   [ ] DigitalOcean account (or cloud provider)
+-   [ ] Cloudflare account with domain configured
+-   [ ] Slack workspace (for notifications)
+-   [ ] Local development environment setup
 
 ---
 
@@ -20,22 +21,23 @@ Before starting, ensure you have:
 ### Step 1: Create GitHub Environments (5 min)
 
 1. **Go to repository settings**
+
    ```
    https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/settings/environments
    ```
 
 2. **Create three environments**:
-   - Click **"New environment"**
-   - Name: `staging` → **Add environment**
-   - Name: `uat` → **Add environment**  
-   - Name: `production` → **Add environment**
+   -   Click **"New environment"**
+   -   Name: `staging` → **Add environment**
+   -   Name: `uat` → **Add environment**
+   -   Name: `production` → **Add environment**
 
 3. **Configure production protection**:
-   - Click on `production` environment
-   - ✅ Check **"Required reviewers"**
-   - Add reviewers: `@your-username, @tech-lead`
-   - ✅ Check **"Wait timer"**: `5` minutes
-   - Click **"Save protection rules"**
+   -   Click on `production` environment
+   -   ✅ Check **"Required reviewers"**
+   -   Add reviewers: `@your-username, @tech-lead`
+   -   ✅ Check **"Wait timer"**: `5` minutes
+   -   Click **"Save protection rules"**
 
 ### Step 2: Add Secrets to Each Environment (5 min)
 
@@ -58,6 +60,7 @@ REDIS_URL           = redis://...
 ```
 
 **For production only**, also add:
+
 ```
 DROPLET_IP_GREEN    = green_server_ip
 NGINX_LB_IP         = load_balancer_ip (for canary)
@@ -90,15 +93,17 @@ git push origin staging
 ```
 
 **Expected result:**
-- Workflow runs automatically
-- Deploys to staging environment
-- No approval needed
-- Slack notification sent
+
+-   Workflow runs automatically
+-   Deploys to staging environment
+-   No approval needed
+-   Slack notification sent
 
 **Check it:**
-- Go to **Actions** tab
-- See "Controlled Promotion Pipeline" running
-- Monitor progress
+
+-   Go to **Actions** tab
+-   See "Controlled Promotion Pipeline" running
+-   Monitor progress
 
 ---
 
@@ -107,6 +112,7 @@ git push origin staging
 ### Cloudflare Setup
 
 #### 1. Get Zone ID
+
 ```powershell
 # Login to Cloudflare dashboard
 # Select your domain (advancia.com)
@@ -115,6 +121,7 @@ git push origin staging
 ```
 
 #### 2. Create API Token
+
 ```powershell
 # Cloudflare dashboard → My Profile → API Tokens
 # Click "Create Token"
@@ -125,6 +132,7 @@ git push origin staging
 ```
 
 #### 3. Get DNS Record IDs
+
 ```powershell
 # Save this script as get-dns-records.ps1
 $ZONE_ID = "YOUR_ZONE_ID"
@@ -152,6 +160,7 @@ Write-Host "WWW Record ID: $($wwwRecord.result[0].id)"
 ### DigitalOcean Setup
 
 #### 1. Create Droplets
+
 ```powershell
 # Go to DigitalOcean dashboard → Create → Droplets
 # For Staging: Create 1 droplet (staging.advancia.com)
@@ -166,6 +175,7 @@ Write-Host "WWW Record ID: $($wwwRecord.result[0].id)"
 ```
 
 #### 2. Generate SSH Key for CI/CD
+
 ```powershell
 # Generate new key specifically for GitHub Actions
 ssh-keygen -t rsa -b 4096 -C "github-actions@advancia.com" -f github_actions_key -N ""
@@ -183,6 +193,7 @@ Get-Content github_actions_key
 ### Slack Setup
 
 #### Create Webhook
+
 ```powershell
 # 1. Go to https://api.slack.com/apps
 # 2. Click "Create New App" → "From scratch"
@@ -238,7 +249,7 @@ git checkout main
 git merge uat
 git push origin main
 
-# Result: 
+# Result:
 # 1. 5-minute wait timer starts
 # 2. Requires 2 approvals from production reviewers
 # 3. After approval: Blue/Green deployment starts
@@ -341,14 +352,14 @@ cat > /etc/nginx/conf.d/advancia.conf << 'EOF'
 server {
     listen 80;
     server_name api.advancia.com;
-    
+
     location / {
         proxy_pass http://backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         add_header X-Served-By $upstream_addr always;
     }
-    
+
     location /health {
         access_log off;
         proxy_pass http://backend;
@@ -408,6 +419,7 @@ curl https://api.advancia.com/health
 ### Issue: Workflow fails with "Permission denied"
 
 **Solution:**
+
 ```powershell
 # Verify SSH key is correct
 # Test SSH connection manually
@@ -420,6 +432,7 @@ Get-Content github_actions_key.pub | ssh root@YOUR_SERVER_IP "cat >> ~/.ssh/auth
 ### Issue: Health checks fail
 
 **Solution:**
+
 ```powershell
 # SSH into server
 ssh root@YOUR_SERVER_IP
@@ -439,6 +452,7 @@ docker-compose restart
 ### Issue: DNS not updating
 
 **Solution:**
+
 ```powershell
 # Verify Cloudflare credentials
 # Test API access
@@ -455,6 +469,7 @@ Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones/YOUR_ZONE_ID/
 ### Issue: Approval not showing up
 
 **Solution:**
+
 ```powershell
 # 1. Check environment settings
 #    Settings → Environments → production → Required reviewers
@@ -471,6 +486,7 @@ Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones/YOUR_ZONE_ID/
 ## 📚 Next Steps
 
 ### 1. Set Up Monitoring (Recommended)
+
 ```powershell
 # Deploy Prometheus + Grafana
 # See: STAGING_DEPLOYMENT_GUIDE.md
@@ -478,6 +494,7 @@ docker-compose -f docker-compose.monitoring.yml up -d
 ```
 
 ### 2. Configure Alerts (Recommended)
+
 ```powershell
 # Set up Slack alerts for:
 # - Deployment failures
@@ -487,6 +504,7 @@ docker-compose -f docker-compose.monitoring.yml up -d
 ```
 
 ### 3. Create Runbooks
+
 ```powershell
 # Document procedures for:
 # - Emergency rollback process
@@ -496,6 +514,7 @@ docker-compose -f docker-compose.monitoring.yml up -d
 ```
 
 ### 4. Schedule Practice Runs
+
 ```powershell
 # Practice deployments:
 # - Weekly staging deploys (Fridays)
@@ -510,26 +529,27 @@ docker-compose -f docker-compose.monitoring.yml up -d
 
 Before each production deployment:
 
-- [ ] All tests passing in staging
-- [ ] UAT sign-off received
-- [ ] Database migrations tested
-- [ ] Rollback plan documented
-- [ ] Team notified (30 min advance)
-- [ ] Monitoring dashboards open
-- [ ] On-call engineer available
-- [ ] Change request approved
-- [ ] Deployment window confirmed
-- [ ] Backup completed
+-   [ ] All tests passing in staging
+-   [ ] UAT sign-off received
+-   [ ] Database migrations tested
+-   [ ] Rollback plan documented
+-   [ ] Team notified (30 min advance)
+-   [ ] Monitoring dashboards open
+-   [ ] On-call engineer available
+-   [ ] Change request approved
+-   [ ] Deployment window confirmed
+-   [ ] Backup completed
 
 ---
 
 ## 📞 Support
 
 ### Documentation
-- **Full guides**: `GITHUB_ENVIRONMENTS_SETUP.md`
-- **Blue/Green**: `BLUE_GREEN_DEPLOYMENT_GUIDE.md`
-- **Canary**: `CANARY_DEPLOYMENT_GUIDE.md`
-- **Secrets**: `ENVIRONMENT_SECRETS_SETUP.md`
+
+-   **Full guides**: `GITHUB_ENVIRONMENTS_SETUP.md`
+-   **Blue/Green**: `BLUE_GREEN_DEPLOYMENT_GUIDE.md`
+-   **Canary**: `CANARY_DEPLOYMENT_GUIDE.md`
+-   **Secrets**: `ENVIRONMENT_SECRETS_SETUP.md`
 
 ### Quick Commands
 

@@ -12,7 +12,7 @@
 // Basic GET request
 const fetchData = async () => {
   try {
-    const response = await fetch("https://api.advanciapayledger.com/api/users");
+    const response = await fetch('https://api.advanciapayledger.com/api/users');
 
     // Must manually check response status
     if (!response.ok) {
@@ -23,17 +23,17 @@ const fetchData = async () => {
     const data = await response.json();
     console.log(data);
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error('Fetch error:', error);
   }
 };
 
 // POST request with Fetch
 const createUser = async (userData) => {
   try {
-    const response = await fetch("https://api.advanciapayledger.com/api/users", {
-      method: "POST",
+    const response = await fetch('https://api.advanciapayledger.com/api/users', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(userData), // Must manually stringify
@@ -42,7 +42,7 @@ const createUser = async (userData) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 };
 ```
@@ -50,15 +50,15 @@ const createUser = async (userData) => {
 ### Axios (Third-Party Library)
 
 ```javascript
-import axios from "axios";
+import axios from 'axios';
 
 // Basic GET request (auto JSON parsing, auto error handling)
 const fetchData = async () => {
   try {
-    const response = await axios.get("https://api.advanciapayledger.com/api/users");
+    const response = await axios.get('https://api.advanciapayledger.com/api/users');
     console.log(response.data); // Already parsed!
   } catch (error) {
-    console.error("Axios error:", error.response?.data);
+    console.error('Axios error:', error.response?.data);
   }
 };
 
@@ -66,7 +66,7 @@ const fetchData = async () => {
 const createUser = async (userData) => {
   try {
     const response = await axios.post(
-      "https://api.advanciapayledger.com/api/users",
+      'https://api.advanciapayledger.com/api/users',
       userData, // Axios auto-stringifies
       {
         headers: {
@@ -76,22 +76,22 @@ const createUser = async (userData) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error:", error.response?.data);
+    console.error('Error:', error.response?.data);
   }
 };
 
 // Axios instance with defaults (RECOMMENDED)
 const api = axios.create({
-  baseURL: "https://api.advanciapayledger.com/api",
+  baseURL: 'https://api.advanciapayledger.com/api',
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 // Add token to all requests
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -99,7 +99,7 @@ api.interceptors.request.use((config) => {
 });
 
 // Usage
-const users = await api.get("/users");
+const users = await api.get('/users');
 ```
 
 **When to use:**
@@ -116,7 +116,7 @@ const users = await api.get("/users");
 ```javascript
 // Old way - Promise chains
 function getUser() {
-  fetch("/api/users/1")
+  fetch('/api/users/1')
     .then((response) => response.json())
     .then((user) => {
       console.log(user);
@@ -139,7 +139,7 @@ function getUser() {
 async function getUser() {
   try {
     // Wait for user data
-    const userResponse = await fetch("/api/users/1");
+    const userResponse = await fetch('/api/users/1');
     const user = await userResponse.json();
     console.log(user);
 
@@ -156,7 +156,11 @@ async function getUser() {
 async function loadDashboard() {
   try {
     // Run all requests in parallel (faster!)
-    const [users, transactions, stats] = await Promise.all([fetch("/api/users").then((r) => r.json()), fetch("/api/transactions").then((r) => r.json()), fetch("/api/stats").then((r) => r.json())]);
+    const [users, transactions, stats] = await Promise.all([
+      fetch('/api/users').then((r) => r.json()),
+      fetch('/api/transactions').then((r) => r.json()),
+      fetch('/api/stats').then((r) => r.json()),
+    ]);
 
     console.log({ users, transactions, stats });
   } catch (error) {
@@ -179,10 +183,10 @@ npm install @tanstack/react-query
 
 ```tsx
 // frontend/src/app/layout.tsx
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export default function RootLayout({ children }) {
   const [queryClient] = useState(
@@ -210,15 +214,15 @@ export default function RootLayout({ children }) {
 ### Usage
 
 ```tsx
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 // GET request with auto caching & refetching
 function UsersList() {
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["users"], // Cache key
+    queryKey: ['users'], // Cache key
     queryFn: async () => {
-      const response = await axios.get("/api/users");
+      const response = await axios.get('/api/users');
       return response.data;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -244,23 +248,23 @@ function CreateUser() {
 
   const mutation = useMutation({
     mutationFn: (newUser) => {
-      return axios.post("/api/users", newUser);
+      return axios.post('/api/users', newUser);
     },
     onSuccess: () => {
       // Invalidate and refetch users list
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate({ name: "John", email: "john@example.com" });
+    mutation.mutate({ name: 'John', email: 'john@example.com' });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <button type="submit" disabled={mutation.isPending}>
-        {mutation.isPending ? "Creating..." : "Create User"}
+        {mutation.isPending ? 'Creating...' : 'Create User'}
       </button>
       {mutation.isError && <div>Error: {mutation.error.message}</div>}
       {mutation.isSuccess && <div>User created!</div>}
@@ -290,13 +294,13 @@ npm install swr
 ### Usage
 
 ```tsx
-import useSWR from "swr";
+import useSWR from 'swr';
 
 // Fetcher function
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 function TransactionsList() {
-  const { data, error, isLoading, mutate } = useSWR("/api/transactions", fetcher, {
+  const { data, error, isLoading, mutate } = useSWR('/api/transactions', fetcher, {
     refreshInterval: 3000, // Auto refresh every 3 seconds
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
@@ -319,7 +323,7 @@ function TransactionsList() {
 
 // With token
 function SecureTransactions() {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   const fetcher = async (url) => {
     const response = await fetch(url, {
@@ -330,7 +334,7 @@ function SecureTransactions() {
     return response.json();
   };
 
-  const { data } = useSWR("/api/transactions", fetcher);
+  const { data } = useSWR('/api/transactions', fetcher);
 
   return <div>{/* ... */}</div>;
 }
@@ -358,9 +362,9 @@ const squared = numbers.map((num) => num ** 2);
 ```tsx
 function UsersList() {
   const users = [
-    { id: 1, name: "Alice", email: "alice@example.com" },
-    { id: 2, name: "Bob", email: "bob@example.com" },
-    { id: 3, name: "Charlie", email: "charlie@example.com" },
+    { id: 1, name: 'Alice', email: 'alice@example.com' },
+    { id: 2, name: 'Bob', email: 'bob@example.com' },
+    { id: 3, name: 'Charlie', email: 'charlie@example.com' },
   ];
 
   return (
@@ -397,8 +401,8 @@ function NumbersList() {
 ```javascript
 // Extract specific properties
 const users = [
-  { id: 1, name: "Alice", age: 25 },
-  { id: 2, name: "Bob", age: 30 },
+  { id: 1, name: 'Alice', age: 25 },
+  { id: 2, name: 'Bob', age: 30 },
 ];
 
 const names = users.map((user) => user.name);
@@ -425,7 +429,7 @@ function TransactionsList() {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    fetch("/api/transactions")
+    fetch('/api/transactions')
       .then((res) => res.json())
       .then((data) => setTransactions(data.transactions));
   }, []);
@@ -435,17 +439,28 @@ function TransactionsList() {
       <h2 className="text-2xl font-bold">Recent Transactions</h2>
 
       {transactions.map((transaction) => (
-        <div key={transaction.id} className="p-4 border rounded-lg shadow hover:shadow-lg transition">
+        <div
+          key={transaction.id}
+          className="p-4 border rounded-lg shadow hover:shadow-lg transition"
+        >
           <div className="flex justify-between items-center">
             <div>
               <h3 className="font-semibold">{transaction.description}</h3>
-              <p className="text-gray-600 text-sm">{new Date(transaction.createdAt).toLocaleDateString()}</p>
+              <p className="text-gray-600 text-sm">
+                {new Date(transaction.createdAt).toLocaleDateString()}
+              </p>
             </div>
             <div className="text-right">
-              <p className={`text-lg font-bold ${transaction.type === "credit" ? "text-green-600" : "text-red-600"}`}>
-                {transaction.type === "credit" ? "+" : "-"}${transaction.amount}
+              <p
+                className={`text-lg font-bold ${transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'}`}
+              >
+                {transaction.type === 'credit' ? '+' : '-'}${transaction.amount}
               </p>
-              <span className={`text-xs px-2 py-1 rounded ${transaction.status === "completed" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}`}>{transaction.status}</span>
+              <span
+                className={`text-xs px-2 py-1 rounded ${transaction.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}
+              >
+                {transaction.status}
+              </span>
             </div>
           </div>
         </div>
@@ -461,11 +476,11 @@ function TransactionsList() {
 
 ```javascript
 // 1. Array literal (most common)
-const users = ["Alice", "Bob", "Charlie"];
+const users = ['Alice', 'Bob', 'Charlie'];
 
 // 2. Array constructor
 const numbers = new Array(5); // Creates [undefined, undefined, undefined, undefined, undefined]
-const colors = new Array("red", "blue", "green");
+const colors = new Array('red', 'blue', 'green');
 
 // 3. Array.from()
 const range = Array.from({ length: 5 }, (_, i) => i + 1);
@@ -479,20 +494,20 @@ const copy = [...original]; // Creates new array
 const items = [];
 
 // Push (add to end)
-items.push("item1");
-items.push("item2");
+items.push('item1');
+items.push('item2');
 console.log(items); // ['item1', 'item2']
 
 // Unshift (add to beginning)
-items.unshift("item0");
+items.unshift('item0');
 console.log(items); // ['item0', 'item1', 'item2']
 
 // Spread (immutable - creates new array)
-const newItems = [...items, "item3"]; // Add to end
-const moreItems = ["itemNeg1", ...items]; // Add to beginning
+const newItems = [...items, 'item3']; // Add to end
+const moreItems = ['itemNeg1', ...items]; // Add to beginning
 
 // Concat
-const combined = items.concat(["item4", "item5"]);
+const combined = items.concat(['item4', 'item5']);
 ```
 
 ### React State with Arrays
@@ -500,12 +515,12 @@ const combined = items.concat(["item4", "item5"]);
 ```tsx
 function TodoList() {
   const [todos, setTodos] = useState([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
 
   // Add item (immutable way)
   const addTodo = () => {
     setTodos([...todos, { id: Date.now(), text: input, completed: false }]);
-    setInput("");
+    setInput('');
   };
 
   // Remove item
@@ -515,7 +530,9 @@ function TodoList() {
 
   // Update item
   const toggleTodo = (id) => {
-    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
+    setTodos(
+      todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo))
+    );
   };
 
   return (
@@ -527,7 +544,9 @@ function TodoList() {
         {todos.map((todo) => (
           <li key={todo.id}>
             <input type="checkbox" checked={todo.completed} onChange={() => toggleTodo(todo.id)} />
-            <span style={{ textDecoration: todo.completed ? "line-through" : "none" }}>{todo.text}</span>
+            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+              {todo.text}
+            </span>
             <button onClick={() => removeTodo(todo.id)}>Delete</button>
           </li>
         ))}
@@ -573,7 +592,7 @@ function createBankAccount(initialBalance) {
     },
     withdraw: function (amount) {
       if (amount > balance) {
-        return "Insufficient funds";
+        return 'Insufficient funds';
       }
       balance -= amount;
       return balance;
@@ -599,14 +618,14 @@ function Counter() {
 
   // Closure: handleClick "remembers" count
   const handleClick = () => {
-    console.log("Current count:", count);
+    console.log('Current count:', count);
     setCount(count + 1);
   };
 
   // setTimeout closure issue
   const handleDelayedLog = () => {
     setTimeout(() => {
-      console.log("Count after 3 seconds:", count); // Captures current count
+      console.log('Count after 3 seconds:', count); // Captures current count
     }, 3000);
   };
 
@@ -621,7 +640,7 @@ function Counter() {
 
 // Event handlers with closures
 function UserList() {
-  const users = ["Alice", "Bob", "Charlie"];
+  const users = ['Alice', 'Bob', 'Charlie'];
 
   // Each handleClick "closes over" the specific user
   return (
@@ -655,13 +674,13 @@ function greet(name, callback) {
   callback();
 }
 
-greet("Alice", function () {
-  console.log("Callback executed!");
+greet('Alice', function () {
+  console.log('Callback executed!');
 });
 
 // With arrow function
-greet("Bob", () => {
-  console.log("Arrow callback!");
+greet('Bob', () => {
+  console.log('Arrow callback!');
 });
 
 // Array methods use callbacks
@@ -691,7 +710,7 @@ numbers.reduce((sum, num) => sum + num, 0);
 // Old-style async callbacks (callback hell)
 function fetchUser(id, callback) {
   setTimeout(() => {
-    callback({ id, name: "Alice" });
+    callback({ id, name: 'Alice' });
   }, 1000);
 }
 
@@ -707,7 +726,7 @@ fetchUser(1, (user) => {
 async function getUser(id) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ id, name: "Alice" });
+      resolve({ id, name: 'Alice' });
     }, 1000);
   });
 }
@@ -721,7 +740,7 @@ const user2 = await getUser(2);
 ```tsx
 // Parent-child communication via callbacks
 function Parent() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
 
   // Callback passed to child
   const handleChildClick = (childData) => {
@@ -737,18 +756,18 @@ function Parent() {
 }
 
 function Child({ onButtonClick }) {
-  return <button onClick={() => onButtonClick("Hello from child!")}>Click Me</button>;
+  return <button onClick={() => onButtonClick('Hello from child!')}>Click Me</button>;
 }
 
 // Event handlers (callbacks)
 function Form() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted");
+    console.log('Form submitted');
   };
 
   const handleChange = (e) => {
-    console.log("Input changed:", e.target.value);
+    console.log('Input changed:', e.target.value);
   };
 
   return (
@@ -765,20 +784,20 @@ function Form() {
 ## 🎯 Complete Example: Advancia Pay Dashboard
 
 ```tsx
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 // API client with interceptors (Axios)
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api',
   timeout: 10000,
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -794,9 +813,9 @@ export default function Dashboard() {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["transactions"],
+    queryKey: ['transactions'],
     queryFn: async () => {
-      const response = await api.get("/transactions");
+      const response = await api.get('/transactions');
       return response.data.transactions;
     },
     staleTime: 60 * 1000, // 1 minute
@@ -805,10 +824,10 @@ export default function Dashboard() {
   // Async function to create transaction
   const createTransaction = async (amount, description) => {
     try {
-      const response = await api.post("/transactions", {
+      const response = await api.post('/transactions', {
         amount,
         description,
-        type: "credit",
+        type: 'credit',
       });
 
       // Refetch transactions after creation
@@ -816,13 +835,13 @@ export default function Dashboard() {
 
       return response.data;
     } catch (err) {
-      console.error("Error creating transaction:", err);
+      console.error('Error creating transaction:', err);
     }
   };
 
   // Callback function for transaction item click
   const handleTransactionClick = (transaction) => {
-    console.log("Transaction clicked:", transaction);
+    console.log('Transaction clicked:', transaction);
     // Could open modal, navigate, etc.
   };
 
@@ -832,8 +851,8 @@ export default function Dashboard() {
     return (transaction) => transaction.type === type;
   };
 
-  const creditFilter = createFilter("credit");
-  const debitFilter = createFilter("debit");
+  const creditFilter = createFilter('credit');
+  const debitFilter = createFilter('debit');
 
   // Loading state
   if (isLoading) {
@@ -848,7 +867,9 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">Error loading transactions: {error.message}</div>
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          Error loading transactions: {error.message}
+        </div>
       </div>
     );
   }
@@ -886,7 +907,9 @@ export default function Dashboard() {
         </div>
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-gray-600 text-sm font-medium">Balance</h3>
-          <p className="text-3xl font-bold text-blue-600">${(totalCredit - totalDebit).toFixed(2)}</p>
+          <p className="text-3xl font-bold text-blue-600">
+            ${(totalCredit - totalDebit).toFixed(2)}
+          </p>
         </div>
       </div>
 
@@ -910,18 +933,25 @@ export default function Dashboard() {
                   <div>
                     <h3 className="font-medium">{transaction.description}</h3>
                     <p className="text-sm text-gray-500">
-                      {new Date(transaction.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
+                      {new Date(transaction.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
                       })}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-lg font-bold ${transaction.type === "credit" ? "text-green-600" : "text-red-600"}`}>
-                      {transaction.type === "credit" ? "+" : "-"}${parseFloat(transaction.amount).toFixed(2)}
+                    <p
+                      className={`text-lg font-bold ${transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'}`}
+                    >
+                      {transaction.type === 'credit' ? '+' : '-'}$
+                      {parseFloat(transaction.amount).toFixed(2)}
                     </p>
-                    <span className={`text-xs px-2 py-1 rounded-full ${transaction.status === "completed" ? "bg-green-100 text-green-800" : transaction.status === "pending" ? "bg-yellow-100 text-yellow-800" : "bg-red-100 text-red-800"}`}>{transaction.status}</span>
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full ${transaction.status === 'completed' ? 'bg-green-100 text-green-800' : transaction.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}`}
+                    >
+                      {transaction.status}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -935,7 +965,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-lg shadow p-12 text-center">
           <p className="text-gray-500 text-lg">No transactions yet</p>
           <button
-            onClick={() => createTransaction(100, "Test Transaction")} // Async callback
+            onClick={() => createTransaction(100, 'Test Transaction')} // Async callback
             className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
             Create Test Transaction

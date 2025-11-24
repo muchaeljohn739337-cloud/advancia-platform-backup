@@ -1,7 +1,7 @@
-"use client";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
-import { ReactNode, useEffect } from "react";
-import { X } from "lucide-react";
+'use client';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { ReactNode, useEffect } from 'react';
+import { X } from 'lucide-react';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface BottomSheetProps {
   children: ReactNode;
   title?: string;
   subtitle?: string;
-  height?: "auto" | "half" | "full";
+  height?: 'auto' | 'half' | 'full';
   showHandle?: boolean;
   closeOnBackdropClick?: boolean;
 }
@@ -20,32 +20,29 @@ export default function BottomSheet({
   children,
   title,
   subtitle,
-  height = "auto",
+  height = 'auto',
   showHandle = true,
   closeOnBackdropClick = true,
 }: BottomSheetProps) {
   // Prevent body scroll when sheet is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [isOpen]);
 
   const heightClasses = {
-    auto: "max-h-[85vh]",
-    half: "h-[50vh]",
-    full: "h-[95vh]",
+    auto: 'max-h-[85vh]',
+    half: 'h-[50vh]',
+    full: 'h-[95vh]',
   };
 
-  const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.y > 100) {
       onClose();
     }
@@ -67,10 +64,10 @@ export default function BottomSheet({
 
           {/* Bottom Sheet */}
           <motion.div
-            initial={{ y: "100%" }}
+            initial={{ y: '100%' }}
             animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             drag="y"
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.5 }}
@@ -102,9 +99,7 @@ export default function BottomSheet({
                       </h3>
                     )}
                     {subtitle && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {subtitle}
-                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{subtitle}</p>
                     )}
                   </div>
                   <button
@@ -119,9 +114,7 @@ export default function BottomSheet({
             )}
 
             {/* Content */}
-            <div
-              className="overflow-y-auto overscroll-contain p-6 max-h-[calc(100%-100px)]"
-            >
+            <div className="overflow-y-auto overscroll-contain p-6 max-h-[calc(100%-100px)]">
               {children}
             </div>
           </motion.div>

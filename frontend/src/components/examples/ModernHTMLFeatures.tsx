@@ -1,27 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 // ✅ MODERN HTML5 FEATURES DEMO
 // Showcase of powerful native HTML features that require zero JavaScript libraries
 
 export default function ModernHTMLFeatures() {
-  const [editableContent, setEditableContent] = useState(
-    "Click me to edit this text!"
-  );
-  const [selectedColor, setSelectedColor] = useState("#1890ff");
-  const [selectedDate, setSelectedDate] = useState("");
+  const [editableContent, setEditableContent] = useState('Click me to edit this text!');
+  const [selectedColor, setSelectedColor] = useState('#1890ff');
+  const [selectedDate, setSelectedDate] = useState('');
   const [rangeValue, setRangeValue] = useState(50);
-  const [selectedWeek, setSelectedWeek] = useState("");
-  const [selectedBrowser, setSelectedBrowser] = useState("");
+  const [selectedWeek, setSelectedWeek] = useState('');
+  const [selectedBrowser, setSelectedBrowser] = useState('');
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-8">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-2">🚀 Modern HTML5 Features</h1>
-        <div className="badge badge-secondary">
-          Zero JavaScript Libraries Required
-        </div>
+        <div className="badge badge-secondary">Zero JavaScript Libraries Required</div>
       </div>
 
       {/* 1. CONTENTEDITABLE - Inline Text Editing */}
@@ -32,8 +28,7 @@ export default function ModernHTMLFeatures() {
             <div className="badge badge-primary">Native HTML</div>
           </h2>
           <p className="text-gray-600 mb-4">
-            Click the text below to edit it directly. Perfect for notes,
-            comments, or quick edits.
+            Click the text below to edit it directly. Perfect for notes, comments, or quick edits.
           </p>
 
           <div className="alert alert-info mb-4">
@@ -50,28 +45,22 @@ export default function ModernHTMLFeatures() {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>
-              Use Case: User notes, transaction descriptions, inline comments
-            </span>
+            <span>Use Case: User notes, transaction descriptions, inline comments</span>
           </div>
 
           <div
             contentEditable="true"
             suppressContentEditableWarning
-            onBlur={(e) =>
-              setEditableContent(e.currentTarget.textContent || "")
-            }
+            onBlur={(e) => setEditableContent(e.currentTarget.textContent || '')}
             className="p-4 border-2 border-dashed border-primary rounded-lg bg-base-200 min-h-[100px] focus:outline-none focus:border-solid focus:border-secondary cursor-text"
-            style={{ outline: "none" }}
+            style={{ outline: 'none' }}
           >
             {editableContent}
           </div>
 
           <div className="mt-4">
             <div className="text-sm text-gray-600">Current content:</div>
-            <div className="font-mono text-sm bg-base-300 p-2 rounded">
-              {editableContent}
-            </div>
+            <div className="font-mono text-sm bg-base-300 p-2 rounded">{editableContent}</div>
           </div>
 
           <div className="mt-4">
@@ -94,8 +83,8 @@ export default function ModernHTMLFeatures() {
             <div className="badge badge-success">Performance</div>
           </h2>
           <p className="text-gray-600 mb-4">
-            Images load only when they're about to enter the viewport. Saves
-            bandwidth and improves page speed.
+            Images load only when they're about to enter the viewport. Saves bandwidth and improves
+            page speed.
           </p>
 
           <div className="alert alert-success mb-4">
@@ -112,9 +101,7 @@ export default function ModernHTMLFeatures() {
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <span>
-              Use Case: User avatars, transaction receipts, KYC documents
-            </span>
+            <span>Use Case: User avatars, transaction receipts, KYC documents</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -125,9 +112,7 @@ export default function ModernHTMLFeatures() {
                 alt="Lazy loaded image 1"
                 className="rounded-lg shadow-lg w-full"
               />
-              <div className="badge badge-primary absolute top-2 right-2">
-                loading="lazy"
-              </div>
+              <div className="badge badge-primary absolute top-2 right-2">loading="lazy"</div>
             </div>
             <div className="relative">
               <img
@@ -136,9 +121,7 @@ export default function ModernHTMLFeatures() {
                 alt="Lazy loaded image 2"
                 className="rounded-lg shadow-lg w-full"
               />
-              <div className="badge badge-secondary absolute top-2 right-2">
-                loading="lazy"
-              </div>
+              <div className="badge badge-secondary absolute top-2 right-2">loading="lazy"</div>
             </div>
             <div className="relative">
               <img
@@ -147,9 +130,7 @@ export default function ModernHTMLFeatures() {
                 alt="Lazy loaded image 3"
                 className="rounded-lg shadow-lg w-full"
               />
-              <div className="badge badge-accent absolute top-2 right-2">
-                loading="lazy"
-              </div>
+              <div className="badge badge-accent absolute top-2 right-2">loading="lazy"</div>
             </div>
           </div>
 
@@ -173,8 +154,7 @@ export default function ModernHTMLFeatures() {
             <div className="badge badge-info">No Library</div>
           </h2>
           <p className="text-gray-600 mb-4">
-            Built-in autocomplete dropdown with suggestions. Type to filter
-            options.
+            Built-in autocomplete dropdown with suggestions. Type to filter options.
           </p>
 
           <div className="alert alert-info mb-4">
@@ -191,9 +171,7 @@ export default function ModernHTMLFeatures() {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>
-              Use Case: Bank selection, crypto currency picker, country selector
-            </span>
+            <span>Use Case: Bank selection, crypto currency picker, country selector</span>
           </div>
 
           <div className="form-control">
@@ -218,17 +196,13 @@ export default function ModernHTMLFeatures() {
               <option value="US Bank" />
             </datalist>
             <label className="label">
-              <span className="label-text-alt">
-                Selected: {selectedBrowser || "None"}
-              </span>
+              <span className="label-text-alt">Selected: {selectedBrowser || 'None'}</span>
             </label>
           </div>
 
           <div className="form-control mt-4">
             <label className="label">
-              <span className="label-text font-semibold">
-                Select Cryptocurrency
-              </span>
+              <span className="label-text font-semibold">Select Cryptocurrency</span>
             </label>
             <input
               list="cryptocurrencies"
@@ -267,8 +241,8 @@ export default function ModernHTMLFeatures() {
             <div className="badge badge-warning">Zero JS</div>
           </h2>
           <p className="text-gray-600 mb-4">
-            Built-in collapsible sections without any JavaScript. Perfect for
-            FAQs and hidden details.
+            Built-in collapsible sections without any JavaScript. Perfect for FAQs and hidden
+            details.
           </p>
 
           <div className="alert alert-warning mb-4">
@@ -358,18 +332,13 @@ export default function ModernHTMLFeatures() {
               <div className="collapse-content">
                 <div className="pt-2 space-y-3">
                   <div>
-                    <p className="font-semibold">
-                      How long do withdrawals take?
-                    </p>
+                    <p className="font-semibold">How long do withdrawals take?</p>
                     <p className="text-sm text-gray-600">
-                      Typically 1-3 business days for bank transfers, 10-30
-                      minutes for crypto.
+                      Typically 1-3 business days for bank transfers, 10-30 minutes for crypto.
                     </p>
                   </div>
                   <div>
-                    <p className="font-semibold">
-                      Are there any withdrawal limits?
-                    </p>
+                    <p className="font-semibold">Are there any withdrawal limits?</p>
                     <p className="text-sm text-gray-600">
                       Standard: $10,000/day. Premium: $50,000/day.
                     </p>
@@ -398,16 +367,12 @@ export default function ModernHTMLFeatures() {
             🎨 Input Type="color" - Native Color Picker
             <div className="badge badge-primary">Built-in</div>
           </h2>
-          <p className="text-gray-600 mb-4">
-            Native color picker without any external libraries.
-          </p>
+          <p className="text-gray-600 mb-4">Native color picker without any external libraries.</p>
 
           <div className="flex items-center gap-4">
             <div className="form-control">
               <label htmlFor="colorPicker" className="label">
-                <span className="label-text font-semibold">
-                  Choose Theme Color
-                </span>
+                <span className="label-text font-semibold">Choose Theme Color</span>
               </label>
               <input
                 id="colorPicker"
@@ -420,9 +385,7 @@ export default function ModernHTMLFeatures() {
             </div>
             <div className="flex-1">
               <div className="text-sm text-gray-600">Selected Color:</div>
-              <div className="text-2xl font-bold font-mono">
-                {selectedColor}
-              </div>
+              <div className="text-2xl font-bold font-mono">{selectedColor}</div>
               <div
                 className="mt-2 p-4 rounded-lg text-white text-center font-semibold"
                 style={{ backgroundColor: selectedColor }}
@@ -459,9 +422,7 @@ export default function ModernHTMLFeatures() {
             {/* Date Picker */}
             <div className="form-control">
               <label htmlFor="datePicker" className="label">
-                <span className="label-text font-semibold">
-                  📆 Transaction Date
-                </span>
+                <span className="label-text font-semibold">📆 Transaction Date</span>
               </label>
               <input
                 id="datePicker"
@@ -472,9 +433,7 @@ export default function ModernHTMLFeatures() {
                 aria-label="Date picker for selecting transaction date"
               />
               <label className="label">
-                <span className="label-text-alt">
-                  Selected: {selectedDate || "None"}
-                </span>
+                <span className="label-text-alt">Selected: {selectedDate || 'None'}</span>
               </label>
             </div>
 
@@ -482,9 +441,7 @@ export default function ModernHTMLFeatures() {
             <div className="form-control">
               <label htmlFor="weekPicker" className="label">
                 <span className="label-text font-semibold">📊 Report Week</span>
-                <span className="label-text-alt text-warning">
-                  ⚠️ Chrome/Edge only
-                </span>
+                <span className="label-text-alt text-warning">⚠️ Chrome/Edge only</span>
               </label>
               <input
                 id="weekPicker"
@@ -496,18 +453,14 @@ export default function ModernHTMLFeatures() {
                 title="Week picker - Not supported in Firefox/Safari"
               />
               <label className="label">
-                <span className="label-text-alt">
-                  Selected: {selectedWeek || "None"}
-                </span>
+                <span className="label-text-alt">Selected: {selectedWeek || 'None'}</span>
               </label>
             </div>
 
             {/* Range Slider */}
             <div className="form-control col-span-full">
               <label htmlFor="amountSlider" className="label">
-                <span className="label-text font-semibold">
-                  💰 Transaction Amount
-                </span>
+                <span className="label-text font-semibold">💰 Transaction Amount</span>
                 <span className="label-text-alt font-bold">${rangeValue}</span>
               </label>
               <input
@@ -537,16 +490,13 @@ export default function ModernHTMLFeatures() {
             <h3 className="font-semibold mb-2">💡 Real Use Cases:</h3>
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>
-                <strong>Date:</strong> Transaction filters, payment schedules,
-                birth date in KYC
+                <strong>Date:</strong> Transaction filters, payment schedules, birth date in KYC
               </li>
               <li>
-                <strong>Week:</strong> Weekly report generation, recurring
-                payment schedules
+                <strong>Week:</strong> Weekly report generation, recurring payment schedules
               </li>
               <li>
-                <strong>Range:</strong> Transaction amount filters, budget
-                limits, fee sliders
+                <strong>Range:</strong> Transaction amount filters, budget limits, fee sliders
               </li>
             </ul>
           </div>

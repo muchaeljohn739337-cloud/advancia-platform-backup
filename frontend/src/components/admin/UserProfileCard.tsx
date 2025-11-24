@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import toast from "react-hot-toast";
-import adminApi from "@/lib/adminApi";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import adminApi from '@/lib/adminApi';
 
 interface UserProfile {
   id: string;
@@ -22,10 +22,7 @@ interface UserProfileCardProps {
   onUpdate?: () => void;
 }
 
-export default function UserProfileCard({
-  profile,
-  onUpdate,
-}: UserProfileCardProps) {
+export default function UserProfileCard({ profile, onUpdate }: UserProfileCardProps) {
   const [isUpdatingRole, setIsUpdatingRole] = useState(false);
 
   const handleRoleChange = async (newRole: string) => {
@@ -38,21 +35,21 @@ export default function UserProfileCard({
       toast.success(`Role updated to ${newRole}`);
       onUpdate?.();
     } catch (error) {
-      console.error("Failed to update role:", error);
-      toast.error("Failed to update role");
+      console.error('Failed to update role:', error);
+      toast.error('Failed to update role');
     } finally {
       setIsUpdatingRole(false);
     }
   };
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return "Never";
-    return new Date(dateString).toLocaleString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    if (!dateString) return 'Never';
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -81,19 +78,15 @@ export default function UserProfileCard({
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-500 mb-1">
-            Email
-          </label>
+          <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
           <p className="text-gray-900">{profile.email}</p>
         </div>
 
         {/* Role Switcher */}
         <div>
-          <label className="block text-sm font-medium text-gray-500 mb-2">
-            Role
-          </label>
+          <label className="block text-sm font-medium text-gray-500 mb-2">Role</label>
           <div className="flex gap-2">
-            {["USER", "STAFF", "ADMIN"].map((role) => (
+            {['USER', 'STAFF', 'ADMIN'].map((role) => (
               <button
                 key={role}
                 onClick={() => handleRoleChange(role)}
@@ -101,13 +94,9 @@ export default function UserProfileCard({
                 aria-label={`Set role to ${role}`}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   profile.role === role
-                    ? "bg-indigo-600 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                } ${
-                  isUpdatingRole
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                } ${isUpdatingRole ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               >
                 {role}
               </button>
@@ -117,14 +106,12 @@ export default function UserProfileCard({
 
         {/* Status */}
         <div>
-          <label className="block text-sm font-medium text-gray-500 mb-1">
-            Status
-          </label>
+          <label className="block text-sm font-medium text-gray-500 mb-1">Status</label>
           <span
             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-              profile.status === "ACTIVE"
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+              profile.status === 'ACTIVE'
+                ? 'bg-green-100 text-green-800'
+                : 'bg-red-100 text-red-800'
             }`}
           >
             {profile.status}
@@ -134,20 +121,12 @@ export default function UserProfileCard({
         {/* Dates */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
           <div>
-            <label className="block text-sm font-medium text-gray-500 mb-1">
-              Joined
-            </label>
-            <p className="text-gray-900 text-sm">
-              {formatDate(profile.createdAt)}
-            </p>
+            <label className="block text-sm font-medium text-gray-500 mb-1">Joined</label>
+            <p className="text-gray-900 text-sm">{formatDate(profile.createdAt)}</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-500 mb-1">
-              Last Login
-            </label>
-            <p className="text-gray-900 text-sm">
-              {formatDate(profile.lastLogin)}
-            </p>
+            <label className="block text-sm font-medium text-gray-500 mb-1">Last Login</label>
+            <p className="text-gray-900 text-sm">{formatDate(profile.lastLogin)}</p>
           </div>
         </div>
       </div>

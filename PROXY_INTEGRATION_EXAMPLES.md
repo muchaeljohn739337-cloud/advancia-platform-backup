@@ -4,22 +4,22 @@ This document shows how to integrate the ProxyClient into existing backend servi
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Import ProxyClient](#import-proxyclient)
-- [Example 1: Cryptomus API](#example-1-cryptomus-api)
-- [Example 2: Telegram Service](#example-2-telegram-service)
-- [Example 3: Trustpilot Service](#example-3-trustpilot-service)
-- [Example 4: Fraud Detection Service](#example-4-fraud-detection-service)
-- [Testing Integration](#testing-integration)
+-   [Overview](#overview)
+-   [Import ProxyClient](#import-proxyclient)
+-   [Example 1: Cryptomus API](#example-1-cryptomus-api)
+-   [Example 2: Telegram Service](#example-2-telegram-service)
+-   [Example 3: Trustpilot Service](#example-3-trustpilot-service)
+-   [Example 4: Fraud Detection Service](#example-4-fraud-detection-service)
+-   [Testing Integration](#testing-integration)
 
 ## Overview
 
 The ProxyClient provides a drop-in replacement for axios with automatic proxy support based on environment variables. All external API calls should route through ProxyClient for:
 
-- **Development**: Test API behavior with different IP addresses
-- **Testing**: Simulate requests from different geolocations
-- **Security**: Avoid IP blocking during security scans
-- **Production**: Route sensitive API calls through residential proxies
+-   **Development**: Test API behavior with different IP addresses
+-   **Testing**: Simulate requests from different geolocations
+-   **Security**: Avoid IP blocking during security scans
+-   **Production**: Route sensitive API calls through residential proxies
 
 ## Import ProxyClient
 
@@ -33,7 +33,7 @@ import { getProxyClient } from "../utils/proxyClient";
 
 **File**: `backend/src/routes/cryptomus.ts`
 
-### Before (using fetch):
+### Before (using fetch)
 
 ```typescript
 // Make request to Cryptomus API
@@ -50,7 +50,7 @@ const response = await fetch(`${CRYPTOMUS_BASE_URL}/payment`, {
 const result: any = await response.json();
 ```
 
-### After (using ProxyClient):
+### After (using ProxyClient)
 
 ```typescript
 import { getProxyClient } from "../utils/proxyClient";
@@ -59,35 +59,31 @@ import { getProxyClient } from "../utils/proxyClient";
 const proxyClient = getProxyClient();
 
 // Make request through proxy (if enabled)
-const result = await proxyClient.post<any>(
-  `${CRYPTOMUS_BASE_URL}/payment`,
-  paymentData,
-  {
-    headers: {
-      "Content-Type": "application/json",
-      userId: CRYPTOMUS_USER_ID,
-      sign: signature,
-    },
-  }
-);
+const result = await proxyClient.post<any>(`${CRYPTOMUS_BASE_URL}/payment`, paymentData, {
+  headers: {
+    "Content-Type": "application/json",
+    userId: CRYPTOMUS_USER_ID,
+    sign: signature,
+  },
+});
 
 // Result is already parsed JSON
 console.log("Payment invoice created:", result);
 ```
 
-### Benefits:
+### Benefits
 
-- ✅ Automatic proxy routing if `PROXY_ENABLED=true`
-- ✅ No code changes needed to enable/disable proxy
-- ✅ Same API as axios (familiar interface)
-- ✅ Handles authentication automatically
-- ✅ Respects bypass rules (localhost, etc.)
+-   ✅ Automatic proxy routing if `PROXY_ENABLED=true`
+-   ✅ No code changes needed to enable/disable proxy
+-   ✅ Same API as axios (familiar interface)
+-   ✅ Handles authentication automatically
+-   ✅ Respects bypass rules (localhost, etc.)
 
 ## Example 2: Telegram Service
 
 **File**: `backend/src/services/telegramService.ts`
 
-### Before (using axios):
+### Before (using axios)
 
 ```typescript
 import axios from "axios";
@@ -103,7 +99,7 @@ export async function sendTelegramMessage(chatId: string, text: string) {
 }
 ```
 
-### After (using ProxyClient):
+### After (using ProxyClient)
 
 ```typescript
 import { getProxyClient } from "../utils/proxyClient";
@@ -124,7 +120,7 @@ export async function sendTelegramMessage(chatId: string, text: string) {
 }
 ```
 
-### Multiple Functions:
+### Multiple Functions
 
 Update all Telegram API calls in the same file:
 
@@ -146,11 +142,7 @@ export async function setWebhook(webhookUrl: string) {
   });
 }
 
-export async function sendPhoto(
-  chatId: string,
-  photoUrl: string,
-  caption?: string
-) {
+export async function sendPhoto(chatId: string, photoUrl: string, caption?: string) {
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
   return await proxyClient.post<any>(url, {
     chat_id: chatId,
@@ -164,7 +156,7 @@ export async function sendPhoto(
 
 **File**: `backend/src/services/trustpilotInvitationService.ts`
 
-### Before (using axios):
+### Before (using axios)
 
 ```typescript
 import axios from "axios";
@@ -184,11 +176,11 @@ await axios.post(
       Authorization: `ApiKey ${TRUSTPILOT_API_KEY}`,
       "Content-Type": "application/json",
     },
-  }
+  },
 );
 ```
 
-### After (using ProxyClient):
+### After (using ProxyClient)
 
 ```typescript
 import { getProxyClient } from "../utils/proxyClient";
@@ -210,7 +202,7 @@ const result = await proxyClient.post<any>(
       Authorization: `ApiKey ${TRUSTPILOT_API_KEY}`,
       "Content-Type": "application/json",
     },
-  }
+  },
 );
 
 console.log("Trustpilot invitation sent:", result);
@@ -220,7 +212,7 @@ console.log("Trustpilot invitation sent:", result);
 
 **File**: `backend/src/services/fraudDetectionService.ts`
 
-### Before (using axios):
+### Before (using axios)
 
 ```typescript
 import axios from "axios";
@@ -233,7 +225,7 @@ const geoData = response.data;
 const isHighRisk = geoData.country_code in HIGH_RISK_COUNTRIES;
 ```
 
-### After (using ProxyClient):
+### After (using ProxyClient)
 
 ```typescript
 import { getProxyClient } from "../utils/proxyClient";
@@ -241,9 +233,7 @@ import { getProxyClient } from "../utils/proxyClient";
 const proxyClient = getProxyClient();
 
 // Check IP geolocation through proxy (if enabled)
-const geoData = await proxyClient.get<any>(
-  `https://ipapi.co/${ipAddress}/json/`
-);
+const geoData = await proxyClient.get<any>(`https://ipapi.co/${ipAddress}/json/`);
 
 // Analyze risk based on location
 const isHighRisk = geoData.country_code in HIGH_RISK_COUNTRIES;
@@ -308,9 +298,7 @@ async function testIntegration() {
   console.log("✅ Geolocation:", geo);
 
   // Test 3: External API call
-  const result = await proxyClient.get<any>(
-    "https://api.github.com/users/github"
-  );
+  const result = await proxyClient.get<any>("https://api.github.com/users/github");
   console.log("✅ GitHub API:", result.login);
 
   // Test 4: Connection test
@@ -352,22 +340,22 @@ async function comparePerformance() {
 
 ## Migration Checklist
 
-- [ ] Identify all external API calls in backend
-- [ ] Replace `axios` imports with `getProxyClient()`
-- [ ] Replace `fetch()` calls with `proxyClient.get/post/put/delete()`
-- [ ] Test with `PROXY_ENABLED=false` (should work as before)
-- [ ] Test with `PROXY_ENABLED=true` (should route through proxy)
-- [ ] Verify IP addresses differ between direct and proxy
-- [ ] Check API rate limits (some APIs may rate limit by IP)
-- [ ] Update error handling (ProxyClient throws on errors)
-- [ ] Add logging for proxy usage in production
-- [ ] Document proxy usage in API documentation
+-   [ ] Identify all external API calls in backend
+-   [ ] Replace `axios` imports with `getProxyClient()`
+-   [ ] Replace `fetch()` calls with `proxyClient.get/post/put/delete()`
+-   [ ] Test with `PROXY_ENABLED=false` (should work as before)
+-   [ ] Test with `PROXY_ENABLED=true` (should route through proxy)
+-   [ ] Verify IP addresses differ between direct and proxy
+-   [ ] Check API rate limits (some APIs may rate limit by IP)
+-   [ ] Update error handling (ProxyClient throws on errors)
+-   [ ] Add logging for proxy usage in production
+-   [ ] Document proxy usage in API documentation
 
 ## Files to Update
 
 Based on grep search, these files make external API calls:
 
-### High Priority (External APIs):
+### High Priority (External APIs)
 
 1. ✅ `backend/src/routes/cryptomus.ts` - Cryptomus payment API
 2. ⏳ `backend/src/routes/payments.ts` - Cryptomus payment API
@@ -376,12 +364,12 @@ Based on grep search, these files make external API calls:
 5. ⏳ `backend/src/services/fraudDetectionService.ts` - IP geolocation API
 6. ⏳ `backend/src/jobs/trustpilotCollector.ts` - Trustpilot data collection
 
-### Low Priority (Internal URLs):
+### Low Priority (Internal URLs)
 
-- `backend/src/routes/auth.ts` - Internal reset links (no proxy needed)
-- `backend/src/routes/email.ts` - Internal verification links (no proxy needed)
-- `backend/src/routes/emailSignup.ts` - Internal magic links (no proxy needed)
-- `backend/src/routes/gamification.ts` - Internal referral links (no proxy needed)
+-   `backend/src/routes/auth.ts` - Internal reset links (no proxy needed)
+-   `backend/src/routes/email.ts` - Internal verification links (no proxy needed)
+-   `backend/src/routes/emailSignup.ts` - Internal magic links (no proxy needed)
+-   `backend/src/routes/gamification.ts` - Internal referral links (no proxy needed)
 
 ## Environment Variables Reference
 
@@ -462,23 +450,23 @@ PROXY_BYPASS=localhost,127.0.0.1,.local,api.example.com
 
 ## Production Considerations
 
-### When to Enable Proxy in Production:
+### When to Enable Proxy in Production
 
-- ✅ **API Rate Limiting**: Rotate IPs to avoid rate limits
-- ✅ **Geo-Restrictions**: Access APIs from specific regions
-- ✅ **Security Testing**: Penetration testing with IP rotation
-- ✅ **Scraping Protection**: Avoid IP blocking during data collection
-- ✅ **Privacy**: Hide backend server IP from external services
+-   ✅ **API Rate Limiting**: Rotate IPs to avoid rate limits
+-   ✅ **Geo-Restrictions**: Access APIs from specific regions
+-   ✅ **Security Testing**: Penetration testing with IP rotation
+-   ✅ **Scraping Protection**: Avoid IP blocking during data collection
+-   ✅ **Privacy**: Hide backend server IP from external services
 
-### When NOT to Use Proxy:
+### When NOT to Use Proxy
 
-- ❌ **Internal Services**: Backend <-> Database (use PROXY_BYPASS)
-- ❌ **Payment Webhooks**: Stripe/Cryptomus webhooks need direct access
-- ❌ **Real-time Communication**: WebSockets (Socket.IO) should be direct
-- ❌ **File Uploads**: Large files to S3/storage (bypass recommended)
-- ❌ **Monitoring**: Health checks, metrics (direct connection preferred)
+-   ❌ **Internal Services**: Backend <-> Database (use PROXY_BYPASS)
+-   ❌ **Payment Webhooks**: Stripe/Cryptomus webhooks need direct access
+-   ❌ **Real-time Communication**: WebSockets (Socket.IO) should be direct
+-   ❌ **File Uploads**: Large files to S3/storage (bypass recommended)
+-   ❌ **Monitoring**: Health checks, metrics (direct connection preferred)
 
-### Recommended Production Setup:
+### Recommended Production Setup
 
 ```bash
 # Production .env (with residential proxy)
@@ -498,11 +486,11 @@ PROXY_BYPASS=localhost,127.0.0.1,.local,stripe.com,cryptomus.com
 
 ## Resources
 
-- **Proxy Configuration Guide**: See `PROXY_CONFIGURATION_GUIDE.md`
-- **Quick Start**: See `PROXY_QUICK_START.md`
-- **ProxyClient Source**: See `backend/src/utils/proxyClient.ts`
-- **Setup Script**: Run `.\scripts\setup-proxy.ps1`
-- **Test Script**: Run `.\scripts\test-proxy.ps1`
+-   **Proxy Configuration Guide**: See `PROXY_CONFIGURATION_GUIDE.md`
+-   **Quick Start**: See `PROXY_QUICK_START.md`
+-   **ProxyClient Source**: See `backend/src/utils/proxyClient.ts`
+-   **Setup Script**: Run `.\scripts\setup-proxy.ps1`
+-   **Test Script**: Run `.\scripts\test-proxy.ps1`
 
 ## Support
 

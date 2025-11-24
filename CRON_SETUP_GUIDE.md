@@ -19,11 +19,11 @@ This guide shows two methods for automating status page updates:
 
 ### Why PM2 Cron?
 
-- ✅ Integrated with PM2 process management
-- ✅ Automatic restart on failure
-- ✅ Logs managed by PM2
-- ✅ Easy monitoring with `pm2 logs`
-- ✅ Survives reboots (with `pm2 startup`)
+-   ✅ Integrated with PM2 process management
+-   ✅ Automatic restart on failure
+-   ✅ Logs managed by PM2
+-   ✅ Easy monitoring with `pm2 logs`
+-   ✅ Survives reboots (with `pm2 startup`)
 
 ### Setup PM2 Cron
 
@@ -128,11 +128,11 @@ pm2 describe status-updater
 
 ### Why System Cron?
 
-- ✅ Simple, no dependencies
-- ✅ Native Linux feature
-- ✅ Works without PM2
-- ⚠️ Manual log management required
-- ⚠️ No automatic restart on failure
+-   ✅ Simple, no dependencies
+-   ✅ Native Linux feature
+-   ✅ Works without PM2
+-   ⚠️ Manual log management required
+-   ⚠️ No automatic restart on failure
 
 ### Quick Setup with Script
 
@@ -348,28 +348,28 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ### Initial Setup
 
-- [ ] Status generator script exists: `backend/scripts/status-generator.mjs`
-- [ ] Output directory exists: `backend/public/`
-- [ ] Log directory exists: `/opt/advancia/logs/`
-- [ ] Cron job added (system cron OR PM2 cron, not both)
-- [ ] Test run successful: `node scripts/status-generator.mjs`
-- [ ] status.json created: `backend/public/status.json`
+-   [ ] Status generator script exists: `backend/scripts/status-generator.mjs`
+-   [ ] Output directory exists: `backend/public/`
+-   [ ] Log directory exists: `/opt/advancia/logs/`
+-   [ ] Cron job added (system cron OR PM2 cron, not both)
+-   [ ] Test run successful: `node scripts/status-generator.mjs`
+-   [ ] status.json created: `backend/public/status.json`
 
 ### After 5 Minutes
 
-- [ ] status.json updated (check file timestamp)
-- [ ] Logs show successful execution
-- [ ] No errors in logs
-- [ ] File size reasonable (10-50 KB)
-- [ ] JSON is valid: `cat status.json | jq .`
+-   [ ] status.json updated (check file timestamp)
+-   [ ] Logs show successful execution
+-   [ ] No errors in logs
+-   [ ] File size reasonable (10-50 KB)
+-   [ ] JSON is valid: `cat status.json | jq .`
 
 ### Frontend Integration
 
-- [ ] Frontend can fetch `/api/status.json`
-- [ ] Status page displays correct data
-- [ ] Metrics match log data
-- [ ] Auto-refresh working (every 30s)
-- [ ] No console errors in browser
+-   [ ] Frontend can fetch `/api/status.json`
+-   [ ] Status page displays correct data
+-   [ ] Metrics match log data
+-   [ ] Auto-refresh working (every 30s)
+-   [ ] No console errors in browser
 
 ---
 
@@ -396,9 +396,9 @@ module.exports = {
 
 ### Why These Settings?
 
-- **Every 5 minutes** - Balances freshness with server load
-- **autorestart: false** - Cron already handles scheduling
-- **max_memory_restart: 200M** - Prevents memory leaks
+-   **Every 5 minutes** - Balances freshness with server load
+-   **autorestart: false** - Cron already handles scheduling
+-   **max_memory_restart: 200M** - Prevents memory leaks
 
 ---
 
@@ -455,10 +455,10 @@ chmod +x /opt/advancia/scripts/check-status-updates.sh
 
 ## 📚 Related Documentation
 
-- [STATUS_PAGE_AUTOMATION_GUIDE.md](./STATUS_PAGE_AUTOMATION_GUIDE.md) - Complete automation guide
-- [FILE_STRUCTURE_STATUS_PAGE.md](./FILE_STRUCTURE_STATUS_PAGE.md) - File structure reference
-- [DAY1_LAUNCH_CHECKLIST.md](./DAY1_LAUNCH_CHECKLIST.md) - Pre-launch checklist
-- [backend/PM2_GUIDE.md](./backend/PM2_GUIDE.md) - PM2 process management
+-   [STATUS_PAGE_AUTOMATION_GUIDE.md](./STATUS_PAGE_AUTOMATION_GUIDE.md) - Complete automation guide
+-   [FILE_STRUCTURE_STATUS_PAGE.md](./FILE_STRUCTURE_STATUS_PAGE.md) - File structure reference
+-   [DAY1_LAUNCH_CHECKLIST.md](./DAY1_LAUNCH_CHECKLIST.md) - Pre-launch checklist
+-   [backend/PM2_GUIDE.md](./backend/PM2_GUIDE.md) - PM2 process management
 
 ---
 

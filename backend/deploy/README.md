@@ -17,7 +17,7 @@ Quick usage
 
    sudo cp deploy/templates/advancia-backend.service.template /etc/systemd/system/advancia-backend.service
 
-   # Edit file and replace placeholders accordingly
+# Edit file and replace placeholders accordingly
 
 2. Reload systemd and start the service:
 
@@ -30,7 +30,7 @@ Quick usage
 
    sudo cp deploy/templates/advancia-nginx.conf.template /etc/nginx/sites-available/advancia
 
-   # Edit the file and set server_name
+# Edit the file and set server_name
 
    sudo ln -s /etc/nginx/sites-available/advancia /etc/nginx/sites-enabled/
    sudo nginx -t && sudo systemctl restart nginx

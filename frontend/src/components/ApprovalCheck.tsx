@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ export default function ApprovalCheck({ children }: ApprovalCheckProps) {
     const checkApproval = async () => {
       try {
         const token = localStorage.getItem('token');
-        
+
         if (!token) {
           router.push('/auth/login');
           return;
@@ -27,13 +27,13 @@ export default function ApprovalCheck({ children }: ApprovalCheckProps) {
 
         const response = await fetch('http://localhost:4000/api/auth/check-approval', {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.ok) {
           const data = await response.json();
-          
+
           if (data.rejected) {
             // User was rejected
             alert(`Account Rejected: ${data.reason || 'Please contact support'}`);

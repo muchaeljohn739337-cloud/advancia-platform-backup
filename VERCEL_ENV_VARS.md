@@ -11,7 +11,7 @@ Set these in Vercel (Production & Preview). Prefix `NEXT_PUBLIC_` makes them rea
 | NEXT_PUBLIC_API_URL                     | Base API endpoint      | `https://api.advanciapayledger.com/api`      | no        |
 | NEXT_PUBLIC_SOCKET_URL                  | Socket.IO base         | `https://api.advanciapayledger.com`          | no        |
 | NEXT_PUBLIC_APP_NAME                    | Display name           | Advancia Pay                                 | no        |
-| NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY      | Stripe public key      | pk*live*******\*\*\*\*******                 | no        |
+| NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY      | Stripe public key      | pk\*live**\*\*\***\*\*\*\***\*\***           | no        |
 | NEXT_PUBLIC_FEATURE_FLAGS               | Comma features         | notifications,rewards,debit_card             | no        |
 | NEXT_PUBLIC_ORG_NAME                    | Org for SEO            | Advancia                                     | no        |
 | NEXT_PUBLIC_ORG_URL                     | Canonical URL          | `https://www.advanciapayledger.com`          | no        |
@@ -77,12 +77,12 @@ node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"
 
 ## Validation Checklist
 
-- [ ] Stripe key matches environment (test vs live).
-- [ ] NextAuth secret length >= 64 bytes.
-- [ ] No wallet seed or encryption key exposed in client bundle (`grep -R WALLET_MASTER_SEED .next`).
-- [ ] CORS accepts only required production origins.
-- [ ] WebSocket connects successfully with auth.
-- [ ] Sentry events received (no PII in payloads).
+-   [ ] Stripe key matches environment (test vs live).
+-   [ ] NextAuth secret length >= 64 bytes.
+-   [ ] No wallet seed or encryption key exposed in client bundle (`grep -R WALLET_MASTER_SEED .next`).
+-   [ ] CORS accepts only required production origins.
+-   [ ] WebSocket connects successfully with auth.
+-   [ ] Sentry events received (no PII in payloads).
 
 ## Rotation Policy (Suggested)
 
@@ -105,11 +105,11 @@ node -e "console.log(require('crypto').randomBytes(64).toString('base64'))"
 
 ## Do Not Store Publicly
 
-- Gmail app password
-- NextAuth secret
-- Wallet seed & encryption key
-- Webhook secrets (Stripe, Cryptomus, NOWPayments)
-- Admin keys or override tokens
+-   Gmail app password
+-   NextAuth secret
+-   Wallet seed & encryption key
+-   Webhook secrets (Stripe, Cryptomus, NOWPayments)
+-   Admin keys or override tokens
 
 ---
 

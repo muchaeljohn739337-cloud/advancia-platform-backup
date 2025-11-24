@@ -15,8 +15,8 @@ jobs:
     name: Deploy to Staging
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/staging'
-    environment: staging  # Uses staging environment secrets
-    
+    environment: staging # Uses staging environment secrets
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,8 +24,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Install dependencies
         run: |
@@ -92,7 +92,7 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           COLOR=$([[ "$STATUS" == "success" ]] && echo "good" || echo "danger")
-          
+
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
             -H 'Content-Type: application/json' \
             -d '{
@@ -111,8 +111,8 @@ jobs:
     name: Deploy to UAT
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/uat'
-    environment: uat  # ⏸️ Pauses here for QA approval
-    
+    environment: uat # ⏸️ Pauses here for QA approval
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -120,8 +120,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Install dependencies
         run: |
@@ -188,7 +188,7 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           COLOR=$([[ "$STATUS" == "success" ]] && echo "good" || echo "danger")
-          
+
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
             -H 'Content-Type: application/json' \
             -d '{
@@ -211,7 +211,7 @@ jobs:
       target: ${{ steps.check.outputs.target }}
       target_ip: ${{ steps.check.outputs.target_ip }}
       inactive_ip: ${{ steps.check.outputs.inactive_ip }}
-    
+
     steps:
       - name: Check current live environment
         id: check
@@ -227,9 +227,9 @@ jobs:
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_API" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" | jq -r '.result.content')
-          
+
           echo "Current production IP: $CURRENT_IP"
-          
+
           # Determine target (deploy to inactive)
           if [[ "$CURRENT_IP" == "$BLUE_IP" ]]; then
             echo "Current: Blue, Target: Green"
@@ -247,8 +247,8 @@ jobs:
     name: Deploy to Production (${{ needs.determine-target.outputs.target }})
     runs-on: ubuntu-latest
     needs: determine-target
-    environment: production  # ⏸️ Pauses for senior approval + 5min timer
-    
+    environment: production # ⏸️ Pauses for senior approval + 5min timer
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -256,8 +256,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Install dependencies
         run: |
@@ -282,7 +282,7 @@ jobs:
           TARGET: ${{ needs.determine-target.outputs.target }}
         run: |
           echo "🚀 Deploying to $TARGET environment ($TARGET_IP)"
-          
+
           ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$TARGET_IP << 'EOF'
             cd /opt/advancia
             git fetch origin main
@@ -312,7 +312,7 @@ jobs:
         run: |
           echo "🏥 Running comprehensive health checks..."
           sleep 30
-          
+
           # Backend health
           BACKEND_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:4000/health)
           if [ "$BACKEND_RESPONSE" != "200" ]; then
@@ -320,7 +320,7 @@ jobs:
             exit 1
           fi
           echo "✅ Backend healthy"
-          
+
           # Frontend health
           FRONTEND_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://$TARGET_IP:3000)
           if [ "$FRONTEND_RESPONSE" != "200" ]; then
@@ -328,19 +328,19 @@ jobs:
             exit 1
           fi
           echo "✅ Frontend healthy"
-          
+
           # Database connectivity
           ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$TARGET_IP << 'EOFDB'
             docker exec advancia-backend npm run db:ping || exit 1
           EOFDB
           echo "✅ Database connected"
-          
+
           # Redis connectivity
           ssh -i ~/.ssh/deploy_key ${{ secrets.DROPLET_USER }}@$TARGET_IP << 'EOFREDIS'
             docker exec advancia-redis redis-cli ping | grep -q PONG || exit 1
           EOFREDIS
           echo "✅ Redis connected"
-          
+
           echo "✅ All health checks passed"
 
   switch-traffic:
@@ -349,7 +349,7 @@ jobs:
     needs: [determine-target, deploy-production]
     if: success()
     environment: production
-    
+
     steps:
       - name: Update Cloudflare DNS
         env:
@@ -361,35 +361,35 @@ jobs:
           TARGET: ${{ needs.determine-target.outputs.target }}
         run: |
           echo "🔄 Switching production traffic to $TARGET ($TARGET_IP)"
-          
+
           # Update API DNS
           API_RESPONSE=$(curl -s -X PATCH \
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_API" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data "{\"type\":\"A\",\"name\":\"api.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}")
-          
+
           if echo "$API_RESPONSE" | grep -q '"success":true'; then
             echo "✅ API DNS updated"
           else
             echo "❌ API DNS update failed"
             exit 1
           fi
-          
+
           # Update WWW DNS
           WWW_RESPONSE=$(curl -s -X PATCH \
             "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_WWW" \
             -H "Authorization: Bearer $CF_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data "{\"type\":\"A\",\"name\":\"www.advancia.com\",\"content\":\"$TARGET_IP\",\"ttl\":60,\"proxied\":true}")
-          
+
           if echo "$WWW_RESPONSE" | grep -q '"success":true'; then
             echo "✅ WWW DNS updated"
           else
             echo "❌ WWW DNS update failed"
             exit 1
           fi
-          
+
           echo "🎯 Production traffic switched to $TARGET"
           echo "⏰ DNS propagation: 1-2 minutes"
 
@@ -397,11 +397,11 @@ jobs:
         run: |
           echo "⏳ Waiting for DNS propagation..."
           sleep 60
-          
+
           RESOLVED_IP=$(dig +short api.advancia.com | tail -n1)
           echo "Resolved IP: $RESOLVED_IP"
           echo "Expected IP: ${{ needs.determine-target.outputs.target_ip }}"
-          
+
           if [[ "$RESOLVED_IP" == "${{ needs.determine-target.outputs.target_ip }}" ]]; then
             echo "✅ DNS propagated successfully"
           else
@@ -426,7 +426,7 @@ jobs:
         run: |
           STATUS="${{ job.status }}"
           COLOR=$([[ "$STATUS" == "success" ]] && echo "good" || echo "danger")
-          
+
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
             -H 'Content-Type: application/json' \
             -d '{

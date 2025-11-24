@@ -4,12 +4,8 @@
  * Provides easy-to-use security utilities for React components
  */
 
-import {
-  InputSecurity,
-  TokenManager,
-  initializeSecurity,
-} from "@/lib/security";
-import { useCallback, useEffect, useState } from "react";
+import { InputSecurity, TokenManager, initializeSecurity } from '@/lib/security';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * Hook to initialize security on app mount
@@ -32,12 +28,9 @@ export function useSafeInput() {
     return InputSecurity.sanitizeInput(input);
   }, []);
 
-  const sanitizeHTML = useCallback(
-    (html: string, allowedTags?: string[]): string => {
-      return InputSecurity.sanitizeHTML(html, allowedTags);
-    },
-    []
-  );
+  const sanitizeHTML = useCallback((html: string, allowedTags?: string[]): string => {
+    return InputSecurity.sanitizeHTML(html, allowedTags);
+  }, []);
 
   const sanitizeURL = useCallback((url: string): string | null => {
     return InputSecurity.sanitizeURL(url);
@@ -101,29 +94,26 @@ export function useAuth() {
  * Hook for secure API calls with automatic token injection
  */
 export function useSecureAPI() {
-  const getHeaders = useCallback(
-    (additionalHeaders?: Record<string, string>) => {
-      const token = TokenManager.getToken();
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        ...additionalHeaders,
-      };
+  const getHeaders = useCallback((additionalHeaders?: Record<string, string>) => {
+    const token = TokenManager.getToken();
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      ...additionalHeaders,
+    };
 
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
 
-      return headers;
-    },
-    []
-  );
+    return headers;
+  }, []);
 
   const secureFetch = useCallback(
     async (url: string, options?: RequestInit): Promise<Response> => {
       // Validate URL
       const sanitizedURL = InputSecurity.sanitizeURL(url);
       if (!sanitizedURL) {
-        throw new Error("Invalid URL");
+        throw new Error('Invalid URL');
       }
 
       // Add authorization header
@@ -136,7 +126,7 @@ export function useSecureAPI() {
       });
 
       // Check for token refresh in response
-      const newToken = response.headers.get("X-New-Token");
+      const newToken = response.headers.get('X-New-Token');
       if (newToken) {
         TokenManager.setToken(newToken);
       }
@@ -145,7 +135,7 @@ export function useSecureAPI() {
       if (response.status === 401) {
         TokenManager.clearTokens();
         // Redirect to login or emit event
-        window.dispatchEvent(new CustomEvent("auth:expired"));
+        window.dispatchEvent(new CustomEvent('auth:expired'));
       }
 
       return response;
@@ -167,7 +157,7 @@ export function useSecurityMonitor() {
 
   useEffect(() => {
     const handleAuthExpired = () => {
-      console.warn("Authentication expired");
+      console.warn('Authentication expired');
       // Handle logout or redirect
     };
 
@@ -176,7 +166,7 @@ export function useSecurityMonitor() {
       setViolations((prev) => [
         ...prev,
         {
-          type: "csp",
+          type: 'csp',
           directive: violation.violatedDirective,
           blockedURI: violation.blockedURI,
           timestamp: new Date(),
@@ -184,15 +174,12 @@ export function useSecurityMonitor() {
       ]);
     };
 
-    window.addEventListener("auth:expired", handleAuthExpired);
-    document.addEventListener("securitypolicyviolation", handleCSPViolation);
+    window.addEventListener('auth:expired', handleAuthExpired);
+    document.addEventListener('securitypolicyviolation', handleCSPViolation);
 
     return () => {
-      window.removeEventListener("auth:expired", handleAuthExpired);
-      document.removeEventListener(
-        "securitypolicyviolation",
-        handleCSPViolation
-      );
+      window.removeEventListener('auth:expired', handleAuthExpired);
+      document.removeEventListener('securitypolicyviolation', handleCSPViolation);
     };
   }, []);
 
@@ -203,19 +190,19 @@ export function useSecurityMonitor() {
  * Hook for safe external link handling
  */
 export function useSafeLink() {
-  const openSafeLink = useCallback((url: string, target: string = "_blank") => {
+  const openSafeLink = useCallback((url: string, target: string = '_blank') => {
     const sanitizedURL = InputSecurity.sanitizeURL(url);
 
     if (!sanitizedURL) {
-      console.error("Unsafe URL blocked:", url);
+      console.error('Unsafe URL blocked:', url);
       return;
     }
 
     // Open with noopener noreferrer
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = sanitizedURL;
     link.target = target;
-    link.rel = "noopener noreferrer";
+    link.rel = 'noopener noreferrer';
     link.click();
   }, []);
 
@@ -226,7 +213,7 @@ export function useSafeLink() {
  * Component wrapper for safe HTML rendering
  */
 export function useSafeHTML(html: string, allowedTags?: string[]) {
-  const [safeHTML, setSafeHTML] = useState("");
+  const [safeHTML, setSafeHTML] = useState('');
 
   useEffect(() => {
     const sanitized = InputSecurity.sanitizeHTML(html, allowedTags);

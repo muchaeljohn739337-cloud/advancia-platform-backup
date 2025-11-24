@@ -1,34 +1,30 @@
 // @ts-nocheck
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
-import { useCallback, useEffect, useState } from "react";
+import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useState } from 'react';
 
 // Dynamic import to avoid SSR issues with Recharts
-const LineChart = dynamic(
-  () => import("recharts").then((mod) => mod.LineChart),
-  {
-    ssr: false,
-  }
-);
-const Line = dynamic(() => import("recharts").then((mod) => mod.Line), {
+const LineChart = dynamic(() => import('recharts').then((mod) => mod.LineChart), {
   ssr: false,
 });
-const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), {
+const Line = dynamic(() => import('recharts').then((mod) => mod.Line), {
   ssr: false,
 });
-const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), {
+const XAxis = dynamic(() => import('recharts').then((mod) => mod.XAxis), {
   ssr: false,
 });
-const CartesianGrid = dynamic(
-  () => import("recharts").then((mod) => mod.CartesianGrid),
-  { ssr: false }
-);
-const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), {
+const YAxis = dynamic(() => import('recharts').then((mod) => mod.YAxis), {
+  ssr: false,
+});
+const CartesianGrid = dynamic(() => import('recharts').then((mod) => mod.CartesianGrid), {
+  ssr: false,
+});
+const Tooltip = dynamic(() => import('recharts').then((mod) => mod.Tooltip), {
   ssr: false,
 });
 const ResponsiveContainer = dynamic(
-  () => import("recharts").then((mod) => mod.ResponsiveContainer),
+  () => import('recharts').then((mod) => mod.ResponsiveContainer),
   { ssr: false }
 );
 
@@ -53,21 +49,21 @@ interface SwapPreview {
 }
 
 export default function CryptoChartsPage() {
-  const [activeSymbol, setActiveSymbol] = useState("BTC");
+  const [activeSymbol, setActiveSymbol] = useState('BTC');
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
   const [rates, setRates] = useState<Rates>({});
   const [swapForm, setSwapForm] = useState({
-    fromSymbol: "BTC",
-    toSymbol: "ETH",
-    amount: "",
+    fromSymbol: 'BTC',
+    toSymbol: 'ETH',
+    amount: '',
   });
   const [swapPreview, setSwapPreview] = useState<SwapPreview | null>(null);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("charts");
+  const [activeTab, setActiveTab] = useState('charts');
 
   const fetchSwapPreview = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const params = new URLSearchParams({
         fromSymbol: swapForm.fromSymbol,
         toSymbol: swapForm.toSymbol,
@@ -79,7 +75,7 @@ export default function CryptoChartsPage() {
       const data = await res.json();
       if (data.success) setSwapPreview(data);
     } catch {
-      console.error("Swap preview error");
+      console.error('Swap preview error');
     }
   }, [swapForm]);
 
@@ -96,44 +92,44 @@ export default function CryptoChartsPage() {
 
   const fetchChart = async (symbol: string) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/crypto/chart/${symbol}?days=30`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) setChartData(data.history);
     } catch (error) {
-      console.error("Fetch chart error:", error);
+      console.error('Fetch chart error:', error);
     }
   };
 
   const fetchRates = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/crypto/rates", {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/crypto/rates', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) setRates(data.rates);
     } catch (error) {
-      console.error("Fetch rates error:", error);
+      console.error('Fetch rates error:', error);
     }
   };
 
   const handleSwap = async () => {
     if (!swapForm.amount || parseFloat(swapForm.amount) <= 0) {
-      alert("Enter a valid amount");
+      alert('Enter a valid amount');
       return;
     }
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/crypto/swap", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/crypto/swap', {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           fromSymbol: swapForm.fromSymbol,
@@ -144,19 +140,19 @@ export default function CryptoChartsPage() {
       const data = await res.json();
       alert(data.message || data.error);
       if (data.success) {
-        setSwapForm({ ...swapForm, amount: "" });
+        setSwapForm({ ...swapForm, amount: '' });
         setSwapPreview(null);
       }
     } catch {
-      alert("Swap failed");
+      alert('Swap failed');
     }
     setLoading(false);
   };
 
   const cryptoSymbols = [
-    { symbol: "BTC", name: "Bitcoin", icon: "₿" },
-    { symbol: "ETH", name: "Ethereum", icon: "Ξ" },
-    { symbol: "USDT", name: "Tether", icon: "₮" },
+    { symbol: 'BTC', name: 'Bitcoin', icon: '₿' },
+    { symbol: 'ETH', name: 'Ethereum', icon: 'Ξ' },
+    { symbol: 'USDT', name: 'Tether', icon: '₮' },
   ];
 
   return (
@@ -171,21 +167,21 @@ export default function CryptoChartsPage() {
           <div className="border-b border-gray-200">
             <div className="flex">
               <button
-                onClick={() => setActiveTab("charts")}
+                onClick={() => setActiveTab('charts')}
                 className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-medium ${
-                  activeTab === "charts"
-                    ? "border-b-2 border-purple-500 text-purple-600"
-                    : "text-gray-600 hover:text-gray-900"
+                  activeTab === 'charts'
+                    ? 'border-b-2 border-purple-500 text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 Price Charts
               </button>
               <button
-                onClick={() => setActiveTab("swap")}
+                onClick={() => setActiveTab('swap')}
                 className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-medium ${
-                  activeTab === "swap"
-                    ? "border-b-2 border-purple-500 text-purple-600"
-                    : "text-gray-600 hover:text-gray-900"
+                  activeTab === 'swap'
+                    ? 'border-b-2 border-purple-500 text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 Swap
@@ -195,7 +191,7 @@ export default function CryptoChartsPage() {
 
           <div className="p-4 sm:p-6">
             {/* Charts Tab */}
-            {activeTab === "charts" && (
+            {activeTab === 'charts' && (
               <div className="space-y-6">
                 {/* Symbol Selector */}
                 <div className="flex flex-wrap gap-3">
@@ -205,8 +201,8 @@ export default function CryptoChartsPage() {
                       onClick={() => setActiveSymbol(crypto.symbol)}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
                         activeSymbol === crypto.symbol
-                          ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
                       <span className="text-xl">{crypto.icon}</span>
@@ -217,32 +213,28 @@ export default function CryptoChartsPage() {
 
                 {/* Current Price */}
                 <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl p-6 text-white">
-                  <div className="text-sm opacity-90 mb-1">
-                    {activeSymbol} Current Price
-                  </div>
+                  <div className="text-sm opacity-90 mb-1">{activeSymbol} Current Price</div>
                   <div className="text-4xl font-bold mb-2">
                     $
                     {rates[activeSymbol]?.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    }) || "0.00"}
+                    }) || '0.00'}
                   </div>
                   <div className="text-sm opacity-90">
                     {chartData.length > 0 && (
                       <span
                         className={
-                          ((chartData[chartData.length - 1].price -
-                            chartData[0].price) /
+                          ((chartData[chartData.length - 1].price - chartData[0].price) /
                             chartData[0].price) *
                             100 >=
                           0
-                            ? "text-green-300"
-                            : "text-red-300"
+                            ? 'text-green-300'
+                            : 'text-red-300'
                         }
                       >
                         {(
-                          ((chartData[chartData.length - 1].price -
-                            chartData[0].price) /
+                          ((chartData[chartData.length - 1].price - chartData[0].price) /
                             chartData[0].price) *
                           100
                         ).toFixed(2)}
@@ -254,14 +246,10 @@ export default function CryptoChartsPage() {
 
                 {/* Chart */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">
-                    30-Day Price History
-                  </h3>
+                  <h3 className="text-lg font-semibold mb-4">30-Day Price History</h3>
                   <div className="h-80 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
                     <div className="text-center">
-                      <h4 className="text-lg font-medium text-gray-600">
-                        Chart Coming Soon
-                      </h4>
+                      <h4 className="text-lg font-medium text-gray-600">Chart Coming Soon</h4>
                       <p className="text-sm text-gray-500 mt-2">
                         Price history chart will be available in the next update
                       </p>
@@ -274,39 +262,26 @@ export default function CryptoChartsPage() {
                   {chartData.length > 0 && (
                     <>
                       <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="text-xs text-gray-600 mb-1">
-                          24h High
-                        </div>
+                        <div className="text-xs text-gray-600 mb-1">24h High</div>
                         <div className="text-lg font-bold text-gray-900">
                           ${chartData[chartData.length - 1].high}
                         </div>
                       </div>
                       <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="text-xs text-gray-600 mb-1">
-                          24h Low
-                        </div>
+                        <div className="text-xs text-gray-600 mb-1">24h Low</div>
                         <div className="text-lg font-bold text-gray-900">
                           ${chartData[chartData.length - 1].low}
                         </div>
                       </div>
                       <div className="bg-gray-50 rounded-lg p-4">
-                        <div className="text-xs text-gray-600 mb-1">
-                          24h Volume
-                        </div>
+                        <div className="text-xs text-gray-600 mb-1">24h Volume</div>
                         <div className="text-lg font-bold text-gray-900">
-                          $
-                          {(
-                            (chartData[chartData.length - 1]?.volume ?? 0) /
-                            1000000
-                          ).toFixed(2)}
-                          M
+                          ${((chartData[chartData.length - 1]?.volume ?? 0) / 1000000).toFixed(2)}M
                         </div>
                       </div>
                       <div className="bg-gray-50 rounded-lg p-4">
                         <div className="text-xs text-gray-600 mb-1">Market</div>
-                        <div className="text-lg font-bold text-gray-900">
-                          24/7
-                        </div>
+                        <div className="text-lg font-bold text-gray-900">24/7</div>
                       </div>
                     </>
                   )}
@@ -315,12 +290,10 @@ export default function CryptoChartsPage() {
             )}
 
             {/* Swap Tab */}
-            {activeTab === "swap" && (
+            {activeTab === 'swap' && (
               <div className="space-y-6">
                 <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    Instant Crypto Swap
-                  </h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Instant Crypto Swap</h3>
                   <p className="text-sm text-gray-600 mb-6">
                     Swap your cryptocurrencies instantly with a 0.5% fee
                   </p>
@@ -328,9 +301,7 @@ export default function CryptoChartsPage() {
                   {/* From */}
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        From
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
                       <div className="flex gap-2">
                         <select
                           value={swapForm.fromSymbol}
@@ -351,20 +322,14 @@ export default function CryptoChartsPage() {
                         <input
                           type="number"
                           value={swapForm.amount}
-                          onChange={(e) =>
-                            setSwapForm({ ...swapForm, amount: e.target.value })
-                          }
+                          onChange={(e) => setSwapForm({ ...swapForm, amount: e.target.value })}
                           placeholder="0.00"
                           className="w-32 px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                       </div>
                       {rates[swapForm.fromSymbol] && swapForm.amount && (
                         <div className="text-sm text-gray-600 mt-1">
-                          ≈ $
-                          {(
-                            parseFloat(swapForm.amount) *
-                            rates[swapForm.fromSymbol]
-                          ).toFixed(2)}{" "}
+                          ≈ ${(parseFloat(swapForm.amount) * rates[swapForm.fromSymbol]).toFixed(2)}{' '}
                           USD
                         </div>
                       )}
@@ -391,14 +356,10 @@ export default function CryptoChartsPage() {
 
                     {/* To */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        To
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
                       <select
                         value={swapForm.toSymbol}
-                        onChange={(e) =>
-                          setSwapForm({ ...swapForm, toSymbol: e.target.value })
-                        }
+                        onChange={(e) => setSwapForm({ ...swapForm, toSymbol: e.target.value })}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
                         {cryptoSymbols
@@ -412,17 +373,15 @@ export default function CryptoChartsPage() {
                       {swapPreview && (
                         <div className="mt-2 space-y-1 text-sm">
                           <div className="font-semibold text-purple-600">
-                            You&apos;ll receive:{" "}
-                            {swapPreview.toAmount.toFixed(6)}{" "}
+                            You&apos;ll receive: {swapPreview.toAmount.toFixed(6)}{' '}
                             {swapForm.toSymbol}
                           </div>
                           <div className="text-gray-600">
-                            Rate: 1 {swapForm.fromSymbol} ={" "}
-                            {swapPreview.rate.toFixed(6)} {swapForm.toSymbol}
+                            Rate: 1 {swapForm.fromSymbol} = {swapPreview.rate.toFixed(6)}{' '}
+                            {swapForm.toSymbol}
                           </div>
                           <div className="text-gray-600">
-                            Fee: ${swapPreview.fee.toFixed(2)} (
-                            {swapPreview.feePercent}%)
+                            Fee: ${swapPreview.fee.toFixed(2)} ({swapPreview.feePercent}%)
                           </div>
                         </div>
                       )}
@@ -430,14 +389,10 @@ export default function CryptoChartsPage() {
 
                     <button
                       onClick={handleSwap}
-                      disabled={
-                        loading ||
-                        !swapForm.amount ||
-                        parseFloat(swapForm.amount) <= 0
-                      }
+                      disabled={loading || !swapForm.amount || parseFloat(swapForm.amount) <= 0}
                       className="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 rounded-lg hover:from-purple-600 hover:to-blue-600 transition disabled:opacity-50 font-semibold"
                     >
-                      {loading ? "Processing..." : "Swap Now"}
+                      {loading ? 'Processing...' : 'Swap Now'}
                     </button>
                   </div>
                 </div>

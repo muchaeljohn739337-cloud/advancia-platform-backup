@@ -8,24 +8,22 @@ Automated system to collect, sync, and display Trustpilot reviews on your platfo
 
 ### 1. **Backend Components**
 
-- **`backend/src/jobs/trustpilotCollector.ts`** - Core review collection service
+-   **`backend/src/jobs/trustpilotCollector.ts`** - Core review collection service
+    -   Fetches reviews from Trustpilot API
+    -   Syncs to local database
+    -   Filters for 5-star reviews only (best positive feedback)
+    -   Auto-publishes 5-star reviews
+    -   Provides statistics and analytics
 
-  - Fetches reviews from Trustpilot API
-  - Syncs to local database
-  - Filters for 5-star reviews only (best positive feedback)
-  - Auto-publishes 5-star reviews
-  - Provides statistics and analytics
+-   **`backend/src/routes/trustpilot.ts`** - API endpoints
+    -   `GET /api/trustpilot/reviews` - Public endpoint for published reviews
+    -   `GET /api/trustpilot/stats` - Review statistics (average rating, counts)
+    -   `POST /api/trustpilot/sync` - Manual sync trigger (admin only)
+    -   `GET /api/trustpilot/admin/all` - All reviews (admin only)
+    -   `PATCH /api/trustpilot/admin/:id/publish` - Publish/unpublish review (admin only)
+    -   `DELETE /api/trustpilot/admin/:id` - Delete review (admin only)
 
-- **`backend/src/routes/trustpilot.ts`** - API endpoints
-
-  - `GET /api/trustpilot/reviews` - Public endpoint for published reviews
-  - `GET /api/trustpilot/stats` - Review statistics (average rating, counts)
-  - `POST /api/trustpilot/sync` - Manual sync trigger (admin only)
-  - `GET /api/trustpilot/admin/all` - All reviews (admin only)
-  - `PATCH /api/trustpilot/admin/:id/publish` - Publish/unpublish review (admin only)
-  - `DELETE /api/trustpilot/admin/:id` - Delete review (admin only)
-
-- **Database Model** - `TrustpilotReview` in Prisma schema
+-   **Database Model** - `TrustpilotReview` in Prisma schema
 
   ```prisma
   model TrustpilotReview {
@@ -43,52 +41,49 @@ Automated system to collect, sync, and display Trustpilot reviews on your platfo
   }
   ```
 
-- **Automated Scheduling** - Integrated with RPA Scheduler
-  - Runs every 6 hours automatically
-  - Can be manually triggered via API
-  - Logs all sync activities to audit trail
+-   **Automated Scheduling** - Integrated with RPA Scheduler
+    -   Runs every 6 hours automatically
+    -   Can be manually triggered via API
+    -   Logs all sync activities to audit trail
 
 ### 2. **Frontend Components**
 
-- **`frontend/src/components/TrustpilotWidget.tsx`** - Basic Trustpilot widget
+-   **`frontend/src/components/TrustpilotWidget.tsx`** - Basic Trustpilot widget
+    -   Simple star rating badge
+    -   Minimal footprint
+    -   Quick integration
 
-  - Simple star rating badge
-  - Minimal footprint
-  - Quick integration
+-   **`frontend/src/components/TrustpilotWidgetEmbedded.tsx`** - Advanced widget with templates
+    -   7 different widget templates (mini, micro, carousel, list, grid, quote, custom)
+    -   Customizable height, width, theme
+    -   Filter by star rating
+    -   Dark/light theme support
+    -   Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c7295cf599d2886b`
 
-- **`frontend/src/components/TrustpilotWidgetEmbedded.tsx`** - Advanced widget with templates
+-   **`frontend/src/components/TrustpilotWidgetShowcase.tsx`** - Widget gallery
+    -   Visual showcase of all templates
+    -   Copy-paste ready examples
+    -   Recommended placements guide
 
-  - 7 different widget templates (mini, micro, carousel, list, grid, quote, custom)
-  - Customizable height, width, theme
-  - Filter by star rating
-  - Dark/light theme support
-  - Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c7295cf599d2886b`
-
-- **`frontend/src/components/TrustpilotWidgetShowcase.tsx`** - Widget gallery
-
-  - Visual showcase of all templates
-  - Copy-paste ready examples
-  - Recommended placements guide
-
-- **`frontend/src/components/TrustpilotReviews.tsx`** - Custom review display
-  - Grid layout of reviews
-  - Star ratings
-  - Verified badge
-  - Responsive design
-  - Loading states
+-   **`frontend/src/components/TrustpilotReviews.tsx`** - Custom review display
+    -   Grid layout of reviews
+    -   Star ratings
+    -   Verified badge
+    -   Responsive design
+    -   Loading states
 
 ### 3. **Configuration**
 
-- Environment variables added to `.env.example`:
+-   Environment variables added to `.env.example`:
 
   ```bash
   TRUSTPILOT_API_KEY=your_trustpilot_api_key
   TRUSTPILOT_BUSINESS_UNIT_ID=your_business_unit_id
   ```
 
-- Dependencies added to `package.json`:
-  - `node-cron` - For scheduling
-  - `@types/node-cron` - TypeScript types
+-   Dependencies added to `package.json`:
+    -   `node-cron` - For scheduling
+    -   `@types/node-cron` - TypeScript types
 
 ## 🚀 Setup Instructions
 
@@ -116,6 +111,7 @@ Automated system to collect, sync, and display Trustpilot reviews on your platfo
    ```
 
 3. Run database migration:
+
    ```bash
    npx prisma migrate dev --name add-trustpilot-reviews
    npx prisma generate
@@ -124,6 +120,7 @@ Automated system to collect, sync, and display Trustpilot reviews on your platfo
 ### Step 3: Configure Frontend
 
 1. Add to `frontend/.env.local`:
+
    ```bash
    NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID=your_business_unit_id_here
    NEXT_PUBLIC_TRUSTPILOT_DOMAIN=advanciapayledger.com
@@ -146,6 +143,7 @@ Automated system to collect, sync, and display Trustpilot reviews on your platfo
    ```
 
 3. **View reviews**:
+
    ```bash
    curl http://localhost:4000/api/trustpilot/reviews
    ```
@@ -201,13 +199,7 @@ export default function HomePage() {
 
       {/* Carousel widget in hero section */}
       <section>
-        <TrustpilotWidgetEmbedded
-          template="carousel"
-          height={350}
-          width="100%"
-          stars="5"
-          theme="dark"
-        />
+        <TrustpilotWidgetEmbedded template="carousel" height={350} width="100%" stars="5" theme="dark" />
       </section>
 
       {/* Quote widget for testimonials */}
@@ -217,12 +209,7 @@ export default function HomePage() {
 
       {/* Use your custom template IDs */}
       <section>
-        <TrustpilotWidgetEmbedded
-          template="custom"
-          customTemplateId="0bff66558872c58ed5b8b7942acc34d9"
-          height={300}
-          width="100%"
-        />
+        <TrustpilotWidgetEmbedded template="custom" customTemplateId="0bff66558872c58ed5b8b7942acc34d9" height={300} width="100%" />
       </section>
     </div>
   );
@@ -291,14 +278,14 @@ curl -X DELETE https://api.advanciapayledger.com/api/trustpilot/admin/:reviewId 
 The system uses the existing RPA scheduler infrastructure:
 
 1. **Automatic Start**: When `RPA_AUTO_START=true` in `.env`
-2. **Schedule**: Every 6 hours (0 _/6 _ \* \*)
+2. **Schedule**: Every 6 hours (0 _/6_ \* \*)
 3. **Process**:
-   - Fetch latest 50 reviews from Trustpilot
-   - Filter for 5-star reviews only
-   - Check for duplicates (by `trustpilotId`)
-   - Insert new reviews or update existing
-   - Auto-publish 5-star reviews
-   - Log activity to audit trail
+   -   Fetch latest 50 reviews from Trustpilot
+   -   Filter for 5-star reviews only
+   -   Check for duplicates (by `trustpilotId`)
+   -   Insert new reviews or update existing
+   -   Auto-publish 5-star reviews
+   -   Log activity to audit trail
 
 ### Manual Trigger
 
@@ -351,11 +338,11 @@ Example response:
 
 ## 🔒 Security
 
-- **API Authentication**: Trustpilot API key stored securely in env vars
-- **Admin Only**: Sync triggers and management require admin role
-- **Rate Limiting**: Respects Trustpilot API rate limits
-- **Audit Trail**: All sync activities logged
-- **Data Validation**: Reviews validated before storage
+-   **API Authentication**: Trustpilot API key stored securely in env vars
+-   **Admin Only**: Sync triggers and management require admin role
+-   **Rate Limiting**: Respects Trustpilot API rate limits
+-   **Audit Trail**: All sync activities logged
+-   **Data Validation**: Reviews validated before storage
 
 ## 🎯 Best Practices
 
@@ -375,9 +362,9 @@ Example response:
 
 ### Sync Frequency
 
-- **Default**: Every 6 hours (good for most businesses)
-- **High Volume**: Every 2 hours if you get many reviews
-- **Low Volume**: Daily if reviews are rare
+-   **Default**: Every 6 hours (good for most businesses)
+-   **High Volume**: Every 2 hours if you get many reviews
+-   **Low Volume**: Daily if reviews are rare
 
 Adjust in `backend/src/rpa/scheduler.ts`:
 
@@ -410,6 +397,7 @@ Adjust in `backend/src/rpa/scheduler.ts`:
    ```
 
 3. **Test API manually**:
+
    ```bash
    curl "https://api.trustpilot.com/v1/business-units/YOUR_BUSINESS_UNIT_ID/reviews" \
      -H "apikey: YOUR_API_KEY"
@@ -428,6 +416,7 @@ Adjust in `backend/src/rpa/scheduler.ts`:
 2. **Check `isPublished` field**: Only published reviews show on frontend
 
 3. **Check frontend API URL**:
+
    ```bash
    echo $NEXT_PUBLIC_API_URL
    ```
@@ -448,8 +437,8 @@ Fetch published reviews.
 
 **Query Parameters:**
 
-- `limit` (optional): Number of reviews (default: 10)
-- `offset` (optional): Pagination offset (default: 0)
+-   `limit` (optional): Number of reviews (default: 10)
+-   `offset` (optional): Pagination offset (default: 0)
 
 **Response:**
 
@@ -523,9 +512,9 @@ Delete a review from database.
 
 ## 📞 Support
 
-- **Trustpilot API Docs**: https://documentation-apidocumentation.trustpilot.com/
-- **Trustpilot Support**: https://support.trustpilot.com/
-- **Internal Issues**: Check backend logs and audit trail
+-   **Trustpilot API Docs**: <https://documentation-apidocumentation.trustpilot.com/>
+-   **Trustpilot Support**: <https://support.trustpilot.com/>
+-   **Internal Issues**: Check backend logs and audit trail
 
 ---
 

@@ -40,7 +40,7 @@ This playbook integrates **Sentry (error tracking)** + **Datadog (metrics)** + *
 
 **Connected Tools**:
 
-- Sentry (error tracking)
+-   Sentry (error tracking)
 
 **What Gets Posted**:
 
@@ -54,15 +54,15 @@ Stack trace: at processPayment (payment.js:45)
 
 **Audience**:
 
-- Backend developers
-- Frontend developers (for API errors)
-- Engineering leads
+-   Backend developers
+-   Frontend developers (for API errors)
+-   Engineering leads
 
 **Notification Settings**:
 
-- Mentions: @backend-team for critical errors
-- Frequency: Real-time for high-priority, batched for low-priority
-- Threads: Enabled for discussion
+-   Mentions: @backend-team for critical errors
+-   Frequency: Real-time for high-priority, batched for low-priority
+-   Threads: Enabled for discussion
 
 ---
 
@@ -72,9 +72,9 @@ Stack trace: at processPayment (payment.js:45)
 
 **Connected Tools**:
 
-- Datadog (metrics & monitoring)
-- PM2 (via webhook)
-- Watchdog (via Slack integration)
+-   Datadog (metrics & monitoring)
+-   PM2 (via webhook)
+-   Watchdog (via Slack integration)
 
 **What Gets Posted**:
 
@@ -88,15 +88,15 @@ CPU: 75%
 
 **Audience**:
 
-- DevOps engineers
-- Backend team leads
-- Site reliability engineers
+-   DevOps engineers
+-   Backend team leads
+-   Site reliability engineers
 
 **Notification Settings**:
 
-- Mentions: @ops-team for infrastructure issues
-- Frequency: Real-time for critical, hourly digest for warnings
-- Threads: Enabled for investigation
+-   Mentions: @ops-team for infrastructure issues
+-   Frequency: Real-time for critical, hourly digest for warnings
+-   Threads: Enabled for investigation
 
 ---
 
@@ -106,9 +106,9 @@ CPU: 75%
 
 **Connected Tools**:
 
-- Sentry (critical errors only)
-- Datadog (critical metrics only)
-- Watchdog (critical health failures)
+-   Sentry (critical errors only)
+-   Datadog (critical metrics only)
+-   Watchdog (critical health failures)
 
 **What Gets Posted**:
 
@@ -123,16 +123,16 @@ Uptime: 95.2% (below SLA)
 
 **Audience**:
 
-- Entire engineering team
-- On-call engineers
-- Engineering managers
+-   Entire engineering team
+-   On-call engineers
+-   Engineering managers
 
 **Notification Settings**:
 
-- Mentions: @channel for critical alerts
-- Frequency: Real-time only (no batching)
-- Threads: Required for all alerts
-- Escalation: PagerDuty if unacknowledged in 5 minutes
+-   Mentions: @channel for critical alerts
+-   Frequency: Real-time only (no batching)
+-   Threads: Required for all alerts
+-   Escalation: PagerDuty if unacknowledged in 5 minutes
 
 ---
 
@@ -336,8 +336,8 @@ Affected: 8 users
 1. **Acknowledge** in Slack thread within 2 minutes
 2. **Open Sentry dashboard** → view stack trace
 3. **Classify severity**:
-   - User-facing? → Priority 1 (hotfix)
-   - Internal only? → Priority 2 (schedule fix)
+   -   User-facing? → Priority 1 (hotfix)
+   -   Internal only? → Priority 2 (schedule fix)
 4. **Check recent deployments** (last 30 min)
 5. **If deployment related** → rollback
 6. **If code bug** → create hotfix PR
@@ -362,24 +362,30 @@ Environment: production
 
 1. **Acknowledge immediately** (< 1 minute)
 2. **Check database status**:
+
    ```bash
    # Connect to DB
    docker ps | grep postgres
    psql -h localhost -U postgres -d advancia
    ```
+
 3. **Verify connection pool settings**:
+
    ```javascript
    // Check backend/src/db.js
    pool: { min: 2, max: 10 }
    ```
+
 4. **Check active connections**:
+
    ```sql
    SELECT count(*) FROM pg_stat_activity;
    ```
+
 5. **Emergency actions**:
-   - If DB down → restart DB container
-   - If pool exhausted → restart backend (PM2)
-   - If DB locked → identify and kill long queries
+   -   If DB down → restart DB container
+   -   If pool exhausted → restart backend (PM2)
+   -   If DB locked → identify and kill long queries
 6. **Roll back recent changes** if deployment-related
 7. **Update #backend-alerts** if escalated
 
@@ -403,12 +409,12 @@ Timeframe: Last 5 minutes
 2. **Post to #backend-alerts** if not already there
 3. **Assign engineer** to investigate root cause
 4. **Update status page** if user-visible downtime:
-   - status.advancia.com → "Investigating payment issues"
+   -   status.advancia.com → "Investigating payment issues"
 5. **Create incident report** in shared doc:
-   - Start time
-   - Affected feature
-   - User impact (number of users)
-   - Actions taken
+   -   Start time
+   -   Affected feature
+   -   User impact (number of users)
+   -   Actions taken
 6. **Communicate ETA** in Slack every 10 minutes
 7. **Post-mortem** after resolution
 
@@ -433,22 +439,26 @@ Memory: 480MB/500MB (near limit)
 
 1. **Acknowledge** within 5 minutes
 2. **Check PM2 logs**:
+
    ```bash
    pm2 logs advancia-backend --lines 100 --err
    ```
+
 3. **Review watchdog logs**:
+
    ```powershell
    .\parse-watchdog.ps1 -ShowDetails
    ```
+
 4. **Identify pattern**:
-   - Memory limit exceeded? → Increase limit or fix leak
-   - Crash loop? → Check recent code changes
-   - Health check failures? → Investigate endpoint
+   -   Memory limit exceeded? → Increase limit or fix leak
+   -   Crash loop? → Check recent code changes
+   -   Health check failures? → Investigate endpoint
 5. **Check Sentry for correlated errors**
 6. **Emergency actions**:
-   - Increase memory limit: `max_memory_restart: "1G"`
-   - Rollback deployment if recent
-   - Disable problematic feature flag
+   -   Increase memory limit: `max_memory_restart: "1G"`
+   -   Rollback deployment if recent
+   -   Disable problematic feature flag
 7. **Monitor for 30 minutes** after action
 
 **Escalation**: If restarts persist >30 minutes → ops lead + engineering lead
@@ -472,14 +482,14 @@ Failed health checks: 12
 1. **Acknowledge immediately**
 2. **Create incident** in tracking system
 3. **Investigate root cause**:
-   - Check infrastructure (server, cloud provider status)
-   - Review error logs (Sentry + PM2)
-   - Check database health
-   - Review recent deployments
+   -   Check infrastructure (server, cloud provider status)
+   -   Review error logs (Sentry + PM2)
+   -   Check database health
+   -   Review recent deployments
 4. **Correlate with Sentry alerts**
 5. **Communicate to stakeholders**:
-   - Internal: #backend-alerts
-   - External: Status page update (if SLA breach)
+   -   Internal: #backend-alerts
+   -   External: Status page update (if SLA breach)
 6. **Document actions taken**
 7. **Schedule post-mortem**
 
@@ -502,21 +512,23 @@ Duration: 12 minutes
 
 1. **Acknowledge** within 10 minutes
 2. **Check current load**:
+
    ```bash
    pm2 monit
    top -p $(pgrep -f "node.*index.js")
    ```
+
 3. **Identify culprit**:
-   - Check active requests (Datadog APM)
-   - Profile memory usage (Node.js heap snapshot)
-   - Check for memory leaks (increasing over time)
+   -   Check active requests (Datadog APM)
+   -   Profile memory usage (Node.js heap snapshot)
+   -   Check for memory leaks (increasing over time)
 4. **Immediate mitigation**:
-   - Scale horizontally (add instance) if high traffic
-   - Restart backend if memory leak suspected
-   - Kill long-running queries if DB-related
+   -   Scale horizontally (add instance) if high traffic
+   -   Restart backend if memory leak suspected
+   -   Kill long-running queries if DB-related
 5. **Schedule optimization**:
-   - If non-urgent → create JIRA ticket
-   - If recurring → prioritize for sprint
+   -   If non-urgent → create JIRA ticket
+   -   If recurring → prioritize for sprint
 6. **Monitor for improvement**
 
 **Escalation**: If resource usage >95% for >30 min → ops lead
@@ -543,11 +555,12 @@ IMMEDIATE ACTION REQUIRED
 
 1. **Immediate team huddle** (war room in Slack thread)
 2. **Assign roles**:
-   - Engineer A: Investigate errors (Sentry)
-   - Engineer B: Investigate system health (Datadog)
-   - Lead: Coordinate + communicate
+   -   Engineer A: Investigate errors (Sentry)
+   -   Engineer B: Investigate system health (Datadog)
+   -   Lead: Coordinate + communicate
 3. **Create incident channel**: `#incident-2025-11-14`
 4. **Status updates every 5 minutes**:
+
    ```
    [12:05] Investigating auth.js error
    [12:10] Identified memory leak in auth middleware
@@ -555,21 +568,22 @@ IMMEDIATE ACTION REQUIRED
    [12:20] Restart completed, monitoring
    [12:25] Error rate declining, uptime recovering
    ```
+
 5. **Communicate to stakeholders**:
-   - Update status page
-   - Notify customer success team
-   - Post to company Slack
+   -   Update status page
+   -   Notify customer success team
+   -   Post to company Slack
 6. **Escalate if unresolved in 30 minutes**:
-   - Page VP Engineering
-   - Consider full rollback
-   - Prepare incident report
+   -   Page VP Engineering
+   -   Consider full rollback
+   -   Prepare incident report
 
 **Post-Incident**:
 
-- Write detailed post-mortem (48 hours)
-- Review alert thresholds
-- Update runbook
-- Implement preventive measures
+-   Write detailed post-mortem (48 hours)
+-   Review alert thresholds
+-   Update runbook
+-   Implement preventive measures
 
 ---
 
@@ -577,31 +591,31 @@ IMMEDIATE ACTION REQUIRED
 
 ### Level 1: Info (💙)
 
-- **Examples**: New error type, minor performance degradation
-- **Response Time**: 24 hours
-- **Audience**: Team channel only
-- **Action**: Log and schedule
+-   **Examples**: New error type, minor performance degradation
+-   **Response Time**: 24 hours
+-   **Audience**: Team channel only
+-   **Action**: Log and schedule
 
 ### Level 2: Warning (⚠️)
 
-- **Examples**: Error rate spike, 1-2 restarts, memory >80%
-- **Response Time**: 1 hour
-- **Audience**: Relevant team channel + mention
-- **Action**: Investigate and monitor
+-   **Examples**: Error rate spike, 1-2 restarts, memory >80%
+-   **Response Time**: 1 hour
+-   **Audience**: Relevant team channel + mention
+-   **Action**: Investigate and monitor
 
 ### Level 3: Error (🔶)
 
-- **Examples**: Multiple restarts, critical error type, CPU >90%
-- **Response Time**: 15 minutes
-- **Audience**: Team channel + ops channel
-- **Action**: Immediate investigation
+-   **Examples**: Multiple restarts, critical error type, CPU >90%
+-   **Response Time**: 15 minutes
+-   **Audience**: Team channel + ops channel
+-   **Action**: Immediate investigation
 
 ### Level 4: Critical (🔴)
 
-- **Examples**: Restart storm, uptime <99%, error spike + restarts
-- **Response Time**: 1 minute
-- **Audience**: All channels + @channel
-- **Action**: War room + escalation
+-   **Examples**: Restart storm, uptime <99%, error spike + restarts
+-   **Response Time**: 1 minute
+-   **Audience**: All channels + @channel
+-   **Action**: War room + escalation
 
 ---
 
@@ -641,10 +655,11 @@ IMMEDIATE ACTION REQUIRED
 2. **Integrations → Slack**
 3. **Authenticate workspace**
 4. **Choose channels**:
-   - `#backend-errors` for all alerts
-   - `#backend-alerts` for critical only
+   -   `#backend-errors` for all alerts
+   -   `#backend-alerts` for critical only
 5. **Configure alert rules** (see above)
 6. **Test with sample error**:
+
    ```javascript
    // In your code
    throw new Error("Test Sentry → Slack integration");
@@ -656,8 +671,8 @@ IMMEDIATE ACTION REQUIRED
 2. **Search "Slack" → Configure**
 3. **Authorize workspace**
 4. **Choose channels**:
-   - `#backend-metrics` for all alerts
-   - `#backend-alerts` for critical only
+   -   `#backend-metrics` for all alerts
+   -   `#backend-alerts` for critical only
 5. **Create monitors** (see alert rules above)
 6. **Test with manual monitor trigger**
 
@@ -678,11 +693,13 @@ Configure in PM2 or run standalone.
 ### Weekly Review (15 minutes)
 
 1. **Check alert frequency**:
+
    ```
    - #backend-errors: How many alerts/day?
    - #backend-metrics: How many alerts/day?
    - #backend-alerts: How many critical/week?
    ```
+
 2. **Identify false positives**: Adjust thresholds
 3. **Review response times**: Are engineers acknowledging quickly?
 4. **Update runbooks**: Add new scenarios encountered
@@ -690,9 +707,9 @@ Configure in PM2 or run standalone.
 ### Monthly Review (30 minutes)
 
 1. **Analyze alert trends**:
-   - Increasing error rates? → Code quality issue
-   - Increasing restarts? → Infrastructure issue
-   - Decreasing alerts? → Improvements working
+   -   Increasing error rates? → Code quality issue
+   -   Increasing restarts? → Infrastructure issue
+   -   Decreasing alerts? → Improvements working
 2. **Review escalation paths**: Were they effective?
 3. **Update alert rules**: Based on lessons learned
 4. **Celebrate improvements**: Share wins with team
@@ -743,21 +760,21 @@ pm2 monit
 
 **What This Playbook Provides**:
 
-- ✅ Three-channel Slack workflow (errors, metrics, critical)
-- ✅ Detailed alert rules for Sentry + Datadog
-- ✅ Step-by-step response procedures
-- ✅ Escalation paths for each scenario
-- ✅ Best practices for alert hygiene
-- ✅ Integration setup guides
-- ✅ Weekly/monthly review process
+-   ✅ Three-channel Slack workflow (errors, metrics, critical)
+-   ✅ Detailed alert rules for Sentry + Datadog
+-   ✅ Step-by-step response procedures
+-   ✅ Escalation paths for each scenario
+-   ✅ Best practices for alert hygiene
+-   ✅ Integration setup guides
+-   ✅ Weekly/monthly review process
 
 **Benefits**:
 
-- Engineers know exactly what to do
-- Alerts are actionable, not noisy
-- Response times are fast and consistent
-- System stays resilient
-- Team learns and improves over time
+-   Engineers know exactly what to do
+-   Alerts are actionable, not noisy
+-   Response times are fast and consistent
+-   System stays resilient
+-   Team learns and improves over time
 
 **Next Steps**:
 

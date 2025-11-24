@@ -38,7 +38,7 @@ Collection → Run → Set:
   └─────────────────────────────────┘
 ```
 
-### 4️⃣ Run!
+### 4️⃣ Run
 
 ```
 Click: [Run Advancia Lockout Runner (Automated)]
@@ -196,14 +196,14 @@ start newman-report.html
 
 ## 📈 Success Criteria Checklist
 
-- [ ] All 6 iterations completed
-- [ ] Attempts 1-4 returned `401`
-- [ ] Attempt 5 returned `429` (lockout triggered)
-- [ ] Attempt 6 returned `429` (lockout persists)
-- [ ] Console shows "Lockout triggered successfully"
-- [ ] Database shows `failed_attempts = 5`
-- [ ] Database shows `locked_until` timestamp set
-- [ ] locked_until is ~15 minutes in future
+-   [ ] All 6 iterations completed
+-   [ ] Attempts 1-4 returned `401`
+-   [ ] Attempt 5 returned `429` (lockout triggered)
+-   [ ] Attempt 6 returned `429` (lockout persists)
+-   [ ] Console shows "Lockout triggered successfully"
+-   [ ] Database shows `failed_attempts = 5`
+-   [ ] Database shows `locked_until` timestamp set
+-   [ ] locked_until is ~15 minutes in future
 
 ---
 
@@ -211,26 +211,26 @@ start newman-report.html
 
 ✅ **DO:**
 
-- Reset before each test run
-- Use 6 iterations (not 5) to confirm persistence
-- Check console output for detailed logs
-- Verify database state after run
+-   Reset before each test run
+-   Use 6 iterations (not 5) to confirm persistence
+-   Check console output for detailed logs
+-   Verify database state after run
 
 ❌ **DON'T:**
 
-- Run multiple times without resetting
-- Use in production environment
-- Ignore 500 errors (indicates backend issues)
-- Forget to verify database changes
+-   Run multiple times without resetting
+-   Use in production environment
+-   Ignore 500 errors (indicates backend issues)
+-   Forget to verify database changes
 
 ---
 
 ## 📚 Full Documentation
 
-- **POSTMAN_RUNNER_GUIDE.md** ← You are here (quick ref)
-- **POSTMAN_TESTING_GUIDE.md** - Complete guide
-- **COMPLETE_TEST_WORKFLOW.md** - Step-by-step
-- **QUICK_TEST_REFERENCE.md** - All commands
+-   **POSTMAN_RUNNER_GUIDE.md** ← You are here (quick ref)
+-   **POSTMAN_TESTING_GUIDE.md** - Complete guide
+-   **COMPLETE_TEST_WORKFLOW.md** - Step-by-step
+-   **QUICK_TEST_REFERENCE.md** - All commands
 
 ---
 

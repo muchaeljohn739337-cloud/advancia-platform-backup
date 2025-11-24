@@ -11,8 +11,9 @@
 **User:** "What's my balance?"  
 **AI Response:**
 
-`	ext
+` ext
 To check your balance:
+
 1. Navigate to your Dashboard
 2. Your balances are displayed at the top:
    - USD Balance (for fiat transactions)
@@ -21,12 +22,12 @@ To check your balance:
    - USDT Balance (Tether stablecoin)
 
 You can also view detailed transaction history in the Transactions section.
-`	ext
+` ext
 
 **User:** "How do I add money to my account?"  
 **AI Response:**
 
-`	ext
+` ext
 To add funds to your Advancia account:
 
 1. CRYPTO DEPOSIT:
@@ -48,23 +49,25 @@ To add funds to your Advancia account:
    - 2.5% processing fee applies
 
 Need help? Contact <support@advanciapayledger.com>
-`	ext
+` ext
 
 ### Transaction Issues
 
 **User:** "My transaction failed"  
 **AI Response:**
 
-`	ext
+` ext
 Let's troubleshoot your failed transaction:
 
 COMMON CAUSES:
+
 1. Insufficient Balance - Check you have enough USD/crypto
 2. Network Issues - Try refreshing and attempting again
 3. Authentication Expired - Re-login to refresh your session
 4. Daily Limit Reached - Check your tier limits
 
 WHAT TO DO:
+
 1. Check your Transaction History for error details
 2. Verify your balance covers the amount + fees
 3. Ensure you're logged in (check top right corner)
@@ -72,13 +75,14 @@ WHAT TO DO:
 
 If issue persists:
 → Create a Support Ticket with:
-   - Transaction ID (if available)
-   - Amount you tried to send
-   - Timestamp of the attempt
-   - Error message screenshot
+
+- Transaction ID (if available)
+- Amount you tried to send
+- Timestamp of the attempt
+- Error message screenshot
 
 Support team typically responds within 24 hours.
-`	ext
+` ext
 
 ---
 
@@ -89,10 +93,11 @@ Support team typically responds within 24 hours.
 **User:** "How do I buy Bitcoin?"  
 **AI Response:**
 
-`	ext
+` ext
 Buying Bitcoin on Advancia is simple:
 
 STEP-BY-STEP:
+
 1. Ensure you have USD balance in your account
 2. Go to Crypto Trading → Buy Bitcoin
 3. Enter amount in USD you want to spend
@@ -109,6 +114,7 @@ FEES:
 • No withdrawal fees for amounts over $100
 
 TIPS:
+
 - Start small to familiarize yourself
 - Monitor market trends in the Market Insights section
 - Set price alerts for your target buy price
@@ -117,15 +123,16 @@ Need more crypto options? We also support:
 • Ethereum (ETH)
 • Tether (USDT)
 • ADVANCIA Token (native platform token)
-`	ext
+` ext
 
 **User:** "Can I withdraw my Bitcoin?"  
 **AI Response:**
 
-`	ext
+` ext
 Yes! Withdraw your Bitcoin easily:
 
 WITHDRAWAL PROCESS:
+
 1. Navigate to Withdrawals → Crypto Withdrawal
 2. Select Bitcoin (BTC) as currency
 3. Enter your external wallet address (IMPORTANT: Double-check!)
@@ -143,6 +150,7 @@ FEES:
 • Platform fee: 0.5% or $5 minimum
 
 PROCESSING TIME:
+
 - Approval: 15-60 minutes
 - Blockchain confirmation: 30-60 minutes (3 confirmations)
 
@@ -152,14 +160,14 @@ SECURITY TIPS:
 ⚠️ Never share your wallet private keys
 
 Track your withdrawal in Real-Time under Withdrawals → Status
-`	ext
+` ext
 
 ### Trump Coin Specific
 
 **User:** "What is Trump Coin?"  
 **AI Response:**
 
-`	ext
+` ext
 Trump Coin is a specialized cryptocurrency available on Advancia:
 
 OVERVIEW:
@@ -175,20 +183,21 @@ FEATURES:
 ✓ Cash-out directly to USD
 
 HOW TO GET STARTED:
+
 1. Go to Crypto Trading → Trump Coin
 2. Purchase using your USD balance
 3. View holdings in Your Wallets section
 
 AI ANALYTICS:
 → Get AI-powered insights on your Trump Coin portfolio:
-  Navigate to AI Analytics → Wallet Analysis
+Navigate to AI Analytics → Wallet Analysis
 
 ⚠️ RISK NOTICE:
 Cryptocurrency trading involves risk. Trump Coin is highly volatile.
 Only invest what you can afford to lose. Past performance ≠ future results.
 
 Current market data available in Market Insights section.
-`	ext
+` ext
 
 ---
 
@@ -199,7 +208,7 @@ Current market data available in Market Insights section.
 **User:** "What are Med Beds?"  
 **AI Response:**
 
-`	ext
+` ext
 Med Beds are Advancia's advanced wellness technology chambers:
 
 🛏️ CHAMBER TYPES:
@@ -236,15 +245,16 @@ BOOKING:
 → Receive confirmation email
 
 View your booking history and health data in the Med Beds Dashboard.
-`	ext
+` ext
 
 **User:** "How do I book a Med Bed session?"  
 **AI Response:**
 
-`	ext
+` ext
 Booking your Med Bed session is easy:
 
 STEP-BY-STEP BOOKING:
+
 1. Navigate to Med Beds → Book Session
 2. SELECT CHAMBER TYPE:
    □ Standard ($50)
@@ -283,7 +293,7 @@ CANCELLATION POLICY:
 • No refund within 24 hours
 
 Questions? Contact <med-beds@advanciapayledger.com>
-`	ext
+` ext
 
 ---
 
@@ -292,7 +302,7 @@ Questions? Contact <med-beds@advanciapayledger.com>
 **User:** "How do I get a debit card?"  
 **AI Response:**
 
-`	ext
+` ext
 Get your Advancia Virtual Debit Card instantly:
 
 💳 CARD DETAILS:
@@ -311,6 +321,7 @@ FEATURES:
 ✓ Virtual card number (no physical card)
 
 HOW TO PURCHASE:
+
 1. Go to Debit Card → Purchase Card
 2. Ensure $1,000 USD in your balance
 3. Review terms and conditions
@@ -318,6 +329,7 @@ HOW TO PURCHASE:
 5. Card issued instantly!
 
 CARD DETAILS DISPLAYED:
+
 - 16-digit card number
 - Expiration date
 - CVV security code
@@ -338,7 +350,7 @@ Your card balance = Your USD balance
 Add funds to USD balance to increase card spending power
 
 Manage your card in Debit Card → My Cards section
-`	ext
+` ext
 
 ---
 
@@ -347,7 +359,7 @@ Manage your card in Debit Card → My Cards section
 **User:** "Can I get a loan?"  
 **AI Response:**
 
-`	ext
+` ext
 Yes! Advancia offers Personal Loans:
 
 💰 LOAN DETAILS:
@@ -370,6 +382,7 @@ TIER-BASED RATES:
 • Platinum: 8-15% APR
 
 APPLICATION PROCESS:
+
 1. Go to Personal Loans → Apply Now
 2. Select loan amount and term
 3. Review your estimated rate
@@ -391,7 +404,7 @@ VIEW ELIGIBILITY:
 → Get personalized loan recommendation
 
 Need help? Loan specialists available via Support Chat.
-`	ext
+` ext
 
 ---
 
@@ -400,7 +413,7 @@ Need help? Loan specialists available via Support Chat.
 **User:** "How do I earn rewards?"  
 **AI Response:**
 
-`	ext
+` ext
 Earn rewards on Advancia automatically:
 
 🎁 REWARD EARNING:
@@ -447,7 +460,7 @@ TIER PROGRESSION:
 • Platinum ($50,000 total volume): +100% rewards
 
 View your tier progress: Profile → Tier Status
-`	ext
+` ext
 
 ---
 
@@ -458,28 +471,30 @@ View your tier progress: Profile → Tier Status
 **User:** "How do I enable 2FA?"  
 **AI Response:**
 
-`	ext
+` ext
 Secure your account with Two-Factor Authentication:
 
 SETUP PROCESS:
+
 1. Go to Settings → Security
 2. Click "Enable 2FA"
 3. CHOOSE METHOD:
 
    A) TOTP AUTHENTICATOR APP (Recommended):
-      - Download Google Authenticator or Authy
-      - Scan QR code shown on screen
-      - Enter 6-digit code to verify
-      - Save backup codes (IMPORTANT!)
+   - Download Google Authenticator or Authy
+   - Scan QR code shown on screen
+   - Enter 6-digit code to verify
+   - Save backup codes (IMPORTANT!)
 
    B) EMAIL OTP:
-      - Enter your email
-      - Receive 6-digit code
-      - Verify code
-      - 2FA active on next login
+   - Enter your email
+   - Receive 6-digit code
+   - Verify code
+   - 2FA active on next login
 
 BACKUP CODES:
 ⚠️ CRITICAL: Save your 8 backup codes
+
 - Use if you lose your phone
 - Each code works once
 - Store securely offline
@@ -487,17 +502,19 @@ BACKUP CODES:
 USING 2FA:
 • Enter code after password at login
 • Required for sensitive actions:
-  - Withdrawals
-  - Card viewing
-  - Account settings changes
-  - Large transactions
+
+- Withdrawals
+- Card viewing
+- Account settings changes
+- Large transactions
 
 LOST ACCESS?
 → Use backup codes
 → Contact <support@advanciapayledger.com> with:
-  - Account email
-  - Photo ID
-  - Recent transaction details
+
+- Account email
+- Photo ID
+- Recent transaction details
 
 BENEFITS:
 ✓ 99.9% protection against unauthorized access
@@ -506,17 +523,18 @@ BENEFITS:
 ✓ Peace of mind
 
 Enable 2FA now for maximum security!
-`	ext
+` ext
 
 ### Password Reset
 
 **User:** "I forgot my password"  
 **AI Response:**
 
-`	ext
+` ext
 Reset your Advancia password easily:
 
 STEP-BY-STEP RESET:
+
 1. Go to Login Page
 2. Click "Forgot Password?"
 3. Enter your registered email
@@ -538,13 +556,14 @@ EMAIL NOT RECEIVED?
 
 STILL CAN'T ACCESS?
 → Contact Account Recovery:
-   Email: <support@advanciapayledger.com>
-   Subject: "Password Reset Assistance"
-   Include:
-   - Registered email
-   - Username (if known)
-   - Account creation date (approximate)
-   - Recent transaction details (for verification)
+Email: <support@advanciapayledger.com>
+Subject: "Password Reset Assistance"
+Include:
+
+- Registered email
+- Username (if known)
+- Account creation date (approximate)
+- Recent transaction details (for verification)
 
 Response time: Within 4 hours during business hours
 
@@ -555,7 +574,7 @@ PASSWORD TIPS:
 🔒 Enable 2FA for extra security
 
 Your account security is our priority!
-`	ext
+` ext
 
 ---
 
@@ -566,18 +585,18 @@ Your account security is our priority!
 **User:** "How do I contact support?"  
 **AI Response:**
 
-`	ext
+` ext
 Multiple ways to get help on Advancia:
 
 1. SUPPORT TICKET SYSTEM (Best for complex issues):
    → Go to Support → Create Ticket
    → Select category:
-      • Account Issues
-      • Transaction Problems
-      • Crypto/Trading Questions
-      • Med Beds Support
-      • Technical Issues
-      • Billing Questions
+   • Account Issues
+   • Transaction Problems
+   • Crypto/Trading Questions
+   • Med Beds Support
+   • Technical Issues
+   • Billing Questions
    → Describe your issue in detail
    → Attach screenshots if helpful
    → Response within 24 hours
@@ -622,7 +641,7 @@ AVERAGE RESPONSE TIMES:
 • Low (feature requests): 24-48 hours
 
 We're here to help! 🎧
-`	ext
+` ext
 
 ---
 
@@ -631,7 +650,7 @@ We're here to help! 🎧
 **User:** "What can AI Analytics tell me?"  
 **AI Response:**
 
-`	ext
+` ext
 Advancia's AI Analytics provides powerful insights:
 
 🤖 AVAILABLE ANALYTICS:
@@ -693,7 +712,7 @@ BENEFITS:
 ✓ Personalized financial guidance
 
 Try it now: Dashboard → AI Analytics section
-`	ext
+` ext
 
 ---
 
@@ -702,7 +721,7 @@ Try it now: Dashboard → AI Analytics section
 **User:** "Do you have an API?"  
 **AI Response:**
 
-`	ext
+` ext
 Yes! Advancia offers a comprehensive REST API:
 
 📡 API DETAILS:
@@ -738,6 +757,7 @@ POST /api/support
 GET /api/support/tickets
 
 AUTHENTICATION:
+
 1. Login to get JWT token
 2. Include in header:
    Authorization: Bearer {your_token}
@@ -770,7 +790,7 @@ COMING SOON:
 • npm package for Node.js
 
 Start building: Get your API key in Settings → Developer
-`	ext
+` ext
 
 ---
 
@@ -781,10 +801,11 @@ Start building: Get your API key in Settings → Developer
 **Error:** "Access token required"  
 **Solution:**
 
-`	ext
+` ext
 This means you need to log in.
 
 FIX:
+
 1. Go to Login page
 2. Enter your credentials
 3. Complete 2FA if enabled
@@ -794,15 +815,16 @@ If already logged in:
 → Your session may have expired
 → Refresh the page and log in again
 → Sessions last 7 days of inactivity
-`	ext
+` ext
 
 **Error:** "Invalid or expired token"  
 **Solution:**
 
-`	ext
+` ext
 Your login session has ended.
 
 FIX:
+
 1. Click "Logout" (if visible)
 2. Log in again
 3. Your data will be preserved
@@ -811,17 +833,18 @@ PREVENTION:
 • Don't share login links
 • Log out on shared computers
 • Enable "Remember Me" for personal devices
-`	ext
+` ext
 
 ### Transaction Errors
 
 **Error:** "Insufficient balance"  
 **Solution:**
 
-`	ext
+` ext
 You don't have enough funds for this action.
 
 CHECK:
+
 1. View your balance in Dashboard
 2. Verify the required amount
 3. Remember transaction fees are added
@@ -833,17 +856,18 @@ SOLUTIONS:
 • Wait for pending deposits to clear
 
 Need funds quickly? Use instant card deposit.
-`	ext
+` ext
 
 ### API Errors
 
 **Error:** "Route not found" (404)  
 **Solution:**
 
-`	ext
+` ext
 The API endpoint doesn't exist or URL is misspelled.
 
 CHECK:
+
 1. Verify endpoint path in documentation
 2. Ensure correct HTTP method (GET/POST/PUT/DELETE)
 3. Check for typos in URL
@@ -853,7 +877,7 @@ Example correct format:
 ✓ /api/transactions
 ✗ /api/transaction (missing 's')
 ✗ /transactions (missing 'api/')
-`	ext
+` ext
 
 ---
 
@@ -864,7 +888,7 @@ Example correct format:
 **User:** "Are there withdrawal limits?"  
 **AI Response:**
 
-`	ext
+` ext
 Yes, limits vary by tier and verification status:
 
 DAILY WITHDRAWAL LIMITS:
@@ -901,13 +925,14 @@ MAXIMUM (per transaction):
 • Contact VIP support for higher limits
 
 INCREASE YOUR LIMITS:
+
 1. Upgrade tier (increase trading volume)
 2. Complete advanced KYC
 3. Maintain good account standing
 4. Request limit increase via support
 
 View your current limits: Settings → Account Limits
-`	ext
+` ext
 
 ---
 

@@ -11,11 +11,11 @@
 
 This guide integrates the comprehensive security testing framework with proxy rotation capabilities for professional penetration testing. By combining automated security scans with residential proxies, you can:
 
-- ✅ Avoid IP blocking during vulnerability scans
-- ✅ Test from multiple geolocations
-- ✅ Simulate distributed attacks (rate limiting, DDoS protection)
-- ✅ Maintain anonymity during red team operations
-- ✅ Comply with security testing best practices
+-   ✅ Avoid IP blocking during vulnerability scans
+-   ✅ Test from multiple geolocations
+-   ✅ Simulate distributed attacks (rate limiting, DDoS protection)
+-   ✅ Maintain anonymity during red team operations
+-   ✅ Comply with security testing best practices
 
 ---
 
@@ -548,64 +548,56 @@ foreach ($loc in $locations) {
 ### DO ✅
 
 1. **Use residential proxies for external testing**
-
-   - More realistic (ISP IPs, not datacenter)
-   - Less likely to be blocked
-   - Better for testing geo-restrictions
+   -   More realistic (ISP IPs, not datacenter)
+   -   Less likely to be blocked
+   -   Better for testing geo-restrictions
 
 2. **Rotate IPs during intensive scans**
-
-   - Prevents IP-based rate limiting
-   - Avoids WAF blacklisting
-   - Simulates distributed attacks
+   -   Prevents IP-based rate limiting
+   -   Avoids WAF blacklisting
+   -   Simulates distributed attacks
 
 3. **Document all testing**
-
-   - Save reports with timestamps
-   - Include proxy details in logs
-   - Track IP addresses used
+   -   Save reports with timestamps
+   -   Include proxy details in logs
+   -   Track IP addresses used
 
 4. **Get authorization before testing**
-
-   - Written permission from client
-   - Scope agreement (target URLs, timeframes)
-   - Rules of engagement
+   -   Written permission from client
+   -   Scope agreement (target URLs, timeframes)
+   -   Rules of engagement
 
 5. **Test from multiple geolocations**
-   - Validates CDN configurations
-   - Tests geo-blocking rules
-   - Compliance with regional regulations
+   -   Validates CDN configurations
+   -   Tests geo-blocking rules
+   -   Compliance with regional regulations
 
 ### DON'T ❌
 
 1. **Don't use proxies for internal testing**
-
-   - Unnecessary overhead
-   - May mask legitimate issues
-   - Complicates debugging
+   -   Unnecessary overhead
+   -   May mask legitimate issues
+   -   Complicates debugging
 
 2. **Don't rotate IPs too frequently**
-
-   - Expensive (bandwidth usage)
-   - May trigger alerts
-   - Difficult to track findings
+   -   Expensive (bandwidth usage)
+   -   May trigger alerts
+   -   Difficult to track findings
 
 3. **Don't bypass security without reason**
-
-   - Proxies shouldn't be used to evade detection unethically
-   - Testing should be authorized
-   - Document all bypass techniques
+   -   Proxies shouldn't be used to evade detection unethically
+   -   Testing should be authorized
+   -   Document all bypass techniques
 
 4. **Don't store credentials in proxy configs**
-
-   - Use environment variables
-   - Rotate proxy passwords regularly
-   - Never commit .env files
+   -   Use environment variables
+   -   Rotate proxy passwords regularly
+   -   Never commit .env files
 
 5. **Don't test production without approval**
-   - Use staging/test environments when possible
-   - Production testing requires explicit authorization
-   - Schedule during maintenance windows
+   -   Use staging/test environments when possible
+   -   Production testing requires explicit authorization
+   -   Schedule during maintenance windows
 
 ---
 
@@ -613,25 +605,25 @@ foreach ($loc in $locations) {
 
 ### Free Options (Development)
 
-- **Docker SOCKS5**: $0/month
-- **SSH Tunnel**: $0/month (if you have VPS)
-- **Tor Network**: $0/month (slow, limited use)
+-   **Docker SOCKS5**: $0/month
+-   **SSH Tunnel**: $0/month (if you have VPS)
+-   **Tor Network**: $0/month (slow, limited use)
 
 **Total**: $0/month
 
 ### Budget Option (Small Teams)
 
-- **IPRoyal Residential**: $14/month (1GB)
-- **Staging environment testing**: Mostly free proxies
-- **Production testing**: Residential proxy
+-   **IPRoyal Residential**: $14/month (1GB)
+-   **Staging environment testing**: Mostly free proxies
+-   **Production testing**: Residential proxy
 
 **Total**: ~$14-50/month
 
 ### Professional Option (Security Firms)
 
-- **Smartproxy**: $75/month (8GB, rotating)
-- **Bright Data**: $500/month (unlimited, premium support)
-- **Multiple locations**: Geo-targeting included
+-   **Smartproxy**: $75/month (8GB, rotating)
+-   **Bright Data**: $500/month (unlimited, premium support)
+-   **Multiple locations**: Geo-targeting included
 
 **Total**: $75-500/month
 
@@ -683,8 +675,8 @@ docker restart socks5-proxy
 
 ### For Security Engineers
 
-1. **OWASP Testing Guide**: https://owasp.org/www-project-web-security-testing-guide/
-2. **Burp Suite Academy**: https://portswigger.net/web-security
+1. **OWASP Testing Guide**: <https://owasp.org/www-project-web-security-testing-guide/>
+2. **Burp Suite Academy**: <https://portswigger.net/web-security>
 3. **HackTheBox**: Practical penetration testing labs
 4. **TryHackMe**: Security testing scenarios
 
@@ -698,16 +690,16 @@ docker restart socks5-proxy
 
 ## ✅ Implementation Checklist
 
-- [x] Proxy system deployed (Docker SOCKS5 or residential)
-- [x] Security testing scripts created (8 files, 3,700+ lines)
-- [x] Proxy integration documented
-- [ ] Security team trained on tools and proxy usage
-- [ ] Authorization obtained for penetration testing
-- [ ] Staging environment configured for testing
-- [ ] Production testing scheduled (off-peak hours)
-- [ ] Reporting template created for findings
-- [ ] Remediation workflow established
-- [ ] Re-testing schedule defined (quarterly)
+-   [x] Proxy system deployed (Docker SOCKS5 or residential)
+-   [x] Security testing scripts created (8 files, 3,700+ lines)
+-   [x] Proxy integration documented
+-   [ ] Security team trained on tools and proxy usage
+-   [ ] Authorization obtained for penetration testing
+-   [ ] Staging environment configured for testing
+-   [ ] Production testing scheduled (off-peak hours)
+-   [ ] Reporting template created for findings
+-   [ ] Remediation workflow established
+-   [ ] Re-testing schedule defined (quarterly)
 
 ---
 
@@ -716,29 +708,26 @@ docker restart socks5-proxy
 This framework provides:
 
 1. ✅ **Automated Security Testing Scripts**
-
-   - `security-test.ps1` (300+ lines)
-   - `api-security-test.ps1` (400+ lines)
-   - `ai-redteam-test.ps1` (500+ lines)
+   -   `security-test.ps1` (300+ lines)
+   -   `api-security-test.ps1` (400+ lines)
+   -   `ai-redteam-test.ps1` (500+ lines)
 
 2. ✅ **Proxy Integration System**
-
-   - `proxyClient.ts` (200+ lines TypeScript)
-   - `setup-proxy.ps1` (200+ lines)
-   - `test-proxy.ps1` (300+ lines)
+   -   `proxyClient.ts` (200+ lines TypeScript)
+   -   `setup-proxy.ps1` (200+ lines)
+   -   `test-proxy.ps1` (300+ lines)
 
 3. ✅ **Comprehensive Documentation**
-
-   - Security Testing Framework (600+ lines)
-   - Proxy Configuration Guide (1,500+ lines)
-   - Integration Examples (520+ lines)
-   - This guide (400+ lines)
+   -   Security Testing Framework (600+ lines)
+   -   Proxy Configuration Guide (1,500+ lines)
+   -   Integration Examples (520+ lines)
+   -   This guide (400+ lines)
 
 4. ✅ **Industry Compliance**
-   - OWASP Top 10 coverage
-   - PCI DSS requirements mapped
-   - NIST guidelines alignment
-   - ISO 27001 security controls
+   -   OWASP Top 10 coverage
+   -   PCI DSS requirements mapped
+   -   NIST guidelines alignment
+   -   ISO 27001 security controls
 
 **Total Deliverables**: 11 files, 5,000+ lines of code and documentation
 
@@ -748,11 +737,11 @@ This framework provides:
 
 This integrated framework combines:
 
-- ✅ Professional security testing tools
-- ✅ Proxy rotation for anonymized scanning
-- ✅ Industry standard compliance (OWASP, PCI DSS, NIST)
-- ✅ Production-ready automation
-- ✅ Comprehensive documentation
+-   ✅ Professional security testing tools
+-   ✅ Proxy rotation for anonymized scanning
+-   ✅ Industry standard compliance (OWASP, PCI DSS, NIST)
+-   ✅ Production-ready automation
+-   ✅ Comprehensive documentation
 
 **Status**: Ready for implementation by specialized security engineering team!
 

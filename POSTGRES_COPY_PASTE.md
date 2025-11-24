@@ -77,31 +77,31 @@ Tests:       130+ passed, 136 total
 
 ## Connection Details
 
-- **Host**: 157.245.8.131
-- **Port**: 5432
-- **Database**: advancia_payledger_test
-- **Username**: test_user
-- **Password**: test_password_123
+-   **Host**: 157.245.8.131
+-   **Port**: 5432
+-   **Database**: advancia_payledger_test
+-   **Username**: test_user
+-   **Password**: test_password_123
 
 ---
 
 ## If Something Goes Wrong
 
-### Test connection from Windows:
+### Test connection from Windows
 
 ```powershell
 psql -h 157.245.8.131 -U test_user -d advancia_payledger_test -W
 # Password: test_password_123
 ```
 
-### Check status on droplet:
+### Check status on droplet
 
 ```bash
 sudo systemctl status postgresql
 sudo ss -tlnp | grep postgres
 ```
 
-### Reset everything on droplet:
+### Reset everything on droplet
 
 ```bash
 sudo systemctl stop postgresql

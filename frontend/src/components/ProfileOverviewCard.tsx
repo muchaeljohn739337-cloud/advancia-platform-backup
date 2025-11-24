@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useState } from "react";
-import Image from "next/image";
-import { Bell, CalendarDays, Eye, EyeOff, MessageCircle, Sparkles, Wallet } from "lucide-react";
+import { useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
+import { Bell, CalendarDays, Eye, EyeOff, MessageCircle, Sparkles, Wallet } from 'lucide-react';
 
 interface ProfileOverviewCardProps {
   name?: string;
@@ -21,18 +21,18 @@ interface ProfileOverviewCardProps {
 // Formats an account number into groups while masking the sensitive section.
 function maskAccountNumber(accountNumber?: string, fallbackSeed?: string) {
   if (accountNumber) {
-    const digits = accountNumber.replace(/[^0-9]/g, "").padStart(8, "0");
+    const digits = accountNumber.replace(/[^0-9]/g, '').padStart(8, '0');
     return `${digits.slice(0, 4)} •••• •••• ${digits.slice(-4)}`;
   }
 
   if (!fallbackSeed) {
-    return "3886 •••• •••• 2042";
+    return '3886 •••• •••• 2042';
   }
 
   const seedDigits = Array.from(fallbackSeed)
     .map((char) => char.charCodeAt(0) % 10)
-    .join("");
-  const padded = seedDigits.padEnd(8, "7");
+    .join('');
+  const padded = seedDigits.padEnd(8, '7');
   return `${padded.slice(0, 4)} •••• •••• ${padded.slice(4, 8)}`;
 }
 
@@ -59,17 +59,17 @@ export default function ProfileOverviewCard({
 
   const greeting = useMemo(() => {
     const hour = now.getHours();
-    if (hour < 12) return "Good Morning";
-    if (hour < 18) return "Good Afternoon";
-    return "Good Evening";
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
   }, [now]);
 
   const formattedTime = useMemo(
     () =>
       now.toLocaleTimeString(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
       }),
     [now]
   );
@@ -77,22 +77,22 @@ export default function ProfileOverviewCard({
   const formattedDate = useMemo(
     () =>
       new Intl.DateTimeFormat(undefined, {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
       }).format(now),
     [now]
   );
 
   const displayBalance = useMemo(() => {
     if (!showBalance) {
-      return "••••••";
+      return '••••••';
     }
 
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
       minimumFractionDigits: 2,
     }).format(balance);
   }, [balance, showBalance]);
@@ -104,12 +104,15 @@ export default function ProfileOverviewCard({
 
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white shadow-2xl">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.2),_transparent_50%)]" aria-hidden />
+      <div
+        className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.2),_transparent_50%)]"
+        aria-hidden
+      />
       <div className="relative z-10 p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-wider text-blue-100">{greeting}</p>
-            <h2 className="mt-1 text-2xl font-semibold">{name || "Advancia User"}</h2>
+            <h2 className="mt-1 text-2xl font-semibold">{name || 'Advancia User'}</h2>
             {email && <p className="text-sm text-blue-100">{email}</p>}
           </div>
           <div className="flex flex-col items-end gap-3 text-right">
@@ -121,7 +124,7 @@ export default function ProfileOverviewCard({
                     onNotificationClick();
                     return;
                   }
-                  alert("No new notifications yet.");
+                  alert('No new notifications yet.');
                 }}
                 className="relative rounded-full bg-white/15 p-2 text-white transition hover:bg-white/30"
                 aria-label="View notifications"
@@ -136,10 +139,10 @@ export default function ProfileOverviewCard({
                     onSupportClick();
                     return;
                   }
-                  if (typeof window !== "undefined" && window.smartsupp) {
-                    window.smartsupp("chat:open");
+                  if (typeof window !== 'undefined' && window.smartsupp) {
+                    window.smartsupp('chat:open');
                   } else {
-                    alert("Live support is getting ready. Please try again shortly.");
+                    alert('Live support is getting ready. Please try again shortly.');
                   }
                 }}
                 className="rounded-full bg-white/15 p-2 text-white transition hover:bg-white/30"
@@ -160,14 +163,14 @@ export default function ProfileOverviewCard({
             {profileImage ? (
               <Image
                 src={profileImage}
-                alt={`${name || "User"} profile`}
+                alt={`${name || 'User'} profile`}
                 width={64}
                 height={64}
                 className="h-16 w-16 rounded-full object-cover ring-4 ring-white/20"
               />
             ) : (
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-lg font-semibold">
-                {initials || "AU"}
+                {initials || 'AU'}
               </div>
             )}
             <div>
@@ -178,7 +181,7 @@ export default function ProfileOverviewCard({
                   type="button"
                   onClick={() => setShowBalance((prev) => !prev)}
                   className="rounded-full bg-white/10 p-2 transition hover:bg-white/20"
-                  aria-label={showBalance ? "Hide balance" : "Show balance"}
+                  aria-label={showBalance ? 'Hide balance' : 'Show balance'}
                 >
                   {showBalance ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -207,7 +210,7 @@ export default function ProfileOverviewCard({
               disabled={topUpLoading}
               className="flex items-center justify-center gap-2 rounded-xl border border-white/70 px-6 py-2 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <CalendarDays className="h-4 w-4" /> {topUpLoading ? "Opening checkout…" : "Top up"}
+              <CalendarDays className="h-4 w-4" /> {topUpLoading ? 'Opening checkout…' : 'Top up'}
             </button>
           </div>
         </div>

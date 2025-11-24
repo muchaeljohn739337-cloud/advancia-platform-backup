@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Mail, CheckCircle, ArrowLeft, Loader } from "lucide-react";
-import Link from "next/link";
+import { useState } from 'react';
+import { Mail, CheckCircle, ArrowLeft, Loader } from 'lucide-react';
+import Link from 'next/link';
 
 export default function EmailSignupPage() {
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await fetch("/api/auth/email-signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/auth/email-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, firstName, lastName }),
       });
 
@@ -29,10 +29,10 @@ export default function EmailSignupPage() {
       if (data.success) {
         setSuccess(true);
       } else {
-        setError(data.error || "Signup failed");
+        setError(data.error || 'Signup failed');
       }
     } catch {
-      setError("Network error. Please try again.");
+      setError('Network error. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -80,9 +80,7 @@ export default function EmailSignupPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    First Name
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
                   <input
                     type="text"
                     value={firstName}
@@ -93,9 +91,7 @@ export default function EmailSignupPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Last Name
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
                   <input
                     type="text"
                     value={lastName}
@@ -133,9 +129,7 @@ export default function EmailSignupPage() {
 
             <div className="mt-6 space-y-3">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800 font-medium mb-2">
-                  🔐 How it works:
-                </p>
+                <p className="text-sm text-blue-800 font-medium mb-2">🔐 How it works:</p>
                 <ol className="text-xs text-blue-700 space-y-1 list-decimal list-inside">
                   <li>Enter your email above</li>
                   <li>We send you a magic link</li>
@@ -147,7 +141,7 @@ export default function EmailSignupPage() {
 
               <div className="text-center">
                 <p className="text-sm text-gray-600">
-                  Already have an account?{" "}
+                  Already have an account?{' '}
                   <Link
                     href="/auth/login"
                     className="text-blue-600 hover:text-blue-800 font-medium"
@@ -163,19 +157,17 @@ export default function EmailSignupPage() {
             <div className="bg-gradient-to-br from-green-400 to-emerald-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
               <CheckCircle size={48} className="text-white" />
             </div>
-            
+
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
               ✅ Check Your Email!
             </h2>
-            
+
             <p className="text-gray-600 mb-6 text-sm sm:text-base">
               We&apos;ve sent a magic link to <strong className="text-blue-600">{email}</strong>
             </p>
 
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-blue-500 p-5 rounded-lg mb-6 text-left">
-              <p className="font-medium text-gray-800 mb-3 text-sm sm:text-base">
-                📧 Next Steps:
-              </p>
+              <p className="font-medium text-gray-800 mb-3 text-sm sm:text-base">📧 Next Steps:</p>
               <ul className="space-y-2 text-xs sm:text-sm text-gray-700">
                 <li className="flex items-start">
                   <span className="text-blue-600 font-bold mr-2">1.</span>
@@ -206,19 +198,19 @@ export default function EmailSignupPage() {
               onClick={async () => {
                 setLoading(true);
                 try {
-                  const res = await fetch("/api/auth/resend-magic-link", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                  const res = await fetch('/api/auth/resend-magic-link', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email }),
                   });
                   const data = await res.json();
                   if (data.success) {
-                    alert("✅ New magic link sent!");
+                    alert('✅ New magic link sent!');
                   } else {
-                    alert("❌ " + data.error);
+                    alert('❌ ' + data.error);
                   }
                 } catch {
-                  alert("Failed to resend link");
+                  alert('Failed to resend link');
                 } finally {
                   setLoading(false);
                 }

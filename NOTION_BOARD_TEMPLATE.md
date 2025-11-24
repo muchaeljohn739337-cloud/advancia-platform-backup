@@ -2,10 +2,10 @@
 
 ## Columns
 
-- **Backlog** → planned tasks not yet started
-- **In Progress** → active tasks (limit to 3–5 max)
-- **Done** → completed tasks
-- **Milestones** → high‑level checkpoints
+-   **Backlog** → planned tasks not yet started
+-   **In Progress** → active tasks (limit to 3–5 max)
+-   **Done** → completed tasks
+-   **Milestones** → high‑level checkpoints
 
 ---
 
@@ -13,33 +13,33 @@
 
 ### Backlog
 
-- Multi‑tenancy support (B2B SaaS)
-- Email service (SendGrid/Resend)
-- File uploads (S3 storage)
-- Kubernetes migration plan
-- Zero Trust security (Cloudflare Access)
+-   Multi‑tenancy support (B2B SaaS)
+-   Email service (SendGrid/Resend)
+-   File uploads (S3 storage)
+-   Kubernetes migration plan
+-   Zero Trust security (Cloudflare Access)
 
 ### In Progress
 
-- Harden signup/login (JWT, bcrypt, role‑based access)
-- Add rate limiting on auth endpoints
-- Configure Cloudflare WAF + Bot Fight Mode
+-   Harden signup/login (JWT, bcrypt, role‑based access)
+-   Add rate limiting on auth endpoints
+-   Configure Cloudflare WAF + Bot Fight Mode
 
 ### Done
 
-- Infrastructure setup (Droplet, Docker, Nginx, Certbot)
-- Reverse proxy + SSL enabled
-- Cloudflare domain + DNS configured
-- Basic frontend + backend deployed
-- CI/CD pipeline live
+-   Infrastructure setup (Droplet, Docker, Nginx, Certbot)
+-   Reverse proxy + SSL enabled
+-   Cloudflare domain + DNS configured
+-   Basic frontend + backend deployed
+-   CI/CD pipeline live
 
 ### Milestones
 
-- **Milestone 1: Secure Foundation** → Auth, SSL, WAF, audit logs
-- **Milestone 2: Monetization** → Stripe/Plaid integration, invoices, webhooks
-- **Milestone 3: User Delight** → Dashboard, analytics, notifications, dark mode
-- **Milestone 4: Reliability** → Monitoring, backups, CI/CD pipeline
-- **Milestone 5: Scale** → Multi‑tenancy, Kubernetes, Zero Trust
+-   **Milestone 1: Secure Foundation** → Auth, SSL, WAF, audit logs
+-   **Milestone 2: Monetization** → Stripe/Plaid integration, invoices, webhooks
+-   **Milestone 3: User Delight** → Dashboard, analytics, notifications, dark mode
+-   **Milestone 4: Reliability** → Monitoring, backups, CI/CD pipeline
+-   **Milestone 5: Scale** → Multi‑tenancy, Kubernetes, Zero Trust
 
 ---
 

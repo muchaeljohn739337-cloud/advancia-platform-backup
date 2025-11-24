@@ -8,10 +8,10 @@ This guide explains the **SLA-based job queue system** that prevents slow backgr
 
 Without proper job queuing:
 
-- ❌ Weekly export jobs block password reset emails
-- ❌ External API calls (Cryptomus, NOWPayments) make user requests slow
-- ❌ Database backups cause site slowdowns
-- ❌ Bulk email sends delay payment notifications
+-   ❌ Weekly export jobs block password reset emails
+-   ❌ External API calls (Cryptomus, NOWPayments) make user requests slow
+-   ❌ Database backups cause site slowdowns
+-   ❌ Bulk email sends delay payment notifications
 
 ## Solution Architecture
 
@@ -27,10 +27,10 @@ Without proper job queuing:
 
 ### Technology Stack
 
-- **Bull Queue** - Redis-backed job queue with retry logic
-- **Redis** - Job storage and distributed locking
-- **Exponential Backoff** - Smart retry strategy
-- **Dead Letter Queue** - Failed job tracking
+-   **Bull Queue** - Redis-backed job queue with retry logic
+-   **Redis** - Job storage and distributed locking
+-   **Exponential Backoff** - Smart retry strategy
+-   **Dead Letter Queue** - Failed job tracking
 
 ---
 
@@ -61,6 +61,7 @@ docker run -d -p 6379:6379 redis:alpine
 1. Go to Render Dashboard → New → Redis
 2. Copy connection string
 3. Add to environment variables:
+
    ```
    REDIS_HOST=your-redis-host.render.com
    REDIS_PORT=6379
@@ -511,9 +512,9 @@ NODE_ENV=production
 
 1. Go to Render Dashboard
 2. Create Redis instance:
-   - Name: `advancia-redis`
-   - Plan: `Starter` ($7/month) or `Standard` ($15/month)
-   - Max Memory Policy: `allkeys-lru`
+   -   Name: `advancia-redis`
+   -   Plan: `Starter` ($7/month) or `Standard` ($15/month)
+   -   Max Memory Policy: `allkeys-lru`
 3. Copy internal connection string
 4. Add to Web Service environment variables
 5. Deploy backend
@@ -638,10 +639,10 @@ curl http://localhost:4000/api/jobs/metrics \
 
 **Expected Result:**
 
-- All 100 jobs queued instantly (< 1 second total)
-- CRITICAL queue processes 20 concurrent jobs
-- No emails block user responses
-- All emails sent within 10 seconds
+-   All 100 jobs queued instantly (< 1 second total)
+-   CRITICAL queue processes 20 concurrent jobs
+-   No emails block user responses
+-   All emails sent within 10 seconds
 
 ---
 
@@ -667,10 +668,10 @@ curl http://localhost:4000/api/jobs/metrics \
 
 **Result:**
 
-- **40-100x faster** API responses
-- **Zero blocking** on critical paths
-- **100% uptime** during exports/backups
-- **No webhook timeouts**
+-   **40-100x faster** API responses
+-   **Zero blocking** on critical paths
+-   **100% uptime** during exports/backups
+-   **No webhook timeouts**
 
 ---
 
@@ -797,27 +798,27 @@ recentFailed.forEach((job) => {
 
 ✅ **Implemented:**
 
-- 5 priority queues with SLA guarantees
-- Rate limiting for external APIs
-- Retry with exponential backoff
-- Dead letter queue for failures
-- Admin monitoring API
-- Graceful shutdown
+-   5 priority queues with SLA guarantees
+-   Rate limiting for external APIs
+-   Retry with exponential backoff
+-   Dead letter queue for failures
+-   Admin monitoring API
+-   Graceful shutdown
 
 ✅ **Benefits:**
 
-- Password resets never blocked by exports
-- External API calls throttled and batched
-- Site stays fast during background jobs
-- Webhooks process without timeouts
-- Failed jobs tracked and retryable
+-   Password resets never blocked by exports
+-   External API calls throttled and batched
+-   Site stays fast during background jobs
+-   Webhooks process without timeouts
+-   Failed jobs tracked and retryable
 
 ✅ **Required for Production:**
 
-- Prevents slow operations from blocking critical paths
-- Essential for fintech app reliability
-- Required for webhook SLA compliance
-- Needed for user experience (instant responses)
+-   Prevents slow operations from blocking critical paths
+-   Essential for fintech app reliability
+-   Required for webhook SLA compliance
+-   Needed for user experience (instant responses)
 
 **Next Steps:**
 

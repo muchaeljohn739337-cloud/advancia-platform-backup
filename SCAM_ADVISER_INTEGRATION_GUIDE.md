@@ -12,7 +12,7 @@ Get a comprehensive trust report for a domain.
 
 **Query Parameters:**
 
-- `domain` (required): The domain to analyze (e.g., "example.com")
+-   `domain` (required): The domain to analyze (e.g., "example.com")
 
 **Response:**
 
@@ -31,10 +31,10 @@ Get a comprehensive trust report for a domain.
 
 **Status Values:**
 
-- `verified`: High trust score (85+), all checks passed
-- `pending`: Moderate trust score (70-84), mostly secure
-- `suspicious`: Low trust score (50-69), some security concerns
-- `high-risk`: Very low trust score (<50), multiple security issues
+-   `verified`: High trust score (85+), all checks passed
+-   `pending`: Moderate trust score (70-84), mostly secure
+-   `suspicious`: Low trust score (50-69), some security concerns
+-   `high-risk`: Very low trust score (<50), multiple security issues
 
 ### 2. GET /api/trust/improvement-tasks
 
@@ -42,7 +42,7 @@ Get suggested improvement tasks based on trust analysis.
 
 **Query Parameters:**
 
-- `domain` (required): The domain to analyze
+-   `domain` (required): The domain to analyze
 
 **Response:**
 
@@ -109,12 +109,7 @@ Get service status and statistics.
   "service": "ScamAdviser Trust Verification",
   "version": "1.0.0",
   "status": "operational",
-  "features": [
-    "Domain trust scoring",
-    "SSL certificate validation",
-    "Business verification status",
-    "Security improvement recommendations"
-  ],
+  "features": ["Domain trust scoring", "SSL certificate validation", "Business verification status", "Security improvement recommendations"],
   "cacheStats": {
     "enabled": true,
     "ttl": "24 hours"
@@ -128,26 +123,26 @@ The trust score is calculated based on multiple factors:
 
 ### SSL Certificate Validation (20 points)
 
-- Valid SSL certificate from trusted CA: +20 points
-- Invalid, expired, or missing SSL: +0 points
+-   Valid SSL certificate from trusted CA: +20 points
+-   Invalid, expired, or missing SSL: +0 points
 
 ### Domain Age (30 points max)
 
-- 1 point per month of domain age
-- Capped at 30 points for domains 30+ months old
-- Newer domains are considered higher risk
+-   1 point per month of domain age
+-   Capped at 30 points for domains 30+ months old
+-   Newer domains are considered higher risk
 
 ### Known Safe Domains (25 points bonus)
 
-- Recognized safe domains get bonus points:
-  - google.com, microsoft.com, github.com
-  - stackoverflow.com, mozilla.org, w3.org
-  - And their subdomains
+-   Recognized safe domains get bonus points:
+    -   google.com, microsoft.com, github.com
+    -   stackoverflow.com, mozilla.org, w3.org
+    -   And their subdomains
 
 ### Business Verification (Automatic)
 
-- Requires score ≥80 AND domain age ≥12 months
-- Not directly scored but affects verification status
+-   Requires score ≥80 AND domain age ≥12 months
+-   Not directly scored but affects verification status
 
 ## Implementation Details
 
@@ -155,18 +150,18 @@ The trust score is calculated based on multiple factors:
 
 The service is implemented with:
 
-- `ScamAdviserService` class for domain analysis
-- In-memory caching with 24-hour TTL
-- SSL certificate validation via HTTPS requests
-- Domain age estimation (simplified for demo)
-- Trust router with validation middleware
+-   `ScamAdviserService` class for domain analysis
+-   In-memory caching with 24-hour TTL
+-   SSL certificate validation via HTTPS requests
+-   Domain age estimation (simplified for demo)
+-   Trust router with validation middleware
 
 ### Caching Strategy
 
-- **Cache Duration**: 24 hours per domain
-- **Cache Key**: Domain name (normalized)
-- **Cache Clear**: Admin-only refresh endpoint
-- **Memory Usage**: Automatic cleanup on service restart
+-   **Cache Duration**: 24 hours per domain
+-   **Cache Key**: Domain name (normalized)
+-   **Cache Clear**: Admin-only refresh endpoint
+-   **Memory Usage**: Automatic cleanup on service restart
 
 ### SSL Validation Process
 
@@ -177,30 +172,30 @@ The service is implemented with:
 
 ### Error Handling
 
-- Invalid domain format: 400 Bad Request
-- Service errors: 500 Internal Server Error
-- Network timeouts: Treated as SSL invalid
-- Missing parameters: 400 Bad Request with details
+-   Invalid domain format: 400 Bad Request
+-   Service errors: 500 Internal Server Error
+-   Network timeouts: Treated as SSL invalid
+-   Missing parameters: 400 Bad Request with details
 
 ## Security Considerations
 
 ### Input Validation
 
-- Domain format validation using regex
-- SQL injection prevention (not applicable)
-- XSS prevention via proper JSON encoding
+-   Domain format validation using regex
+-   SQL injection prevention (not applicable)
+-   XSS prevention via proper JSON encoding
 
 ### Rate Limiting
 
-- Inherits from global API rate limiting
-- Additional per-domain caching reduces load
-- Admin endpoints have stricter access controls
+-   Inherits from global API rate limiting
+-   Additional per-domain caching reduces load
+-   Admin endpoints have stricter access controls
 
 ### Authentication
 
-- Public endpoints: No authentication required
-- Admin endpoints: JWT token + role verification
-- Sensitive operations logged for audit
+-   Public endpoints: No authentication required
+-   Admin endpoints: JWT token + role verification
+-   Sensitive operations logged for audit
 
 ## Frontend Integration
 
@@ -210,27 +205,10 @@ For basic trust display, use simple widget embed:
 
 ```html
 <!-- Trustpilot Widget -->
-<div
-  class="trustpilot-widget"
-  data-locale="en-US"
-  data-template-id="5419b6a8b0d04a076446a9ad"
-  data-businessunit-id="YOUR_BUSINESS_ID"
-  data-style-height="24px"
-  data-style-width="100%"
-  data-theme="light"
->
-  <a
-    href="https://www.trustpilot.com/review/YOUR_DOMAIN"
-    target="_blank"
-    rel="noopener"
-    >Trustpilot</a
-  >
+<div class="trustpilot-widget" data-locale="en-US" data-template-id="5419b6a8b0d04a076446a9ad" data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="24px" data-style-width="100%" data-theme="light">
+  <a href="https://www.trustpilot.com/review/YOUR_DOMAIN" target="_blank" rel="noopener">Trustpilot</a>
 </div>
-<script
-  type="text/javascript"
-  src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
-  async
-></script>
+<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 ```
 
 ### API Integration
@@ -241,9 +219,7 @@ For advanced trust features:
 // Get trust report
 const getTrustReport = async (domain) => {
   try {
-    const response = await fetch(
-      `/api/trust/report?domain=${encodeURIComponent(domain)}`
-    );
+    const response = await fetch(`/api/trust/report?domain=${encodeURIComponent(domain)}`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -272,9 +248,7 @@ const TrustScore = ({ domain }) => {
     const fetchTrustData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          `/api/trust/report?domain=${encodeURIComponent(domain)}`
-        );
+        const response = await fetch(`/api/trust/report?domain=${encodeURIComponent(domain)}`);
         const data = await response.json();
 
         if (data.success) {
@@ -348,21 +322,21 @@ curl -H "Authorization: Bearer YOUR_ADMIN_TOKEN" "http://localhost:4000/api/trus
 
 ### Expected Responses
 
-- **High Trust Domain** (google.com): Score 95+, verified status
-- **Medium Trust Domain** (example.com): Score 70-85, pending status
-- **New Domain**: Lower score due to age factor
-- **Invalid SSL Domain**: Score penalty, security warnings
+-   **High Trust Domain** (google.com): Score 95+, verified status
+-   **Medium Trust Domain** (example.com): Score 70-85, pending status
+-   **New Domain**: Lower score due to age factor
+-   **Invalid SSL Domain**: Score penalty, security warnings
 
 ### Evaluation Alignment
 
 The API responses match the evaluation framework expectations:
 
-- ✅ `scamAdviserScore`: number (0-100)
-- ✅ `sslValid`: boolean
-- ✅ `verifiedBusiness`: boolean
-- ✅ `status`: string enum
-- ✅ `domainAgeMonths`: number
-- ✅ `lastChecked`: ISO date string
+-   ✅ `scamAdviserScore`: number (0-100)
+-   ✅ `sslValid`: boolean
+-   ✅ `verifiedBusiness`: boolean
+-   ✅ `status`: string enum
+-   ✅ `domainAgeMonths`: number
+-   ✅ `lastChecked`: ISO date string
 
 ## Production Considerations
 
@@ -378,17 +352,17 @@ For production use, replace the simplified implementation with actual Scam Advis
 
 ### Monitoring
 
-- Monitor API response times
-- Track cache hit rates
-- Alert on service failures
-- Log admin operations for audit
+-   Monitor API response times
+-   Track cache hit rates
+-   Alert on service failures
+-   Log admin operations for audit
 
 ### Scalability
 
-- Consider external caching (Redis)
-- Implement proper rate limiting per domain
-- Add database storage for historical data
-- Scale horizontally behind load balancer
+-   Consider external caching (Redis)
+-   Implement proper rate limiting per domain
+-   Add database storage for historical data
+-   Scale horizontally behind load balancer
 
 ## Troubleshooting
 

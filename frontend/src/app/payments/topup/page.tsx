@@ -1,11 +1,11 @@
-"use client";
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export default function TopUpPage() {
-  const [amount, setAmount] = useState<string>("10");
-  const [token, setToken] = useState<string>("");
+  const [amount, setAmount] = useState<string>('10');
+  const [token, setToken] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,10 +14,10 @@ export default function TopUpPage() {
     setLoading(true);
     try {
       const res = await fetch(`${API_URL}/api/payments/checkout-session`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify({ amount: Number(amount) }),
       });
@@ -29,7 +29,7 @@ export default function TopUpPage() {
       if (data?.url) {
         window.location.href = data.url;
       } else {
-        throw new Error("No checkout URL returned");
+        throw new Error('No checkout URL returned');
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -42,7 +42,9 @@ export default function TopUpPage() {
   return (
     <div className="max-w-md mx-auto p-6 space-y-4">
       <h1 className="text-2xl font-semibold">Top Up Balance</h1>
-      <p className="text-sm text-gray-600">Enter an amount in USD, provide your JWT, and create a Stripe Checkout session.</p>
+      <p className="text-sm text-gray-600">
+        Enter an amount in USD, provide your JWT, and create a Stripe Checkout session.
+      </p>
       {/* Premium quick amounts */}
       <div className="flex items-center gap-2 flex-wrap">
         <span className="text-xs text-gray-500 mr-2">Premium amounts:</span>
@@ -77,7 +79,7 @@ export default function TopUpPage() {
         disabled={loading || !amount || !token}
         className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50"
       >
-        {loading ? "Creating session..." : "Create Checkout Session"}
+        {loading ? 'Creating session...' : 'Create Checkout Session'}
       </button>
       {error && <div className="text-red-600 text-sm">{error}</div>}
     </div>

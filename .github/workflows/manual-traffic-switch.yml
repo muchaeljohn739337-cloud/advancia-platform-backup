@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       target_environment:
-        description: 'Switch traffic to which environment?'
+        description: "Switch traffic to which environment?"
         required: true
         type: choice
         options:
           - green
           - blue
       reason:
-        description: 'Reason for traffic switch'
+        description: "Reason for traffic switch"
         required: true
         type: string
 
@@ -20,7 +20,7 @@ jobs:
     name: Switch Production Traffic
     runs-on: ubuntu-latest
     environment: production
-    
+
     steps:
       - name: Set environment variables
         id: set-env
@@ -60,13 +60,13 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "{\"type\":\"A\",\"name\":\"api.advancia.com\",\"content\":\"${{ steps.set-env.outputs.TARGET_IP }}\",\"ttl\":120,\"proxied\":true}"
-          
+
           # Update www record
           curl -X PATCH "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/dns_records/${{ secrets.CF_WWW_RECORD_ID }}" \
           -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
           -H "Content-Type: application/json" \
           --data "{\"type\":\"A\",\"name\":\"www.advancia.com\",\"content\":\"${{ steps.set-env.outputs.TARGET_IP }}\",\"ttl\":120,\"proxied\":true}"
-          
+
           echo "✅ DNS records updated"
 
       - name: Wait for DNS propagation
@@ -78,7 +78,7 @@ jobs:
         run: |
           max_attempts=20
           attempt=0
-          
+
           while [ $attempt -lt $max_attempts ]; do
             if curl -f -s "https://api.advancia.com/api/health" | grep -q "ok"; then
               echo "✅ Production endpoint responding correctly"
@@ -88,7 +88,7 @@ jobs:
             sleep 3
             attempt=$((attempt+1))
           done
-          
+
           echo "❌ Production endpoint verification failed"
           exit 1
 

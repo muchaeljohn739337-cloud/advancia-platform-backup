@@ -1,7 +1,7 @@
 # Quick Start PostgreSQL for Development
 # Run: docker-compose -f docker-compose.dev-db.yml up -d
 
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -17,7 +17,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5

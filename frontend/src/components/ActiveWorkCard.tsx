@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function ActiveWorkCard() {
-  const [imageError, setImageError] = useState(false)
-  const [lastUpdate, setLastUpdate] = useState<string>('')
+  const [imageError, setImageError] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState<string>('');
 
   useEffect(() => {
     // Get last update time
-    const now = new Date().toLocaleString()
-    setLastUpdate(now)
-  }, [])
+    const now = new Date().toLocaleString();
+    setLastUpdate(now);
+  }, []);
 
   return (
     <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 shadow-lg hover:shadow-xl transition-shadow">
@@ -46,11 +46,7 @@ export default function ActiveWorkCard() {
         Commits over the last 14 days
       </p>
 
-      {lastUpdate && (
-        <p className="mt-1 text-xs text-slate-400">
-          Updated: {lastUpdate}
-        </p>
-      )}
+      {lastUpdate && <p className="mt-1 text-xs text-slate-400">Updated: {lastUpdate}</p>}
     </div>
-  )
+  );
 }

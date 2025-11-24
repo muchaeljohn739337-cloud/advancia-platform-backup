@@ -1,53 +1,50 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { X, Lock, CheckCircle, AlertCircle, Send } from "lucide-react";
+import React, { useState } from 'react';
+import { X, Lock, CheckCircle, AlertCircle, Send } from 'lucide-react';
 
 interface ForgotPasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
-  const [email, setEmail] = useState("");
+const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ isOpen, onClose }) => {
+  const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
-  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email) {
-      setError("Email is required");
+      setError('Email is required');
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError("Please enter a valid email address");
+      setError('Please enter a valid email address');
       return;
     }
 
     setIsLoading(true);
-    setError("");
+    setError('');
 
     try {
       // TODO: Implement forgot password endpoint in backend
       const response = await fetch(`${API}/api/auth/forgot-password`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to send reset email");
+        throw new Error(data.error || 'Failed to send reset email');
       }
 
       setIsSuccess(true);
@@ -56,9 +53,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
       }, 3000);
     } catch (err) {
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to send reset email. Please try again."
+        err instanceof Error ? err.message : 'Failed to send reset email. Please try again.'
       );
     } finally {
       setIsLoading(false);
@@ -66,8 +61,8 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
   };
 
   const handleClose = () => {
-    setEmail("");
-    setError("");
+    setEmail('');
+    setError('');
     setIsSuccess(false);
     setIsLoading(false);
     onClose();
@@ -94,7 +89,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             <Lock size={32} className="text-blue-600" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {isSuccess ? "Check Your Email" : "Reset Password"}
+            {isSuccess ? 'Check Your Email' : 'Reset Password'}
           </h2>
           <p className="text-gray-600">
             {isSuccess
@@ -108,12 +103,9 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle size={32} className="text-green-600" />
             </div>
-            <p className="text-green-600 font-semibold mb-4">
-              Email sent successfully!
-            </p>
+            <p className="text-green-600 font-semibold mb-4">Email sent successfully!</p>
             <p className="text-sm text-gray-600 mb-6">
-              Please check your inbox and follow the instructions to reset your
-              password.
+              Please check your inbox and follow the instructions to reset your password.
             </p>
             <button
               onClick={handleClose}
@@ -126,15 +118,13 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Input */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  setError("");
+                  setError('');
                 }}
                 placeholder="Enter your email"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"

@@ -7,11 +7,12 @@ Real-time visualization and alerting for multi-region deployments with Prometheu
 ## 🎯 Overview
 
 Monitor your multi-region deployments with region-specific dashboards showing:
-- **Latency** per region (P50, P95, P99)
-- **Error rates** (HTTP 5xx, failed health checks)
-- **Resource usage** (CPU, memory, disk per droplet)
-- **Traffic distribution** (Blue vs Green, % per region)
-- **Deployment status** (Canary stages 10→100%)
+
+-   **Latency** per region (P50, P95, P99)
+-   **Error rates** (HTTP 5xx, failed health checks)
+-   **Resource usage** (CPU, memory, disk per droplet)
+-   **Traffic distribution** (Blue vs Green, % per region)
+-   **Deployment status** (Canary stages 10→100%)
 
 ---
 
@@ -20,6 +21,7 @@ Monitor your multi-region deployments with region-specific dashboards showing:
 ### Regional Metrics Endpoints
 
 **Each region exposes:**
+
 ```
 https://api-us.advancia.com/metrics    # US East Prometheus metrics
 https://api-eu.advancia.com/metrics    # EU West Prometheus metrics
@@ -27,6 +29,7 @@ https://api-apac.advancia.com/metrics  # APAC Southeast Prometheus metrics
 ```
 
 **Metrics Format (Prometheus):**
+
 ```prometheus
 # HELP http_request_duration_seconds HTTP request latency
 # TYPE http_request_duration_seconds histogram
@@ -71,15 +74,17 @@ system_memory_usage_percent{region="us-east",droplet="green"} 62.8
 ### Option 1: Prometheus + Grafana (Self-Hosted)
 
 **Pros:**
-- Full control and customization
-- No external costs
-- Deep metric retention
-- Advanced querying (PromQL)
+
+-   Full control and customization
+-   No external costs
+-   Deep metric retention
+-   Advanced querying (PromQL)
 
 **Cons:**
-- Requires infrastructure management
-- Setup complexity
-- Need to configure scraping
+
+-   Requires infrastructure management
+-   Setup complexity
+-   Need to configure scraping
 
 **Monthly Cost:** $40 (droplet for Prometheus/Grafana)
 
@@ -88,15 +93,17 @@ system_memory_usage_percent{region="us-east",droplet="green"} 62.8
 ### Option 2: Datadog (Managed)
 
 **Pros:**
-- Fully managed service
-- Beautiful dashboards out-of-box
-- APM tracing included
-- Excellent alerting
+
+-   Fully managed service
+-   Beautiful dashboards out-of-box
+-   APM tracing included
+-   Excellent alerting
 
 **Cons:**
-- Expensive at scale
-- Vendor lock-in
-- Data retention limits
+
+-   Expensive at scale
+-   Vendor lock-in
+-   Data retention limits
 
 **Monthly Cost:** $150-500 (based on hosts/metrics)
 
@@ -105,15 +112,17 @@ system_memory_usage_percent{region="us-east",droplet="green"} 62.8
 ### Option 3: Grafana Cloud (Managed)
 
 **Pros:**
-- Managed Grafana + Prometheus
-- Same Grafana UI you know
-- Good free tier
-- Scalable
+
+-   Managed Grafana + Prometheus
+-   Same Grafana UI you know
+-   Good free tier
+-   Scalable
 
 **Cons:**
-- Limited free tier
-- Costs increase with metrics
-- Less control than self-hosted
+
+-   Limited free tier
+-   Costs increase with metrics
+-   Less control than self-hosted
 
 **Monthly Cost:** $0-200 (free tier → paid)
 
@@ -122,10 +131,11 @@ system_memory_usage_percent{region="us-east",droplet="green"} 62.8
 ### Option 4: Hybrid (Recommended)
 
 **Architecture:**
-- **Prometheus** (self-hosted on dedicated droplet)
-- **Grafana Cloud** (managed dashboards)
-- **Push metrics** from GitHub Actions during deployment
-- **Slack** for alerts
+
+-   **Prometheus** (self-hosted on dedicated droplet)
+-   **Grafana Cloud** (managed dashboards)
+-   **Push metrics** from GitHub Actions during deployment
+-   **Slack** for alerts
 
 **Monthly Cost:** $40 (Prometheus droplet) + $0 (Grafana free tier) = **$40**
 
@@ -136,6 +146,7 @@ system_memory_usage_percent{region="us-east",droplet="green"} 62.8
 ### Step 1: Deploy Prometheus Server
 
 **Create Prometheus Droplet:**
+
 ```bash
 doctl compute droplet create \
   advancia-prometheus \
@@ -145,27 +156,28 @@ doctl compute droplet create \
 ```
 
 **Install Prometheus:**
+
 ```bash
 ssh root@PROMETHEUS_IP << 'EOF'
   # Download Prometheus
   wget https://github.com/prometheus/prometheus/releases/download/v2.48.0/prometheus-2.48.0.linux-amd64.tar.gz
   tar xvfz prometheus-*.tar.gz
   cd prometheus-*
-  
+
   # Create service user
   useradd --no-create-home --shell /bin/false prometheus
-  
+
   # Create directories
   mkdir /etc/prometheus /var/lib/prometheus
-  
+
   # Copy binaries
   cp prometheus promtool /usr/local/bin/
   cp -r consoles console_libraries /etc/prometheus/
-  
+
   # Set ownership
   chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
   chown prometheus:prometheus /usr/local/bin/{prometheus,promtool}
-  
+
   # Create config
   cat > /etc/prometheus/prometheus.yml << 'CONFIG'
 global:
@@ -182,14 +194,14 @@ scrape_configs:
         labels:
           region: 'us-east'
           environment: 'blue'
-  
+
   - job_name: 'us-east-green'
     static_configs:
       - targets: ['US_GREEN_IP:4000']
         labels:
           region: 'us-east'
           environment: 'green'
-  
+
   # EU West
   - job_name: 'eu-west-blue'
     static_configs:
@@ -197,14 +209,14 @@ scrape_configs:
         labels:
           region: 'eu-west'
           environment: 'blue'
-  
+
   - job_name: 'eu-west-green'
     static_configs:
       - targets: ['EU_GREEN_IP:4000']
         labels:
           region: 'eu-west'
           environment: 'green'
-  
+
   # APAC Southeast
   - job_name: 'apac-se-blue'
     static_configs:
@@ -212,7 +224,7 @@ scrape_configs:
         labels:
           region: 'apac-se'
           environment: 'blue'
-  
+
   - job_name: 'apac-se-green'
     static_configs:
       - targets: ['APAC_GREEN_IP:4000']
@@ -228,7 +240,7 @@ alerting:
 rule_files:
   - '/etc/prometheus/alerts.yml'
 CONFIG
-  
+
   # Create systemd service
   cat > /etc/systemd/system/prometheus.service << 'SERVICE'
 [Unit]
@@ -249,12 +261,12 @@ ExecStart=/usr/local/bin/prometheus \
 [Install]
 WantedBy=multi-user.target
 SERVICE
-  
+
   # Start Prometheus
   systemctl daemon-reload
   systemctl enable prometheus
   systemctl start prometheus
-  
+
   echo "✅ Prometheus installed and running on :9090"
 EOF
 ```
@@ -264,6 +276,7 @@ EOF
 ### Step 2: Configure Alert Rules
 
 **Create `/etc/prometheus/alerts.yml`:**
+
 ```yaml
 groups:
   - name: regional_alerts
@@ -280,7 +293,7 @@ groups:
           summary: "High error rate in US East"
           description: "Error rate is {{ $value }}% (threshold: 1.0%)"
           dashboard: "https://grafana.advancia.com/d/us-east"
-      
+
       - alert: HighErrorRateEUWest
         expr: error_rate_percent{region="eu-west"} > 1.0
         for: 2m
@@ -290,7 +303,7 @@ groups:
         annotations:
           summary: "High error rate in EU West"
           description: "Error rate is {{ $value }}% (threshold: 1.0%)"
-      
+
       - alert: HighErrorRateAPACSE
         expr: error_rate_percent{region="apac-se"} > 1.0
         for: 2m
@@ -300,7 +313,7 @@ groups:
         annotations:
           summary: "High error rate in APAC Southeast"
           description: "Error rate is {{ $value }}% (threshold: 1.0%)"
-      
+
       # High Latency Alerts
       - alert: HighLatencyUSEast
         expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{region="us-east"}[5m])) > 0.3
@@ -311,7 +324,7 @@ groups:
         annotations:
           summary: "High P95 latency in US East"
           description: "P95 latency is {{ $value }}s (threshold: 0.3s)"
-      
+
       # High CPU Usage
       - alert: HighCPUUsage
         expr: system_cpu_usage_percent > 80
@@ -321,7 +334,7 @@ groups:
         annotations:
           summary: "High CPU usage in {{ $labels.region }}"
           description: "CPU usage is {{ $value }}% on {{ $labels.droplet }}"
-      
+
       # High Memory Usage
       - alert: HighMemoryUsage
         expr: system_memory_usage_percent > 85
@@ -331,7 +344,7 @@ groups:
         annotations:
           summary: "High memory usage in {{ $labels.region }}"
           description: "Memory usage is {{ $value }}% on {{ $labels.droplet }}"
-      
+
       # Regional Service Down
       - alert: RegionalServiceDown
         expr: up{job=~".*-(blue|green)"} == 0
@@ -341,7 +354,7 @@ groups:
         annotations:
           summary: "Service down in {{ $labels.region }}"
           description: "{{ $labels.job }} is down"
-      
+
       # Deployment In Progress
       - alert: CanaryDeploymentStalled
         expr: changes(traffic_distribution_percent[10m]) == 0 and traffic_distribution_percent > 0 and traffic_distribution_percent < 100
@@ -358,11 +371,13 @@ groups:
 ### Step 3: Install Grafana Cloud (Free Tier)
 
 **Sign up:**
-1. Go to https://grafana.com/auth/sign-up
+
+1. Go to <https://grafana.com/auth/sign-up>
 2. Create free account (14-day trial, then free tier)
 3. Get your API credentials
 
 **Configure Prometheus Remote Write:**
+
 ```yaml
 # Add to /etc/prometheus/prometheus.yml
 remote_write:
@@ -373,6 +388,7 @@ remote_write:
 ```
 
 **Restart Prometheus:**
+
 ```bash
 systemctl restart prometheus
 ```
@@ -411,13 +427,13 @@ See `GRAFANA_DASHBOARDS.json` for complete multi-region dashboard configuration.
   run: |
     # Collect metrics from deployed service
     RESPONSE=$(curl -s http://${{ secrets.DROPLET_IP_GREEN }}:4000/metrics)
-    
+
     # Extract key metrics
     ERROR_RATE=$(echo "$RESPONSE" | grep 'error_rate_percent' | awk '{print $2}')
     LATENCY_P95=$(echo "$RESPONSE" | grep 'http_request_duration_seconds_bucket{le="0.5"}' | awk '{print $2}')
     CPU_USAGE=$(echo "$RESPONSE" | grep 'system_cpu_usage_percent' | awk '{print $2}')
     MEMORY_USAGE=$(echo "$RESPONSE" | grep 'system_memory_usage_percent' | awk '{print $2}')
-    
+
     # Push to Prometheus Pushgateway
     cat <<EOF | curl --data-binary @- "$PROMETHEUS_PUSHGATEWAY/metrics/job/github-actions/region/$REGION"
 # TYPE deployment_error_rate gauge
@@ -435,7 +451,7 @@ deployment_memory_usage{region="$REGION",environment="$ENVIRONMENT"} $MEMORY_USA
 # TYPE deployment_timestamp gauge
 deployment_timestamp{region="$REGION",environment="$ENVIRONMENT"} $(date +%s)
 EOF
-    
+
     echo "✅ Metrics pushed for $REGION"
 
 - name: Validate metrics against thresholds
@@ -444,11 +460,11 @@ EOF
       echo "❌ Error rate too high: $ERROR_RATE%"
       exit 1
     fi
-    
+
     if (( $(echo "$CPU_USAGE > 80" | bc -l) )); then
       echo "⚠️ Warning: High CPU usage: $CPU_USAGE%"
     fi
-    
+
     echo "✅ Metrics within acceptable thresholds"
 ```
 
@@ -459,6 +475,7 @@ EOF
 ### Setup Datadog Agent
 
 **Install on each droplet:**
+
 ```bash
 DD_API_KEY=YOUR_DATADOG_API_KEY \
 DD_SITE="datadoghq.com" \
@@ -466,6 +483,7 @@ bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
 ```
 
 **Configure regional tags:**
+
 ```yaml
 # /etc/datadog-agent/datadog.yaml
 tags:
@@ -492,10 +510,10 @@ tags:
         "tags": ["region:'"$REGION"'", "deployment:canary"],
         "alert_type": "success"
       }'
-    
+
     # Send custom metrics
     CURRENT_TIME=$(date +%s)
-    
+
     curl -X POST "https://api.datadoghq.com/api/v1/series" \
       -H "Content-Type: application/json" \
       -H "DD-API-KEY: $DD_API_KEY" \
@@ -546,18 +564,18 @@ tags:
       COLOR="danger"
       EMOJI="❌"
     fi
-    
+
     # Get current metrics
     METRICS=$(curl -s http://${{ secrets.DROPLET_IP_GREEN }}:4000/metrics)
     ERROR_RATE=$(echo "$METRICS" | grep 'error_rate_percent' | awk '{print $2}')
     LATENCY=$(echo "$METRICS" | grep 'http_request_duration_seconds_sum' | awk '{print $2}')
     CPU=$(echo "$METRICS" | grep 'system_cpu_usage_percent' | awk '{print $2}')
     MEMORY=$(echo "$METRICS" | grep 'system_memory_usage_percent' | awk '{print $2}')
-    
+
     # Dashboard URLs
     GRAFANA_URL="https://grafana.advancia.com/d/${REGION}-overview"
     PROMETHEUS_URL="https://prometheus.advancia.com/graph?g0.expr=error_rate_percent{region=\"${REGION}\"}"
-    
+
     curl -X POST "$SLACK_WEBHOOK" \
       -H 'Content-Type: application/json' \
       -d '{
@@ -630,26 +648,31 @@ tags:
 **Panels:**
 
 1. **Regional Traffic Map** (Geomap)
+
    ```promql
    sum by (region) (rate(http_requests_total[5m]))
    ```
 
 2. **Error Rate Comparison** (Time Series)
+
    ```promql
    error_rate_percent{region=~"us-east|eu-west|apac-se"}
    ```
 
 3. **Latency Heatmap** (Heatmap)
+
    ```promql
    rate(http_request_duration_seconds_bucket[5m])
    ```
 
 4. **Deployment Status** (Stat Panel)
+
    ```promql
    traffic_distribution_percent{environment="green"}
    ```
 
 5. **Resource Usage** (Gauge)
+
    ```promql
    system_cpu_usage_percent
    system_memory_usage_percent
@@ -662,64 +685,65 @@ tags:
 ### Alertmanager Configuration
 
 **`/etc/alertmanager/alertmanager.yml`:**
+
 ```yaml
 global:
   resolve_timeout: 5m
-  slack_api_url: '$SLACK_WEBHOOK_URL'
+  slack_api_url: "$SLACK_WEBHOOK_URL"
 
 route:
-  group_by: ['region', 'severity']
+  group_by: ["region", "severity"]
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
-  receiver: 'slack-default'
-  
+  receiver: "slack-default"
+
   routes:
     # Critical alerts → PagerDuty + Slack
     - match:
         severity: critical
-      receiver: 'pagerduty-critical'
+      receiver: "pagerduty-critical"
       continue: true
-    
+
     # Regional routing
     - match:
         region: us-east
-      receiver: 'slack-us-team'
-    
+      receiver: "slack-us-team"
+
     - match:
         region: eu-west
-      receiver: 'slack-eu-team'
-    
+      receiver: "slack-eu-team"
+
     - match:
         region: apac-se
-      receiver: 'slack-apac-team'
+      receiver: "slack-apac-team"
 
 receivers:
-  - name: 'slack-default'
+  - name: "slack-default"
     slack_configs:
-      - channel: '#deployments'
-        title: '{{ .GroupLabels.region }} Alert'
-        text: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+      - channel: "#deployments"
+        title: "{{ .GroupLabels.region }} Alert"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}{{ end }}"
         send_resolved: true
-  
-  - name: 'slack-us-team'
+
+  - name: "slack-us-team"
     slack_configs:
-      - channel: '#us-ops'
-        title: 'US East Alert'
-  
-  - name: 'slack-eu-team'
+      - channel: "#us-ops"
+        title: "US East Alert"
+
+  - name: "slack-eu-team"
     slack_configs:
-      - channel: '#eu-ops'
-        title: 'EU West Alert'
-  
-  - name: 'slack-apac-team'
+      - channel: "#eu-ops"
+        title: "EU West Alert"
+
+  - name: "slack-apac-team"
     slack_configs:
-      - channel: '#apac-ops'
-        title: 'APAC Southeast Alert'
-  
-  - name: 'pagerduty-critical'
+      - channel: "#apac-ops"
+        title: "APAC Southeast Alert"
+
+  - name: "pagerduty-critical"
     pagerduty_configs:
-      - service_key: '$PAGERDUTY_SERVICE_KEY'
+      - service_key: "$PAGERDUTY_SERVICE_KEY"
 ```
 
 ---
@@ -727,38 +751,43 @@ receivers:
 ## ✅ Setup Checklist
 
 ### Infrastructure
-- [ ] Prometheus server deployed and running
-- [ ] Grafana Cloud account created
-- [ ] Remote write configured
-- [ ] Alertmanager installed
-- [ ] All regions exposing `/metrics` endpoint
+
+-   [ ] Prometheus server deployed and running
+-   [ ] Grafana Cloud account created
+-   [ ] Remote write configured
+-   [ ] Alertmanager installed
+-   [ ] All regions exposing `/metrics` endpoint
 
 ### Dashboards
-- [ ] Multi-region overview dashboard created
-- [ ] Per-region dashboards configured
-- [ ] Canary progress dashboard setup
-- [ ] Resource usage dashboard created
-- [ ] Custom alerts configured
+
+-   [ ] Multi-region overview dashboard created
+-   [ ] Per-region dashboards configured
+-   [ ] Canary progress dashboard setup
+-   [ ] Resource usage dashboard created
+-   [ ] Custom alerts configured
 
 ### Integration
-- [ ] GitHub Actions pushing metrics
-- [ ] Slack webhooks configured
-- [ ] Dashboard links in notifications
-- [ ] Alert routing tested
-- [ ] Runbooks documented
+
+-   [ ] GitHub Actions pushing metrics
+-   [ ] Slack webhooks configured
+-   [ ] Dashboard links in notifications
+-   [ ] Alert routing tested
+-   [ ] Runbooks documented
 
 ### Testing
-- [ ] Test metric collection from all regions
-- [ ] Verify dashboards updating in real-time
-- [ ] Trigger test alerts
-- [ ] Validate Slack notifications
-- [ ] Test dashboard links
+
+-   [ ] Test metric collection from all regions
+-   [ ] Verify dashboards updating in real-time
+-   [ ] Trigger test alerts
+-   [ ] Validate Slack notifications
+-   [ ] Test dashboard links
 
 ---
 
 ## 💰 Cost Summary
 
 ### Self-Hosted (Prometheus + Grafana Cloud)
+
 ```
 Prometheus droplet: $40/month (2vCPU, 4GB RAM)
 Grafana Cloud:      $0/month (free tier: 10K series, 14-day retention)
@@ -766,6 +795,7 @@ Total:              $40/month
 ```
 
 ### Fully Managed (Datadog)
+
 ```
 Datadog Pro:        $15/host/month × 6 hosts = $90/month
 Custom metrics:     $0.05/metric × 100 = $5/month
@@ -774,6 +804,7 @@ Total:             $281/month (with APM)
 ```
 
 ### Hybrid (Recommended)
+
 ```
 Prometheus:        $40/month
 Grafana Cloud:     $0/month

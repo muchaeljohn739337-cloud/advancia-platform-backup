@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { CreditCard, Calendar, DollarSign, X, Plus, CheckCircle } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { CreditCard, Calendar, DollarSign, X, Plus, CheckCircle } from 'lucide-react';
 
 interface Subscription {
   id: string;
@@ -19,52 +19,52 @@ interface SubscriptionPlan {
   name: string;
   description: string;
   price: number;
-  interval: "month" | "year";
+  interval: 'month' | 'year';
   features: string[];
 }
 
 const AVAILABLE_PLANS: SubscriptionPlan[] = [
   {
-    id: "basic_monthly",
-    name: "Basic Plan",
-    description: "Perfect for individuals getting started",
+    id: 'basic_monthly',
+    name: 'Basic Plan',
+    description: 'Perfect for individuals getting started',
     price: 9.99,
-    interval: "month",
+    interval: 'month',
     features: [
-      "Up to 10 transactions per month",
-      "Basic crypto wallet",
-      "Email support",
-      "Standard processing times",
+      'Up to 10 transactions per month',
+      'Basic crypto wallet',
+      'Email support',
+      'Standard processing times',
     ],
   },
   {
-    id: "pro_monthly",
-    name: "Pro Plan",
-    description: "For professionals and small businesses",
+    id: 'pro_monthly',
+    name: 'Pro Plan',
+    description: 'For professionals and small businesses',
     price: 29.99,
-    interval: "month",
+    interval: 'month',
     features: [
-      "Unlimited transactions",
-      "Advanced crypto features",
-      "Priority support",
-      "Instant processing",
-      "Lower fees",
-      "API access",
+      'Unlimited transactions',
+      'Advanced crypto features',
+      'Priority support',
+      'Instant processing',
+      'Lower fees',
+      'API access',
     ],
   },
   {
-    id: "enterprise_monthly",
-    name: "Enterprise Plan",
-    description: "For large organizations",
+    id: 'enterprise_monthly',
+    name: 'Enterprise Plan',
+    description: 'For large organizations',
     price: 99.99,
-    interval: "month",
+    interval: 'month',
     features: [
-      "Everything in Pro",
-      "Dedicated account manager",
-      "Custom integrations",
-      "SLA guarantee",
-      "Advanced analytics",
-      "White-label options",
+      'Everything in Pro',
+      'Dedicated account manager',
+      'Custom integrations',
+      'SLA guarantee',
+      'Advanced analytics',
+      'White-label options',
     ],
   },
 ];
@@ -81,8 +81,8 @@ export default function SubscriptionsPage() {
 
   const fetchSubscriptions = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/payments/subscriptions", {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/payments/subscriptions', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -99,11 +99,11 @@ export default function SubscriptionsPage() {
 
   const createSubscription = async (plan: SubscriptionPlan) => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/payments/subscription/create", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/payments/subscription/create', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -116,39 +116,43 @@ export default function SubscriptionsPage() {
         const data = await res.json();
         if (data.clientSecret) {
           // Redirect to Stripe checkout
-          alert("Subscription created! Redirecting to payment...");
+          alert('Subscription created! Redirecting to payment...');
           // In production, use Stripe Checkout or Elements
           await fetchSubscriptions();
           setShowNewSubscription(false);
         }
       } else {
-        alert("Failed to create subscription");
+        alert('Failed to create subscription');
       }
     } catch {
-      alert("Error creating subscription");
+      alert('Error creating subscription');
     }
   };
 
   const cancelSubscription = async (id: string) => {
-    if (!confirm("Cancel this subscription? You'll still have access until the end of the billing period.")) {
+    if (
+      !confirm(
+        "Cancel this subscription? You'll still have access until the end of the billing period."
+      )
+    ) {
       return;
     }
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/payments/subscription/${id}/cancel`, {
-        method: "POST",
+        method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.ok) {
-        alert("Subscription cancelled successfully");
+        alert('Subscription cancelled successfully');
         await fetchSubscriptions();
       } else {
-        alert("Failed to cancel subscription");
+        alert('Failed to cancel subscription');
       }
     } catch {
-      alert("Error cancelling subscription");
+      alert('Error cancelling subscription');
     }
   };
 
@@ -214,11 +218,11 @@ export default function SubscriptionsPage() {
                         </h3>
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            sub.status === "active"
-                              ? "bg-green-100 text-green-700"
-                              : sub.status === "canceled"
-                              ? "bg-red-100 text-red-700"
-                              : "bg-yellow-100 text-yellow-700"
+                            sub.status === 'active'
+                              ? 'bg-green-100 text-green-700'
+                              : sub.status === 'canceled'
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-yellow-100 text-yellow-700'
                           }`}
                         >
                           {sub.status}
@@ -246,7 +250,7 @@ export default function SubscriptionsPage() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      {sub.status === "active" && !sub.cancelAtPeriodEnd && (
+                      {sub.status === 'active' && !sub.cancelAtPeriodEnd && (
                         <button
                           onClick={() => cancelSubscription(sub.id)}
                           className="px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition"
@@ -284,8 +288,8 @@ export default function SubscriptionsPage() {
                     key={plan.id}
                     className={`border-2 rounded-xl p-6 transition cursor-pointer ${
                       selectedPlan?.id === plan.id
-                        ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                        : "border-gray-200 dark:border-gray-700 hover:border-blue-300"
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'
                     }`}
                     onClick={() => setSelectedPlan(plan)}
                   >
@@ -305,7 +309,10 @@ export default function SubscriptionsPage() {
 
                     <ul className="space-y-3 mb-6">
                       {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
+                        >
                           <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                           <span>{feature}</span>
                         </li>
@@ -319,8 +326,8 @@ export default function SubscriptionsPage() {
                       }}
                       className={`w-full py-3 rounded-lg font-medium transition ${
                         selectedPlan?.id === plan.id
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
+                          ? 'bg-blue-600 text-white hover:bg-blue-700'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300'
                       }`}
                     >
                       Subscribe

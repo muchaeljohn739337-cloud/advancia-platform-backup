@@ -17,34 +17,34 @@ Professional security suite inspired by VeePN's security features:
 
 **Features:**
 
-- **317 data breaches detected** banner with red alert styling
-- **Email breach list** showing:
-  - Email addresses with breach counts
-  - Red warning icons for high-risk accounts (>5 breaches)
-  - Click to view detailed breach sources
-- **Breach source details** with:
-  - Source website names (forum.btcsec.com, modbsolutions.com, etc.)
-  - Leak counts per source
-  - Breach dates
-  - Source-specific icons (🔓, 💳, 📧, etc.)
-- **Category tabs:**
-  - Email (active, shows breach count)
-  - Phone number (premium, grayed out)
-  - Credit card (premium, grayed out)
-  - SSN/ID (premium, grayed out)
-- **24/7 Monitoring activation** - Blue "Activate" button with Shield icon
-- **Protection recommendations:**
-  - Change Passwords (CheckCircle icon)
-  - Enable 2FA (Shield icon)
-  - Monitor Activity (AlertTriangle icon)
+-   **317 data breaches detected** banner with red alert styling
+-   **Email breach list** showing:
+    -   Email addresses with breach counts
+    -   Red warning icons for high-risk accounts (>5 breaches)
+    -   Click to view detailed breach sources
+-   **Breach source details** with:
+    -   Source website names (forum.btcsec.com, modbsolutions.com, etc.)
+    -   Leak counts per source
+    -   Breach dates
+    -   Source-specific icons (🔓, 💳, 📧, etc.)
+-   **Category tabs:**
+    -   Email (active, shows breach count)
+    -   Phone number (premium, grayed out)
+    -   Credit card (premium, grayed out)
+    -   SSN/ID (premium, grayed out)
+-   **24/7 Monitoring activation** - Blue "Activate" button with Shield icon
+-   **Protection recommendations:**
+    -   Change Passwords (CheckCircle icon)
+    -   Enable 2FA (Shield icon)
+    -   Monitor Activity (AlertTriangle icon)
 
 **Design:**
 
-- Red gradient alert banner
-- Two-column layout: Email list (left) + Breach details (right)
-- White cards with shadow and hover effects
-- Green "24/7 Active" badge when monitoring enabled
-- Blue gradient recommendations section at bottom
+-   Red gradient alert banner
+-   Two-column layout: Email list (left) + Breach details (right)
+-   White cards with shadow and hover effects
+-   Green "24/7 Active" badge when monitoring enabled
+-   Blue gradient recommendations section at bottom
 
 ### 2. **IP Protection Page**
 
@@ -52,36 +52,36 @@ Professional security suite inspired by VeePN's security features:
 
 **Features:**
 
-- **Your IP Status card:**
-  - Current IP: 197.211.52.75 (with show/hide toggle)
-  - ISP: Globacom
-  - Location: Lagos, Nigeria
-  - Status: Unprotected → Protected (toggle)
-  - Refresh button to check current IP
-- **IP Rotation:**
-  - Country selector dropdown (🇺🇸 US, 🇬🇧 UK, 🇩🇪 DE, 🇫🇷 FR, 🇨🇦 CA, 🇦🇺 AU, 🇯🇵 JP, 🇸🇬 SG)
-  - "Rotate IP Now" button with animated spinner
-  - Success message showing new masked location
-- **Protection Features (3 cards):**
-  - VPN Protection - Encrypts traffic through secure servers
-  - Proxy Server - Masks IP through proxy network
-  - Location Masking - Hides real geographical location
-  - Each shows ACTIVE badge when enabled (green background)
-- **Enable/Disable Protection** toggle button (top right)
-- **Why IP Protection Matters** section:
-  - Privacy Protection
-  - Access Restrictions (bypass geo-blocks)
-  - Security Enhancement (DDoS protection)
-  - Anonymity Online
+-   **Your IP Status card:**
+    -   Current IP: 197.211.52.75 (with show/hide toggle)
+    -   ISP: Globacom
+    -   Location: Lagos, Nigeria
+    -   Status: Unprotected → Protected (toggle)
+    -   Refresh button to check current IP
+-   **IP Rotation:**
+    -   Country selector dropdown (🇺🇸 US, 🇬🇧 UK, 🇩🇪 DE, 🇫🇷 FR, 🇨🇦 CA, 🇦🇺 AU, 🇯🇵 JP, 🇸🇬 SG)
+    -   "Rotate IP Now" button with animated spinner
+    -   Success message showing new masked location
+-   **Protection Features (3 cards):**
+    -   VPN Protection - Encrypts traffic through secure servers
+    -   Proxy Server - Masks IP through proxy network
+    -   Location Masking - Hides real geographical location
+    -   Each shows ACTIVE badge when enabled (green background)
+-   **Enable/Disable Protection** toggle button (top right)
+-   **Why IP Protection Matters** section:
+    -   Privacy Protection
+    -   Access Restrictions (bypass geo-blocks)
+    -   Security Enhancement (DDoS protection)
+    -   Anonymity Online
 
 **Design:**
 
-- Green (protected) / Red (unprotected) status indicator
-- Two-column layout: IP Status + IP Rotation
-- Three feature cards with conditional green highlighting
-- Blue gradient information banner at bottom
-- Font-mono for IP address display
-- Eye/EyeOff icons for IP visibility toggle
+-   Green (protected) / Red (unprotected) status indicator
+-   Two-column layout: IP Status + IP Rotation
+-   Three feature cards with conditional green highlighting
+-   Blue gradient information banner at bottom
+-   Font-mono for IP address display
+-   Eye/EyeOff icons for IP visibility toggle
 
 ### 3. **Backend API Routes**
 
@@ -91,37 +91,37 @@ Professional security suite inspired by VeePN's security features:
 
 **GET /api/security/breach-check**
 
-- Headers: `Authorization: Bearer <token>`
-- Returns: `{ breaches: DataBreach[], totalBreaches: number, monitoring: boolean }`
-- **Demo mode:** Returns empty breaches for now
-- **Production:** Integrate with Have I Been Pwned API (https://haveibeenpwned.com/API/v3)
+-   Headers: `Authorization: Bearer <token>`
+-   Returns: `{ breaches: DataBreach[], totalBreaches: number, monitoring: boolean }`
+-   **Demo mode:** Returns empty breaches for now
+-   **Production:** Integrate with Have I Been Pwned API (<https://haveibeenpwned.com/API/v3>)
 
 **POST /api/security/activate-monitoring**
 
-- Headers: `Authorization: Bearer <token>`
-- Returns: `{ success: true, monitoring: true }`
-- Enables 24/7 breach monitoring for user
+-   Headers: `Authorization: Bearer <token>`
+-   Returns: `{ success: true, monitoring: true }`
+-   Enables 24/7 breach monitoring for user
 
 **POST /api/security/rotate-ip**
 
-- Headers: `Authorization: Bearer <token>`
-- Body: `{ targetCountry: string }`
-- Returns: `{ success: true, newIP: string, country: string, city: string, protected: true }`
-- **Demo mode:** Generates random IP based on country prefix
-- **Production:** Integrate with proxy/VPN provider API (ProxyMesh, Luminati, SmartProxy)
+-   Headers: `Authorization: Bearer <token>`
+-   Body: `{ targetCountry: string }`
+-   Returns: `{ success: true, newIP: string, country: string, city: string, protected: true }`
+-   **Demo mode:** Generates random IP based on country prefix
+-   **Production:** Integrate with proxy/VPN provider API (ProxyMesh, Luminati, SmartProxy)
 
 **GET /api/security/ip-info**
 
-- Headers: `Authorization: Bearer <token>`
-- Returns: `{ ip: string, protected: boolean }`
-- Gets client IP from request headers
+-   Headers: `Authorization: Bearer <token>`
+-   Returns: `{ ip: string, protected: boolean }`
+-   Gets client IP from request headers
 
 ### 4. **Backend Integration**
 
 **Modified:** `backend/src/index.ts`
 
-- Added import: `import securityRouter from "./routes/security";`
-- Added route: `app.use("/api/security", securityRouter);`
+-   Added import: `import securityRouter from "./routes/security";`
+-   Added route: `app.use("/api/security", securityRouter);`
 
 ---
 
@@ -129,42 +129,42 @@ Professional security suite inspired by VeePN's security features:
 
 ### Breach Alert Page
 
-- **Colors:**
-  - Red gradient: Alert banner (from-red-50 to-orange-50)
-  - Red text: Breach counts, leak numbers
-  - Blue: Activate button, recommendation section gradient
-  - Green: Active monitoring badge
-  - Orange: Premium category badges
-- **Icons:**
-  - Shield (header, recommendations)
-  - AlertTriangle (high-risk accounts, monitoring)
-  - Mail, Phone, CreditCard, FileText (category tabs)
-  - ChevronRight (navigation arrows)
-  - CheckCircle (recommendations)
-  - Info (monitoring notice)
-- **Layout:**
-  - Max-width: 1792px (7xl)
-  - Grid: 2 columns on desktop, stacks on mobile
-  - Card-based design with rounded-2xl corners
+-   **Colors:**
+    -   Red gradient: Alert banner (from-red-50 to-orange-50)
+    -   Red text: Breach counts, leak numbers
+    -   Blue: Activate button, recommendation section gradient
+    -   Green: Active monitoring badge
+    -   Orange: Premium category badges
+-   **Icons:**
+    -   Shield (header, recommendations)
+    -   AlertTriangle (high-risk accounts, monitoring)
+    -   Mail, Phone, CreditCard, FileText (category tabs)
+    -   ChevronRight (navigation arrows)
+    -   CheckCircle (recommendations)
+    -   Info (monitoring notice)
+-   **Layout:**
+    -   Max-width: 1792px (7xl)
+    -   Grid: 2 columns on desktop, stacks on mobile
+    -   Card-based design with rounded-2xl corners
 
 ### IP Protection Page
 
-- **Colors:**
-  - Green: Protected status, active features (from-green-600)
-  - Red: Unprotected status (from-red-600)
-  - Blue: Action buttons, info banner gradient
-  - Slate: Background, card borders
-- **Icons:**
-  - Shield/ShieldAlert (header status)
-  - Globe, MapPin, Zap (IP info)
-  - RefreshCw (rotate button, animated spin)
-  - Power (enable/disable toggle)
-  - Eye/EyeOff (IP visibility)
-  - Lock (protection active message)
-- **Layout:**
-  - Max-width: 1280px (5xl)
-  - Grid: 2 columns for status cards, 3 columns for features
-  - Conditional green borders when features active
+-   **Colors:**
+    -   Green: Protected status, active features (from-green-600)
+    -   Red: Unprotected status (from-red-600)
+    -   Blue: Action buttons, info banner gradient
+    -   Slate: Background, card borders
+-   **Icons:**
+    -   Shield/ShieldAlert (header status)
+    -   Globe, MapPin, Zap (IP info)
+    -   RefreshCw (rotate button, animated spin)
+    -   Power (enable/disable toggle)
+    -   Eye/EyeOff (IP visibility)
+    -   Lock (protection active message)
+-   **Layout:**
+    -   Max-width: 1280px (5xl)
+    -   Grid: 2 columns for status cards, 3 columns for features
+    -   Conditional green borders when features active
 
 ---
 
@@ -232,17 +232,12 @@ router.get("/breach-check", authenticateToken, async (req, res) => {
     }
 
     // Have I Been Pwned API v3
-    const response = await axios.get(
-      `https://haveibeenpwned.com/api/v3/breachedaccount/${encodeURIComponent(
-        user.email
-      )}`,
-      {
-        headers: {
-          "hibp-api-key": process.env.HIBP_API_KEY, // Get from https://haveibeenpwned.com/API/Key
-          "User-Agent": "Advancia-Pay-Ledger",
-        },
-      }
-    );
+    const response = await axios.get(`https://haveibeenpwned.com/api/v3/breachedaccount/${encodeURIComponent(user.email)}`, {
+      headers: {
+        "hibp-api-key": process.env.HIBP_API_KEY, // Get from https://haveibeenpwned.com/API/Key
+        "User-Agent": "Advancia-Pay-Ledger",
+      },
+    });
 
     const breaches = response.data.map((breach: any) => ({
       name: breach.Name,
@@ -369,8 +364,8 @@ PROXY_PASSWORD=your_password
 
 Both pages work in demo mode without backend integration:
 
-- Breach Alert shows sample breach data (4 emails with various breach counts)
-- IP Protection simulates IP rotation with random IPs based on country
+-   Breach Alert shows sample breach data (4 emails with various breach counts)
+-   IP Protection simulates IP rotation with random IPs based on country
 
 ---
 
@@ -422,9 +417,7 @@ async function notifyUserOfBreach(user: User, breachDetails: any) {
       <ul>
         <li><strong>Source:</strong> ${breachDetails.name}</li>
         <li><strong>Date:</strong> ${breachDetails.date}</li>
-        <li><strong>Leaked data:</strong> ${breachDetails.dataClasses.join(
-          ", "
-        )}</li>
+        <li><strong>Leaked data:</strong> ${breachDetails.dataClasses.join(", ")}</li>
       </ul>
       <p><strong>Recommended actions:</strong></p>
       <ol>
@@ -536,33 +529,33 @@ npx prisma generate
 
 ### Breach Alert
 
-- [ ] Page loads without errors
-- [ ] Email list displays with breach counts
-- [ ] Clicking email shows breach source details
-- [ ] Category tabs display correctly (Email active, others grayed)
-- [ ] "Activate" button toggles monitoring
-- [ ] "24/7 Active" badge shows when monitoring enabled
-- [ ] Recommendations section displays with icons
-- [ ] Responsive on mobile screens
-- [ ] API calls include authentication token
-- [ ] Demo data loads if API fails
+-   [ ] Page loads without errors
+-   [ ] Email list displays with breach counts
+-   [ ] Clicking email shows breach source details
+-   [ ] Category tabs display correctly (Email active, others grayed)
+-   [ ] "Activate" button toggles monitoring
+-   [ ] "24/7 Active" badge shows when monitoring enabled
+-   [ ] Recommendations section displays with icons
+-   [ ] Responsive on mobile screens
+-   [ ] API calls include authentication token
+-   [ ] Demo data loads if API fails
 
 ### IP Protection
 
-- [ ] Current IP displays correctly
-- [ ] ISP and location information shows
-- [ ] Status indicator matches protection state (red/green)
-- [ ] Country dropdown populates with options
-- [ ] "Rotate IP Now" button triggers IP change
-- [ ] Loading spinner shows during rotation
-- [ ] New IP displays in correct format
-- [ ] Status changes to "Protected" after rotation
-- [ ] Feature cards show ACTIVE badges when enabled
-- [ ] "Enable/Disable Protection" toggle works
-- [ ] Eye/EyeOff toggle hides/shows IP
-- [ ] Refresh button updates IP info
-- [ ] Why IP Protection section displays
-- [ ] Responsive on mobile screens
+-   [ ] Current IP displays correctly
+-   [ ] ISP and location information shows
+-   [ ] Status indicator matches protection state (red/green)
+-   [ ] Country dropdown populates with options
+-   [ ] "Rotate IP Now" button triggers IP change
+-   [ ] Loading spinner shows during rotation
+-   [ ] New IP displays in correct format
+-   [ ] Status changes to "Protected" after rotation
+-   [ ] Feature cards show ACTIVE badges when enabled
+-   [ ] "Enable/Disable Protection" toggle works
+-   [ ] Eye/EyeOff toggle hides/shows IP
+-   [ ] Refresh button updates IP info
+-   [ ] Why IP Protection section displays
+-   [ ] Responsive on mobile screens
 
 ---
 
@@ -579,40 +572,40 @@ PROXY_PASSWORD=your_proxy_password
 
 2. **API Rate Limits:**
 
-- Have I Been Pwned: 1 request per 1.5 seconds (respect rate limits)
-- Implement caching to avoid repeated API calls
-- Store breach data in database and update daily
+-   Have I Been Pwned: 1 request per 1.5 seconds (respect rate limits)
+-   Implement caching to avoid repeated API calls
+-   Store breach data in database and update daily
 
 3. **Security Considerations:**
 
-- Never log real user IPs in production
-- Encrypt stored IP addresses in database
-- Use HTTPS for all proxy connections
-- Validate country input to prevent injection
+-   Never log real user IPs in production
+-   Encrypt stored IP addresses in database
+-   Use HTTPS for all proxy connections
+-   Validate country input to prevent injection
 
 4. **Performance:**
 
-- Cache breach check results for 24 hours
-- Lazy load breach source details
-- Paginate email list if user has many addresses
-- Debounce IP rotation requests
+-   Cache breach check results for 24 hours
+-   Lazy load breach source details
+-   Paginate email list if user has many addresses
+-   Debounce IP rotation requests
 
 ---
 
 ## 📝 Future Enhancements
 
-- [ ] **Multi-email monitoring** - Check multiple emails per user
-- [ ] **Real-time alerts** - Push notifications for new breaches
-- [ ] **Password strength checker** - Analyze user passwords
-- [ ] **Dark web monitoring** - Check for leaked credentials on dark web
-- [ ] **Automated IP rotation** - Schedule automatic rotations
-- [ ] **VPN kill switch** - Drop connection if VPN fails
-- [ ] **DNS leak protection** - Prevent DNS request leaks
-- [ ] **Split tunneling** - Route specific traffic through VPN
-- [ ] **Connection logs** - Track all IP rotations
-- [ ] **Custom proxy servers** - Let users add their own proxies
-- [ ] **Geolocation spoofing** - Change browser geolocation
-- [ ] **User agent rotation** - Randomize browser fingerprint
+-   [ ] **Multi-email monitoring** - Check multiple emails per user
+-   [ ] **Real-time alerts** - Push notifications for new breaches
+-   [ ] **Password strength checker** - Analyze user passwords
+-   [ ] **Dark web monitoring** - Check for leaked credentials on dark web
+-   [ ] **Automated IP rotation** - Schedule automatic rotations
+-   [ ] **VPN kill switch** - Drop connection if VPN fails
+-   [ ] **DNS leak protection** - Prevent DNS request leaks
+-   [ ] **Split tunneling** - Route specific traffic through VPN
+-   [ ] **Connection logs** - Track all IP rotations
+-   [ ] **Custom proxy servers** - Let users add their own proxies
+-   [ ] **Geolocation spoofing** - Change browser geolocation
+-   [ ] **User agent rotation** - Randomize browser fingerprint
 
 ---
 
@@ -622,59 +615,59 @@ PROXY_PASSWORD=your_proxy_password
 
 **Problem:** No breaches showing
 
-- Check if user email exists in database
-- Verify HIBP API key is valid
-- Check API rate limits (max 1 req per 1.5s)
-- Test demo mode by removing API call
+-   Check if user email exists in database
+-   Verify HIBP API key is valid
+-   Check API rate limits (max 1 req per 1.5s)
+-   Test demo mode by removing API call
 
 **Problem:** "Activate" button not working
 
-- Check authentication token in localStorage
-- Verify `/api/security/activate-monitoring` endpoint
-- Check browser console for errors
-- Ensure user is authenticated
+-   Check authentication token in localStorage
+-   Verify `/api/security/activate-monitoring` endpoint
+-   Check browser console for errors
+-   Ensure user is authenticated
 
 ### IP Protection Issues
 
 **Problem:** IP not rotating
 
-- Check proxy/VPN provider credentials
-- Verify network connectivity
-- Test demo mode (generates random IP)
-- Check backend logs for proxy errors
+-   Check proxy/VPN provider credentials
+-   Verify network connectivity
+-   Test demo mode (generates random IP)
+-   Check backend logs for proxy errors
 
 **Problem:** Wrong country showing
 
-- Verify country mapping in backend
-- Check IP geolocation API response
-- Update IP range prefixes if needed
-- Test with different countries
+-   Verify country mapping in backend
+-   Check IP geolocation API response
+-   Update IP range prefixes if needed
+-   Test with different countries
 
 **Problem:** "Protected" status not updating
 
-- Check state management in React component
-- Verify API response includes `protected: true`
-- Check localStorage persistence
-- Refresh page to reset state
+-   Check state management in React component
+-   Verify API response includes `protected: true`
+-   Check localStorage persistence
+-   Refresh page to reset state
 
 ---
 
 ## 📚 Related Documentation
 
-- [Support Page Guide](./SUPPORT_PAGE_GUIDE.md)
-- [Maintenance Mode Guide](./MAINTENANCE_MODE_GUIDE.md)
-- [API Reference](./API_REFERENCE.md)
-- [Deployment Guide](./DEPLOYMENT_GUIDE.md)
-- [Security Best Practices](./SECURITY_BEST_PRACTICES.md)
+-   [Support Page Guide](./SUPPORT_PAGE_GUIDE.md)
+-   [Maintenance Mode Guide](./MAINTENANCE_MODE_GUIDE.md)
+-   [API Reference](./API_REFERENCE.md)
+-   [Deployment Guide](./DEPLOYMENT_GUIDE.md)
+-   [Security Best Practices](./SECURITY_BEST_PRACTICES.md)
 
 ---
 
 ## 🔗 External Resources
 
-- [Have I Been Pwned API](https://haveibeenpwned.com/API/v3)
-- [ProxyMesh](https://proxymesh.com/)
-- [IP Geolocation API](https://ipapi.co/)
-- [VeePN Breach Alert](https://veepn.com/alert/)
+-   [Have I Been Pwned API](https://haveibeenpwned.com/API/v3)
+-   [ProxyMesh](https://proxymesh.com/)
+-   [IP Geolocation API](https://ipapi.co/)
+-   [VeePN Breach Alert](https://veepn.com/alert/)
 
 ---
 

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface Wallet {
   balance: number;
@@ -18,14 +18,14 @@ interface ChartDataPoint {
 export default function TokenWalletPage() {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
   const [transferForm, setTransferForm] = useState({
-    toEmail: "",
-    amount: "",
-    message: "",
+    toEmail: '',
+    amount: '',
+    message: '',
   });
-  const [buyForm, setBuyForm] = useState({ usdAmount: "" });
-  const [stakeForm, setStakeForm] = useState({ amount: "", duration: "30" });
+  const [buyForm, setBuyForm] = useState({ usdAmount: '' });
+  const [stakeForm, setStakeForm] = useState({ amount: '', duration: '30' });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -35,39 +35,39 @@ export default function TokenWalletPage() {
 
   const fetchWallet = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/tokens/wallet", {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/tokens/wallet', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) setWallet(data.wallet);
     } catch (error) {
-      console.error("Fetch wallet error:", error);
+      console.error('Fetch wallet error:', error);
     }
   };
 
   const fetchChart = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/tokens/chart?days=30", {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/tokens/chart?days=30', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) setChartData(data.history);
     } catch (error) {
-      console.error("Fetch chart error:", error);
+      console.error('Fetch chart error:', error);
     }
   };
 
   const handleWithdraw = async (amount: number) => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/tokens/withdraw", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/tokens/withdraw', {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ amount }),
       });
@@ -75,7 +75,7 @@ export default function TokenWalletPage() {
       alert(data.message || data.error);
       if (data.success) fetchWallet();
     } catch {
-      alert("Withdrawal failed");
+      alert('Withdrawal failed');
     }
     setLoading(false);
   };
@@ -84,12 +84,12 @@ export default function TokenWalletPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/tokens/transfer", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/tokens/transfer', {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           toEmail: transferForm.toEmail,
@@ -101,10 +101,10 @@ export default function TokenWalletPage() {
       alert(data.message || data.error);
       if (data.success) {
         fetchWallet();
-        setTransferForm({ toEmail: "", amount: "", message: "" });
+        setTransferForm({ toEmail: '', amount: '', message: '' });
       }
     } catch {
-      alert("Transfer failed");
+      alert('Transfer failed');
     }
     setLoading(false);
   };
@@ -113,12 +113,12 @@ export default function TokenWalletPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/tokens/buy", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/tokens/buy', {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ usdAmount: parseFloat(buyForm.usdAmount) }),
       });
@@ -126,10 +126,10 @@ export default function TokenWalletPage() {
       alert(data.message || data.error);
       if (data.success) {
         fetchWallet();
-        setBuyForm({ usdAmount: "" });
+        setBuyForm({ usdAmount: '' });
       }
     } catch {
-      alert("Purchase failed");
+      alert('Purchase failed');
     }
     setLoading(false);
   };
@@ -138,12 +138,12 @@ export default function TokenWalletPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/tokens/stake", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/tokens/stake', {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           amount: parseFloat(stakeForm.amount),
@@ -154,10 +154,10 @@ export default function TokenWalletPage() {
       alert(data.message || data.error);
       if (data.success) {
         fetchWallet();
-        setStakeForm({ amount: "", duration: "30" });
+        setStakeForm({ amount: '', duration: '30' });
       }
     } catch {
-      alert("Staking failed");
+      alert('Staking failed');
     }
     setLoading(false);
   };
@@ -216,14 +216,14 @@ export default function TokenWalletPage() {
         <div className="bg-white rounded-xl shadow-lg mb-6">
           <div className="border-b border-gray-200 overflow-x-auto">
             <div className="flex min-w-max">
-              {["overview", "transfer", "buy", "stake"].map((tab) => (
+              {['overview', 'transfer', 'buy', 'stake'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-medium capitalize whitespace-nowrap ${
                     activeTab === tab
-                      ? "border-b-2 border-blue-500 text-blue-600"
-                      : "text-gray-600 hover:text-gray-900"
+                      ? 'border-b-2 border-blue-500 text-blue-600'
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
                   {tab}
@@ -234,7 +234,7 @@ export default function TokenWalletPage() {
 
           <div className="p-4 sm:p-6">
             {/* Overview Tab */}
-            {activeTab === "overview" && (
+            {activeTab === 'overview' && (
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg sm:text-xl font-semibold mb-4">
@@ -242,9 +242,7 @@ export default function TokenWalletPage() {
                   </h3>
                   <div className="h-64 sm:h-80 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
                     <div className="text-center">
-                      <h4 className="text-lg font-medium text-gray-600">
-                        Price Chart Coming Soon
-                      </h4>
+                      <h4 className="text-lg font-medium text-gray-600">Price Chart Coming Soon</h4>
                       <p className="text-sm text-gray-500 mt-2">
                         Token price history will be available in the next update
                       </p>
@@ -253,13 +251,11 @@ export default function TokenWalletPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg sm:text-xl font-semibold mb-4">
-                    Quick Actions
-                  </h3>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-4">Quick Actions</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <button
                       onClick={() => {
-                        const amount = prompt("Enter amount to withdraw:");
+                        const amount = prompt('Enter amount to withdraw:');
                         if (amount) handleWithdraw(parseFloat(amount));
                       }}
                       className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg hover:from-blue-600 hover:to-blue-700 transition text-sm sm:text-base"
@@ -267,7 +263,7 @@ export default function TokenWalletPage() {
                       Withdraw to USD
                     </button>
                     <button
-                      onClick={() => setActiveTab("transfer")}
+                      onClick={() => setActiveTab('transfer')}
                       className="bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-purple-600 hover:to-purple-700 transition text-sm sm:text-base"
                     >
                       Transfer Tokens
@@ -278,7 +274,7 @@ export default function TokenWalletPage() {
             )}
 
             {/* Transfer Tab */}
-            {activeTab === "transfer" && (
+            {activeTab === 'transfer' && (
               <form onSubmit={handleTransfer} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -298,9 +294,7 @@ export default function TokenWalletPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Amount
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
                   <input
                     type="number"
                     value={transferForm.amount}
@@ -336,18 +330,16 @@ export default function TokenWalletPage() {
                   disabled={loading}
                   className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 transition disabled:opacity-50"
                 >
-                  {loading ? "Processing..." : "Transfer Tokens"}
+                  {loading ? 'Processing...' : 'Transfer Tokens'}
                 </button>
               </form>
             )}
 
             {/* Buy Tab */}
-            {activeTab === "buy" && (
+            {activeTab === 'buy' && (
               <form onSubmit={handleBuy} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    USD Amount
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">USD Amount</label>
                   <input
                     type="number"
                     value={buyForm.usdAmount}
@@ -357,10 +349,8 @@ export default function TokenWalletPage() {
                     min="1"
                   />
                   <p className="text-sm text-gray-600 mt-2">
-                    You will receive:{" "}
-                    {buyForm.usdAmount
-                      ? (parseFloat(buyForm.usdAmount) * 10).toLocaleString()
-                      : 0}{" "}
+                    You will receive:{' '}
+                    {buyForm.usdAmount ? (parseFloat(buyForm.usdAmount) * 10).toLocaleString() : 0}{' '}
                     tokens
                   </p>
                 </div>
@@ -369,13 +359,13 @@ export default function TokenWalletPage() {
                   disabled={loading}
                   className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition disabled:opacity-50"
                 >
-                  {loading ? "Processing..." : "Buy Tokens"}
+                  {loading ? 'Processing...' : 'Buy Tokens'}
                 </button>
               </form>
             )}
 
             {/* Stake Tab */}
-            {activeTab === "stake" && (
+            {activeTab === 'stake' && (
               <form onSubmit={handleStake} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -384,9 +374,7 @@ export default function TokenWalletPage() {
                   <input
                     type="number"
                     value={stakeForm.amount}
-                    onChange={(e) =>
-                      setStakeForm({ ...stakeForm, amount: e.target.value })
-                    }
+                    onChange={(e) => setStakeForm({ ...stakeForm, amount: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     min="1"
@@ -398,9 +386,7 @@ export default function TokenWalletPage() {
                   </label>
                   <select
                     value={stakeForm.duration}
-                    onChange={(e) =>
-                      setStakeForm({ ...stakeForm, duration: e.target.value })
-                    }
+                    onChange={(e) => setStakeForm({ ...stakeForm, duration: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="7">7 Days (3% APY)</option>
@@ -411,14 +397,14 @@ export default function TokenWalletPage() {
                 </div>
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-700">
-                    Estimated Reward:{" "}
+                    Estimated Reward:{' '}
                     {stakeForm.amount
                       ? (
                           parseFloat(stakeForm.amount) *
                           0.05 *
                           (parseInt(stakeForm.duration) / 365)
                         ).toFixed(2)
-                      : 0}{" "}
+                      : 0}{' '}
                     tokens
                   </p>
                 </div>
@@ -427,7 +413,7 @@ export default function TokenWalletPage() {
                   disabled={loading}
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition disabled:opacity-50"
                 >
-                  {loading ? "Processing..." : "Stake Tokens"}
+                  {loading ? 'Processing...' : 'Stake Tokens'}
                 </button>
               </form>
             )}

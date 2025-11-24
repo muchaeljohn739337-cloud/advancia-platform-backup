@@ -80,9 +80,9 @@ certbot --nginx -d yourdomain.com -d www.yourdomain.com --non-interactive --agre
 
 **Follow the prompts:**
 
-- Enter email for renewal notices
-- Agree to Terms of Service
-- Choose: Redirect HTTP to HTTPS (recommended)
+-   Enter email for renewal notices
+-   Agree to Terms of Service
+-   Choose: Redirect HTTP to HTTPS (recommended)
 
 ---
 
@@ -103,8 +103,8 @@ echo | openssl s_client -connect yourdomain.com:443 -servername yourdomain.com 2
 
 Online tools:
 
-- https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com
-- https://www.sslshopper.com/ssl-checker.html
+-   <https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com>
+-   <https://www.sslshopper.com/ssl-checker.html>
 
 ---
 
@@ -137,7 +137,7 @@ pm2 restart advancia-backend
 
 Update Vercel environment variable:
 
-1. Go to: https://vercel.com/advanciapayledger/frontend/settings/environment-variables
+1. Go to: <https://vercel.com/advanciapayledger/frontend/settings/environment-variables>
 2. Edit `NEXT_PUBLIC_API_URL`
 3. Change to: `https://yourdomain.com` (or `https://api.yourdomain.com`)
 4. Redeploy frontend
@@ -261,9 +261,9 @@ systemctl start nginx
 
 ### Mixed content errors
 
-- Ensure all API calls use `https://`
-- Update `NEXT_PUBLIC_API_URL` to use HTTPS
-- Check browser console for blocked resources
+-   Ensure all API calls use `https://`
+-   Update `NEXT_PUBLIC_API_URL` to use HTTPS
+-   Check browser console for blocked resources
 
 ### Certificate renewal fails
 
@@ -297,15 +297,15 @@ certbot delete --cert-name yourdomain.com
 
 ## Summary Checklist
 
-- [ ] Domain DNS pointing to 157.245.8.131
-- [ ] DNS propagated (test with nslookup)
-- [ ] Nginx config updated with domain
-- [ ] Certbot certificate obtained
-- [ ] HTTPS working on domain
-- [ ] Backend CORS updated with HTTPS URLs
-- [ ] Vercel frontend updated with HTTPS API URL
-- [ ] Auto-renewal tested
-- [ ] Force HTTPS redirect enabled
+-   [ ] Domain DNS pointing to 157.245.8.131
+-   [ ] DNS propagated (test with nslookup)
+-   [ ] Nginx config updated with domain
+-   [ ] Certbot certificate obtained
+-   [ ] HTTPS working on domain
+-   [ ] Backend CORS updated with HTTPS URLs
+-   [ ] Vercel frontend updated with HTTPS API URL
+-   [ ] Auto-renewal tested
+-   [ ] Force HTTPS redirect enabled
 
 ---
 

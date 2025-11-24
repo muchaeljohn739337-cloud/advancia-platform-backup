@@ -10,18 +10,18 @@ This guide shows you how to use Postman's Collection Runner to automatically sim
 
 ### 1. **Advancia_Lockout_Runner.postman_collection.json** (NEW!)
 
-- **Purpose:** Automated iteration-based lockout testing
-- **Features:**
-  - Single request that runs multiple times
-  - Automatic attempt counter
-  - Smart detection of lockout trigger
-  - Comprehensive logging and summary
-  - No manual clicking required!
+-   **Purpose:** Automated iteration-based lockout testing
+-   **Features:**
+    -   Single request that runs multiple times
+    -   Automatic attempt counter
+    -   Smart detection of lockout trigger
+    -   Comprehensive logging and summary
+    -   No manual clicking required!
 
 ### 2. **Advancia_Lockout_Tests.postman_collection.json** (Original)
 
-- **Purpose:** Manual step-by-step testing with individual requests
-- **Use Case:** When you want granular control over each test phase
+-   **Purpose:** Manual step-by-step testing with individual requests
+-   **Use Case:** When you want granular control over each test phase
 
 ---
 
@@ -182,9 +182,9 @@ another@test.com,incorrect123
 
 **Runner Settings:**
 
-- Select Data: `lockout-test-data.csv`
-- Iterations: Auto (one per row)
-- File Type: CSV
+-   Select Data: `lockout-test-data.csv`
+-   Iterations: Auto (one per row)
+-   File Type: CSV
 
 ---
 
@@ -209,9 +209,9 @@ user2@test.com,incorrect,000000
 
 **Runner Config:**
 
-- Data: Select CSV file
-- Iterations: Auto (3 in this case)
-- Delay: 1000ms
+-   Data: Select CSV file
+-   Iterations: Auto (3 in this case)
+-   Delay: 1000ms
 
 ---
 
@@ -221,15 +221,15 @@ user2@test.com,incorrect,000000
 
 **Runner Config:**
 
-- Iterations: 10
-- Delay: 0ms (no delay)
-- Environment: Production-like
+-   Iterations: 10
+-   Delay: 0ms (no delay)
+-   Environment: Production-like
 
 **What to Watch:**
 
-- Rate limiting behavior
-- Database performance
-- Lock acquisition timing
+-   Rate limiting behavior
+-   Database performance
+-   Lock acquisition timing
 
 ---
 
@@ -408,6 +408,7 @@ admin@advancia.com    | 5               | 2025-11-14 10:45:30+00   | 🔒 LOCKED
 1. Check collection variables are enabled
 2. Verify pre-request script is running
 3. Clear collection variables and retry:
+
    ```javascript
    pm.collectionVariables.clear();
    ```
@@ -433,9 +434,9 @@ admin@advancia.com    | 5               | 2025-11-14 10:45:30+00   | 🔒 LOCKED
 
 **Problem:**
 
-- Backend not enforcing lockout
-- Database not updating
-- Route handler logic issue
+-   Backend not enforcing lockout
+-   Database not updating
+-   Route handler logic issue
 
 **Solution:**
 
@@ -472,30 +473,30 @@ node src/index.js
 
 ## 🎓 Best Practices
 
-### ✅ DO:
+### ✅ DO
 
-- Always reset account state before running (`.\quick-db-check.ps1 reset`)
-- Use 6 iterations to confirm lockout persistence
-- Set 1000ms delay for realistic testing
-- Verify database state after each run
-- Use Newman for CI/CD automation
+-   Always reset account state before running (`.\quick-db-check.ps1 reset`)
+-   Use 6 iterations to confirm lockout persistence
+-   Set 1000ms delay for realistic testing
+-   Verify database state after each run
+-   Use Newman for CI/CD automation
 
-### ❌ DON'T:
+### ❌ DON'T
 
-- Run without resetting if testing multiple times
-- Use 0ms delay in production-like environments
-- Forget to check database after Runner completes
-- Test against production database
-- Ignore unexpected status codes in console
+-   Run without resetting if testing multiple times
+-   Use 0ms delay in production-like environments
+-   Forget to check database after Runner completes
+-   Test against production database
+-   Ignore unexpected status codes in console
 
 ---
 
 ## 📚 Related Documentation
 
-- **POSTMAN_TESTING_GUIDE.md** - Complete Postman testing guide
-- **COMPLETE_TEST_WORKFLOW.md** - Step-by-step testing procedures
-- **DATABASE_VERIFICATION_GUIDE.md** - SQL verification queries
-- **QUICK_TEST_REFERENCE.md** - Quick command reference
+-   **POSTMAN_TESTING_GUIDE.md** - Complete Postman testing guide
+-   **COMPLETE_TEST_WORKFLOW.md** - Step-by-step testing procedures
+-   **DATABASE_VERIFICATION_GUIDE.md** - SQL verification queries
+-   **QUICK_TEST_REFERENCE.md** - Quick command reference
 
 ---
 
@@ -503,14 +504,14 @@ node src/index.js
 
 Your automated runner test is successful when:
 
-- ✅ All 6 iterations complete without errors
-- ✅ First 4 attempts return `401 Unauthorized`
-- ✅ 5th attempt returns `429 Too Many Requests`
-- ✅ 6th attempt also returns `429` (confirms persistence)
-- ✅ Console shows lockout timestamp
-- ✅ Database shows `failed_attempts = 5`
-- ✅ Database shows `locked_until` set to future timestamp
-- ✅ Final summary shows "Lockout policy triggered successfully!"
+-   ✅ All 6 iterations complete without errors
+-   ✅ First 4 attempts return `401 Unauthorized`
+-   ✅ 5th attempt returns `429 Too Many Requests`
+-   ✅ 6th attempt also returns `429` (confirms persistence)
+-   ✅ Console shows lockout timestamp
+-   ✅ Database shows `failed_attempts = 5`
+-   ✅ Database shows `locked_until` set to future timestamp
+-   ✅ Final summary shows "Lockout policy triggered successfully!"
 
 ---
 

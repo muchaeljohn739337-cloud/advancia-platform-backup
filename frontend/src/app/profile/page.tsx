@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import ProfileOverviewCard from "@/components/ProfileOverviewCard";
-import SidebarLayout from "@/components/SidebarLayout";
-import { Camera, Mail, Shield, UserCircle, Users } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import ProfileOverviewCard from '@/components/ProfileOverviewCard';
+import SidebarLayout from '@/components/SidebarLayout';
+import { Camera, Mail, Shield, UserCircle, Users } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 interface SessionUser {
   id?: string;
@@ -22,38 +22,38 @@ export default function ProfilePage() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialPreview);
   const [topUpLoading, setTopUpLoading] = useState(false);
   const objectUrlRef = useRef<string | null>(null);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const displayName = useMemo(() => {
     if (sessionUser?.name && sessionUser.name.trim().length > 0) {
       return sessionUser.name;
     }
     if (sessionUser?.email) {
-      return sessionUser.email.split("@")[0];
+      return sessionUser.email.split('@')[0];
     }
-    return "Advancia User";
+    return 'Advancia User';
   }, [sessionUser?.name, sessionUser?.email]);
 
   const initials = useMemo(() => {
-    const parts = (displayName || "Advancia User").split(/\s+/).filter(Boolean);
-    if (!parts.length) return "AU";
-    const first = parts[0]?.[0] ?? "";
-    const last = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "";
+    const parts = (displayName || 'Advancia User').split(/\s+/).filter(Boolean);
+    if (!parts.length) return 'AU';
+    const first = parts[0]?.[0] ?? '';
+    const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
     return `${first}${last}`.toUpperCase();
   }, [displayName]);
 
   const derivedAccountNumber = useMemo(() => {
     if (sessionUser?.id) {
-      const digits = sessionUser.id.replace(/[^0-9]/g, "");
+      const digits = sessionUser.id.replace(/[^0-9]/g, '');
       if (digits.length >= 8) return digits.slice(0, 12);
-      if (digits.length > 0) return digits.padEnd(8, "7");
+      if (digits.length > 0) return digits.padEnd(8, '7');
     }
 
     if (sessionUser?.email) {
       const ascii = Array.from(sessionUser.email)
         .map((char) => char.charCodeAt(0) % 10)
-        .join("");
-      return ascii.slice(0, 12).padEnd(8, "5");
+        .join('');
+      return ascii.slice(0, 12).padEnd(8, '5');
     }
 
     return undefined;
@@ -89,43 +89,43 @@ export default function ProfilePage() {
 
   const calculatedRole = useMemo(() => {
     const role = sessionUser?.role || sessionUser?.email;
-    if (!role) return "User";
+    if (!role) return 'User';
 
-    if (role === "admin" || role.includes("admin")) {
-      return "Administrator";
+    if (role === 'admin' || role.includes('admin')) {
+      return 'Administrator';
     }
 
-    return "User";
+    return 'User';
   }, [sessionUser?.role, sessionUser?.email]);
 
   const notifyTopUpError = (message: string) => {
-    console.error("Top up error:", message);
+    console.error('Top up error:', message);
     alert(message);
   };
 
   const handleTopUp = async () => {
-    const amountInput = prompt("Enter the amount to add (USD):", "50");
+    const amountInput = prompt('Enter the amount to add (USD):', '50');
     if (!amountInput) return;
 
     const parsedAmount = Number(amountInput);
     if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
-      notifyTopUpError("Please provide a valid amount greater than zero.");
+      notifyTopUpError('Please provide a valid amount greater than zero.');
       return;
     }
 
     try {
       setTopUpLoading(true);
       const response = await fetch(`${API_URL}/api/payments/checkout-session`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           amount: parsedAmount,
           metadata: {
             userId: sessionUser?.id,
             email: sessionUser?.email,
-            source: "profile",
+            source: 'profile',
           },
         }),
       });
@@ -133,7 +133,7 @@ export default function ProfilePage() {
       if (!response.ok) {
         const errorBody = await response.json().catch(() => null);
         const reason = (errorBody as { error?: string } | null)?.error;
-        notifyTopUpError(reason || "Unable to start checkout session.");
+        notifyTopUpError(reason || 'Unable to start checkout session.');
         return;
       }
 
@@ -141,11 +141,11 @@ export default function ProfilePage() {
       if (payload.url) {
         window.location.href = payload.url;
       } else {
-        notifyTopUpError("Checkout response missing redirect URL.");
+        notifyTopUpError('Checkout response missing redirect URL.');
       }
     } catch (error) {
-      console.error("Top up request failed", error);
-      notifyTopUpError("Network error while starting checkout.");
+      console.error('Top up request failed', error);
+      notifyTopUpError('Network error while starting checkout.');
     } finally {
       setTopUpLoading(false);
     }
@@ -158,8 +158,7 @@ export default function ProfilePage() {
           <div>
             <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
             <p className="mt-2 text-sm text-slate-600">
-              Review your personal information, manage your avatar, and confirm
-              your account status.
+              Review your personal information, manage your avatar, and confirm your account status.
             </p>
           </div>
 
@@ -174,14 +173,12 @@ export default function ProfilePage() {
               if (topUpLoading) return;
               handleTopUp();
             }}
-            onNotificationClick={() => alert("No new notifications")}
+            onNotificationClick={() => alert('No new notifications')}
             onSupportClick={() => {
-              if (typeof window !== "undefined" && window.smartsupp) {
-                window.smartsupp("chat:open");
+              if (typeof window !== 'undefined' && window.smartsupp) {
+                window.smartsupp('chat:open');
               } else {
-                alert(
-                  "Live support is getting ready. Please try again shortly."
-                );
+                alert('Live support is getting ready. Please try again shortly.');
               }
             }}
             topUpLoading={topUpLoading}
@@ -216,8 +213,8 @@ export default function ProfilePage() {
                 </label>
 
                 <p className="mt-3 text-xs text-slate-500">
-                  Your image stays in this session only. Save to backend storage
-                  to persist this avatar.
+                  Your image stays in this session only. Save to backend storage to persist this
+                  avatar.
                 </p>
               </div>
             </section>
@@ -230,29 +227,20 @@ export default function ProfilePage() {
                 </h2>
                 <dl className="mt-4 grid gap-4 sm:grid-cols-2">
                   <div>
-                    <dt className="text-xs uppercase tracking-wide text-slate-500">
-                      Full Name
-                    </dt>
-                    <dd className="mt-1 text-sm font-semibold text-slate-800">
-                      {displayName}
-                    </dd>
+                    <dt className="text-xs uppercase tracking-wide text-slate-500">Full Name</dt>
+                    <dd className="mt-1 text-sm font-semibold text-slate-800">{displayName}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs uppercase tracking-wide text-slate-500">
-                      Role
-                    </dt>
+                    <dt className="text-xs uppercase tracking-wide text-slate-500">Role</dt>
                     <dd className="mt-1 flex items-center gap-2 text-sm font-semibold text-slate-800">
-                      <Shield className="h-4 w-4 text-emerald-500" />{" "}
-                      {calculatedRole}
+                      <Shield className="h-4 w-4 text-emerald-500" /> {calculatedRole}
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-xs uppercase tracking-wide text-slate-500">
-                      Email
-                    </dt>
+                    <dt className="text-xs uppercase tracking-wide text-slate-500">Email</dt>
                     <dd className="mt-1 flex items-center gap-2 text-sm font-semibold text-slate-800 break-all">
                       <Mail className="h-4 w-4 text-blue-500" />
-                      {sessionUser?.email || "Not provided"}
+                      {sessionUser?.email || 'Not provided'}
                     </dd>
                   </div>
                   <div>
@@ -260,7 +248,7 @@ export default function ProfilePage() {
                       Account Number
                     </dt>
                     <dd className="mt-1 text-sm font-semibold text-slate-800">
-                      {derivedAccountNumber || "Pending"}
+                      {derivedAccountNumber || 'Pending'}
                     </dd>
                   </div>
                 </dl>
@@ -272,18 +260,9 @@ export default function ProfilePage() {
                   Security & Access
                 </h2>
                 <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                  <li>
-                    • Access limited to your profile and authorized dashboard
-                    sections.
-                  </li>
-                  <li>
-                    • Uploading a picture here updates your on-screen avatar
-                    immediately.
-                  </li>
-                  <li>
-                    • Contact an administrator for role upgrades or additional
-                    privileges.
-                  </li>
+                  <li>• Access limited to your profile and authorized dashboard sections.</li>
+                  <li>• Uploading a picture here updates your on-screen avatar immediately.</li>
+                  <li>• Contact an administrator for role upgrades or additional privileges.</li>
                 </ul>
               </div>
             </section>

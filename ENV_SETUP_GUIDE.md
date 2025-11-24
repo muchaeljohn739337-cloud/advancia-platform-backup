@@ -68,11 +68,14 @@ cp .env.example .env
 1. Sign up at [stripe.com](https://stripe.com)
 2. Get test keys from Dashboard → Developers → API Keys
 3. Add to **backend**:
+
    ```env
    STRIPE_SECRET_KEY="sk_test_..."
    STRIPE_WEBHOOK_SECRET="whsec_..."
    ```
+
 4. Add to **frontend**:
+
    ```env
    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
    ```
@@ -84,6 +87,7 @@ cp .env.example .env
 1. Sign up at [plaid.com](https://plaid.com)
 2. Create app and get credentials
 3. Add to **backend**:
+
    ```env
    PLAID_CLIENT_ID="your-client-id"
    PLAID_SECRET="your-secret"
@@ -98,6 +102,7 @@ cp .env.example .env
 2. Add your domain
 3. Get API token: My Profile → API Tokens → Create Token
 4. Add to **backend**:
+
    ```env
    CLOUDFLARE_API_TOKEN="your-token"
    CLOUDFLARE_ZONE_ID="your-zone-id"
@@ -110,10 +115,13 @@ cp .env.example .env
 1. Create project at [sentry.io](https://sentry.io)
 2. Get DSN from Project Settings
 3. Add to **backend**:
+
    ```env
    SENTRY_DSN="https://...@sentry.io/..."
    ```
+
 4. Add to **frontend**:
+
    ```env
    NEXT_PUBLIC_SENTRY_DSN="https://...@sentry.io/..."
    ```
@@ -125,10 +133,13 @@ cp .env.example .env
 1. Create project at [mixpanel.com](https://mixpanel.com)
 2. Get token from Project Settings
 3. Add to **backend**:
+
    ```env
    MIXPANEL_TOKEN="your-token"
    ```
+
 4. Add to **frontend**:
+
    ```env
    NEXT_PUBLIC_MIXPANEL_TOKEN="your-token"
    ```
@@ -142,6 +153,7 @@ cp .env.example .env
 1. Enable 2FA on your Gmail account
 2. Generate App Password: [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
 3. Add to **backend**:
+
    ```env
    EMAIL_HOST="smtp.gmail.com"
    EMAIL_PORT="587"
@@ -154,6 +166,7 @@ cp .env.example .env
 1. Sign up at [sendgrid.com](https://sendgrid.com)
 2. Create API key
 3. Add to **backend**:
+
    ```env
    EMAIL_HOST="smtp.sendgrid.net"
    EMAIL_PORT="587"
@@ -168,6 +181,7 @@ cp .env.example .env
 1. Sign up at [cryptomus.com](https://cryptomus.com)
 2. Create merchant account
 3. Add to **backend**:
+
    ```env
    CRYPTOMUS_API_KEY="your-api-key"
    CRYPTOMUS_MERCHANT_ID="your-merchant-id"
@@ -202,22 +216,22 @@ NEXT_PUBLIC_VAPID_KEY="generated-public-key"
 
 ## 🔒 Security Best Practices
 
-### ✅ DO:
+### ✅ DO
 
-- ✅ Use strong, randomly generated secrets (32+ characters)
-- ✅ Never commit `.env` files to Git
-- ✅ Use different secrets for dev, staging, and production
-- ✅ Rotate secrets regularly (every 90 days)
-- ✅ Use environment-specific `.env` files
-- ✅ Encrypt secrets in CI/CD (GitHub Secrets, Render env vars)
+-   ✅ Use strong, randomly generated secrets (32+ characters)
+-   ✅ Never commit `.env` files to Git
+-   ✅ Use different secrets for dev, staging, and production
+-   ✅ Rotate secrets regularly (every 90 days)
+-   ✅ Use environment-specific `.env` files
+-   ✅ Encrypt secrets in CI/CD (GitHub Secrets, Render env vars)
 
-### ❌ DON'T:
+### ❌ DON'T
 
-- ❌ Use default/example secrets in production
-- ❌ Share `.env` files via email/Slack/Discord
-- ❌ Hardcode secrets in source code
-- ❌ Use the same secrets across multiple environments
-- ❌ Store secrets in plaintext documentation
+-   ❌ Use default/example secrets in production
+-   ❌ Share `.env` files via email/Slack/Discord
+-   ❌ Hardcode secrets in source code
+-   ❌ Use the same secrets across multiple environments
+-   ❌ Store secrets in plaintext documentation
 
 ---
 
@@ -225,22 +239,22 @@ NEXT_PUBLIC_VAPID_KEY="generated-public-key"
 
 ### **Local Development**
 
-- Use `.env` (backend) and `.env.local` (frontend)
-- Relaxed CORS, debug logging enabled
-- Test/sandbox API keys
+-   Use `.env` (backend) and `.env.local` (frontend)
+-   Relaxed CORS, debug logging enabled
+-   Test/sandbox API keys
 
 ### **Staging/UAT**
 
-- Environment variables via hosting platform (Render, Vercel)
-- Tighter CORS, standard logging
-- Test/sandbox API keys
+-   Environment variables via hosting platform (Render, Vercel)
+-   Tighter CORS, standard logging
+-   Test/sandbox API keys
 
 ### **Production**
 
-- Environment variables via hosting platform (encrypted at rest)
-- Strict CORS, minimal logging
-- Production API keys with monitoring
-- Enable rate limiting and WAF
+-   Environment variables via hosting platform (encrypted at rest)
+-   Strict CORS, minimal logging
+-   Production API keys with monitoring
+-   Enable rate limiting and WAF
 
 ---
 
@@ -279,43 +293,43 @@ npm run dev
 
 ### "DATABASE_URL not found"
 
-- ✅ Verify `.env` exists in `backend/` directory
-- ✅ Check `.env` is not empty
-- ✅ Restart backend server after changes
+-   ✅ Verify `.env` exists in `backend/` directory
+-   ✅ Check `.env` is not empty
+-   ✅ Restart backend server after changes
 
 ### "JWT_SECRET is required"
 
-- ✅ Generate secret: `openssl rand -base64 32`
-- ✅ Add to `backend/.env`: `JWT_SECRET="generated-secret"`
+-   ✅ Generate secret: `openssl rand -base64 32`
+-   ✅ Add to `backend/.env`: `JWT_SECRET="generated-secret"`
 
 ### "CORS error" in frontend
 
-- ✅ Verify `FRONTEND_URL` in backend `.env` matches frontend URL
-- ✅ Check `NEXT_PUBLIC_API_URL` in frontend `.env.local` points to backend
+-   ✅ Verify `FRONTEND_URL` in backend `.env` matches frontend URL
+-   ✅ Check `NEXT_PUBLIC_API_URL` in frontend `.env.local` points to backend
 
 ### "Stripe key invalid"
 
-- ✅ Use `pk_test_` (publishable) in frontend
-- ✅ Use `sk_test_` (secret) in backend
-- ✅ Never use secret keys in frontend
+-   ✅ Use `pk_test_` (publishable) in frontend
+-   ✅ Use `sk_test_` (secret) in backend
+-   ✅ Never use secret keys in frontend
 
 ---
 
 ## 📚 Additional Resources
 
-- [Backend README](./backend/README.md) - Detailed backend setup
-- [Frontend README](./frontend/README.md) - Detailed frontend setup
-- [Deployment Guide](./ONE_HOUR_MIGRATION_GUIDE.md) - Production deployment
-- [Troubleshooting](./TROUBLESHOOTING.md) - Common issues and fixes
+-   [Backend README](./backend/README.md) - Detailed backend setup
+-   [Frontend README](./frontend/README.md) - Detailed frontend setup
+-   [Deployment Guide](./ONE_HOUR_MIGRATION_GUIDE.md) - Production deployment
+-   [Troubleshooting](./TROUBLESHOOTING.md) - Common issues and fixes
 
 ---
 
 ## 🤝 Need Help?
 
-- 📖 Check [.env.example files](./backend/.env.example) for all available options
-- 🐛 Open an issue on GitHub
-- 💬 Join our Discord community
-- 📧 Email: support@advanciapayledger.com
+-   📖 Check [.env.example files](./backend/.env.example) for all available options
+-   🐛 Open an issue on GitHub
+-   💬 Join our Discord community
+-   📧 Email: <support@advanciapayledger.com>
 
 ---
 

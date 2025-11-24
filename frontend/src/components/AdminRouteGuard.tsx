@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { adminApi } from "@/lib/api";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { adminApi } from '@/lib/api';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface AdminRouteGuardProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface AdminRouteGuardProps {
 function isTokenExpired(token: string | undefined): boolean {
   if (!token) return true;
   try {
-    const parts = token.split(".");
+    const parts = token.split('.');
     if (parts.length < 2 || !parts[1]) return true;
     const payload = JSON.parse(atob(parts[1]));
     const exp = payload.exp * 1000; // Convert to milliseconds
@@ -36,7 +36,7 @@ export default function AdminRouteGuard({ children }: AdminRouteGuardProps) {
   useEffect(() => {
     const checkAdminAccess = async () => {
       // Allow access to login page without checking
-      if (pathname === "/admin/login") {
+      if (pathname === '/admin/login') {
         setIsAuthorized(true);
         setIsChecking(false);
         return;
@@ -44,26 +44,26 @@ export default function AdminRouteGuard({ children }: AdminRouteGuardProps) {
 
       try {
         // Check if user is logged in
-        const token = localStorage.getItem("token");
-        const userEmail = localStorage.getItem("userEmail");
-        const userRole = localStorage.getItem("userRole");
+        const token = localStorage.getItem('token');
+        const userEmail = localStorage.getItem('userEmail');
+        const userRole = localStorage.getItem('userRole');
 
         if (!token || !userEmail) {
           // Not logged in - redirect to admin login
-          router.push("/admin/login");
+          router.push('/admin/login');
           return;
         }
 
         // Quick role check (client-side optimization)
-        if (userRole !== "ADMIN") {
-          alert("Access Denied: Admin privileges required");
-          router.push("/dashboard");
+        if (userRole !== 'ADMIN') {
+          alert('Access Denied: Admin privileges required');
+          router.push('/dashboard');
           return;
         }
 
         // Check token expiration
         if (isTokenExpired(token)) {
-          console.log("Token expired, will attempt refresh via API call...");
+          console.log('Token expired, will attempt refresh via API call...');
           // Token expired - the apiClient interceptor will handle refresh
           // Just proceed with the API call
         }
@@ -77,14 +77,14 @@ export default function AdminRouteGuard({ children }: AdminRouteGuardProps) {
           setIsChecking(false);
         }
       } catch (error: unknown) {
-        console.error("Admin access check failed:", error);
+        console.error('Admin access check failed:', error);
 
-        if (error && typeof error === "object" && "response" in error) {
+        if (error && typeof error === 'object' && 'response' in error) {
           const axiosError = error as { response?: { status?: number } };
           if (axiosError.response?.status === 403) {
             // User is NOT admin - redirect to dashboard
-            alert("Access Denied: Admin privileges required");
-            router.push("/dashboard");
+            alert('Access Denied: Admin privileges required');
+            router.push('/dashboard');
             return;
           }
         }
@@ -92,7 +92,7 @@ export default function AdminRouteGuard({ children }: AdminRouteGuardProps) {
         // Other error (token refresh failed, network error, etc.)
         // The apiClient interceptor will handle redirects if refresh fails
         localStorage.clear();
-        router.push("/admin/login");
+        router.push('/admin/login');
       }
     };
 

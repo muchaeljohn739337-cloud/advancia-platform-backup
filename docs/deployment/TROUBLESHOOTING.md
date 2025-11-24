@@ -11,6 +11,7 @@ Common issues and quick fixes for the Advancia Pay Ledger platform.
 **Symptom**: Changes not reflecting in browser after saving files
 
 **Fix**:
+
 ```powershell
 # Restart the frontend dev server
 cd frontend
@@ -18,6 +19,7 @@ npm run dev
 ```
 
 **Alternative** (if issue persists):
+
 ```powershell
 # Clear Next.js cache and restart
 rm -rf .next
@@ -31,6 +33,7 @@ npm run dev
 **Symptom**: `EADDRINUSE: address already in use :::3000` or `:::4000`
 
 **Fix for Frontend (Port 3000)**:
+
 ```powershell
 # Kill process on port 3000
 npx kill-port 3000
@@ -40,6 +43,7 @@ npm run clean
 ```
 
 **Fix for Backend (Port 4000)**:
+
 ```powershell
 # Kill process on port 4000
 npx kill-port 4000
@@ -50,6 +54,7 @@ npm run dev
 ```
 
 **Windows-specific fix**:
+
 ```powershell
 # Find and kill the process
 Get-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess | Stop-Process -Force
@@ -67,19 +72,21 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 4000).OwningProcess | Stop-Proc
 **Causes & Fixes**:
 
 1. **Missing Import Path**
+
    ```typescript
    // ❌ Wrong
-   import Dashboard from '../components/Dashboard'
-   
+   import Dashboard from "../components/Dashboard";
+
    // ✅ Correct - use path alias
-   import Dashboard from '@/components/Dashboard'
+   import Dashboard from "@/components/Dashboard";
    ```
 
 2. **Component Not Exported**
+
    ```typescript
    // ❌ Missing export
    function MyComponent() { ... }
-   
+
    // ✅ Correct
    export default function MyComponent() { ... }
    ```
@@ -111,6 +118,7 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 4000).OwningProcess | Stop-Proc
 **Symptom**: Classes like `bg-blue-500` not applying styles
 
 **Check 1**: Verify `globals.css` includes Tailwind directives
+
 ```css
 /* frontend/src/app/globals.css */
 @tailwind base;
@@ -119,24 +127,23 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 4000).OwningProcess | Stop-Proc
 ```
 
 **Check 2**: Ensure `globals.css` is imported in layout
+
 ```typescript
 // frontend/src/app/layout.tsx
-import './globals.css'
+import "./globals.css";
 ```
 
 **Check 3**: Verify `tailwind.config.js` content paths
+
 ```javascript
 module.exports = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
   // ... rest of config
-}
+};
 ```
 
 **Fix**: Restart dev server after config changes
+
 ```powershell
 npm run dev
 ```
@@ -152,16 +159,18 @@ npm run dev
 **Debugging Steps**:
 
 1. **Check Import Path**
+
    ```typescript
    // Use absolute imports with @/ alias
-   import MyComponent from '@/components/MyComponent'
+   import MyComponent from "@/components/MyComponent";
    ```
 
 2. **Verify Component Export**
+
    ```typescript
    // Named export
    export function MyComponent() { ... }
-   
+
    // Default export (preferred)
    export default function MyComponent() { ... }
    ```
@@ -172,10 +181,11 @@ npm run dev
    - Check terminal for compilation errors
 
 4. **Verify Component Usage**
+
    ```typescript
    // ✅ Correct
    <MyComponent />
-   
+
    // ❌ Wrong (if default export)
    <MyComponent></MyComponent> // Can work but use self-closing
    ```
@@ -187,10 +197,11 @@ npm run dev
 **Symptom**: `Error: useState can only be used in Client Components`
 
 **Fix**: Add `"use client"` at top of file
+
 ```typescript
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function MyComponent() {
   const [count, setCount] = useState(0);
@@ -199,6 +210,7 @@ export default function MyComponent() {
 ```
 
 **When to use `"use client"`**:
+
 - Components using React hooks (`useState`, `useEffect`, etc.)
 - Components with event handlers (`onClick`, `onChange`, etc.)
 - Components using browser APIs (`window`, `document`, etc.)
@@ -211,12 +223,14 @@ export default function MyComponent() {
 **Symptom**: Animations don't play or components appear static
 
 **Fix 1**: Add `"use client"` directive
+
 ```typescript
 "use client";
 import { motion } from "framer-motion";
 ```
 
 **Fix 2**: Verify animation props
+
 ```typescript
 <motion.div
   initial={{ opacity: 0, y: 20 }}
@@ -228,6 +242,7 @@ import { motion } from "framer-motion";
 ```
 
 **Fix 3**: Check for layout conflicts
+
 ```typescript
 // Add layout prop for smoother animations
 <motion.div layout>
@@ -246,34 +261,40 @@ import { motion } from "framer-motion";
 **Debugging Steps**:
 
 1. **Check Backend is Running**
+
    ```powershell
    cd backend
    npm run dev
    ```
+
    Should see: `Server listening on port 4000`
 
 2. **Test API Manually**
+
    ```powershell
    # Test health endpoint
    curl http://localhost:4000/health
-   
+
    # Or use PowerShell
    Invoke-WebRequest -Uri http://localhost:4000/health
    ```
 
 3. **Check CORS Configuration**
+
    ```typescript
    // backend/src/index.ts
-   app.use(cors({
-     origin: 'http://localhost:3000',
-     credentials: true
-   }));
+   app.use(
+     cors({
+       origin: "http://localhost:3000",
+       credentials: true,
+     }),
+   );
    ```
 
 4. **Verify Frontend API URL**
    ```typescript
    // Should match backend port
-   const API_URL = 'http://localhost:4000';
+   const API_URL = "http://localhost:4000";
    ```
 
 ---
@@ -283,34 +304,37 @@ import { motion } from "framer-motion";
 **Symptom**: Real-time updates not working
 
 **Fix 1**: Check Socket.IO initialization
+
 ```typescript
 // frontend
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
-const socket = io('http://localhost:4000', {
-  transports: ['websocket', 'polling']
+const socket = io("http://localhost:4000", {
+  transports: ["websocket", "polling"],
 });
 ```
 
 **Fix 2**: Verify backend Socket.IO setup
+
 ```typescript
 // backend/src/index.ts
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
-    credentials: true
-  }
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
 });
 ```
 
 **Fix 3**: Check connection in browser console
+
 ```typescript
-socket.on('connect', () => {
-  console.log('✅ Socket.IO connected:', socket.id);
+socket.on("connect", () => {
+  console.log("✅ Socket.IO connected:", socket.id);
 });
 
-socket.on('disconnect', () => {
-  console.log('❌ Socket.IO disconnected');
+socket.on("disconnect", () => {
+  console.log("❌ Socket.IO disconnected");
 });
 ```
 
@@ -323,6 +347,7 @@ socket.on('disconnect', () => {
 **Symptom**: `Cannot find module 'framer-motion'` or similar
 
 **Fix**:
+
 ```powershell
 # Install all dependencies
 cd frontend
@@ -333,6 +358,7 @@ npm install framer-motion
 ```
 
 **For Backend**:
+
 ```powershell
 cd backend
 npm install
@@ -345,11 +371,13 @@ npm install
 **Symptom**: Red squiggly lines or compilation errors
 
 **Fix 1**: Install type definitions
+
 ```powershell
 npm install --save-dev @types/node @types/react @types/react-dom
 ```
 
 **Fix 2**: Check `tsconfig.json`
+
 ```json
 {
   "compilerOptions": {
@@ -366,6 +394,7 @@ npm install --save-dev @types/node @types/react @types/react-dom
 ```
 
 **Fix 3**: Restart TypeScript server in VS Code
+
 - Press `Ctrl+Shift+P`
 - Type: `TypeScript: Restart TS Server`
 - Press Enter
@@ -379,6 +408,7 @@ npm install --save-dev @types/node @types/react @types/react-dom
 **Symptom**: `@prisma/client` module not found
 
 **Fix**:
+
 ```powershell
 cd backend
 npx prisma generate
@@ -391,6 +421,7 @@ npx prisma generate
 **Symptom**: `Can't reach database server` or connection timeout
 
 **Fix 1**: Check PostgreSQL is running
+
 ```powershell
 # Check if PostgreSQL service is running
 Get-Service -Name postgresql*
@@ -400,12 +431,14 @@ docker ps | grep postgres
 ```
 
 **Fix 2**: Verify DATABASE_URL
+
 ```env
 # backend/.env
 DATABASE_URL="postgresql://user:password@localhost:5432/advancia_db?schema=public"
 ```
 
 **Fix 3**: Test connection
+
 ```powershell
 cd backend
 npx prisma db pull
@@ -418,17 +451,20 @@ npx prisma db pull
 **Symptom**: `Migration engine error` or schema drift
 
 **Fix 1**: Reset database (⚠️ Development only!)
+
 ```powershell
 cd backend
 npx prisma migrate reset
 ```
 
 **Fix 2**: Create new migration
+
 ```powershell
 npx prisma migrate dev --name fix_schema
 ```
 
 **Fix 3**: Check migration status
+
 ```powershell
 npx prisma migrate status
 ```
@@ -438,6 +474,7 @@ npx prisma migrate status
 ## 🎯 Quick Commands Reference
 
 ### Frontend Commands
+
 ```powershell
 cd frontend
 
@@ -450,6 +487,7 @@ npm run clean           # Kill port 3000 and restart
 ```
 
 ### Backend Commands
+
 ```powershell
 cd backend
 
@@ -462,6 +500,7 @@ npx prisma studio       # Open database GUI
 ```
 
 ### Port Management
+
 ```powershell
 # Kill specific port
 npx kill-port 3000
@@ -480,15 +519,18 @@ Stop-Process -Id <PID> -Force
 ## 🔍 Debugging Tips
 
 ### 1. Check Browser Console
+
 - Press `F12` → Console tab
 - Look for errors (red text)
 - Check Network tab for failed requests
 
 ### 2. Check Terminal Output
+
 - Frontend terminal: Compilation errors, warnings
 - Backend terminal: API errors, database issues
 
 ### 3. Use VS Code Debugger
+
 ```json
 // .vscode/launch.json
 {
@@ -504,12 +546,13 @@ Stop-Process -Id <PID> -Force
 ```
 
 ### 4. Enable Verbose Logging
+
 ```typescript
 // Add to components for debugging
-console.log('Component rendered:', { props, state });
+console.log("Component rendered:", { props, state });
 
 useEffect(() => {
-  console.log('Effect triggered:', dependency);
+  console.log("Effect triggered:", dependency);
 }, [dependency]);
 ```
 
@@ -529,12 +572,13 @@ useEffect(() => {
 ## 🆘 Still Having Issues?
 
 1. **Clear All Caches**
+
    ```powershell
    # Frontend
    cd frontend
    rm -rf .next node_modules package-lock.json
    npm install
-   
+
    # Backend
    cd backend
    rm -rf dist node_modules package-lock.json
@@ -547,10 +591,11 @@ useEffect(() => {
    - Git installed: `git --version`
 
 3. **Restart Everything**
+
    ```powershell
    # Kill all Node processes
    taskkill /F /IM node.exe
-   
+
    # Restart VS Code
    # Restart servers
    ```
@@ -564,6 +609,7 @@ useEffect(() => {
 **💡 Pro Tip**: Keep both frontend and backend terminals open side-by-side to see errors from both services in real-time!
 
 **🎯 Quick Fix Checklist**:
+
 - [ ] Backend running on port 4000?
 - [ ] Frontend running on port 3000?
 - [ ] Dependencies installed (`node_modules` exists)?

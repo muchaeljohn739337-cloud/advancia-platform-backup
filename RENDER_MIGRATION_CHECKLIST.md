@@ -8,12 +8,12 @@
 
 ## ✅ **PHASE 1: Pre-Migration Verification** (COMPLETED)
 
-- [x] Backend has `build` script: `tsc -p tsconfig.json`
-- [x] Backend has `start` script: `node dist/index.js`
-- [x] `render.yaml` configured with correct build commands
-- [x] Database connection string available
-- [x] Prisma schema has `url = env("DATABASE_URL")`
-- [x] All deprecated deployment scripts removed
+-   [x] Backend has `build` script: `tsc -p tsconfig.json`
+-   [x] Backend has `start` script: `node dist/index.js`
+-   [x] `render.yaml` configured with correct build commands
+-   [x] Database connection string available
+-   [x] Prisma schema has `url = env("DATABASE_URL")`
+-   [x] All deprecated deployment scripts removed
 
 ---
 
@@ -29,10 +29,10 @@ npm run build
 
 **Status**: ✅ **Build succeeds**
 
-- TypeScript compiles to `dist/` folder (36 items)
-- JavaScript files emitted successfully
-- Note: ~195 type errors exist but don't block compilation (tsconfig: `noEmitOnError: false`)
-- **Deployment-ready**: Render will compile successfully
+-   TypeScript compiles to `dist/` folder (36 items)
+-   JavaScript files emitted successfully
+-   Note: ~195 type errors exist but don't block compilation (tsconfig: `noEmitOnError: false`)
+-   **Deployment-ready**: Render will compile successfully
 
 ### Test backend starts locally
 
@@ -64,16 +64,14 @@ curl http://localhost:4000/api/health
 ### Option A: Using `render.yaml` (Recommended)
 
 1. **Connect GitHub to Render**:
-
-   - Go to [https://dashboard.render.com/](https://dashboard.render.com/)
-   - Click **New** → **Blueprint**
-   - Select repository: `muchaeljohn739337-cloud/-modular-saas-platform`
-   - Branch: `main` or `preview-clean`
+   -   Go to [https://dashboard.render.com/](https://dashboard.render.com/)
+   -   Click **New** → **Blueprint**
+   -   Select repository: `muchaeljohn739337-cloud/-modular-saas-platform`
+   -   Branch: `main` or `preview-clean`
 
 2. **Render will auto-detect `render.yaml`** and create:
-
-   - Web Service: `advancia-backend`
-   - Linked to existing PostgreSQL database
+   -   Web Service: `advancia-backend`
+   -   Linked to existing PostgreSQL database
 
 3. **Set Environment Secrets** (sync: false vars):
 
@@ -94,16 +92,14 @@ curl http://localhost:4000/api/health
 ### Option B: Manual Web Service Creation
 
 1. **New Web Service**:
-
-   - Name: `advancia-backend`
-   - Region: `Oregon` (same as DB)
-   - Branch: `main`
-   - Root Directory: `backend`
+   -   Name: `advancia-backend`
+   -   Region: `Oregon` (same as DB)
+   -   Branch: `main`
+   -   Root Directory: `backend`
 
 2. **Build Settings**:
-
-   - Build Command: `npm install && npm exec prisma generate && npm exec prisma migrate deploy && npm run build`
-   - Start Command: `npm start`
+   -   Build Command: `npm install && npm exec prisma generate && npm exec prisma migrate deploy && npm run build`
+   -   Start Command: `npm start`
 
 3. **Environment Variables**: (same as Option A)
 
@@ -299,8 +295,8 @@ curl -X POST https://api.advanciapayledger.com/api/auth/login `
    ```
 
 4. **Remove old DNS records**:
-   - Any CNAME/A records pointing to old droplet IP
-   - Keep only Render/Vercel/Cloudflare records
+   -   Any CNAME/A records pointing to old droplet IP
+   -   Keep only Render/Vercel/Cloudflare records
 
 ---
 
@@ -308,35 +304,35 @@ curl -X POST https://api.advanciapayledger.com/api/auth/login `
 
 ### Backend (Render) - Required
 
-- [x] NODE_ENV=production
-- [x] PORT=4000
-- [x] DATABASE_URL (already set in render.yaml)
-- [ ] JWT_SECRET
-- [ ] SESSION_SECRET
-- [ ] FRONTEND_URL
-- [ ] ALLOWED_ORIGINS
-- [ ] STRIPE_SECRET_KEY
-- [ ] STRIPE_WEBHOOK_SECRET
-- [ ] STRIPE_PUBLISHABLE_KEY
-- [ ] VAPID_PUBLIC_KEY
-- [ ] VAPID_PRIVATE_KEY
-- [ ] VAPID_SUBJECT
-- [ ] EMAIL_USER
-- [ ] EMAIL_PASSWORD
-- [ ] SMTP_HOST
-- [ ] SMTP_PORT
-- [ ] CRYPTOMUS_API_KEY (if using crypto payments)
-- [ ] CRYPTOMUS_MERCHANT_ID (if using crypto payments)
-- [ ] SENTRY_DSN (optional, for error tracking)
+-   [x] NODE_ENV=production
+-   [x] PORT=4000
+-   [x] DATABASE_URL (already set in render.yaml)
+-   [ ] JWT_SECRET
+-   [ ] SESSION_SECRET
+-   [ ] FRONTEND_URL
+-   [ ] ALLOWED_ORIGINS
+-   [ ] STRIPE_SECRET_KEY
+-   [ ] STRIPE_WEBHOOK_SECRET
+-   [ ] STRIPE_PUBLISHABLE_KEY
+-   [ ] VAPID_PUBLIC_KEY
+-   [ ] VAPID_PRIVATE_KEY
+-   [ ] VAPID_SUBJECT
+-   [ ] EMAIL_USER
+-   [ ] EMAIL_PASSWORD
+-   [ ] SMTP_HOST
+-   [ ] SMTP_PORT
+-   [ ] CRYPTOMUS_API_KEY (if using crypto payments)
+-   [ ] CRYPTOMUS_MERCHANT_ID (if using crypto payments)
+-   [ ] SENTRY_DSN (optional, for error tracking)
 
 ### Frontend (Vercel) - Required
 
-- [ ] NEXT_PUBLIC_API_URL
-- [ ] NEXT_PUBLIC_WS_URL
-- [ ] NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-- [ ] NEXT_PUBLIC_VAPID_KEY
-- [ ] NEXTAUTH_URL
-- [ ] NEXTAUTH_SECRET
+-   [ ] NEXT_PUBLIC_API_URL
+-   [ ] NEXT_PUBLIC_WS_URL
+-   [ ] NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+-   [ ] NEXT_PUBLIC_VAPID_KEY
+-   [ ] NEXTAUTH_URL
+-   [ ] NEXTAUTH_SECRET
 
 ---
 
@@ -370,30 +366,30 @@ curl -X POST https://api.advanciapayledger.com/api/auth/login `
 
 ## 📞 **Support Resources**
 
-- **Render Docs**: <https://render.com/docs>
-- **Render Status**: <https://status.render.com>
-- **Prisma Docs**: <https://www.prisma.io/docs>
-- **Next.js Deployment**: <https://nextjs.org/docs/deployment>
+-   **Render Docs**: <https://render.com/docs>
+-   **Render Status**: <https://status.render.com>
+-   **Prisma Docs**: <https://www.prisma.io/docs>
+-   **Next.js Deployment**: <https://nextjs.org/docs/deployment>
 
 ---
 
 ## 🎉 **Deployment Complete Checklist**
 
-- [x] Backend builds locally without errors
-- [x] Backend compiles successfully (dist/index.js exists)
-- [ ] Render service deployed successfully
-- [ ] All environment variables set in Render
-- [ ] Backend logs show successful startup
-- [ ] Health endpoint responds from Render URL
-- [ ] Frontend environment variables updated
-- [ ] Frontend redeployed on Vercel
-- [ ] Custom domains configured (if applicable)
-- [ ] DNS propagated and SSL certificates active
-- [ ] Stripe webhooks updated
-- [ ] Email OTP working
-- [ ] User registration/login working
-- [ ] WebSocket notifications working
-- [ ] Old infrastructure cleaned up
+-   [x] Backend builds locally without errors
+-   [x] Backend compiles successfully (dist/index.js exists)
+-   [ ] Render service deployed successfully
+-   [ ] All environment variables set in Render
+-   [ ] Backend logs show successful startup
+-   [ ] Health endpoint responds from Render URL
+-   [ ] Frontend environment variables updated
+-   [ ] Frontend redeployed on Vercel
+-   [ ] Custom domains configured (if applicable)
+-   [ ] DNS propagated and SSL certificates active
+-   [ ] Stripe webhooks updated
+-   [ ] Email OTP working
+-   [ ] User registration/login working
+-   [ ] WebSocket notifications working
+-   [ ] Old infrastructure cleaned up
 
 ---
 

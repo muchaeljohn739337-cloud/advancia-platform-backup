@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import {
   AlertTriangle,
   CheckCircle,
@@ -17,11 +17,11 @@ import {
   Shield,
   Upload,
   Users,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import QRCode from "qrcode";
-import { useState } from "react";
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import QRCode from 'qrcode';
+import { useState } from 'react';
 
 interface Wallet {
   id: string;
@@ -29,7 +29,7 @@ interface Wallet {
   address: string;
   balance: number;
   currency: string;
-  recoveryStatus: "secured" | "at-risk" | "recovered";
+  recoveryStatus: 'secured' | 'at-risk' | 'recovered';
 }
 
 type SessionUser = {
@@ -40,61 +40,57 @@ type SessionUser = {
 export default function CryptoRecovery() {
   const { data: session } = useSession();
   const sessionUser = session?.user as SessionUser | undefined;
-  const userId = sessionUser?.id || "demo-user";
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const userId = sessionUser?.id || 'demo-user';
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const wallets: Wallet[] = [
     {
-      id: "1",
-      name: "Bitcoin Wallet",
-      address: "bc1q37a9kpzyea5cahpyx8xpx6v7vr5na64f4cxxnt",
+      id: '1',
+      name: 'Bitcoin Wallet',
+      address: 'bc1q37a9kpzyea5cahpyx8xpx6v7vr5na64f4cxxnt',
       balance: 0.15,
-      currency: "BTC",
-      recoveryStatus: "secured",
+      currency: 'BTC',
+      recoveryStatus: 'secured',
     },
     {
-      id: "2",
-      name: "Ethereum Wallet",
-      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f89Ab",
+      id: '2',
+      name: 'Ethereum Wallet',
+      address: '0x742d35Cc6634C0532925a3b844Bc9e7595f89Ab',
       balance: 2.5,
-      currency: "ETH",
-      recoveryStatus: "secured",
+      currency: 'ETH',
+      recoveryStatus: 'secured',
     },
     {
-      id: "3",
-      name: "Stellar Wallet",
-      address: "GDRXE2BQUC3AZNPVFSCEZ76NJ3WWL25FYFK6RGZGIEKWE4SOOHSUJNXE",
+      id: '3',
+      name: 'Stellar Wallet',
+      address: 'GDRXE2BQUC3AZNPVFSCEZ76NJ3WWL25FYFK6RGZGIEKWE4SOOHSUJNXE',
       balance: 15420.5,
-      currency: "XLM",
-      recoveryStatus: "secured",
+      currency: 'XLM',
+      recoveryStatus: 'secured',
     },
     {
-      id: "4",
-      name: "Ripple Wallet",
-      address: "rN7n7otQDd6FczFgLdlqtyMVrn3HMfgh1U",
+      id: '4',
+      name: 'Ripple Wallet',
+      address: 'rN7n7otQDd6FczFgLdlqtyMVrn3HMfgh1U',
       balance: 2850.75,
-      currency: "XRP",
-      recoveryStatus: "secured",
+      currency: 'XRP',
+      recoveryStatus: 'secured',
     },
     {
-      id: "5",
-      name: "Trump Coin Wallet",
-      address: "0xTRUMP45Cc6634C0532925a3b844Bc9e7595f89MAGA",
+      id: '5',
+      name: 'Trump Coin Wallet',
+      address: '0xTRUMP45Cc6634C0532925a3b844Bc9e7595f89MAGA',
       balance: 100000,
-      currency: "TRUMP",
-      recoveryStatus: "secured",
+      currency: 'TRUMP',
+      recoveryStatus: 'secured',
     },
   ];
 
-  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(
-    wallets[0] || null
-  );
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(wallets[0] || null);
   const [showReceiveModal, setShowReceiveModal] = useState(false);
-  const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [showSeedPhrase, setShowSeedPhrase] = useState(false);
-  const [recoveryMethod, setRecoveryMethod] = useState<
-    "seed" | "multisig" | "social"
-  >("seed");
+  const [recoveryMethod, setRecoveryMethod] = useState<'seed' | 'multisig' | 'social'>('seed');
   const [isSavingSnapshot, setIsSavingSnapshot] = useState(false);
   const [saveFeedback, setSaveFeedback] = useState<string | null>(null);
 
@@ -105,13 +101,13 @@ export default function CryptoRecovery() {
         width: 300,
         margin: 2,
         color: {
-          dark: "#000000",
-          light: "#FFFFFF",
+          dark: '#000000',
+          light: '#FFFFFF',
         },
       });
       setQrCodeUrl(url);
     } catch (err) {
-      console.error("Error generating QR code:", err);
+      console.error('Error generating QR code:', err);
     }
   };
 
@@ -123,50 +119,50 @@ export default function CryptoRecovery() {
   };
 
   const seedWords = [
-    "abandon",
-    "ability",
-    "able",
-    "about",
-    "above",
-    "absent",
-    "absorb",
-    "abstract",
-    "absurd",
-    "abuse",
-    "access",
-    "accident",
+    'abandon',
+    'ability',
+    'able',
+    'about',
+    'above',
+    'absent',
+    'absorb',
+    'abstract',
+    'absurd',
+    'abuse',
+    'access',
+    'accident',
   ];
 
   const backupMethods = [
     {
-      id: "seed",
-      name: "Seed Phrase Recovery",
+      id: 'seed',
+      name: 'Seed Phrase Recovery',
       icon: Key,
-      color: "from-yellow-500 to-orange-600",
-      description: "12-24 word backup phrase",
-      security: "High",
+      color: 'from-yellow-500 to-orange-600',
+      description: '12-24 word backup phrase',
+      security: 'High',
     },
     {
-      id: "multisig",
-      name: "Multi-Signature",
+      id: 'multisig',
+      name: 'Multi-Signature',
       icon: Users,
-      color: "from-blue-500 to-indigo-600",
-      description: "Require multiple approvals",
-      security: "Very High",
+      color: 'from-blue-500 to-indigo-600',
+      description: 'Require multiple approvals',
+      security: 'Very High',
     },
     {
-      id: "social",
-      name: "Social Recovery",
+      id: 'social',
+      name: 'Social Recovery',
       icon: Shield,
-      color: "from-green-500 to-emerald-600",
-      description: "Trusted contacts backup",
-      security: "High",
+      color: 'from-green-500 to-emerald-600',
+      description: 'Trusted contacts backup',
+      security: 'High',
     },
   ];
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    alert("Copied to clipboard!");
+    alert('Copied to clipboard!');
   };
 
   const handleSaveQrSnapshot = async () => {
@@ -177,9 +173,9 @@ export default function CryptoRecovery() {
       setSaveFeedback(null);
 
       const response = await fetch(`${API_URL}/api/recovery/qr`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           walletId: selectedWallet.id,
@@ -192,14 +188,14 @@ export default function CryptoRecovery() {
       if (!response.ok) {
         const errorBody = await response.json().catch(() => null);
         const reason = (errorBody as { error?: string } | null)?.error;
-        setSaveFeedback(reason || "Failed to store recovery snapshot.");
+        setSaveFeedback(reason || 'Failed to store recovery snapshot.');
         return;
       }
 
-      setSaveFeedback("Recovery snapshot sent to secure vault.");
+      setSaveFeedback('Recovery snapshot sent to secure vault.');
     } catch (error) {
-      console.error("Failed to upload recovery snapshot", error);
-      setSaveFeedback("Network error while saving snapshot.");
+      console.error('Failed to upload recovery snapshot', error);
+      setSaveFeedback('Network error while saving snapshot.');
     } finally {
       setIsSavingSnapshot(false);
     }
@@ -218,15 +214,11 @@ export default function CryptoRecovery() {
             <Shield size={32} />
             Crypto Recovery Suite
           </h2>
-          <p className="text-white/90">
-            Military-grade wallet recovery and backup solutions
-          </p>
+          <p className="text-white/90">Military-grade wallet recovery and backup solutions</p>
           <p className="mt-2 text-sm text-white/75">
-            Securing assets for{" "}
-            <span className="font-semibold">
-              {sessionUser?.email || "demo@advancia.com"}
-            </span>{" "}
-            (<span className="font-mono">{userId}</span>)
+            Securing assets for{' '}
+            <span className="font-semibold">{sessionUser?.email || 'demo@advancia.com'}</span> (
+            <span className="font-mono">{userId}</span>)
           </p>
         </div>
       </div>
@@ -261,16 +253,16 @@ export default function CryptoRecovery() {
                 </div>
                 <div
                   className={`p-2 rounded-lg ${
-                    wallet.recoveryStatus === "secured"
-                      ? "bg-green-100 text-green-600"
-                      : wallet.recoveryStatus === "at-risk"
-                      ? "bg-yellow-100 text-yellow-600"
-                      : "bg-blue-100 text-blue-600"
+                    wallet.recoveryStatus === 'secured'
+                      ? 'bg-green-100 text-green-600'
+                      : wallet.recoveryStatus === 'at-risk'
+                        ? 'bg-yellow-100 text-yellow-600'
+                        : 'bg-blue-100 text-blue-600'
                   }`}
                 >
-                  {wallet.recoveryStatus === "secured" ? (
+                  {wallet.recoveryStatus === 'secured' ? (
                     <CheckCircle size={20} />
-                  ) : wallet.recoveryStatus === "at-risk" ? (
+                  ) : wallet.recoveryStatus === 'at-risk' ? (
                     <AlertTriangle size={20} />
                   ) : (
                     <RefreshCw size={20} />
@@ -279,25 +271,23 @@ export default function CryptoRecovery() {
               </div>
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <p className="text-3xl font-bold text-slate-900">
-                    {wallet.balance.toFixed(4)}
-                  </p>
+                  <p className="text-3xl font-bold text-slate-900">{wallet.balance.toFixed(4)}</p>
                   <p className="text-sm text-slate-600">{wallet.currency}</p>
                 </div>
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    wallet.recoveryStatus === "secured"
-                      ? "bg-green-100 text-green-700"
-                      : wallet.recoveryStatus === "at-risk"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-blue-100 text-blue-700"
+                    wallet.recoveryStatus === 'secured'
+                      ? 'bg-green-100 text-green-700'
+                      : wallet.recoveryStatus === 'at-risk'
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-blue-100 text-blue-700'
                   }`}
                 >
-                  {wallet.recoveryStatus === "secured"
-                    ? "Secured"
-                    : wallet.recoveryStatus === "at-risk"
-                    ? "At Risk"
-                    : "Recovered"}
+                  {wallet.recoveryStatus === 'secured'
+                    ? 'Secured'
+                    : wallet.recoveryStatus === 'at-risk'
+                      ? 'At Risk'
+                      : 'Recovered'}
                 </span>
               </div>
 
@@ -341,24 +331,19 @@ export default function CryptoRecovery() {
             {/* Warning */}
             <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-4 mb-6">
               <p className="text-sm text-yellow-200">
-                Only send {selectedWallet.currency} (
-                {selectedWallet.name.split(" ")[0]}) assets to this address.
-                Other assets will be lost forever.
+                Only send {selectedWallet.currency} ({selectedWallet.name.split(' ')[0]}) assets to
+                this address. Other assets will be lost forever.
               </p>
             </div>
 
             {/* Currency Info */}
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
-                <span className="text-2xl font-bold">
-                  {selectedWallet.currency.charAt(0)}
-                </span>
+                <span className="text-2xl font-bold">{selectedWallet.currency.charAt(0)}</span>
               </div>
               <div className="text-center">
                 <p className="text-2xl font-bold">{selectedWallet.currency}</p>
-                <p className="text-sm text-slate-400">
-                  {selectedWallet.name.split(" ")[0]}
-                </p>
+                <p className="text-sm text-slate-400">{selectedWallet.name.split(' ')[0]}</p>
               </div>
             </div>
 
@@ -379,9 +364,7 @@ export default function CryptoRecovery() {
             {/* Address */}
             <div className="bg-white/10 rounded-lg p-4 mb-6">
               <p className="text-sm text-slate-400 mb-2 text-center">Address</p>
-              <p className="text-center font-mono text-sm break-all">
-                {selectedWallet.address}
-              </p>
+              <p className="text-center font-mono text-sm break-all">{selectedWallet.address}</p>
             </div>
 
             {/* Action Buttons */}
@@ -394,14 +377,14 @@ export default function CryptoRecovery() {
                 <span className="text-xs">Copy</span>
               </button>
               <button
-                onClick={() => alert("Set amount feature coming soon!")}
+                onClick={() => alert('Set amount feature coming soon!')}
                 className="flex flex-col items-center justify-center p-4 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
               >
                 <DollarSign size={24} className="mb-2" />
                 <span className="text-xs">Set Amount</span>
               </button>
               <button
-                onClick={() => alert("Share feature coming soon!")}
+                onClick={() => alert('Share feature coming soon!')}
                 className="flex flex-col items-center justify-center p-4 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
               >
                 <Share2 size={24} className="mb-2" />
@@ -414,15 +397,11 @@ export default function CryptoRecovery() {
               disabled={isSavingSnapshot}
               className="mt-4 w-full rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 font-semibold text-white transition hover:from-emerald-600 hover:to-teal-600 disabled:cursor-wait disabled:opacity-70"
             >
-              {isSavingSnapshot
-                ? "Saving recovery snapshot…"
-                : "Save Recovery Snapshot"}
+              {isSavingSnapshot ? 'Saving recovery snapshot…' : 'Save Recovery Snapshot'}
             </button>
 
             {saveFeedback && (
-              <p className="mt-3 text-center text-sm text-emerald-200">
-                {saveFeedback}
-              </p>
+              <p className="mt-3 text-center text-sm text-emerald-200">{saveFeedback}</p>
             )}
 
             {/* Deposit Info */}
@@ -433,9 +412,7 @@ export default function CryptoRecovery() {
                 </div>
                 <div>
                   <p className="font-semibold mb-1">Deposit from exchange</p>
-                  <p className="text-sm text-slate-400">
-                    By direct transfer from your account
-                  </p>
+                  <p className="text-sm text-slate-400">By direct transfer from your account</p>
                 </div>
               </div>
             </div>
@@ -445,9 +422,7 @@ export default function CryptoRecovery() {
 
       {/* Recovery Methods */}
       <div>
-        <h3 className="text-xl font-bold text-slate-800 mb-4">
-          Recovery Methods
-        </h3>
+        <h3 className="text-xl font-bold text-slate-800 mb-4">Recovery Methods</h3>
         <div className="grid md:grid-cols-3 gap-4">
           {backupMethods.map((method, index) => (
             <motion.div
@@ -456,18 +431,12 @@ export default function CryptoRecovery() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.02 }}
-              onClick={() =>
-                setRecoveryMethod(method.id as typeof recoveryMethod)
-              }
+              onClick={() => setRecoveryMethod(method.id as typeof recoveryMethod)}
               className={`cursor-pointer rounded-2xl overflow-hidden ${
-                recoveryMethod === method.id
-                  ? "ring-4 ring-blue-500 ring-offset-2"
-                  : ""
+                recoveryMethod === method.id ? 'ring-4 ring-blue-500 ring-offset-2' : ''
               }`}
             >
-              <div
-                className={`bg-gradient-to-br ${method.color} p-6 text-white`}
-              >
+              <div className={`bg-gradient-to-br ${method.color} p-6 text-white`}>
                 <method.icon size={40} className="mb-4" />
                 <h4 className="text-lg font-bold mb-2">{method.name}</h4>
                 <p className="text-sm opacity-90 mb-3">{method.description}</p>
@@ -482,22 +451,20 @@ export default function CryptoRecovery() {
       </div>
 
       {/* Seed Phrase Management */}
-      {recoveryMethod === "seed" && (
+      {recoveryMethod === 'seed' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-xl p-6 border-2 border-slate-200 shadow-sm"
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-slate-800">
-              Seed Phrase Backup
-            </h3>
+            <h3 className="text-xl font-bold text-slate-800">Seed Phrase Backup</h3>
             <button
               onClick={() => setShowSeedPhrase(!showSeedPhrase)}
               className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors"
             >
               {showSeedPhrase ? <EyeOff size={18} /> : <Eye size={18} />}
-              {showSeedPhrase ? "Hide" : "Show"} Phrase
+              {showSeedPhrase ? 'Hide' : 'Show'} Phrase
             </button>
           </div>
 
@@ -510,40 +477,32 @@ export default function CryptoRecovery() {
                     className="bg-slate-50 border-2 border-slate-200 rounded-lg p-3 text-center"
                   >
                     <span className="text-xs text-slate-500">{index + 1}.</span>
-                    <p className="font-mono font-semibold text-slate-900">
-                      {word}
-                    </p>
+                    <p className="font-mono font-semibold text-slate-900">{word}</p>
                   </div>
                 ))}
               </div>
 
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4 flex items-start gap-3">
-                <AlertTriangle
-                  className="text-yellow-600 flex-shrink-0 mt-1"
-                  size={20}
-                />
+                <AlertTriangle className="text-yellow-600 flex-shrink-0 mt-1" size={20} />
                 <div>
-                  <p className="font-semibold text-yellow-900">
-                    Critical Security Warning
-                  </p>
+                  <p className="font-semibold text-yellow-900">Critical Security Warning</p>
                   <p className="text-sm text-yellow-800 mt-1">
-                    Never share your seed phrase with anyone. Write it down and
-                    store it in a secure location. Anyone with access to this
-                    phrase can access your funds.
+                    Never share your seed phrase with anyone. Write it down and store it in a secure
+                    location. Anyone with access to this phrase can access your funds.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => copyToClipboard(seedWords.join(" "))}
+                  onClick={() => copyToClipboard(seedWords.join(' '))}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                 >
                   <Copy size={18} />
                   Copy to Clipboard
                 </button>
                 <button
-                  onClick={() => alert("Downloading backup...")}
+                  onClick={() => alert('Downloading backup...')}
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors"
                 >
                   <Download size={18} />
@@ -566,23 +525,17 @@ export default function CryptoRecovery() {
       )}
 
       {/* Multi-Sig Setup */}
-      {recoveryMethod === "multisig" && (
+      {recoveryMethod === 'multisig' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-xl p-6 border-2 border-slate-200 shadow-sm"
         >
-          <h3 className="text-xl font-bold text-slate-800 mb-4">
-            Multi-Signature Setup
-          </h3>
+          <h3 className="text-xl font-bold text-slate-800 mb-4">Multi-Signature Setup</h3>
           <div className="space-y-4">
             <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-              <p className="font-semibold text-blue-900 mb-2">
-                Current Configuration
-              </p>
-              <p className="text-sm text-blue-800">
-                2 of 3 signatures required for transactions
-              </p>
+              <p className="font-semibold text-blue-900 mb-2">Current Configuration</p>
+              <p className="text-sm text-blue-800">2 of 3 signatures required for transactions</p>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
@@ -591,9 +544,7 @@ export default function CryptoRecovery() {
                     1
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900">
-                      Primary Signer
-                    </p>
+                    <p className="font-semibold text-slate-900">Primary Signer</p>
                     <p className="text-xs text-slate-600">0x742d...89Ab</p>
                   </div>
                 </div>
@@ -605,9 +556,7 @@ export default function CryptoRecovery() {
                     2
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900">
-                      Secondary Signer
-                    </p>
+                    <p className="font-semibold text-slate-900">Secondary Signer</p>
                     <p className="text-xs text-slate-600">0x8f3a...12Cd</p>
                   </div>
                 </div>
@@ -619,9 +568,7 @@ export default function CryptoRecovery() {
                     3
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900">
-                      Recovery Signer
-                    </p>
+                    <p className="font-semibold text-slate-900">Recovery Signer</p>
                     <p className="text-xs text-slate-600">0x1b7e...56Ef</p>
                   </div>
                 </div>
@@ -633,18 +580,16 @@ export default function CryptoRecovery() {
       )}
 
       {/* Social Recovery */}
-      {recoveryMethod === "social" && (
+      {recoveryMethod === 'social' && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-xl p-6 border-2 border-slate-200 shadow-sm"
         >
-          <h3 className="text-xl font-bold text-slate-800 mb-4">
-            Social Recovery Guardians
-          </h3>
+          <h3 className="text-xl font-bold text-slate-800 mb-4">Social Recovery Guardians</h3>
           <p className="text-sm text-slate-600 mb-4">
-            Select trusted contacts who can help recover your wallet if you lose
-            access. 3 out of 5 guardians must approve recovery.
+            Select trusted contacts who can help recover your wallet if you lose access. 3 out of 5
+            guardians must approve recovery.
           </p>
           <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-semibold hover:shadow-lg transition-shadow">
             <Users size={18} />

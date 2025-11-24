@@ -57,8 +57,7 @@ const CONFIG = {
   POSTGRES_PASSWORD: "postgres",
   POSTGRES_DB: "advancia_payledger_test",
   POSTGRES_TIMEOUT: 30000,
-  DATABASE_URL:
-    "postgresql://postgres:postgres@localhost:5433/advancia_payledger_test",
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5433/advancia_payledger_test",
 };
 ```
 
@@ -78,34 +77,34 @@ API_KEY=test-api-key
 
 ### 1. Enhanced Error Handling
 
-- **Docker Troubleshooting**: Automatic detection and guidance for Docker issues
-- **Port Conflicts**: Intelligent port conflict resolution
-- **Connection Issues**: Timeout handling with exponential backoff
-- **Prisma Errors**: Detailed migration and schema error reporting
+-   **Docker Troubleshooting**: Automatic detection and guidance for Docker issues
+-   **Port Conflicts**: Intelligent port conflict resolution
+-   **Connection Issues**: Timeout handling with exponential backoff
+-   **Prisma Errors**: Detailed migration and schema error reporting
 
 ### 2. Environment Validation
 
-- **Dependency Checks**: Verifies Docker, Node.js, npm, and Prisma availability
-- **File Validation**: Ensures required configuration files exist
-- **Network Validation**: Checks port availability and container connectivity
+-   **Dependency Checks**: Verifies Docker, Node.js, npm, and Prisma availability
+-   **File Validation**: Ensures required configuration files exist
+-   **Network Validation**: Checks port availability and container connectivity
 
 ### 3. Graceful Cleanup
 
-- **Signal Handlers**: Properly handles SIGINT, SIGTERM, and uncaught exceptions
-- **Automatic Cleanup**: Removes orphaned containers and temporary files
-- **Resource Management**: Prevents memory leaks and hanging processes
+-   **Signal Handlers**: Properly handles SIGINT, SIGTERM, and uncaught exceptions
+-   **Automatic Cleanup**: Removes orphaned containers and temporary files
+-   **Resource Management**: Prevents memory leaks and hanging processes
 
 ### 4. Performance Monitoring
 
-- **Connection Benchmarks**: Measures database connection speed
-- **Query Performance**: Tests read/write operation timing
-- **Resource Usage**: Monitors container memory and CPU usage
+-   **Connection Benchmarks**: Measures database connection speed
+-   **Query Performance**: Tests read/write operation timing
+-   **Resource Usage**: Monitors container memory and CPU usage
 
 ### 5. Interactive Management
 
-- **Menu-Driven Interface**: User-friendly command selection
-- **Real-time Feedback**: Live status updates and progress indicators
-- **Help System**: Contextual troubleshooting guides
+-   **Menu-Driven Interface**: User-friendly command selection
+-   **Real-time Feedback**: Live status updates and progress indicators
+-   **Help System**: Contextual troubleshooting guides
 
 ## 🎯 Usage Scenarios
 
@@ -168,9 +167,9 @@ npm run test:db:benchmark
 
 **Solutions**:
 
-- Stop conflicting containers: `docker stop postgres-test`
-- Use different port: Set `POSTGRES_PORT=5434` in `.env.test`
-- Check port usage: `netstat -an | findstr :5433`
+-   Stop conflicting containers: `docker stop postgres-test`
+-   Use different port: Set `POSTGRES_PORT=5434` in `.env.test`
+-   Check port usage: `netstat -an | findstr :5433`
 
 #### Connection Timeouts
 
@@ -180,9 +179,9 @@ npm run test:db:benchmark
 
 **Solutions**:
 
-- Increase timeout: Modify `POSTGRES_TIMEOUT` in CONFIG
-- Check container status: `docker ps -a`
-- View container logs: `docker logs postgres-test`
+-   Increase timeout: Modify `POSTGRES_TIMEOUT` in CONFIG
+-   Check container status: `docker ps -a`
+-   View container logs: `docker logs postgres-test`
 
 #### Migration Errors
 
@@ -192,9 +191,9 @@ npm run test:db:benchmark
 
 **Solutions**:
 
-- Regenerate client: `npx prisma generate`
-- Reset database: `npm run test:db:reset`
-- Check schema: `npx prisma format`
+-   Regenerate client: `npx prisma generate`
+-   Reset database: `npm run test:db:reset`
+-   Check schema: `npx prisma format`
 
 ### Advanced Troubleshooting
 
@@ -273,17 +272,17 @@ npm run test:db:benchmark
 
 **Expected Results**:
 
-- Connection: < 50ms
-- Read (100 users): < 100ms
-- Write (audit log): < 50ms
-- Total: < 200ms
+-   Connection: < 50ms
+-   Read (100 users): < 100ms
+-   Write (audit log): < 50ms
+-   Total: < 200ms
 
 **Performance Tips**:
 
-- Use connection pooling in production
-- Index frequently queried columns
-- Monitor slow queries with `EXPLAIN ANALYZE`
-- Consider read replicas for heavy workloads
+-   Use connection pooling in production
+-   Index frequently queried columns
+-   Monitor slow queries with `EXPLAIN ANALYZE`
+-   Consider read replicas for heavy workloads
 
 ## 🔄 Migration from Legacy Setup
 
@@ -315,27 +314,27 @@ docker exec -i postgres-test psql -U postgres advancia_payledger_test < backup.s
 
 ### Development
 
-- Use interactive menu (`npm run test:db`) for daily development
-- Run health checks before important testing sessions
-- Keep Docker Desktop updated for best performance
+-   Use interactive menu (`npm run test:db`) for daily development
+-   Run health checks before important testing sessions
+-   Keep Docker Desktop updated for best performance
 
 ### Testing
 
-- Reset database between test suites for isolation
-- Use seeded data for consistent test results
-- Monitor performance benchmarks for regression detection
+-   Reset database between test suites for isolation
+-   Use seeded data for consistent test results
+-   Monitor performance benchmarks for regression detection
 
 ### Production Readiness
 
-- Never use test database configuration in production
-- Use proper connection pooling and SSL in production
-- Implement proper backup and disaster recovery procedures
+-   Never use test database configuration in production
+-   Use proper connection pooling and SSL in production
+-   Implement proper backup and disaster recovery procedures
 
 ### Debugging
 
-- Check logs first: `docker logs postgres-test`
-- Use health checks to identify issues quickly
-- Monitor resource usage during heavy operations
+-   Check logs first: `docker logs postgres-test`
+-   Use health checks to identify issues quickly
+-   Monitor resource usage during heavy operations
 
 ## 🆘 Support and Resources
 
@@ -354,15 +353,15 @@ docker exec postgres-test psql -U postgres -c "SELECT count(*) FROM pg_stat_acti
 
 ### Documentation Links
 
-- [Docker Desktop Installation](https://www.docker.com/products/docker-desktop/)
-- [Prisma Documentation](https://www.prisma.io/docs/)
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+-   [Docker Desktop Installation](https://www.docker.com/products/docker-desktop/)
+-   [Prisma Documentation](https://www.prisma.io/docs/)
+-   [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 
 ### Project-Specific Help
 
-- Backend README: `backend/README.md`
-- Deployment Guide: `DEPLOYMENT_GUIDE.md`
-- Architecture Overview: `ARCHITECTURE.md`
+-   Backend README: `backend/README.md`
+-   Deployment Guide: `DEPLOYMENT_GUIDE.md`
+-   Architecture Overview: `ARCHITECTURE.md`
 
 ---
 

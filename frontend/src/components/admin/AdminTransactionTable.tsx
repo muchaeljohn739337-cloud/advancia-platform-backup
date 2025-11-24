@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
-import toast from "react-hot-toast";
+import React, { useEffect, useState } from 'react';
+import { format } from 'date-fns';
+import toast from 'react-hot-toast';
 
 interface Transaction {
   id: string;
   userId: string;
   currency: string;
   amount: number;
-  type: "credit" | "debit" | "ADMIN_ADJUSTMENT";
+  type: 'credit' | 'debit' | 'ADMIN_ADJUSTMENT';
   description?: string;
   adminUser?: string;
   createdAt: string;
@@ -18,31 +18,29 @@ interface Transaction {
 const AdminTransactionTable: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filtered, setFiltered] = useState<Transaction[]>([]);
-  const [currency, setCurrency] = useState<string>("All");
-  const [admin, setAdmin] = useState<string>("");
+  const [currency, setCurrency] = useState<string>('All');
+  const [admin, setAdmin] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchTransactions = async () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
-        }/api/admin/transactions`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/api/admin/transactions`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
           },
         }
       );
 
-      if (!res.ok) throw new Error("Failed to fetch transactions");
+      if (!res.ok) throw new Error('Failed to fetch transactions');
       const data = await res.json();
       setTransactions(data);
       setFiltered(data);
     } catch (err) {
       console.error(err);
-      toast.error("Error loading transaction history");
+      toast.error('Error loading transaction history');
     } finally {
       setIsLoading(false);
     }
@@ -50,10 +48,10 @@ const AdminTransactionTable: React.FC = () => {
 
   const applyFilter = () => {
     let list = [...transactions];
-    if (currency !== "All") {
+    if (currency !== 'All') {
       list = list.filter((t) => {
         // Extract currency from description or use a default matching strategy
-        const desc = t.description?.toUpperCase() || "";
+        const desc = t.description?.toUpperCase() || '';
         return desc.includes(currency);
       });
     }
@@ -77,8 +75,8 @@ const AdminTransactionTable: React.FC = () => {
   }, [currency, admin, transactions]);
 
   const getTransactionType = (type: string, amount: number) => {
-    if (type === "ADMIN_ADJUSTMENT") {
-      return amount > 0 ? "credit" : "debit";
+    if (type === 'ADMIN_ADJUSTMENT') {
+      return amount > 0 ? 'credit' : 'debit';
     }
     return type;
   };
@@ -132,29 +130,21 @@ const AdminTransactionTable: React.FC = () => {
                 return (
                   <tr key={t.id} className="hover:bg-gray-50">
                     <td className="border p-2">
-                      {format(new Date(t.createdAt), "MMM d, yyyy h:mm a")}
+                      {format(new Date(t.createdAt), 'MMM d, yyyy h:mm a')}
                     </td>
                     <td className="border p-2 uppercase">
-                      {t.description?.match(/(USD|BTC|ETH|USDT)/i)?.[0] ||
-                        "N/A"}
+                      {t.description?.match(/(USD|BTC|ETH|USDT)/i)?.[0] || 'N/A'}
                     </td>
                     <td
                       className={`border p-2 font-medium ${
-                        transType === "credit"
-                          ? "text-green-600"
-                          : "text-red-600"
+                        transType === 'credit' ? 'text-green-600' : 'text-red-600'
                       }`}
                     >
-                      {transType === "credit" ? "+" : "-"}{" "}
-                      {Math.abs(Number(t.amount)).toFixed(2)}
+                      {transType === 'credit' ? '+' : '-'} {Math.abs(Number(t.amount)).toFixed(2)}
                     </td>
-                    <td className="border p-2 capitalize">
-                      {t.type.replace("_", " ")}
-                    </td>
-                    <td className="border p-2 text-xs font-mono">
-                      {t.userId.slice(0, 8)}...
-                    </td>
-                    <td className="border p-2">{t.description || "-"}</td>
+                    <td className="border p-2 capitalize">{t.type.replace('_', ' ')}</td>
+                    <td className="border p-2 text-xs font-mono">{t.userId.slice(0, 8)}...</td>
+                    <td className="border p-2">{t.description || '-'}</td>
                   </tr>
                 );
               })}
@@ -162,9 +152,7 @@ const AdminTransactionTable: React.FC = () => {
           </table>
         </div>
       ) : (
-        <div className="text-center text-gray-500 py-10">
-          No transactions found
-        </div>
+        <div className="text-center text-gray-500 py-10">No transactions found</div>
       )}
     </div>
   );

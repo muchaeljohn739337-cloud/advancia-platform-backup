@@ -69,12 +69,11 @@
 ## Slack Setup (60 seconds)
 
 1. **Create Webhook**:
-
-   - Go to: https://api.slack.com/messaging/webhooks
-   - Click "Create New App" → "From scratch"
-   - Enable "Incoming Webhooks"
-   - Add to channel (e.g., #alerts)
-   - Copy webhook URL
+   -   Go to: <https://api.slack.com/messaging/webhooks>
+   -   Click "Create New App" → "From scratch"
+   -   Enable "Incoming Webhooks"
+   -   Add to channel (e.g., #alerts)
+   -   Copy webhook URL
 
 2. **Test**:
 
@@ -85,6 +84,7 @@
    ```
 
 3. **Use**:
+
    ```powershell
    .\backend-watchdog.ps1 -Port 4000 -SlackWebhook $webhook
    ```
@@ -96,11 +96,11 @@
 1. **Enable 2FA**: Google Account → Security → 2-Step Verification
 
 2. **Create App Password**:
-
-   - Security → 2-Step Verification → App passwords
-   - Select "Mail" → Copy 16-char password
+   -   Security → 2-Step Verification → App passwords
+   -   Select "Mail" → Copy 16-char password
 
 3. **Use**:
+
    ```powershell
    .\backend-watchdog.ps1 `
        -Port 4000 `

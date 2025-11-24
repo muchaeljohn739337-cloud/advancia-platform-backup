@@ -13,11 +13,11 @@ npm install daisyui formik yup @nivo/core @nivo/line @nivo/bar @nivo/pie @headle
 
 ### Package Versions
 
-- **daisyui**: ^4.x - Tailwind CSS component library
-- **formik**: ^2.x - Form state management
-- **yup**: ^1.x - Schema validation
-- **@nivo/\***: ^0.87.x - Data visualization
-- **@headlessui/react**: ^2.x - Accessible UI components
+-   **daisyui**: ^4.x - Tailwind CSS component library
+-   **formik**: ^2.x - Form state management
+-   **yup**: ^1.x - Schema validation
+-   **@nivo/\***: ^0.87.x - Data visualization
+-   **@headlessui/react**: ^2.x - Accessible UI components
 
 ---
 
@@ -28,19 +28,19 @@ npm install daisyui formik yup @nivo/core @nivo/line @nivo/bar @nivo/pie @headle
 **What it does**: Pre-styled Tailwind components  
 **Use for**: Buttons, cards, modals, alerts, forms
 
-#### Before DaisyUI:
+#### Before DaisyUI
 
 ```tsx
 <button className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all">Submit</button>
 ```
 
-#### After DaisyUI:
+#### After DaisyUI
 
 ```tsx
 <button className="btn btn-primary">Submit</button>
 ```
 
-#### Common Components:
+#### Common Components
 
 ```tsx
 // Buttons
@@ -87,7 +87,7 @@ npm install daisyui formik yup @nivo/core @nivo/line @nivo/bar @nivo/pie @headle
 **What it does**: Form state, validation, submission handling  
 **Use for**: Login, registration, KYC, payment forms
 
-#### Example:
+#### Example
 
 ```tsx
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -126,11 +126,11 @@ function MyForm() {
 
 **Benefits**:
 
-- ✅ Auto validation on blur/change
-- ✅ Error message handling
-- ✅ Loading states
-- ✅ Async submission
-- ✅ Form reset after success
+-   ✅ Auto validation on blur/change
+-   ✅ Error message handling
+-   ✅ Loading states
+-   ✅ Async submission
+-   ✅ Form reset after success
 
 ---
 
@@ -139,7 +139,7 @@ function MyForm() {
 **What it does**: Beautiful, responsive charts  
 **Use for**: Transaction history, analytics dashboards, reports
 
-#### Line Chart:
+#### Line Chart
 
 ```tsx
 import { ResponsiveLine } from "@nivo/line";
@@ -160,7 +160,7 @@ const data = [
 </div>;
 ```
 
-#### Bar Chart:
+#### Bar Chart
 
 ```tsx
 import { ResponsiveBar } from "@nivo/bar";
@@ -173,7 +173,7 @@ const data = [
 <ResponsiveBar data={data} keys={["revenue", "fees"]} indexBy="month" groupMode="grouped" colors={{ scheme: "nivo" }} />;
 ```
 
-#### Pie Chart:
+#### Pie Chart
 
 ```tsx
 import { ResponsivePie } from "@nivo/pie";
@@ -188,9 +188,9 @@ const data = [
 
 **Available Charts**:
 
-- Line, Bar, Pie, Area, Stream
-- Heatmap, Calendar, Sankey
-- Radar, Funnel, Network
+-   Line, Bar, Pie, Area, Stream
+-   Heatmap, Calendar, Sankey
+-   Radar, Funnel, Network
 
 ---
 
@@ -199,7 +199,7 @@ const data = [
 **What it does**: Unstyled, accessible UI components  
 **Use for**: Modals, dropdowns, tabs, toggles
 
-#### Modal/Dialog:
+#### Modal/Dialog
 
 ```tsx
 import { Dialog, Transition } from "@headlessui/react";
@@ -234,7 +234,7 @@ function MyModal() {
 }
 ```
 
-#### Dropdown/Listbox:
+#### Dropdown/Listbox
 
 ```tsx
 import { Listbox } from "@headlessui/react";
@@ -253,7 +253,7 @@ const [selected, setSelected] = useState(options[0]);
 </Listbox>;
 ```
 
-#### Toggle/Switch:
+#### Toggle/Switch
 
 ```tsx
 import { Switch } from "@headlessui/react";
@@ -278,19 +278,19 @@ const [enabled, setEnabled] = useState(false);
 ## 📍 Demo Page
 
 **Access the live demo**:  
-http://localhost:3000/demo/tools
+<http://localhost:3000/demo/tools>
 
 **Example Components**:
 
-- `frontend/src/components/examples/EnhancedFormExample.tsx`
-- `frontend/src/components/examples/NivoChartsExample.tsx`
-- `frontend/src/components/examples/HeadlessUIExample.tsx`
+-   `frontend/src/components/examples/EnhancedFormExample.tsx`
+-   `frontend/src/components/examples/NivoChartsExample.tsx`
+-   `frontend/src/components/examples/HeadlessUIExample.tsx`
 
 ---
 
 ## 🎨 Styling Best Practices
 
-### Combining Libraries:
+### Combining Libraries
 
 ```tsx
 // DaisyUI + Headless UI
@@ -324,56 +324,56 @@ http://localhost:3000/demo/tools
 
 ## 🚀 Migration Guide
 
-### Replace Existing Components:
+### Replace Existing Components
 
-#### 1. Login/Register Forms:
+#### 1. Login/Register Forms
 
-- **Before**: Manual form state + validation
-- **After**: Use Formik + Yup schema
-- **Files**: `src/app/auth/login/page.tsx`, `src/app/auth/register/page.tsx`
+-   **Before**: Manual form state + validation
+-   **After**: Use Formik + Yup schema
+-   **Files**: `src/app/auth/login/page.tsx`, `src/app/auth/register/page.tsx`
 
-#### 2. Dashboard Charts:
+#### 2. Dashboard Charts
 
-- **Before**: Chart.js
-- **After**: Nivo charts
-- **Files**: `src/app/dashboard/page.tsx`, `src/app/admin/monitoring/page.tsx`
+-   **Before**: Chart.js
+-   **After**: Nivo charts
+-   **Files**: `src/app/dashboard/page.tsx`, `src/app/admin/monitoring/page.tsx`
 
-#### 3. Modal Dialogs:
+#### 3. Modal Dialogs
 
-- **Before**: Custom modal components
-- **After**: Headless UI Dialog
-- **Files**: Any component with modal/popup
+-   **Before**: Custom modal components
+-   **After**: Headless UI Dialog
+-   **Files**: Any component with modal/popup
 
-#### 4. Buttons & Cards:
+#### 4. Buttons & Cards
 
-- **Before**: Long Tailwind className strings
-- **After**: DaisyUI utility classes
-- **Files**: All components with repetitive styling
+-   **Before**: Long Tailwind className strings
+-   **After**: DaisyUI utility classes
+-   **Files**: All components with repetitive styling
 
 ---
 
 ## 🔗 Useful Resources
 
-### Documentation:
+### Documentation
 
-- **DaisyUI**: https://daisyui.com/components/
-- **Formik**: https://formik.org/docs/overview
-- **Yup**: https://github.com/jquense/yup
-- **Nivo**: https://nivo.rocks/components/
-- **Headless UI**: https://headlessui.com/
+-   **DaisyUI**: <https://daisyui.com/components/>
+-   **Formik**: <https://formik.org/docs/overview>
+-   **Yup**: <https://github.com/jquense/yup>
+-   **Nivo**: <https://nivo.rocks/components/>
+-   **Headless UI**: <https://headlessui.com/>
 
-### Tools NOT Installed (Why):
+### Tools NOT Installed (Why)
 
-- ❌ **ReverseUI/KokonutUI**: DaisyUI already provides components
-- ❌ **Xano**: You have a complete backend
-- ℹ️ **Shape Divider**: Use https://www.shapedivider.app (copy/paste SVG)
-- ℹ️ **Animista**: Use https://animista.net (copy/paste CSS)
+-   ❌ **ReverseUI/KokonutUI**: DaisyUI already provides components
+-   ❌ **Xano**: You have a complete backend
+-   ℹ️ **Shape Divider**: Use <https://www.shapedivider.app> (copy/paste SVG)
+-   ℹ️ **Animista**: Use <https://animista.net> (copy/paste CSS)
 
 ---
 
 ## 💡 Quick Wins
 
-### Immediate Improvements:
+### Immediate Improvements
 
 1. **Replace 404.tsx buttons** with DaisyUI: `btn btn-primary`
 2. **Add Formik to KYC forms** for auto-validation
@@ -381,12 +381,12 @@ http://localhost:3000/demo/tools
 4. **Use Headless UI modals** for withdrawal confirmations
 5. **Apply DaisyUI cards** to transaction lists
 
-### Time Savings:
+### Time Savings
 
-- 🕐 **70% less CSS** - Use DaisyUI instead of manual Tailwind
-- 🕐 **50% less form code** - Formik handles state + validation
-- 🕐 **Instant charts** - Nivo pre-configured, no setup
-- 🕐 **Accessible by default** - Headless UI handles ARIA + keyboard nav
+-   🕐 **70% less CSS** - Use DaisyUI instead of manual Tailwind
+-   🕐 **50% less form code** - Formik handles state + validation
+-   🕐 **Instant charts** - Nivo pre-configured, no setup
+-   🕐 **Accessible by default** - Headless UI handles ARIA + keyboard nav
 
 ---
 
@@ -425,7 +425,7 @@ http://localhost:3000/demo/tools
 
 **Next Steps**:
 
-1. ✅ Visit http://localhost:3000/demo/tools
+1. ✅ Visit <http://localhost:3000/demo/tools>
 2. ✅ Explore example components
 3. ✅ Start migrating existing components
 4. ✅ Read documentation for advanced features

@@ -228,47 +228,39 @@ router.post("/create-checkout", authenticateToken, async (req, res) => {
 });
 
 // Stripe webhook
-router.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  async (req, res) => {
-    const sig = req.headers["stripe-signature"]!;
-    let event;
+router.post("/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+  const sig = req.headers["stripe-signature"]!;
+  let event;
 
-    try {
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET!
-      );
-    } catch (err) {
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-
-    if (event.type === "checkout.session.completed") {
-      const session = event.data.object;
-      await prisma.user.update({
-        where: { id: session.metadata.userId },
-        data: {
-          subscriptionStatus: "active",
-          subscriptionTier: "PRO",
-          subscriptionStartDate: new Date(),
-          stripeSubscriptionId: session.subscription as string,
-        },
-      });
-    }
-
-    if (event.type === "customer.subscription.deleted") {
-      const subscription = event.data.object;
-      await prisma.user.update({
-        where: { stripeSubscriptionId: subscription.id },
-        data: { subscriptionStatus: "cancelled" },
-      });
-    }
-
-    res.json({ received: true });
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
-);
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    await prisma.user.update({
+      where: { id: session.metadata.userId },
+      data: {
+        subscriptionStatus: "active",
+        subscriptionTier: "PRO",
+        subscriptionStartDate: new Date(),
+        stripeSubscriptionId: session.subscription as string,
+      },
+    });
+  }
+
+  if (event.type === "customer.subscription.deleted") {
+    const subscription = event.data.object;
+    await prisma.user.update({
+      where: { stripeSubscriptionId: subscription.id },
+      data: { subscriptionStatus: "cancelled" },
+    });
+  }
+
+  res.json({ received: true });
+});
 
 export default router;
 ```
@@ -301,10 +293,7 @@ Show single Pro plan:
     <li>✅ Priority processing</li>
   </ul>
 
-  <button
-    onClick={handleSubscribe}
-    className="w-full bg-white text-blue-600 py-3 rounded-lg font-bold"
-  >
+  <button onClick={handleSubscribe} className="w-full bg-white text-blue-600 py-3 rounded-lg font-bold">
     Subscribe Now
   </button>
 </div>
@@ -444,6 +433,7 @@ curl -X GET http://YOUR_DROPLET_IP:4000/api/dashboard \
    ```
 
 5. **Setup backups**:
+
    ```bash
    # Daily PostgreSQL backup
    crontab -e
@@ -469,11 +459,11 @@ curl https://dashboard.stripe.com/webhooks
 
 ### Key Metrics to Watch
 
-- **Active Subscriptions**: Stripe Dashboard → Subscriptions
-- **MRR (Monthly Recurring Revenue)**: Active users × $10
-- **Churn Rate**: Cancelled subscriptions / Total subscriptions
-- **API Response Times**: PM2 logs
-- **Database Size**: `SELECT pg_size_pretty(pg_database_size('advancia_prod'));`
+-   **Active Subscriptions**: Stripe Dashboard → Subscriptions
+-   **MRR (Monthly Recurring Revenue)**: Active users × $10
+-   **Churn Rate**: Cancelled subscriptions / Total subscriptions
+-   **API Response Times**: PM2 logs
+-   **Database Size**: `SELECT pg_size_pretty(pg_database_size('advancia_prod'));`
 
 ---
 
@@ -520,21 +510,21 @@ cat /var/www/-modular-saas-platform/backend/.env | grep DATABASE_URL
 
 ## ✅ Final Launch Checklist
 
-- [ ] Database migration with subscription fields
-- [ ] Auth middleware blocks unsubscribed users
-- [ ] Stripe product created ($10/month)
-- [ ] Stripe webhook endpoint configured
-- [ ] Digital Ocean droplet running
-- [ ] PostgreSQL database created
-- [ ] Backend deployed with PM2
-- [ ] Frontend deployed to Vercel
-- [ ] Pricing page shows single Pro plan
-- [ ] Test: Register → Can't access → Subscribe → Full access
-- [ ] DNS pointed to droplet (if custom domain)
-- [ ] SSL certificate installed
-- [ ] Nginx reverse proxy configured
-- [ ] PM2 monitoring enabled
-- [ ] Daily backups scheduled
+-   [ ] Database migration with subscription fields
+-   [ ] Auth middleware blocks unsubscribed users
+-   [ ] Stripe product created ($10/month)
+-   [ ] Stripe webhook endpoint configured
+-   [ ] Digital Ocean droplet running
+-   [ ] PostgreSQL database created
+-   [ ] Backend deployed with PM2
+-   [ ] Frontend deployed to Vercel
+-   [ ] Pricing page shows single Pro plan
+-   [ ] Test: Register → Can't access → Subscribe → Full access
+-   [ ] DNS pointed to droplet (if custom domain)
+-   [ ] SSL certificate installed
+-   [ ] Nginx reverse proxy configured
+-   [ ] PM2 monitoring enabled
+-   [ ] Daily backups scheduled
 
 ---
 
@@ -545,5 +535,5 @@ cat /var/www/-modular-saas-platform/backend/.env | grep DATABASE_URL
 **Server cost**: $12/month (Digital Ocean)  
 **Frontend cost**: FREE (Vercel)
 
-**Launch URL**: https://advancia.vercel.app  
+**Launch URL**: <https://advancia.vercel.app>  
 **After 2 customers sign up, you're profitable!** 🚀

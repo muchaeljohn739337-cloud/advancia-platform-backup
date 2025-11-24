@@ -1,22 +1,22 @@
-"use client";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement } from "chart.js";
-import type { ChartOptions } from "chart.js";
+'use client';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+import type { ChartOptions } from 'chart.js';
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 export default function BalanceChart() {
   const data = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [
       {
-        label: "Wallet Balance",
+        label: 'Wallet Balance',
         data: [1200, 1600, 1400, 1900, 1750, 2100],
         fill: false,
-        borderColor: "#2563EB",
-        backgroundColor: "#2563EB",
+        borderColor: '#2563EB',
+        backgroundColor: '#2563EB',
         tension: 0.3,
-        pointBackgroundColor: "#2563EB",
-        pointBorderColor: "#ffffff",
+        pointBackgroundColor: '#2563EB',
+        pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 6,
         pointHoverRadius: 8,
@@ -29,27 +29,29 @@ export default function BalanceChart() {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false
-      }
+        display: false,
+      },
     },
     scales: {
       y: {
         beginAtZero: true,
         grid: {
-          color: '#f3f4f6'
+          color: '#f3f4f6',
         },
         ticks: {
           callback(value) {
             const numericValue = typeof value === 'number' ? value : Number(value);
-            return Number.isFinite(numericValue) ? `$${numericValue.toLocaleString()}` : `$${value}`;
-          }
-        }
+            return Number.isFinite(numericValue)
+              ? `$${numericValue.toLocaleString()}`
+              : `$${value}`;
+          },
+        },
       },
       x: {
         grid: {
-          display: false
-        }
-      }
+          display: false,
+        },
+      },
     },
     interaction: {
       intersect: false,

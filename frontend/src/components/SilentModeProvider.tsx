@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 /**
  * Silent Mode Provider
@@ -13,14 +13,12 @@ export default function SilentModeProvider() {
   useEffect(() => {
     const checkSilentMode = async () => {
       try {
-        const response = await fetch("/api/admin/config/silent-mode", {
-          credentials: "include",
+        const response = await fetch('/api/admin/config/silent-mode', {
+          credentials: 'include',
         });
 
         if (!response.ok) {
-          console.warn(
-            "[Silent Mode] Failed to fetch config, defaulting to disabled"
-          );
+          console.warn('[Silent Mode] Failed to fetch config, defaulting to disabled');
           return;
         }
 
@@ -28,12 +26,12 @@ export default function SilentModeProvider() {
 
         if (data.silentMode) {
           // Set global flag for toast wrapper
-          if (typeof window !== "undefined") {
+          if (typeof window !== 'undefined') {
             window.__SILENT_MODE__ = true;
           }
 
           // Suppress console logs in production
-          if (process.env.NODE_ENV === "production") {
+          if (process.env.NODE_ENV === 'production') {
             const noop = () => {};
             console.log = noop;
             console.info = noop;
@@ -41,16 +39,16 @@ export default function SilentModeProvider() {
             // Keep console.error for critical debugging
           }
 
-          console.log("🔇 Silent Mode activated");
+          console.log('🔇 Silent Mode activated');
         } else {
-          if (typeof window !== "undefined") {
+          if (typeof window !== 'undefined') {
             window.__SILENT_MODE__ = false;
           }
         }
       } catch (error) {
-        console.error("[Silent Mode] Error checking configuration:", error);
+        console.error('[Silent Mode] Error checking configuration:', error);
         // Default to not enabled on error
-        if (typeof window !== "undefined") {
+        if (typeof window !== 'undefined') {
           window.__SILENT_MODE__ = false;
         }
       }

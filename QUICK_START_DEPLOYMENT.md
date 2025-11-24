@@ -107,10 +107,10 @@ gh run list --workflow=multi-region-deployment-with-monitoring.yml --limit 5
 
 **Configure secrets in GitHub UI:**
 
-1. Go to: https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/settings/secrets/actions
+1. Go to: <https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/settings/secrets/actions>
 2. Click "New repository secret"
 3. Add each secret from the list below
-4. Configure environments: https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/settings/environments
+4. Configure environments: <https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/settings/environments>
 
 ---
 
@@ -119,72 +119,83 @@ gh run list --workflow=multi-region-deployment-with-monitoring.yml --limit 5
 Copy this checklist and track your progress:
 
 ### Notifications (Required for alerts)
-- [ ] `SLACK_WEBHOOK_URL` - Incident Quick Cards  
-      Get from: https://api.slack.com/apps → Your App → Incoming Webhooks
-- [ ] `GLOBAL_SLACK_WEBHOOK` - Deployment summaries  
-      Get from: https://api.slack.com/apps → Your App → Incoming Webhooks
-- [ ] `TEAMS_WEBHOOK_URL` - Microsoft Teams (optional)  
-      Get from: Teams → Channel → ••• → Connectors → Incoming Webhook
+
+-   [ ] `SLACK_WEBHOOK_URL` - Incident Quick Cards  
+       Get from: <https://api.slack.com/apps> → Your App → Incoming Webhooks
+-   [ ] `GLOBAL_SLACK_WEBHOOK` - Deployment summaries  
+       Get from: <https://api.slack.com/apps> → Your App → Incoming Webhooks
+-   [ ] `TEAMS_WEBHOOK_URL` - Microsoft Teams (optional)  
+       Get from: Teams → Channel → ••• → Connectors → Incoming Webhook
 
 ### Infrastructure (Required for deployment)
-- [ ] `DROPLET_IP_GREEN` - New version target  
-      Get from: https://cloud.digitalocean.com/ → Droplets
-- [ ] `DROPLET_IP_BLUE` - Current production  
-      Get from: https://cloud.digitalocean.com/ → Droplets
-- [ ] `LB_IP` - Load balancer  
-      Get from: https://cloud.digitalocean.com/ → Load Balancers
-- [ ] `DROPLET_USER` - SSH user (usually "deploy")  
-      Create with: `adduser deploy` on droplet
+
+-   [ ] `DROPLET_IP_GREEN` - New version target  
+       Get from: <https://cloud.digitalocean.com/> → Droplets
+-   [ ] `DROPLET_IP_BLUE` - Current production  
+       Get from: <https://cloud.digitalocean.com/> → Droplets
+-   [ ] `LB_IP` - Load balancer  
+       Get from: <https://cloud.digitalocean.com/> → Load Balancers
+-   [ ] `DROPLET_USER` - SSH user (usually "deploy")  
+       Create with: `adduser deploy` on droplet
 
 ### DNS (Required for traffic switching)
-- [ ] `CF_ZONE_ID` - Cloudflare zone ID  
-      Get from: https://dash.cloudflare.com/ → Your Domain → Overview (right sidebar)
-- [ ] `CF_API_TOKEN` - Cloudflare API token  
-      Get from: https://dash.cloudflare.com/ → My Profile → API Tokens → Create Token
-- [ ] `CF_RECORD_ID_API` - DNS record ID  
-      Get from: API call (see WEBHOOK_CONFIGURATION_GUIDE.md)
+
+-   [ ] `CF_ZONE_ID` - Cloudflare zone ID  
+       Get from: <https://dash.cloudflare.com/> → Your Domain → Overview (right sidebar)
+-   [ ] `CF_API_TOKEN` - Cloudflare API token  
+       Get from: <https://dash.cloudflare.com/> → My Profile → API Tokens → Create Token
+-   [ ] `CF_RECORD_ID_API` - DNS record ID  
+       Get from: API call (see WEBHOOK_CONFIGURATION_GUIDE.md)
 
 ### Monitoring (Required for metrics)
-- [ ] `PROMETHEUS_PUSHGATEWAY_URL` - Metrics endpoint  
-      Example: `http://pushgateway.monitoring.svc:9091`
-- [ ] `GRAFANA_API_KEY` - Dashboard annotations  
-      Get from: https://grafana.advancia.com → Configuration → API Keys
+
+-   [ ] `PROMETHEUS_PUSHGATEWAY_URL` - Metrics endpoint  
+       Example: `http://pushgateway.monitoring.svc:9091`
+-   [ ] `GRAFANA_API_KEY` - Dashboard annotations  
+       Get from: <https://grafana.advancia.com> → Configuration → API Keys
 
 ---
 
 ## 🔍 Quick Commands Reference
 
 **Check current secrets:**
+
 ```powershell
 gh secret list
 ```
 
 **Add a secret:**
+
 ```powershell
 echo "secret-value" | gh secret set SECRET_NAME
 ```
 
 **Delete a secret:**
+
 ```powershell
 gh secret delete SECRET_NAME
 ```
 
 **List environments:**
+
 ```powershell
 gh api repos/muchaeljohn739337-cloud/-modular-saas-platform/environments | jq '.environments[].name'
 ```
 
 **View workflow runs:**
+
 ```powershell
 gh run list --workflow=multi-region-deployment-with-monitoring.yml --limit 10
 ```
 
 **Watch a running workflow:**
+
 ```powershell
 gh run watch
 ```
 
 **View logs from last run:**
+
 ```powershell
 gh run view --log
 ```
@@ -196,14 +207,16 @@ gh run view --log
 Before your first production deployment:
 
 ### Pre-Flight (5 minutes)
-- [ ] All 12 secrets configured and tested
-- [ ] 3 environments created with reviewers
-- [ ] Slack channels created (#deployments, #incidents-deployments)
-- [ ] DigitalOcean droplets accessible via SSH
-- [ ] Cloudflare API token has DNS edit permissions
-- [ ] Grafana dashboard accessible
+
+-   [ ] All 12 secrets configured and tested
+-   [ ] 3 environments created with reviewers
+-   [ ] Slack channels created (#deployments, #incidents-deployments)
+-   [ ] DigitalOcean droplets accessible via SSH
+-   [ ] Cloudflare API token has DNS edit permissions
+-   [ ] Grafana dashboard accessible
 
 ### Deployment Command (Copy & Paste)
+
 ```powershell
 # Delayed mode (safest, recommended for first deployment)
 gh workflow run multi-region-deployment-with-monitoring.yml `
@@ -219,12 +232,14 @@ gh run watch
 ```
 
 ### During Deployment (Monitor)
-- [ ] Watch Slack #deployments channel for updates
-- [ ] Open Grafana dashboards for each region
-- [ ] Keep GitHub Actions logs open
-- [ ] Have rollback command ready (see below)
+
+-   [ ] Watch Slack #deployments channel for updates
+-   [ ] Open Grafana dashboards for each region
+-   [ ] Keep GitHub Actions logs open
+-   [ ] Have rollback command ready (see below)
 
 ### Emergency Rollback
+
 ```powershell
 # If something goes wrong, cancel the run
 gh run list --workflow=multi-region-deployment-with-monitoring.yml --limit 1
@@ -241,46 +256,50 @@ gh run cancel <run-id>
 After your first deployment completes:
 
 **You should see:**
-- ✅ Slack notification in #deployments with success message
-- ✅ All 3 regions showing green in Grafana
-- ✅ Error rate < 0.2% across all regions
-- ✅ Latency P95 < 300ms across all regions
-- ✅ No rollback incidents
+
+-   ✅ Slack notification in #deployments with success message
+-   ✅ All 3 regions showing green in Grafana
+-   ✅ Error rate < 0.2% across all regions
+-   ✅ Latency P95 < 300ms across all regions
+-   ✅ No rollback incidents
 
 **If you see issues:**
-- 🚨 Incident Quick Card in #incidents-deployments
-- ⚠️ Rollback triggered automatically
-- 📋 Follow debugging guide: `DEPLOYMENT_DEBUGGING_GUIDE.md`
+
+-   🚨 Incident Quick Card in #incidents-deployments
+-   ⚠️ Rollback triggered automatically
+-   📋 Follow debugging guide: `DEPLOYMENT_DEBUGGING_GUIDE.md`
 
 ---
 
 ## 📚 Documentation Quick Links
 
-| Document | Purpose | When to Use |
-|----------|---------|-------------|
-| `setup-github-config.ps1` | Automated setup script | Run first to configure everything |
-| `WEBHOOK_CONFIGURATION_GUIDE.md` | Slack/Teams webhook setup | Before running setup script |
-| `PRODUCTION_READINESS_CHECKLIST.md` | Complete pre-deployment validation | Day before production deployment |
-| `DEPLOYMENT_QUICK_REFERENCE.md` | Fast-access deployment card | During deployment |
-| `DEPLOYMENT_LIFECYCLE.md` | Configure → Deploy → Monitor → Celebrate | Team reference guide |
-| `DEPLOYMENT_DEBUGGING_GUIDE.md` | Troubleshooting and runbooks | When issues occur |
+| Document                            | Purpose                                  | When to Use                       |
+| ----------------------------------- | ---------------------------------------- | --------------------------------- |
+| `setup-github-config.ps1`           | Automated setup script                   | Run first to configure everything |
+| `WEBHOOK_CONFIGURATION_GUIDE.md`    | Slack/Teams webhook setup                | Before running setup script       |
+| `PRODUCTION_READINESS_CHECKLIST.md` | Complete pre-deployment validation       | Day before production deployment  |
+| `DEPLOYMENT_QUICK_REFERENCE.md`     | Fast-access deployment card              | During deployment                 |
+| `DEPLOYMENT_LIFECYCLE.md`           | Configure → Deploy → Monitor → Celebrate | Team reference guide              |
+| `DEPLOYMENT_DEBUGGING_GUIDE.md`     | Troubleshooting and runbooks             | When issues occur                 |
 
 ---
 
 ## ✅ Current Status
 
 **Completed:**
-- ✅ Workflow created (867 lines, production-ready)
-- ✅ Documentation suite complete (6 comprehensive guides)
-- ✅ Setup script created and tested
-- ✅ Webhook configuration guide created
-- ✅ GitHub CLI verified and authenticated
+
+-   ✅ Workflow created (867 lines, production-ready)
+-   ✅ Documentation suite complete (6 comprehensive guides)
+-   ✅ Setup script created and tested
+-   ✅ Webhook configuration guide created
+-   ✅ GitHub CLI verified and authenticated
 
 **Pending:**
-- ⚠️ Secrets configuration (12 secrets needed)
-- ⚠️ Environments setup (3 environments + reviewers)
-- ⚠️ Slack/Teams webhooks (2-3 webhooks)
-- ⚠️ First test deployment
+
+-   ⚠️ Secrets configuration (12 secrets needed)
+-   ⚠️ Environments setup (3 environments + reviewers)
+-   ⚠️ Slack/Teams webhooks (2-3 webhooks)
+-   ⚠️ First test deployment
 
 **Time to Complete:** ~30 minutes for full setup
 
@@ -291,6 +310,7 @@ After your first deployment completes:
 **Choose your path above and start with Option A (Recommended).**
 
 If you get stuck:
+
 1. Check `WEBHOOK_CONFIGURATION_GUIDE.md` for webhook help
 2. Check `PRODUCTION_READINESS_CHECKLIST.md` for complete details
 3. Run `.\setup-github-config.ps1 -Help` for script options

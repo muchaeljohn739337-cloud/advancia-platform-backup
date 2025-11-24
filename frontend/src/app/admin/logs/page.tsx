@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import AdminNav from "@/components/AdminNav";
-import { FileText, Filter } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import AdminNav from '@/components/AdminNav';
+import { FileText, Filter } from 'lucide-react';
 
 export default function AdminLogsPage() {
   const router = useRouter();
@@ -11,13 +11,13 @@ export default function AdminLogsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      router.push("/admin/login");
+      router.push('/admin/login');
       return;
     }
 
-    fetch("http://localhost:4000/api/admin/logs", {
+    fetch('http://localhost:4000/api/admin/logs', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())

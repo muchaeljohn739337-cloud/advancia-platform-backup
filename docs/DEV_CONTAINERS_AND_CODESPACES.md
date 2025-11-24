@@ -68,14 +68,12 @@ Copy-paste the following into your root `README.md` under a new "Develop" sectio
 This repo ships with a full dev container. It standardizes Node/Prisma/Postgres/Redis and avoids platform-specific issues.
 
 - VS Code Dev Containers
-
   1. Open the repo in VS Code → "Reopen in Container".
   2. Wait for setup to complete.
   3. Run VS Code Task: "🚀 Start Development Servers" (or dev scripts).
   4. Frontend: http://localhost:3000 · Backend health: http://localhost:4000/api/health
 
 - GitHub Codespaces
-
   1. On GitHub: Code → "Create codespace on main".
   2. Use the Ports tab to open 3000/4000.
 

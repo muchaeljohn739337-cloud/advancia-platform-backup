@@ -1,6 +1,7 @@
 # 🧪 Test Account Creation & Login Guide
 
 ## ✅ Backend Status: HEALTHY
+
 **Checked:** Backend is live at https://advancia-backend.onrender.com
 
 ---
@@ -18,11 +19,13 @@
 ### **Step 1: Visit Your Site**
 
 Open browser (Chrome/Edge in incognito mode recommended):
+
 ```
 https://advanciapayledger.com
 ```
 
 **Expected:**
+
 - ✅ Should redirect to `/auth/login` page
 - ✅ See "Advancia Pay" login page with gradient background
 - ✅ Two login options: Regular login + One-Time Code
@@ -32,6 +35,7 @@ https://advanciapayledger.com
 ### **Step 2: Click "Create Account"**
 
 At bottom of login page:
+
 - ✅ Look for "Don't have an account? Create Account"
 - ✅ Click "Create Account" link
 - ✅ Should navigate to `/auth/register`
@@ -42,17 +46,18 @@ At bottom of login page:
 
 Fill out the registration form:
 
-| Field | Value |
-|-------|-------|
-| **Username** | `pdtribe181` (or any username you want) |
-| **Email** | `pdtribe181@gmail.com` |
-| **Password** | Choose a strong password (min 6 chars) |
-| **Confirm Password** | Same password |
-| **Accept Terms** | ✅ Check the box |
+| Field                | Value                                   |
+| -------------------- | --------------------------------------- |
+| **Username**         | `pdtribe181` (or any username you want) |
+| **Email**            | `pdtribe181@gmail.com`                  |
+| **Password**         | Choose a strong password (min 6 chars)  |
+| **Confirm Password** | Same password                           |
+| **Accept Terms**     | ✅ Check the box                        |
 
 **Click:** "Create Account" button
 
 **Expected:**
+
 - ✅ Loading state: "Creating Account..."
 - ✅ Redirect to login page after success
 - ✅ May see "Registration successful" message
@@ -64,16 +69,18 @@ Fill out the registration form:
 On login page (`/auth/login`):
 
 **Option A - Email/Password Login:**
+
 1. Enter email: `pdtribe181@gmail.com`
 2. Enter your password
 3. Click "Sign In"
 4. **Expected:** Redirect to `/dashboard` ✅
 
 **Option B - One-Time Code (OTP) Login:**
+
 1. Click "Login with One-Time Code" button
 2. Enter email: `pdtribe181@gmail.com`
 3. Click "Send Code"
-4. **Expected:** 
+4. **Expected:**
    - OTP sent to your email (if email service configured)
    - OR see error if email not configured (that's okay for testing)
 
@@ -84,6 +91,7 @@ On login page (`/auth/login`):
 After successful login:
 
 **Expected:**
+
 - ✅ Redirect to `https://advanciapayledger.com/dashboard`
 - ✅ See dashboard with:
   - Sidebar navigation
@@ -119,6 +127,7 @@ After successful login:
 ## 🔍 What to Check:
 
 ### **✅ Registration Works:**
+
 - [ ] Can create account with pdtribe181@gmail.com
 - [ ] Password validation works (min 6 chars)
 - [ ] Password confirmation matches
@@ -126,18 +135,21 @@ After successful login:
 - [ ] Redirects to login after success
 
 ### **✅ Login Works:**
+
 - [ ] Can login with email + password
 - [ ] Wrong password shows error
 - [ ] Successful login redirects to dashboard
 - [ ] Token stored in browser (check DevTools → Application → localStorage)
 
 ### **✅ Authentication Protection:**
+
 - [ ] Root page (`/`) redirects to login
 - [ ] Dashboard requires authentication
 - [ ] Direct dashboard access blocked without login
 - [ ] Logout clears authentication
 
 ### **✅ Error Handling:**
+
 - [ ] No ugly CloudFront errors visible
 - [ ] Friendly error messages shown
 - [ ] Clean redirect on errors
@@ -149,6 +161,7 @@ After successful login:
 ### **Problem: "Cannot connect to backend"**
 
 **Check:**
+
 1. Backend environment variable `CORS_ORIGIN`
 2. Should be: `https://advanciapayledger.com`
 3. Update in Render → Backend → Environment
@@ -157,11 +170,13 @@ After successful login:
 ### **Problem: "Registration failed"**
 
 **Possible causes:**
+
 - Backend database connection issue
 - Check backend logs in Render
 - Verify migrations ran successfully (7/7)
 
 **Check backend logs:**
+
 1. Render → advancia-backend → Logs
 2. Look for registration POST request
 3. Check for errors
@@ -169,11 +184,13 @@ After successful login:
 ### **Problem: "OTP not received"**
 
 **Expected behavior:**
+
 - OTP requires email service (SendGrid, AWS SES, etc.)
 - If not configured yet, OTP won't work
 - Use email/password login instead for now
 
 **To fix OTP later:**
+
 - Configure email service in backend
 - Add SMTP credentials to environment
 - Test email sending
@@ -181,6 +198,7 @@ After successful login:
 ### **Problem: "Stuck on loading screen"**
 
 **Check:**
+
 1. Browser console (F12) for errors
 2. Network tab for failed requests
 3. Backend CORS allowing frontend domain
@@ -253,6 +271,7 @@ Dashboard displays! (✅)
 ## 📝 Notes:
 
 **Current Status:**
+
 - ✅ Backend: Live and healthy
 - ✅ Frontend: Deployed with auth enforcement
 - ✅ Database: 7 migrations applied
@@ -260,6 +279,7 @@ Dashboard displays! (✅)
 - ✅ SSL: Active via Cloudflare
 
 **What Works:**
+
 - ✅ Registration
 - ✅ Email/Password Login
 - ✅ Dashboard access control
@@ -267,6 +287,7 @@ Dashboard displays! (✅)
 - ✅ Error handling
 
 **What Might Not Work Yet:**
+
 - ⏳ OTP login (needs email service)
 - ⏳ Email verification (if enabled)
 - ⏳ Password reset (needs email service)
@@ -299,6 +320,7 @@ Once you confirm registration and login work:
 **Go ahead and test with `pdtribe181@gmail.com`!** 🎉
 
 Let me know:
+
 - ✅ What works
 - ❌ Any errors you see
 - 📸 Screenshots if needed

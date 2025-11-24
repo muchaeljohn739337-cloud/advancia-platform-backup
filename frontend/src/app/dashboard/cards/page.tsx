@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import { CreditCard, Lock, Settings, TrendingUp, Send, Ban, Snowflake } from "lucide-react";
+import { useState, useEffect, useCallback } from 'react';
+import { CreditCard, Lock, Settings, TrendingUp, Send, Ban, Snowflake } from 'lucide-react';
 
 interface DebitCard {
   id: string;
@@ -30,18 +30,22 @@ export default function DebitCardsPage() {
   const [cards, setCards] = useState<DebitCard[]>([]);
   const [selectedCard, setSelectedCard] = useState<DebitCard | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
-  
+
   // Forms
-  const [pinForm, setPinForm] = useState({ oldPin: "", newPin: "", confirmPin: "" });
-  const [limitForm, setLimitForm] = useState({ dailyLimit: "" });
-  const [nameForm, setNameForm] = useState({ cardHolderName: "" });
+  const [pinForm, setPinForm] = useState({
+    oldPin: '',
+    newPin: '',
+    confirmPin: '',
+  });
+  const [limitForm, setLimitForm] = useState({ dailyLimit: '' });
+  const [nameForm, setNameForm] = useState({ cardHolderName: '' });
 
   const fetchCards = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("/api/debit-cards/my-cards", {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/debit-cards/my-cards', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -52,7 +56,7 @@ export default function DebitCardsPage() {
         }
       }
     } catch {
-      console.error("Failed to fetch cards");
+      console.error('Failed to fetch cards');
     }
   }, [selectedCard]);
 
@@ -68,14 +72,14 @@ export default function DebitCardsPage() {
 
   const fetchTransactions = async (cardId: string) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/transactions/${cardId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) setTransactions(data.transactions);
     } catch {
-      console.error("Failed to fetch transactions");
+      console.error('Failed to fetch transactions');
     }
   };
 
@@ -83,12 +87,12 @@ export default function DebitCardsPage() {
     if (!selectedCard) return;
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/freeze/${selectedCard.id}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ freeze }),
       });
@@ -96,7 +100,7 @@ export default function DebitCardsPage() {
       alert(data.message || data.error);
       if (data.success) fetchCards();
     } catch {
-      alert("Failed to update card status");
+      alert('Failed to update card status');
     }
     setLoading(false);
   };
@@ -105,27 +109,30 @@ export default function DebitCardsPage() {
     e.preventDefault();
     if (!selectedCard) return;
     if (pinForm.newPin !== pinForm.confirmPin) {
-      alert("PINs do not match");
+      alert('PINs do not match');
       return;
     }
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/set-pin/${selectedCard.id}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ oldPin: pinForm.oldPin, newPin: pinForm.newPin }),
+        body: JSON.stringify({
+          oldPin: pinForm.oldPin,
+          newPin: pinForm.newPin,
+        }),
       });
       const data = await res.json();
       alert(data.message || data.error);
       if (data.success) {
-        setPinForm({ oldPin: "", newPin: "", confirmPin: "" });
+        setPinForm({ oldPin: '', newPin: '', confirmPin: '' });
       }
     } catch {
-      alert("Failed to set PIN");
+      alert('Failed to set PIN');
     }
     setLoading(false);
   };
@@ -135,20 +142,22 @@ export default function DebitCardsPage() {
     if (!selectedCard) return;
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/set-limits/${selectedCard.id}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ dailyLimit: parseFloat(limitForm.dailyLimit) }),
+        body: JSON.stringify({
+          dailyLimit: parseFloat(limitForm.dailyLimit),
+        }),
       });
       const data = await res.json();
       alert(data.message || data.error);
       if (data.success) fetchCards();
     } catch {
-      alert("Failed to set limits");
+      alert('Failed to set limits');
     }
     setLoading(false);
   };
@@ -158,12 +167,12 @@ export default function DebitCardsPage() {
     if (!selectedCard) return;
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/customize/${selectedCard.id}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ cardHolderName: nameForm.cardHolderName }),
       });
@@ -171,44 +180,45 @@ export default function DebitCardsPage() {
       alert(data.message || data.error);
       if (data.success) fetchCards();
     } catch {
-      alert("Failed to customize card");
+      alert('Failed to customize card');
     }
     setLoading(false);
   };
 
   const handleRequestPhysical = async () => {
     if (!selectedCard) return;
-    const address = prompt("Enter your shipping address:");
+    const address = prompt('Enter your shipping address:');
     if (!address) return;
-    
+
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/request-physical/${selectedCard.id}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ shippingAddress: address, expedited: false }),
       });
       const data = await res.json();
       alert(data.message || data.error);
     } catch {
-      alert("Failed to request physical card");
+      alert('Failed to request physical card');
     }
     setLoading(false);
   };
 
   const handleCancelCard = async () => {
     if (!selectedCard) return;
-    if (!confirm("Are you sure you want to cancel this card? This action cannot be undone.")) return;
-    
+    if (!confirm('Are you sure you want to cancel this card? This action cannot be undone.'))
+      return;
+
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       const res = await fetch(`/api/debit-cards/${selectedCard.id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -218,21 +228,21 @@ export default function DebitCardsPage() {
         fetchCards();
       }
     } catch {
-      alert("Failed to cancel card");
+      alert('Failed to cancel card');
     }
     setLoading(false);
   };
 
   const getCardColor = (status: string) => {
     switch (status) {
-      case "active":
-        return "from-blue-500 to-purple-600";
-      case "frozen":
-        return "from-gray-400 to-gray-600";
-      case "cancelled":
-        return "from-red-400 to-red-600";
+      case 'active':
+        return 'from-blue-500 to-purple-600';
+      case 'frozen':
+        return 'from-gray-400 to-gray-600';
+      case 'cancelled':
+        return 'from-red-400 to-red-600';
       default:
-        return "from-green-500 to-teal-600";
+        return 'from-green-500 to-teal-600';
     }
   };
 
@@ -282,20 +292,20 @@ export default function DebitCardsPage() {
                     onClick={() => setSelectedCard(card)}
                     className={`cursor-pointer p-4 rounded-lg border-2 transition-all ${
                       selectedCard?.id === card.id
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
-                    <div className={`bg-gradient-to-r ${getCardColor(card.status)} text-white p-6 rounded-xl mb-2`}>
+                    <div
+                      className={`bg-gradient-to-r ${getCardColor(card.status)} text-white p-6 rounded-xl mb-2`}
+                    >
                       <div className="flex justify-between items-start mb-8">
                         <div className="text-xs font-semibold">
-                          {card.cardType === "physical" ? "PHYSICAL" : "VIRTUAL"}
+                          {card.cardType === 'physical' ? 'PHYSICAL' : 'VIRTUAL'}
                         </div>
                         <CreditCard size={32} />
                       </div>
-                      <div className="text-lg font-mono tracking-wider mb-4">
-                        {card.cardNumber}
-                      </div>
+                      <div className="text-lg font-mono tracking-wider mb-4">{card.cardNumber}</div>
                       <div className="flex justify-between items-end">
                         <div>
                           <div className="text-xs opacity-75">CARDHOLDER</div>
@@ -304,7 +314,8 @@ export default function DebitCardsPage() {
                         <div>
                           <div className="text-xs opacity-75">EXPIRES</div>
                           <div className="text-sm font-semibold">
-                            {card.expiryMonth.toString().padStart(2, "0")}/{card.expiryYear.toString().slice(-2)}
+                            {card.expiryMonth.toString().padStart(2, '0')}/
+                            {card.expiryYear.toString().slice(-2)}
                           </div>
                         </div>
                       </div>
@@ -315,11 +326,15 @@ export default function DebitCardsPage() {
                     </div>
                     <div className="mt-1 flex justify-between text-sm">
                       <span className="text-gray-600">Status:</span>
-                      <span className={`font-semibold ${
-                        card.status === "active" ? "text-green-600" :
-                        card.status === "frozen" ? "text-blue-600" :
-                        "text-red-600"
-                      }`}>
+                      <span
+                        className={`font-semibold ${
+                          card.status === 'active'
+                            ? 'text-green-600'
+                            : card.status === 'frozen'
+                              ? 'text-blue-600'
+                              : 'text-red-600'
+                        }`}
+                      >
                         {card.status.toUpperCase()}
                       </span>
                     </div>
@@ -335,14 +350,14 @@ export default function DebitCardsPage() {
               <div className="bg-white rounded-xl shadow-lg p-6">
                 {/* Tabs */}
                 <div className="flex flex-wrap gap-2 mb-6 border-b">
-                  {["overview", "transactions", "settings", "security"].map((tab) => (
+                  {['overview', 'transactions', 'settings', 'security'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
                       className={`px-4 py-2 font-medium capitalize transition-colors ${
                         activeTab === tab
-                          ? "text-blue-600 border-b-2 border-blue-600"
-                          : "text-gray-600 hover:text-gray-900"
+                          ? 'text-blue-600 border-b-2 border-blue-600'
+                          : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
                       {tab}
@@ -351,7 +366,7 @@ export default function DebitCardsPage() {
                 </div>
 
                 {/* Overview Tab */}
-                {activeTab === "overview" && (
+                {activeTab === 'overview' && (
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-blue-50 p-4 rounded-lg">
@@ -370,19 +385,19 @@ export default function DebitCardsPage() {
 
                     <div className="space-y-3">
                       <button
-                        onClick={() => handleFreezeCard(selectedCard.status !== "frozen")}
+                        onClick={() => handleFreezeCard(selectedCard.status !== 'frozen')}
                         disabled={loading}
                         className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium ${
-                          selectedCard.status === "frozen"
-                            ? "bg-green-600 hover:bg-green-700 text-white"
-                            : "bg-yellow-600 hover:bg-yellow-700 text-white"
+                          selectedCard.status === 'frozen'
+                            ? 'bg-green-600 hover:bg-green-700 text-white'
+                            : 'bg-yellow-600 hover:bg-yellow-700 text-white'
                         }`}
                       >
                         <Snowflake size={20} />
-                        {selectedCard.status === "frozen" ? "Unfreeze Card" : "Freeze Card"}
+                        {selectedCard.status === 'frozen' ? 'Unfreeze Card' : 'Freeze Card'}
                       </button>
 
-                      {selectedCard.cardType === "virtual" && (
+                      {selectedCard.cardType === 'virtual' && (
                         <button
                           onClick={handleRequestPhysical}
                           disabled={loading}
@@ -406,7 +421,7 @@ export default function DebitCardsPage() {
                 )}
 
                 {/* Transactions Tab */}
-                {activeTab === "transactions" && (
+                {activeTab === 'transactions' && (
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>
                     {transactions.length === 0 ? (
@@ -414,15 +429,20 @@ export default function DebitCardsPage() {
                     ) : (
                       <div className="space-y-3">
                         {transactions.map((tx) => (
-                          <div key={tx.id} className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                          <div
+                            key={tx.id}
+                            className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
+                          >
                             <div>
                               <div className="font-medium">{tx.description}</div>
                               <div className="text-sm text-gray-600">
                                 {new Date(tx.createdAt).toLocaleDateString()}
                               </div>
                             </div>
-                            <div className={`font-bold ${tx.amount < 0 ? "text-red-600" : "text-green-600"}`}>
-                              {tx.amount < 0 ? "-" : "+"}${Math.abs(tx.amount).toFixed(2)}
+                            <div
+                              className={`font-bold ${tx.amount < 0 ? 'text-red-600' : 'text-green-600'}`}
+                            >
+                              {tx.amount < 0 ? '-' : '+'}${Math.abs(tx.amount).toFixed(2)}
                             </div>
                           </div>
                         ))}
@@ -432,7 +452,7 @@ export default function DebitCardsPage() {
                 )}
 
                 {/* Settings Tab */}
-                {activeTab === "settings" && (
+                {activeTab === 'settings' && (
                   <div className="space-y-6">
                     <form onSubmit={handleCustomizeName}>
                       <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
@@ -479,7 +499,7 @@ export default function DebitCardsPage() {
                 )}
 
                 {/* Security Tab */}
-                {activeTab === "security" && (
+                {activeTab === 'security' && (
                   <form onSubmit={handleSetPin}>
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <Lock size={20} />

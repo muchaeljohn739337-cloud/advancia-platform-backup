@@ -17,19 +17,18 @@ LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3
 ### Setup with Authenticator App
 
 1. **Google Authenticator / Authy / Microsoft Authenticator**
-
-   - Open your authenticator app
-   - Select "Add Account" or "+"
-   - Choose "Enter a setup key" or "Manual entry"
-   - Enter these details:
-     - **Account name**: Advancia Pay Admin
-     - **Key**: `LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3`
-     - **Type**: Time-based
-   - Save the account
+   -   Open your authenticator app
+   -   Select "Add Account" or "+"
+   -   Choose "Enter a setup key" or "Manual entry"
+   -   Enter these details:
+     -   **Account name**: Advancia Pay Admin
+     -   **Key**: `LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3`
+     -   **Type**: Time-based
+   -   Save the account
 
 2. **Generate TOTP Token**
-   - The app will generate a 6-digit code every 30 seconds
-   - Use this code when logging in as admin
+   -   The app will generate a 6-digit code every 30 seconds
+   -   Use this code when logging in as admin
 
 ### QR Code URL (Alternative Method)
 
@@ -89,12 +88,12 @@ Replace `123456` with the 6-digit code from your authenticator app.
 
 The admin account is protected by the same lockout policy as regular users:
 
-- **Max failed attempts**: 5
-- **Lockout duration**: 15 minutes
-- **Applies to**:
-  - Wrong password
-  - Invalid TOTP token
-  - Invalid backup code
+-   **Max failed attempts**: 5
+-   **Lockout duration**: 15 minutes
+-   **Applies to**:
+    -   Wrong password
+    -   Invalid TOTP token
+    -   Invalid backup code
 
 After 5 failed attempts, the account will be locked for 15 minutes, regardless of correct credentials.
 
@@ -121,38 +120,39 @@ Both requests automatically extract and store the JWT token for subsequent authe
 
 ### TOTP Token Always Fails
 
-- Check your device's time synchronization (TOTP requires accurate time)
-- Verify the secret key was entered correctly
-- Try resetting the TOTP secret and rescanning
+-   Check your device's time synchronization (TOTP requires accurate time)
+-   Verify the secret key was entered correctly
+-   Try resetting the TOTP secret and rescanning
 
 ### Account Locked
 
-- Wait 15 minutes for automatic unlock
-- Or manually reset via database:
+-   Wait 15 minutes for automatic unlock
+-   Or manually reset via database:
+
   ```sql
   UPDATE users SET failed_attempts = 0, locked_until = NULL WHERE email = 'admin@advancia.com';
   ```
 
 ### Lost Authenticator Access
 
-- Use backup codes for emergency access
-- Contact system administrator to reset 2FA
+-   Use backup codes for emergency access
+-   Contact system administrator to reset 2FA
 
 ## Production Deployment Checklist
 
 Before deploying to production:
 
-- [ ] Change admin password from default `admin123`
-- [ ] Generate new TOTP secret
-- [ ] Create new backup codes
-- [ ] Store secrets in secure vault (e.g., AWS Secrets Manager)
-- [ ] Update environment variables
-- [ ] Test 2FA login
-- [ ] Document recovery procedures
-- [ ] Set up monitoring alerts for failed login attempts
+-   [ ] Change admin password from default `admin123`
+-   [ ] Generate new TOTP secret
+-   [ ] Create new backup codes
+-   [ ] Store secrets in secure vault (e.g., AWS Secrets Manager)
+-   [ ] Update environment variables
+-   [ ] Test 2FA login
+-   [ ] Document recovery procedures
+-   [ ] Set up monitoring alerts for failed login attempts
 
 ---
 
 **Created**: November 14, 2025  
 **Status**: Development Environment  
-**Backend**: http://localhost:4000
+**Backend**: <http://localhost:4000>

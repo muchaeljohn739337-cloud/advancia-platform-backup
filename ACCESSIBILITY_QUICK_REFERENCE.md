@@ -80,19 +80,19 @@ Arrow Keys → Adjust slider/select options
 
 ## 🧪 Test Checklist
 
-- [ ] Tab to color picker → Narrator says full label
-- [ ] Tab to date picker → Narrator says purpose
-- [ ] Tab to week picker → Narrator warns about browser support
-- [ ] Tab to slider → Narrator announces min/max/current value
-- [ ] Arrow keys on slider → Narrator announces value changes
-- [ ] All controls reachable without mouse
-- [ ] No keyboard traps
+-   [ ] Tab to color picker → Narrator says full label
+-   [ ] Tab to date picker → Narrator says purpose
+-   [ ] Tab to week picker → Narrator warns about browser support
+-   [ ] Tab to slider → Narrator announces min/max/current value
+-   [ ] Arrow keys on slider → Narrator announces value changes
+-   [ ] All controls reachable without mouse
+-   [ ] No keyboard traps
 
 ---
 
 ## 🔧 VS Code Accessibility Support
 
-### Enable in VS Code:
+### Enable in VS Code
 
 ```
 Method 1: Ctrl + Shift + P → "accessibility" → "on"
@@ -100,13 +100,13 @@ Method 2: Ctrl + , → Search "accessibility support" → "on"
 Method 3: Click "Yes" in notification bar
 ```
 
-### What It Enables:
+### What It Enables
 
-- ✅ Line numbers announced
-- ✅ Code changes read clearly
-- ✅ Better keyboard navigation
-- ✅ IntelliSense optimization
-- ✅ Error message clarity
+-   ✅ Line numbers announced
+-   ✅ Code changes read clearly
+-   ✅ Better keyboard navigation
+-   ✅ IntelliSense optimization
+-   ✅ Error message clarity
 
 ---
 
@@ -164,29 +164,26 @@ Current value: 5000, Minimum: 0, Maximum: 10000, slider"
 ## 🎯 Pages with Accessibility Features
 
 1. **Modern HTML Features Demo**
-
-   - URL: `http://localhost:3000/demo/tools`
-   - All native HTML5 inputs with full accessibility
+   -   URL: `http://localhost:3000/demo/tools`
+   -   All native HTML5 inputs with full accessibility
 
 2. **Interactive Form Demo**
-
-   - URL: `http://localhost:3000/demo/interactive`
-   - Mouse tracking + form metrics
+   -   URL: `http://localhost:3000/demo/interactive`
+   -   Mouse tracking + form metrics
 
 3. **Admin Users Table**
-
-   - URL: `http://localhost:3000/admin/users`
-   - Datalist inputs for filters
+   -   URL: `http://localhost:3000/admin/users`
+   -   Datalist inputs for filters
 
 4. **Doctor Registration**
-   - URL: `http://localhost:3000/register/doctor`
-   - Datalist for specializations
+   -   URL: `http://localhost:3000/register/doctor`
+   -   Datalist for specializations
 
 ---
 
 ## 🔒 Accessibility Best Practices
 
-### Always Include:
+### Always Include
 
 1. ✅ `<label htmlFor="inputId">` for every input
 2. ✅ `id` attribute matching the label
@@ -195,7 +192,7 @@ Current value: 5000, Minimum: 0, Maximum: 10000, slider"
 5. ✅ Visible warnings for browser-specific features
 6. ✅ `title` attribute for hover tooltips
 
-### Never Do:
+### Never Do
 
 1. ❌ Input without label
 2. ❌ Label without `htmlFor`
@@ -232,18 +229,18 @@ npm run dev
 
 ### Keyboard Navigation Not Working
 
-- Check if focus is on browser window (`Alt + Tab`)
-- Disable browser extensions that might intercept keys
-- Try `F6` to move focus to page content
+-   Check if focus is on browser window (`Alt + Tab`)
+-   Disable browser extensions that might intercept keys
+-   Try `F6` to move focus to page content
 
 ---
 
 ## 📚 Resources
 
-- [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
-- [MDN ARIA Guide](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
-- [WebAIM Screen Reader Testing](https://webaim.org/articles/screenreader_testing/)
-- [Narrator User Guide](https://support.microsoft.com/en-us/windows/complete-guide-to-narrator-e4397a0d-ef4f-b386-d8ae-c172f109bdb1)
+-   [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
+-   [MDN ARIA Guide](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
+-   [WebAIM Screen Reader Testing](https://webaim.org/articles/screenreader_testing/)
+-   [Narrator User Guide](https://support.microsoft.com/en-us/windows/complete-guide-to-narrator-e4397a0d-ef4f-b386-d8ae-c172f109bdb1)
 
 ---
 

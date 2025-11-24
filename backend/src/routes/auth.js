@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import speakeasy from 'speakeasy';
 import { query } from '../db.js';
 import {

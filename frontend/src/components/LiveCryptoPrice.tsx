@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 interface CryptoPrices {
   BTC: number;
@@ -22,29 +22,29 @@ export default function LiveCryptoPrice({ cryptoType, onPriceUpdate }: LiveCrypt
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const response = await fetch("/api/crypto/prices");
+        const response = await fetch('/api/crypto/prices');
         if (response.ok) {
           const data = await response.json();
           setPrices(data.prices);
           setLastUpdate(new Date(data.timestamp));
-          
+
           // Notify parent component of price update
           if (onPriceUpdate && data.prices[cryptoType]) {
             onPriceUpdate(data.prices[cryptoType]);
           }
         }
       } catch (error) {
-        console.error("Failed to fetch crypto prices:", error);
+        console.error('Failed to fetch crypto prices:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchPrices();
-    
+
     // Refresh prices every 10 seconds
     const interval = setInterval(fetchPrices, 10000);
-    
+
     return () => clearInterval(interval);
   }, [cryptoType, onPriceUpdate]);
 
@@ -57,11 +57,7 @@ export default function LiveCryptoPrice({ cryptoType, onPriceUpdate }: LiveCrypt
   }
 
   if (!prices || !prices[cryptoType as keyof CryptoPrices]) {
-    return (
-      <div className="text-red-600 dark:text-red-400">
-        Price unavailable
-      </div>
-    );
+    return <div className="text-red-600 dark:text-red-400">Price unavailable</div>;
   }
 
   const currentPrice = prices[cryptoType as keyof CryptoPrices];
@@ -70,7 +66,11 @@ export default function LiveCryptoPrice({ cryptoType, onPriceUpdate }: LiveCrypt
   return (
     <div className="flex items-center space-x-2">
       <div className="text-2xl font-bold text-gray-900 dark:text-white">
-        ${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        $
+        {currentPrice.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
       </div>
       <div className="flex flex-col text-xs text-gray-500 dark:text-gray-400">
         <span className="flex items-center">

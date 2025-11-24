@@ -6,11 +6,11 @@
 
 ## ✅ Pre-Deployment Status
 
-- ✅ TypeScript compiles successfully → `dist/index.js` (24KB)
-- ✅ Prisma client generated (v5.22.0)
-- ✅ render.yaml configured with all required settings
-- ✅ Database already on Render PostgreSQL (Oregon)
-- ✅ Build script handles TypeScript errors gracefully
+-   ✅ TypeScript compiles successfully → `dist/index.js` (24KB)
+-   ✅ Prisma client generated (v5.22.0)
+-   ✅ render.yaml configured with all required settings
+-   ✅ Database already on Render PostgreSQL (Oregon)
+-   ✅ Build script handles TypeScript errors gracefully
 
 ---
 
@@ -18,8 +18,8 @@
 
 **Files:**
 
-- `backend/` folder (entire Node.js application)
-- `render.yaml` (infrastructure as code)
+-   `backend/` folder (entire Node.js application)
+-   `render.yaml` (infrastructure as code)
 
 **Build Process on Render:**
 
@@ -47,7 +47,7 @@ git push origin preview-clean
 
 **Option A: Blueprint (Recommended)**
 
-1. Go to https://dashboard.render.com
+1. Go to <https://dashboard.render.com>
 2. Click **New** → **Blueprint**
 3. Select repo: `muchaeljohn739337-cloud/-modular-saas-platform`
 4. Branch: `preview-clean`
@@ -58,12 +58,12 @@ git push origin preview-clean
 1. Click **New** → **Web Service**
 2. Connect GitHub repo
 3. Settings:
-   - Name: `advancia-backend`
-   - Region: `Oregon`
-   - Branch: `preview-clean`
-   - Root Directory: `backend`
-   - Build: `npm ci && npx prisma generate && npx prisma migrate deploy && npm run build`
-   - Start: `npm start`
+   -   Name: `advancia-backend`
+   -   Region: `Oregon`
+   -   Branch: `preview-clean`
+   -   Root Directory: `backend`
+   -   Build: `npm ci && npx prisma generate && npx prisma migrate deploy && npm run build`
+   -   Start: `npm start`
 
 ### Step 3: Set Environment Secrets
 
@@ -135,7 +135,7 @@ Expected: `{"status":"ok","timestamp":"2025-11-21T..."}`
 
 ### Vercel Environment Variables
 
-1. Go to https://vercel.com/dashboard
+1. Go to <https://vercel.com/dashboard>
 2. Select project: `modular-saas-platform-frontend`
 3. **Settings** → **Environment Variables**
 4. Update:
@@ -177,32 +177,32 @@ NEXT_PUBLIC_WS_URL=wss://advancia-backend.onrender.com
 
 ✅ **Render Dashboard:**
 
-- Service: `advancia-backend` (Running)
-- URL: `https://advancia-backend.onrender.com`
-- Region: Oregon (US West)
-- Plan: Free (Starter)
+-   Service: `advancia-backend` (Running)
+-   URL: `https://advancia-backend.onrender.com`
+-   Region: Oregon (US West)
+-   Plan: Free (Starter)
 
 ✅ **Endpoints Working:**
 
-- GET `/api/health` → 200 OK
-- POST `/api/auth/register` → 200/400 (validation)
-- POST `/api/auth/login` → 200/401
+-   GET `/api/health` → 200 OK
+-   POST `/api/auth/register` → 200/400 (validation)
+-   POST `/api/auth/login` → 200/401
 
 ✅ **Frontend:**
 
-- Connects to Render backend
-- API calls succeed
-- WebSocket notifications work
+-   Connects to Render backend
+-   API calls succeed
+-   WebSocket notifications work
 
 ---
 
 ## 🎉 Success Criteria
 
-- [ ] Render service shows "Live" status
-- [ ] Health endpoint returns 200
-- [ ] No errors in Render logs
-- [ ] Frontend can register/login users
-- [ ] Database queries working
+-   [ ] Render service shows "Live" status
+-   [ ] Health endpoint returns 200
+-   [ ] No errors in Render logs
+-   [ ] Frontend can register/login users
+-   [ ] Database queries working
 
 ---
 
@@ -219,11 +219,11 @@ NEXT_PUBLIC_WS_URL=wss://advancia-backend.onrender.com
    ```
 
 2. **Render Settings:**
-
-   - Add custom domain: `api.advanciapayledger.com`
-   - Wait for SSL provisioning (~5 min)
+   -   Add custom domain: `api.advanciapayledger.com`
+   -   Wait for SSL provisioning (~5 min)
 
 3. **Update Environment:**
+
    ```
    FRONTEND_URL=https://advanciapayledger.com
    ALLOWED_ORIGINS=https://advanciapayledger.com,https://www.advanciapayledger.com
@@ -231,7 +231,7 @@ NEXT_PUBLIC_WS_URL=wss://advancia-backend.onrender.com
 
 ### Update Stripe Webhooks
 
-https://dashboard.stripe.com → Developers → Webhooks:
+<https://dashboard.stripe.com> → Developers → Webhooks:
 
 ```
 URL: https://api.advanciapayledger.com/api/payments/webhook
@@ -242,9 +242,9 @@ Events: payment_intent.succeeded, payment_intent.failed
 
 ## 🆘 Support
 
-- Render Docs: https://render.com/docs/deploy-node-express-app
-- Prisma Render Guide: https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-render
-- Issues: Check `RENDER_MIGRATION_CHECKLIST.md`
+-   Render Docs: <https://render.com/docs/deploy-node-express-app>
+-   Prisma Render Guide: <https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-render>
+-   Issues: Check `RENDER_MIGRATION_CHECKLIST.md`
 
 ---
 

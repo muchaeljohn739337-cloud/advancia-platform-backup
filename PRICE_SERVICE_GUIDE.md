@@ -294,9 +294,9 @@ REDIS_URL=redis://localhost:6379
 
 ### Rate Limits
 
-- **CoinGecko Free:** 10-30 calls/min (no key required)
-- **Binance Public:** 1200 calls/min (no key required)
-- **Caching:** Responses cached for 5 minutes (configurable)
+-   **CoinGecko Free:** 10-30 calls/min (no key required)
+-   **Binance Public:** 1200 calls/min (no key required)
+-   **Caching:** Responses cached for 5 minutes (configurable)
 
 ### Upgrading to Paid Tiers (Optional)
 
@@ -481,8 +481,8 @@ The service automatically falls back to the next provider if one fails.
 
 ## Support
 
-- API errors? Check `/api/prices/status` for provider health
-- Need more symbols? CoinGecko supports 10,000+ coins via their ID system
-- Performance issues? Monitor Redis cache hit rates in admin dashboard
+-   API errors? Check `/api/prices/status` for provider health
+-   Need more symbols? CoinGecko supports 10,000+ coins via their ID system
+-   Performance issues? Monitor Redis cache hit rates in admin dashboard
 
 **No API keys needed to start. Scale when you need it.** 🚀

@@ -28,10 +28,7 @@ const payload = {
 const jsonPayload = JSON.stringify(payload);
 
 // Generate HMAC SHA256 signature
-const signature = crypto
-  .createHmac("sha256", CRYPTOMUS_API_KEY)
-  .update(jsonPayload)
-  .digest("hex");
+const signature = crypto.createHmac("sha256", CRYPTOMUS_API_KEY).update(jsonPayload).digest("hex");
 
 console.log("Payload:", jsonPayload);
 console.log("Signature:", signature);
@@ -63,10 +60,7 @@ const payload = {
 
 // Generate signature
 const jsonPayload = JSON.stringify(payload);
-const signature = crypto
-  .createHmac("sha256", CRYPTOMUS_API_KEY)
-  .update(jsonPayload)
-  .digest("hex");
+const signature = crypto.createHmac("sha256", CRYPTOMUS_API_KEY).update(jsonPayload).digest("hex");
 
 // Send POST request to webhook
 (async () => {
@@ -95,12 +89,10 @@ const signature = crypto
 import crypto from "crypto";
 
 // Replace with your Stripe webhook secret (from Dashboard)
-const STRIPE_WEBHOOK_SECRET =
-  process.env.STRIPE_WEBHOOK_SECRET || "whsec_test_secret";
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "whsec_test_secret";
 
 // Replace with your webhook endpoint
-const WEBHOOK_URL =
-  process.env.WEBHOOK_URL || "http://localhost:4000/api/stripe/webhook";
+const WEBHOOK_URL = process.env.WEBHOOK_URL || "http://localhost:4000/api/stripe/webhook";
 
 // Example Stripe event payload
 const payload = {
@@ -126,10 +118,7 @@ const jsonPayload = JSON.stringify(payload);
 // Stripe signs with a timestamp + payload
 const timestamp = Math.floor(Date.now() / 1000);
 const signedPayload = `${timestamp}.${jsonPayload}`;
-const signature = crypto
-  .createHmac("sha256", STRIPE_WEBHOOK_SECRET)
-  .update(signedPayload)
-  .digest("hex");
+const signature = crypto.createHmac("sha256", STRIPE_WEBHOOK_SECRET).update(signedPayload).digest("hex");
 
 // Build header value
 const stripeSignatureHeader = `t=${timestamp},v1=${signature}`;
@@ -161,14 +150,10 @@ import crypto from "crypto";
 
 // --- Config ---
 const CRYPTOMUS_API_KEY = process.env.CRYPTOMUS_API_KEY || "test_api_key";
-const STRIPE_WEBHOOK_SECRET =
-  process.env.STRIPE_WEBHOOK_SECRET || "whsec_test_secret";
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "whsec_test_secret";
 
-const CRYPTOMUS_WEBHOOK_URL =
-  process.env.CRYPTOMUS_WEBHOOK_URL ||
-  "http://localhost:4000/api/cryptomus/webhook";
-const STRIPE_WEBHOOK_URL =
-  process.env.STRIPE_WEBHOOK_URL || "http://localhost:4000/api/stripe/webhook";
+const CRYPTOMUS_WEBHOOK_URL = process.env.CRYPTOMUS_WEBHOOK_URL || "http://localhost:4000/api/cryptomus/webhook";
+const STRIPE_WEBHOOK_URL = process.env.STRIPE_WEBHOOK_URL || "http://localhost:4000/api/stripe/webhook";
 
 // --- Cryptomus Test Payload ---
 const cryptomusPayload = {
@@ -182,10 +167,7 @@ const cryptomusPayload = {
 };
 
 // Generate Cryptomus signature
-const cryptomusSignature = crypto
-  .createHmac("sha256", CRYPTOMUS_API_KEY)
-  .update(JSON.stringify(cryptomusPayload))
-  .digest("hex");
+const cryptomusSignature = crypto.createHmac("sha256", CRYPTOMUS_API_KEY).update(JSON.stringify(cryptomusPayload)).digest("hex");
 
 // --- Stripe Test Payload ---
 const stripePayload = {
@@ -207,10 +189,7 @@ const stripePayload = {
 const stripeJson = JSON.stringify(stripePayload);
 const timestamp = Math.floor(Date.now() / 1000);
 const signedPayload = `${timestamp}.${stripeJson}`;
-const stripeSignature = crypto
-  .createHmac("sha256", STRIPE_WEBHOOK_SECRET)
-  .update(signedPayload)
-  .digest("hex");
+const stripeSignature = crypto.createHmac("sha256", STRIPE_WEBHOOK_SECRET).update(signedPayload).digest("hex");
 const stripeSignatureHeader = `t=${timestamp},v1=${stripeSignature}`;
 
 // --- Send Requests ---
@@ -245,36 +224,44 @@ const stripeSignatureHeader = `t=${timestamp},v1=${stripeSignature}`;
 
 ### How to Use All Scripts
 
-#### For Signature Generation Only:
+#### For Signature Generation Only
 
 1. Run the script in the backend directory:
+
    ```bash
    cd backend
    node generateSignature.js
    ```
+
 2. Copy the signature output for use in Postman or manual cURL requests.
 
-#### For Individual Provider Testing:
+#### For Individual Provider Testing
 
 1. **Cryptomus testing:**
+
    ```bash
    cd backend
    CRYPTOMUS_API_KEY=your_api_key node testCryptomusWebhook.js
    ```
+
 2. **Stripe testing:**
+
    ```bash
    cd backend
    STRIPE_WEBHOOK_SECRET=your_webhook_secret node testStripeWebhook.js
    ```
 
-#### For Unified Testing (Both Providers):
+#### For Unified Testing (Both Providers)
 
 1. Run the unified test runner:
+
    ```bash
    cd backend
    CRYPTOMUS_API_KEY=your_api_key STRIPE_WEBHOOK_SECRET=your_webhook_secret node testUnifiedWebhook.js
    ```
+
 2. For production testing, set webhook URLs:
+
    ```bash
    cd backend
    CRYPTOMUS_API_KEY=your_api_key \
@@ -283,6 +270,7 @@ const stripeSignatureHeader = `t=${timestamp},v1=${stripeSignature}`;
    STRIPE_WEBHOOK_URL=https://yourdomain.com/api/stripe/webhook \
    node testUnifiedWebhook.js
    ```
+
 3. Check backend logs and database for successful webhook processing.
 
 ### cURL Test Commands
@@ -444,22 +432,25 @@ curl "http://localhost:3000/api/payment-status?orderId=test-order-67890"
 1. **Start backend:** `cd backend && npm run dev`
 2. **Start frontend:** `cd frontend && npm run dev`
 3. **Run automated test:**
+
    ```bash
    cd backend
    CRYPTOMUS_API_KEY=your_test_key node testCryptomusWebhook.js
    ```
+
 4. **Check logs and database** for successful processing
 5. **Test payment status API:**
+
    ```bash
    curl "http://localhost:3000/api/payment-status?orderId=order_12345"
    ```
 
 **Production Notes:**
 
-- Use HTTPS URLs only for production webhook endpoints
-- Monitor webhook delivery in Cryptomus dashboard
-- Set up alerts for failed webhook deliveries
-- Test with small amounts first before enabling full production payments
+-   Use HTTPS URLs only for production webhook endpoints
+-   Monitor webhook delivery in Cryptomus dashboard
+-   Set up alerts for failed webhook deliveries
+-   Test with small amounts first before enabling full production payments
 
 ---
 

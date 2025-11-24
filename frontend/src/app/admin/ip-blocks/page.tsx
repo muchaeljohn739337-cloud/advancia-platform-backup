@@ -1,9 +1,8 @@
+'use client';
 
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import adminApi from "@/lib/adminApi";
-import toast from "react-hot-toast";
+import { useCallback, useEffect, useState } from 'react';
+import adminApi from '@/lib/adminApi';
+import toast from 'react-hot-toast';
 
 interface IpBlock {
   id: string;
@@ -23,7 +22,7 @@ export default function IpBlocksPanel() {
       const res = await adminApi.get(`/api/admin/ip-blocks`);
       setBlocks(res.data);
     } catch (error) {
-      toast.error("Failed to load IP blocks");
+      toast.error('Failed to load IP blocks');
       console.error(error);
     } finally {
       setLoading(false);
@@ -36,7 +35,7 @@ export default function IpBlocksPanel() {
       toast.success(`Unblocked ${ip}`);
       setBlocks(blocks.filter((b) => b.ip !== ip));
     } catch (error) {
-      toast.error("Failed to unblock IP");
+      toast.error('Failed to unblock IP');
       console.error(error);
     }
   };
@@ -69,29 +68,19 @@ export default function IpBlocksPanel() {
           <table className="min-w-full border rounded-lg overflow-hidden">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
-                  IP
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
-                  Reason
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
-                  Until
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">
-                  Actions
-                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">IP</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Reason</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Until</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {blocks.map((block) => (
                 <tr key={block.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-sm font-mono">{block.ip}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600">{block.reason || '—'}</td>
                   <td className="px-4 py-3 text-sm text-gray-600">
-                    {block.reason || "—"}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-gray-600">
-                    {block.until ? new Date(block.until).toLocaleString() : "—"}
+                    {block.until ? new Date(block.until).toLocaleString() : '—'}
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <button
@@ -123,7 +112,7 @@ function FailRateGauge() {
     return () => clearInterval(interval);
   }, []);
 
-  const color = rate > 8 ? "red" : rate > 5 ? "yellow" : "green";
+  const color = rate > 8 ? 'red' : rate > 5 ? 'yellow' : 'green';
 
   return (
     <div className="p-4 bg-gray-50 border rounded-lg shadow-sm">
@@ -131,12 +120,8 @@ function FailRateGauge() {
         <span>📈</span>
         <span>Live Fail Rate</span>
       </h2>
-      <div className={`text-3xl font-bold text-${color}-600`}>
-        {rate.toFixed(2)} / min
-      </div>
-      <p className="text-sm text-gray-500 mt-1">
-        Current average login fails per minute
-      </p>
+      <div className={`text-3xl font-bold text-${color}-600`}>{rate.toFixed(2)} / min</div>
+      <p className="text-sm text-gray-500 mt-1">Current average login fails per minute</p>
     </div>
   );
 }

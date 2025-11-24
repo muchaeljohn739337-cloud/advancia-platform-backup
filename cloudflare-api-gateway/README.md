@@ -296,42 +296,34 @@ wrangler deploy --env production
 ### Fetch Dashboard (Frontend)
 
 ```javascript
-const response = await fetch(
-  "https://api.advanciapayledger.com/api/dashboard",
-  {
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-    },
-  }
-);
+const response = await fetch("https://api.advanciapayledger.com/api/dashboard", {
+  headers: {
+    Authorization: `Bearer ${userToken}`,
+  },
+});
 const data = await response.json();
 ```
 
 ### Create Stripe Payment
 
 ```javascript
-const response = await fetch(
-  "https://api.advanciapayledger.com/api/payments/stripe/payment_intents",
-  {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${userToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      amount: 5000,
-      currency: "usd",
-    }),
-  }
-);
+const response = await fetch("https://api.advanciapayledger.com/api/payments/stripe/payment_intents", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${userToken}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    amount: 5000,
+    currency: "usd",
+  }),
+});
 ```
 
 ### Get Crypto Prices
 
 ```javascript
-const response = await fetch(
-  "https://api.advanciapayledger.com/api/public/prices"
-);
+const response = await fetch("https://api.advanciapayledger.com/api/public/prices");
 const prices = await response.json();
 console.log(prices.prices.BTC); // Current BTC price
 ```

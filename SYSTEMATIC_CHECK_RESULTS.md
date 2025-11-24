@@ -63,25 +63,25 @@ Database: Already configured (Oregon PostgreSQL)
 
 **Configured in render.yaml:**
 
-- ✅ NODE_ENV=production
-- ✅ PORT=4000
-- ✅ DATABASE_URL (connected to Render PostgreSQL)
-- ✅ FRONTEND_URL
-- ✅ ALLOWED_ORIGINS
+-   ✅ NODE_ENV=production
+-   ✅ PORT=4000
+-   ✅ DATABASE_URL (connected to Render PostgreSQL)
+-   ✅ FRONTEND_URL
+-   ✅ ALLOWED_ORIGINS
 
 **Awaiting Manual Setup (sync: false):**
 
-- ⏳ JWT_SECRET
-- ⏳ SESSION_SECRET
-- ⏳ STRIPE_SECRET_KEY
-- ⏳ STRIPE_WEBHOOK_SECRET
-- ⏳ STRIPE_PUBLISHABLE_KEY
-- ⏳ VAPID_PUBLIC_KEY
-- ⏳ VAPID_PRIVATE_KEY
-- ⏳ EMAIL_USER
-- ⏳ EMAIL_PASSWORD
-- ⏳ CRYPTOMUS_API_KEY (optional)
-- ⏳ CRYPTOMUS_MERCHANT_ID (optional)
+-   ⏳ JWT_SECRET
+-   ⏳ SESSION_SECRET
+-   ⏳ STRIPE_SECRET_KEY
+-   ⏳ STRIPE_WEBHOOK_SECRET
+-   ⏳ STRIPE_PUBLISHABLE_KEY
+-   ⏳ VAPID_PUBLIC_KEY
+-   ⏳ VAPID_PRIVATE_KEY
+-   ⏳ EMAIL_USER
+-   ⏳ EMAIL_PASSWORD
+-   ⏳ CRYPTOMUS_API_KEY (optional)
+-   ⏳ CRYPTOMUS_MERCHANT_ID (optional)
 
 ---
 
@@ -166,10 +166,10 @@ git push origin preview-clean
 
 **Common Issues:**
 
-- Missing `sync: false` environment variables
-- Database connection failures
-- Build command errors
-- Port binding issues
+-   Missing `sync: false` environment variables
+-   Database connection failures
+-   Build command errors
+-   Port binding issues
 
 ### **Step 3: Set Environment Secrets** (5 minutes)
 
@@ -258,32 +258,32 @@ Wait: 2-3 minutes for auto-redeploy
 
 ### **Pre-Deployment** (Local)
 
-- [x] Backend builds successfully
-- [x] Prisma client generated
-- [x] Git changes on preview-clean branch
-- [x] render.yaml configured correctly
-- [x] All required files present
-- [x] TypeScript config set to forceConsistentCasingInFileNames: true
-- [ ] Uncommitted changes committed and pushed
+-   [x] Backend builds successfully
+-   [x] Prisma client generated
+-   [x] Git changes on preview-clean branch
+-   [x] render.yaml configured correctly
+-   [x] All required files present
+-   [x] TypeScript config set to forceConsistentCasingInFileNames: true
+-   [ ] Uncommitted changes committed and pushed
 
 ### **Deployment** (Render)
 
-- [ ] Connected GitHub repo to Render
-- [ ] Created Blueprint from render.yaml
-- [ ] Verified build logs show success
-- [ ] Set all environment secrets
-- [ ] Health endpoint responds 200 OK
-- [ ] Backend URL accessible
+-   [ ] Connected GitHub repo to Render
+-   [ ] Created Blueprint from render.yaml
+-   [ ] Verified build logs show success
+-   [ ] Set all environment secrets
+-   [ ] Health endpoint responds 200 OK
+-   [ ] Backend URL accessible
 
 ### **Post-Deployment** (Vercel + Testing)
 
-- [ ] Updated Vercel environment variables
-- [ ] Frontend redeployed
-- [ ] Frontend can reach backend API
-- [ ] Test user registration
-- [ ] Test user login
-- [ ] Test WebSocket notifications
-- [ ] Stripe webhooks updated (if applicable)
+-   [ ] Updated Vercel environment variables
+-   [ ] Frontend redeployed
+-   [ ] Frontend can reach backend API
+-   [ ] Test user registration
+-   [ ] Test user login
+-   [ ] Test WebSocket notifications
+-   [ ] Stripe webhooks updated (if applicable)
 
 ---
 

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
 interface TokenWalletProps {
   userId: string;
@@ -33,28 +33,26 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [showCashout, setShowCashout] = useState(false);
   const [showTransfer, setShowTransfer] = useState(false);
-  const [withdrawAddress, setWithdrawAddress] = useState("");
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [cashoutAmount, setCashoutAmount] = useState("");
-  const [transferAddress, setTransferAddress] = useState("");
-  const [transferAmount, setTransferAmount] = useState("");
+  const [withdrawAddress, setWithdrawAddress] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [cashoutAmount, setCashoutAmount] = useState('');
+  const [transferAddress, setTransferAddress] = useState('');
+  const [transferAmount, setTransferAmount] = useState('');
   const [processing, setProcessing] = useState(false);
   const [message, setMessage] = useState<{
-    type: "success" | "error";
+    type: 'success' | 'error';
     text: string;
   } | null>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const fetchBalance = useCallback(async () => {
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/tokens/balance/${userId}`
-      );
+      const res = await fetch(`http://localhost:4000/api/tokens/balance/${userId}`);
       const data = await res.json();
       setBalance(data);
     } catch (error: unknown) {
-      console.error("Error fetching balance:", error);
+      console.error('Error fetching balance:', error);
     } finally {
       setLoading(false);
     }
@@ -62,13 +60,11 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
   const fetchTransactions = useCallback(async () => {
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/tokens/history/${userId}?limit=20`
-      );
+      const res = await fetch(`http://localhost:4000/api/tokens/history/${userId}?limit=20`);
       const data = await res.json();
       setTransactions(data.transactions || []);
     } catch (error: unknown) {
-      console.error("Error fetching transactions:", error);
+      console.error('Error fetching transactions:', error);
     }
   }, [userId]);
 
@@ -80,16 +76,16 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
   // Socket.io connection for real-time updates
   useEffect(() => {
     const socketInstance = io(API_URL, {
-      transports: ["websocket", "polling"],
+      transports: ['websocket', 'polling'],
     });
 
-    socketInstance.on("connect", () => {
-      console.log("✅ Connected to token wallet socket");
-      socketInstance.emit("join-room", userId);
+    socketInstance.on('connect', () => {
+      console.log('✅ Connected to token wallet socket');
+      socketInstance.emit('join-room', userId);
     });
 
-    socketInstance.on("token-balance-update", (data) => {
-      console.log("💰 Real-time balance update:", data);
+    socketInstance.on('token-balance-update', (data) => {
+      console.log('💰 Real-time balance update:', data);
       setBalance((prev) => {
         if (!prev) return null;
         return {
@@ -103,8 +99,8 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
       void fetchTransactions();
     });
 
-    socketInstance.on("disconnect", () => {
-      console.log("❌ Disconnected from token wallet socket");
+    socketInstance.on('disconnect', () => {
+      console.log('❌ Disconnected from token wallet socket');
     });
 
     return () => {
@@ -117,9 +113,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
     setProcessing(true);
     try {
-      const res = await fetch("http://localhost:4000/api/tokens/withdraw", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('http://localhost:4000/api/tokens/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
           amount: withdrawAmount,
@@ -130,18 +126,18 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage({ type: "success", text: "Withdrawal successful!" });
-        setWithdrawAmount("");
-        setWithdrawAddress("");
+        setMessage({ type: 'success', text: 'Withdrawal successful!' });
+        setWithdrawAmount('');
+        setWithdrawAddress('');
         setShowWithdraw(false);
         fetchBalance();
         fetchTransactions();
       } else {
-        setMessage({ type: "error", text: data.error || "Withdrawal failed" });
+        setMessage({ type: 'error', text: data.error || 'Withdrawal failed' });
       }
     } catch (error: unknown) {
-      console.error("Error processing withdrawal:", error);
-      setMessage({ type: "error", text: "Network error" });
+      console.error('Error processing withdrawal:', error);
+      setMessage({ type: 'error', text: 'Network error' });
     } finally {
       setProcessing(false);
     }
@@ -152,9 +148,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
     setProcessing(true);
     try {
-      const res = await fetch("http://localhost:4000/api/tokens/cashout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('http://localhost:4000/api/tokens/cashout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
           amount: cashoutAmount,
@@ -165,17 +161,17 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
       if (res.ok) {
         const usdValue = (parseFloat(cashoutAmount) * 0.1).toFixed(2);
-        setMessage({ type: "success", text: `Cashed out $${usdValue}!` });
-        setCashoutAmount("");
+        setMessage({ type: 'success', text: `Cashed out $${usdValue}!` });
+        setCashoutAmount('');
         setShowCashout(false);
         fetchBalance();
         fetchTransactions();
       } else {
-        setMessage({ type: "error", text: data.error || "Cashout failed" });
+        setMessage({ type: 'error', text: data.error || 'Cashout failed' });
       }
     } catch (error: unknown) {
-      console.error("Error processing cashout:", error);
-      setMessage({ type: "error", text: "Network error" });
+      console.error('Error processing cashout:', error);
+      setMessage({ type: 'error', text: 'Network error' });
     } finally {
       setProcessing(false);
     }
@@ -186,9 +182,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
     setProcessing(true);
     try {
-      const res = await fetch("http://localhost:4000/api/tokens/transfer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('http://localhost:4000/api/tokens/transfer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           fromUserId: userId,
           toUserId: transferAddress,
@@ -199,18 +195,18 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage({ type: "success", text: "Transfer successful!" });
-        setTransferAmount("");
-        setTransferAddress("");
+        setMessage({ type: 'success', text: 'Transfer successful!' });
+        setTransferAmount('');
+        setTransferAddress('');
         setShowTransfer(false);
         fetchBalance();
         fetchTransactions();
       } else {
-        setMessage({ type: "error", text: data.error || "Transfer failed" });
+        setMessage({ type: 'error', text: data.error || 'Transfer failed' });
       }
     } catch (error: unknown) {
-      console.error("Error processing transfer:", error);
-      setMessage({ type: "error", text: "Network error" });
+      console.error('Error processing transfer:', error);
+      setMessage({ type: 'error', text: 'Network error' });
     } finally {
       setProcessing(false);
     }
@@ -237,33 +233,29 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
           <div>
             <p className="text-sm opacity-90">Available Balance</p>
             <p className="text-5xl font-bold">
-              {parseFloat(balance?.availableBalance || "0").toLocaleString()}{" "}
-              ADV
+              {parseFloat(balance?.availableBalance || '0').toLocaleString()} ADV
             </p>
             <p className="text-sm opacity-75 mt-1">
-              ≈ $
-              {(parseFloat(balance?.availableBalance || "0") * 0.1).toFixed(2)}{" "}
-              USD
+              ≈ ${(parseFloat(balance?.availableBalance || '0') * 0.1).toFixed(2)} USD
             </p>
           </div>
           <div className="flex gap-6 text-sm">
             <div>
               <p className="opacity-75">Total Balance</p>
               <p className="font-semibold">
-                {parseFloat(balance?.balance || "0").toLocaleString()} ADV
+                {parseFloat(balance?.balance || '0').toLocaleString()} ADV
               </p>
             </div>
             <div>
               <p className="opacity-75">Locked</p>
               <p className="font-semibold">
-                {parseFloat(balance?.lockedBalance || "0").toLocaleString()} ADV
+                {parseFloat(balance?.lockedBalance || '0').toLocaleString()} ADV
               </p>
             </div>
             <div>
               <p className="opacity-75">Lifetime Earned</p>
               <p className="font-semibold">
-                {parseFloat(balance?.lifetimeEarned || "0").toLocaleString()}{" "}
-                ADV
+                {parseFloat(balance?.lifetimeEarned || '0').toLocaleString()} ADV
               </p>
             </div>
           </div>
@@ -306,9 +298,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className={`p-4 rounded-xl ${
-              message.type === "success"
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+              message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
             }`}
           >
             {message.text}
@@ -318,14 +308,10 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
 
       {/* Transaction History */}
       <div className="bg-white rounded-2xl p-6 shadow-lg">
-        <h3 className="text-xl font-bold text-navy mb-4">
-          Recent Transactions
-        </h3>
+        <h3 className="text-xl font-bold text-navy mb-4">Recent Transactions</h3>
         <div className="space-y-3">
           {transactions.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              No transactions yet
-            </p>
+            <p className="text-gray-500 text-center py-8">No transactions yet</p>
           ) : (
             transactions.map((tx) => (
               <motion.div
@@ -335,12 +321,8 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                 className="flex justify-between items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
               >
                 <div>
-                  <p className="font-semibold text-navy capitalize">
-                    {tx.type.replace("_", " ")}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {tx.description || "No description"}
-                  </p>
+                  <p className="font-semibold text-navy capitalize">{tx.type.replace('_', ' ')}</p>
+                  <p className="text-sm text-gray-500">{tx.description || 'No description'}</p>
                   <p className="text-xs text-gray-400">
                     {new Date(tx.createdAt).toLocaleDateString()}
                   </p>
@@ -348,21 +330,17 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                 <div className="text-right">
                   <p
                     className={`font-bold ${
-                      ["earn", "bonus", "reward", "referral"].includes(tx.type)
-                        ? "text-green-600"
-                        : "text-red-600"
+                      ['earn', 'bonus', 'reward', 'referral'].includes(tx.type)
+                        ? 'text-green-600'
+                        : 'text-red-600'
                     }`}
                   >
-                    {["earn", "bonus", "reward", "referral"].includes(tx.type)
-                      ? "+"
-                      : "-"}
+                    {['earn', 'bonus', 'reward', 'referral'].includes(tx.type) ? '+' : '-'}
                     {parseFloat(tx.amount).toLocaleString()} ADV
                   </p>
                   <p
                     className={`text-xs ${
-                      tx.status === "completed"
-                        ? "text-green-600"
-                        : "text-yellow-600"
+                      tx.status === 'completed' ? 'text-green-600' : 'text-yellow-600'
                     }`}
                   >
                     {tx.status}
@@ -391,9 +369,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
               className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-4">
-                Withdraw Tokens
-              </h3>
+              <h3 className="text-2xl font-bold text-navy mb-4">Withdraw Tokens</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -406,9 +382,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="0.00"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Fee: 1% (includes gas fees)
-                  </p>
+                  <p className="text-xs text-gray-500 mt-1">Fee: 1% (includes gas fees)</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -428,7 +402,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                     disabled={processing}
                     className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold transition-colors"
                   >
-                    {processing ? "Processing..." : "Confirm Withdrawal"}
+                    {processing ? 'Processing...' : 'Confirm Withdrawal'}
                   </button>
                   <button
                     onClick={() => setShowWithdraw(false)}
@@ -460,9 +434,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
               className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-4">
-                Cash Out to USD
-              </h3>
+              <h3 className="text-2xl font-bold text-navy mb-4">Cash Out to USD</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -477,12 +449,9 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     You&apos;ll receive: $
-                    {(parseFloat(cashoutAmount || "0") * 0.1 * 0.98).toFixed(2)}{" "}
-                    USD (2% fee)
+                    {(parseFloat(cashoutAmount || '0') * 0.1 * 0.98).toFixed(2)} USD (2% fee)
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Exchange rate: 1 ADV = $0.10 USD
-                  </p>
+                  <p className="text-xs text-gray-400 mt-1">Exchange rate: 1 ADV = $0.10 USD</p>
                 </div>
                 <div className="flex gap-3">
                   <button
@@ -490,7 +459,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                     disabled={processing}
                     className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold transition-colors"
                   >
-                    {processing ? "Processing..." : "Confirm Cash Out"}
+                    {processing ? 'Processing...' : 'Confirm Cash Out'}
                   </button>
                   <button
                     onClick={() => setShowCashout(false)}
@@ -522,9 +491,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
               className="bg-white rounded-2xl p-8 max-w-md w-full mx-4"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-4">
-                Transfer Tokens
-              </h3>
+              <h3 className="text-2xl font-bold text-navy mb-4">Transfer Tokens</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -556,7 +523,7 @@ export default function TokenWallet({ userId }: TokenWalletProps) {
                     disabled={processing}
                     className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold transition-colors"
                   >
-                    {processing ? "Processing..." : "Send Transfer"}
+                    {processing ? 'Processing...' : 'Send Transfer'}
                   </button>
                   <button
                     onClick={() => setShowTransfer(false)}

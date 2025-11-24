@@ -143,38 +143,33 @@ router.post("/register", validateApiKey, async (req, res) => {
 
 ```typescript
 // New: POST /api/admin/users/approve-registration
-router.post(
-  "/approve-registration",
-  authenticateToken,
-  requireAdmin,
-  async (req: any, res) => {
-    try {
-      const { userId, approved } = req.body;
+router.post("/approve-registration", authenticateToken, requireAdmin, async (req: any, res) => {
+  try {
+    const { userId, approved } = req.body;
 
-      const user = await prisma.user.update({
-        where: { id: userId },
-        data: { active: approved === true },
-      });
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { active: approved === true },
+    });
 
-      // Notify user of approval/rejection
-      const status = approved ? "approved" : "rejected";
-      await createNotification({
-        userId: user.id,
-        type: "email",
-        category: "admin",
-        title: `Registration ${status}`,
-        message: `Your registration has been ${status}.`,
-      });
+    // Notify user of approval/rejection
+    const status = approved ? "approved" : "rejected";
+    await createNotification({
+      userId: user.id,
+      type: "email",
+      category: "admin",
+      title: `Registration ${status}`,
+      message: `Your registration has been ${status}.`,
+    });
 
-      return res.json({
-        message: `User registration ${status}`,
-        user: { id: user.id, email: user.email, active: user.active },
-      });
-    } catch (err) {
-      return res.status(500).json({ error: "Failed to process approval" });
-    }
+    return res.json({
+      message: `User registration ${status}`,
+      user: { id: user.id, email: user.email, active: user.active },
+    });
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to process approval" });
   }
-);
+});
 ```
 
 ### Step 3: Protect Unprotected Routes

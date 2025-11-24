@@ -65,9 +65,9 @@ const user = await prisma.user.create({
 
 **Result:**
 
-- Users can sign up and immediately access the platform
-- No admin approval required
-- Still requires email verification (optional to enforce)
+-   Users can sign up and immediately access the platform
+-   No admin approval required
+-   Still requires email verification (optional to enforce)
 
 ---
 
@@ -104,9 +104,9 @@ if (!user.emailVerified && !["ADMIN"].includes(user.role)) {
 
 **Result:**
 
-- Users sign up → verify email → full access
-- No admin approval needed
-- Standard for most SaaS platforms
+-   Users sign up → verify email → full access
+-   No admin approval needed
+-   Standard for most SaaS platforms
 
 ---
 
@@ -163,14 +163,9 @@ export const requireSubscription = (...tiers: SubscriptionTier[]) => {
 };
 
 // Usage:
-router.post(
-  "/premium-feature",
-  authenticateToken,
-  requireSubscription("PRO", "ENTERPRISE"),
-  async (req, res) => {
-    // Premium feature logic
-  }
-);
+router.post("/premium-feature", authenticateToken, requireSubscription("PRO", "ENTERPRISE"), async (req, res) => {
+  // Premium feature logic
+});
 ```
 
 **Free Tier Limits Example:**
@@ -295,18 +290,16 @@ Issue: Render server not responding
 **Troubleshooting Steps:**
 
 1. **Check Render Dashboard:**
-
-   - Go to https://dashboard.render.com
-   - Check service logs for errors
-   - Verify environment variables are set
-   - Check if service is suspended (free tier timeout)
+   -   Go to <https://dashboard.render.com>
+   -   Check service logs for errors
+   -   Verify environment variables are set
+   -   Check if service is suspended (free tier timeout)
 
 2. **Common Issues:**
-
-   - Database connection failed (DATABASE_URL incorrect)
-   - Missing environment variables (JWT_SECRET, etc.)
-   - Build failed (check build logs)
-   - Free tier sleep (service sleeps after 15 min inactivity)
+   -   Database connection failed (DATABASE_URL incorrect)
+   -   Missing environment variables (JWT_SECRET, etc.)
+   -   Build failed (check build logs)
+   -   Free tier sleep (service sleeps after 15 min inactivity)
 
 3. **Quick Fix:**
 
@@ -399,52 +392,47 @@ Invoke-RestMethod -Uri "https://api.advanciapayledger.com/api/security/rotate-ip
 ### **Immediate (Get System Running):**
 
 1. ✅ **Fix Backend Deployment**
-
-   - Check Render logs
-   - Restart service
-   - Verify DATABASE_URL
+   -   Check Render logs
+   -   Restart service
+   -   Verify DATABASE_URL
 
 2. ✅ **Test Frontend**
-
-   - Visit https://advanciapayledger.com
-   - Check Vercel deployment logs
+   -   Visit <https://advanciapayledger.com>
+   -   Check Vercel deployment logs
 
 3. ✅ **Enable Free Sign-In**
-   - Option 1: Set `approved: true` in registration
-   - OR Option 2: Remove approval check from middleware
+   -   Option 1: Set `approved: true` in registration
+   -   OR Option 2: Remove approval check from middleware
 
 ### **Short Term (This Week):**
 
 4. ⏳ **Database Migration**
-
-   - Add BreachAlert model
-   - Add IPRotationLog model
-   - Add SecuritySettings model
-   - Run `npx prisma migrate dev`
+   -   Add BreachAlert model
+   -   Add IPRotationLog model
+   -   Add SecuritySettings model
+   -   Run `npx prisma migrate dev`
 
 5. ⏳ **Test Security Features**
-
-   - Navigate to /security/breach-alert
-   - Navigate to /security/ip-protection
-   - Test chat widget on /support
+   -   Navigate to /security/breach-alert
+   -   Navigate to /security/ip-protection
+   -   Test chat widget on /support
 
 6. ⏳ **Production API Integration**
-   - Sign up for HIBP API key ($3.50/month)
-   - Sign up for ProxyMesh ($10/month)
-   - Update security.ts routes
+   -   Sign up for HIBP API key ($3.50/month)
+   -   Sign up for ProxyMesh ($10/month)
+   -   Update security.ts routes
 
 ### **Medium Term (Next Week):**
 
 7. ⏳ **Implement Subscription Tiers**
-
-   - Add SubscriptionTier enum
-   - Create subscription middleware
-   - Add Stripe subscription flow
+   -   Add SubscriptionTier enum
+   -   Create subscription middleware
+   -   Add Stripe subscription flow
 
 8. ⏳ **Set Usage Limits**
-   - API rate limits per tier
-   - Feature gates
-   - Storage quotas
+   -   API rate limits per tier
+   -   Feature gates
+   -   Storage quotas
 
 ---
 
@@ -533,6 +521,6 @@ FREE_TIER_FEATURES = {
 
 **Question: Which option do you prefer?**
 
-- Option 1: Auto-approve all users (simplest)
-- Option 2: Email verification only (standard SaaS)
-- Option 3: Freemium with tiers (most scalable)
+-   Option 1: Auto-approve all users (simplest)
+-   Option 2: Email verification only (standard SaaS)
+-   Option 3: Freemium with tiers (most scalable)

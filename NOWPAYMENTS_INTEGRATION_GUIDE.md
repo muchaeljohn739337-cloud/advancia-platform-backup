@@ -4,11 +4,11 @@
 
 NOWPayments has been integrated as an alternative crypto payment provider alongside Cryptomus. This gives your users:
 
-- **200+ cryptocurrencies** (vs Cryptomus ~50)
-- **Lower fees** (0.5% vs ~1%)
-- **Mass payouts** for user withdrawals
-- **Non-custodial option** for better security
-- **Better API documentation** and support
+-   **200+ cryptocurrencies** (vs Cryptomus ~50)
+-   **Lower fees** (0.5% vs ~1%)
+-   **Mass payouts** for user withdrawals
+-   **Non-custodial option** for better security
+-   **Better API documentation** and support
 
 ## 📋 Features Implemented
 
@@ -16,24 +16,22 @@ NOWPayments has been integrated as an alternative crypto payment provider alongs
 
 All endpoints use **silent mode logging** - development logs to console, production ready for analytics integration.
 
-#### Available Endpoints:
+#### Available Endpoints
 
 1. **GET /api/nowpayments/currencies**
-
-   - Fetch all available cryptocurrencies
-   - Requires authentication
-   - Response: `{ success: true, currencies: [...] }`
+   -   Fetch all available cryptocurrencies
+   -   Requires authentication
+   -   Response: `{ success: true, currencies: [...] }`
 
 2. **GET /api/nowpayments/min-amount/:currency**
-
-   - Get minimum payment amount for a currency
-   - Example: `/api/nowpayments/min-amount/btc`
-   - Response: `{ success: true, minAmount: "0.001", currency: "BTC" }`
+   -   Get minimum payment amount for a currency
+   -   Example: `/api/nowpayments/min-amount/btc`
+   -   Response: `{ success: true, minAmount: "0.001", currency: "BTC" }`
 
 3. **POST /api/nowpayments/create-payment**
+   -   Create a new crypto payment invoice
+   -   Body:
 
-   - Create a new crypto payment invoice
-   - Body:
      ```json
      {
        "amount": 100,
@@ -42,24 +40,23 @@ All endpoints use **silent mode logging** - development logs to console, product
        "description": "Crypto withdrawal"
      }
      ```
-   - Response: Payment details with pay address, amount, invoice URL
+
+   -   Response: Payment details with pay address, amount, invoice URL
 
 4. **GET /api/nowpayments/payment/:paymentId**
-
-   - Get payment status
-   - Returns current status, amounts paid, timestamps
+   -   Get payment status
+   -   Returns current status, amounts paid, timestamps
 
 5. **POST /api/nowpayments/ipn**
-
-   - Webhook endpoint for Instant Payment Notifications
-   - Verifies HMAC-SHA512 signature
-   - Auto-updates payment status in database
-   - **Public endpoint** (no auth) - secured by signature verification
+   -   Webhook endpoint for Instant Payment Notifications
+   -   Verifies HMAC-SHA512 signature
+   -   Auto-updates payment status in database
+   -   **Public endpoint** (no auth) - secured by signature verification
 
 6. **GET /api/nowpayments/my-payments**
-   - List user's payment history
-   - Requires authentication
-   - Returns last 50 payments
+   -   List user's payment history
+   -   Requires authentication
+   -   Returns last 50 payments
 
 ### Database Schema Updates
 
@@ -91,11 +88,11 @@ model CryptoPayments {
 
 Updated `EnhancedFormExample.tsx` with payment provider selector:
 
-- **Radio card selection** between NOWPayments and Cryptomus
-- **Visual comparison** showing fees and coin counts
-- **Animated selection** with scale effects
-- **Recommended badge** on NOWPayments (lower fees)
-- **DaisyUI styling** matching existing form design
+-   **Radio card selection** between NOWPayments and Cryptomus
+-   **Visual comparison** showing fees and coin counts
+-   **Animated selection** with scale effects
+-   **Recommended badge** on NOWPayments (lower fees)
+-   **DaisyUI styling** matching existing form design
 
 ## 🔧 Setup Instructions
 
@@ -103,14 +100,14 @@ Updated `EnhancedFormExample.tsx` with payment provider selector:
 
 **Sandbox (Testing):**
 
-1. Go to https://account.sandbox.nowpayments.io/
+1. Go to <https://account.sandbox.nowpayments.io/>
 2. Sign up for free sandbox account
 3. Navigate to Settings → API Keys
 4. Copy your **API Key** and **IPN Secret**
 
 **Production:**
 
-1. Go to https://nowpayments.io/
+1. Go to <https://nowpayments.io/>
 2. Complete KYC verification
 3. Navigate to Dashboard → Settings → API
 4. Generate API keys
@@ -164,7 +161,7 @@ npm start
 
 **Frontend Test:**
 
-1. Go to http://localhost:3000/demo/tools
+1. Go to <http://localhost:3000/demo/tools>
 2. Scroll to "Crypto Withdrawal Form"
 3. Select **NOWPayments** provider
 4. Fill in form and submit
@@ -184,8 +181,8 @@ curl -X GET http://localhost:4000/api/nowpayments/currencies \
 
 All operations use silent mode logging:
 
-- **Development:** Logs to console with `[NOWPayments]` prefix
-- **Production:** No console spam, ready for analytics integration (Sentry, DataDog)
+-   **Development:** Logs to console with `[NOWPayments]` prefix
+-   **Production:** No console spam, ready for analytics integration (Sentry, DataDog)
 
 ```typescript
 function logDev(message: string, data?: any) {
@@ -215,7 +212,7 @@ All user-facing endpoints require JWT authentication via `authenticateToken` mid
 
 ## 📊 Payment Flow
 
-### User Initiates Withdrawal:
+### User Initiates Withdrawal
 
 1. **Frontend:** User selects NOWPayments, fills form
 2. **POST /api/nowpayments/create-payment**
@@ -224,7 +221,7 @@ All user-facing endpoints require JWT authentication via `authenticateToken` mid
 5. **Response:** Returns payment address, amount, invoice URL
 6. **Frontend:** Displays payment details to user
 
-### User Pays:
+### User Pays
 
 1. User sends crypto to provided address
 2. NOWPayments detects payment
@@ -348,18 +345,18 @@ function logDev(message: string, data?: any) {
 
 Keep both providers active:
 
-- Users choose preferred provider
-- Lower fees with NOWPayments
-- Cryptomus as backup/alternative
-- **No disruption** to existing users
+-   Users choose preferred provider
+-   Lower fees with NOWPayments
+-   Cryptomus as backup/alternative
+-   **No disruption** to existing users
 
 ### Option 2: Full Migration
 
 Switch entirely to NOWPayments:
 
-- Better fees and features
-- Requires migrating existing users
-- **Risk:** Disruption to active transactions
+-   Better fees and features
+-   Requires migrating existing users
+-   **Risk:** Disruption to active transactions
 
 **Recommendation:** Use Option 1 (dual provider) for flexibility and redundancy.
 
@@ -405,11 +402,11 @@ npx prisma generate
 
 ## 📚 Additional Resources
 
-- **NOWPayments Docs:** https://documenter.getpostman.com/view/7907941/S1a32n38
-- **API Reference:** https://documenter.getpostman.com/view/7907941/S1a32n38
-- **Sandbox Dashboard:** https://account.sandbox.nowpayments.io/
-- **Production Dashboard:** https://nowpayments.io/dashboard
-- **Support:** support@nowpayments.io
+-   **NOWPayments Docs:** <https://documenter.getpostman.com/view/7907941/S1a32n38>
+-   **API Reference:** <https://documenter.getpostman.com/view/7907941/S1a32n38>
+-   **Sandbox Dashboard:** <https://account.sandbox.nowpayments.io/>
+-   **Production Dashboard:** <https://nowpayments.io/dashboard>
+-   **Support:** <support@nowpayments.io>
 
 ## 🎉 What's Next?
 
@@ -440,14 +437,14 @@ open http://localhost:3000/demo/tools
 
 ### Production Checklist
 
-- [ ] Production API keys configured
-- [ ] IPN webhook URL set in dashboard
-- [ ] HTTPS enabled for webhook endpoint
-- [ ] Signature verification working
-- [ ] Database migration complete
-- [ ] Frontend tested with real payments
-- [ ] Monitoring/analytics integrated
-- [ ] User documentation updated
+-   [ ] Production API keys configured
+-   [ ] IPN webhook URL set in dashboard
+-   [ ] HTTPS enabled for webhook endpoint
+-   [ ] Signature verification working
+-   [ ] Database migration complete
+-   [ ] Frontend tested with real payments
+-   [ ] Monitoring/analytics integrated
+-   [ ] User documentation updated
 
 ---
 

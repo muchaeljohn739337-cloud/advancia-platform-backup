@@ -3,13 +3,13 @@ name: Environment-Aware Deployment
 on:
   push:
     branches:
-      - main        # Production
-      - uat         # User Acceptance Testing
-      - staging     # Staging/Development
+      - main # Production
+      - uat # User Acceptance Testing
+      - staging # Staging/Development
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Target environment'
+        description: "Target environment"
         required: true
         type: choice
         options:
@@ -33,7 +33,7 @@ jobs:
       slack_webhook: ${{ steps.set-env.outputs.slack_webhook }}
       database_url: ${{ steps.set-env.outputs.database_url }}
       redis_url: ${{ steps.set-env.outputs.redis_url }}
-    
+
     steps:
       - name: Determine environment
         id: set-env
@@ -48,10 +48,10 @@ jobs:
           else
             ENV="staging"
           fi
-          
+
           echo "environment=$ENV" >> $GITHUB_OUTPUT
           echo "🎯 Detected environment: $ENV"
-          
+
           # Set environment-specific secrets
           if [[ "$ENV" == "production" ]]; then
             echo "cf_zone_id=${{ secrets.PROD_CF_ZONE_ID }}" >> $GITHUB_OUTPUT
@@ -92,7 +92,7 @@ jobs:
     name: Build and Test
     runs-on: ubuntu-latest
     needs: detect-environment
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -100,8 +100,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Install backend dependencies
         working-directory: ./backend
@@ -138,7 +138,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [detect-environment, build-and-test]
     environment: ${{ needs.detect-environment.outputs.environment }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -159,7 +159,7 @@ jobs:
           REDIS_URL: ${{ needs.detect-environment.outputs.redis_url }}
         run: |
           echo "🚀 Deploying to $ENVIRONMENT environment at $DROPLET_IP"
-          
+
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no $DROPLET_USER@$DROPLET_IP << 'EOF'
             # Navigate to application directory
             cd /opt/advancia || exit 1
@@ -199,25 +199,25 @@ jobs:
       - name: Health check
         run: |
           echo "🏥 Running health checks..."
-          
+
           # Wait for application to be fully ready
           sleep 10
-          
+
           # Check backend health
           BACKEND_URL="https://api-${{ needs.detect-environment.outputs.environment }}.advancia.com/health"
           echo "Checking backend: $BACKEND_URL"
-          
+
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" $BACKEND_URL)
           if [ "$RESPONSE" != "200" ]; then
             echo "❌ Backend health check failed (HTTP $RESPONSE)"
             exit 1
           fi
           echo "✅ Backend is healthy"
-          
+
           # Check frontend health
           FRONTEND_URL="https://www-${{ needs.detect-environment.outputs.environment }}.advancia.com"
           echo "Checking frontend: $FRONTEND_URL"
-          
+
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" $FRONTEND_URL)
           if [ "$RESPONSE" != "200" ]; then
             echo "❌ Frontend health check failed (HTTP $RESPONSE)"
@@ -230,7 +230,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [detect-environment, deploy]
     if: success()
-    
+
     steps:
       - name: Update Cloudflare DNS
         env:
@@ -242,7 +242,7 @@ jobs:
           ENVIRONMENT: ${{ needs.detect-environment.outputs.environment }}
         run: |
           echo "🌐 Updating DNS records for $ENVIRONMENT..."
-          
+
           # Determine subdomain suffix
           if [[ "$ENVIRONMENT" == "production" ]]; then
             SUBDOMAIN_API="api"
@@ -251,7 +251,7 @@ jobs:
             SUBDOMAIN_API="api-$ENVIRONMENT"
             SUBDOMAIN_WWW="www-$ENVIRONMENT"
           fi
-          
+
           # Update API subdomain
           echo "Updating $SUBDOMAIN_API.advancia.com → $DROPLET_IP"
           API_RESPONSE=$(curl -s -X PATCH \
@@ -265,7 +265,7 @@ jobs:
               \"ttl\": 120,
               \"proxied\": true
             }")
-          
+
           if echo "$API_RESPONSE" | grep -q '"success":true'; then
             echo "✅ API DNS record updated"
           else
@@ -273,7 +273,7 @@ jobs:
             echo "$API_RESPONSE"
             exit 1
           fi
-          
+
           # Update WWW subdomain
           echo "Updating $SUBDOMAIN_WWW.advancia.com → $DROPLET_IP"
           WWW_RESPONSE=$(curl -s -X PATCH \
@@ -287,7 +287,7 @@ jobs:
               \"ttl\": 120,
               \"proxied\": true
             }")
-          
+
           if echo "$WWW_RESPONSE" | grep -q '"success":true'; then
             echo "✅ WWW DNS record updated"
           else
@@ -295,7 +295,7 @@ jobs:
             echo "$WWW_RESPONSE"
             exit 1
           fi
-          
+
           echo "🎯 DNS propagation may take 1-2 minutes"
 
   notify:
@@ -303,7 +303,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [detect-environment, deploy, update-dns]
     if: always()
-    
+
     steps:
       - name: Determine deployment status
         id: status
@@ -335,7 +335,7 @@ jobs:
             API_URL="https://api-$ENVIRONMENT.advancia.com"
             WEB_URL="https://www-$ENVIRONMENT.advancia.com"
           fi
-          
+
           curl -X POST "$SLACK_WEBHOOK" \
             -H 'Content-Type: application/json' \
             -d "{
@@ -379,5 +379,5 @@ jobs:
                 \"ts\": $(date +%s)
               }]
             }"
-          
+
           echo "📣 Slack notification sent"

@@ -237,13 +237,13 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 **Position**: Before traffic reaches your infrastructure  
 **Functions**:
 
-- ✅ DDoS mitigation (automatic, unlimited)
-- ✅ WAF rules (OWASP + Custom)
-- ✅ Rate limiting (endpoint-specific)
-- ✅ Bot detection & challenge
-- ✅ SSL/TLS termination
-- ✅ CDN caching (static assets)
-- ✅ Zero Trust Access (admin routes)
+-   ✅ DDoS mitigation (automatic, unlimited)
+-   ✅ WAF rules (OWASP + Custom)
+-   ✅ Rate limiting (endpoint-specific)
+-   ✅ Bot detection & challenge
+-   ✅ SSL/TLS termination
+-   ✅ CDN caching (static assets)
+-   ✅ Zero Trust Access (admin routes)
 
 **Blocks**: 99% of attacks before they reach your server
 
@@ -252,10 +252,10 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 **Position**: Server network layer  
 **Functions**:
 
-- ✅ Port-level filtering
-- ✅ IP-based rules
-- ✅ SSH brute force protection
-- ✅ Only allows necessary ports (22, 80, 443)
+-   ✅ Port-level filtering
+-   ✅ IP-based rules
+-   ✅ SSH brute force protection
+-   ✅ Only allows necessary ports (22, 80, 443)
 
 **Blocks**: Unauthorized port access, network scans
 
@@ -264,12 +264,12 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 **Position**: Application gateway  
 **Functions**:
 
-- ✅ SSL certificate management (Let's Encrypt)
-- ✅ HTTP → HTTPS redirect
-- ✅ Security headers injection
-- ✅ Request routing & load balancing
-- ✅ Static asset caching
-- ✅ WebSocket upgrade handling
+-   ✅ SSL certificate management (Let's Encrypt)
+-   ✅ HTTP → HTTPS redirect
+-   ✅ Security headers injection
+-   ✅ Request routing & load balancing
+-   ✅ Static asset caching
+-   ✅ WebSocket upgrade handling
 
 **Blocks**: Unencrypted traffic, improperly routed requests
 
@@ -278,12 +278,12 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 **Position**: Backend business logic  
 **Functions**:
 
-- ✅ JWT authentication & validation
-- ✅ Role-based access control (RBAC)
-- ✅ Input validation & sanitization
-- ✅ SQL injection prevention (Prisma ORM)
-- ✅ CSRF token validation
-- ✅ Audit logging
+-   ✅ JWT authentication & validation
+-   ✅ Role-based access control (RBAC)
+-   ✅ Input validation & sanitization
+-   ✅ SQL injection prevention (Prisma ORM)
+-   ✅ CSRF token validation
+-   ✅ Audit logging
 
 **Blocks**: Unauthorized API access, malformed requests
 
@@ -292,11 +292,11 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 **Position**: Data persistence layer  
 **Functions**:
 
-- ✅ User-specific database accounts
-- ✅ Encrypted connections (SSL)
-- ✅ Prepared statements (SQL injection prevention)
-- ✅ Row-level security policies
-- ✅ Automated backups
+-   ✅ User-specific database accounts
+-   ✅ Encrypted connections (SSL)
+-   ✅ Prepared statements (SQL injection prevention)
+-   ✅ Row-level security policies
+-   ✅ Automated backups
 
 **Blocks**: Direct database access, data breaches
 
@@ -306,9 +306,9 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 
 ### Cloudflare CDN
 
-- **Static Assets**: Cached at 200+ edge locations globally
-- **Cache Hit Ratio**: Target >80%
-- **Argo Smart Routing**: Faster origin connections (optional, paid)
+-   **Static Assets**: Cached at 200+ edge locations globally
+-   **Cache Hit Ratio**: Target >80%
+-   **Argo Smart Routing**: Faster origin connections (optional, paid)
 
 ### Nginx Caching
 
@@ -320,15 +320,15 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 
 ### PM2 Cluster Mode
 
-- **Backend**: 2 instances (round-robin load balancing)
-- **Frontend**: 1 instance (Next.js handles concurrency)
-- **Auto-restart**: On crash or memory limit (500MB)
+-   **Backend**: 2 instances (round-robin load balancing)
+-   **Frontend**: 1 instance (Next.js handles concurrency)
+-   **Auto-restart**: On crash or memory limit (500MB)
 
 ### Database Optimization
 
-- **Connection Pooling**: Prisma manages connections
-- **Indexes**: On frequently queried columns (userId, createdAt)
-- **Query Optimization**: Prisma generates efficient SQL
+-   **Connection Pooling**: Prisma manages connections
+-   **Indexes**: On frequently queried columns (userId, createdAt)
+-   **Query Optimization**: Prisma generates efficient SQL
 
 ---
 
@@ -338,40 +338,40 @@ Complete architecture overview of the production fintech SaaS platform with Digi
 
 **Metrics:**
 
-- CPU usage (alert if >80% for 5 min)
-- Memory usage (alert if >85%)
-- Disk usage (alert if >90%)
-- Network bandwidth
+-   CPU usage (alert if >80% for 5 min)
+-   Memory usage (alert if >85%)
+-   Disk usage (alert if >90%)
+-   Network bandwidth
 
 ### Cloudflare Analytics
 
 **Metrics:**
 
-- Total requests
-- Bandwidth usage
-- Threats blocked (WAF, rate limit, bots)
-- Cache hit ratio
-- Response time (origin vs edge)
+-   Total requests
+-   Bandwidth usage
+-   Threats blocked (WAF, rate limit, bots)
+-   Cache hit ratio
+-   Response time (origin vs edge)
 
 ### Sentry (Application Monitoring)
 
 **Tracks:**
 
-- JavaScript errors (frontend)
-- Node.js exceptions (backend)
-- Performance metrics
-- User sessions
-- Release tracking
+-   JavaScript errors (frontend)
+-   Node.js exceptions (backend)
+-   Performance metrics
+-   User sessions
+-   Release tracking
 
 ### PM2 Monitoring
 
 **Tracks:**
 
-- Process uptime
-- Memory consumption
-- CPU usage per process
-- Restart count
-- Log aggregation
+-   Process uptime
+-   Memory consumption
+-   CPU usage per process
+-   Restart count
+-   Log aggregation
 
 ### Custom Health Checks
 
@@ -443,10 +443,10 @@ curl https://advanciapayledger.com/api/health
 
 **Compare to Vercel + Render:**
 
-- Vercel Pro: $20/month
-- Render Standard: $25/month
-- Managed PostgreSQL: $50/month
-- **Total**: $95/month (less control, vendor lock-in)
+-   Vercel Pro: $20/month
+-   Render Standard: $25/month
+-   Managed PostgreSQL: $50/month
+-   **Total**: $95/month (less control, vendor lock-in)
 
 **DigitalOcean Advantage**: Full control, no vendor lock-in, predictable pricing
 
@@ -538,11 +538,11 @@ Cloudflare Edge
 
 ## 📚 Related Documentation
 
-- [DigitalOcean Droplet Deployment Guide](./DIGITALOCEAN_DROPLET_DEPLOYMENT.md)
-- [Cloudflare Security Configuration](./CLOUDFLARE_SECURITY_GUIDE.md)
-- [Nginx Configuration Reference](./NGINX_CONFIG_REFERENCE.md)
-- [Environment Variables Setup](./ENV_SETUP_GUIDE.md)
-- [One-Hour Migration Guide](./ONE_HOUR_MIGRATION_GUIDE.md)
+-   [DigitalOcean Droplet Deployment Guide](./DIGITALOCEAN_DROPLET_DEPLOYMENT.md)
+-   [Cloudflare Security Configuration](./CLOUDFLARE_SECURITY_GUIDE.md)
+-   [Nginx Configuration Reference](./NGINX_CONFIG_REFERENCE.md)
+-   [Environment Variables Setup](./ENV_SETUP_GUIDE.md)
+-   [One-Hour Migration Guide](./ONE_HOUR_MIGRATION_GUIDE.md)
 
 ---
 

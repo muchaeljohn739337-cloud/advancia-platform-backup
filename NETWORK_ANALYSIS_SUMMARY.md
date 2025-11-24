@@ -4,12 +4,12 @@
 
 ### Connection Quality
 
-- **Wi-Fi SSID:** Yp1
-- **Signal Strength:** 99% (Excellent!)
-- **Channel:** 2 (2.4 GHz)
-- **Link Speed:** 72.2 Mbps
-- **Packet Loss:** 0% (Perfect)
-- **Gateway Latency:** 0 ms (Excellent)
+-   **Wi-Fi SSID:** Yp1
+-   **Signal Strength:** 99% (Excellent!)
+-   **Channel:** 2 (2.4 GHz)
+-   **Link Speed:** 72.2 Mbps
+-   **Packet Loss:** 0% (Perfect)
+-   **Gateway Latency:** 0 ms (Excellent)
 
 ### Adapters Active
 
@@ -25,37 +25,37 @@
 
 Complete guide covering:
 
-- **Bluetooth Handshake Process** (Classic & BLE)
-  - Inquiry → Paging → Authentication → Encryption
-  - BLE pairing phases and key exchange
-- **Wi-Fi Packet Drop Causes**
-  - Signal interference (microwaves, Bluetooth, neighbors)
-  - Weak signal strength (dBm explained)
-  - Network congestion
-  - Driver/hardware issues
-- **Diagnostic Methods**
-  - Continuous ping tests
-  - Pathping for hop-by-hop analysis
-  - PowerShell network statistics
-- **Troubleshooting Scripts**
-  - Real-time packet loss monitor
-  - Channel analysis tools
-- **Common Scenarios & Fixes**
-  - Intermittent drops → Power-saving mode
-  - High traffic drops → QoS configuration
-  - Post-update issues → Driver rollback
+-   **Bluetooth Handshake Process** (Classic & BLE)
+    -   Inquiry → Paging → Authentication → Encryption
+    -   BLE pairing phases and key exchange
+-   **Wi-Fi Packet Drop Causes**
+    -   Signal interference (microwaves, Bluetooth, neighbors)
+    -   Weak signal strength (dBm explained)
+    -   Network congestion
+    -   Driver/hardware issues
+-   **Diagnostic Methods**
+    -   Continuous ping tests
+    -   Pathping for hop-by-hop analysis
+    -   PowerShell network statistics
+-   **Troubleshooting Scripts**
+    -   Real-time packet loss monitor
+    -   Channel analysis tools
+-   **Common Scenarios & Fixes**
+    -   Intermittent drops → Power-saving mode
+    -   High traffic drops → QoS configuration
+    -   Post-update issues → Driver rollback
 
 ### 2. **network-diagnostic.ps1**
 
 Automated diagnostic tool that checks:
 
-- Network adapter status
-- Wi-Fi connection details (SSID, signal, channel)
-- Gateway connectivity
-- DNS resolution speed
-- Internet connectivity
-- Packet statistics
-- **Continuous monitoring mode** with `-Continuous` flag
+-   Network adapter status
+-   Wi-Fi connection details (SSID, signal, channel)
+-   Gateway connectivity
+-   DNS resolution speed
+-   Internet connectivity
+-   Packet statistics
+-   **Continuous monitoring mode** with `-Continuous` flag
 
 ---
 
@@ -99,21 +99,19 @@ Success! Data delivered.
 ### Why Packets Drop
 
 1. **Physical Issues**
-
-   - Weak signal (you're too far from router)
-   - Interference (microwave oven, Bluetooth devices)
-   - Physical obstacles (walls, metal objects)
+   -   Weak signal (you're too far from router)
+   -   Interference (microwave oven, Bluetooth devices)
+   -   Physical obstacles (walls, metal objects)
 
 2. **Network Issues**
-
-   - Too many devices connected
-   - Router buffer overflow (memory full)
-   - Channel congestion (neighbors on same channel)
+   -   Too many devices connected
+   -   Router buffer overflow (memory full)
+   -   Channel congestion (neighbors on same channel)
 
 3. **Technical Issues**
-   - Outdated drivers
-   - Hardware malfunction
-   - Incorrect network configuration
+   -   Outdated drivers
+   -   Hardware malfunction
+   -   Incorrect network configuration
 
 ---
 
@@ -365,37 +363,37 @@ Test-NetConnection -ComputerName localhost -Port 3000
 
 ### Ethical Use Only
 
-- ✅ Diagnose **your own** network
-- ✅ Test **your own** devices
-- ✅ Educational purposes
-- ❌ Never capture others' traffic
-- ❌ Never unauthorized network access
-- ❌ Never malicious use
+-   ✅ Diagnose **your own** network
+-   ✅ Test **your own** devices
+-   ✅ Educational purposes
+-   ❌ Never capture others' traffic
+-   ❌ Never unauthorized network access
+-   ❌ Never malicious use
 
 ### Legal Considerations
 
-- Computer Fraud and Abuse Act (USA)
-- GDPR compliance (Europe)
-- Local cybersecurity laws
-- Always get written permission for penetration testing
+-   Computer Fraud and Abuse Act (USA)
+-   GDPR compliance (Europe)
+-   Local cybersecurity laws
+-   Always get written permission for penetration testing
 
 ---
 
 ## 🔗 Related Files
 
-- `NETWORK_PACKET_ANALYSIS_GUIDE.md` - Deep dive into Wireshark
-- `BLUETOOTH_WIFI_TROUBLESHOOTING.md` - This comprehensive guide
-- `network-diagnostic.ps1` - Automated diagnostic tool
-- `NATIVE_HTML5_CONVERSION_SUMMARY.md` - Frontend modernization
+-   `NETWORK_PACKET_ANALYSIS_GUIDE.md` - Deep dive into Wireshark
+-   `BLUETOOTH_WIFI_TROUBLESHOOTING.md` - This comprehensive guide
+-   `network-diagnostic.ps1` - Automated diagnostic tool
+-   `NATIVE_HTML5_CONVERSION_SUMMARY.md` - Frontend modernization
 
 ---
 
 **Your Network Score: A+ 🎉**
 
-- Signal: 99% ✅
-- Packet Loss: 0% ✅
-- Latency: 0 ms ✅
-- DNS: Working ✅
-- Internet: Connected ✅
+-   Signal: 99% ✅
+-   Packet Loss: 0% ✅
+-   Latency: 0 ms ✅
+-   DNS: Working ✅
+-   Internet: Connected ✅
 
 **Everything is running perfectly!**

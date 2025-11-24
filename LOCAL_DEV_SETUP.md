@@ -88,6 +88,7 @@ JWT_SECRET=dev_secret_key_change_in_prod
    ```
 
 3. **Deploy to Staging:**
+
    ```bash
    # On staging server with database
    ./quick-deploy.sh staging

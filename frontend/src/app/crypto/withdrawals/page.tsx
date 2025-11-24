@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
+import { useState, useEffect } from 'react';
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
 
 interface CryptoWithdrawal {
   id: string;
   cryptoType: string;
   amount: number;
   walletAddress: string;
-  status: "PENDING" | "COMPLETED" | "CANCELLED";
+  status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
   transactionHash?: string;
   createdAt: string;
   updatedAt: string;
@@ -17,8 +17,8 @@ interface CryptoWithdrawal {
 export default function CryptoWithdrawalsPage() {
   const [withdrawals, setWithdrawals] = useState<CryptoWithdrawal[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [filter, setFilter] = useState<"ALL" | "PENDING" | "COMPLETED" | "CANCELLED">("ALL");
+  const [error, setError] = useState('');
+  const [filter, setFilter] = useState<'ALL' | 'PENDING' | 'COMPLETED' | 'CANCELLED'>('ALL');
   const [selectedWithdrawal, setSelectedWithdrawal] = useState<CryptoWithdrawal | null>(null);
 
   useEffect(() => {
@@ -27,8 +27,8 @@ export default function CryptoWithdrawalsPage() {
 
   const fetchWithdrawals = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       const response = await fetch(`/api/crypto/withdrawals/${userId}`, {
         headers: {
@@ -37,43 +37,44 @@ export default function CryptoWithdrawalsPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch withdrawals");
+        throw new Error('Failed to fetch withdrawals');
       }
 
       const data = await response.json();
       setWithdrawals(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to fetch withdrawals";
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch withdrawals';
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredWithdrawals = filter === "ALL"
-    ? withdrawals
-    : withdrawals.filter((withdrawal) => withdrawal.status === filter);
+  const filteredWithdrawals =
+    filter === 'ALL'
+      ? withdrawals
+      : withdrawals.filter((withdrawal) => withdrawal.status === filter);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "PENDING":
-        return "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200";
-      case "COMPLETED":
-        return "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200";
-      case "CANCELLED":
-        return "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200";
+      case 'PENDING':
+        return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200';
+      case 'COMPLETED':
+        return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200';
+      case 'CANCELLED':
+        return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200';
       default:
-        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200";
+        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(dateString).toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -106,7 +107,12 @@ export default function CryptoWithdrawalsPage() {
               className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
               New Withdrawal
             </a>
@@ -114,19 +120,21 @@ export default function CryptoWithdrawalsPage() {
 
           {/* Filter Tabs */}
           <div className="mb-6 flex flex-wrap gap-2">
-            {["ALL", "PENDING", "COMPLETED", "CANCELLED"].map((status) => (
+            {['ALL', 'PENDING', 'COMPLETED', 'CANCELLED'].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status as typeof filter)}
                 className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                   filter === status
-                    ? "bg-indigo-600 text-white"
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
               >
                 {status}
                 <span className="ml-2 px-2 py-0.5 bg-black/10 dark:bg-white/10 rounded-full text-xs">
-                  {status === "ALL" ? withdrawals.length : withdrawals.filter((w) => w.status === status).length}
+                  {status === 'ALL'
+                    ? withdrawals.length
+                    : withdrawals.filter((w) => w.status === status).length}
                 </span>
               </button>
             ))}
@@ -136,8 +144,19 @@ export default function CryptoWithdrawalsPage() {
           {loading && (
             <div className="flex items-center justify-center py-12">
               <svg className="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
             </div>
           )}
@@ -146,8 +165,18 @@ export default function CryptoWithdrawalsPage() {
           {error && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
               <div className="flex items-center">
-                <svg className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5 text-red-600 dark:text-red-400 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
               </div>
@@ -159,14 +188,24 @@ export default function CryptoWithdrawalsPage() {
             <>
               {filteredWithdrawals.length === 0 ? (
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-12 text-center">
-                  <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-16 h-16 text-gray-400 mx-auto mb-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     No {filter.toLowerCase()} withdrawals found
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    {filter === "ALL"
+                    {filter === 'ALL'
                       ? "You haven't requested any crypto withdrawals yet."
                       : `You don't have any ${filter.toLowerCase()} withdrawals.`}
                   </p>
@@ -205,13 +244,18 @@ export default function CryptoWithdrawalsPage() {
                       </thead>
                       <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                         {filteredWithdrawals.map((withdrawal) => (
-                          <tr key={withdrawal.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                          <tr
+                            key={withdrawal.id}
+                            className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                          >
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                               {formatDate(withdrawal.createdAt)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
-                                <span className="font-bold text-gray-900 dark:text-white">{withdrawal.cryptoType}</span>
+                                <span className="font-bold text-gray-900 dark:text-white">
+                                  {withdrawal.cryptoType}
+                                </span>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-white">
@@ -221,7 +265,9 @@ export default function CryptoWithdrawalsPage() {
                               {shortenAddress(withdrawal.walletAddress)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(withdrawal.status)}`}>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(withdrawal.status)}`}
+                              >
                                 {withdrawal.status}
                               </span>
                             </td>
@@ -256,8 +302,18 @@ export default function CryptoWithdrawalsPage() {
                       onClick={() => setSelectedWithdrawal(null)}
                       className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -265,24 +321,34 @@ export default function CryptoWithdrawalsPage() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-400">Withdrawal ID:</span>
-                      <span className="font-mono text-sm text-gray-900 dark:text-white">{selectedWithdrawal.id}</span>
+                      <span className="font-mono text-sm text-gray-900 dark:text-white">
+                        {selectedWithdrawal.id}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-400">Cryptocurrency:</span>
-                      <span className="font-bold text-lg text-gray-900 dark:text-white">{selectedWithdrawal.cryptoType}</span>
+                      <span className="font-bold text-lg text-gray-900 dark:text-white">
+                        {selectedWithdrawal.cryptoType}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-400">Amount:</span>
-                      <span className="font-mono text-gray-900 dark:text-white">{selectedWithdrawal.amount.toFixed(8)}</span>
+                      <span className="font-mono text-gray-900 dark:text-white">
+                        {selectedWithdrawal.amount.toFixed(8)}
+                      </span>
                     </div>
                     <div className="py-3 border-b border-gray-200 dark:border-gray-700">
-                      <span className="text-gray-600 dark:text-gray-400 block mb-2">Destination Wallet:</span>
+                      <span className="text-gray-600 dark:text-gray-400 block mb-2">
+                        Destination Wallet:
+                      </span>
                       <div className="flex items-center space-x-2">
                         <code className="flex-1 text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded break-all text-gray-900 dark:text-white">
                           {selectedWithdrawal.walletAddress}
                         </code>
                         <button
-                          onClick={() => copyToClipboard(selectedWithdrawal.walletAddress, "Address")}
+                          onClick={() =>
+                            copyToClipboard(selectedWithdrawal.walletAddress, 'Address')
+                          }
                           className="px-3 py-1 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700"
                         >
                           Copy
@@ -291,28 +357,38 @@ export default function CryptoWithdrawalsPage() {
                     </div>
                     <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-400">Status:</span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedWithdrawal.status)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedWithdrawal.status)}`}
+                      >
                         {selectedWithdrawal.status}
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-400">Created:</span>
-                      <span className="text-sm text-gray-900 dark:text-white">{formatDate(selectedWithdrawal.createdAt)}</span>
+                      <span className="text-sm text-gray-900 dark:text-white">
+                        {formatDate(selectedWithdrawal.createdAt)}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-3 border-b border-gray-200 dark:border-gray-700">
                       <span className="text-gray-600 dark:text-gray-400">Last Updated:</span>
-                      <span className="text-sm text-gray-900 dark:text-white">{formatDate(selectedWithdrawal.updatedAt)}</span>
+                      <span className="text-sm text-gray-900 dark:text-white">
+                        {formatDate(selectedWithdrawal.updatedAt)}
+                      </span>
                     </div>
 
                     {selectedWithdrawal.transactionHash && (
                       <div className="py-3 border-b border-gray-200 dark:border-gray-700">
-                        <span className="text-gray-600 dark:text-gray-400 block mb-2">Transaction Hash:</span>
+                        <span className="text-gray-600 dark:text-gray-400 block mb-2">
+                          Transaction Hash:
+                        </span>
                         <div className="flex items-center space-x-2">
                           <code className="flex-1 text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded break-all text-gray-900 dark:text-white">
                             {selectedWithdrawal.transactionHash}
                           </code>
                           <button
-                            onClick={() => copyToClipboard(selectedWithdrawal.transactionHash!, "TX Hash")}
+                            onClick={() =>
+                              copyToClipboard(selectedWithdrawal.transactionHash!, 'TX Hash')
+                            }
                             className="px-3 py-1 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700"
                           >
                             Copy
@@ -321,10 +397,11 @@ export default function CryptoWithdrawalsPage() {
                       </div>
                     )}
 
-                    {selectedWithdrawal.status === "PENDING" && (
+                    {selectedWithdrawal.status === 'PENDING' && (
                       <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
                         <p className="text-sm text-yellow-800 dark:text-yellow-200">
-                          ⏳ Your withdrawal is pending admin approval. This usually takes up to 24 hours.
+                          ⏳ Your withdrawal is pending admin approval. This usually takes up to 24
+                          hours.
                         </p>
                       </div>
                     )}

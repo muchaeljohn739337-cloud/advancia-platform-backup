@@ -9,12 +9,9 @@
  * @param options - Optional Intl.DateTimeFormatOptions
  * @returns Formatted date string
  */
-export function formatDateTime(
-  date: Date | string,
-  options?: Intl.DateTimeFormatOptions
-): string {
+export function formatDateTime(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   const defaultOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -34,12 +31,9 @@ export function formatDateTime(
  * @param includeSeconds - Whether to include seconds (default: true)
  * @returns Formatted time string
  */
-export function formatTime(
-  date: Date | string,
-  includeSeconds: boolean = true
-): string {
+export function formatTime(date: Date | string, includeSeconds: boolean = true): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   const options: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
@@ -60,7 +54,7 @@ export function formatDate(
   format: 'short' | 'medium' | 'long' | 'full' = 'medium'
 ): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
+
   const formatMap: Record<string, Intl.DateTimeFormatOptions> = {
     short: {
       month: 'numeric',
@@ -130,10 +124,7 @@ export function formatRelativeTime(date: Date | string): string {
  * @param decimals - Number of decimal places (default: 2)
  * @returns Formatted number string
  */
-export function formatNumber(
-  value: number,
-  decimals: number = 2
-): string {
+export function formatNumber(value: number, decimals: number = 2): string {
   return new Intl.NumberFormat(undefined, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
@@ -146,10 +137,7 @@ export function formatNumber(
  * @param currency - Currency code (default: 'USD')
  * @returns Formatted currency string
  */
-export function formatCurrency(
-  value: number,
-  currency: string = 'USD'
-): string {
+export function formatCurrency(value: number, currency: string = 'USD'): string {
   return new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency,

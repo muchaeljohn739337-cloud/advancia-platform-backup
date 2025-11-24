@@ -1,16 +1,8 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import {
-  Clock,
-  Heart,
-  Home,
-  RefreshCw,
-  Settings,
-  Shield,
-  Zap,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { motion } from 'framer-motion';
+import { Clock, Heart, Home, RefreshCw, Settings, Shield, Zap } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function MaintenancePage() {
   const [countdown, setCountdown] = useState(15);
@@ -28,10 +20,10 @@ export default function MaintenancePage() {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/health`);
       if (response.ok) {
-        window.location.href = "/";
+        window.location.href = '/';
       }
     } catch {
-      console.log("Still in maintenance");
+      console.log('Still in maintenance');
     } finally {
       setIsChecking(false);
     }
@@ -40,18 +32,18 @@ export default function MaintenancePage() {
   const features = [
     {
       icon: Zap,
-      text: "Upgrading performance",
-      color: "from-yellow-500 to-orange-500",
+      text: 'Upgrading performance',
+      color: 'from-yellow-500 to-orange-500',
     },
     {
       icon: Shield,
-      text: "Enhancing security",
-      color: "from-blue-500 to-indigo-600",
+      text: 'Enhancing security',
+      color: 'from-blue-500 to-indigo-600',
     },
     {
       icon: Heart,
-      text: "Improving reliability",
-      color: "from-pink-500 to-rose-600",
+      text: 'Improving reliability',
+      color: 'from-pink-500 to-rose-600',
     },
   ];
 
@@ -74,7 +66,7 @@ export default function MaintenancePage() {
           <div className="flex justify-center mb-8">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-2xl opacity-50"></div>
@@ -110,9 +102,9 @@ export default function MaintenancePage() {
               transition={{ delay: 0.6 }}
               className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed"
             >
-              Our platform is currently undergoing scheduled maintenance to
-              bring you exciting new features and improvements. Don&apos;t
-              worry—your account and data are completely safe! ✨
+              Our platform is currently undergoing scheduled maintenance to bring you exciting new
+              features and improvements. Don&apos;t worry—your account and data are completely safe!
+              ✨
             </motion.p>
           </div>
 
@@ -141,9 +133,7 @@ export default function MaintenancePage() {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <div className="flex items-center justify-center gap-3 mb-3">
                 <Clock className="h-6 w-6 text-blue-300" />
-                <span className="text-white text-lg font-semibold">
-                  Auto-checking in:
-                </span>
+                <span className="text-white text-lg font-semibold">Auto-checking in:</span>
               </div>
               <div className="text-center">
                 <motion.span
@@ -167,10 +157,8 @@ export default function MaintenancePage() {
                 disabled={isChecking}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <RefreshCw
-                  className={`h-5 w-5 ${isChecking ? "animate-spin" : ""}`}
-                />
-                {isChecking ? "Checking..." : "Check Status Now"}
+                <RefreshCw className={`h-5 w-5 ${isChecking ? 'animate-spin' : ''}`} />
+                {isChecking ? 'Checking...' : 'Check Status Now'}
               </motion.button>
 
               <motion.a
@@ -195,11 +183,10 @@ export default function MaintenancePage() {
             className="mt-10 pt-8 border-t border-white/20 text-center"
           >
             <p className="text-slate-300 text-sm mb-3">
-              Expected completion time:{" "}
-              <strong className="text-white">Within 30 minutes</strong>
+              Expected completion time: <strong className="text-white">Within 30 minutes</strong>
             </p>
             <p className="text-slate-400 text-sm">
-              Questions? Contact us at{" "}
+              Questions? Contact us at{' '}
               <a
                 href="mailto:support@advanciapayledger.com"
                 className="text-blue-400 hover:text-blue-300 underline"
@@ -229,8 +216,7 @@ export default function MaintenancePage() {
           transition={{ delay: 1.5 }}
           className="text-center mt-8 text-slate-300 text-lg"
         >
-          Thank you for your patience! We appreciate your trust in Advancia Pay.
-          💙
+          Thank you for your patience! We appreciate your trust in Advancia Pay. 💙
         </motion.p>
 
         {/* Company Information Footer */}
@@ -243,9 +229,7 @@ export default function MaintenancePage() {
           {/* Payment Partners */}
           <div className="bg-slate-800/30 backdrop-blur-sm rounded-xl p-6 border border-slate-700/50">
             <p className="text-slate-300 text-sm mb-2">
-              <strong className="text-white">
-                Payment Processing Partners:
-              </strong>
+              <strong className="text-white">Payment Processing Partners:</strong>
             </p>
             <p className="text-slate-400 text-sm">
               <a
@@ -255,8 +239,8 @@ export default function MaintenancePage() {
                 className="text-purple-400 hover:text-purple-300 underline"
               >
                 Stripe Inc.
-              </a>{" "}
-              (USA) and{" "}
+              </a>{' '}
+              (USA) and{' '}
               <a
                 href="https://cryptomus.com"
                 target="_blank"
@@ -264,7 +248,7 @@ export default function MaintenancePage() {
                 className="text-purple-400 hover:text-purple-300 underline"
               >
                 Cryptomus
-              </a>{" "}
+              </a>{' '}
               (International)
             </p>
           </div>
@@ -272,18 +256,12 @@ export default function MaintenancePage() {
           {/* Legal Entity Info */}
           <div className="text-slate-400 text-xs space-y-1">
             <p>
-              © {new Date().getFullYear()}{" "}
-              <strong className="text-slate-300">
-                Advancia Technologies LLC
-              </strong>
+              © {new Date().getFullYear()}{' '}
+              <strong className="text-slate-300">Advancia Technologies LLC</strong>
             </p>
-            <p>
-              Services provided by Advancia Technologies LLC, registered in
-              Delaware, USA.
-            </p>
+            <p>Services provided by Advancia Technologies LLC, registered in Delaware, USA.</p>
             <p className="text-slate-500">
-              FinCEN MSB Registration: Pending | State Money Transmitter
-              Licenses: Applied
+              FinCEN MSB Registration: Pending | State Money Transmitter Licenses: Applied
             </p>
           </div>
 

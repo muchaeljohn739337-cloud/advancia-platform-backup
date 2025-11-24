@@ -6,13 +6,13 @@
 
 A production-ready, fully responsive HTML/CSS/TypeScript template with:
 
-- ✅ **Dark mode** with localStorage persistence
-- ✅ **Mobile navigation** with smooth animations
-- ✅ **Accessibility** (ARIA labels, keyboard nav, skip links)
-- ✅ **SEO optimized** semantic HTML5
-- ✅ **Performance** optimized (preload, lazy load, async)
-- ✅ **TypeScript** type-safe utilities
-- ✅ **Sass integration** with design system
+-   ✅ **Dark mode** with localStorage persistence
+-   ✅ **Mobile navigation** with smooth animations
+-   ✅ **Accessibility** (ARIA labels, keyboard nav, skip links)
+-   ✅ **SEO optimized** semantic HTML5
+-   ✅ **Performance** optimized (preload, lazy load, async)
+-   ✅ **TypeScript** type-safe utilities
+-   ✅ **Sass integration** with design system
 
 ---
 
@@ -79,72 +79,72 @@ npm run sass:build
 
 ### ✅ Header
 
-- **Sticky navigation** with blur backdrop
-- **Logo** with SVG gradient
-- **Desktop menu** with 5 nav links
-- **Mobile hamburger** with smooth animation
-- **Theme toggle** (sun/moon icons)
-- **CTA buttons** (Login + Get Started)
+-   **Sticky navigation** with blur backdrop
+-   **Logo** with SVG gradient
+-   **Desktop menu** with 5 nav links
+-   **Mobile hamburger** with smooth animation
+-   **Theme toggle** (sun/moon icons)
+-   **CTA buttons** (Login + Get Started)
 
 ### ✅ Hero Section
 
-- **Gradient background** with overlay
-- **Responsive typography** (5xl → 3xl on mobile)
-- **CTA buttons** with icons
-- **Stats display** (3 metrics: $2.4M, 10k, 99.9%)
+-   **Gradient background** with overlay
+-   **Responsive typography** (5xl → 3xl on mobile)
+-   **CTA buttons** with icons
+-   **Stats display** (3 metrics: $2.4M, 10k, 99.9%)
 
 ### ✅ Features Grid
 
-- **6 feature cards** with icons
-- **Responsive layout** (1 col → 2 col → 3 col)
-- **Hover effects** with transform + shadow
-- **SVG icons** from Feather Icons
+-   **6 feature cards** with icons
+-   **Responsive layout** (1 col → 2 col → 3 col)
+-   **Hover effects** with transform + shadow
+-   **SVG icons** from Feather Icons
 
 ### ✅ CTA Section
 
-- **Gradient card** with call-to-action
-- **Centered layout** with button
+-   **Gradient card** with call-to-action
+-   **Centered layout** with button
 
 ### ✅ Footer
 
-- **4-column grid** (responsive: 1 col → 4 col)
-- **Social links** (Twitter, GitHub, LinkedIn)
-- **Footer links** (Product, Resources, Company)
-- **Badges** (SOC 2, 256-bit encryption)
-- **Copyright** with current year
+-   **4-column grid** (responsive: 1 col → 4 col)
+-   **Social links** (Twitter, GitHub, LinkedIn)
+-   **Footer links** (Product, Resources, Company)
+-   **Badges** (SOC 2, 256-bit encryption)
+-   **Copyright** with current year
 
 ### ✅ Dark Mode
 
-- **Toggle button** in header (auto-save to localStorage)
-- **System preference** detection (prefers-color-scheme)
-- **Smooth transitions** (250ms cubic-bezier)
-- **48 CSS variables** with theme overrides
+-   **Toggle button** in header (auto-save to localStorage)
+-   **System preference** detection (prefers-color-scheme)
+-   **Smooth transitions** (250ms cubic-bezier)
+-   **48 CSS variables** with theme overrides
 
 ### ✅ Mobile Navigation
 
-- **Hamburger animation** (3-bar → X)
-- **Slide-down menu** with opacity fade
-- **Body scroll lock** when menu open
-- **Click outside** to close
-- **Escape key** to close
-- **Auto-close** on link click
+-   **Hamburger animation** (3-bar → X)
+-   **Slide-down menu** with opacity fade
+-   **Body scroll lock** when menu open
+-   **Click outside** to close
+-   **Escape key** to close
+-   **Auto-close** on link click
 
 ### ✅ Accessibility
 
-- **ARIA labels** on all interactive elements
-- **Keyboard navigation** (Tab, Escape, Enter)
-- **Skip to main content** link
-- **Focus-visible** polyfill
-- **Screen reader** friendly
-- **Semantic HTML5** (header, main, footer, nav, section, article)
+-   **ARIA labels** on all interactive elements
+-   **Keyboard navigation** (Tab, Escape, Enter)
+-   **Skip to main content** link
+-   **Focus-visible** polyfill
+-   **Screen reader** friendly
+-   **Semantic HTML5** (header, main, footer, nav, section, article)
 
 ### ✅ Performance
 
-- **Preconnect** to Google Fonts
-- **Async font loading** with display=swap
-- **Scroll throttling** (100ms debounce)
-- **Lazy animations** (only on visible elements)
-- **Reduced motion** support (@media prefers-reduced-motion)
+-   **Preconnect** to Google Fonts
+-   **Async font loading** with display=swap
+-   **Scroll throttling** (100ms debounce)
+-   **Lazy animations** (only on visible elements)
+-   **Reduced motion** support (@media prefers-reduced-motion)
 
 ---
 
@@ -167,10 +167,7 @@ Edit CSS variables in `template.css` (or Sass variables):
 Replace Google Fonts link in `index.html`:
 
 ```html
-<link
-  href="https://fonts.googleapis.com/css2?family=YOUR_FONT:wght@300;400;600;700&display=swap"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css2?family=YOUR_FONT:wght@300;400;600;700&display=swap" rel="stylesheet" />
 ```
 
 Update CSS variable:
@@ -252,10 +249,11 @@ export default function Landing() {
 ### Scenario 3: WordPress Theme
 
 1. Convert HTML to PHP template parts:
-   - `header.php` → site-header
-   - `footer.php` → site-footer
-   - `front-page.php` → hero + features + CTA
+   -   `header.php` → site-header
+   -   `footer.php` → site-footer
+   -   `front-page.php` → hero + features + CTA
 2. Enqueue styles in `functions.php`:
+
    ```php
    wp_enqueue_style('template', get_template_directory_uri() . '/template.css');
    wp_enqueue_script('template', get_template_directory_uri() . '/template.js');
@@ -388,17 +386,17 @@ accessibilityManager.init(); // Initialize a11y features
 
 Before deploying:
 
-- [ ] **Compile TypeScript**: `tsc templates/template.ts`
-- [ ] **Minify CSS**: Use `sass --style=compressed` or PostCSS
-- [ ] **Optimize images**: Compress hero images, convert to WebP
-- [ ] **Update meta tags**: Title, description, Open Graph
-- [ ] **Add favicon**: Generate all sizes (16x16, 32x32, 180x180)
-- [ ] **Test dark mode**: Toggle and refresh page
-- [ ] **Test mobile nav**: Open, close, click links
-- [ ] **Test accessibility**: Tab through page, use screen reader
-- [ ] **Lighthouse audit**: Target 90+ scores
-- [ ] **Cross-browser test**: Chrome, Firefox, Safari, Edge
-- [ ] **Mobile test**: iOS Safari, Chrome Android
+-   [ ] **Compile TypeScript**: `tsc templates/template.ts`
+-   [ ] **Minify CSS**: Use `sass --style=compressed` or PostCSS
+-   [ ] **Optimize images**: Compress hero images, convert to WebP
+-   [ ] **Update meta tags**: Title, description, Open Graph
+-   [ ] **Add favicon**: Generate all sizes (16x16, 32x32, 180x180)
+-   [ ] **Test dark mode**: Toggle and refresh page
+-   [ ] **Test mobile nav**: Open, close, click links
+-   [ ] **Test accessibility**: Tab through page, use screen reader
+-   [ ] **Lighthouse audit**: Target 90+ scores
+-   [ ] **Cross-browser test**: Chrome, Firefox, Safari, Edge
+-   [ ] **Mobile test**: iOS Safari, Chrome Android
 
 ---
 
@@ -406,43 +404,43 @@ Before deploying:
 
 ### Dark mode not persisting
 
-- Check localStorage: `localStorage.getItem('theme')`
-- Verify TypeScript compiled: `templates/template.js` exists
-- Check console for errors
+-   Check localStorage: `localStorage.getItem('theme')`
+-   Verify TypeScript compiled: `templates/template.js` exists
+-   Check console for errors
 
 ### Mobile menu not animating
 
-- Ensure `aria-expanded` attribute toggles
-- Check `.active` class added to `#navMenu`
-- Verify CSS transition properties present
+-   Ensure `aria-expanded` attribute toggles
+-   Check `.active` class added to `#navMenu`
+-   Verify CSS transition properties present
 
 ### Sticky header not sticking
 
-- Check `position: sticky` support in browser
-- Ensure header has `top: 0` and `z-index: 1000`
-- Verify no parent has `overflow: hidden`
+-   Check `position: sticky` support in browser
+-   Ensure header has `top: 0` and `z-index: 1000`
+-   Verify no parent has `overflow: hidden`
 
 ### Fonts not loading
 
-- Check Google Fonts link in `<head>`
-- Verify network tab shows fonts downloaded
-- Use `font-display: swap` for FOUT prevention
+-   Check Google Fonts link in `<head>`
+-   Verify network tab shows fonts downloaded
+-   Use `font-display: swap` for FOUT prevention
 
 ### Theme toggle not working
 
-- Check `#themeToggle` element exists
-- Verify TypeScript compiled and loaded
-- Check console for `initTemplate()` logs
+-   Check `#themeToggle` element exists
+-   Verify TypeScript compiled and loaded
+-   Check console for `initTemplate()` logs
 
 ---
 
 ## 📚 Resources
 
-- **Feather Icons**: https://feathericons.com/ (used for all icons)
-- **Google Fonts**: https://fonts.google.com/ (Inter font family)
-- **CSS Variables**: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
-- **ARIA**: https://www.w3.org/WAI/ARIA/apg/ (accessibility patterns)
-- **Lighthouse**: https://developers.google.com/web/tools/lighthouse (performance audit)
+-   **Feather Icons**: <https://feathericons.com/> (used for all icons)
+-   **Google Fonts**: <https://fonts.google.com/> (Inter font family)
+-   **CSS Variables**: <https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties>
+-   **ARIA**: <https://www.w3.org/WAI/ARIA/apg/> (accessibility patterns)
+-   **Lighthouse**: <https://developers.google.com/web/tools/lighthouse> (performance audit)
 
 ---
 
@@ -453,12 +451,12 @@ Template follows [Advancia Copilot Instructions](../.github/copilot-instructions
 
 Built with ❤️ using:
 
-- HTML5 semantic elements
-- CSS Grid + Flexbox
-- CSS Custom Properties (variables)
-- TypeScript with strict types
-- Sass with BEM methodology
-- Mobile-first responsive design
+-   HTML5 semantic elements
+-   CSS Grid + Flexbox
+-   CSS Custom Properties (variables)
+-   TypeScript with strict types
+-   Sass with BEM methodology
+-   Mobile-first responsive design
 
 ---
 

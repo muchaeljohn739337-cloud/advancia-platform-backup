@@ -100,10 +100,7 @@ const checkAccountLockout = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    const result = await query(
-      "SELECT failed_attempts, locked_until FROM users WHERE email = $1",
-      [email]
-    );
+    const result = await query("SELECT failed_attempts, locked_until FROM users WHERE email = $1", [email]);
 
     if (result.rowCount === 0) {
       return next(); // User doesn't exist, let auth handle it
@@ -113,9 +110,7 @@ const checkAccountLockout = async (req, res, next) => {
 
     // Check if account is currently locked
     if (user.locked_until && new Date() < new Date(user.locked_until)) {
-      const remainingTime = Math.ceil(
-        (new Date(user.locked_until) - new Date()) / 1000 / 60
-      );
+      const remainingTime = Math.ceil((new Date(user.locked_until) - new Date()) / 1000 / 60);
 
       return res.status(423).json({
         error: "Account locked due to too many failed attempts",
@@ -152,10 +147,7 @@ const handleFailedAttempt = async (userId, currentFailedAttempts = 0) => {
   }
 
   try {
-    await query(
-      "UPDATE users SET failed_attempts = $1, locked_until = $2 WHERE id = $3",
-      [newFailedAttempts, lockedUntil, userId]
-    );
+    await query("UPDATE users SET failed_attempts = $1, locked_until = $2 WHERE id = $3", [newFailedAttempts, lockedUntil, userId]);
 
     return {
       failedAttempts: newFailedAttempts,
@@ -174,15 +166,10 @@ const handleFailedAttempt = async (userId, currentFailedAttempts = 0) => {
 ```javascript
 const handleSuccessfulLogin = async (userId) => {
   try {
-    await query(
-      "UPDATE users SET failed_attempts = 0, locked_until = NULL, last_login_at = CURRENT_TIMESTAMP WHERE id = $1",
-      [userId]
-    );
+    await query("UPDATE users SET failed_attempts = 0, locked_until = NULL, last_login_at = CURRENT_TIMESTAMP WHERE id = $1", [userId]);
 
     // Optional: Log successful login for audit
-    console.log(
-      `Successful login for user ${userId} at ${new Date().toISOString()}`
-    );
+    console.log(`Successful login for user ${userId} at ${new Date().toISOString()}`);
   } catch (error) {
     console.error("Failed to reset lockout status:", error);
     // Don't throw - login succeeded, just log the error
@@ -207,10 +194,7 @@ router.post("/login", checkAccountLockout, async (req, res) => {
 
   if (!passwordValid) {
     // 3. Handle failed attempt
-    const lockoutResult = await handleFailedAttempt(
-      user.id,
-      req.lockoutInfo.failedAttempts
-    );
+    const lockoutResult = await handleFailedAttempt(user.id, req.lockoutInfo.failedAttempts);
 
     return res.status(401).json({
       error: "Invalid credentials",
@@ -335,10 +319,10 @@ psql -c "SELECT email, failed_attempts, locked_until FROM users WHERE email = 'u
 
 ## 📈 Benefits
 
-- **Brute Force Protection**: Prevents automated attacks
-- **User Experience**: Clear feedback on remaining attempts
-- **Admin Control**: Manual lock/unlock capabilities
-- **Audit Trail**: Track suspicious activity
-- **Scalable**: Works with multiple authentication methods
-- **Configurable**: Easy to adjust thresholds and durations</content>
+-   **Brute Force Protection**: Prevents automated attacks
+-   **User Experience**: Clear feedback on remaining attempts
+-   **Admin Control**: Manual lock/unlock capabilities
+-   **Audit Trail**: Track suspicious activity
+-   **Scalable**: Works with multiple authentication methods
+-   **Configurable**: Easy to adjust thresholds and durations</content>
   <parameter name="filePath">c:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\-modular-saas-platform\LOCKOUT_POLICY_IMPLEMENTATION.md

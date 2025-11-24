@@ -28,8 +28,8 @@
 
 The trace viewer is now open in VS Code. If not visible:
 
-- Press `Ctrl+Shift+P` (or `Cmd+Shift+P`)
-- Run: `AI Toolkit: Open Trace Viewer`
+-   Press `Ctrl+Shift+P` (or `Cmd+Shift+P`)
+-   Run: `AI Toolkit: Open Trace Viewer`
 
 ### 2. Start Backend with Tracing
 
@@ -57,11 +57,11 @@ node test-tracing.js
 
 Open the AI Toolkit trace viewer in VS Code to see:
 
-- HTTP request spans with timing
-- Express middleware execution order
-- Database queries (Prisma)
-- Request/response details
-- Error stack traces
+-   HTTP request spans with timing
+-   Express middleware execution order
+-   Database queries (Prisma)
+-   Request/response details
+-   Error stack traces
 
 ## Features
 
@@ -69,29 +69,29 @@ Open the AI Toolkit trace viewer in VS Code to see:
 
 The following are traced automatically (no code changes needed):
 
-- **HTTP Requests**: All incoming requests to Express
-- **Express Middleware**: Each middleware function execution
-- **Database Queries**: All Prisma queries with parameters
-- **External API Calls**: Axios, fetch, http/https module
-- **Errors**: Full exception stack traces in traces
+-   **HTTP Requests**: All incoming requests to Express
+-   **Express Middleware**: Each middleware function execution
+-   **Database Queries**: All Prisma queries with parameters
+-   **External API Calls**: Axios, fetch, http/https module
+-   **Errors**: Full exception stack traces in traces
 
 ### ✅ Performance Metrics
 
 Each trace includes:
 
-- Request duration (end-to-end)
-- Database query time
-- External API latency
-- Middleware overhead
-- Error rates
+-   Request duration (end-to-end)
+-   Database query time
+-   External API latency
+-   Middleware overhead
+-   Error rates
 
 ### ✅ Context Propagation
 
 Traces flow through:
 
-- HTTP requests → Route handlers → Database queries
-- Parent-child span relationships
-- Distributed tracing across services (ready for microservices)
+-   HTTP requests → Route handlers → Database queries
+-   Parent-child span relationships
+-   Distributed tracing across services (ready for microservices)
 
 ## Configuration
 
@@ -136,7 +136,7 @@ Then check AI Toolkit trace viewer for detailed spans.
 
 ### Option 3: Frontend Testing
 
-Open your frontend at http://localhost:3000 and interact with it. Backend traces will appear in AI Toolkit.
+Open your frontend at <http://localhost:3000> and interact with it. Backend traces will appear in AI Toolkit.
 
 ## Troubleshooting
 
@@ -149,9 +149,8 @@ Open your frontend at http://localhost:3000 and interact with it. Backend traces
    ```
 
 2. **Verify AI Toolkit is running**:
-
-   - Open trace viewer in VS Code
-   - Should show "Listening on http://localhost:4318"
+   -   Open trace viewer in VS Code
+   -   Should show "Listening on <http://localhost:4318>"
 
 3. **Check .env configuration**:
 
@@ -160,6 +159,7 @@ Open your frontend at http://localhost:3000 and interact with it. Backend traces
    ```
 
 4. **Test OTLP endpoint**:
+
    ```bash
    curl http://localhost:4318/v1/traces
    ```
@@ -183,11 +183,11 @@ Or comment out the tracing import in `backend/src/index.ts`:
 
 For production, you can export traces to:
 
-- **Jaeger** (free, self-hosted)
-- **New Relic** (paid, managed)
-- **Datadog** (paid, managed)
-- **Honeycomb** (paid, managed)
-- **Azure Application Insights** (paid, managed)
+-   **Jaeger** (free, self-hosted)
+-   **New Relic** (paid, managed)
+-   **Datadog** (paid, managed)
+-   **Honeycomb** (paid, managed)
+-   **Azure Application Insights** (paid, managed)
 
 See `TRACING_GUIDE.md` for detailed configuration.
 
@@ -195,10 +195,10 @@ See `TRACING_GUIDE.md` for detailed configuration.
 
 Minimal overhead:
 
-- ~0.1-0.5ms per HTTP request
-- ~0.05-0.2ms per database query
-- ~10-50MB additional memory
-- <1% additional CPU
+-   ~0.1-0.5ms per HTTP request
+-   ~0.05-0.2ms per database query
+-   ~10-50MB additional memory
+-   <1% additional CPU
 
 ## Advanced Usage
 
@@ -244,10 +244,10 @@ if (span) {
 
 ## Resources
 
-- **Full Documentation**: `backend/TRACING_GUIDE.md`
-- **OpenTelemetry Docs**: https://opentelemetry.io/docs/
-- **AI Toolkit**: https://github.com/microsoft/vscode-ai-toolkit
-- **Prisma Tracing**: https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing
+-   **Full Documentation**: `backend/TRACING_GUIDE.md`
+-   **OpenTelemetry Docs**: <https://opentelemetry.io/docs/>
+-   **AI Toolkit**: <https://github.com/microsoft/vscode-ai-toolkit>
+-   **Prisma Tracing**: <https://www.prisma.io/docs/concepts/components/prisma-client/opentelemetry-tracing>
 
 ---
 

@@ -1,35 +1,26 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import {
-  Bitcoin,
-  CheckCircle,
-  Clock,
-  CreditCard,
-  Home,
-  Receipt,
-} from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { motion } from 'framer-motion';
+import { Bitcoin, CheckCircle, Clock, CreditCard, Home, Receipt } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [status, setStatus] = useState<"checking" | "confirmed" | "pending">(
-    "checking"
-  );
+  const [status, setStatus] = useState<'checking' | 'confirmed' | 'pending'>('checking');
   const [details, setDetails] = useState<any>(null);
-  const [type, setType] = useState<"stripe" | "crypto" | null>(null);
+  const [type, setType] = useState<'stripe' | 'crypto' | null>(null);
 
-  const sessionId = searchParams?.get("session_id");
-  const invoiceId = searchParams?.get("invoice_id");
-  const orderId = searchParams?.get("orderId");
+  const sessionId = searchParams?.get('session_id');
+  const invoiceId = searchParams?.get('invoice_id');
+  const orderId = searchParams?.get('orderId');
 
   const checkPayment = useCallback(async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (sessionId) {
-      setType("stripe");
+      setType('stripe');
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/payments/session/${sessionId}`,
         {
@@ -39,12 +30,12 @@ function PaymentSuccessContent() {
       if (res.ok) {
         const data = await res.json();
         setDetails(data);
-        setStatus(data.payment_status === "paid" ? "confirmed" : "pending");
+        setStatus(data.payment_status === 'paid' ? 'confirmed' : 'pending');
       }
     }
 
     if (invoiceId) {
-      setType("crypto");
+      setType('crypto');
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/cryptomus/status/${invoiceId}`,
         {
@@ -54,7 +45,7 @@ function PaymentSuccessContent() {
       if (res.ok) {
         const data = await res.json();
         setDetails(data);
-        setStatus("pending"); // Crypto requires admin approval
+        setStatus('pending'); // Crypto requires admin approval
       }
     }
 
@@ -69,12 +60,12 @@ function PaymentSuccessContent() {
       if (res.ok) {
         const data = await res.json();
         setDetails(data);
-        if (data.status === "confirmed") {
-          setStatus("confirmed");
-          setType("stripe"); // Default, could be enhanced to detect provider
-        } else if (data.status === "pending") {
-          setStatus("pending");
-          setType("crypto"); // Assume crypto for pending status
+        if (data.status === 'confirmed') {
+          setStatus('confirmed');
+          setType('stripe'); // Default, could be enhanced to detect provider
+        } else if (data.status === 'pending') {
+          setStatus('pending');
+          setType('crypto'); // Assume crypto for pending status
         }
       }
     }
@@ -87,8 +78,8 @@ function PaymentSuccessContent() {
   }, [checkPayment]);
 
   useEffect(() => {
-    if (status === "confirmed") {
-      setTimeout(() => router.push("/dashboard"), 5000);
+    if (status === 'confirmed') {
+      setTimeout(() => router.push('/dashboard'), 5000);
     }
   }, [status, router]);
 
@@ -104,12 +95,12 @@ function PaymentSuccessContent() {
           <div className="flex justify-center mb-4">
             <div
               className={`flex items-center gap-2 px-4 py-2 rounded-full ${
-                type === "stripe"
-                  ? "bg-purple-100 text-purple-700"
-                  : "bg-orange-100 text-orange-700"
+                type === 'stripe'
+                  ? 'bg-purple-100 text-purple-700'
+                  : 'bg-orange-100 text-orange-700'
               }`}
             >
-              {type === "stripe" ? (
+              {type === 'stripe' ? (
                 <>
                   <CreditCard className="w-4 h-4" />
                   <span className="text-sm font-semibold">Card Payment</span>
@@ -126,11 +117,11 @@ function PaymentSuccessContent() {
 
         {/* Icon */}
         <div className="flex justify-center mb-6">
-          {status === "checking" ? (
+          {status === 'checking' ? (
             <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center">
               <Clock className="w-12 h-12 text-blue-600 animate-pulse" />
             </div>
-          ) : status === "confirmed" ? (
+          ) : status === 'confirmed' ? (
             <div className="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center animate-bounce">
               <CheckCircle className="w-12 h-12 text-green-600" />
             </div>
@@ -143,26 +134,22 @@ function PaymentSuccessContent() {
 
         {/* Title */}
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-4 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-          {status === "checking" && "Verifying Payment..."}
-          {status === "confirmed" && "Payment Successful! 🎉"}
-          {status === "pending" && "Payment Received!"}
+          {status === 'checking' && 'Verifying Payment...'}
+          {status === 'confirmed' && 'Payment Successful! 🎉'}
+          {status === 'pending' && 'Payment Received!'}
         </h1>
 
         {/* Description */}
         <div className="text-center mb-8">
-          {status === "confirmed" && (
-            <p className="text-gray-700 text-lg">
-              Your payment has been confirmed and processed!
-            </p>
+          {status === 'confirmed' && (
+            <p className="text-gray-700 text-lg">Your payment has been confirmed and processed!</p>
           )}
-          {status === "pending" && type === "crypto" && (
+          {status === 'pending' && type === 'crypto' && (
             <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
-              <p className="text-sm font-semibold text-orange-900">
-                Admin Approval Required
-              </p>
+              <p className="text-sm font-semibold text-orange-900">Admin Approval Required</p>
               <p className="text-sm text-gray-700 mt-2">
-                Your crypto payment has been received. Admin will review and
-                credit your account within 15-60 minutes.
+                Your crypto payment has been received. Admin will review and credit your account
+                within 15-60 minutes.
               </p>
             </div>
           )}
@@ -188,12 +175,12 @@ function PaymentSuccessContent() {
                 <span className="text-gray-600">Status:</span>
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    status === "confirmed"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
+                    status === 'confirmed'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-yellow-100 text-yellow-700'
                   }`}
                 >
-                  {status === "confirmed" ? "Confirmed" : "Pending"}
+                  {status === 'confirmed' ? 'Confirmed' : 'Pending'}
                 </span>
               </div>
             </div>
@@ -202,14 +189,14 @@ function PaymentSuccessContent() {
 
         {/* Actions */}
         <button
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push('/dashboard')}
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg flex items-center justify-center gap-2"
         >
           <Home className="w-5 h-5" />
           Go to Dashboard
         </button>
 
-        {status === "confirmed" && (
+        {status === 'confirmed' && (
           <p className="text-center text-xs text-gray-400 mt-4 animate-pulse">
             Redirecting in 5 seconds...
           </p>

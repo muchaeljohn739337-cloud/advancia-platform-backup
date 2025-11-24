@@ -1,4 +1,4 @@
-import InteractiveFormDemo from "@/components/InteractiveFormDemo";
+import InteractiveFormDemo from '@/components/InteractiveFormDemo';
 
 export default function InteractiveDemoPage() {
   return <InteractiveFormDemo />;

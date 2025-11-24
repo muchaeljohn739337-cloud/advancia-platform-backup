@@ -2,14 +2,17 @@
 
 ## 1. Deploy to Staging
 
-- Push your latest changes to the **staging branch** (or staging server).
-- On the staging server, pull updates:
+-   Push your latest changes to the **staging branch** (or staging server).
+-   On the staging server, pull updates:
+
   ```bash
   git fetch --all
   git checkout staging
   git pull origin staging
   ```
-- Restart services with PM2:
+
+-   Restart services with PM2:
+
   ```bash
   pm2 restart advancia-backend
   ```
@@ -49,8 +52,8 @@ app-error-2025-11-14_18-00-00.log
 pm2 logs advancia-backend
 ```
 
-- Watch new entries being written.
-- Confirm rotation occurs when size threshold is reached.
+-   Watch new entries being written.
+-   Confirm rotation occurs when size threshold is reached.
 
 ---
 
@@ -72,8 +75,8 @@ Shows live logs and confirms rotation in action.
 
 # ✅ Outcome
 
-- **Staging deployment** ensures log rotation works before production.
-- **PM2 logrotate** keeps logs manageable and prevents disk bloat.
-- **Monitoring with pm2 list/logs** confirms rotation is active.
+-   **Staging deployment** ensures log rotation works before production.
+-   **PM2 logrotate** keeps logs manageable and prevents disk bloat.
+-   **Monitoring with pm2 list/logs** confirms rotation is active.
 
 ---

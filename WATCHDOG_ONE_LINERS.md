@@ -400,30 +400,30 @@ Run: `.\dashboard.ps1`
 
 ## 🎯 When to Use One-Liners vs parse-watchdog.ps1
 
-### Use One-Liners When:
+### Use One-Liners When
 
-- ✅ Need instant answer (< 5 seconds)
-- ✅ Checking single metric
-- ✅ Quick troubleshooting
-- ✅ Ad-hoc queries
-- ✅ Command-line workflow
+-   ✅ Need instant answer (< 5 seconds)
+-   ✅ Checking single metric
+-   ✅ Quick troubleshooting
+-   ✅ Ad-hoc queries
+-   ✅ Command-line workflow
 
-### Use parse-watchdog.ps1 When:
+### Use parse-watchdog.ps1 When
 
-- ✅ Need comprehensive report
-- ✅ Want daily/weekly summaries
-- ✅ Exporting to CSV
-- ✅ Automated reporting
-- ✅ Detailed analysis with recommendations
+-   ✅ Need comprehensive report
+-   ✅ Want daily/weekly summaries
+-   ✅ Exporting to CSV
+-   ✅ Automated reporting
+-   ✅ Detailed analysis with recommendations
 
 ---
 
 ## 📚 Related Tools
 
-- **parse-watchdog.ps1** - Full analysis script
-- **backend-tools.ps1** - Watchdog management
-- **simple-watchdog.ps1** - Lightweight monitoring
-- **health-check.ps1** - API health checks
+-   **parse-watchdog.ps1** - Full analysis script
+-   **backend-tools.ps1** - Watchdog management
+-   **simple-watchdog.ps1** - Lightweight monitoring
+-   **health-check.ps1** - API health checks
 
 ---
 
@@ -431,12 +431,12 @@ Run: `.\dashboard.ps1`
 
 With these one-liners, you can:
 
-- ✅ Get instant restart/failure counts
-- ✅ Check today's uptime in seconds
-- ✅ Monitor logs in real-time
-- ✅ Search for specific issues quickly
-- ✅ Create custom shortcuts and aliases
-- ✅ Build simple dashboards
+-   ✅ Get instant restart/failure counts
+-   ✅ Check today's uptime in seconds
+-   ✅ Monitor logs in real-time
+-   ✅ Search for specific issues quickly
+-   ✅ Create custom shortcuts and aliases
+-   ✅ Build simple dashboards
 
 **Most useful commands**:
 

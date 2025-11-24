@@ -1,23 +1,23 @@
-"use client";
-import { useState, useEffect, useCallback } from "react";
-import TotpSetup from "@/components/TotpSetup";
-import RequireRole from "@/components/RequireRole";
+'use client';
+import { useState, useEffect, useCallback } from 'react';
+import TotpSetup from '@/components/TotpSetup';
+import RequireRole from '@/components/RequireRole';
 
 export default function SecuritySettingsPage() {
   const [totpEnabled, setTotpEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showSetup, setShowSetup] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const getErrorMessage = (err: unknown, fallback: string) =>
     err instanceof Error && err.message ? err.message : fallback;
 
   const fetchSecurityStatus = useCallback(async () => {
     setLoading(true);
-    setError("");
+    setError('');
     try {
-      const token = localStorage.getItem("token");
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
       const response = await fetch(`${apiUrl}/api/auth/me`, {
         headers: {
@@ -27,14 +27,14 @@ export default function SecuritySettingsPage() {
 
       if (!response.ok) {
         const errorBody = (await response.json()) as { error?: string };
-        throw new Error(errorBody?.error ?? "Failed to fetch security status");
+        throw new Error(errorBody?.error ?? 'Failed to fetch security status');
       }
 
       const user = (await response.json()) as { totpEnabled?: boolean };
       setTotpEnabled(Boolean(user.totpEnabled));
     } catch (err) {
-      const message = getErrorMessage(err, "Failed to load security settings");
-      console.error("Failed to fetch security status:", err);
+      const message = getErrorMessage(err, 'Failed to load security settings');
+      console.error('Failed to fetch security status:', err);
       setError(message);
     } finally {
       setLoading(false);
@@ -46,93 +46,95 @@ export default function SecuritySettingsPage() {
   }, [fetchSecurityStatus]);
 
   const handleDisable2FA = async () => {
-    if (!confirm("Are you sure you want to disable 2FA? This will make your account less secure.")) {
+    if (
+      !confirm('Are you sure you want to disable 2FA? This will make your account less secure.')
+    ) {
       return;
     }
 
-    const code = prompt("Enter your current 2FA code to confirm:");
+    const code = prompt('Enter your current 2FA code to confirm:');
     if (!code) return;
 
     try {
-      const token = localStorage.getItem("token");
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
       const response = await fetch(`${apiUrl}/api/2fa/disable`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ code }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to disable 2FA");
+        throw new Error(data.error || 'Failed to disable 2FA');
       }
 
       setTotpEnabled(false);
-      alert("2FA has been disabled");
+      alert('2FA has been disabled');
     } catch (err) {
-      setError(getErrorMessage(err, "Failed to disable 2FA"));
+      setError(getErrorMessage(err, 'Failed to disable 2FA'));
     }
   };
 
   const handleRegenerateBackupCodes = async () => {
-    if (!confirm("This will invalidate your old backup codes. Continue?")) {
+    if (!confirm('This will invalidate your old backup codes. Continue?')) {
       return;
     }
 
-    const code = prompt("Enter your current 2FA code to confirm:");
+    const code = prompt('Enter your current 2FA code to confirm:');
     if (!code) return;
 
     try {
-      const token = localStorage.getItem("token");
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      const token = localStorage.getItem('token');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
       const response = await fetch(`${apiUrl}/api/2fa/backup-codes/regenerate`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ code }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || "Failed to regenerate backup codes");
+        throw new Error(data.error || 'Failed to regenerate backup codes');
       }
 
       const result = await response.json();
-      
+
       // Download new backup codes
       const blob = new Blob(
         [
-          "ADVANCIA 2FA BACKUP CODES (NEW)\n",
-          "================================\n\n",
-          "Keep these codes safe! Each can be used once.\n\n",
-          result.backupCodes.join("\n"),
-          "\n\nGenerated: " + new Date().toLocaleString(),
+          'ADVANCIA 2FA BACKUP CODES (NEW)\n',
+          '================================\n\n',
+          'Keep these codes safe! Each can be used once.\n\n',
+          result.backupCodes.join('\n'),
+          '\n\nGenerated: ' + new Date().toLocaleString(),
         ],
-        { type: "text/plain" }
+        { type: 'text/plain' }
       );
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = "advancia-2fa-backup-codes-new.txt";
+      a.download = 'advancia-2fa-backup-codes-new.txt';
       a.click();
       URL.revokeObjectURL(url);
 
-      alert("New backup codes generated and downloaded!");
+      alert('New backup codes generated and downloaded!');
     } catch (err) {
-      setError(getErrorMessage(err, "Failed to regenerate backup codes"));
+      setError(getErrorMessage(err, 'Failed to regenerate backup codes'));
     }
   };
 
   if (loading) {
     return (
-      <RequireRole roles={["USER", "STAFF", "ADMIN"]}>
+      <RequireRole roles={['USER', 'STAFF', 'ADMIN']}>
         <div className="flex items-center justify-center min-h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
         </div>
@@ -142,7 +144,7 @@ export default function SecuritySettingsPage() {
 
   if (showSetup) {
     return (
-      <RequireRole roles={["USER", "STAFF", "ADMIN"]}>
+      <RequireRole roles={['USER', 'STAFF', 'ADMIN']}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4">
           <TotpSetup />
         </div>
@@ -151,7 +153,7 @@ export default function SecuritySettingsPage() {
   }
 
   return (
-    <RequireRole roles={["USER", "STAFF", "ADMIN"]}>
+    <RequireRole roles={['USER', 'STAFF', 'ADMIN']}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
@@ -166,8 +168,8 @@ export default function SecuritySettingsPage() {
                   Two-Factor Authentication (2FA)
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  Add an extra layer of security to your account by requiring a code from
-                  your authenticator app when you sign in.
+                  Add an extra layer of security to your account by requiring a code from your
+                  authenticator app when you sign in.
                 </p>
 
                 <div className="flex items-center space-x-2 mb-4">
@@ -176,11 +178,7 @@ export default function SecuritySettingsPage() {
                   </span>
                   {totpEnabled ? (
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-                      <svg
-                        className="w-4 h-4 mr-1"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
+                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
                           d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -191,11 +189,7 @@ export default function SecuritySettingsPage() {
                     </span>
                   ) : (
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                      <svg
-                        className="w-4 h-4 mr-1"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
+                      <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
                           d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
@@ -265,26 +259,58 @@ export default function SecuritySettingsPage() {
             </h3>
             <ul className="space-y-2 text-blue-800 dark:text-blue-200">
               <li className="flex items-start">
-                <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 <span>Enable 2FA to protect your account from unauthorized access</span>
               </li>
               <li className="flex items-start">
-                <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 <span>Save your backup codes in a secure location</span>
               </li>
               <li className="flex items-start">
-                <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 <span>Use a strong, unique password for your account</span>
               </li>
               <li className="flex items-start">
-                <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <svg
+                  className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
                 </svg>
                 <span>Never share your 2FA codes or backup codes with anyone</span>
               </li>

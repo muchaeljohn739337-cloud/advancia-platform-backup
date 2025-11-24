@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 
 interface SummaryCardProps {
-  title: string
-  value: number
-  icon: React.ReactNode
-  iconBg: string
-  gradient: string
-  delay?: number
-  clickable?: boolean
-  badge?: React.ReactNode
-  onClick?: () => void
+  title: string;
+  value: number;
+  icon: React.ReactNode;
+  iconBg: string;
+  gradient: string;
+  delay?: number;
+  clickable?: boolean;
+  badge?: React.ReactNode;
+  onClick?: () => void;
 }
 
 export default function SummaryCard({
@@ -24,33 +24,33 @@ export default function SummaryCard({
   delay = 0,
   clickable = false,
   badge,
-  onClick
+  onClick,
 }: SummaryCardProps) {
-  const countRef = useRef<HTMLSpanElement>(null)
+  const countRef = useRef<HTMLSpanElement>(null);
 
   // Animated counter
   useEffect(() => {
-    if (!countRef.current) return
+    if (!countRef.current) return;
 
-    const target = value
-    const duration = 1000
-    const start = 0
-    const increment = target / (duration / 16)
-    let current = start
+    const target = value;
+    const duration = 1000;
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = start;
 
     const timer = setInterval(() => {
-      current += increment
+      current += increment;
       if (current >= target) {
-        current = target
-        clearInterval(timer)
+        current = target;
+        clearInterval(timer);
       }
       if (countRef.current) {
-        countRef.current.textContent = `$${current.toFixed(2)}`
+        countRef.current.textContent = `$${current.toFixed(2)}`;
       }
-    }, 16)
+    }, 16);
 
-    return () => clearInterval(timer)
-  }, [value])
+    return () => clearInterval(timer);
+  }, [value]);
 
   return (
     <motion.div
@@ -58,7 +58,7 @@ export default function SummaryCard({
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay, type: 'spring', stiffness: 200 }}
       whileHover={{
-        scale: 1.03
+        scale: 1.03,
       }}
       onClick={onClick}
       className={`
@@ -70,7 +70,7 @@ export default function SummaryCard({
     >
       {/* Background decoration */}
       <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/20 rounded-full blur-2xl" />
-      
+
       <div className="relative flex items-start justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-slate-600 mb-2">{title}</p>
@@ -80,10 +80,7 @@ export default function SummaryCard({
             transition={{ delay: delay + 0.2, type: 'spring' }}
             className="flex items-baseline gap-2"
           >
-            <span 
-              ref={countRef}
-              className="text-3xl font-bold text-slate-800 animate-counter-up"
-            >
+            <span ref={countRef} className="text-3xl font-bold text-slate-800 animate-counter-up">
               ${value.toFixed(2)}
             </span>
             {badge}
@@ -95,9 +92,7 @@ export default function SummaryCard({
           transition={{ duration: 0.5 }}
           className={`${iconBg} p-3 rounded-lg shadow-md`}
         >
-          <div className="text-white">
-            {icon}
-          </div>
+          <div className="text-white">{icon}</div>
         </motion.div>
       </div>
 
@@ -110,5 +105,5 @@ export default function SummaryCard({
         />
       )}
     </motion.div>
-  )
+  );
 }

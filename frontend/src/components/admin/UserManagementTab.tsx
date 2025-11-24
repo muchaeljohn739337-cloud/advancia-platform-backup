@@ -1,78 +1,78 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 
 const UserManagementTab = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("registration_date");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('registration_date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Mock user data - replace with actual API calls
   const users = useMemo(
     () => [
       {
         id: 1,
-        name: "Sarah Johnson",
-        email: "sarah.johnson@email.com",
-        status: "active",
-        role: "user",
-        registrationDate: "2024-09-15",
+        name: 'Sarah Johnson',
+        email: 'sarah.johnson@email.com',
+        status: 'active',
+        role: 'user',
+        registrationDate: '2024-09-15',
         totalSpent: 2450.0,
         balanceCoins: 2450,
-        lastLogin: "2024-10-03",
+        lastLogin: '2024-10-03',
         totalOrders: 12,
-        badges: ["Bronze Spender", "Early Adopter"],
+        badges: ['Bronze Spender', 'Early Adopter'],
       },
       {
         id: 2,
-        name: "Michael Chen",
-        email: "michael.chen@email.com",
-        status: "active",
-        role: "user",
-        registrationDate: "2024-08-22",
+        name: 'Michael Chen',
+        email: 'michael.chen@email.com',
+        status: 'active',
+        role: 'user',
+        registrationDate: '2024-08-22',
         totalSpent: 5890.0,
         balanceCoins: 5890,
-        lastLogin: "2024-10-04",
+        lastLogin: '2024-10-04',
         totalOrders: 28,
-        badges: ["Silver Spender", "Frequent Buyer", "VIP Member"],
+        badges: ['Silver Spender', 'Frequent Buyer', 'VIP Member'],
       },
       {
         id: 3,
-        name: "Emily Rodriguez",
-        email: "emily.rodriguez@email.com",
-        status: "suspended",
-        role: "user",
-        registrationDate: "2024-07-10",
+        name: 'Emily Rodriguez',
+        email: 'emily.rodriguez@email.com',
+        status: 'suspended',
+        role: 'user',
+        registrationDate: '2024-07-10',
         totalSpent: 890.0,
         balanceCoins: 890,
-        lastLogin: "2024-09-28",
+        lastLogin: '2024-09-28',
         totalOrders: 5,
-        badges: ["Bronze Spender"],
+        badges: ['Bronze Spender'],
       },
       {
         id: 4,
-        name: "David Thompson",
-        email: "david.thompson@email.com",
-        status: "active",
-        role: "admin",
-        registrationDate: "2024-06-01",
+        name: 'David Thompson',
+        email: 'david.thompson@email.com',
+        status: 'active',
+        role: 'admin',
+        registrationDate: '2024-06-01',
         totalSpent: 12450.0,
         balanceCoins: 12450,
-        lastLogin: "2024-10-04",
+        lastLogin: '2024-10-04',
         totalOrders: 45,
-        badges: ["Gold Spender", "Admin", "Platform Pioneer"],
+        badges: ['Gold Spender', 'Admin', 'Platform Pioneer'],
       },
       {
         id: 5,
-        name: "Lisa Wang",
-        email: "lisa.wang@email.com",
-        status: "inactive",
-        role: "user",
-        registrationDate: "2024-09-01",
+        name: 'Lisa Wang',
+        email: 'lisa.wang@email.com',
+        status: 'inactive',
+        role: 'user',
+        registrationDate: '2024-09-01',
         totalSpent: 150.0,
         balanceCoins: 150,
-        lastLogin: "2024-09-15",
+        lastLogin: '2024-09-15',
         totalOrders: 1,
         badges: [],
       },
@@ -81,17 +81,17 @@ const UserManagementTab = () => {
   );
 
   const statusOptions = [
-    { value: "all", label: "All Status" },
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
-    { value: "suspended", label: "Suspended" },
+    { value: 'all', label: 'All Status' },
+    { value: 'active', label: 'Active' },
+    { value: 'inactive', label: 'Inactive' },
+    { value: 'suspended', label: 'Suspended' },
   ];
 
   const sortOptions = [
-    { value: "registration_date", label: "Registration Date" },
-    { value: "name", label: "Name" },
-    { value: "totalSpent", label: "Total Spent" },
-    { value: "lastLogin", label: "Last Login" },
+    { value: 'registration_date', label: 'Registration Date' },
+    { value: 'name', label: 'Name' },
+    { value: 'totalSpent', label: 'Total Spent' },
+    { value: 'lastLogin', label: 'Last Login' },
   ];
 
   const filteredAndSortedUsers = useMemo(() => {
@@ -99,25 +99,20 @@ const UserManagementTab = () => {
       const matchesSearch =
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus =
-        statusFilter === "all" || user.status === statusFilter;
+      const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
 
     return filtered.sort((a, b) => {
-      let aValue: string | number | Date = a[sortBy as keyof typeof a] as
-        | string
-        | number;
-      let bValue: string | number | Date = b[sortBy as keyof typeof b] as
-        | string
-        | number;
+      let aValue: string | number | Date = a[sortBy as keyof typeof a] as string | number;
+      let bValue: string | number | Date = b[sortBy as keyof typeof b] as string | number;
 
-      if (sortBy === "registration_date" || sortBy === "lastLogin") {
+      if (sortBy === 'registration_date' || sortBy === 'lastLogin') {
         aValue = new Date(aValue as string);
         bValue = new Date(bValue as string);
       }
 
-      if (sortOrder === "asc") {
+      if (sortOrder === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -127,25 +122,21 @@ const UserManagementTab = () => {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      active: { color: "bg-green-100 text-green-800", label: "Active" },
-      inactive: { color: "bg-gray-100 text-gray-800", label: "Inactive" },
-      suspended: { color: "bg-red-100 text-red-800", label: "Suspended" },
+      active: { color: 'bg-green-100 text-green-800', label: 'Active' },
+      inactive: { color: 'bg-gray-100 text-gray-800', label: 'Inactive' },
+      suspended: { color: 'bg-red-100 text-red-800', label: 'Suspended' },
     };
 
-    const config =
-      statusConfig[status as keyof typeof statusConfig] ||
-      statusConfig.inactive;
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.inactive;
     return (
-      <span
-        className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
-      >
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
         {config.label}
       </span>
     );
   };
 
   const getRoleBadge = (role: string) => {
-    return role === "admin" ? (
+    return role === 'admin' ? (
       <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
         Admin
       </span>
@@ -158,9 +149,9 @@ const UserManagementTab = () => {
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
       .substring(0, 2);
   };
@@ -185,12 +176,8 @@ const UserManagementTab = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">
-            User Management
-          </h2>
-          <p className="text-gray-600">
-            Manage user accounts, permissions, and status
-          </p>
+          <h2 className="text-2xl font-semibold text-gray-900">User Management</h2>
+          <p className="text-gray-600">Manage user accounts, permissions, and status</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -237,11 +224,11 @@ const UserManagementTab = () => {
             ))}
           </select>
           <button
-            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
             className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            title={`Sort ${sortOrder === "asc" ? "ascending" : "descending"}`}
+            title={`Sort ${sortOrder === 'asc' ? 'ascending' : 'descending'}`}
           >
-            {sortOrder === "asc" ? "↑" : "↓"}
+            {sortOrder === 'asc' ? '↑' : '↓'}
           </button>
         </div>
       </div>
@@ -252,41 +239,20 @@ const UserManagementTab = () => {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  User
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Status
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Role
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Registration
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Total Spent
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Balance
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Orders
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Last Login
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Actions
-                </th>
+                <th className="text-left p-4 font-medium text-gray-900">User</th>
+                <th className="text-left p-4 font-medium text-gray-900">Status</th>
+                <th className="text-left p-4 font-medium text-gray-900">Role</th>
+                <th className="text-left p-4 font-medium text-gray-900">Registration</th>
+                <th className="text-left p-4 font-medium text-gray-900">Total Spent</th>
+                <th className="text-left p-4 font-medium text-gray-900">Balance</th>
+                <th className="text-left p-4 font-medium text-gray-900">Orders</th>
+                <th className="text-left p-4 font-medium text-gray-900">Last Login</th>
+                <th className="text-left p-4 font-medium text-gray-900">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredAndSortedUsers.map((user) => (
-                <tr
-                  key={user.id}
-                  className="border-t border-gray-200 hover:bg-gray-50"
-                >
+                <tr key={user.id} className="border-t border-gray-200 hover:bg-gray-50">
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold text-sm">
@@ -309,9 +275,7 @@ const UserManagementTab = () => {
                   <td className="p-4 font-mono text-sm text-gray-900">
                     {user.balanceCoins.toLocaleString()}
                   </td>
-                  <td className="p-4 text-sm text-gray-900">
-                    {user.totalOrders}
-                  </td>
+                  <td className="p-4 text-sm text-gray-900">{user.totalOrders}</td>
                   <td className="p-4 text-sm text-gray-600">
                     {new Date(user.lastLogin).toLocaleDateString()}
                   </td>
@@ -328,17 +292,13 @@ const UserManagementTab = () => {
                         onClick={() =>
                           handleStatusChange(
                             user.id,
-                            user.status === "suspended" ? "active" : "suspended"
+                            user.status === 'suspended' ? 'active' : 'suspended'
                           )
                         }
                         className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50"
-                        title={
-                          user.status === "suspended"
-                            ? "Activate user"
-                            : "Suspend user"
-                        }
+                        title={user.status === 'suspended' ? 'Activate user' : 'Suspend user'}
                       >
-                        {user.status === "suspended" ? "Activate" : "Suspend"}
+                        {user.status === 'suspended' ? 'Activate' : 'Suspend'}
                       </button>
                       <button
                         onClick={() => handleDeleteUser(user.id)}
@@ -359,10 +319,7 @@ const UserManagementTab = () => {
       {/* Mobile Cards */}
       <div className="lg:hidden space-y-4">
         {filteredAndSortedUsers.map((user) => (
-          <div
-            key={user.id}
-            className="bg-white rounded-lg border border-gray-200 p-4"
-          >
+          <div key={user.id} className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">
@@ -429,14 +386,11 @@ const UserManagementTab = () => {
               </button>
               <button
                 onClick={() =>
-                  handleStatusChange(
-                    user.id,
-                    user.status === "suspended" ? "active" : "suspended"
-                  )
+                  handleStatusChange(user.id, user.status === 'suspended' ? 'active' : 'suspended')
                 }
                 className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
               >
-                {user.status === "suspended" ? "Activate" : "Suspend"}
+                {user.status === 'suspended' ? 'Activate' : 'Suspend'}
               </button>
               <button
                 onClick={() => handleDeleteUser(user.id)}
@@ -462,7 +416,7 @@ const UserManagementTab = () => {
             <span className="text-sm text-gray-600">Active Users</span>
           </div>
           <p className="text-2xl font-semibold text-gray-900">
-            {users.filter((u) => u.status === "active").length}
+            {users.filter((u) => u.status === 'active').length}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -470,10 +424,7 @@ const UserManagementTab = () => {
             <span className="text-sm text-gray-600">Total Revenue</span>
           </div>
           <p className="text-2xl font-semibold text-gray-900">
-            $
-            {users
-              .reduce((sum, user) => sum + user.totalSpent, 0)
-              .toLocaleString()}
+            ${users.reduce((sum, user) => sum + user.totalSpent, 0).toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -481,9 +432,7 @@ const UserManagementTab = () => {
             <span className="text-sm text-gray-600">Total Balance</span>
           </div>
           <p className="text-2xl font-semibold text-gray-900">
-            {users
-              .reduce((sum, user) => sum + user.balanceCoins, 0)
-              .toLocaleString()}
+            {users.reduce((sum, user) => sum + user.balanceCoins, 0).toLocaleString()}
           </p>
         </div>
       </div>

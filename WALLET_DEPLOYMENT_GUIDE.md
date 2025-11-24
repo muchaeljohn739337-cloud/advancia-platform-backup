@@ -112,15 +112,15 @@ curl -X GET https://api.advancia.com/api/wallets/history/BTC \
 
 ## 🔒 Security Checklist
 
-- [ ] Master seed stored in secure vault (1Password, KeePass, etc.)
-- [ ] Encryption key stored separately from master seed
-- [ ] `.env` file permissions set to 600 on droplet
-- [ ] Backup of master seed in physically separate location
-- [ ] Admin wallet addresses configured for withdrawals
-- [ ] Test wallet generation on production
-- [ ] Test wallet rotation on production
-- [ ] Verify encrypted private keys in database
-- [ ] Monitor logs for any wallet generation errors
+-   [ ] Master seed stored in secure vault (1Password, KeePass, etc.)
+-   [ ] Encryption key stored separately from master seed
+-   [ ] `.env` file permissions set to 600 on droplet
+-   [ ] Backup of master seed in physically separate location
+-   [ ] Admin wallet addresses configured for withdrawals
+-   [ ] Test wallet generation on production
+-   [ ] Test wallet rotation on production
+-   [ ] Verify encrypted private keys in database
+-   [ ] Monitor logs for any wallet generation errors
 
 ## 📊 Monitoring
 
@@ -142,7 +142,7 @@ psql -U postgres -d advancia_pay -c "
 "
 ```
 
-### Expected Output:
+### Expected Output
 
 ```
  currency | wallet_count | keys_count
@@ -204,10 +204,10 @@ EOF
 
 ## 🔗 Related Files
 
-- Backend Service: `backend/src/services/custodialWalletService.ts`
-- API Routes: `backend/src/routes/wallets.ts`
-- Migration: `backend/prisma/migrations/20251118092211_add_withdrawal_wallet_fields/`
-- Test Script: `backend/test-wallet.js`
+-   Backend Service: `backend/src/services/custodialWalletService.ts`
+-   API Routes: `backend/src/routes/wallets.ts`
+-   Migration: `backend/prisma/migrations/20251118092211_add_withdrawal_wallet_fields/`
+-   Test Script: `backend/test-wallet.js`
 
 ## 📞 Support
 

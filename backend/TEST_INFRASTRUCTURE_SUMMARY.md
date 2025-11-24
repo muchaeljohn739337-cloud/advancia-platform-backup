@@ -235,6 +235,7 @@ Currently skipped. To enable:
    Change `describe.skip` to `describe` in `tests/integration.test.ts`
 
 5. **Run tests**:
+
    ```bash
    npm test
    ```

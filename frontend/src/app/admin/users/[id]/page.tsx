@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import toast from "react-hot-toast";
-import RequireRole from "@/components/RequireRole";
-import adminApi from "@/lib/adminApi";
-import UserProfileCard from "@/components/admin/UserProfileCard";
-import UserBalanceCard from "@/components/admin/UserBalanceCard";
-import AdminBalanceManager from "@/components/AdminBalanceManager";
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import RequireRole from '@/components/RequireRole';
+import adminApi from '@/lib/adminApi';
+import UserProfileCard from '@/components/admin/UserProfileCard';
+import UserBalanceCard from '@/components/admin/UserBalanceCard';
+import AdminBalanceManager from '@/components/AdminBalanceManager';
 
 interface UserData {
   profile: {
@@ -70,7 +70,7 @@ interface ActivityResponse {
   totalPages: number;
 }
 
-type Tab = "Overview" | "Transactions" | "Activity";
+type Tab = 'Overview' | 'Transactions' | 'Activity';
 
 export default function AdminUserDetailPage() {
   const params = useParams();
@@ -79,7 +79,7 @@ export default function AdminUserDetailPage() {
 
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<Tab>("Overview");
+  const [activeTab, setActiveTab] = useState<Tab>('Overview');
   const [showSuspendModal, setShowSuspendModal] = useState(false);
   const [isSuspending, setIsSuspending] = useState(false);
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
@@ -90,13 +90,11 @@ export default function AdminUserDetailPage() {
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      const response = await adminApi.get<UserData>(
-        `/api/admin/users/${userId}`
-      );
+      const response = await adminApi.get<UserData>(`/api/admin/users/${userId}`);
       setUserData(response.data);
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
-      toast.error("Failed to load user data");
+      console.error('Failed to fetch user data:', error);
+      toast.error('Failed to load user data');
     } finally {
       setLoading(false);
     }
@@ -105,15 +103,14 @@ export default function AdminUserDetailPage() {
   const fetchActivityLogs = async () => {
     try {
       setActivityLoading(true);
-      const response = await adminApi.get<ActivityResponse>(
-        `/api/admin/users/${userId}/activity`,
-        { params: { page: activityPage, pageSize: 10 } }
-      );
+      const response = await adminApi.get<ActivityResponse>(`/api/admin/users/${userId}/activity`, {
+        params: { page: activityPage, pageSize: 10 },
+      });
       setActivityLogs(response.data.items);
       setActivityTotal(response.data.total);
     } catch (error) {
-      console.error("Failed to fetch activity logs:", error);
-      toast.error("Failed to load activity logs");
+      console.error('Failed to fetch activity logs:', error);
+      toast.error('Failed to load activity logs');
     } finally {
       setActivityLoading(false);
     }
@@ -127,7 +124,7 @@ export default function AdminUserDetailPage() {
   }, [userId]);
 
   useEffect(() => {
-    if (userId && activeTab === "Activity") {
+    if (userId && activeTab === 'Activity') {
       void fetchActivityLogs();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,8 +134,7 @@ export default function AdminUserDetailPage() {
     if (!userData) return;
     setIsSuspending(true);
     try {
-      const newStatus =
-        userData.profile.status === "ACTIVE" ? "SUSPENDED" : "ACTIVE";
+      const newStatus = userData.profile.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
       await adminApi.patch(`/api/admin/users/${userId}/status`, {
         status: newStatus,
       });
@@ -146,28 +142,28 @@ export default function AdminUserDetailPage() {
       setShowSuspendModal(false);
       await fetchUserData();
     } catch (error) {
-      console.error("Failed to update user status:", error);
-      toast.error("Failed to update user status");
+      console.error('Failed to update user status:', error);
+      toast.error('Failed to update user status');
     } finally {
       setIsSuspending(false);
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
   const formatCurrency = (value: string) => {
-    const num = parseFloat(value || "0");
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+    const num = parseFloat(value || '0');
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(num);
@@ -175,7 +171,7 @@ export default function AdminUserDetailPage() {
 
   if (loading) {
     return (
-      <RequireRole roles={["ADMIN"]}>
+      <RequireRole roles={['ADMIN']}>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-center py-12">
@@ -189,13 +185,13 @@ export default function AdminUserDetailPage() {
 
   if (!userData) {
     return (
-      <RequireRole roles={["ADMIN"]}>
+      <RequireRole roles={['ADMIN']}>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center py-12">
               <p className="text-gray-600">User not found</p>
               <button
-                onClick={() => router.push("/admin/users")}
+                onClick={() => router.push('/admin/users')}
                 className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
               >
                 Back to Users
@@ -208,7 +204,7 @@ export default function AdminUserDetailPage() {
   }
 
   return (
-    <RequireRole roles={["ADMIN"]}>
+    <RequireRole roles={['ADMIN']}>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
@@ -218,7 +214,7 @@ export default function AdminUserDetailPage() {
             className="mb-8"
           >
             <button
-              onClick={() => router.push("/admin/users")}
+              onClick={() => router.push('/admin/users')}
               className="mb-4 text-indigo-600 hover:text-indigo-800 flex items-center gap-2"
             >
               ← Back to Users
@@ -230,14 +226,12 @@ export default function AdminUserDetailPage() {
               <button
                 onClick={() => setShowSuspendModal(true)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  userData.profile.status === "ACTIVE"
-                    ? "bg-red-600 text-white hover:bg-red-700"
-                    : "bg-green-600 text-white hover:bg-green-700"
+                  userData.profile.status === 'ACTIVE'
+                    ? 'bg-red-600 text-white hover:bg-red-700'
+                    : 'bg-green-600 text-white hover:bg-green-700'
                 }`}
               >
-                {userData.profile.status === "ACTIVE"
-                  ? "Suspend User"
-                  : "Activate User"}
+                {userData.profile.status === 'ACTIVE' ? 'Suspend User' : 'Activate User'}
               </button>
             </div>
           </motion.div>
@@ -249,15 +243,15 @@ export default function AdminUserDetailPage() {
             transition={{ delay: 0.1 }}
             className="mb-6 bg-white rounded-xl shadow-md p-2 flex gap-2"
           >
-            {(["Overview", "Transactions", "Activity"] as Tab[]).map((tab) => (
+            {(['Overview', 'Transactions', 'Activity'] as Tab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 aria-label={`Switch to ${tab} tab`}
                 className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${
                   activeTab === tab
-                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md"
-                    : "text-gray-600 hover:bg-gray-100"
+                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
                 {tab}
@@ -266,28 +260,22 @@ export default function AdminUserDetailPage() {
           </motion.div>
 
           {/* Tab Content */}
-          {activeTab === "Overview" && (
+          {activeTab === 'Overview' && (
             <div className="space-y-6">
               {/* Two-column layout for cards (stacked on mobile) */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <UserProfileCard
-                  profile={userData.profile}
-                  onUpdate={fetchUserData}
-                />
-                <UserBalanceCard
-                  balances={userData.balances}
-                  tier={userData.tier}
-                />
+                <UserProfileCard profile={userData.profile} onUpdate={fetchUserData} />
+                <UserBalanceCard balances={userData.balances} tier={userData.tier} />
               </div>
 
               {/* Admin Balance Manager */}
               <AdminBalanceManager
                 userId={userId}
                 currentBalances={{
-                  usd: userData.balances.usd || "0",
-                  btc: userData.balances.btc || "0",
-                  eth: userData.balances.eth || "0",
-                  usdt: userData.balances.usdt || "0",
+                  usd: userData.balances.usd || '0',
+                  btc: userData.balances.btc || '0',
+                  eth: userData.balances.eth || '0',
+                  usdt: userData.balances.usdt || '0',
                 }}
                 onBalanceUpdated={fetchUserData}
               />
@@ -310,57 +298,51 @@ export default function AdminUserDetailPage() {
                       </label>
                       <span
                         className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                          userData.kyc.status === "APPROVED"
-                            ? "bg-green-100 text-green-800"
-                            : userData.kyc.status === "REJECTED"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
+                          userData.kyc.status === 'APPROVED'
+                            ? 'bg-green-100 text-green-800'
+                            : userData.kyc.status === 'REJECTED'
+                              ? 'bg-red-100 text-red-800'
+                              : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
                         {userData.kyc.status}
                       </span>
                     </div>
-                    {userData.kyc.status === "PENDING" && (
-                          <div className="flex gap-2">
-                          <button
-                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
-                            onClick={() =>
-                            toast("KYC approval not yet implemented")
-                            }
-                          >
-                            Approve
-                          </button>
-                          <button
-                            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
-                            onClick={() => {
-                            toast("KYC rejection not yet implemented");
-                            }}
-                          >
-                            Reject
-                          </button>
-                          </div>
+                    {userData.kyc.status === 'PENDING' && (
+                      <div className="flex gap-2">
+                        <button
+                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
+                          onClick={() => toast('KYC approval not yet implemented')}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all"
+                          onClick={() => {
+                            toast('KYC rejection not yet implemented');
+                          }}
+                        >
+                          Reject
+                        </button>
+                      </div>
                     )}
                   </div>
                   {userData.kyc.documents.length === 0 && (
-                    <p className="mt-4 text-gray-500 text-sm">
-                      No KYC documents submitted.
-                    </p>
+                    <p className="mt-4 text-gray-500 text-sm">No KYC documents submitted.</p>
                   )}
                 </div>
               </motion.div>
             </div>
           )}
 
-          {activeTab === "Transactions" && (
+          {activeTab === 'Transactions' && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="bg-white rounded-xl shadow-md overflow-hidden"
             >
               <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
-                <h2 className="text-xl font-bold text-white">
-                  Recent Transactions
-                </h2>
+                <h2 className="text-xl font-bold text-white">Recent Transactions</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
@@ -386,10 +368,7 @@ export default function AdminUserDetailPage() {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {userData.transactions.length === 0 ? (
                       <tr>
-                        <td
-                          colSpan={5}
-                          className="px-6 py-4 text-center text-gray-500"
-                        >
+                        <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
                           No transactions found
                         </td>
                       </tr>
@@ -410,18 +389,18 @@ export default function AdminUserDetailPage() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <span
                               className={`px-2 py-1 rounded-full text-xs font-medium uppercase ${
-                                tx.status === "completed"
-                                  ? "bg-green-100 text-green-800"
-                                  : tx.status === "pending"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-red-100 text-red-800"
+                                tx.status === 'completed'
+                                  ? 'bg-green-100 text-green-800'
+                                  : tx.status === 'pending'
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : 'bg-red-100 text-red-800'
                               }`}
                             >
                               {tx.status}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-500">
-                            {tx.description || "—"}
+                            {tx.description || '—'}
                           </td>
                         </tr>
                       ))
@@ -432,7 +411,7 @@ export default function AdminUserDetailPage() {
             </motion.div>
           )}
 
-          {activeTab === "Activity" && (
+          {activeTab === 'Activity' && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -489,21 +468,19 @@ export default function AdminUserDetailPage() {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <div>
-                                  <p className="font-medium text-gray-900">
-                                    {log.resourceType}
-                                  </p>
+                                  <p className="font-medium text-gray-900">{log.resourceType}</p>
                                   <p className="text-xs text-gray-400">
                                     {log.resourceId.substring(0, 12)}...
                                   </p>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {log.ipAddress || "—"}
+                                {log.ipAddress || '—'}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {log.performedBy
-                                  ? log.performedBy.substring(0, 12) + "..."
-                                  : "System"}
+                                  ? log.performedBy.substring(0, 12) + '...'
+                                  : 'System'}
                               </td>
                             </tr>
                           ))}
@@ -518,9 +495,7 @@ export default function AdminUserDetailPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() =>
-                            setActivityPage((p) => Math.max(1, p - 1))
-                          }
+                          onClick={() => setActivityPage((p) => Math.max(1, p - 1))}
                           disabled={activityPage === 1}
                           aria-label="Previous page"
                           className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-50"
@@ -528,14 +503,11 @@ export default function AdminUserDetailPage() {
                           Previous
                         </button>
                         <span className="text-sm text-gray-600">
-                          Page {activityPage} of{" "}
-                          {Math.ceil(activityTotal / 10) || 1}
+                          Page {activityPage} of {Math.ceil(activityTotal / 10) || 1}
                         </span>
                         <button
                           onClick={() => setActivityPage((p) => p + 1)}
-                          disabled={
-                            activityPage >= Math.ceil(activityTotal / 10)
-                          }
+                          disabled={activityPage >= Math.ceil(activityTotal / 10)}
                           aria-label="Next page"
                           className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-50"
                         >
@@ -560,14 +532,12 @@ export default function AdminUserDetailPage() {
             className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6"
           >
             <h3 className="text-xl font-bold text-gray-900 mb-4">
-              {userData.profile.status === "ACTIVE"
-                ? "Suspend User?"
-                : "Activate User?"}
+              {userData.profile.status === 'ACTIVE' ? 'Suspend User?' : 'Activate User?'}
             </h3>
             <p className="text-gray-600 mb-6">
-              {userData.profile.status === "ACTIVE"
-                ? "Are you sure you want to suspend this user? They will not be able to access their account."
-                : "Are you sure you want to activate this user? They will regain full access to their account."}
+              {userData.profile.status === 'ACTIVE'
+                ? 'Are you sure you want to suspend this user? They will not be able to access their account.'
+                : 'Are you sure you want to activate this user? They will regain full access to their account.'}
             </p>
             <div className="flex gap-3 justify-end">
               <button
@@ -581,16 +551,16 @@ export default function AdminUserDetailPage() {
                 onClick={handleSuspendToggle}
                 disabled={isSuspending}
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  userData.profile.status === "ACTIVE"
-                    ? "bg-red-600 text-white hover:bg-red-700"
-                    : "bg-green-600 text-white hover:bg-green-700"
-                } ${isSuspending ? "opacity-50 cursor-not-allowed" : ""}`}
+                  userData.profile.status === 'ACTIVE'
+                    ? 'bg-red-600 text-white hover:bg-red-700'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                } ${isSuspending ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {isSuspending
-                  ? "Processing..."
-                  : userData.profile.status === "ACTIVE"
-                  ? "Suspend"
-                  : "Activate"}
+                  ? 'Processing...'
+                  : userData.profile.status === 'ACTIVE'
+                    ? 'Suspend'
+                    : 'Activate'}
               </button>
             </div>
           </motion.div>

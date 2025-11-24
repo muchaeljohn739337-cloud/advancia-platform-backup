@@ -211,10 +211,10 @@ const cspDirectives = [
 
 ## 📚 Documentation
 
-- **Full Guide:** `FRONTEND_SECURITY_GUIDE.md`
-- **Implementation Summary:** `FRONTEND_SECURITY_IMPLEMENTATION.md`
-- **Example Login:** `frontend/src/components/examples/SecureLogin.tsx`
-- **Example Profile:** `frontend/src/components/examples/SafeUserProfile.tsx`
+-   **Full Guide:** `FRONTEND_SECURITY_GUIDE.md`
+-   **Implementation Summary:** `FRONTEND_SECURITY_IMPLEMENTATION.md`
+-   **Example Login:** `frontend/src/components/examples/SecureLogin.tsx`
+-   **Example Profile:** `frontend/src/components/examples/SafeUserProfile.tsx`
 
 ---
 
@@ -231,15 +231,15 @@ const cspDirectives = [
 
 ## ✅ Pre-Deploy Checklist
 
-- [ ] DOMPurify installed
-- [ ] `initializeSecurity()` in app root
-- [ ] All inputs sanitized
-- [ ] Using `TokenManager` for auth
-- [ ] Using `secureFetch` for APIs
-- [ ] Tested XSS prevention
-- [ ] Tested clickjacking protection
-- [ ] CSP headers verified
-- [ ] No secrets in localStorage
+-   [ ] DOMPurify installed
+-   [ ] `initializeSecurity()` in app root
+-   [ ] All inputs sanitized
+-   [ ] Using `TokenManager` for auth
+-   [ ] Using `secureFetch` for APIs
+-   [ ] Tested XSS prevention
+-   [ ] Tested clickjacking protection
+-   [ ] CSP headers verified
+-   [ ] No secrets in localStorage
 
 ---
 

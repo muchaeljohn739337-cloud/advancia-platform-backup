@@ -30,8 +30,16 @@
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "cd backend && npm run build",
     "test": "npm run test --workspaces",
+    "test:unit": "npm run test --workspaces",
+    "test:integration": "cd backend && npm run test:integration",
+    "test:e2e": "cd frontend && npm run test:e2e",
     "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces",
     "type-check": "npm run type-check --workspaces",
+    "build": "npm run build --workspaces",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
     "fix": "npm run lint:fix --workspaces && npx prettier --write . && npm run type-check --workspaces",
     "format": "npx prettier --write .",
     "lint-staged": "lint-staged",
@@ -99,7 +107,7 @@
     "*.{json,css,md}": [
       "prettier --write"
     ],
-    "*.md": [
+    "backend/**/*.md": [
       "markdownlint --fix"
     ]
   },

@@ -325,32 +325,32 @@ module.exports = {
 
 ✅ **PM2 Process Manager**
 
-- Auto-restart on crash
-- Memory management (500MB limit)
-- Health check monitoring (30s interval)
-- Comprehensive logging
+-   Auto-restart on crash
+-   Memory management (500MB limit)
+-   Health check monitoring (30s interval)
+-   Comprehensive logging
 
 ✅ **PowerShell Watchdog**
 
-- External health monitoring
-- Slack/Email alerts
-- Independent restart capability
-- Detailed logging
+-   External health monitoring
+-   Slack/Email alerts
+-   Independent restart capability
+-   Detailed logging
 
 ✅ **Log Analysis**
 
-- parse-watchdog.ps1 (daily summaries)
-- One-liner queries (instant stats)
-- CSV export (reporting)
-- Unified logging strategy
+-   parse-watchdog.ps1 (daily summaries)
+-   One-liner queries (instant stats)
+-   CSV export (reporting)
+-   Unified logging strategy
 
 ✅ **Documentation**
 
-- PM2_GUIDE.md (complete PM2 reference)
-- UNIFIED_LOGGING_STRATEGY.md (logging + roadmap)
-- WATCHDOG_ONE_LINERS.md (quick queries)
-- WATCHDOG_LOG_ANALYSIS.md (automation)
-- MONITORING_QUICK_REFERENCE.md (this file)
+-   PM2_GUIDE.md (complete PM2 reference)
+-   UNIFIED_LOGGING_STRATEGY.md (logging + roadmap)
+-   WATCHDOG_ONE_LINERS.md (quick queries)
+-   WATCHDOG_LOG_ANALYSIS.md (automation)
+-   MONITORING_QUICK_REFERENCE.md (this file)
 
 ---
 
@@ -385,10 +385,10 @@ Get-Content backend\logs\combined.log -Wait -Tail 20
 
 ## 📞 Support Resources
 
-- **PM2 Docs**: https://pm2.keymetrics.io/docs/
-- **Backend README**: `backend/README.md`
-- **PM2 Guide**: `backend/PM2_GUIDE.md`
-- **Logging Strategy**: `UNIFIED_LOGGING_STRATEGY.md`
+-   **PM2 Docs**: <https://pm2.keymetrics.io/docs/>
+-   **Backend README**: `backend/README.md`
+-   **PM2 Guide**: `backend/PM2_GUIDE.md`
+-   **Logging Strategy**: `UNIFIED_LOGGING_STRATEGY.md`
 
 ---
 

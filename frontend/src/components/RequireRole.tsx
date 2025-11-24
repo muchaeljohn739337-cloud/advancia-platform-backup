@@ -1,6 +1,6 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface RequireRoleProps {
   roles?: string[];
@@ -13,7 +13,7 @@ interface RequireRoleProps {
  * Redirects to login if not authenticated, or to /403 if wrong role
  */
 export default function RequireRole({
-  roles = ["USER"],
+  roles = ['USER'],
   children,
   fallback = null,
 }: RequireRoleProps) {
@@ -23,15 +23,15 @@ export default function RequireRole({
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       if (!token) {
-        router.push("/auth/login");
+        router.push('/auth/login');
         return;
       }
 
       try {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
         const response = await fetch(`${apiUrl}/api/auth/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,8 +39,8 @@ export default function RequireRole({
         });
 
         if (!response.ok) {
-          localStorage.removeItem("token");
-          router.push("/auth/login");
+          localStorage.removeItem('token');
+          router.push('/auth/login');
           return;
         }
 
@@ -50,12 +50,12 @@ export default function RequireRole({
         if (user?.role && roles.includes(user.role)) {
           setAuthorized(true);
         } else {
-          router.push("/403");
+          router.push('/403');
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
-        localStorage.removeItem("token");
-        router.push("/auth/login");
+        console.error('Auth check failed:', error);
+        localStorage.removeItem('token');
+        router.push('/auth/login');
       } finally {
         setLoading(false);
       }
@@ -65,10 +65,12 @@ export default function RequireRole({
   }, [roles, router]);
 
   if (loading) {
-    return fallback || (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
+    return (
+      fallback || (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
+      )
     );
   }
 
@@ -78,4 +80,3 @@ export default function RequireRole({
 
   return <>{children}</>;
 }
-

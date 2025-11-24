@@ -8,12 +8,12 @@ The alert system provides proactive notifications when rate limit thresholds are
 
 ### Key Features
 
-- **Multi-Channel Notifications**: Email, SMS, Slack, Teams, WebSocket, Sentry
-- **Configurable Policies**: Different thresholds and channels per route group
-- **Alert Cooldowns**: Prevents alert spam with configurable cooldown periods
-- **Alert History**: Stores alerts in Redis for forensic analysis
-- **Severity Levels**: Critical, High, Medium, Low classification
-- **Real-Time Dashboard**: View alerts and trends in admin panel
+-   **Multi-Channel Notifications**: Email, SMS, Slack, Teams, WebSocket, Sentry
+-   **Configurable Policies**: Different thresholds and channels per route group
+-   **Alert Cooldowns**: Prevents alert spam with configurable cooldown periods
+-   **Alert History**: Stores alerts in Redis for forensic analysis
+-   **Severity Levels**: Critical, High, Medium, Low classification
+-   **Real-Time Dashboard**: View alerts and trends in admin panel
 
 ---
 
@@ -22,29 +22,26 @@ The alert system provides proactive notifications when rate limit thresholds are
 ### Components
 
 1. **Alert Policy Configuration** (`backend/src/config/alertPolicy.ts`)
-
-   - Defines thresholds, channels, and severity per route group
-   - Configurable cooldown periods to prevent spam
-   - Easy to extend with new route groups
+   -   Defines thresholds, channels, and severity per route group
+   -   Configurable cooldown periods to prevent spam
+   -   Easy to extend with new route groups
 
 2. **Alert Service** (`backend/src/services/alertService.ts`)
-
-   - Multi-channel delivery (email, SMS, Slack, Teams, Sentry)
-   - Alert history tracking in Redis
-   - Cooldown management
-   - Error handling with Sentry fallback
+   -   Multi-channel delivery (email, SMS, Slack, Teams, Sentry)
+   -   Alert history tracking in Redis
+   -   Cooldown management
+   -   Error handling with Sentry fallback
 
 3. **Rate Limiter Integration** (`backend/src/middleware/rateLimiterRedis.ts`)
-
-   - Automatic alert triggering based on policies
-   - Threshold checking independent of rate limits
-   - WebSocket broadcasting for real-time updates
+   -   Automatic alert triggering based on policies
+   -   Threshold checking independent of rate limits
+   -   WebSocket broadcasting for real-time updates
 
 4. **API Endpoints** (`backend/src/routes/users.ts`)
-   - `/api/admin/alert-history` - Retrieve alert history
-   - `/api/admin/rate-limits` - View offenders
-   - `/api/admin/rate-limit-trends` - Trend data
-   - `/api/admin/global-trends` - System-wide patterns
+   -   `/api/admin/alert-history` - Retrieve alert history
+   -   `/api/admin/rate-limits` - View offenders
+   -   `/api/admin/rate-limit-trends` - Trend data
+   -   `/api/admin/global-trends` - System-wide patterns
 
 ---
 
@@ -110,10 +107,10 @@ REDIS_URL=redis://localhost:6379
 
 ### 1. Email Alerts
 
-- **Provider**: SMTP (Gmail, SendGrid, etc.)
-- **Format**: HTML with severity color coding
-- **Content**: Identifier, group, count, severity, path, timestamp
-- **Fallback**: Sentry logs failures
+-   **Provider**: SMTP (Gmail, SendGrid, etc.)
+-   **Format**: HTML with severity color coding
+-   **Content**: Identifier, group, count, severity, path, timestamp
+-   **Fallback**: Sentry logs failures
 
 **Example Email**:
 
@@ -136,10 +133,10 @@ the configured threshold for the auth route group.
 
 ### 2. SMS Alerts
 
-- **Provider**: Twilio
-- **Format**: Concise text message
-- **Content**: Identifier, group, count, severity
-- **Fallback**: Sentry logs failures
+-   **Provider**: Twilio
+-   **Format**: Concise text message
+-   **Content**: Identifier, group, count, severity
+-   **Fallback**: Sentry logs failures
 
 **Example SMS**:
 
@@ -150,10 +147,10 @@ with 15 requests (CRITICAL)
 
 ### 3. Slack Alerts
 
-- **Provider**: Slack Incoming Webhooks
-- **Format**: Rich blocks with color coding
-- **Content**: Header, fields, context
-- **Features**: Clickable links, timestamps
+-   **Provider**: Slack Incoming Webhooks
+-   **Format**: Rich blocks with color coding
+-   **Content**: Header, fields, context
+-   **Features**: Clickable links, timestamps
 
 **Example Slack Message**:
 
@@ -170,24 +167,24 @@ Timestamp: Nov 15, 2025 2:30 PM
 
 ### 4. Teams Alerts
 
-- **Provider**: Teams Incoming Webhooks
-- **Format**: Adaptive Cards
-- **Content**: Title, fact set
-- **Features**: Formatted, collapsible
+-   **Provider**: Teams Incoming Webhooks
+-   **Format**: Adaptive Cards
+-   **Content**: Title, fact set
+-   **Features**: Formatted, collapsible
 
 ### 5. WebSocket Real-Time
 
-- **Event**: `rateEvent`
-- **Payload**: `{ group, identifier, count, exceeded, timestamp }`
-- **Usage**: Real-time dashboard updates
-- **No Configuration Required**
+-   **Event**: `rateEvent`
+-   **Payload**: `{ group, identifier, count, exceeded, timestamp }`
+-   **Usage**: Real-time dashboard updates
+-   **No Configuration Required**
 
 ### 6. Sentry Logging
 
-- **Level**: Based on severity (fatal, error, warning)
-- **Tags**: `type: security`, `event: rate_limit_alert`, `routeGroup`
-- **Extra**: Full alert context
-- **Features**: Stack traces, breadcrumbs, user context
+-   **Level**: Based on severity (fatal, error, warning)
+-   **Tags**: `type: security`, `event: rate_limit_alert`, `routeGroup`
+-   **Extra**: Full alert context
+-   **Features**: Stack traces, breadcrumbs, user context
 
 ---
 
@@ -257,10 +254,10 @@ Body: {
 
 ### Severity Levels
 
-- **Critical**: 💀 Immediate threat (brute force, financial abuse)
-- **High**: 🔴 Serious concern (admin access attempts)
-- **Medium**: 🚨 Moderate issue (API abuse)
-- **Low**: ⚠️ Minor concern (general traffic)
+-   **Critical**: 💀 Immediate threat (brute force, financial abuse)
+-   **High**: 🔴 Serious concern (admin access attempts)
+-   **Medium**: 🚨 Moderate issue (API abuse)
+-   **Low**: ⚠️ Minor concern (general traffic)
 
 ---
 
@@ -271,28 +268,25 @@ Body: {
 The admin dashboard at `/admin/rate-limits` shows:
 
 1. **Statistics Cards**
-
-   - Total violations
-   - Unique offenders
-   - User accounts
-   - IP addresses
+   -   Total violations
+   -   Unique offenders
+   -   User accounts
+   -   IP addresses
 
 2. **Route Group Filter**
-
-   - Click groups to view specific data
-   - Badge shows offender count
+   -   Click groups to view specific data
+   -   Badge shows offender count
 
 3. **Offenders Table**
-
-   - Type (user/IP)
-   - Identifier
-   - Violation count
-   - Clear action button
+   -   Type (user/IP)
+   -   Identifier
+   -   Violation count
+   -   Clear action button
 
 4. **Trend Charts** (coming soon)
-   - Global traffic over time
-   - Per-offender patterns
-   - Real-time WebSocket updates
+   -   Global traffic over time
+   -   Per-offender patterns
+   -   Real-time WebSocket updates
 
 ### Alert Notifications
 
@@ -318,12 +312,12 @@ When an alert is triggered:
    ```
 
 2. For Gmail, enable "App Passwords":
-
-   - Go to Google Account settings
-   - Security → 2-Step Verification → App passwords
-   - Generate password for "Mail"
+   -   Go to Google Account settings
+   -   Security → 2-Step Verification → App passwords
+   -   Generate password for "Mail"
 
 3. Check logs:
+
    ```bash
    # Backend logs show email delivery attempts
    ✓ Email alert sent for 192.168.1.100 in auth
@@ -345,6 +339,7 @@ When an alert is triggered:
 2. Check Twilio console for errors
 
 3. If not configured, alerts skip SMS gracefully:
+
    ```
    ⚠️ Twilio not configured, skipping SMS alert
    ```
@@ -352,9 +347,8 @@ When an alert is triggered:
 ### Slack/Teams Webhooks
 
 1. Create incoming webhook:
-
-   - **Slack**: Workspace Settings → Apps → Incoming Webhooks
-   - **Teams**: Channel → Connectors → Incoming Webhook
+   -   **Slack**: Workspace Settings → Apps → Incoming Webhooks
+   -   **Teams**: Channel → Connectors → Incoming Webhook
 
 2. Set environment variable:
 
@@ -364,6 +358,7 @@ When an alert is triggered:
    ```
 
 3. Test with curl:
+
    ```bash
    curl -X POST $SLACK_WEBHOOK_URL \
      -H 'Content-Type: application/json' \
@@ -396,6 +391,7 @@ If alert history not working:
    ```
 
 3. Test manually:
+
    ```bash
    redis-cli
    > LRANGE alert_history:auth 0 -1
@@ -446,13 +442,7 @@ redis-cli HGETALL global_trends:auth
 1. Edit `alertPolicy.ts`:
 
    ```typescript
-   export type AlertChannel =
-     | "email"
-     | "sms"
-     | "slack"
-     | "teams"
-     | "discord"
-     | "pagerduty";
+   export type AlertChannel = "email" | "sms" | "slack" | "teams" | "discord" | "pagerduty";
    ```
 
 2. Add handler in `alertService.ts`:
@@ -464,6 +454,7 @@ redis-cli HGETALL global_trends:auth
    ```
 
 3. Update `sendAlert` function:
+
    ```typescript
    case 'discord':
      promises.push(sendDiscordAlert(data));
@@ -501,24 +492,24 @@ router.post("/webhooks/alert", async (req, res) => {
 
 ### 1. Channel Selection
 
-- **Critical**: Use all channels (email + SMS + Slack/Teams)
-- **High**: Email + SMS + Slack
-- **Medium**: Email + Slack
-- **Low**: Email + Sentry
+-   **Critical**: Use all channels (email + SMS + Slack/Teams)
+-   **High**: Email + SMS + Slack
+-   **Medium**: Email + Slack
+-   **Low**: Email + Sentry
 
 ### 2. Threshold Tuning
 
-- Start conservative (low thresholds)
-- Monitor for false positives
-- Adjust based on actual traffic patterns
-- Different thresholds for different subsystems
+-   Start conservative (low thresholds)
+-   Monitor for false positives
+-   Adjust based on actual traffic patterns
+-   Different thresholds for different subsystems
 
 ### 3. Cooldown Periods
 
-- Shorter for critical routes (3-5 minutes)
-- Longer for general traffic (15-30 minutes)
-- Prevents alert fatigue
-- Balances awareness vs spam
+-   Shorter for critical routes (3-5 minutes)
+-   Longer for general traffic (15-30 minutes)
+-   Prevents alert fatigue
+-   Balances awareness vs spam
 
 ### 4. Alert Response
 
@@ -528,17 +519,17 @@ When alert received:
 2. Review Sentry for full details
 3. Investigate offender (user ID or IP)
 4. Take action:
-   - Clear rate limit if legitimate
-   - Block IP if malicious
-   - Contact user if account compromised
-   - Adjust policy if false positive
+   -   Clear rate limit if legitimate
+   -   Block IP if malicious
+   -   Contact user if account compromised
+   -   Adjust policy if false positive
 
 ### 5. Regular Reviews
 
-- Weekly: Review alert history
-- Monthly: Adjust thresholds and policies
-- Quarterly: Analyze patterns and trends
-- Update documentation as system evolves
+-   Weekly: Review alert history
+-   Monthly: Adjust thresholds and policies
+-   Quarterly: Analyze patterns and trends
+-   Update documentation as system evolves
 
 ---
 
@@ -554,10 +545,10 @@ When alert received:
 
 ## 📚 Related Documentation
 
-- [Rate Limiting Guide](./REDIS_RATE_LIMITING_GUIDE.md)
-- [Admin User Filters](./ADMIN_USER_FILTERS.md)
-- [Sentry Setup](./backend/SENTRY_SETUP.md)
-- [Environment Configuration](./backend/.env.example)
+-   [Rate Limiting Guide](./REDIS_RATE_LIMITING_GUIDE.md)
+-   [Admin User Filters](./ADMIN_USER_FILTERS.md)
+-   [Sentry Setup](./backend/SENTRY_SETUP.md)
+-   [Environment Configuration](./backend/.env.example)
 
 ---
 

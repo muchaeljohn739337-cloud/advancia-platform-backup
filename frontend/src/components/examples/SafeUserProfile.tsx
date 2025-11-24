@@ -8,11 +8,11 @@
  * - Token refresh
  */
 
-"use client";
+'use client';
 
-import { useSafeHTML, useSafeLink, useSecureAPI } from "@/hooks/useSecurity";
-import { InputSecurity } from "@/lib/security";
-import { useEffect, useState } from "react";
+import { useSafeHTML, useSafeLink, useSecureAPI } from '@/hooks/useSecurity';
+import { InputSecurity } from '@/lib/security';
+import { useEffect, useState } from 'react';
 
 interface UserProfile {
   id: number;
@@ -33,7 +33,7 @@ export default function SafeUserProfile() {
   const { openSafeLink } = useSafeLink();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     loadProfile();
@@ -44,10 +44,10 @@ export default function SafeUserProfile() {
       setLoading(true);
 
       // Secure API call with automatic token injection
-      const response = await secureFetch("/api/users/profile");
+      const response = await secureFetch('/api/users/profile');
 
       if (!response.ok) {
-        throw new Error("Failed to load profile");
+        throw new Error('Failed to load profile');
       }
 
       const data = await response.json();
@@ -60,15 +60,15 @@ export default function SafeUserProfile() {
   };
 
   // Sanitize bio HTML (allows only safe tags)
-  const safeBio = useSafeHTML(profile?.bio || "", [
-    "p",
-    "br",
-    "strong",
-    "em",
-    "a",
-    "ul",
-    "li",
-    "ol",
+  const safeBio = useSafeHTML(profile?.bio || '', [
+    'p',
+    'br',
+    'strong',
+    'em',
+    'a',
+    'ul',
+    'li',
+    'ol',
   ]);
 
   const handleExternalLink = (url: string) => {
@@ -118,23 +118,18 @@ export default function SafeUserProfile() {
           {/* Avatar */}
           <div className="flex items-end -mt-16 mb-4">
             <img
-              src={
-                InputSecurity.sanitizeURL(profile.avatar) ||
-                "/default-avatar.png"
-              }
+              src={InputSecurity.sanitizeURL(profile.avatar) || '/default-avatar.png'}
               alt="Profile avatar"
               className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/default-avatar.png";
+                (e.target as HTMLImageElement).src = '/default-avatar.png';
               }}
             />
             <div className="ml-4 mb-2">
               <h1 className="text-3xl font-bold text-gray-900">
                 {InputSecurity.escapeHTML(profile.name)}
               </h1>
-              <p className="text-gray-600">
-                {InputSecurity.escapeHTML(profile.email)}
-              </p>
+              <p className="text-gray-600">{InputSecurity.escapeHTML(profile.email)}</p>
             </div>
           </div>
 
@@ -156,12 +151,7 @@ export default function SafeUserProfile() {
                 className="text-blue-600 hover:underline flex items-center"
               >
                 🔗 {InputSecurity.escapeHTML(profile.website)}
-                <svg
-                  className="w-4 h-4 ml-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -206,9 +196,7 @@ export default function SafeUserProfile() {
 
           {/* Security Info */}
           <div className="mt-8 p-4 bg-green-50 border border-green-200 rounded">
-            <p className="font-semibold text-green-800 mb-2">
-              🔒 Security Features Active:
-            </p>
+            <p className="font-semibold text-green-800 mb-2">🔒 Security Features Active:</p>
             <ul className="space-y-1 text-green-700 text-sm">
               <li>✅ HTML sanitization (XSS prevention)</li>
               <li>✅ URL validation (prevents javascript: URIs)</li>

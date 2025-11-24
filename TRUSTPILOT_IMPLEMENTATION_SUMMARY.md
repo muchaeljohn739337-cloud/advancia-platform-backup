@@ -5,24 +5,23 @@
 ### Backend
 
 1. **`backend/src/jobs/trustpilotCollector.ts`** - Core review collection service
-
-   - Fetches reviews from Trustpilot API (5-star only)
-   - Syncs to database
-   - Auto-publishes 5-star reviews
-   - Provides statistics
+   -   Fetches reviews from Trustpilot API (5-star only)
+   -   Syncs to database
+   -   Auto-publishes 5-star reviews
+   -   Provides statistics
 
 2. **`backend/src/routes/trustpilot.ts`** - API routes
-   - Public: `/api/trustpilot/reviews`, `/api/trustpilot/stats`
-   - Admin: `/api/trustpilot/sync`, `/api/trustpilot/admin/all`
-   - Management: Publish/unpublish, delete reviews
+   -   Public: `/api/trustpilot/reviews`, `/api/trustpilot/stats`
+   -   Admin: `/api/trustpilot/sync`, `/api/trustpilot/admin/all`
+   -   Management: Publish/unpublish, delete reviews
 
 ### Frontend
 
 3. **`frontend/src/components/TrustpilotReviews.tsx`** - Custom review display component
-   - Grid layout
-   - Star ratings
-   - Verified badges
-   - Responsive design
+   -   Grid layout
+   -   Star ratings
+   -   Verified badges
+   -   Responsive design
 
 ### Documentation
 
@@ -33,28 +32,24 @@
 ### Backend
 
 1. **`backend/prisma/schema.prisma`**
-
-   - Added `TrustpilotReview` model
+   -   Added `TrustpilotReview` model
 
 2. **`backend/src/rpa/scheduler.ts`**
-
-   - Imported trustpilotCollector
-   - Added trustpilotSync scheduled task (every 6 hours)
-   - Updated runTask method
-   - Updated logScheduledTasks method
+   -   Imported trustpilotCollector
+   -   Added trustpilotSync scheduled task (every 6 hours)
+   -   Updated runTask method
+   -   Updated logScheduledTasks method
 
 3. **`backend/src/index.ts`**
-
-   - Imported trustpilotRouter
-   - Registered route: `/api/trustpilot`
+   -   Imported trustpilotRouter
+   -   Registered route: `/api/trustpilot`
 
 4. **`backend/package.json`**
-
-   - Added `node-cron: ^3.0.3`
-   - Added `@types/node-cron: ^3.0.11`
+   -   Added `node-cron: ^3.0.3`
+   -   Added `@types/node-cron: ^3.0.11`
 
 5. **`backend/.env.example`**
-   - Added Trustpilot API configuration variables
+   -   Added Trustpilot API configuration variables
 
 ### Frontend
 
@@ -106,12 +101,12 @@ NEXT_PUBLIC_TRUSTPILOT_DOMAIN=advanciapayledger.com
 
 ### 4. Get Trustpilot Credentials
 
-1. Go to https://businessapp.b2b.trustpilot.com/
+1. Go to <https://businessapp.b2b.trustpilot.com/>
 2. Navigate to **Integrations** → **API**
 3. Create new API key
 4. Copy:
-   - API Key
-   - Business Unit ID (from Account Settings)
+   -   API Key
+   -   Business Unit ID (from Account Settings)
 
 ### 5. Test the System
 
@@ -151,58 +146,58 @@ export default function HomePage() {
 
 ## 🔍 Verification Checklist
 
-- [ ] Dependencies installed (`node-cron` in package.json)
-- [ ] Database migration created and applied
-- [ ] Trustpilot API credentials obtained
-- [ ] Environment variables configured (backend + frontend)
-- [ ] Backend server starts without errors
-- [ ] API endpoint `/api/trustpilot/stats` returns data
-- [ ] Manual sync works (admin endpoint)
-- [ ] Reviews display on frontend
-- [ ] Automated sync runs every 6 hours
+-   [ ] Dependencies installed (`node-cron` in package.json)
+-   [ ] Database migration created and applied
+-   [ ] Trustpilot API credentials obtained
+-   [ ] Environment variables configured (backend + frontend)
+-   [ ] Backend server starts without errors
+-   [ ] API endpoint `/api/trustpilot/stats` returns data
+-   [ ] Manual sync works (admin endpoint)
+-   [ ] Reviews display on frontend
+-   [ ] Automated sync runs every 6 hours
 
 ## 🎯 Features Implemented
 
 ✅ **Automated Collection**
 
-- Scheduled sync every 6 hours
-- Fetches latest 50 reviews
-- Filters for 5-star reviews only (best positive feedback)
+-   Scheduled sync every 6 hours
+-   Fetches latest 50 reviews
+-   Filters for 5-star reviews only (best positive feedback)
 
 ✅ **Database Storage**
 
-- Prisma model with indexes
-- Duplicate prevention (by trustpilotId)
-- Verified review tracking
+-   Prisma model with indexes
+-   Duplicate prevention (by trustpilotId)
+-   Verified review tracking
 
 ✅ **API Endpoints**
 
-- Public: View published reviews + stats
-- Admin: Manual sync, view all, publish/unpublish, delete
+-   Public: View published reviews + stats
+-   Admin: Manual sync, view all, publish/unpublish, delete
 
 ✅ **Frontend Components**
 
-- Custom review grid display
-- Official Trustpilot widget (already exists)
-- Star ratings and verification badges
+-   Custom review grid display
+-   Official Trustpilot widget (already exists)
+-   Star ratings and verification badges
 
 ✅ **Scheduling**
 
-- Integrated with existing RPA scheduler
-- Auto-start on server boot (if RPA_AUTO_START=true)
-- Manual trigger support
+-   Integrated with existing RPA scheduler
+-   Auto-start on server boot (if RPA_AUTO_START=true)
+-   Manual trigger support
 
 ✅ **Monitoring**
 
-- Audit trail logging
-- Error handling and logging
-- Statistics and analytics
+-   Audit trail logging
+-   Error handling and logging
+-   Statistics and analytics
 
 ✅ **Documentation**
 
-- Complete setup guide
-- API reference
-- Troubleshooting tips
+-   Complete setup guide
+-   API reference
+-   Troubleshooting tips
 
 ## 📊 Architecture
 
@@ -251,16 +246,16 @@ this.scheduleTask(
   "0 */6 * * *", // Change this cron expression
   async () => {
     /* ... */
-  }
+  },
 );
 ```
 
 **Common Schedules:**
 
-- `"0 */2 * * *"` - Every 2 hours
-- `"0 */12 * * *"` - Every 12 hours
-- `"0 0 * * *"` - Daily at midnight
-- `"0 9 * * 1"` - Every Monday at 9 AM
+-   `"0 */2 * * *"` - Every 2 hours
+-   `"0 */12 * * *"` - Every 12 hours
+-   `"0 0 * * *"` - Daily at midnight
+-   `"0 9 * * 1"` - Every Monday at 9 AM
 
 ### Filter Review Ratings
 
@@ -294,12 +289,12 @@ isPublished: review.stars >= 4, // Change threshold
 
 All code is production-ready with:
 
-- Error handling
-- Logging
-- Security (admin-only endpoints)
-- Rate limiting (via existing middleware)
-- Audit trail
-- Type safety (TypeScript)
+-   Error handling
+-   Logging
+-   Security (admin-only endpoints)
+-   Rate limiting (via existing middleware)
+-   Audit trail
+-   Type safety (TypeScript)
 
 ---
 

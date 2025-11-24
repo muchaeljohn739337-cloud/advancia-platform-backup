@@ -2,10 +2,10 @@
 
 ## Prerequisites
 
-- Node.js 18+
-- PostgreSQL 14+
-- Redis 6+
-- Existing Advancia Pay backend + frontend
+-   Node.js 18+
+-   PostgreSQL 14+
+-   Redis 6+
+-   Existing Advancia Pay backend + frontend
 
 ---
 
@@ -128,8 +128,8 @@ curl -X PUT \
 
 **Expected responses**:
 
-- List: `{"success":true,"policies":[...],"canEdit":true}`
-- Update: `{"success":true,"policy":{...}}`
+-   List: `{"success":true,"policies":[...],"canEdit":true}`
+-   Update: `{"success":true,"policy":{...}}`
 
 ---
 
@@ -166,10 +166,10 @@ npm list react react-hot-toast
 4. **Log in** with SUPERADMIN account
 
 5. **You should see**:
-   - Table with 7 policies
-   - Edit buttons (enabled for SUPERADMIN)
-   - Status toggles
-   - Audit log button
+   -   Table with 7 policies
+   -   Edit buttons (enabled for SUPERADMIN)
+   -   Status toggles
+   -   Audit log button
 
 ---
 
@@ -203,11 +203,11 @@ LIMIT 10;
 
 **Expected columns**:
 
-- `action`: "updated"
-- `user_email`: "admin@example.com"
-- `changes_before`: JSON snapshot
-- `changes_after`: JSON snapshot
-- `reason`: "Testing policy update"
+-   `action`: "updated"
+-   `user_email`: "<admin@example.com>"
+-   `changes_before`: JSON snapshot
+-   `changes_after`: JSON snapshot
+-   `reason`: "Testing policy update"
 
 ---
 
@@ -260,26 +260,26 @@ curl -X PUT \
 
 ## ✅ Verification Checklist
 
-- [ ] **Database**
-  - [ ] `alert_policies` table exists (7 rows)
-  - [ ] `policy_audit_logs` table exists (empty initially)
-- [ ] **Backend**
-  - [ ] Routes registered: `/api/admin/alert-policies`, `/api/admin/policy-audit`
-  - [ ] Middleware: `requireSuperAdmin` working
-  - [ ] RBAC: ADMIN can view, SUPERADMIN can edit
-- [ ] **Frontend**
-  - [ ] Page renders: `/admin/alert-policies`
-  - [ ] Table shows 7 policies
-  - [ ] Edit buttons visible for SUPERADMIN
-  - [ ] "View Only" mode for ADMIN
-- [ ] **Alerts**
-  - [ ] Email alert received (check ALERT_EMAIL inbox)
-  - [ ] Cooldown prevents duplicates (check logs)
-  - [ ] Alert history stored in Redis
-- [ ] **Audit**
-  - [ ] Policy changes logged in `policy_audit_logs`
-  - [ ] Sentry captures critical events
-  - [ ] Anomaly detection works (run `/policy-audit/anomalies`)
+-   [ ] **Database**
+    -   [ ] `alert_policies` table exists (7 rows)
+    -   [ ] `policy_audit_logs` table exists (empty initially)
+-   [ ] **Backend**
+    -   [ ] Routes registered: `/api/admin/alert-policies`, `/api/admin/policy-audit`
+    -   [ ] Middleware: `requireSuperAdmin` working
+    -   [ ] RBAC: ADMIN can view, SUPERADMIN can edit
+-   [ ] **Frontend**
+    -   [ ] Page renders: `/admin/alert-policies`
+    -   [ ] Table shows 7 policies
+    -   [ ] Edit buttons visible for SUPERADMIN
+    -   [ ] "View Only" mode for ADMIN
+-   [ ] **Alerts**
+    -   [ ] Email alert received (check ALERT_EMAIL inbox)
+    -   [ ] Cooldown prevents duplicates (check logs)
+    -   [ ] Alert history stored in Redis
+-   [ ] **Audit**
+    -   [ ] Policy changes logged in `policy_audit_logs`
+    -   [ ] Sentry captures critical events
+    -   [ ] Anomaly detection works (run `/policy-audit/anomalies`)
 
 ---
 
@@ -357,40 +357,37 @@ curl -H "Authorization: Bearer $TOKEN" \
 ## 📚 Next Steps
 
 1. **Configure Alert Channels**:
-
-   - [Email Setup](./ALERT_SYSTEM_GUIDE.md#email-configuration)
-   - [SMS Setup](./ALERT_SYSTEM_GUIDE.md#sms-twilio-configuration)
-   - [Slack Setup](./ALERT_SYSTEM_GUIDE.md#slack-webhook-configuration)
-   - [Teams Setup](./ALERT_SYSTEM_GUIDE.md#teams-webhook-configuration)
+   -   [Email Setup](./ALERT_SYSTEM_GUIDE.md#email-configuration)
+   -   [SMS Setup](./ALERT_SYSTEM_GUIDE.md#sms-twilio-configuration)
+   -   [Slack Setup](./ALERT_SYSTEM_GUIDE.md#slack-webhook-configuration)
+   -   [Teams Setup](./ALERT_SYSTEM_GUIDE.md#teams-webhook-configuration)
 
 2. **Production Hardening**:
-
-   - Enable MFA for all admin accounts
-   - Configure HTTPS with HSTS
-   - Set up rate limiting on admin endpoints
-   - Review [Security Checklist](./ALERT_POLICY_MANAGEMENT.md#checklist-for-production)
+   -   Enable MFA for all admin accounts
+   -   Configure HTTPS with HSTS
+   -   Set up rate limiting on admin endpoints
+   -   Review [Security Checklist](./ALERT_POLICY_MANAGEMENT.md#checklist-for-production)
 
 3. **Monitoring**:
-
-   - Set up Sentry alerts for critical policy changes
-   - Schedule weekly audit log reviews
-   - Configure anomaly detection alerts
+   -   Set up Sentry alerts for critical policy changes
+   -   Schedule weekly audit log reviews
+   -   Configure anomaly detection alerts
 
 4. **Team Training**:
-   - Share [Alert Policy Management Guide](./ALERT_POLICY_MANAGEMENT.md)
-   - Document your org's policy change procedures
-   - Run tabletop exercise for incident response
+   -   Share [Alert Policy Management Guide](./ALERT_POLICY_MANAGEMENT.md)
+   -   Document your org's policy change procedures
+   -   Run tabletop exercise for incident response
 
 ---
 
-## 🎉 Success!
+## 🎉 Success
 
 You now have a production-ready, secure alert policy management system with:
 
-- ✅ Visual admin UI
-- ✅ RBAC protection
-- ✅ Tamper-evident audit logging
-- ✅ Multi-channel alerts
-- ✅ Database-backed configuration
+-   ✅ Visual admin UI
+-   ✅ RBAC protection
+-   ✅ Tamper-evident audit logging
+-   ✅ Multi-channel alerts
+-   ✅ Database-backed configuration
 
 **Questions?** See [ALERT_POLICY_MANAGEMENT.md](./ALERT_POLICY_MANAGEMENT.md) for full documentation.

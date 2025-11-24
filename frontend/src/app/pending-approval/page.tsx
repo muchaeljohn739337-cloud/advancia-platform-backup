@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Clock, CheckCircle, Shield, Sparkles, TrendingUp, Award } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { motion } from 'framer-motion';
+import { Clock, CheckCircle, Shield, Sparkles, TrendingUp, Award } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function PendingApprovalPage() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -23,12 +23,12 @@ export default function PendingApprovalPage() {
       try {
         const response = await fetch('http://localhost:4000/api/auth/check-approval', {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
         const data = await response.json();
-        
+
         if (data.approved) {
           // User approved! Redirect to dashboard
           clearInterval(interval);
@@ -52,24 +52,24 @@ export default function PendingApprovalPage() {
   const benefits = [
     {
       icon: <TrendingUp className="w-6 h-6" />,
-      title: "15% Welcome Bonus",
-      description: "Get instant bonus on your first deposit once approved"
+      title: '15% Welcome Bonus',
+      description: 'Get instant bonus on your first deposit once approved',
     },
     {
       icon: <Shield className="w-6 h-6" />,
-      title: "Bank-Level Security",
-      description: "Your funds are protected with military-grade encryption"
+      title: 'Bank-Level Security',
+      description: 'Your funds are protected with military-grade encryption',
     },
     {
       icon: <Award className="w-6 h-6" />,
-      title: "Premium Features",
-      description: "Access advanced trading tools and AI-powered analytics"
+      title: 'Premium Features',
+      description: 'Access advanced trading tools and AI-powered analytics',
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
-      title: "VIP Support",
-      description: "Get priority 24/7 customer support from our expert team"
-    }
+      title: 'VIP Support',
+      description: 'Get priority 24/7 customer support from our expert team',
+    },
   ];
 
   return (
@@ -118,7 +118,7 @@ export default function PendingApprovalPage() {
                 <p className="text-sm text-gray-400">Completed ✓</p>
               </div>
             </div>
-            
+
             <div className="bg-yellow-500/20 border-2 border-yellow-500 rounded-xl p-4 flex items-center space-x-3 animate-pulse">
               <Clock className="w-6 h-6 text-yellow-400 flex-shrink-0" />
               <div>
@@ -126,7 +126,7 @@ export default function PendingApprovalPage() {
                 <p className="text-sm text-gray-400">In Progress...</p>
               </div>
             </div>
-            
+
             <div className="bg-gray-500/10 border border-gray-500/30 rounded-xl p-4 flex items-center space-x-3 opacity-50">
               <Sparkles className="w-6 h-6 text-gray-400 flex-shrink-0" />
               <div>
@@ -145,7 +145,9 @@ export default function PendingApprovalPage() {
             <ul className="space-y-2 text-gray-300">
               <li className="flex items-start">
                 <span className="text-purple-400 mr-2">•</span>
-                <span>Our admin team is reviewing your application (typically takes 1-2 hours)</span>
+                <span>
+                  Our admin team is reviewing your application (typically takes 1-2 hours)
+                </span>
               </li>
               <li className="flex items-start">
                 <span className="text-purple-400 mr-2">•</span>
@@ -223,8 +225,11 @@ export default function PendingApprovalPage() {
         {/* Support Contact */}
         <div className="mt-6 text-center">
           <p className="text-gray-400 text-sm">
-            Questions? Contact us at{" "}
-            <a href="mailto:support@advancia.com" className="text-purple-400 hover:text-purple-300 transition">
+            Questions? Contact us at{' '}
+            <a
+              href="mailto:support@advancia.com"
+              className="text-purple-400 hover:text-purple-300 transition"
+            >
               support@advancia.com
             </a>
           </p>

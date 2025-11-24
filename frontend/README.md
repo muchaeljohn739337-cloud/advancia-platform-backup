@@ -5,14 +5,12 @@ Modern fintech dashboard built with Next.js 14, TypeScript, Tailwind CSS, and Fr
 ## 🎨 Features
 
 - **💼 Dashboard Overview**
-
   - Animated summary cards (Credits, Debits, Net Balance, Bonus)
   - Click-to-expand balance breakdown modal
   - Real-time transaction updates via Socket.IO
   - Sound and haptic feedback on interactions
 
 - **📊 Components**
-
   - Summary Cards with animated counters
   - Balance Dropdown with detailed breakdown
   - Transaction List with filters (All, Credits, Debits, Bonus)
@@ -49,8 +47,8 @@ We removed it from `tsconfig.json`. If you later upgrade TypeScript and need to 
 {
   "compilerOptions": {
     // ...other options
-    "ignoreDeprecations": "5.0" // or the version boundary specified by TS docs
-  }
+    "ignoreDeprecations": "5.0", // or the version boundary specified by TS docs
+  },
 }
 ```
 
@@ -250,8 +248,7 @@ NEXT_PUBLIC_SMARTSUPP_KEY=your_smartsupp_public_key
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    NEXT_PUBLIC_API_URL:
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000',
   },
 };
 ```

@@ -7,12 +7,12 @@
     "MD034": true, // no bare URLs
     "MD040": true, // fenced code blocks should have a language
     "MD022": true, // blanks around headings
-    "MD032": true // blanks around lists
+    "MD032": true, // blanks around lists
   },
   "globs": [
     "**/*.md",
     "!**/node_modules/**",
     "!**/.git/**",
-    "!**/.git-rewrite/**"
-  ]
+    "!**/.git-rewrite/**",
+  ],
 }

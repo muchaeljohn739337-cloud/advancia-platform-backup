@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
     <title>Simple Trustpilot Widget Integration</title>
     <style>
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
@@ -62,7 +62,7 @@
         color: #ecf0f1;
         padding: 20px;
         border-radius: 6px;
-        font-family: "Courier New", monospace;
+        font-family: 'Courier New', monospace;
         overflow-x: auto;
         margin: 20px 0;
       }
@@ -128,32 +128,23 @@
         <ol>
           <li>
             <strong>Create Trustpilot Business Account</strong> at
-            <a href="https://business.trustpilot.com/" target="_blank"
-              >business.trustpilot.com</a
-            >
+            <a href="https://business.trustpilot.com/" target="_blank">business.trustpilot.com</a>
           </li>
-          <li>
-            <strong>Get your Business Unit ID</strong> from your Trustpilot
-            dashboard
-          </li>
+          <li><strong>Get your Business Unit ID</strong> from your Trustpilot dashboard</li>
           <li><strong>Replace placeholder values</strong> in the code below</li>
         </ol>
       </div>
 
       <div class="widget-section">
         <h2>🏆 Basic Trust Badge (Recommended)</h2>
-        <p>
-          Shows your overall rating with stars - perfect for headers and footers
-        </p>
+        <p>Shows your overall rating with stars - perfect for headers and footers</p>
 
         <div class="code-block">
-          &lt;!-- Trustpilot Basic Badge --&gt; &lt;div
-          class="trustpilot-widget" data-locale="en-US"
-          data-template-id="5419b6a8b0d04a076446a9ad"
-          data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="24px"
-          data-style-width="100%" data-theme="light"&gt; &lt;a
-          href="https://www.trustpilot.com/review/YOUR_DOMAIN" target="_blank"
-          rel="noopener"&gt;Trustpilot&lt;/a&gt; &lt;/div&gt; &lt;script
+          &lt;!-- Trustpilot Basic Badge --&gt; &lt;div class="trustpilot-widget"
+          data-locale="en-US" data-template-id="5419b6a8b0d04a076446a9ad"
+          data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="24px" data-style-width="100%"
+          data-theme="light"&gt; &lt;a href="https://www.trustpilot.com/review/YOUR_DOMAIN"
+          target="_blank" rel="noopener"&gt;Trustpilot&lt;/a&gt; &lt;/div&gt; &lt;script
           type="text/javascript"
           src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
           async&gt;&lt;/script&gt;
@@ -177,35 +168,28 @@
 
       <div class="widget-section">
         <h2>📊 Review Summary Widget</h2>
-        <p>
-          Displays rating breakdown and review count - great for landing pages
-        </p>
+        <p>Displays rating breakdown and review count - great for landing pages</p>
 
         <div class="code-block">
-          &lt;!-- Trustpilot Review Summary --&gt; &lt;div
-          class="trustpilot-widget" data-locale="en-US"
-          data-template-id="5419b6ffb0d04a09e042d5fc"
-          data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="130px"
-          data-style-width="100%" data-theme="light"&gt; &lt;a
-          href="https://www.trustpilot.com/review/YOUR_DOMAIN" target="_blank"
-          rel="noopener"&gt;Trustpilot&lt;/a&gt; &lt;/div&gt;
+          &lt;!-- Trustpilot Review Summary --&gt; &lt;div class="trustpilot-widget"
+          data-locale="en-US" data-template-id="5419b6ffb0d04a09e042d5fc"
+          data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="130px" data-style-width="100%"
+          data-theme="light"&gt; &lt;a href="https://www.trustpilot.com/review/YOUR_DOMAIN"
+          target="_blank" rel="noopener"&gt;Trustpilot&lt;/a&gt; &lt;/div&gt;
         </div>
       </div>
 
       <div class="widget-section">
         <h2>💬 Review Carousel</h2>
-        <p>
-          Shows rotating customer reviews - perfect for testimonials section
-        </p>
+        <p>Shows rotating customer reviews - perfect for testimonials section</p>
 
         <div class="code-block">
-          &lt;!-- Trustpilot Review Carousel --&gt; &lt;div
-          class="trustpilot-widget" data-locale="en-US"
-          data-template-id="54ad5defc6454f065c28af8b"
-          data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="240px"
-          data-style-width="100%" data-theme="light" data-tags="Product"&gt;
-          &lt;a href="https://www.trustpilot.com/review/YOUR_DOMAIN"
-          target="_blank" rel="noopener"&gt;Trustpilot&lt;/a&gt; &lt;/div&gt;
+          &lt;!-- Trustpilot Review Carousel --&gt; &lt;div class="trustpilot-widget"
+          data-locale="en-US" data-template-id="54ad5defc6454f065c28af8b"
+          data-businessunit-id="YOUR_BUSINESS_ID" data-style-height="240px" data-style-width="100%"
+          data-theme="light" data-tags="Product"&gt; &lt;a
+          href="https://www.trustpilot.com/review/YOUR_DOMAIN" target="_blank"
+          rel="noopener"&gt;Trustpilot&lt;/a&gt; &lt;/div&gt;
         </div>
       </div>
 
@@ -215,73 +199,37 @@
           <li>
             <strong>Replace placeholders:</strong>
             <ul>
-              <li>
-                <code>YOUR_BUSINESS_ID</code> → Your actual Trustpilot Business
-                Unit ID
-              </li>
-              <li>
-                <code>YOUR_DOMAIN</code> → Your website domain (e.g.,
-                example.com)
-              </li>
+              <li><code>YOUR_BUSINESS_ID</code> → Your actual Trustpilot Business Unit ID</li>
+              <li><code>YOUR_DOMAIN</code> → Your website domain (e.g., example.com)</li>
             </ul>
           </li>
+          <li><strong>Add to your HTML:</strong> Copy the widget code into your website</li>
           <li>
-            <strong>Add to your HTML:</strong> Copy the widget code into your
-            website
+            <strong>Include script:</strong> Make sure the Trustpilot script is included (only once
+            per page)
           </li>
-          <li>
-            <strong>Include script:</strong> Make sure the Trustpilot script is
-            included (only once per page)
-          </li>
-          <li>
-            <strong>Test:</strong> Verify widgets load correctly on your site
-          </li>
+          <li><strong>Test:</strong> Verify widgets load correctly on your site</li>
         </ol>
       </div>
 
       <div class="warning">
         <h3>⚠️ Important Notes</h3>
         <ul>
-          <li>
-            <strong>Single Script:</strong> Only include the Trustpilot script
-            once per page
-          </li>
-          <li>
-            <strong>Domain Verification:</strong> Trustpilot may require domain
-            verification
-          </li>
-          <li>
-            <strong>Review Collection:</strong> You need actual customer reviews
-            to display
-          </li>
-          <li>
-            <strong>GDPR Compliance:</strong> Ensure compliance with privacy
-            regulations
-          </li>
+          <li><strong>Single Script:</strong> Only include the Trustpilot script once per page</li>
+          <li><strong>Domain Verification:</strong> Trustpilot may require domain verification</li>
+          <li><strong>Review Collection:</strong> You need actual customer reviews to display</li>
+          <li><strong>GDPR Compliance:</strong> Ensure compliance with privacy regulations</li>
         </ul>
       </div>
 
       <div class="success">
         <h3>✅ Benefits of This Approach</h3>
         <ul>
-          <li>
-            <strong>Simple Implementation:</strong> No complex backend
-            integration needed
-          </li>
-          <li>
-            <strong>Real-time Updates:</strong> Widgets automatically update
-            with new reviews
-          </li>
-          <li>
-            <strong>SEO Friendly:</strong> Rich snippets and structured data
-            included
-          </li>
-          <li>
-            <strong>Mobile Responsive:</strong> Works perfectly on all devices
-          </li>
-          <li>
-            <strong>Performance:</strong> Lightweight and loads asynchronously
-          </li>
+          <li><strong>Simple Implementation:</strong> No complex backend integration needed</li>
+          <li><strong>Real-time Updates:</strong> Widgets automatically update with new reviews</li>
+          <li><strong>SEO Friendly:</strong> Rich snippets and structured data included</li>
+          <li><strong>Mobile Responsive:</strong> Works perfectly on all devices</li>
+          <li><strong>Performance:</strong> Lightweight and loads asynchronously</li>
         </ul>
       </div>
 
@@ -321,29 +269,23 @@
         <h3>🚀 React Integration Example</h3>
         <p>For React applications, create a reusable component:</p>
         <div class="code-block">
-          // TrustpilotWidget.jsx import React, { useEffect } from 'react';
-          const TrustpilotWidget = ({ businessId, domain, templateId =
-          "5419b6a8b0d04a076446a9ad", height = "24px", theme = "light" }) => {
-          useEffect(() => { // Load Trustpilot widget script if (typeof window
-          !== 'undefined' && window.Trustpilot) {
-          window.Trustpilot.loadFromElement(
-          document.querySelector('.trustpilot-widget') ); } }, []); return (
-          &lt;div className="trustpilot-widget" data-locale="en-US"
-          data-template-id={templateId} data-businessunit-id={businessId}
-          data-style-height={height} data-style-width="100%" data-theme={theme}
-          &gt; &lt;a href={`https://www.trustpilot.com/review/${domain}`}
-          target="_blank" rel="noopener noreferrer" &gt; Trustpilot &lt;/a&gt;
-          &lt;/div&gt; ); }; // Usage: // &lt;TrustpilotWidget //
-          businessId="YOUR_BUSINESS_ID" // domain="your-domain.com" // /&gt;
+          // TrustpilotWidget.jsx import React, { useEffect } from 'react'; const TrustpilotWidget =
+          ({ businessId, domain, templateId = "5419b6a8b0d04a076446a9ad", height = "24px", theme =
+          "light" }) => { useEffect(() => { // Load Trustpilot widget script if (typeof window !==
+          'undefined' && window.Trustpilot) { window.Trustpilot.loadFromElement(
+          document.querySelector('.trustpilot-widget') ); } }, []); return ( &lt;div
+          className="trustpilot-widget" data-locale="en-US" data-template-id={templateId}
+          data-businessunit-id={businessId} data-style-height={height} data-style-width="100%"
+          data-theme={theme} &gt; &lt;a href={`https://www.trustpilot.com/review/${domain}`}
+          target="_blank" rel="noopener noreferrer" &gt; Trustpilot &lt;/a&gt; &lt;/div&gt; ); }; //
+          Usage: // &lt;TrustpilotWidget // businessId="YOUR_BUSINESS_ID" //
+          domain="your-domain.com" // /&gt;
         </div>
       </div>
 
       <div class="header" style="margin-top: 60px">
         <h2>🎯 Next Steps</h2>
-        <p>
-          Choose the widget that best fits your needs, customize it, and add to
-          your website!
-        </p>
+        <p>Choose the widget that best fits your needs, customize it, and add to your website!</p>
       </div>
     </div>
   </body>

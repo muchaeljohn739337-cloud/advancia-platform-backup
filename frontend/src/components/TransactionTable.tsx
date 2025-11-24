@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface Transaction {
   id: string;
@@ -20,7 +20,7 @@ interface TransactionTableProps {
 
 interface SortField {
   field: keyof Transaction;
-  order: "asc" | "desc";
+  order: 'asc' | 'desc';
 }
 
 interface Filters {
@@ -40,10 +40,10 @@ interface ViewPreferences {
   showAdvancedSort: boolean;
 }
 
-const STORAGE_KEY = "transactionTableViewPreferences";
+const STORAGE_KEY = 'transactionTableViewPreferences';
 
 const DEFAULT_PREFERENCES: ViewPreferences = {
-  sortFields: [{ field: "createdAt", order: "desc" }],
+  sortFields: [{ field: 'createdAt', order: 'desc' }],
   filters: {},
   pagination: { page: 1, pageSize: 10 },
   showAdvancedSort: false,
@@ -52,10 +52,9 @@ const DEFAULT_PREFERENCES: ViewPreferences = {
 export default function TransactionTable({
   transactions,
   loading = false,
-  title = "Transactions",
+  title = 'Transactions',
 }: TransactionTableProps) {
-  const [preferences, setPreferences] =
-    useState<ViewPreferences>(DEFAULT_PREFERENCES);
+  const [preferences, setPreferences] = useState<ViewPreferences>(DEFAULT_PREFERENCES);
   const [showFilters, setShowFilters] = useState(false);
 
   // Load preferences from localStorage on mount
@@ -67,7 +66,7 @@ export default function TransactionTable({
         setPreferences(parsed);
       }
     } catch (error) {
-      console.error("Failed to load view preferences:", error);
+      console.error('Failed to load view preferences:', error);
     }
   }, []);
 
@@ -76,7 +75,7 @@ export default function TransactionTable({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
     } catch (error) {
-      console.error("Failed to save view preferences:", error);
+      console.error('Failed to save view preferences:', error);
     }
   }, [preferences]);
 
@@ -92,15 +91,15 @@ export default function TransactionTable({
 
         // Handle null/undefined
         if (aValue == null && bValue == null) continue;
-        if (aValue == null) return order === "asc" ? 1 : -1;
-        if (bValue == null) return order === "asc" ? -1 : 1;
+        if (aValue == null) return order === 'asc' ? 1 : -1;
+        if (bValue == null) return order === 'asc' ? -1 : 1;
 
         let cmp = 0;
 
         // Strings
-        if (typeof aValue === "string" && typeof bValue === "string") {
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
           // Special handling for dates
-          if (field === "createdAt") {
+          if (field === 'createdAt') {
             cmp = new Date(aValue).getTime() - new Date(bValue).getTime();
           } else {
             cmp = aValue.localeCompare(bValue);
@@ -112,7 +111,7 @@ export default function TransactionTable({
         }
 
         if (cmp !== 0) {
-          return order === "asc" ? cmp : -cmp;
+          return order === 'asc' ? cmp : -cmp;
         }
         // If equal, continue to next field
       }
@@ -124,12 +123,9 @@ export default function TransactionTable({
   const filteredTransactions = transactions.filter((tx) => {
     const { status, provider, currency, searchTerm } = preferences.filters;
 
-    if (status && tx.status.toLowerCase() !== status.toLowerCase())
-      return false;
-    if (provider && tx.provider.toLowerCase() !== provider.toLowerCase())
-      return false;
-    if (currency && tx.currency.toLowerCase() !== currency.toLowerCase())
-      return false;
+    if (status && tx.status.toLowerCase() !== status.toLowerCase()) return false;
+    if (provider && tx.provider.toLowerCase() !== provider.toLowerCase()) return false;
+    if (currency && tx.currency.toLowerCase() !== currency.toLowerCase()) return false;
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       const matchesSearch =
@@ -143,17 +139,11 @@ export default function TransactionTable({
   });
 
   // Apply sorting
-  const sortedTransactions = sortTransactionsMulti(
-    filteredTransactions,
-    preferences.sortFields
-  );
+  const sortedTransactions = sortTransactionsMulti(filteredTransactions, preferences.sortFields);
 
   // Apply pagination
-  const totalPages = Math.ceil(
-    sortedTransactions.length / preferences.pagination.pageSize
-  );
-  const startIndex =
-    (preferences.pagination.page - 1) * preferences.pagination.pageSize;
+  const totalPages = Math.ceil(sortedTransactions.length / preferences.pagination.pageSize);
+  const startIndex = (preferences.pagination.page - 1) * preferences.pagination.pageSize;
   const paginatedTransactions = sortedTransactions.slice(
     startIndex,
     startIndex + preferences.pagination.pageSize
@@ -172,10 +162,7 @@ export default function TransactionTable({
   const addSortField = () => {
     if (preferences.sortFields.length < 4) {
       updatePreferences({
-        sortFields: [
-          ...preferences.sortFields,
-          { field: "amount", order: "asc" },
-        ],
+        sortFields: [...preferences.sortFields, { field: 'amount', order: 'asc' }],
       });
     }
   };
@@ -190,7 +177,7 @@ export default function TransactionTable({
 
   const updateFilter = (key: keyof Filters, value: string) => {
     const newFilters = { ...preferences.filters };
-    if (value === "") {
+    if (value === '') {
       delete newFilters[key];
     } else {
       newFilters[key] = value;
@@ -222,48 +209,46 @@ export default function TransactionTable({
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
-      console.error("Failed to clear preferences:", error);
+      console.error('Failed to clear preferences:', error);
     }
   };
 
   const getFieldLabel = (field: keyof Transaction): string => {
     const labels: Record<keyof Transaction, string> = {
-      createdAt: "Date Created",
-      amount: "Amount",
-      status: "Status",
-      provider: "Payment Provider",
-      currency: "Currency",
-      id: "Transaction ID",
-      description: "Description",
+      createdAt: 'Date Created',
+      amount: 'Amount',
+      status: 'Status',
+      provider: 'Payment Provider',
+      currency: 'Currency',
+      id: 'Transaction ID',
+      description: 'Description',
     };
     return labels[field] || field;
   };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case "completed":
-      case "success":
-        return "text-green-600 bg-green-100";
-      case "pending":
-        return "text-yellow-600 bg-yellow-100";
-      case "failed":
-      case "error":
-        return "text-red-600 bg-red-100";
+      case 'completed':
+      case 'success':
+        return 'text-green-600 bg-green-100';
+      case 'pending':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'failed':
+      case 'error':
+        return 'text-red-600 bg-red-100';
       default:
-        return "text-gray-600 bg-gray-100";
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getProviderBadge = (provider: string) => {
     const styles = {
-      stripe: "bg-blue-100 text-blue-800",
-      cryptomus: "bg-purple-100 text-purple-800",
-      default: "bg-gray-100 text-gray-800",
+      stripe: 'bg-blue-100 text-blue-800',
+      cryptomus: 'bg-purple-100 text-purple-800',
+      default: 'bg-gray-100 text-gray-800',
     };
 
-    return (
-      styles[provider.toLowerCase() as keyof typeof styles] || styles.default
-    );
+    return styles[provider.toLowerCase() as keyof typeof styles] || styles.default;
   };
 
   if (loading) {
@@ -272,10 +257,7 @@ export default function TransactionTable({
         <h3 className="text-lg font-semibold mb-4">{title}</h3>
         <div className="animate-pulse space-y-4">
           {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="h-12 bg-gray-200 dark:bg-gray-700 rounded"
-            ></div>
+            <div key={i} className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
           ))}
         </div>
       </div>
@@ -293,12 +275,7 @@ export default function TransactionTable({
               className="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1"
               title="Toggle filters"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -341,7 +318,7 @@ export default function TransactionTable({
               }
               className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium px-3 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-1"
             >
-              {preferences.showAdvancedSort ? "Simple Sort" : "Advanced Sort"}
+              {preferences.showAdvancedSort ? 'Simple Sort' : 'Advanced Sort'}
               {preferences.sortFields.length > 1 && (
                 <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-blue-500 rounded-full">
                   {preferences.sortFields.length}
@@ -355,9 +332,7 @@ export default function TransactionTable({
         {showFilters && (
           <div className="mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Filters
-              </h4>
+              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filters</h4>
               {Object.keys(preferences.filters).length > 0 && (
                 <button
                   onClick={clearFilters}
@@ -371,13 +346,13 @@ export default function TransactionTable({
               <input
                 type="text"
                 placeholder="Search..."
-                value={preferences.filters.searchTerm || ""}
-                onChange={(e) => updateFilter("searchTerm", e.target.value)}
+                value={preferences.filters.searchTerm || ''}
+                onChange={(e) => updateFilter('searchTerm', e.target.value)}
                 className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-900"
               />
               <select
-                value={preferences.filters.status || ""}
-                onChange={(e) => updateFilter("status", e.target.value)}
+                value={preferences.filters.status || ''}
+                onChange={(e) => updateFilter('status', e.target.value)}
                 className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-900"
               >
                 <option value="">All Statuses</option>
@@ -386,8 +361,8 @@ export default function TransactionTable({
                 <option value="failed">Failed</option>
               </select>
               <select
-                value={preferences.filters.provider || ""}
-                onChange={(e) => updateFilter("provider", e.target.value)}
+                value={preferences.filters.provider || ''}
+                onChange={(e) => updateFilter('provider', e.target.value)}
                 className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-900"
               >
                 <option value="">All Providers</option>
@@ -395,8 +370,8 @@ export default function TransactionTable({
                 <option value="cryptomus">Cryptomus</option>
               </select>
               <select
-                value={preferences.filters.currency || ""}
-                onChange={(e) => updateFilter("currency", e.target.value)}
+                value={preferences.filters.currency || ''}
+                onChange={(e) => updateFilter('currency', e.target.value)}
                 className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-900"
               >
                 <option value="">All Currencies</option>
@@ -413,11 +388,9 @@ export default function TransactionTable({
         {!preferences.showAdvancedSort ? (
           // Simple sort (single field)
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-              Sort by:
-            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Sort by:</span>
             <select
-              value={preferences.sortFields[0]?.field || "createdAt"}
+              value={preferences.sortFields[0]?.field || 'createdAt'}
               onChange={(e) =>
                 updateSortField(0, {
                   field: e.target.value as keyof Transaction,
@@ -425,18 +398,16 @@ export default function TransactionTable({
               }
               className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-800"
             >
-              <option value="createdAt">{getFieldLabel("createdAt")}</option>
-              <option value="amount">{getFieldLabel("amount")}</option>
-              <option value="status">{getFieldLabel("status")}</option>
-              <option value="provider">{getFieldLabel("provider")}</option>
-              <option value="currency">{getFieldLabel("currency")}</option>
-              <option value="id">{getFieldLabel("id")}</option>
+              <option value="createdAt">{getFieldLabel('createdAt')}</option>
+              <option value="amount">{getFieldLabel('amount')}</option>
+              <option value="status">{getFieldLabel('status')}</option>
+              <option value="provider">{getFieldLabel('provider')}</option>
+              <option value="currency">{getFieldLabel('currency')}</option>
+              <option value="id">{getFieldLabel('id')}</option>
             </select>
             <select
-              value={preferences.sortFields[0]?.order || "desc"}
-              onChange={(e) =>
-                updateSortField(0, { order: e.target.value as "asc" | "desc" })
-              }
+              value={preferences.sortFields[0]?.order || 'desc'}
+              onChange={(e) => updateSortField(0, { order: e.target.value as 'asc' | 'desc' })}
               className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-800"
             >
               <option value="desc">↓ Descending</option>
@@ -449,7 +420,7 @@ export default function TransactionTable({
             {preferences.sortFields.map((sortField, index) => (
               <div key={index} className="flex items-center gap-2">
                 <span className="text-xs text-gray-500 dark:text-gray-400 w-12">
-                  {index === 0 ? "Sort by" : "then"}
+                  {index === 0 ? 'Sort by' : 'then'}
                 </span>
                 <select
                   value={sortField.field}
@@ -460,20 +431,18 @@ export default function TransactionTable({
                   }
                   className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-800 flex-1"
                 >
-                  <option value="createdAt">
-                    {getFieldLabel("createdAt")}
-                  </option>
-                  <option value="amount">{getFieldLabel("amount")}</option>
-                  <option value="status">{getFieldLabel("status")}</option>
-                  <option value="provider">{getFieldLabel("provider")}</option>
-                  <option value="currency">{getFieldLabel("currency")}</option>
-                  <option value="id">{getFieldLabel("id")}</option>
+                  <option value="createdAt">{getFieldLabel('createdAt')}</option>
+                  <option value="amount">{getFieldLabel('amount')}</option>
+                  <option value="status">{getFieldLabel('status')}</option>
+                  <option value="provider">{getFieldLabel('provider')}</option>
+                  <option value="currency">{getFieldLabel('currency')}</option>
+                  <option value="id">{getFieldLabel('id')}</option>
                 </select>
                 <select
                   value={sortField.order}
                   onChange={(e) =>
                     updateSortField(index, {
-                      order: e.target.value as "asc" | "desc",
+                      order: e.target.value as 'asc' | 'desc',
                     })
                   }
                   className="text-sm border border-gray-300 dark:border-gray-600 rounded px-3 py-1.5 bg-white dark:bg-gray-800"
@@ -487,12 +456,7 @@ export default function TransactionTable({
                     className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
                     title="Remove"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -509,12 +473,7 @@ export default function TransactionTable({
                 onClick={addSortField}
                 className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium flex items-center gap-1"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -528,15 +487,15 @@ export default function TransactionTable({
             {preferences.sortFields.length > 1 && (
               <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Active sort:</span>{" "}
+                  <span className="font-semibold">Active sort:</span>{' '}
                   {preferences.sortFields
                     .map(
                       (sf, i) =>
-                        `${i > 0 ? "→ " : ""}${getFieldLabel(sf.field)} (${
-                          sf.order === "asc" ? "↑" : "↓"
+                        `${i > 0 ? '→ ' : ''}${getFieldLabel(sf.field)} (${
+                          sf.order === 'asc' ? '↑' : '↓'
                         })`
                     )
-                    .join(" ")}
+                    .join(' ')}
                 </p>
               </div>
             )}
@@ -568,19 +527,13 @@ export default function TransactionTable({
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {sortedTransactions.length === 0 ? (
               <tr>
-                <td
-                  colSpan={5}
-                  className="px-4 py-8 text-center text-gray-500 dark:text-gray-400"
-                >
+                <td colSpan={5} className="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
                   No transactions found
                 </td>
               </tr>
             ) : (
               paginatedTransactions.map((transaction) => (
-                <tr
-                  key={transaction.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                >
+                <tr key={transaction.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
                   <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
                     {new Date(transaction.createdAt).toLocaleDateString()}
                   </td>
@@ -606,7 +559,7 @@ export default function TransactionTable({
                     </span>
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
-                    {transaction.description || "-"}
+                    {transaction.description || '-'}
                   </td>
                 </tr>
               ))
@@ -620,24 +573,18 @@ export default function TransactionTable({
         <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-700 dark:text-gray-300">
-              Showing {startIndex + 1} to{" "}
-              {Math.min(
-                startIndex + preferences.pagination.pageSize,
-                sortedTransactions.length
-              )}{" "}
-              of {sortedTransactions.length}
+              Showing {startIndex + 1} to{' '}
+              {Math.min(startIndex + preferences.pagination.pageSize, sortedTransactions.length)} of{' '}
+              {sortedTransactions.length}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
-              ({filteredTransactions.length} filtered from {transactions.length}{" "}
-              total)
+              ({filteredTransactions.length} filtered from {transactions.length} total)
             </span>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-700 dark:text-gray-300">
-                Per page:
-              </label>
+              <label className="text-sm text-gray-700 dark:text-gray-300">Per page:</label>
               <select
                 value={preferences.pagination.pageSize}
                 onChange={(e) => changePageSize(Number(e.target.value))}

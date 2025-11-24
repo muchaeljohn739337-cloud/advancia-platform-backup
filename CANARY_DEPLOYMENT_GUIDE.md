@@ -9,6 +9,7 @@ Progressive traffic shifting with automated health monitoring and rollback.
 Canary deployment gradually shifts production traffic from the old version (Blue) to the new version (Green) in controlled stages, allowing real-world validation with minimal risk.
 
 ### Traffic Progression
+
 ```
 Blue (100%) ────────────────────────────────────> Green (0%)
       ↓
@@ -28,40 +29,46 @@ Blue (0%)   ──────────────────────�
 ## 🔹 Canary Stages
 
 ### Stage 0: Pre-Deployment
-- ✅ Deploy new version to Green environment
-- ✅ Run comprehensive health checks
-- ✅ Verify all services are ready
-- ✅ Blue still serves 100% traffic
+
+-   ✅ Deploy new version to Green environment
+-   ✅ Run comprehensive health checks
+-   ✅ Verify all services are ready
+-   ✅ Blue still serves 100% traffic
 
 ### Stage 1: 10% Canary (Initial Test)
-- 🎯 **Traffic**: 10% → Green, 90% → Blue
-- ⏱️ **Duration**: 5 minutes
-- 📊 **Metrics**: Error rate < 1%, P95 latency < 500ms
-- 🚨 **Rollback if**: Any health check fails
+
+-   🎯 **Traffic**: 10% → Green, 90% → Blue
+-   ⏱️ **Duration**: 5 minutes
+-   📊 **Metrics**: Error rate < 1%, P95 latency < 500ms
+-   🚨 **Rollback if**: Any health check fails
 
 ### Stage 2: 25% Canary (Confidence Building)
-- 🎯 **Traffic**: 25% → Green, 75% → Blue
-- ⏱️ **Duration**: 5 minutes
-- 📊 **Metrics**: Error rate < 0.5%, P95 latency < 400ms
-- 🚨 **Rollback if**: Error rate increases or latency spikes
+
+-   🎯 **Traffic**: 25% → Green, 75% → Blue
+-   ⏱️ **Duration**: 5 minutes
+-   📊 **Metrics**: Error rate < 0.5%, P95 latency < 400ms
+-   🚨 **Rollback if**: Error rate increases or latency spikes
 
 ### Stage 3: 50% Canary (Even Split)
-- 🎯 **Traffic**: 50% → Green, 50% → Blue
-- ⏱️ **Duration**: 10 minutes
-- 📊 **Metrics**: Error rate < 0.1%, P95 latency < 350ms
-- 🚨 **Rollback if**: Green performs worse than Blue
+
+-   🎯 **Traffic**: 50% → Green, 50% → Blue
+-   ⏱️ **Duration**: 10 minutes
+-   📊 **Metrics**: Error rate < 0.1%, P95 latency < 350ms
+-   🚨 **Rollback if**: Green performs worse than Blue
 
 ### Stage 4: 75% Canary (Near-Complete)
-- 🎯 **Traffic**: 75% → Green, 25% → Blue
-- ⏱️ **Duration**: 10 minutes
-- 📊 **Metrics**: Error rate ≈ Blue, latency ≈ Blue
-- 🚨 **Rollback if**: Any degradation detected
+
+-   🎯 **Traffic**: 75% → Green, 25% → Blue
+-   ⏱️ **Duration**: 10 minutes
+-   📊 **Metrics**: Error rate ≈ Blue, latency ≈ Blue
+-   🚨 **Rollback if**: Any degradation detected
 
 ### Stage 5: 100% Full Rollout
-- 🎯 **Traffic**: 100% → Green
-- ✅ Blue kept warm for instant rollback
-- 📊 **Metrics**: Continuous monitoring for 30 minutes
-- 🔄 **Rollback**: Manual or automatic if issues arise
+
+-   🎯 **Traffic**: 100% → Green
+-   ✅ Blue kept warm for instant rollback
+-   📊 **Metrics**: Continuous monitoring for 30 minutes
+-   🔄 **Rollback**: Manual or automatic if issues arise
 
 ---
 
@@ -76,36 +83,36 @@ upstream backend {
     # Stage 1: 10% Canary
     server green.advancia.internal:4000 weight=1;   # 10%
     server blue.advancia.internal:4000 weight=9;    # 90%
-    
+
     # Stage 2: 25% Canary
     # server green.advancia.internal:4000 weight=1;  # 25%
     # server blue.advancia.internal:4000 weight=3;   # 75%
-    
+
     # Stage 3: 50% Canary
     # server green.advancia.internal:4000 weight=1;  # 50%
     # server blue.advancia.internal:4000 weight=1;   # 50%
-    
+
     # Stage 4: 75% Canary
     # server green.advancia.internal:4000 weight=3;  # 75%
     # server blue.advancia.internal:4000 weight=1;   # 25%
-    
+
     # Stage 5: Full Rollout
     # server green.advancia.internal:4000 weight=1;  # 100%
     # server blue.advancia.internal:4000 down;       # 0% (backup only)
-    
+
     keepalive 32;
 }
 
 server {
     listen 80;
     server_name api.advancia.com;
-    
+
     location / {
         proxy_pass http://backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        
+
         # Track which backend handled request
         add_header X-Served-By $upstream_addr always;
     }
@@ -151,11 +158,11 @@ frontend api_frontend
 
 backend api_backend
     balance roundrobin
-    
+
     # Stage 1: 10% Canary
     server green green.advancia.internal:4000 check weight 10
     server blue blue.advancia.internal:4000 check weight 90
-    
+
     # Health checks
     option httpchk GET /health HTTP/1.1\r\nHost:\ api.advancia.com
     http-check expect status 200
@@ -168,6 +175,7 @@ backend api_backend
 ### Key Metrics to Monitor
 
 #### 1. Error Rate
+
 ```bash
 # Acceptable thresholds
 Stage 1 (10%):  < 1.0% errors
@@ -178,6 +186,7 @@ Stage 5 (100%): < 0.1% errors
 ```
 
 #### 2. Response Time (P95 Latency)
+
 ```bash
 # Maximum acceptable latency
 Stage 1 (10%):  < 500ms
@@ -188,12 +197,14 @@ Stage 5 (100%): < 300ms
 ```
 
 #### 3. Throughput
+
 ```bash
 # Requests per second should not degrade
 Green RPS ≥ 95% of Blue RPS
 ```
 
 #### 4. CPU & Memory Usage
+
 ```bash
 # Resource usage should be stable
 CPU:    < 80%
@@ -266,36 +277,36 @@ exit 0
 ### Automatic Rollback Conditions
 
 1. **Health Check Failure**
-   - Any endpoint returns non-200 status
-   - Response time > 5 seconds
-   - Service becomes unreachable
+   -   Any endpoint returns non-200 status
+   -   Response time > 5 seconds
+   -   Service becomes unreachable
 
 2. **Error Rate Spike**
-   - Error rate increases by > 50% compared to Blue
-   - Error rate exceeds stage threshold
-   - Critical errors detected (5xx responses)
+   -   Error rate increases by > 50% compared to Blue
+   -   Error rate exceeds stage threshold
+   -   Critical errors detected (5xx responses)
 
 3. **Performance Degradation**
-   - P95 latency increases by > 30%
-   - Throughput drops by > 20%
-   - CPU/Memory usage > 90%
+   -   P95 latency increases by > 30%
+   -   Throughput drops by > 20%
+   -   CPU/Memory usage > 90%
 
 4. **Database Issues**
-   - Connection pool exhaustion
-   - Query timeout rate increases
-   - Transaction rollback rate spikes
+   -   Connection pool exhaustion
+   -   Query timeout rate increases
+   -   Transaction rollback rate spikes
 
 5. **External Dependencies**
-   - Payment gateway failures
-   - Email service timeouts
-   - SMS provider errors
+   -   Payment gateway failures
+   -   Email service timeouts
+   -   SMS provider errors
 
 ### Manual Rollback Triggers
 
-- Security vulnerability detected
-- Data integrity issues
-- Customer complaints spike
-- Business-critical feature broken
+-   Security vulnerability detected
+-   Data integrity issues
+-   Customer complaints spike
+-   Business-critical feature broken
 
 ---
 
@@ -309,15 +320,15 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
     Determine if canary should proceed to next stage
     Returns: (proceed: bool, reason: str)
     """
-    
+
     # 1. Error rate comparison
     if green_metrics.error_rate > blue_metrics.error_rate * 1.2:
         return False, f"Green error rate ({green_metrics.error_rate}%) > Blue ({blue_metrics.error_rate}%) by 20%"
-    
+
     # 2. Latency comparison
     if green_metrics.p95_latency > blue_metrics.p95_latency * 1.3:
         return False, f"Green latency ({green_metrics.p95_latency}ms) > Blue ({blue_metrics.p95_latency}ms) by 30%"
-    
+
     # 3. Absolute thresholds
     thresholds = {
         1: {"error_rate": 1.0, "latency": 500},
@@ -326,20 +337,20 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
         4: {"error_rate": 0.1, "latency": 300},
         5: {"error_rate": 0.1, "latency": 300},
     }
-    
+
     if green_metrics.error_rate > thresholds[stage]["error_rate"]:
         return False, f"Green error rate ({green_metrics.error_rate}%) exceeds threshold ({thresholds[stage]['error_rate']}%)"
-    
+
     if green_metrics.p95_latency > thresholds[stage]["latency"]:
         return False, f"Green latency ({green_metrics.p95_latency}ms) exceeds threshold ({thresholds[stage]['latency']}ms)"
-    
+
     # 4. Resource usage
     if green_metrics.cpu_usage > 85:
         return False, f"Green CPU usage too high: {green_metrics.cpu_usage}%"
-    
+
     if green_metrics.memory_usage > 90:
         return False, f"Green memory usage too high: {green_metrics.memory_usage}%"
-    
+
     # All checks passed
     return True, "All metrics within acceptable ranges"
 ```
@@ -349,38 +360,42 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
 ## 🔹 Benefits of Canary Deployment
 
 ### ✅ Risk Mitigation
-- Only 10% of users affected if issues arise
-- Gradual rollout allows early detection
-- Instant rollback minimizes downtime
+
+-   Only 10% of users affected if issues arise
+-   Gradual rollout allows early detection
+-   Instant rollback minimizes downtime
 
 ### ✅ Real-World Validation
-- Test with actual production traffic patterns
-- Validate performance under real load
-- Catch edge cases missed in staging
+
+-   Test with actual production traffic patterns
+-   Validate performance under real load
+-   Catch edge cases missed in staging
 
 ### ✅ Confidence Building
-- Progressive traffic increase builds confidence
-- Each stage validates the next
-- Team can monitor and intervene
+
+-   Progressive traffic increase builds confidence
+-   Each stage validates the next
+-   Team can monitor and intervene
 
 ### ✅ Continuous Monitoring
-- Automated health checks at each stage
-- Metrics comparison (Green vs Blue)
-- Early warning system for issues
+
+-   Automated health checks at each stage
+-   Metrics comparison (Green vs Blue)
+-   Early warning system for issues
 
 ---
 
 ## 🔹 Canary vs Blue/Green
 
-| Aspect | Blue/Green | Canary |
-|--------|-----------|--------|
-| **Traffic Switch** | All-at-once (100%) | Gradual (10→25→50→75→100%) |
-| **Risk** | Higher (all users affected) | Lower (limited blast radius) |
-| **Rollback** | Instant DNS switch | Instant traffic shift back |
-| **Complexity** | Lower | Higher (multiple stages) |
-| **Monitoring** | Post-deployment | During deployment |
-| **User Impact** | All users immediately | Limited subset first |
-| **Best For** | Well-tested releases | Risky/major changes |
+| Aspect             | Blue/Green                  | Canary                       |
+| ------------------ | --------------------------- | ---------------------------- |
+| **Traffic Switch** | All-at-once (100%)          | Gradual (10→25→50→75→100%)   |
+| **Risk**           | Higher (all users affected) | Lower (limited blast radius) |
+| **Rollback**       | Instant DNS switch          | Instant traffic shift back   |
+| **Complexity**     | Lower                       | Higher (multiple stages)     |
+| **Monitoring**     | Post-deployment             | During deployment            |
+| **User Impact**    | All users immediately       | Limited subset first         |
+| **Best For**       | Well-tested releases        | Risky/major changes          |
 
 ### When to Use Canary
 
@@ -389,7 +404,7 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
 ✅ Database schema migrations  
 ✅ Third-party integrations  
 ✅ Performance optimizations  
-✅ Security patches (non-critical)  
+✅ Security patches (non-critical)
 
 ### When to Use Blue/Green
 
@@ -397,7 +412,7 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
 ✅ Config changes  
 ✅ Well-tested features  
 ✅ Emergency hotfixes  
-✅ Rollback scenarios  
+✅ Rollback scenarios
 
 ---
 
@@ -406,19 +421,19 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
 **Best of both worlds:**
 
 1. **Use Canary for initial rollout**
-   - Deploy to Green
-   - Gradually shift traffic (10→25→50→75%)
-   - Monitor metrics at each stage
+   -   Deploy to Green
+   -   Gradually shift traffic (10→25→50→75%)
+   -   Monitor metrics at each stage
 
 2. **Use Blue/Green for final switch**
-   - Once 75% traffic on Green looks good
-   - Final DNS switch to 100% Green
-   - Keep Blue as instant rollback
+   -   Once 75% traffic on Green looks good
+   -   Final DNS switch to 100% Green
+   -   Keep Blue as instant rollback
 
 3. **Keep both environments warm**
-   - Green serves production traffic
-   - Blue ready for instant rollback
-   - Can quickly revert to Blue if needed
+   -   Green serves production traffic
+   -   Blue ready for instant rollback
+   -   Can quickly revert to Blue if needed
 
 ---
 
@@ -445,16 +460,16 @@ def should_proceed_to_next_stage(green_metrics, blue_metrics, stage):
 
 ## ✅ Setup Checklist
 
-- [ ] Configure load balancer for weighted routing
-- [ ] Set up comprehensive health check endpoints
-- [ ] Implement metrics collection (Prometheus/Grafana)
-- [ ] Create canary decision logic script
-- [ ] Configure automated rollback triggers
-- [ ] Set up alerting for each canary stage
-- [ ] Test rollback procedure
-- [ ] Document rollback playbook
-- [ ] Train team on canary process
-- [ ] Create runbook for canary deployment
+-   [ ] Configure load balancer for weighted routing
+-   [ ] Set up comprehensive health check endpoints
+-   [ ] Implement metrics collection (Prometheus/Grafana)
+-   [ ] Create canary decision logic script
+-   [ ] Configure automated rollback triggers
+-   [ ] Set up alerting for each canary stage
+-   [ ] Test rollback procedure
+-   [ ] Document rollback playbook
+-   [ ] Train team on canary process
+-   [ ] Create runbook for canary deployment
 
 ---
 

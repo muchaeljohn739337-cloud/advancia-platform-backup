@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import AdminNav from "@/components/AdminNav";
-import { CheckCircle, XCircle, Clock, AlertCircle } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import AdminNav from '@/components/AdminNav';
+import { CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
 
 interface Withdrawal {
   id: string;
@@ -21,7 +21,7 @@ export default function AdminWithdrawalsPage() {
   const router = useRouter();
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchWithdrawals();
@@ -30,26 +30,26 @@ export default function AdminWithdrawalsPage() {
 
   async function fetchWithdrawals() {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
-        router.push("/admin/login");
+        router.push('/admin/login');
         return;
       }
 
-      const response = await fetch("http://localhost:4000/api/admin/withdrawals", {
+      const response = await fetch('http://localhost:4000/api/admin/withdrawals', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch withdrawals");
+        throw new Error('Failed to fetch withdrawals');
       }
 
       const data = await response.json();
       setWithdrawals(data.withdrawals || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load withdrawals");
+      setError(err instanceof Error ? err.message : 'Failed to load withdrawals');
     } finally {
       setLoading(false);
     }
@@ -57,11 +57,11 @@ export default function AdminWithdrawalsPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
+      case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-400" />;
-      case "rejected":
+      case 'rejected':
         return <XCircle className="w-5 h-5 text-red-400" />;
-      case "pending":
+      case 'pending':
         return <Clock className="w-5 h-5 text-yellow-400" />;
       default:
         return <AlertCircle className="w-5 h-5 text-gray-400" />;
@@ -134,7 +134,7 @@ export default function AdminWithdrawalsPage() {
                         className="border-b border-purple-500/10 hover:bg-purple-900/10 transition-colors"
                       >
                         <td className="px-6 py-4 text-white">
-                          {withdrawal.user?.email || "Unknown"}
+                          {withdrawal.user?.email || 'Unknown'}
                         </td>
                         <td className="px-6 py-4 text-white font-semibold">
                           ${withdrawal.amount.toFixed(2)}
@@ -142,16 +142,14 @@ export default function AdminWithdrawalsPage() {
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
                             {getStatusIcon(withdrawal.status)}
-                            <span className="text-gray-300 capitalize">
-                              {withdrawal.status}
-                            </span>
+                            <span className="text-gray-300 capitalize">{withdrawal.status}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 text-gray-400 text-sm">
                           {new Date(withdrawal.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4">
-                          {withdrawal.status === "pending" && (
+                          {withdrawal.status === 'pending' && (
                             <div className="flex gap-2">
                               <button className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded text-sm transition-colors">
                                 Approve
@@ -179,7 +177,7 @@ export default function AdminWithdrawalsPage() {
             <div className="bg-slate-900/50 backdrop-blur-sm border border-purple-500/20 rounded-xl p-6">
               <h3 className="text-gray-400 text-sm mb-2">Pending</h3>
               <p className="text-3xl font-bold text-yellow-400">
-                {withdrawals.filter((w) => w.status === "pending").length}
+                {withdrawals.filter((w) => w.status === 'pending').length}
               </p>
             </div>
             <div className="bg-slate-900/50 backdrop-blur-sm border border-purple-500/20 rounded-xl p-6">

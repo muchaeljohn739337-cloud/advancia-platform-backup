@@ -120,7 +120,7 @@ stripe trigger payment_intent.succeeded
 
 For production, you'll need to:
 
-1. Go to https://dashboard.stripe.com/webhooks
+1. Go to <https://dashboard.stripe.com/webhooks>
 2. Click "Add endpoint"
 3. Enter your production URL: `https://your-domain.com/api/payments/webhook`
 4. Select events to listen for:
@@ -192,4 +192,4 @@ When a `checkout.session.completed` event is received:
 
 ---
 
-**Need help?** Check the Stripe CLI docs: https://stripe.com/docs/stripe-cli
+**Need help?** Check the Stripe CLI docs: <https://stripe.com/docs/stripe-cli>

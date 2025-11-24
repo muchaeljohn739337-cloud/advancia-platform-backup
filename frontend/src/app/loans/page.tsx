@@ -1,85 +1,91 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Banknote, Clock, AlertCircle, CheckCircle, Calendar, Percent } from 'lucide-react'
-import { useSession } from 'next-auth/react'
-import { redirect } from 'next/navigation'
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Banknote, Clock, AlertCircle, CheckCircle, Calendar, Percent } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 interface Loan {
-  id: string
-  amount: number
-  interestRate: number
-  termMonths: number
-  monthlyPayment: number
-  remainingBalance: number
-  status: 'active' | 'paid' | 'defaulted' | 'pending'
-  startDate: string
-  dueDate: string
-  purpose: string
+  id: string;
+  amount: number;
+  interestRate: number;
+  termMonths: number;
+  monthlyPayment: number;
+  remainingBalance: number;
+  status: 'active' | 'paid' | 'defaulted' | 'pending';
+  startDate: string;
+  dueDate: string;
+  purpose: string;
 }
 
 interface LoanOffer {
-  amount: number
-  interestRate: number
-  termMonths: number
-  monthlyPayment: number
+  amount: number;
+  interestRate: number;
+  termMonths: number;
+  monthlyPayment: number;
 }
 
 export default function LoansPage() {
-  const { status } = useSession()
-  const [loans, setLoans] = useState<Loan[]>([])
-  const [loanOffers, setLoanOffers] = useState<LoanOffer[]>([])
-  const [loading, setLoading] = useState(true)
-  const [applying, setApplying] = useState(false)
-  const [selectedOffer, setSelectedOffer] = useState<LoanOffer | null>(null)
-  const [loanPurpose, setLoanPurpose] = useState('')
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const { status } = useSession();
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [loanOffers, setLoanOffers] = useState<LoanOffer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [applying, setApplying] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState<LoanOffer | null>(null);
+  const [loanPurpose, setLoanPurpose] = useState('');
+  const [message, setMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      redirect('/auth/login')
+      redirect('/auth/login');
     }
     if (status === 'authenticated') {
-      loadLoans()
-      loadLoanOffers()
+      loadLoans();
+      loadLoanOffers();
     }
-  }, [status])
+  }, [status]);
 
   const loadLoans = async () => {
     try {
-      const res = await fetch('/api/loans')
+      const res = await fetch('/api/loans');
       if (res.ok) {
-        const data = await res.json()
-        setLoans(data.loans || [])
+        const data = await res.json();
+        setLoans(data.loans || []);
       }
     } catch (error) {
-      console.error('Failed to load loans:', error)
+      console.error('Failed to load loans:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const loadLoanOffers = async () => {
     try {
-      const res = await fetch('/api/loans/offers')
+      const res = await fetch('/api/loans/offers');
       if (res.ok) {
-        const data = await res.json()
-        setLoanOffers(data.offers || [])
+        const data = await res.json();
+        setLoanOffers(data.offers || []);
       }
     } catch (error) {
-      console.error('Failed to load loan offers:', error)
+      console.error('Failed to load loan offers:', error);
     }
-  }
+  };
 
   const applyForLoan = async () => {
     if (!selectedOffer || !loanPurpose.trim()) {
-      setMessage({ type: 'error', text: 'Please select a loan offer and provide a purpose' })
-      return
+      setMessage({
+        type: 'error',
+        text: 'Please select a loan offer and provide a purpose',
+      });
+      return;
     }
 
-    setApplying(true)
-    setMessage(null)
+    setApplying(true);
+    setMessage(null);
 
     try {
       const res = await fetch('/api/loans/apply', {
@@ -89,43 +95,54 @@ export default function LoansPage() {
           amount: selectedOffer.amount,
           interestRate: selectedOffer.interestRate,
           termMonths: selectedOffer.termMonths,
-          purpose: loanPurpose
-        })
-      })
+          purpose: loanPurpose,
+        }),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (res.ok) {
-        setMessage({ type: 'success', text: 'Loan application submitted successfully!' })
-        setSelectedOffer(null)
-        setLoanPurpose('')
-        loadLoans()
+        setMessage({
+          type: 'success',
+          text: 'Loan application submitted successfully!',
+        });
+        setSelectedOffer(null);
+        setLoanPurpose('');
+        loadLoans();
       } else {
-        setMessage({ type: 'error', text: data.error || 'Failed to apply for loan' })
+        setMessage({
+          type: 'error',
+          text: data.error || 'Failed to apply for loan',
+        });
       }
     } catch {
-      setMessage({ type: 'error', text: 'An error occurred' })
+      setMessage({ type: 'error', text: 'An error occurred' });
     } finally {
-      setApplying(false)
+      setApplying(false);
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'from-blue-500 to-cyan-600'
-      case 'paid': return 'from-green-500 to-emerald-600'
-      case 'pending': return 'from-yellow-500 to-amber-600'
-      case 'defaulted': return 'from-red-500 to-rose-600'
-      default: return 'from-gray-500 to-slate-600'
+      case 'active':
+        return 'from-blue-500 to-cyan-600';
+      case 'paid':
+        return 'from-green-500 to-emerald-600';
+      case 'pending':
+        return 'from-yellow-500 to-amber-600';
+      case 'defaulted':
+        return 'from-red-500 to-rose-600';
+      default:
+        return 'from-gray-500 to-slate-600';
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -156,11 +173,17 @@ export default function LoansPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className={`p-4 rounded-lg ${
-              message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
+              message.type === 'success'
+                ? 'bg-green-50 text-green-800 border border-green-200'
+                : 'bg-red-50 text-red-800 border border-red-200'
             }`}
           >
             <div className="flex items-center gap-2">
-              {message.type === 'success' ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+              {message.type === 'success' ? (
+                <CheckCircle className="w-5 h-5" />
+              ) : (
+                <AlertCircle className="w-5 h-5" />
+              )}
               <span>{message.text}</span>
             </div>
           </motion.div>
@@ -188,7 +211,9 @@ export default function LoansPage() {
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="text-lg font-bold text-slate-800">${offer.amount.toLocaleString()}</h3>
+                      <h3 className="text-lg font-bold text-slate-800">
+                        ${offer.amount.toLocaleString()}
+                      </h3>
                       <p className="text-sm text-slate-600">{offer.termMonths} months term</p>
                     </div>
                     <div className="text-right">
@@ -200,7 +225,9 @@ export default function LoansPage() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-slate-600">Monthly Payment:</span>
-                    <span className="font-bold text-slate-800">${offer.monthlyPayment.toFixed(2)}</span>
+                    <span className="font-bold text-slate-800">
+                      ${offer.monthlyPayment.toFixed(2)}
+                    </span>
                   </div>
                 </motion.div>
               ))}
@@ -262,7 +289,9 @@ export default function LoansPage() {
                         <h3 className="font-bold text-slate-800">{loan.purpose}</h3>
                         <p className="text-xs text-slate-500">ID: {loan.id.slice(0, 8)}</p>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${getStatusColor(loan.status)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${getStatusColor(loan.status)}`}
+                      >
                         {loan.status.toUpperCase()}
                       </span>
                     </div>
@@ -274,11 +303,15 @@ export default function LoansPage() {
                       </div>
                       <div>
                         <p className="text-slate-600 text-xs">Remaining</p>
-                        <p className="font-bold text-slate-800">${loan.remainingBalance.toFixed(2)}</p>
+                        <p className="font-bold text-slate-800">
+                          ${loan.remainingBalance.toFixed(2)}
+                        </p>
                       </div>
                       <div>
                         <p className="text-slate-600 text-xs">Monthly Payment</p>
-                        <p className="font-bold text-slate-800">${loan.monthlyPayment.toFixed(2)}</p>
+                        <p className="font-bold text-slate-800">
+                          ${loan.monthlyPayment.toFixed(2)}
+                        </p>
                       </div>
                       <div>
                         <p className="text-slate-600 text-xs">Interest Rate</p>
@@ -304,5 +337,5 @@ export default function LoansPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

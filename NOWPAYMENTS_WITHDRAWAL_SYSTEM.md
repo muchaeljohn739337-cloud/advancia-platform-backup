@@ -24,8 +24,8 @@ POST /api/withdrawals/request
 
 **Available Providers** (GET `/api/withdrawals/methods`):
 
-- **Cryptomus**: 50+ coins, 1% fees, 5-30min processing
-- **NOWPayments**: 200+ coins, 0.5% fees, 10-60min processing ⭐ Recommended
+-   **Cryptomus**: 50+ coins, 1% fees, 5-30min processing
+-   **NOWPayments**: 200+ coins, 0.5% fees, 10-60min processing ⭐ Recommended
 
 This creates a record in `crypto_withdrawals` table with `status: "pending"` and stores the selected `paymentProvider`.
 
@@ -39,8 +39,8 @@ SELECT * FROM crypto_withdrawals WHERE status = 'approved';
 
 Admin can:
 
-- ✅ **Approve** → Set `status = 'approved'`, `approvedBy = adminId`
-- ❌ **Reject** → Set `status = 'rejected'`, add `adminNotes`
+-   ✅ **Approve** → Set `status = 'approved'`, `approvedBy = adminId`
+-   ❌ **Reject** → Set `status = 'rejected'`, add `adminNotes`
 
 ### 3. **Admin Processes Approved Withdrawals (Batch)**
 
@@ -112,9 +112,9 @@ x-nowpayments-sig: <hmac_signature>
 1. Verifies HMAC signature
 2. Finds withdrawal by `unique_external_id`
 3. Updates status:
-   - `FINISHED` → `completed`, sets `txHash`, `completedAt`
-   - `FAILED` → `failed`, adds error notes
-   - `WAITING/CONFIRMING` → `processing`
+   -   `FINISHED` → `completed`, sets `txHash`, `completedAt`
+   -   `FAILED` → `failed`, adds error notes
+   -   `WAITING/CONFIRMING` → `processing`
 
 ### 6. **User Receives Crypto**
 
@@ -259,10 +259,10 @@ Content-Type: application/json
 
 **Error Cases:**
 
-- `403` - Not admin
-- `400` - Missing/invalid withdrawalIds
-- `404` - No approved withdrawals found
-- `500` - NOWPayments API error (withdrawals marked as `failed`)
+-   `403` - Not admin
+-   `400` - Missing/invalid withdrawalIds
+-   `404` - No approved withdrawals found
+-   `500` - NOWPayments API error (withdrawals marked as `failed`)
 
 ### **POST /api/nowpayments/payout-ipn** (Webhook)
 
@@ -521,16 +521,16 @@ const ProcessWithdrawals = () => {
 
 ## Production Checklist
 
-- [ ] Switch from sandbox to production API keys
-- [ ] Configure production `BACKEND_URL` for IPN webhooks
-- [ ] Add IPN callback URL in NOWPayments dashboard
-- [ ] Set up monitoring for failed payouts
-- [ ] Implement admin email notifications for new withdrawal requests
-- [ ] Add withdrawal limits (daily/weekly per user)
-- [ ] Implement 2FA verification for batch payouts (optional)
-- [ ] Set up balance alerts (notify admin when merchant balance low)
-- [ ] Add blockchain explorer links in admin UI (using `txHash`)
-- [ ] Implement payout reconciliation report (compare DB vs NOWPayments)
+-   [ ] Switch from sandbox to production API keys
+-   [ ] Configure production `BACKEND_URL` for IPN webhooks
+-   [ ] Add IPN callback URL in NOWPayments dashboard
+-   [ ] Set up monitoring for failed payouts
+-   [ ] Implement admin email notifications for new withdrawal requests
+-   [ ] Add withdrawal limits (daily/weekly per user)
+-   [ ] Implement 2FA verification for batch payouts (optional)
+-   [ ] Set up balance alerts (notify admin when merchant balance low)
+-   [ ] Add blockchain explorer links in admin UI (using `txHash`)
+-   [ ] Implement payout reconciliation report (compare DB vs NOWPayments)
 
 ---
 
@@ -542,9 +542,9 @@ Check `adminNotes` in `crypto_withdrawals` table for NOWPayments error message.
 
 Common issues:
 
-- **Insufficient balance**: Admin needs to deposit more crypto to merchant account
-- **Invalid address**: User provided wrong/malformed wallet address
-- **Currency mismatch**: Requested currency not supported or disabled
+-   **Insufficient balance**: Admin needs to deposit more crypto to merchant account
+-   **Invalid address**: User provided wrong/malformed wallet address
+-   **Currency mismatch**: Requested currency not supported or disabled
 
 ### IPN Not Received
 

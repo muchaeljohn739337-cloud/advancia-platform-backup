@@ -1,6 +1,6 @@
 /**
  * Example: Secure Login Component
- * 
+ *
  * Demonstrates:
  * - Input sanitization
  * - Secure token storage
@@ -19,7 +19,7 @@ export default function SecureLogin() {
   const router = useRouter();
   const { login, isAuthenticated } = useAuth();
   const { sanitize, sanitizeEmail } = useSafeInput();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -60,13 +60,13 @@ export default function SecureLogin() {
         headers: {
           'Content-Type': 'application/json',
           // CSRF token if needed
-          'X-CSRF-Token': getCsrfToken()
+          'X-CSRF-Token': getCsrfToken(),
         },
         body: JSON.stringify({
           email: safeEmail,
-          password: safePassword
+          password: safePassword,
         }),
-        credentials: 'include' // Include cookies
+        credentials: 'include', // Include cookies
       });
 
       const data = await response.json();
@@ -78,11 +78,11 @@ export default function SecureLogin() {
       // 4. Store token securely
       if (data.token) {
         login(data.token, data.expiresIn || 3600);
-        
+
         // Clear form
         setEmail('');
         setPassword('');
-        
+
         // Redirect to dashboard
         router.push('/dashboard');
       }
@@ -96,11 +96,9 @@ export default function SecureLogin() {
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-6">Secure Login</h1>
-      
+
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">
-          {error}
-        </div>
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded">{error}</div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">

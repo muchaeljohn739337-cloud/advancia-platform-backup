@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import AdminNav from "@/components/AdminNav";
-import { BarChart3, TrendingUp, Users, Activity, Target, Calendar, UserCheck } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import AdminNav from '@/components/AdminNav';
+import { BarChart3, TrendingUp, Users, Activity, Target, Calendar, UserCheck } from 'lucide-react';
 // Temporarily disable analytics hook to avoid sessionStorage issues
 // import { useAdminAnalytics } from "@/hooks/useAnalytics";
 
@@ -20,7 +20,7 @@ export default function AdminAnalyticsPage() {
   const router = useRouter();
   // const { getFunnels, getCohorts } = useAdminAnalytics();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [funnelData, setFunnelData] = useState<any>(null);
   const [cohortData, setCohortData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'funnels' | 'cohorts'>('overview');
@@ -32,9 +32,9 @@ export default function AdminAnalyticsPage() {
 
   async function fetchAnalytics() {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
-        router.push("/admin/login");
+        router.push('/admin/login');
         return;
       }
 
@@ -51,7 +51,7 @@ export default function AdminAnalyticsPage() {
       setFunnelData({ mock: true });
       setCohortData({ mock: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load analytics");
+      setError(err instanceof Error ? err.message : 'Failed to load analytics');
     } finally {
       setLoading(false);
     }
@@ -114,13 +114,9 @@ export default function AdminAnalyticsPage() {
             <OverviewTab funnelData={funnelData} cohortData={cohortData} />
           )}
 
-          {activeTab === 'funnels' && (
-            <FunnelsTab funnelData={funnelData} />
-          )}
+          {activeTab === 'funnels' && <FunnelsTab funnelData={funnelData} />}
 
-          {activeTab === 'cohorts' && (
-            <CohortsTab cohortData={cohortData} />
-          )}
+          {activeTab === 'cohorts' && <CohortsTab cohortData={cohortData} />}
         </div>
       </div>
     </div>
@@ -182,7 +178,9 @@ function OverviewTab({ funnelData, cohortData }: { funnelData: any; cohortData: 
                     <div className="w-24 bg-slate-700 rounded-full h-2">
                       <div
                         className="bg-purple-500 h-2 rounded-full"
-                        style={{ width: `${(step.users / funnelData.funnels[0]?.users || 1) * 100}%` }}
+                        style={{
+                          width: `${(step.users / funnelData.funnels[0]?.users || 1) * 100}%`,
+                        }}
                       ></div>
                     </div>
                     <span className="text-white text-sm font-medium w-12 text-right">
@@ -207,13 +205,21 @@ function OverviewTab({ funnelData, cohortData }: { funnelData: any; cohortData: 
           {cohortData?.cohorts ? (
             <div className="space-y-2">
               {cohortData.cohorts.slice(0, 5).map((cohort: any, index: number) => (
-                <div key={index} className="flex items-center justify-between py-2 border-b border-slate-700 last:border-b-0">
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2 border-b border-slate-700 last:border-b-0"
+                >
                   <span className="text-gray-300 text-sm">
-                    {new Date(cohort.cohort_month).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    {new Date(cohort.cohort_month).toLocaleDateString('en-US', {
+                      month: 'short',
+                      year: 'numeric',
+                    })}
                   </span>
                   <div className="text-right">
                     <div className="text-white text-sm font-medium">{cohort.cohort_size} users</div>
-                    <div className="text-gray-500 text-xs">{cohort.retained_30d} retained (30d)</div>
+                    <div className="text-gray-500 text-xs">
+                      {cohort.retained_30d} retained (30d)
+                    </div>
                   </div>
                 </div>
               ))}
@@ -243,7 +249,7 @@ function FunnelsTab({ funnelData }: { funnelData: any }) {
           <div className="space-y-4">
             {funnelData.funnels.map((step: any, index: number) => {
               const previousUsers = index > 0 ? funnelData.funnels[index - 1].users : step.users;
-              const conversionRate = previousUsers > 0 ? ((step.users / previousUsers) * 100) : 0;
+              const conversionRate = previousUsers > 0 ? (step.users / previousUsers) * 100 : 0;
 
               return (
                 <div key={index} className="bg-slate-800/50 rounded-lg p-4">
@@ -259,7 +265,9 @@ function FunnelsTab({ funnelData }: { funnelData: any }) {
                     <div className="w-32 bg-slate-700 rounded-full h-2">
                       <div
                         className="bg-purple-500 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${(step.users / funnelData.funnels[0]?.users || 1) * 100}%` }}
+                        style={{
+                          width: `${(step.users / funnelData.funnels[0]?.users || 1) * 100}%`,
+                        }}
                       ></div>
                     </div>
                   </div>
@@ -309,7 +317,9 @@ function CohortsTab({ cohortData }: { cohortData: any }) {
                   <th className="text-right py-3 px-4 text-gray-400 font-medium">Active</th>
                   <th className="text-right py-3 px-4 text-gray-400 font-medium">30d Retention</th>
                   <th className="text-right py-3 px-4 text-gray-400 font-medium">90d Retention</th>
-                  <th className="text-right py-3 px-4 text-gray-400 font-medium">Avg Transactions</th>
+                  <th className="text-right py-3 px-4 text-gray-400 font-medium">
+                    Avg Transactions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -318,26 +328,34 @@ function CohortsTab({ cohortData }: { cohortData: any }) {
                     <td className="py-3 px-4 text-white font-medium">
                       {new Date(cohort.cohort_month).toLocaleDateString('en-US', {
                         month: 'short',
-                        year: 'numeric'
+                        year: 'numeric',
                       })}
                     </td>
                     <td className="py-3 px-4 text-right text-gray-300">{cohort.cohort_size}</td>
                     <td className="py-3 px-4 text-right text-gray-300">{cohort.active_users}</td>
                     <td className="py-3 px-4 text-right">
-                      <span className={`px-2 py-1 rounded text-xs ${
-                        cohort.retained_30d > 50 ? 'bg-green-500/20 text-green-400' :
-                        cohort.retained_30d > 25 ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-red-500/20 text-red-400'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${
+                          cohort.retained_30d > 50
+                            ? 'bg-green-500/20 text-green-400'
+                            : cohort.retained_30d > 25
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'bg-red-500/20 text-red-400'
+                        }`}
+                      >
                         {cohort.retained_30d}%
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <span className={`px-2 py-1 rounded text-xs ${
-                        cohort.retained_90d > 30 ? 'bg-green-500/20 text-green-400' :
-                        cohort.retained_90d > 15 ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-red-500/20 text-red-400'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${
+                          cohort.retained_90d > 30
+                            ? 'bg-green-500/20 text-green-400'
+                            : cohort.retained_90d > 15
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'bg-red-500/20 text-red-400'
+                        }`}
+                      >
                         {cohort.retained_90d}%
                       </span>
                     </td>
@@ -362,7 +380,9 @@ function CohortsTab({ cohortData }: { cohortData: any }) {
             <ul className="text-gray-300 text-sm space-y-1">
               <li>• Best performing cohort: {cohortData.insights.bestCohort}</li>
               <li>• Retention trend: {cohortData.insights.retentionTrend}</li>
-              <li>• Recommendations: {cohortData.insights.recommendations?.join(', ') || 'None'}</li>
+              <li>
+                • Recommendations: {cohortData.insights.recommendations?.join(', ') || 'None'}
+              </li>
             </ul>
           </div>
         )}
@@ -377,7 +397,7 @@ function MetricCard({
   title,
   value,
   subtitle,
-  color
+  color,
 }: {
   icon: any;
   title: string;
@@ -394,7 +414,9 @@ function MetricCard({
   };
 
   return (
-    <div className={`bg-slate-900/50 backdrop-blur-sm border rounded-xl p-6 ${colorClasses[color as keyof typeof colorClasses] || colorClasses.blue}`}>
+    <div
+      className={`bg-slate-900/50 backdrop-blur-sm border rounded-xl p-6 ${colorClasses[color as keyof typeof colorClasses] || colorClasses.blue}`}
+    >
       <Icon className="w-8 h-8 mb-4" />
       <h3 className="text-gray-400 text-sm mb-2">{title}</h3>
       <p className="text-2xl font-bold text-white mb-1">{value}</p>

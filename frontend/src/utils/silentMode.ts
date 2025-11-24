@@ -7,7 +7,7 @@ let silentModeEnabled = false;
 
 export const initSilentMode = async (): Promise<boolean> => {
   try {
-    const res = await fetch("/api/admin/config/silent-mode");
+    const res = await fetch('/api/admin/config/silent-mode');
     const data = await res.json();
 
     silentModeEnabled = data.silentMode || false;
@@ -21,12 +21,12 @@ export const initSilentMode = async (): Promise<boolean> => {
       window.console.debug = noop;
       // Keep console.error for critical issues
 
-      console.error("🛑 Silent Mode: Backend notifications suppressed");
+      console.error('🛑 Silent Mode: Backend notifications suppressed');
     }
 
     return silentModeEnabled;
   } catch (error) {
-    console.error("Failed to initialize Silent Mode:", error);
+    console.error('Failed to initialize Silent Mode:', error);
     return false;
   }
 };
@@ -35,10 +35,7 @@ export const isSilentMode = (): boolean => {
   return silentModeEnabled;
 };
 
-export const showToastIfAllowed = (
-  toastFn: () => void,
-  isBackendError = false
-): void => {
+export const showToastIfAllowed = (toastFn: () => void, isBackendError = false): void => {
   // Only suppress backend errors in silent mode
   if (silentModeEnabled && isBackendError) {
     return; // Suppress

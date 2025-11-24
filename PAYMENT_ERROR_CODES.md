@@ -47,11 +47,11 @@ Webhook (`paymentsWebhook.ts`) emits `payment-status` with fields: `paymentInten
 
 ## Client Implementation Notes
 
-- Always branch logic on `response.code` when present instead of parsing `error` string.
-- Retry Strategy: Only retry automatically on transient 5xx (e.g., `PAYMENT_INTENT_CREATE_FAILED`, `REFUND_FAILED`). Do NOT auto-retry card declines (`CARD_ERROR`).
-- Idempotency: `PAYMENT_INTENT_REUSED` indicates server reused an existing intent—client should not create another.
-- Logging: Log all non-2xx codes plus `CARD_ERROR` with sufficient context (userId, amount, intentId).
-- Telemetry: Tag metrics with `code` to aggregate failure types.
+-   Always branch logic on `response.code` when present instead of parsing `error` string.
+-   Retry Strategy: Only retry automatically on transient 5xx (e.g., `PAYMENT_INTENT_CREATE_FAILED`, `REFUND_FAILED`). Do NOT auto-retry card declines (`CARD_ERROR`).
+-   Idempotency: `PAYMENT_INTENT_REUSED` indicates server reused an existing intent—client should not create another.
+-   Logging: Log all non-2xx codes plus `CARD_ERROR` with sufficient context (userId, amount, intentId).
+-   Telemetry: Tag metrics with `code` to aggregate failure types.
 
 ## Adding New Codes
 
@@ -62,11 +62,11 @@ Webhook (`paymentsWebhook.ts`) emits `payment-status` with fields: `paymentInten
 
 ## Deprecation Policy
 
-- Codes can be deprecated by removing them from responses and adding a note here (Deprecated) for one release cycle before deletion.
+-   Codes can be deprecated by removing them from responses and adding a note here (Deprecated) for one release cycle before deletion.
 
 ## Versioning
 
-- Maintain changes via git history; no separate versioning needed. Consider adding a "Last Updated" line if change frequency grows.
+-   Maintain changes via git history; no separate versioning needed. Consider adding a "Last Updated" line if change frequency grows.
 
 _Last Updated: 2025-11-20_
 
@@ -74,7 +74,7 @@ _Last Updated: 2025-11-20_
 
 ### Payment Declined
 
-- **Code:** `CARD_ERROR`
-- **HTTP Status:** `400`
-- **Meaning:** The card was declined, has insufficient funds, or another issue preventing the charge.
-- **Client Handling:** Display a user-friendly error message indicating the card issue. Suggest the user check their card details, ensure sufficient funds, or try a different payment method.
+-   **Code:** `CARD_ERROR`
+-   **HTTP Status:** `400`
+-   **Meaning:** The card was declined, has insufficient funds, or another issue preventing the charge.
+-   **Client Handling:** Display a user-friendly error message indicating the card issue. Suggest the user check their card details, ensure sufficient funds, or try a different payment method.

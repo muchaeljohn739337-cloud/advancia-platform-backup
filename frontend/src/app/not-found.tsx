@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function NotFound() {
   const pathname = usePathname();
 
   useEffect(() => {
     // Silent mode 404 logging - logs to console without user notification
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       console.warn(`[404] Page not found: ${pathname}`);
     }
 
     // Optional: Send to analytics/monitoring service in production
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       // Example: trackEvent('404', { path: pathname });
     }
   }, [pathname]);
@@ -41,25 +41,18 @@ export default function NotFound() {
 
           {/* Title */}
           <h1 className="text-4xl font-bold mb-2">404</h1>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-            Page Not Found
-          </h2>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">Page Not Found</h2>
 
           {/* Description */}
           <p className="text-gray-600 mb-6">
-            The page <code className="badge badge-ghost">{pathname}</code>{" "}
-            doesn&apos;t exist or has been moved.
+            The page <code className="badge badge-ghost">{pathname}</code> doesn&apos;t exist or has
+            been moved.
           </p>
 
           {/* Actions */}
           <div className="card-actions justify-center">
             <a href="/" className="btn btn-primary">
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -69,16 +62,13 @@ export default function NotFound() {
               </svg>
               Go Home
             </a>
-            <button
-              onClick={() => window.history.back()}
-              className="btn btn-ghost"
-            >
+            <button onClick={() => window.history.back()} className="btn btn-ghost">
               Go Back
             </button>
           </div>
 
           {/* Debug Info (Development Only) */}
-          {process.env.NODE_ENV === "development" && (
+          {process.env.NODE_ENV === 'development' && (
             <div className="alert alert-info mt-6">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -93,9 +83,7 @@ export default function NotFound() {
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span className="text-sm">
-                Development Mode: 404 logged silently to console
-              </span>
+              <span className="text-sm">Development Mode: 404 logged silently to console</span>
             </div>
           )}
         </div>

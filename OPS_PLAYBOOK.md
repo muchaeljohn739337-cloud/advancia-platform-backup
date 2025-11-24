@@ -8,29 +8,29 @@
 
 ### Cloud Provider
 
-- **Provider**: DigitalOcean Droplet (Ubuntu 22.04 LTS)
-- **Specs**: 2 vCPU, 4GB RAM, 80GB SSD (scale as needed)
-- **Firewall**: UFW (allow only SSH:22, HTTP:80, HTTPS:443)
-- **DNS**: Cloudflare nameservers
-- **Edge Security**: Cloudflare (SSL, WAF, Rate Limiting, Bot Protection)
+-   **Provider**: DigitalOcean Droplet (Ubuntu 22.04 LTS)
+-   **Specs**: 2 vCPU, 4GB RAM, 80GB SSD (scale as needed)
+-   **Firewall**: UFW (allow only SSH:22, HTTP:80, HTTPS:443)
+-   **DNS**: Cloudflare nameservers
+-   **Edge Security**: Cloudflare (SSL, WAF, Rate Limiting, Bot Protection)
 
 ### Application Stack
 
-- **Frontend**: React + Next.js (Dockerized, port 3000)
-- **Backend**: Node.js + Express (Dockerized, port 4000)
-- **Database**: PostgreSQL (Dockerized, persistent volume)
-- **Reverse Proxy**: Nginx
-- **Containerization**: Docker + Docker Compose
-- **Process Management**: PM2 (optional for non-Docker deployments)
+-   **Frontend**: React + Next.js (Dockerized, port 3000)
+-   **Backend**: Node.js + Express (Dockerized, port 4000)
+-   **Database**: PostgreSQL (Dockerized, persistent volume)
+-   **Reverse Proxy**: Nginx
+-   **Containerization**: Docker + Docker Compose
+-   **Process Management**: PM2 (optional for non-Docker deployments)
 
 ### Security & Compliance
 
-- **WAF**: Cloudflare (SQLi, XSS, brute force protection)
-- **Rate Limiting**: 10 requests/minute on `/api/login` and `/api/register`
-- **Bot Protection**: Cloudflare Bot Fight Mode enabled
-- **Access Control**: Role-based (admin/user) + Cloudflare Access for admin routes
-- **Encryption**: HTTPS enforced everywhere
-- **Compliance**: Audit logs (PCI DSS, SOC2 ready)
+-   **WAF**: Cloudflare (SQLi, XSS, brute force protection)
+-   **Rate Limiting**: 10 requests/minute on `/api/login` and `/api/register`
+-   **Bot Protection**: Cloudflare Bot Fight Mode enabled
+-   **Access Control**: Role-based (admin/user) + Cloudflare Access for admin routes
+-   **Encryption**: HTTPS enforced everywhere
+-   **Compliance**: Audit logs (PCI DSS, SOC2 ready)
 
 ---
 
@@ -168,21 +168,18 @@ sudo systemctl status certbot.timer
 ### 6. Configure Cloudflare Security
 
 1. **DNS Setup**:
-
-   - Point domain to Cloudflare nameservers
-   - Add A record: `@` → your Droplet IP
-   - Add CNAME: `www` → `@`
+   -   Point domain to Cloudflare nameservers
+   -   Add A record: `@` → your Droplet IP
+   -   Add CNAME: `www` → `@`
 
 2. **SSL Configuration**:
-
-   - Set SSL mode to "Full (Strict)"
-   - Enable "Always Use HTTPS"
+   -   Set SSL mode to "Full (Strict)"
+   -   Enable "Always Use HTTPS"
 
 3. **WAF & Security**:
-
-   - Enable Cloudflare WAF with OWASP ruleset
-   - Add custom rules for SQLi/XSS protection
-   - Enable Bot Fight Mode
+   -   Enable Cloudflare WAF with OWASP ruleset
+   -   Add custom rules for SQLi/XSS protection
+   -   Enable Bot Fight Mode
 
 4. **Rate Limiting**:
 
@@ -193,9 +190,9 @@ sudo systemctl status certbot.timer
    ```
 
 5. **Zero Trust Access** (for admin routes):
-   - Enable Cloudflare Access
-   - Protect `/admin/*` routes
-   - Require authentication for admin access
+   -   Enable Cloudflare Access
+   -   Protect `/admin/*` routes
+   -   Require authentication for admin access
 
 ---
 
@@ -229,9 +226,9 @@ DD_API_KEY=your_datadog_api_key bash -c "$(curl -L https://s3.amazonaws.com/dd-a
 
 ### Cloudflare Analytics
 
-- **Dashboard**: Traffic, threats, performance
-- **Logs**: Real-time request logging
-- **Security Events**: WAF blocks, rate limit hits
+-   **Dashboard**: Traffic, threats, performance
+-   **Logs**: Real-time request logging
+-   **Security Events**: WAF blocks, rate limit hits
 
 ### Audit Logging
 
@@ -300,11 +297,11 @@ jobs:
 
 Add to GitHub repository secrets:
 
-- `DROPLET_IP`: Your DigitalOcean Droplet IP
-- `DROPLET_USER`: SSH username (usually `root`)
-- `DROPLET_SSH_KEY`: Private SSH key
-- `REGISTRY_USER`: Docker registry username
-- `REGISTRY_PASSWORD`: Docker registry password
+-   `DROPLET_IP`: Your DigitalOcean Droplet IP
+-   `DROPLET_USER`: SSH username (usually `root`)
+-   `DROPLET_SSH_KEY`: Private SSH key
+-   `REGISTRY_USER`: Docker registry username
+-   `REGISTRY_PASSWORD`: Docker registry password
 
 ---
 
@@ -400,8 +397,8 @@ docker-compose exec db psql -U postgres -d Advancia
 
 **Rate limiting too aggressive:**
 
-- Adjust Cloudflare rate limiting rules
-- Check application-level rate limiting in backend
+-   Adjust Cloudflare rate limiting rules
+-   Check application-level rate limiting in backend
 
 ### Performance Optimization
 
@@ -431,48 +428,48 @@ services:
 
 ### ✅ Authentication & User Management
 
-- [x] JWT-based login/signup
-- [x] Password hashing (bcrypt)
-- [x] Role-based access control (admin/user)
-- [x] MFA/SSO for admin routes (Cloudflare Access)
+-   [x] JWT-based login/signup
+-   [x] Password hashing (bcrypt)
+-   [x] Role-based access control (admin/user)
+-   [x] MFA/SSO for admin routes (Cloudflare Access)
 
 ### ✅ Payments & Transactions
 
-- [x] Stripe integration (payments)
-- [x] Plaid integration (bank linking)
-- [x] Transaction history API
-- [x] Webhooks for payment events
+-   [x] Stripe integration (payments)
+-   [x] Plaid integration (bank linking)
+-   [x] Transaction history API
+-   [x] Webhooks for payment events
 
 ### ✅ Dashboard & UI
 
-- [x] Responsive React dashboard
-- [x] Charts (Chart.js or Recharts)
-- [x] Notifications (toast, email)
-- [x] User profile & settings
+-   [x] Responsive React dashboard
+-   [x] Charts (Chart.js or Recharts)
+-   [x] Notifications (toast, email)
+-   [x] User profile & settings
 
 ### ✅ Backend Logic
 
-- [x] RESTful API with Express
-- [x] PostgreSQL models (users, transactions, logs)
-- [x] Validation middleware (Joi/Zod)
-- [x] Error handling middleware
+-   [x] RESTful API with Express
+-   [x] PostgreSQL models (users, transactions, logs)
+-   [x] Validation middleware (Joi/Zod)
+-   [x] Error handling middleware
 
 ### ✅ DevOps & Deployment
 
-- [x] Dockerfiles for backend/frontend
-- [x] .dockerignore and .env.example files
-- [x] docker-compose.yml for full stack
-- [x] Nginx reverse proxy config
-- [x] CI/CD pipeline (GitHub Actions)
-- [x] GitHub Container Registry (optional)
+-   [x] Dockerfiles for backend/frontend
+-   [x] .dockerignore and .env.example files
+-   [x] docker-compose.yml for full stack
+-   [x] Nginx reverse proxy config
+-   [x] CI/CD pipeline (GitHub Actions)
+-   [x] GitHub Container Registry (optional)
 
 ### ✅ Monitoring & Logging
 
-- [x] Sentry (frontend/backend errors)
-- [x] Datadog (performance metrics)
-- [x] DigitalOcean Monitoring (CPU, memory, disk)
-- [x] Cloudflare Analytics (traffic, threats)
-- [x] Audit logs for compliance
+-   [x] Sentry (frontend/backend errors)
+-   [x] Datadog (performance metrics)
+-   [x] DigitalOcean Monitoring (CPU, memory, disk)
+-   [x] Cloudflare Analytics (traffic, threats)
+-   [x] Audit logs for compliance
 
 ---
 
@@ -505,16 +502,16 @@ sudo certbot renew
 
 ### Documentation Links
 
-- [README.md](./README.md) - Project overview
-- [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md) - Feature checklist
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
-- [DIGITALOCEAN_DROPLET_DEPLOYMENT.md](./DIGITALOCEAN_DROPLET_DEPLOYMENT.md) - Detailed deployment guide
-- [CLOUDFLARE_SECURITY_GUIDE.md](./CLOUDFLARE_SECURITY_GUIDE.md) - Security configuration
-- [DAY2_OPS_CHECKLIST.md](./DAY2_OPS_CHECKLIST.md) - Ongoing operations checklist
-- [OPS_WALL_CHART.md](./OPS_WALL_CHART.md) - Visual ops timeline
-- [FOUNDERS_OPS_HANDBOOK.md](./FOUNDERS_OPS_HANDBOOK.md) - Consolidated ops guide
-- [POST_LAUNCH_ROADMAP.md](./POST_LAUNCH_ROADMAP.md) - Feature rollout priorities
-- [NOTION_BOARD_TEMPLATE.md](./NOTION_BOARD_TEMPLATE.md) - Kanban board template for tracking
+-   [README.md](./README.md) - Project overview
+-   [LAUNCH_CHECKLIST.md](./LAUNCH_CHECKLIST.md) - Feature checklist
+-   [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
+-   [DIGITALOCEAN_DROPLET_DEPLOYMENT.md](./DIGITALOCEAN_DROPLET_DEPLOYMENT.md) - Detailed deployment guide
+-   [CLOUDFLARE_SECURITY_GUIDE.md](./CLOUDFLARE_SECURITY_GUIDE.md) - Security configuration
+-   [DAY2_OPS_CHECKLIST.md](./DAY2_OPS_CHECKLIST.md) - Ongoing operations checklist
+-   [OPS_WALL_CHART.md](./OPS_WALL_CHART.md) - Visual ops timeline
+-   [FOUNDERS_OPS_HANDBOOK.md](./FOUNDERS_OPS_HANDBOOK.md) - Consolidated ops guide
+-   [POST_LAUNCH_ROADMAP.md](./POST_LAUNCH_ROADMAP.md) - Feature rollout priorities
+-   [NOTION_BOARD_TEMPLATE.md](./NOTION_BOARD_TEMPLATE.md) - Kanban board template for tracking
 
 ### Job Execution Patterns
 
@@ -557,8 +554,8 @@ jobs:
 
 ✅ **Key points**
 
-- `needs:` → ensures jobs run systematically in order.
-- `concurrency:` → avoids duplicate runs (only one deploy job per branch).
+-   `needs:` → ensures jobs run systematically in order.
+-   `concurrency:` → avoids duplicate runs (only one deploy job per branch).
 
 #### Node.js Job Runner (Custom Script)
 
@@ -583,8 +580,8 @@ await addJob("deploy", { id: "main-branch" });
 
 ✅ **Key points**
 
-- `jobId` ensures duplicates are skipped.
-- Queue enforces systematic execution.
+-   `jobId` ensures duplicates are skipped.
+-   Queue enforces systematic execution.
 
 #### Bash Script with Lockfile
 
@@ -606,25 +603,25 @@ echo "Running job systematically..."
 
 ✅ **Key points**
 
-- Lockfile prevents duplicate runs.
-- Trap cleans up lockfile after job finishes.
+-   Lockfile prevents duplicate runs.
+-   Trap cleans up lockfile after job finishes.
 
 ⚡ **Recommendation**: For SaaS deployment via GitHub → Droplet, use the **GitHub Actions approach with `concurrency`** for systematic, duplicate-free execution.
 
 #### Staging vs Production Environments
 
-- **Staging**: Deploys automatically on every push to `main` branch. Use for testing changes safely.
-- **Production**: Deploys only on GitHub releases (manual promotion). Ensures stability.
-- **Setup**: Configure separate secrets (`DROPLET_IP_STAGING`, `DROPLET_IP_PROD`, etc.) for each environment.
-- **Approval Gates**: For production, set up environment protection in GitHub: Settings > Environments > `production` > Add required reviewers to approve deploys.
-- **Workflow**: Push to `main` → Staging deploy. Create release → Wait for approval → Production deploy.
+-   **Staging**: Deploys automatically on every push to `main` branch. Use for testing changes safely.
+-   **Production**: Deploys only on GitHub releases (manual promotion). Ensures stability.
+-   **Setup**: Configure separate secrets (`DROPLET_IP_STAGING`, `DROPLET_IP_PROD`, etc.) for each environment.
+-   **Approval Gates**: For production, set up environment protection in GitHub: Settings > Environments > `production` > Add required reviewers to approve deploys.
+-   **Workflow**: Push to `main` → Staging deploy. Create release → Wait for approval → Production deploy.
 
 ### Emergency Contacts
 
-- **Infrastructure Issues**: DigitalOcean support
-- **Security Incidents**: [security@Advancia.com](mailto:security@Advancia.com)
-- **Application Bugs**: GitHub Issues
-- **Performance Issues**: Datadog alerts
+-   **Infrastructure Issues**: DigitalOcean support
+-   **Security Incidents**: [security@Advancia.com](mailto:security@Advancia.com)
+-   **Application Bugs**: GitHub Issues
+-   **Performance Issues**: Datadog alerts
 
 ---
 

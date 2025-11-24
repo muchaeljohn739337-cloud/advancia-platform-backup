@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Maximize2, MessageCircle, Minimize2, Send, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Maximize2, MessageCircle, Minimize2, Send, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 type Message = {
   id: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   text: string;
   timestamp: Date;
 };
@@ -14,7 +14,7 @@ export default function SupportChatWidget() {
   const [open, setOpen] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,8 +28,8 @@ export default function SupportChatWidget() {
   useEffect(() => {
     if (open && messages.length === 0) {
       const welcomeMessage: Message = {
-        id: "welcome",
-        role: "assistant",
+        id: 'welcome',
+        role: 'assistant',
         text: "👋 Hello! I'm here to help with any questions about Advancia Pay. How can I assist you today?",
         timestamp: new Date(),
       };
@@ -44,38 +44,37 @@ export default function SupportChatWidget() {
 
     const userMsg: Message = {
       id: String(Date.now()),
-      role: "user",
+      role: 'user',
       text: input,
       timestamp: new Date(),
     };
     addMessage(userMsg);
-    setInput("");
+    setInput('');
     setLoading(true);
 
     try {
-      const res = await fetch("/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: userMsg.text }),
       });
 
-      if (!res.ok) throw new Error("AI API error");
+      if (!res.ok) throw new Error('AI API error');
       const body = await res.json();
       const assistantText =
-        body?.reply ||
-        "I'm here to help! Could you provide more details about your question?";
+        body?.reply || "I'm here to help! Could you provide more details about your question?";
 
       addMessage({
         id: String(Date.now() + 1),
-        role: "assistant",
+        role: 'assistant',
         text: assistantText,
         timestamp: new Date(),
       });
     } catch (err) {
-      console.error("Support chat error:", err);
+      console.error('Support chat error:', err);
       addMessage({
         id: String(Date.now() + 2),
-        role: "assistant",
+        role: 'assistant',
         text: "I'm having trouble connecting right now. Please try submitting a support ticket above, and our team will respond within 24 hours.",
         timestamp: new Date(),
       });
@@ -85,9 +84,9 @@ export default function SupportChatWidget() {
   }
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
@@ -108,9 +107,9 @@ export default function SupportChatWidget() {
     <div
       className="fixed bottom-6 right-6 z-50 flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden transition-all duration-300"
       style={{
-        width: minimized ? "320px" : "400px",
-        height: minimized ? "64px" : "600px",
-        maxHeight: "calc(100vh - 100px)",
+        width: minimized ? '320px' : '400px',
+        height: minimized ? '64px' : '600px',
+        maxHeight: 'calc(100vh - 100px)',
       }}
     >
       {/* Header */}
@@ -122,9 +121,7 @@ export default function SupportChatWidget() {
           </div>
           <div>
             <h3 className="font-semibold text-sm">Support Chat</h3>
-            <p className="text-xs text-blue-100">
-              We typically reply in minutes
-            </p>
+            <p className="text-xs text-blue-100">We typically reply in minutes</p>
           </div>
         </div>
 
@@ -132,13 +129,9 @@ export default function SupportChatWidget() {
           <button
             onClick={() => setMinimized(!minimized)}
             className="hover:bg-blue-600 p-1.5 rounded transition-colors"
-            aria-label={minimized ? "Maximize" : "Minimize"}
+            aria-label={minimized ? 'Maximize' : 'Minimize'}
           >
-            {minimized ? (
-              <Maximize2 className="h-4 w-4" />
-            ) : (
-              <Minimize2 className="h-4 w-4" />
-            )}
+            {minimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
           </button>
           <button
             onClick={() => setOpen(false)}
@@ -160,27 +153,19 @@ export default function SupportChatWidget() {
             {messages.map((m) => (
               <div
                 key={m.id}
-                className={`flex ${
-                  m.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div
-                  className={`max-w-[80%] ${
-                    m.role === "user" ? "text-right" : "text-left"
-                  }`}
-                >
+                <div className={`max-w-[80%] ${m.role === 'user' ? 'text-right' : 'text-left'}`}>
                   <div
                     className={`inline-block px-4 py-2 rounded-2xl ${
-                      m.role === "user"
-                        ? "bg-blue-600 text-white rounded-br-sm"
-                        : "bg-slate-100 text-slate-900 rounded-bl-sm"
+                      m.role === 'user'
+                        ? 'bg-blue-600 text-white rounded-br-sm'
+                        : 'bg-slate-100 text-slate-900 rounded-bl-sm'
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{m.text}</p>
                   </div>
-                  <p className="text-xs text-slate-400 mt-1 px-2">
-                    {formatTime(m.timestamp)}
-                  </p>
+                  <p className="text-xs text-slate-400 mt-1 px-2">{formatTime(m.timestamp)}</p>
                 </div>
               </div>
             ))}
@@ -191,15 +176,15 @@ export default function SupportChatWidget() {
                   <div className="flex gap-1">
                     <span
                       className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "0ms" }}
+                      style={{ animationDelay: '0ms' }}
                     ></span>
                     <span
                       className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "150ms" }}
+                      style={{ animationDelay: '150ms' }}
                     ></span>
                     <span
                       className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"
-                      style={{ animationDelay: "300ms" }}
+                      style={{ animationDelay: '300ms' }}
                     ></span>
                   </div>
                 </div>
@@ -212,19 +197,19 @@ export default function SupportChatWidget() {
             <p className="text-xs text-slate-500 mb-2">Quick actions:</p>
             <div className="flex gap-2 flex-wrap">
               <button
-                onClick={() => setInput("How do I deposit funds?")}
+                onClick={() => setInput('How do I deposit funds?')}
                 className="text-xs px-3 py-1.5 bg-white border border-slate-200 rounded-full hover:border-blue-500 hover:text-blue-600 transition-colors"
               >
                 💰 Deposits
               </button>
               <button
-                onClick={() => setInput("What are the withdrawal fees?")}
+                onClick={() => setInput('What are the withdrawal fees?')}
                 className="text-xs px-3 py-1.5 bg-white border border-slate-200 rounded-full hover:border-blue-500 hover:text-blue-600 transition-colors"
               >
                 💸 Withdrawals
               </button>
               <button
-                onClick={() => setInput("How does the rewards system work?")}
+                onClick={() => setInput('How does the rewards system work?')}
                 className="text-xs px-3 py-1.5 bg-white border border-slate-200 rounded-full hover:border-blue-500 hover:text-blue-600 transition-colors"
               >
                 🎁 Rewards
@@ -238,7 +223,7 @@ export default function SupportChatWidget() {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
                 placeholder="Type your message..."
                 className="flex-1 px-4 py-2.5 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none text-sm text-slate-900 placeholder-slate-400"
                 disabled={loading}
@@ -253,8 +238,7 @@ export default function SupportChatWidget() {
               </button>
             </div>
             <p className="text-xs text-slate-400 mt-2 text-center">
-              Powered by Advancia AI •{" "}
-              <span className="text-green-500">● Online</span>
+              Powered by Advancia AI • <span className="text-green-500">● Online</span>
             </p>
           </div>
         </>

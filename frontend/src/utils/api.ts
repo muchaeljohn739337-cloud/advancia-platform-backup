@@ -3,11 +3,10 @@
  * Provides centralized API client with authentication
  */
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000';
 
 interface RequestOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
   body?: unknown;
 }
@@ -15,23 +14,19 @@ interface RequestOptions {
 /**
  * Make an authenticated API request
  */
-async function apiRequest<T>(
-  endpoint: string,
-  options: RequestOptions = {}
-): Promise<T> {
-  const { method = "GET", headers = {}, body } = options;
+async function apiRequest<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
+  const { method = 'GET', headers = {}, body } = options;
 
   // Get token from localStorage
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
   const requestHeaders: Record<string, string> = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     ...headers,
   };
 
   if (token) {
-    requestHeaders["Authorization"] = `Bearer ${token}`;
+    requestHeaders['Authorization'] = `Bearer ${token}`;
   }
 
   const config: RequestInit = {
@@ -39,20 +34,16 @@ async function apiRequest<T>(
     headers: requestHeaders,
   };
 
-  if (body && method !== "GET") {
+  if (body && method !== 'GET') {
     config.body = JSON.stringify(body);
   }
 
-  const url = endpoint.startsWith("http")
-    ? endpoint
-    : `${API_BASE_URL}${endpoint}`;
+  const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
 
   const response = await fetch(url, config);
 
   if (!response.ok) {
-    const errorData = await response
-      .json()
-      .catch(() => ({ error: "Request failed" }));
+    const errorData = await response.json().catch(() => ({ error: 'Request failed' }));
     throw new Error(errorData.error || `HTTP ${response.status}`);
   }
 
@@ -67,7 +58,7 @@ export const adminApi = {
    * GET request to admin endpoints
    */
   get: <T = unknown>(endpoint: string): Promise<T> => {
-    return apiRequest<T>(endpoint, { method: "GET" });
+    return apiRequest<T>(endpoint, { method: 'GET' });
   },
 
   /**
@@ -75,7 +66,7 @@ export const adminApi = {
    */
   post: <T = unknown>(endpoint: string, data?: unknown): Promise<T> => {
     return apiRequest<T>(endpoint, {
-      method: "POST",
+      method: 'POST',
       body: data,
     });
   },
@@ -85,7 +76,7 @@ export const adminApi = {
    */
   put: <T = unknown>(endpoint: string, data?: unknown): Promise<T> => {
     return apiRequest<T>(endpoint, {
-      method: "PUT",
+      method: 'PUT',
       body: data,
     });
   },
@@ -94,7 +85,7 @@ export const adminApi = {
    * DELETE request to admin endpoints
    */
   delete: <T = unknown>(endpoint: string): Promise<T> => {
-    return apiRequest<T>(endpoint, { method: "DELETE" });
+    return apiRequest<T>(endpoint, { method: 'DELETE' });
   },
 
   /**
@@ -102,7 +93,7 @@ export const adminApi = {
    */
   patch: <T = unknown>(endpoint: string, data?: unknown): Promise<T> => {
     return apiRequest<T>(endpoint, {
-      method: "PATCH",
+      method: 'PATCH',
       body: data,
     });
   },
@@ -112,16 +103,15 @@ export const adminApi = {
  * General API helper (non-admin)
  */
 export const api = {
-  get: <T = unknown>(endpoint: string): Promise<T> =>
-    apiRequest<T>(endpoint, { method: "GET" }),
+  get: <T = unknown>(endpoint: string): Promise<T> => apiRequest<T>(endpoint, { method: 'GET' }),
   post: <T = unknown>(endpoint: string, data?: unknown): Promise<T> =>
-    apiRequest<T>(endpoint, { method: "POST", body: data }),
+    apiRequest<T>(endpoint, { method: 'POST', body: data }),
   put: <T = unknown>(endpoint: string, data?: unknown): Promise<T> =>
-    apiRequest<T>(endpoint, { method: "PUT", body: data }),
+    apiRequest<T>(endpoint, { method: 'PUT', body: data }),
   delete: <T = unknown>(endpoint: string): Promise<T> =>
-    apiRequest<T>(endpoint, { method: "DELETE" }),
+    apiRequest<T>(endpoint, { method: 'DELETE' }),
   patch: <T = unknown>(endpoint: string, data?: unknown): Promise<T> =>
-    apiRequest<T>(endpoint, { method: "PATCH", body: data }),
+    apiRequest<T>(endpoint, { method: 'PATCH', body: data }),
 };
 
 export default api;

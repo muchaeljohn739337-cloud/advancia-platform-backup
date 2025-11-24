@@ -4,10 +4,10 @@ Get the app running locally in minutes. This guide is tuned for Windows with Pow
 
 ## Prerequisites
 
-- Node.js 20 LTS (recommended)
-- Git
-- Docker Desktop (optional, for one-command setup)
-- PostgreSQL 15+ (skip if using Docker)
+-   Node.js 20 LTS (recommended)
+-   Git
+-   Docker Desktop (optional, for one-command setup)
+-   PostgreSQL 15+ (skip if using Docker)
 
 Verify tools:
 
@@ -29,10 +29,10 @@ docker compose up -d
 
 Open:
 
-- [http://localhost](http://localhost) (Nginx proxy)
-- [http://localhost:3000](http://localhost:3000) (Frontend)
-- [http://localhost:4000/api/health](http://localhost:4000/api/health) (Backend)
-- [http://localhost:15672](http://localhost:15672) (RabbitMQ UI, user: advancia / rabbitmq_pass_change_in_prod)
+-   [http://localhost](http://localhost) (Nginx proxy)
+-   [http://localhost:3000](http://localhost:3000) (Frontend)
+-   [http://localhost:4000/api/health](http://localhost:4000/api/health) (Backend)
+-   [http://localhost:15672](http://localhost:15672) (RabbitMQ UI, user: advancia / rabbitmq_pass_change_in_prod)
 
 Stop:
 
@@ -78,8 +78,8 @@ Copy-Item .env.example .env.local -Force
 
 Minimal backend edits (`backend/.env`):
 
-- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/advancia_db`
-- Generate a `JWT_SECRET` (64+ chars). Quick generator:
+-   `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/advancia_db`
+-   Generate a `JWT_SECRET` (64+ chars). Quick generator:
 
 ```powershell
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
@@ -118,8 +118,8 @@ npm run dev
 
 Open:
 
-- [http://localhost:3000](http://localhost:3000)
-- [http://localhost:4000/api/health](http://localhost:4000/api/health)
+-   [http://localhost:3000](http://localhost:3000)
+-   [http://localhost:4000/api/health](http://localhost:4000/api/health)
 
 ---
 
@@ -153,9 +153,9 @@ sudo apt install -y tmux
 
 ### 3) Enable Docker in WSL
 
-- Install Docker Desktop for Windows
-- Settings → General: enable “Use the WSL 2 based engine”
-- Settings → Resources → WSL Integration: enable for your Ubuntu distro
+-   Install Docker Desktop for Windows
+-   Settings → General: enable “Use the WSL 2 based engine”
+-   Settings → Resources → WSL Integration: enable for your Ubuntu distro
 
 Verify in Ubuntu:
 
@@ -201,8 +201,8 @@ cd ../frontend && npm run dev
 
 Open:
 
-- [http://localhost:3000](http://localhost:3000)
-- [http://localhost:4000/api/health](http://localhost:4000/api/health)
+-   [http://localhost:3000](http://localhost:3000)
+-   [http://localhost:4000/api/health](http://localhost:4000/api/health)
 
 ---
 
@@ -214,7 +214,7 @@ You can also double‑click `install-dependencies.bat` from the repo root to ins
 
 ## Troubleshooting
 
-- Port in use:
+-   Port in use:
 
 ```powershell
 # Find and stop Docker stack
@@ -223,14 +223,14 @@ docker compose down
 Get-Process -Id (Get-NetTCPConnection -LocalPort 4000).OwningProcess | Stop-Process -Force
 ```
 
-- Reset DB:
+-   Reset DB:
 
 ```powershell
 cd backend
 npx prisma migrate reset --force
 ```
 
-- Node version:
+-   Node version:
 
 ```powershell
 node -v  # prefer v20.x
@@ -238,5 +238,5 @@ node -v  # prefer v20.x
 
 ## Need more depth?
 
-- `DEV_SETUP_GUIDE.md` — advanced workflows, scripts, and troubleshooting
-- `backend/.env.example` and `frontend/.env.example` — complete env references
+-   `DEV_SETUP_GUIDE.md` — advanced workflows, scripts, and troubleshooting
+-   `backend/.env.example` and `frontend/.env.example` — complete env references

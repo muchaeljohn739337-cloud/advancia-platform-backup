@@ -2,14 +2,14 @@
 
 ## Prerequisites
 
-- [ ] Active Trustpilot business account
-- [ ] Access to Trustpilot Business Portal
-- [ ] Backend running with database access
-- [ ] Admin account credentials
+-   [ ] Active Trustpilot business account
+-   [ ] Access to Trustpilot Business Portal
+-   [ ] Backend running with database access
+-   [ ] Admin account credentials
 
 ## Step 1: Get Trustpilot Credentials (5 minutes)
 
-1. [ ] Log in to https://businessapp.b2b.trustpilot.com/
+1. [ ] Log in to <https://businessapp.b2b.trustpilot.com/>
 2. [ ] Navigate to **Integrations** → **API**
 3. [ ] Click **Create API key**
 4. [ ] Copy **API Key** (starts with "tp\_")
@@ -174,10 +174,12 @@ npm install
 
 1. Check API credentials in `.env`
 2. Test Trustpilot API directly:
+
    ```powershell
    curl "https://api.trustpilot.com/v1/business-units/YOUR_BU_ID/reviews" `
      -H "apikey: YOUR_API_KEY"
    ```
+
 3. Check backend logs for errors
 
 ### Issue: Reviews not displaying on frontend
@@ -199,20 +201,20 @@ npx prisma generate
 
 ## ✨ Success Criteria
 
-- [ ] ✅ Backend starts without errors
-- [ ] ✅ Stats endpoint returns data
-- [ ] ✅ Manual sync completes successfully
-- [ ] ✅ Reviews visible in database (Prisma Studio)
-- [ ] ✅ Reviews display on frontend
-- [ ] ✅ Automated sync scheduled (check logs)
+-   [ ] ✅ Backend starts without errors
+-   [ ] ✅ Stats endpoint returns data
+-   [ ] ✅ Manual sync completes successfully
+-   [ ] ✅ Reviews visible in database (Prisma Studio)
+-   [ ] ✅ Reviews display on frontend
+-   [ ] ✅ Automated sync scheduled (check logs)
 
 ---
 
 ## 📚 Documentation
 
-- **Full Guide**: `TRUSTPILOT_AUTOMATION_GUIDE.md`
-- **Implementation Details**: `TRUSTPILOT_IMPLEMENTATION_SUMMARY.md`
-- **Trustpilot API Docs**: https://documentation-apidocumentation.trustpilot.com/
+-   **Full Guide**: `TRUSTPILOT_AUTOMATION_GUIDE.md`
+-   **Implementation Details**: `TRUSTPILOT_IMPLEMENTATION_SUMMARY.md`
+-   **Trustpilot API Docs**: <https://documentation-apidocumentation.trustpilot.com/>
 
 ---
 

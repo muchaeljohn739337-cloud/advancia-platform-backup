@@ -1,16 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-  User,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  AlertCircle,
-  UserPlus,
-} from "lucide-react";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { User, Mail, Lock, Eye, EyeOff, AlertCircle, UserPlus } from 'lucide-react';
 
 interface RegisterFormProps {
   onSuccess?: () => void;
@@ -19,53 +11,53 @@ interface RegisterFormProps {
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    firstName: "",
-    lastName: "",
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
     termsAccepted: false,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
-    setError("");
+    setError('');
   };
 
   const validateForm = () => {
     if (!formData.username || !formData.email || !formData.password) {
-      setError("Please fill in all required fields");
+      setError('Please fill in all required fields');
       return false;
     }
 
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setError("Please enter a valid email address");
+      setError('Please enter a valid email address');
       return false;
     }
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters long");
+      setError('Password must be at least 6 characters long');
       return false;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError('Passwords do not match');
       return false;
     }
 
     if (!formData.termsAccepted) {
-      setError("Please accept the terms and conditions");
+      setError('Please accept the terms and conditions');
       return false;
     }
 
@@ -78,13 +70,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     if (!validateForm()) return;
 
     setIsLoading(true);
-    setError("");
+    setError('');
 
     try {
       const response = await fetch(`${API}/api/auth/register`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           username: formData.username,
@@ -98,25 +90,21 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Registration failed");
+        throw new Error(data.error || 'Registration failed');
       }
 
       // Auto-login after successful registration
       if (data.token) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem('token', data.token);
 
         if (onSuccess) {
           onSuccess();
         } else {
-          router.push("/dashboard");
+          router.push('/dashboard');
         }
       }
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Registration failed. Please try again."
-      );
+      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -127,9 +115,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       {/* Name Fields */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            First Name
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
           <input
             type="text"
             name="firstName"
@@ -141,9 +127,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Last Name
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
           <input
             type="text"
             name="lastName"
@@ -210,7 +194,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             <Lock size={18} className="text-gray-400" />
           </div>
           <input
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             name="password"
             value={formData.password}
             onChange={handleChange}
@@ -245,7 +229,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             <Lock size={18} className="text-gray-400" />
           </div>
           <input
-            type={showConfirmPassword ? "text" : "password"}
+            type={showConfirmPassword ? 'text' : 'password'}
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
@@ -283,7 +267,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
           required
         />
         <label className="text-sm text-gray-600">
-          I agree to the{" "}
+          I agree to the{' '}
           <a
             href="/terms"
             className="text-blue-600 hover:underline"
@@ -291,8 +275,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
             rel="noopener noreferrer"
           >
             Terms of Service
-          </a>{" "}
-          and{" "}
+          </a>{' '}
+          and{' '}
           <a
             href="/privacy"
             className="text-blue-600 hover:underline"

@@ -6,14 +6,14 @@ The enhanced `backend-watchdog.ps1` now includes a comprehensive notification sy
 
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Configuration](#configuration)
-- [Usage Examples](#usage-examples)
-- [Notification Types](#notification-types)
-- [Slack Setup](#slack-setup)
-- [Email Setup](#email-setup)
-- [Troubleshooting](#troubleshooting)
-- [Best Practices](#best-practices)
+-   [Features](#features)
+-   [Configuration](#configuration)
+-   [Usage Examples](#usage-examples)
+-   [Notification Types](#notification-types)
+-   [Slack Setup](#slack-setup)
+-   [Email Setup](#email-setup)
+-   [Troubleshooting](#troubleshooting)
+-   [Best Practices](#best-practices)
 
 ---
 
@@ -21,26 +21,26 @@ The enhanced `backend-watchdog.ps1` now includes a comprehensive notification sy
 
 ### Automated Alerts
 
-- **Slack Notifications**: Rich formatted messages with color-coded severity
-- **Email Notifications**: Detailed HTML emails for critical failures
-- **Multi-Channel**: Send to both Slack and Email simultaneously
-- **Smart Filtering**: Emails only sent for error/critical level alerts
+-   **Slack Notifications**: Rich formatted messages with color-coded severity
+-   **Email Notifications**: Detailed HTML emails for critical failures
+-   **Multi-Channel**: Send to both Slack and Email simultaneously
+-   **Smart Filtering**: Emails only sent for error/critical level alerts
 
 ### Alert Content
 
-- Health check failure details
-- Auto-restart status (success/failure)
-- Real-time statistics (uptime, checks, restarts, success rate)
-- Timestamp and port information
-- Formatted for easy reading
+-   Health check failure details
+-   Auto-restart status (success/failure)
+-   Real-time statistics (uptime, checks, restarts, success rate)
+-   Timestamp and port information
+-   Formatted for easy reading
 
 ### Alert Levels
 
-- **Success**: Backend successfully restarted
-- **Info**: General informational messages
-- **Warning**: Non-critical issues detected
-- **Error**: Health check failures requiring restart
-- **Critical**: Restart failures requiring manual intervention
+-   **Success**: Backend successfully restarted
+-   **Info**: General informational messages
+-   **Warning**: Non-critical issues detected
+-   **Error**: Health check failures requiring restart
+-   **Critical**: Restart failures requiring manual intervention
 
 ---
 
@@ -223,10 +223,10 @@ Invoke-RestMethod -Uri $webhook -Method Post -ContentType 'application/json' -Bo
 
 ### Message Colors
 
-- 🟢 **Green (good)**: Success messages
-- 🟡 **Yellow (warning)**: Warning messages
-- 🔴 **Red (danger)**: Error/Critical messages
-- 🔵 **Blue (#439FE0)**: Info messages
+-   🟢 **Green (good)**: Success messages
+-   🟡 **Yellow (warning)**: Warning messages
+-   🔴 **Red (danger)**: Error/Critical messages
+-   🔵 **Blue (#439FE0)**: Info messages
 
 ---
 
@@ -306,9 +306,11 @@ Invoke-RestMethod -Uri $webhook -Method Post -ContentType 'application/json' -Bo
 
 1. Verify webhook URL is correct
 2. Test webhook with curl:
+
    ```powershell
    curl -X POST -H 'Content-type: application/json' --data '{"text":"Test"}' YOUR_WEBHOOK_URL
    ```
+
 3. Check if webhook is still active in Slack settings
 4. Ensure network connectivity allows HTTPS outbound
 
@@ -319,23 +321,21 @@ Invoke-RestMethod -Uri $webhook -Method Post -ContentType 'application/json' -Bo
 **Solutions**:
 
 1. **Authentication Failed**
-
-   - Gmail: Use App Password, not regular password
-   - Verify username/password are correct
-   - Check 2FA is enabled for Gmail
+   -   Gmail: Use App Password, not regular password
+   -   Verify username/password are correct
+   -   Check 2FA is enabled for Gmail
 
 2. **Connection Failed**
-
-   - Verify SMTP server and port are correct
-   - Check firewall allows port 587 outbound
-   - Try port 465 with SSL if 587 fails
+   -   Verify SMTP server and port are correct
+   -   Check firewall allows port 587 outbound
+   -   Try port 465 with SSL if 587 fails
 
 3. **SSL/TLS Issues**
-
-   - Ensure `-UseSsl $true` is set
-   - Try different ports (465, 587, 2525)
+   -   Ensure `-UseSsl $true` is set
+   -   Try different ports (465, 587, 2525)
 
 4. **Test Email Manually**
+
    ```powershell
    Send-MailMessage `
        -To "recipient@example.com" `
@@ -353,10 +353,12 @@ Invoke-RestMethod -Uri $webhook -Method Post -ContentType 'application/json' -Bo
 **Solutions**:
 
 1. Check if parameters are passed correctly:
+
    ```powershell
    Write-Host "SlackWebhook: $SlackWebhook"
    Write-Host "EmailTo: $EmailTo"
    ```
+
 2. Verify notification functions are being called (check logs)
 3. Ensure alert level triggers notifications (emails only for error/critical)
 
@@ -366,17 +368,17 @@ Invoke-RestMethod -Uri $webhook -Method Post -ContentType 'application/json' -Bo
 
 ### 1. Security
 
-- **Never commit credentials**: Use environment variables or secure vaults
-- **Rotate credentials**: Change SMTP passwords regularly
-- **Use app passwords**: Don't use main account passwords
-- **Limit webhook scope**: Create dedicated Slack channels
+-   **Never commit credentials**: Use environment variables or secure vaults
+-   **Rotate credentials**: Change SMTP passwords regularly
+-   **Use app passwords**: Don't use main account passwords
+-   **Limit webhook scope**: Create dedicated Slack channels
 
 ### 2. Alert Management
 
-- **Don't over-alert**: Set reasonable `CheckInterval` (30-60 seconds)
-- **Test notifications**: Verify all channels before production
-- **Monitor alert fatigue**: If restarts are frequent, investigate root cause
-- **Set up on-call rotation**: Multiple email recipients for critical alerts
+-   **Don't over-alert**: Set reasonable `CheckInterval` (30-60 seconds)
+-   **Test notifications**: Verify all channels before production
+-   **Monitor alert fatigue**: If restarts are frequent, investigate root cause
+-   **Set up on-call rotation**: Multiple email recipients for critical alerts
 
 ### 3. Production Setup
 
@@ -419,10 +421,10 @@ Get-Content backend\logs\watchdog.log -Wait
 
 ### 5. Alert Escalation Strategy
 
-- **First 3 failures**: Slack notification (info level)
-- **Restart triggered**: Slack + Email (error level)
-- **Restart fails**: Slack + Email + SMS (critical level)
-- **3+ restarts in 1 hour**: Page on-call engineer
+-   **First 3 failures**: Slack notification (info level)
+-   **Restart triggered**: Slack + Email (error level)
+-   **Restart fails**: Slack + Email + SMS (critical level)
+-   **3+ restarts in 1 hour**: Page on-call engineer
 
 ---
 
@@ -430,11 +432,11 @@ Get-Content backend\logs\watchdog.log -Wait
 
 Every notification includes:
 
-- **Uptime**: Time since watchdog started
-- **Total Checks**: Number of health checks performed
-- **Total Restarts**: Number of automatic restarts
-- **Success Rate**: Percentage of successful health checks
-- **Port**: Monitored backend port
+-   **Uptime**: Time since watchdog started
+-   **Total Checks**: Number of health checks performed
+-   **Total Restarts**: Number of automatic restarts
+-   **Success Rate**: Percentage of successful health checks
+-   **Port**: Monitored backend port
 
 ---
 
@@ -487,16 +489,16 @@ if ($Level -eq "critical") {
 
 ### Log Locations
 
-- **Watchdog Log**: `backend/logs/watchdog.log`
-- **PM2 Logs**: `~/.pm2/logs/advancia-backend-*.log`
-- **Backend Logs**: `backend/logs/error.log`, `backend/logs/combined.log`
+-   **Watchdog Log**: `backend/logs/watchdog.log`
+-   **PM2 Logs**: `~/.pm2/logs/advancia-backend-*.log`
+-   **Backend Logs**: `backend/logs/error.log`, `backend/logs/combined.log`
 
 ### Log Levels
 
-- `INFO`: Normal operations
-- `WARN`: Non-critical issues (single health check failure)
-- `ERROR`: Critical issues requiring restart
-- `SUCCESS`: Successful operations (restarts, recoveries)
+-   `INFO`: Normal operations
+-   `WARN`: Non-critical issues (single health check failure)
+-   `ERROR`: Critical issues requiring restart
+-   `SUCCESS`: Successful operations (restarts, recoveries)
 
 ---
 
@@ -504,12 +506,12 @@ if ($Level -eq "critical") {
 
 The enhanced watchdog system provides:
 
-- ✅ Automatic health monitoring
-- ✅ Self-healing auto-restart
-- ✅ Multi-channel notifications (Slack + Email)
-- ✅ Detailed statistics and reporting
-- ✅ Flexible configuration
-- ✅ Production-ready security
+-   ✅ Automatic health monitoring
+-   ✅ Self-healing auto-restart
+-   ✅ Multi-channel notifications (Slack + Email)
+-   ✅ Detailed statistics and reporting
+-   ✅ Flexible configuration
+-   ✅ Production-ready security
 
 **Next Steps**:
 

@@ -238,6 +238,7 @@ If tracing causes high memory usage:
    ```
 
 2. **Disable noisy instrumentations**:
+
    ```typescript
    '@opentelemetry/instrumentation-fs': {
      enabled: false,

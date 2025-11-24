@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { io, Socket } from "socket.io-client";
-import { ensureToken } from "@/utils/auth";
-import adminApi from "@/lib/adminApi";
-import AdminNav from "@/components/AdminNav";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { io, Socket } from 'socket.io-client';
+import { ensureToken } from '@/utils/auth';
+import adminApi from '@/lib/adminApi';
+import AdminNav from '@/components/AdminNav';
 
 interface SessionInfo {
   email: string;
@@ -23,14 +23,14 @@ export default function SessionManager() {
   async function revoke(token: string) {
     const adminToken = await ensureToken();
     if (!adminToken) {
-      router.push("/admin/login");
+      router.push('/admin/login');
       return;
     }
 
     try {
-      await adminApi.post("/api/sessions/revoke", { token });
+      await adminApi.post('/api/sessions/revoke', { token });
     } catch (err) {
-      console.error("Failed to revoke session:", err);
+      console.error('Failed to revoke session:', err);
     }
   }
 
@@ -38,22 +38,22 @@ export default function SessionManager() {
     const init = async () => {
       const token = await ensureToken();
       if (!token) {
-        router.push("/admin/login");
+        router.push('/admin/login');
         return;
       }
 
       // Connect to Socket.IO
-      socket = io(process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000", {
+      socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000', {
         auth: { token },
       });
 
-      socket.on("sessions:update", (data) => {
+      socket.on('sessions:update', (data) => {
         setSessions(data);
         setLoading(false);
       });
 
-      socket.on("connect_error", (err) => {
-        console.error("Socket connection error:", err);
+      socket.on('connect_error', (err) => {
+        console.error('Socket connection error:', err);
         setLoading(false);
       });
     };
@@ -62,7 +62,7 @@ export default function SessionManager() {
 
     return () => {
       if (socket) {
-        socket.off("sessions:update");
+        socket.off('sessions:update');
         socket.disconnect();
       }
     };
@@ -84,58 +84,54 @@ export default function SessionManager() {
       <AdminNav />
       <div className="p-8">
         <div className="max-w-4xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white">
-            🧠 Active Admin Sessions
-          </h1>
-        </div>
+          <div className="mb-6">
+            <h1 className="text-3xl font-bold text-white">🧠 Active Admin Sessions</h1>
+          </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          {Object.entries(sessions).length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No active sessions.</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {Object.entries(sessions).map(([token, info]) => (
-                <div
-                  key={token}
-                  className="border border-gray-200 rounded-lg p-4 flex justify-between items-center hover:bg-gray-50 transition"
-                >
-                  <div>
-                    <p className="text-sm text-gray-600">
-                      <strong className="text-gray-800">Email:</strong>{" "}
-                      {info.email}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <strong className="text-gray-800">Role:</strong>{" "}
-                      {info.role}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <strong className="text-gray-800">Created:</strong>{" "}
-                      {new Date(info.createdAt).toLocaleString()}
-                    </p>
-                  </div>
-                  <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-semibold"
-                    onClick={() => revoke(token)}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            {Object.entries(sessions).length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">No active sessions.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {Object.entries(sessions).map(([token, info]) => (
+                  <div
+                    key={token}
+                    className="border border-gray-200 rounded-lg p-4 flex justify-between items-center hover:bg-gray-50 transition"
                   >
-                    Revoke
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                    <div>
+                      <p className="text-sm text-gray-600">
+                        <strong className="text-gray-800">Email:</strong> {info.email}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <strong className="text-gray-800">Role:</strong> {info.role}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <strong className="text-gray-800">Created:</strong>{' '}
+                        {new Date(info.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-semibold"
+                      onClick={() => revoke(token)}
+                    >
+                      Revoke
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => router.push("/admin/subscribers")}
-            className="text-blue-600 hover:text-blue-700 underline"
-          >
-            ← Back to Subscribers
-          </button>
-        </div>
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => router.push('/admin/subscribers')}
+              className="text-blue-600 hover:text-blue-700 underline"
+            >
+              ← Back to Subscribers
+            </button>
+          </div>
         </div>
       </div>
     </div>

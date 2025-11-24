@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import toast from "react-hot-toast";
-import { adminApi } from "@/utils/api";
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { adminApi } from '@/utils/api';
 
 interface AdminBalanceManagerProps {
   userId: string;
@@ -20,45 +20,42 @@ export default function AdminBalanceManager({
   currentBalances,
   onBalanceUpdated,
 }: AdminBalanceManagerProps) {
-  const [currency, setcurrency] = useState<string>("USD");
-  const [amount, setAmount] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [currency, setcurrency] = useState<string>('USD');
+  const [amount, setAmount] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleAddBalance = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      toast.error("Please enter a valid amount");
+      toast.error('Please enter a valid amount');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response: any = await adminApi.post(
-        `/admin/users/${userId}/update-balance`,
-        {
-          currency,
-          amount: parseFloat(amount),
-          description: description || `Admin added ${amount} ${currency}`,
-        }
-      );
+      const response: any = await adminApi.post(`/admin/users/${userId}/update-balance`, {
+        currency,
+        amount: parseFloat(amount),
+        description: description || `Admin added ${amount} ${currency}`,
+      });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setAmount("");
-        setDescription("");
+        setAmount('');
+        setDescription('');
 
         // Notify parent to refresh balances
         if (onBalanceUpdated) {
           onBalanceUpdated();
         }
       } else {
-        toast.error(response.data.error || "Failed to add balance");
+        toast.error(response.data.error || 'Failed to add balance');
       }
     } catch (error: unknown) {
-      console.error("Error adding balance:", error);
-      let errorMessage = "Failed to add balance";
-      if (error && typeof error === "object" && "response" in error) {
+      console.error('Error adding balance:', error);
+      let errorMessage = 'Failed to add balance';
+      if (error && typeof error === 'object' && 'response' in error) {
         const responseError = error as {
           response?: { data?: { error?: string } };
         };
@@ -74,9 +71,7 @@ export default function AdminBalanceManager({
     <div className="bg-white rounded-xl shadow-md p-6 mt-6">
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 -mx-6 -mt-6 px-6 py-4 rounded-t-xl mb-6">
         <h3 className="text-xl font-bold text-white">Add Balance</h3>
-        <p className="text-white/80 text-sm">
-          Add USD, BTC, ETH, or USDT to user&apos;s balance
-        </p>
+        <p className="text-white/80 text-sm">Add USD, BTC, ETH, or USDT to user&apos;s balance</p>
       </div>
 
       {/* Current Balances */}
@@ -110,9 +105,7 @@ export default function AdminBalanceManager({
       {/* Add Balance Form */}
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Balance Type
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Balance Type</label>
           <select
             value={currency}
             onChange={(e) => setcurrency(e.target.value)}
@@ -127,9 +120,7 @@ export default function AdminBalanceManager({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Amount
-          </label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Amount</label>
           <input
             type="number"
             step="any"
@@ -166,7 +157,7 @@ export default function AdminBalanceManager({
               Adding...
             </span>
           ) : (
-            `Add ${amount || "0"} ${currency}`
+            `Add ${amount || '0'} ${currency}`
           )}
         </button>
       </div>
@@ -174,12 +165,10 @@ export default function AdminBalanceManager({
       {/* Info Banner */}
       <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-800">
-          <strong>Note:</strong> All balance additions are logged in the audit
-          trail and will trigger a real-time update for the user.
+          <strong>Note:</strong> All balance additions are logged in the audit trail and will
+          trigger a real-time update for the user.
         </p>
       </div>
     </div>
   );
 }
-
-

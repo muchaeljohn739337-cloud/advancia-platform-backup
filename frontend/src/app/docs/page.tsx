@@ -1,106 +1,97 @@
-"use client";
+'use client';
 
-import SidebarLayout from "@/components/SidebarLayout";
-import { motion } from "framer-motion";
-import {
-  Book,
-  Boxes,
-  Code,
-  Database,
-  ExternalLink,
-  FileText,
-  Shield,
-  Zap,
-} from "lucide-react";
-import Link from "next/link";
+import SidebarLayout from '@/components/SidebarLayout';
+import { motion } from 'framer-motion';
+import { Book, Boxes, Code, Database, ExternalLink, FileText, Shield, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 export default function DocsPage() {
   const sections = [
     {
       icon: Zap,
-      title: "Getting Started",
-      description: "Quick start guide and initial setup",
+      title: 'Getting Started',
+      description: 'Quick start guide and initial setup',
       links: [
-        { label: "Introduction", href: "#introduction" },
-        { label: "Account Setup", href: "#account-setup" },
-        { label: "Dashboard Overview", href: "#dashboard" },
-        { label: "First Transaction", href: "#first-transaction" },
+        { label: 'Introduction', href: '#introduction' },
+        { label: 'Account Setup', href: '#account-setup' },
+        { label: 'Dashboard Overview', href: '#dashboard' },
+        { label: 'First Transaction', href: '#first-transaction' },
       ],
     },
     {
       icon: Shield,
-      title: "Security",
-      description: "Authentication and security features",
+      title: 'Security',
+      description: 'Authentication and security features',
       links: [
-        { label: "Two-Factor Authentication", href: "#2fa" },
-        { label: "Password Management", href: "#passwords" },
-        { label: "Session Security", href: "#sessions" },
-        { label: "API Security", href: "#api-security" },
+        { label: 'Two-Factor Authentication', href: '#2fa' },
+        { label: 'Password Management', href: '#passwords' },
+        { label: 'Session Security', href: '#sessions' },
+        { label: 'API Security', href: '#api-security' },
       ],
     },
     {
       icon: Database,
-      title: "Transactions",
-      description: "Managing your transactions",
+      title: 'Transactions',
+      description: 'Managing your transactions',
       links: [
-        { label: "Creating Transactions", href: "#create-transaction" },
-        { label: "Transaction History", href: "#history" },
-        { label: "Filters & Search", href: "#filters" },
-        { label: "Export Data", href: "#export" },
+        { label: 'Creating Transactions', href: '#create-transaction' },
+        { label: 'Transaction History', href: '#history' },
+        { label: 'Filters & Search', href: '#filters' },
+        { label: 'Export Data', href: '#export' },
       ],
     },
     {
       icon: Code,
-      title: "API Reference",
-      description: "Developer documentation",
+      title: 'API Reference',
+      description: 'Developer documentation',
       links: [
-        { label: "Authentication", href: "#auth-api" },
-        { label: "Transactions API", href: "#transactions-api" },
-        { label: "Tokens API", href: "#tokens-api" },
-        { label: "Webhooks", href: "#webhooks" },
+        { label: 'Authentication', href: '#auth-api' },
+        { label: 'Transactions API', href: '#transactions-api' },
+        { label: 'Tokens API', href: '#tokens-api' },
+        { label: 'Webhooks', href: '#webhooks' },
       ],
     },
     {
       icon: Boxes,
-      title: "Features",
-      description: "Platform features and capabilities",
+      title: 'Features',
+      description: 'Platform features and capabilities',
       links: [
-        { label: "Crypto Trading", href: "#crypto" },
-        { label: "Loan System", href: "#loans" },
-        { label: "Rewards Program", href: "#rewards" },
-        { label: "Analytics", href: "#analytics" },
+        { label: 'Crypto Trading', href: '#crypto' },
+        { label: 'Loan System', href: '#loans' },
+        { label: 'Rewards Program', href: '#rewards' },
+        { label: 'Analytics', href: '#analytics' },
       ],
     },
     {
       icon: FileText,
-      title: "Guides",
-      description: "Step-by-step tutorials",
+      title: 'Guides',
+      description: 'Step-by-step tutorials',
       links: [
-        { label: "Mobile App Setup", href: "#mobile-setup" },
-        { label: "Link Bank Account", href: "#link-bank" },
-        { label: "Set Up Notifications", href: "#notifications" },
-        { label: "Tax Reporting", href: "#taxes" },
+        { label: 'Mobile App Setup', href: '#mobile-setup' },
+        { label: 'Link Bank Account', href: '#link-bank' },
+        { label: 'Set Up Notifications', href: '#notifications' },
+        { label: 'Tax Reporting', href: '#taxes' },
       ],
     },
   ];
 
   const quickLinks = [
     {
-      title: "Backend README",
-      href: "https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/tree/main/backend#readme",
+      title: 'Backend README',
+      href: 'https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/tree/main/backend#readme',
       external: true,
     },
     {
-      title: "Frontend README",
-      href: "https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/tree/main/frontend#readme",
+      title: 'Frontend README',
+      href: 'https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/tree/main/frontend#readme',
       external: true,
     },
     {
-      title: "Troubleshooting Guide",
-      href: "#troubleshooting",
+      title: 'Troubleshooting Guide',
+      href: '#troubleshooting',
       external: false,
     },
-    { title: "FAQ", href: "#faq", external: false },
+    { title: 'FAQ', href: '#faq', external: false },
   ];
 
   return (
@@ -117,9 +108,7 @@ export default function DocsPage() {
             >
               <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full">
                 <Book className="h-6 w-6 text-blue-600" />
-                <span className="text-blue-900 font-semibold">
-                  Documentation
-                </span>
+                <span className="text-blue-900 font-semibold">Documentation</span>
               </div>
 
               <h1 className="text-5xl md:text-6xl font-bold">
@@ -142,8 +131,8 @@ export default function DocsPage() {
               <motion.a
                 key={link.title}
                 href={link.href}
-                target={link.external ? "_blank" : undefined}
-                rel={link.external ? "noopener noreferrer" : undefined}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noopener noreferrer' : undefined}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.05 }}
@@ -173,12 +162,8 @@ export default function DocsPage() {
                     <section.icon className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900">
-                      {section.title}
-                    </h3>
-                    <p className="text-sm text-slate-600">
-                      {section.description}
-                    </p>
+                    <h3 className="text-xl font-bold text-slate-900">{section.title}</h3>
+                    <p className="text-sm text-slate-600">{section.description}</p>
                   </div>
                 </div>
 
@@ -213,15 +198,12 @@ export default function DocsPage() {
             </div>
 
             <p className="text-slate-300 text-lg mb-8 max-w-3xl">
-              Build powerful integrations with our RESTful API. Access
-              transaction data, manage user accounts, and automate workflows
-              programmatically.
+              Build powerful integrations with our RESTful API. Access transaction data, manage user
+              accounts, and automate workflows programmatically.
             </p>
 
             <div className="bg-slate-950/50 rounded-xl p-6 mb-8 border border-slate-700">
-              <div className="text-sm text-slate-400 mb-2">
-                Example API Request
-              </div>
+              <div className="text-sm text-slate-400 mb-2">Example API Request</div>
               <pre className="text-green-400 font-mono text-sm overflow-x-auto">
                 {`POST /api/transactions
 Content-Type: application/json
@@ -266,18 +248,13 @@ Authorization: Bearer YOUR_API_KEY
               animate={{ opacity: 1 }}
               className="bg-white rounded-xl p-6 shadow-lg border border-slate-200"
             >
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
-                How do I get started?
-              </h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">How do I get started?</h3>
               <p className="text-slate-600">
-                Simply create an account, verify your email, and you&apos;ll be
-                ready to start managing your finances. Check out our{" "}
-                <Link
-                  href="#getting-started"
-                  className="text-purple-600 hover:underline"
-                >
+                Simply create an account, verify your email, and you&apos;ll be ready to start
+                managing your finances. Check out our{' '}
+                <Link href="#getting-started" className="text-purple-600 hover:underline">
                   Getting Started guide
-                </Link>{" "}
+                </Link>{' '}
                 for a detailed walkthrough.
               </p>
             </motion.div>
@@ -288,16 +265,11 @@ Authorization: Bearer YOUR_API_KEY
               transition={{ delay: 0.1 }}
               className="bg-white rounded-xl p-6 shadow-lg border border-slate-200"
             >
-              <h3 className="text-lg font-bold text-slate-900 mb-2">
-                Is my data secure?
-              </h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-2">Is my data secure?</h3>
               <p className="text-slate-600">
-                Yes! We use bank-grade encryption, secure authentication, and
-                follow industry best practices. Learn more in our{" "}
-                <Link
-                  href="#security"
-                  className="text-purple-600 hover:underline"
-                >
+                Yes! We use bank-grade encryption, secure authentication, and follow industry best
+                practices. Learn more in our{' '}
+                <Link href="#security" className="text-purple-600 hover:underline">
                   Security section
                 </Link>
                 .
@@ -314,14 +286,11 @@ Authorization: Bearer YOUR_API_KEY
                 Can I integrate this with my own application?
               </h3>
               <p className="text-slate-600">
-                Absolutely! Our API allows you to integrate Advancia Pay into
-                your applications. Check out our{" "}
-                <Link
-                  href="#api-reference"
-                  className="text-purple-600 hover:underline"
-                >
+                Absolutely! Our API allows you to integrate Advancia Pay into your applications.
+                Check out our{' '}
+                <Link href="#api-reference" className="text-purple-600 hover:underline">
                   API Reference
-                </Link>{" "}
+                </Link>{' '}
                 to get started.
               </p>
             </motion.div>

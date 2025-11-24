@@ -1,9 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
-type Item = { id: string; amount: number; note: string | null; createdAt: string };
+type Item = {
+  id: string;
+  amount: number;
+  note: string | null;
+  createdAt: string;
+};
 
 export default function RecentBulkCredits({ limit = 5 }: { limit?: number }) {
   const [items, setItems] = useState<Item[]>([]);
@@ -16,18 +21,18 @@ export default function RecentBulkCredits({ limit = 5 }: { limit?: number }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
         const res = await fetch(`${apiUrl}/api/admin/bulk-credits?page=${page}&pageSize=${limit}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         });
         if (!res.ok) throw new Error(`Request failed: ${res.status}`);
         const data = await res.json();
         setItems(Array.isArray(data.items) ? data.items : []);
-        if (typeof data.totalPages === "number") setTotalPages(data.totalPages);
-        if (typeof data.totalAmount === "number") setTotalAmount(data.totalAmount);
+        if (typeof data.totalPages === 'number') setTotalPages(data.totalPages);
+        if (typeof data.totalAmount === 'number') setTotalAmount(data.totalAmount);
       } catch (e) {
-        const msg = e instanceof Error ? e.message : "Unknown error";
+        const msg = e instanceof Error ? e.message : 'Unknown error';
         setError(msg);
       } finally {
         setLoading(false);
@@ -47,14 +52,23 @@ export default function RecentBulkCredits({ limit = 5 }: { limit?: number }) {
       {loading ? (
         <div className="text-gray-500">Loading…</div>
       ) : error ? (
-        <div className="text-amber-700 bg-amber-50 border border-amber-200 p-2 rounded text-sm">{error}</div>
+        <div className="text-amber-700 bg-amber-50 border border-amber-200 p-2 rounded text-sm">
+          {error}
+        </div>
       ) : items.length === 0 ? (
         <div className="text-gray-500 text-sm">No recent bulk credits.</div>
       ) : (
         <>
           <div className="mb-2 text-sm text-gray-600">
             Running total:
-            <span className="font-semibold text-gray-900"> ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            <span className="font-semibold text-gray-900">
+              {' '}
+              $
+              {totalAmount.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
           </div>
           <ul className="divide-y divide-gray-200">
             {items.map((it) => (
@@ -63,7 +77,9 @@ export default function RecentBulkCredits({ limit = 5 }: { limit?: number }) {
                   <div className="font-medium text-gray-900">${it.amount.toLocaleString()}</div>
                   {it.note && <div className="text-xs text-gray-500">{it.note}</div>}
                 </div>
-                <div className="text-xs text-gray-500">{new Date(it.createdAt).toLocaleString()}</div>
+                <div className="text-xs text-gray-500">
+                  {new Date(it.createdAt).toLocaleString()}
+                </div>
               </li>
             ))}
           </ul>
@@ -75,7 +91,9 @@ export default function RecentBulkCredits({ limit = 5 }: { limit?: number }) {
             >
               ← Prev
             </button>
-            <div className="text-gray-600">Page {page} of {totalPages}</div>
+            <div className="text-gray-600">
+              Page {page} of {totalPages}
+            </div>
             <button
               disabled={page >= totalPages}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}

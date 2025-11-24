@@ -23,10 +23,10 @@ npm install -g @eslint/eslintrc eslint-plugin-security
 
 ### Optional Tools (Professional Pentest)
 
-- **Burp Suite Professional**: $449/year - https://portswigger.net/burp/pro
-- **OWASP ZAP Pro**: Free - https://www.zaproxy.org/
-- **Nessus Professional**: $4,990/year - https://www.tenable.com/products/nessus
-- **Metasploit Pro**: $15,000/year - https://www.metasploit.com/
+-   **Burp Suite Professional**: $449/year - <https://portswigger.net/burp/pro>
+-   **OWASP ZAP Pro**: Free - <https://www.zaproxy.org/>
+-   **Nessus Professional**: $4,990/year - <https://www.tenable.com/products/nessus>
+-   **Metasploit Pro**: $15,000/year - <https://www.metasploit.com/>
 
 ---
 
@@ -57,10 +57,10 @@ cd c:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform
 
 **What it checks:**
 
-- ✅ Security headers (HSTS, CSP, X-Frame-Options)
-- ✅ SSL/TLS configuration
-- ✅ CORS policy
-- ✅ Basic vulnerability scan
+-   ✅ Security headers (HSTS, CSP, X-Frame-Options)
+-   ✅ SSL/TLS configuration
+-   ✅ CORS policy
+-   ✅ Basic vulnerability scan
 
 **Expected output:**
 
@@ -210,7 +210,7 @@ import { Configuration, OpenAIApi } from "openai";
 const openai = new OpenAIApi(
   new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
-  })
+  }),
 );
 
 export async function moderateContent(prompt: string): Promise<boolean> {
@@ -220,23 +220,14 @@ export async function moderateContent(prompt: string): Promise<boolean> {
 
   const flagged = moderation.data.results[0].flagged;
   if (flagged) {
-    console.warn(
-      "Prompt flagged by OpenAI Moderation:",
-      moderation.data.results[0].categories
-    );
+    console.warn("Prompt flagged by OpenAI Moderation:", moderation.data.results[0].categories);
   }
 
   return !flagged;
 }
 
 // Prompt injection detection
-const dangerousPatterns = [
-  /ignore\s+(all\s+)?previous\s+instructions/i,
-  /system\s*prompt/i,
-  /you\s+are\s+now/i,
-  /developer\s+mode/i,
-  /###\s*system\s*###/i,
-];
+const dangerousPatterns = [/ignore\s+(all\s+)?previous\s+instructions/i, /system\s*prompt/i, /you\s+are\s+now/i, /developer\s+mode/i, /###\s*system\s*###/i];
 
 export function detectPromptInjection(prompt: string): boolean {
   return dangerousPatterns.some((pattern) => pattern.test(prompt));
@@ -282,15 +273,15 @@ security-reports/
 
 ### Authentication & Session Management
 
-- [ ] Test password strength requirements
-- [ ] Test account lockout mechanism
-- [ ] Test password reset flow
-- [ ] Test session timeout
-- [ ] Test concurrent sessions
-- [ ] Test "Remember Me" functionality
-- [ ] Test logout functionality
-- [ ] Test JWT token expiration
-- [ ] Test refresh token rotation
+-   [ ] Test password strength requirements
+-   [ ] Test account lockout mechanism
+-   [ ] Test password reset flow
+-   [ ] Test session timeout
+-   [ ] Test concurrent sessions
+-   [ ] Test "Remember Me" functionality
+-   [ ] Test logout functionality
+-   [ ] Test JWT token expiration
+-   [ ] Test refresh token rotation
 
 **Commands:**
 
@@ -306,11 +297,11 @@ Invoke-WebRequest -Uri http://localhost:4000/api/users/profile -Headers @{"Autho
 
 ### Authorization & Access Control
 
-- [ ] Test horizontal privilege escalation (user A accessing user B's data)
-- [ ] Test vertical privilege escalation (user accessing admin endpoints)
-- [ ] Test direct object references (guessing IDs)
-- [ ] Test missing function level access control
-- [ ] Test API key permissions
+-   [ ] Test horizontal privilege escalation (user A accessing user B's data)
+-   [ ] Test vertical privilege escalation (user accessing admin endpoints)
+-   [ ] Test direct object references (guessing IDs)
+-   [ ] Test missing function level access control
+-   [ ] Test API key permissions
 
 **Commands:**
 
@@ -326,13 +317,13 @@ Invoke-WebRequest -Uri http://localhost:4000/api/admin/users -Headers @{"Authori
 
 ### Input Validation
 
-- [ ] Test SQL injection (all input fields)
-- [ ] Test NoSQL injection
-- [ ] Test XSS (reflected, stored, DOM-based)
-- [ ] Test command injection
-- [ ] Test XML/XXE injection
-- [ ] Test LDAP injection
-- [ ] Test template injection
+-   [ ] Test SQL injection (all input fields)
+-   [ ] Test NoSQL injection
+-   [ ] Test XSS (reflected, stored, DOM-based)
+-   [ ] Test command injection
+-   [ ] Test XML/XXE injection
+-   [ ] Test LDAP injection
+-   [ ] Test template injection
 
 **SQL Injection Payloads:**
 
@@ -359,12 +350,12 @@ admin'--
 
 ### Business Logic Testing
 
-- [ ] Test negative transaction amounts
-- [ ] Test decimal/rounding errors
-- [ ] Test race conditions (concurrent requests)
-- [ ] Test workflow bypass
-- [ ] Test rate limiting
-- [ ] Test transaction limits
+-   [ ] Test negative transaction amounts
+-   [ ] Test decimal/rounding errors
+-   [ ] Test race conditions (concurrent requests)
+-   [ ] Test workflow bypass
+-   [ ] Test rate limiting
+-   [ ] Test transaction limits
 
 **Race condition test:**
 
@@ -438,37 +429,37 @@ jobs:
 
 ### Daily (Automated)
 
-- ✅ Dependency vulnerability scans (npm audit, Snyk)
-- ✅ Code quality checks (ESLint Security)
-- ✅ Container image scanning (Trivy)
+-   ✅ Dependency vulnerability scans (npm audit, Snyk)
+-   ✅ Code quality checks (ESLint Security)
+-   ✅ Container image scanning (Trivy)
 
 ### Weekly (Automated + Manual)
 
-- ✅ API security testing (full suite)
-- ✅ SAST scanning (Semgrep, SonarQube)
-- ✅ Security header validation
-- 👤 Manual authentication testing
+-   ✅ API security testing (full suite)
+-   ✅ SAST scanning (Semgrep, SonarQube)
+-   ✅ Security header validation
+-   👤 Manual authentication testing
 
 ### Monthly (Manual)
 
-- 👤 AI/ML red teaming
-- 👤 Business logic testing
-- 👤 Mobile app security testing
-- 👤 Infrastructure penetration testing
+-   👤 AI/ML red teaming
+-   👤 Business logic testing
+-   👤 Mobile app security testing
+-   👤 Infrastructure penetration testing
 
 ### Quarterly (Professional)
 
-- 💼 External penetration test ($15K-$30K)
-- 💼 Code review by security experts
-- 💼 Red team exercise
-- 💼 Compliance audit (PCI DSS, SOC 2)
+-   💼 External penetration test ($15K-$30K)
+-   💼 Code review by security experts
+-   💼 Red team exercise
+-   💼 Compliance audit (PCI DSS, SOC 2)
 
 ### Annual (Comprehensive)
 
-- 💼 Third-party security audit ($25K-$50K)
-- 💼 Disaster recovery test
-- 💼 Security awareness training update
-- 💼 Incident response drill
+-   💼 Third-party security audit ($25K-$50K)
+-   💼 Disaster recovery test
+-   💼 Security awareness training update
+-   💼 Incident response drill
 
 ---
 
@@ -476,32 +467,32 @@ jobs:
 
 ### Critical (Fix Immediately)
 
-- ❌ SQL injection vulnerabilities
-- ❌ Authentication bypass
-- ❌ Arbitrary file upload
-- ❌ Remote code execution
-- ❌ Sensitive data exposure
+-   ❌ SQL injection vulnerabilities
+-   ❌ Authentication bypass
+-   ❌ Arbitrary file upload
+-   ❌ Remote code execution
+-   ❌ Sensitive data exposure
 
 ### High (Fix within 7 days)
 
-- ⚠️ XSS vulnerabilities
-- ⚠️ CSRF vulnerabilities
-- ⚠️ Broken access control
-- ⚠️ Security misconfiguration
-- ⚠️ Weak cryptography
+-   ⚠️ XSS vulnerabilities
+-   ⚠️ CSRF vulnerabilities
+-   ⚠️ Broken access control
+-   ⚠️ Security misconfiguration
+-   ⚠️ Weak cryptography
 
 ### Medium (Fix within 30 days)
 
-- 🟡 Missing security headers
-- 🟡 Information disclosure
-- 🟡 Insufficient logging
-- 🟡 Vulnerable dependencies (moderate severity)
+-   🟡 Missing security headers
+-   🟡 Information disclosure
+-   🟡 Insufficient logging
+-   🟡 Vulnerable dependencies (moderate severity)
 
 ### Low (Fix within 90 days)
 
-- 🔵 Missing best practices
-- 🔵 Low-severity vulnerabilities
-- 🔵 Code quality issues
+-   🔵 Missing best practices
+-   🔵 Low-severity vulnerabilities
+-   🔵 Code quality issues
 
 ---
 
@@ -569,12 +560,11 @@ If a **CRITICAL** vulnerability is found:
    ```
 
 2. **Incident Response (within 4 hours):**
-
-   - Notify security team
-   - Document vulnerability details
-   - Develop and test patch
-   - Review logs for exploitation attempts
-   - Prepare disclosure statement
+   -   Notify security team
+   -   Document vulnerability details
+   -   Develop and test patch
+   -   Review logs for exploitation attempts
+   -   Prepare disclosure statement
 
 3. **Deployment (within 24 hours):**
 
@@ -590,10 +580,10 @@ If a **CRITICAL** vulnerability is found:
    ```
 
 4. **Post-Incident (within 1 week):**
-   - Conduct post-mortem
-   - Update security documentation
-   - Improve detection capabilities
-   - User communication (if required)
+   -   Conduct post-mortem
+   -   Update security documentation
+   -   Improve detection capabilities
+   -   User communication (if required)
 
 ---
 
@@ -601,24 +591,24 @@ If a **CRITICAL** vulnerability is found:
 
 ### Internal Documentation
 
-- [SECURITY_TESTING_FRAMEWORK.md](./SECURITY_TESTING_FRAMEWORK.md) - Complete framework
-- [API_TESTING_GUIDE.md](./API_TESTING_GUIDE.md) - API test procedures
-- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Secure deployment practices
+-   [SECURITY_TESTING_FRAMEWORK.md](./SECURITY_TESTING_FRAMEWORK.md) - Complete framework
+-   [API_TESTING_GUIDE.md](./API_TESTING_GUIDE.md) - API test procedures
+-   [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Secure deployment practices
 
 ### External Resources
 
-- **OWASP Top 10**: https://owasp.org/www-project-top-ten/
-- **OWASP API Security**: https://owasp.org/API-Security/
-- **CWE Top 25**: https://cwe.mitre.org/top25/
-- **NIST Cybersecurity Framework**: https://www.nist.gov/cyberframework
-- **PCI DSS Requirements**: https://www.pcisecuritystandards.org/
+-   **OWASP Top 10**: <https://owasp.org/www-project-top-ten/>
+-   **OWASP API Security**: <https://owasp.org/API-Security/>
+-   **CWE Top 25**: <https://cwe.mitre.org/top25/>
+-   **NIST Cybersecurity Framework**: <https://www.nist.gov/cyberframework>
+-   **PCI DSS Requirements**: <https://www.pcisecuritystandards.org/>
 
 ### Training
 
-- **PortSwigger Web Security Academy**: https://portswigger.net/web-security (Free)
-- **OWASP WebGoat**: https://owasp.org/www-project-webgoat/ (Free)
-- **HackTheBox**: https://www.hackthebox.com/ ($20/month)
-- **TryHackMe**: https://tryhackme.com/ ($11/month)
+-   **PortSwigger Web Security Academy**: <https://portswigger.net/web-security> (Free)
+-   **OWASP WebGoat**: <https://owasp.org/www-project-webgoat/> (Free)
+-   **HackTheBox**: <https://www.hackthebox.com/> ($20/month)
+-   **TryHackMe**: <https://tryhackme.com/> ($11/month)
 
 ---
 
@@ -626,8 +616,8 @@ If a **CRITICAL** vulnerability is found:
 
 For security questions or to report vulnerabilities:
 
-- **Email**: security@advanciapayledger.com
-- **Bug Bounty**: https://hackerone.com/advancia-pay
-- **Emergency**: Use PagerDuty incident escalation
+-   **Email**: <security@advanciapayledger.com>
+-   **Bug Bounty**: <https://hackerone.com/advancia-pay>
+-   **Emergency**: Use PagerDuty incident escalation
 
 **Note:** Never discuss security vulnerabilities in public channels (GitHub issues, Slack, etc.)

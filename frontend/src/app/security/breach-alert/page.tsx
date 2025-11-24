@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
 import {
   AlertTriangle,
   CheckCircle,
@@ -11,8 +11,8 @@ import {
   Mail,
   Phone,
   Shield,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface DataBreach {
   email: string;
@@ -34,11 +34,10 @@ export default function BreachAlertPage() {
   async function fetchBreachData() {
     setLoading(true);
     try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (!token) return;
 
-      const response = await fetch("/api/security/breach-check", {
+      const response = await fetch('/api/security/breach-check', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -49,85 +48,85 @@ export default function BreachAlertPage() {
         setMonitoring(data.monitoring || false);
       }
     } catch (error) {
-      console.error("Breach check error:", error);
+      console.error('Breach check error:', error);
       // Demo data for testing
       setBreaches([
         {
-          email: "jerry.gossett2@gmail.com",
+          email: 'jerry.gossett2@gmail.com',
           breachCount: 11,
           sources: [
             {
-              name: "forum.btcsec.com",
+              name: 'forum.btcsec.com',
               leakCount: 2,
-              date: "2024-03",
-              icon: "🔓",
+              date: '2024-03',
+              icon: '🔓',
             },
             {
-              name: "modbsolutions.com",
+              name: 'modbsolutions.com',
               leakCount: 8,
-              date: "2023-11",
-              icon: "💳",
+              date: '2023-11',
+              icon: '💳',
             },
           ],
         },
         {
-          email: "bigkelly@gmail.com",
+          email: 'bigkelly@gmail.com',
           breachCount: 15,
           sources: [
             {
-              name: "rivercitymediaonline.com",
+              name: 'rivercitymediaonline.com',
               leakCount: 4,
-              date: "2024-01",
-              icon: "📧",
+              date: '2024-01',
+              icon: '📧',
             },
-            { name: "Exploit.In", leakCount: 2, date: "2023-09", icon: "🔐" },
+            { name: 'Exploit.In', leakCount: 2, date: '2023-09', icon: '🔐' },
             {
-              name: "dailymotion.com",
+              name: 'dailymotion.com',
               leakCount: 3,
-              date: "2023-07",
-              icon: "🎥",
+              date: '2023-07',
+              icon: '🎥',
             },
             {
-              name: "pemiblanc.com",
+              name: 'pemiblanc.com',
               leakCount: 2,
-              date: "2024-02",
-              icon: "🔓",
+              date: '2024-02',
+              icon: '🔓',
             },
             {
-              name: "Kayo.moe Credential Stuffing List",
+              name: 'Kayo.moe Credential Stuffing List',
               leakCount: 4,
-              date: "2023-12",
-              icon: "📋",
+              date: '2023-12',
+              icon: '📋',
             },
           ],
         },
         {
-          email: "perrenialspatcouli@gmail.com",
+          email: 'perrenialspatcouli@gmail.com',
           breachCount: 3,
           sources: [
             {
-              name: "LinkedIn Data Leak 2021",
+              name: 'LinkedIn Data Leak 2021',
               leakCount: 1,
-              date: "2021-06",
-              icon: "💼",
+              date: '2021-06',
+              icon: '💼',
             },
             {
-              name: "Collection #1",
+              name: 'Collection #1',
               leakCount: 2,
-              date: "2019-01",
-              icon: "📦",
+              date: '2019-01',
+              icon: '📦',
             },
           ],
         },
         {
-          email: "admin@advancia.com",
+          email: 'admin@advancia.com',
           breachCount: 1,
           sources: [
             {
-              name: "Test Breach Database",
+              name: 'Test Breach Database',
               leakCount: 1,
-              date: "2024-11",
-              icon: "⚠️",
+              date: '2024-11',
+              icon: '⚠️',
             },
           ],
         },
@@ -140,12 +139,11 @@ export default function BreachAlertPage() {
 
   async function activateMonitoring() {
     try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (!token) return;
 
-      const response = await fetch("/api/security/activate-monitoring", {
-        method: "POST",
+      const response = await fetch('/api/security/activate-monitoring', {
+        method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -153,7 +151,7 @@ export default function BreachAlertPage() {
         setMonitoring(true);
       }
     } catch (error) {
-      console.error("Activation error:", error);
+      console.error('Activation error:', error);
     }
   }
 
@@ -170,12 +168,8 @@ export default function BreachAlertPage() {
                 <Shield className="h-8 w-8 text-red-600" />
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-slate-900">
-                  Breach Alert
-                </h1>
-                <p className="text-slate-600">
-                  Monitor your data for security breaches
-                </p>
+                <h1 className="text-3xl font-bold text-slate-900">Breach Alert</h1>
+                <p className="text-slate-600">Monitor your data for security breaches</p>
               </div>
               {monitoring && (
                 <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-2 rounded-full">
@@ -192,9 +186,7 @@ export default function BreachAlertPage() {
                   <h2 className="text-2xl font-bold text-red-600 mb-2">
                     {totalBreaches} data breaches detected
                   </h2>
-                  <p className="text-slate-700">
-                    Take a look for leaks you should review
-                  </p>
+                  <p className="text-slate-700">Take a look for leaks you should review</p>
                 </div>
                 {!monitoring && (
                   <button
@@ -210,9 +202,7 @@ export default function BreachAlertPage() {
               <div className="mt-6 flex items-center gap-3 text-sm text-slate-700">
                 <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg">
                   <Info className="h-4 w-4 text-orange-500" />
-                  <span className="font-semibold">
-                    Turn on 24/7 Breach Monitoring
-                  </span>
+                  <span className="font-semibold">Turn on 24/7 Breach Monitoring</span>
                 </div>
               </div>
             </div>
@@ -273,14 +263,10 @@ export default function BreachAlertPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column: Email List */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="font-bold text-lg text-slate-900 mb-4">
-                Email Breaches
-              </h3>
+              <h3 className="font-bold text-lg text-slate-900 mb-4">Email Breaches</h3>
 
               {loading ? (
-                <div className="text-center py-8 text-slate-500">
-                  Loading breach data...
-                </div>
+                <div className="text-center py-8 text-slate-500">Loading breach data...</div>
               ) : (
                 <div className="space-y-3">
                   {breaches.map((breach, index) => (
@@ -289,8 +275,8 @@ export default function BreachAlertPage() {
                       onClick={() => setSelectedEmail(breach.email)}
                       className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                         selectedEmail === breach.email
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-slate-200 hover:border-slate-300"
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <div className="flex items-start justify-between">
@@ -319,16 +305,12 @@ export default function BreachAlertPage() {
 
             {/* Right Column: Breach Details */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="font-bold text-lg text-slate-900 mb-4">
-                Breach Sources
-              </h3>
+              <h3 className="font-bold text-lg text-slate-900 mb-4">Breach Sources</h3>
 
               {selectedBreach ? (
                 <div className="space-y-3">
                   <div className="bg-slate-50 p-4 rounded-lg mb-4">
-                    <div className="text-sm text-slate-600 mb-1">
-                      Selected email
-                    </div>
+                    <div className="text-sm text-slate-600 mb-1">Selected email</div>
                     <div className="font-semibold text-slate-900 break-all">
                       {selectedBreach.email}
                     </div>
@@ -345,18 +327,12 @@ export default function BreachAlertPage() {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <span className="text-2xl">{source.icon}</span>
-                          <div className="font-semibold text-slate-900">
-                            {source.name}
-                          </div>
+                          <div className="font-semibold text-slate-900">{source.name}</div>
                         </div>
-                        <div className="text-red-600 font-bold">
-                          {source.leakCount} leaks
-                        </div>
+                        <div className="text-red-600 font-bold">{source.leakCount} leaks</div>
                       </div>
                       {source.date && (
-                        <div className="text-xs text-slate-500">
-                          Breach date: {source.date}
-                        </div>
+                        <div className="text-xs text-slate-500">Breach date: {source.date}</div>
                       )}
                       <button className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1">
                         View details <ChevronRight className="h-3 w-3" />

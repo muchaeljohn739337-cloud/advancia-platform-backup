@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import UserManagementTab from "./UserManagementTab";
-import ProductManagementTab from "./ProductManagementTab";
-import WithdrawalManagementTab from "./WithdrawalManagementTab";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import UserManagementTab from './UserManagementTab';
+import ProductManagementTab from './ProductManagementTab';
+import WithdrawalManagementTab from './WithdrawalManagementTab';
 // import AnalyticsTab from "./AnalyticsTab";
 
 const AdminControlPanel = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState('users');
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -23,36 +23,36 @@ const AdminControlPanel = () => {
     // Fetch current user from API
     const fetchCurrentUser = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         if (!token) {
-          router.push("/auth/enhanced");
+          router.push('/auth/enhanced');
           return;
         }
 
-        const response = await fetch("http://localhost:4000/api/auth/me", {
+        const response = await fetch('http://localhost:4000/api/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (!response.ok) {
-          router.push("/auth/enhanced");
+          router.push('/auth/enhanced');
           return;
         }
 
         const data = await response.json();
 
         // Check if user is admin
-        if (data.user?.role !== "ADMIN") {
-          router.push("/");
+        if (data.user?.role !== 'ADMIN') {
+          router.push('/');
           return;
         }
 
         setCurrentUser(data.user);
         await fetchStats();
       } catch (error) {
-        console.error("Error fetching user:", error);
-        router.push("/auth/enhanced");
+        console.error('Error fetching user:', error);
+        router.push('/auth/enhanced');
       } finally {
         setLoading(false);
       }
@@ -63,10 +63,10 @@ const AdminControlPanel = () => {
 
   const fetchStats = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
       // Fetch dashboard stats from your backend
-      const response = await fetch("http://localhost:4000/api/admin/stats", {
+      const response = await fetch('http://localhost:4000/api/admin/stats', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -77,44 +77,43 @@ const AdminControlPanel = () => {
         setStats(data);
       }
     } catch (error) {
-      console.error("Error fetching stats:", error);
+      console.error('Error fetching stats:', error);
     }
   };
 
   const tabs = [
     {
-      id: "users",
-      label: "User Management",
-      icon: "👥",
-      description: "Manage user accounts and permissions",
+      id: 'users',
+      label: 'User Management',
+      icon: '👥',
+      description: 'Manage user accounts and permissions',
       component: UserManagementTab,
     },
     {
-      id: "products",
-      label: "Product Management",
-      icon: "📦",
-      description: "Manage services and catalog",
+      id: 'products',
+      label: 'Product Management',
+      icon: '📦',
+      description: 'Manage services and catalog',
       component: ProductManagementTab,
     },
     {
-      id: "withdrawals",
-      label: "Withdrawal Requests",
-      icon: "💳",
-      description: "Review and process withdrawal requests",
+      id: 'withdrawals',
+      label: 'Withdrawal Requests',
+      icon: '💳',
+      description: 'Review and process withdrawal requests',
       component: WithdrawalManagementTab,
     },
-    
   ];
 
   const activeTabData = tabs.find((tab) => tab.id === activeTab);
   const ActiveComponent = activeTabData?.component;
 
   const getInitials = (name: string) => {
-    if (!name) return "AD";
+    if (!name) return 'AD';
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
       .substring(0, 2);
   };
@@ -138,19 +137,15 @@ const AdminControlPanel = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <button
-                onClick={() => router.push("/")}
+                onClick={() => router.push('/')}
                 className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 ← Back to Dashboard
               </button>
               <div className="h-6 w-px bg-gray-200"></div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">
-                  Admin Control Panel
-                </h1>
-                <p className="text-sm text-gray-600">
-                  Platform management and administration
-                </p>
+                <h1 className="text-xl font-semibold text-gray-900">Admin Control Panel</h1>
+                <p className="text-sm text-gray-600">Platform management and administration</p>
               </div>
             </div>
 
@@ -186,20 +181,16 @@ const AdminControlPanel = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors duration-200 ${
                       activeTab === tab.id
-                        ? "bg-blue-600 text-white shadow-sm"
-                        : "text-gray-700 hover:bg-gray-100"
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
                     <span className="text-xl">{tab.icon}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">
-                        {tab.label}
-                      </p>
+                      <p className="text-sm font-medium truncate">{tab.label}</p>
                       <p
                         className={`text-xs truncate ${
-                          activeTab === tab.id
-                            ? "text-blue-100"
-                            : "text-gray-500"
+                          activeTab === tab.id ? 'text-blue-100' : 'text-gray-500'
                         }`}
                       >
                         {tab.description}
@@ -218,23 +209,17 @@ const AdminControlPanel = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Active Users</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {stats.activeUsers}
-                  </span>
+                  <span className="text-sm font-medium text-gray-900">{stats.activeUsers}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">
-                    Pending Withdrawals
-                  </span>
+                  <span className="text-sm text-gray-600">Pending Withdrawals</span>
                   <span className="text-sm font-medium text-yellow-600">
                     {stats.pendingWithdrawals}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Active Services</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {stats.activeProducts}
-                  </span>
+                  <span className="text-sm font-medium text-gray-900">{stats.activeProducts}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Total Revenue</span>
@@ -254,9 +239,7 @@ const AdminControlPanel = () => {
               ) : (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">⚠️</div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    Access Denied
-                  </h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Access Denied</h3>
                   <p className="text-gray-600">
                     You don&apos;t have permission to access this section.
                   </p>
@@ -275,9 +258,7 @@ const AdminControlPanel = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex-shrink-0 flex flex-col items-center gap-1 px-4 py-3 min-w-0 ${
-                activeTab === tab.id
-                  ? "text-blue-600 border-t-2 border-blue-600"
-                  : "text-gray-500"
+                activeTab === tab.id ? 'text-blue-600 border-t-2 border-blue-600' : 'text-gray-500'
               }`}
             >
               <span className="text-xl">{tab.icon}</span>

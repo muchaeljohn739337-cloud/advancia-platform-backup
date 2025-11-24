@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
             Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="sr-only">
@@ -75,22 +75,14 @@ export default function ForgotPasswordPage() {
             />
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm text-center">
-              {error}
-            </div>
-          )}
+          {error && <div className="text-red-600 text-sm text-center">{error}</div>}
 
-          {message && (
-            <div className="text-green-600 text-sm text-center">
-              {message}
-            </div>
-          )}
+          {message && <div className="text-green-600 text-sm text-center">{message}</div>}
 
           {resetLink && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
               <p className="text-sm text-yellow-800 font-medium">Development Mode:</p>
-              <a 
+              <a
                 href={resetLink}
                 className="text-sm text-blue-600 hover:text-blue-800 underline break-all"
               >
@@ -110,10 +102,7 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div className="text-center">
-            <Link 
-              href="/auth/login"
-              className="text-indigo-600 hover:text-indigo-500 text-sm"
-            >
+            <Link href="/auth/login" className="text-indigo-600 hover:text-indigo-500 text-sm">
               Back to Login
             </Link>
           </div>

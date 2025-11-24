@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ArrowLeft, RefreshCw, XCircle } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from 'framer-motion';
+import { ArrowLeft, RefreshCw, XCircle } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function PaymentCancelPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const orderId = searchParams?.get("orderId");
+  const orderId = searchParams?.get('orderId');
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-blue-50 p-6">
@@ -24,22 +24,16 @@ export default function PaymentCancelPage() {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-rose-600 mb-4">
-          Payment Cancelled
-        </h1>
+        <h1 className="text-3xl font-bold text-rose-600 mb-4">Payment Cancelled</h1>
 
         {/* Description */}
         <p className="text-slate-600 mb-6">
-          No charges were made. You can restart the checkout process whenever
-          you're ready.
+          No charges were made. You can restart the checkout process whenever you're ready.
         </p>
 
         {orderId && (
           <p className="text-sm text-slate-500 mb-6">
-            Order ID:{" "}
-            <code className="bg-slate-100 px-2 py-1 rounded text-xs">
-              {orderId}
-            </code>
+            Order ID: <code className="bg-slate-100 px-2 py-1 rounded text-xs">{orderId}</code>
           </p>
         )}
 
@@ -54,7 +48,7 @@ export default function PaymentCancelPage() {
           </button>
 
           <button
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push('/dashboard')}
             className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />

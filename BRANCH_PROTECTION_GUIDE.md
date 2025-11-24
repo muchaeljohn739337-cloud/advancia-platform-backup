@@ -10,23 +10,21 @@
 ### Option 1: Automated Setup (Recommended)
 
 1. **Create GitHub Personal Access Token (PAT)**
-
-   - Go to: https://github.com/settings/tokens
-   - Click "Generate new token (classic)"
-   - Name: `Branch Protection Token`
-   - Select scopes:
-     - ✅ `repo` (Full control of private repositories)
-     - ✅ `admin:repo_hook` (Full control of repository hooks)
-   - Click "Generate token"
-   - **Copy the token** (you won't see it again!)
+   -   Go to: <https://github.com/settings/tokens>
+   -   Click "Generate new token (classic)"
+   -   Name: `Branch Protection Token`
+   -   Select scopes:
+     -   ✅ `repo` (Full control of private repositories)
+     -   ✅ `admin:repo_hook` (Full control of repository hooks)
+   -   Click "Generate token"
+   -   **Copy the token** (you won't see it again!)
 
 2. **Add Token to Repository Secrets**
-
-   - Go to: `Repository Settings → Secrets and variables → Actions`
-   - Click "New repository secret"
-   - Name: `GH_ADMIN_PAT`
-   - Value: Paste your PAT
-   - Click "Add secret"
+   -   Go to: `Repository Settings → Secrets and variables → Actions`
+   -   Click "New repository secret"
+   -   Name: `GH_ADMIN_PAT`
+   -   Value: Paste your PAT
+   -   Click "Add secret"
 
 3. **Run the Workflow**
 
@@ -52,40 +50,40 @@ Configure as shown in [Manual Configuration](#manual-configuration-steps) below.
 
 ### Minimal Protection
 
-- ❌ No required status checks
-- ❌ No PR reviews required
-- ✅ Prevent branch deletion
-- ⚠️ Force push allowed (use with caution)
+-   ❌ No required status checks
+-   ❌ No PR reviews required
+-   ✅ Prevent branch deletion
+-   ⚠️ Force push allowed (use with caution)
 
 **Use case:** Development branches, personal projects
 
 ### Standard Protection (Recommended)
 
-- ✅ Require status checks to pass:
-  - `build` - Backend/Frontend build
-  - `type-lint` - TypeScript type checking
-  - `CI (pnpm checks)` - Code quality checks
-- ✅ Require 1 pull request review
-- ✅ Dismiss stale reviews on new push
-- ✅ Require conversation resolution
-- ❌ No force pushes
-- ✅ Prevent branch deletion
+-   ✅ Require status checks to pass:
+    -   `build` - Backend/Frontend build
+    -   `type-lint` - TypeScript type checking
+    -   `CI (pnpm checks)` - Code quality checks
+-   ✅ Require 1 pull request review
+-   ✅ Dismiss stale reviews on new push
+-   ✅ Require conversation resolution
+-   ❌ No force pushes
+-   ✅ Prevent branch deletion
 
 **Use case:** Production repositories, team projects
 
 ### Strict Protection
 
-- ✅ Require status checks to pass:
-  - `build`, `type-lint`, `CI (pnpm checks)`
-  - `backend`, `frontend` - Full test suites
-- ✅ Require 2 pull request reviews
-- ✅ Require code owner approval
-- ✅ Require approval of most recent push
-- ✅ Enforce for administrators
-- ✅ Require linear history (no merge commits)
-- ✅ Require conversation resolution
-- ❌ No force pushes
-- ✅ Prevent branch deletion
+-   ✅ Require status checks to pass:
+    -   `build`, `type-lint`, `CI (pnpm checks)`
+    -   `backend`, `frontend` - Full test suites
+-   ✅ Require 2 pull request reviews
+-   ✅ Require code owner approval
+-   ✅ Require approval of most recent push
+-   ✅ Enforce for administrators
+-   ✅ Require linear history (no merge commits)
+-   ✅ Require conversation resolution
+-   ❌ No force pushes
+-   ✅ Prevent branch deletion
 
 **Use case:** Critical production systems, regulated environments
 
@@ -116,17 +114,17 @@ Branch name pattern: main|staging|production
 
 #### ✅ Require Pull Request Before Merging
 
-- [x] **Require a pull request before merging**
-  - [x] Require approvals: **1** (standard) or **2** (strict)
-  - [x] Dismiss stale pull request approvals when new commits are pushed
-  - [x] Require review from Code Owners (if CODEOWNERS file exists)
-  - [x] Require approval of the most recent reviewable push (strict only)
-  - [ ] Require conversation resolution before merging
+-   [x] **Require a pull request before merging**
+    -   [x] Require approvals: **1** (standard) or **2** (strict)
+    -   [x] Dismiss stale pull request approvals when new commits are pushed
+    -   [x] Require review from Code Owners (if CODEOWNERS file exists)
+    -   [x] Require approval of the most recent reviewable push (strict only)
+    -   [ ] Require conversation resolution before merging
 
 #### ✅ Require Status Checks Before Merging
 
-- [x] **Require status checks to pass before merging**
-  - [x] Require branches to be up to date before merging
+-   [x] **Require status checks to pass before merging**
+    -   [x] Require branches to be up to date before merging
 
 **Status checks to require:** (Click "Search for status checks")
 
@@ -141,27 +139,27 @@ Integration Tests (optional)
 
 #### ✅ Additional Rules
 
-- [x] **Require conversation resolution before merging**
-- [ ] **Require signed commits** (optional, requires GPG setup)
-- [x] **Require linear history** (strict only)
-- [ ] **Require deployments to succeed** (if using GitHub Deployments)
+-   [x] **Require conversation resolution before merging**
+-   [ ] **Require signed commits** (optional, requires GPG setup)
+-   [x] **Require linear history** (strict only)
+-   [ ] **Require deployments to succeed** (if using GitHub Deployments)
 
 #### 🛡️ Enforcement Settings
 
-- [ ] **Do not allow bypassing the above settings**
-  - Check this for strict enforcement (even admins must follow rules)
-  - Leave unchecked for flexibility during emergencies
+-   [ ] **Do not allow bypassing the above settings**
+    -   Check this for strict enforcement (even admins must follow rules)
+    -   Leave unchecked for flexibility during emergencies
 
 #### 🚫 Restrict Who Can Push
 
-- [ ] **Restrict who can push to matching branches**
-  - Leave unchecked for open collaboration
-  - Check and add specific users/teams for restricted repositories
+-   [ ] **Restrict who can push to matching branches**
+    -   Leave unchecked for open collaboration
+    -   Check and add specific users/teams for restricted repositories
 
 #### 📝 Additional Options
 
-- [ ] **Allow force pushes** - ❌ **Do NOT enable for main branch**
-- [ ] **Allow deletions** - ❌ **Do NOT enable for main branch**
+-   [ ] **Allow force pushes** - ❌ **Do NOT enable for main branch**
+-   [ ] **Allow deletions** - ❌ **Do NOT enable for main branch**
 
 ### Step 4: Save Changes
 
@@ -281,12 +279,12 @@ If "Enforce for administrators" is disabled:
 
 ### 🚨 Emergency Bypass Checklist
 
-- [ ] Document reason for bypass
-- [ ] Notify team in Slack/Discord/Email
-- [ ] Create incident ticket
-- [ ] Re-enable protection immediately after
-- [ ] Schedule post-mortem review
-- [ ] Update deployment docs if needed
+-   [ ] Document reason for bypass
+-   [ ] Notify team in Slack/Discord/Email
+-   [ ] Create incident ticket
+-   [ ] Re-enable protection immediately after
+-   [ ] Schedule post-mortem review
+-   [ ] Update deployment docs if needed
 
 ---
 
@@ -333,28 +331,24 @@ Create `.github/CODEOWNERS` to require specific people to review certain files:
 These CI workflows must pass before merging:
 
 1. **`build`** - From `.github/workflows/ci.yml`
-
-   - Builds backend and frontend
-   - Verifies no compilation errors
+   -   Builds backend and frontend
+   -   Verifies no compilation errors
 
 2. **`type-lint`** - From `.github/workflows/ci-pnpm.yml`
-
-   - TypeScript type checking
-   - ESLint code quality
+   -   TypeScript type checking
+   -   ESLint code quality
 
 3. **`CI (pnpm checks)`** - From `.github/workflows/ci-pnpm.yml`
-
-   - Comprehensive linting
-   - Type checking across workspace
+   -   Comprehensive linting
+   -   Type checking across workspace
 
 4. **`backend`** (optional) - From `.github/workflows/ci.yml`
-
-   - Backend unit tests
-   - Integration tests
+   -   Backend unit tests
+   -   Integration tests
 
 5. **`frontend`** (optional) - From `.github/workflows/ci.yml`
-   - Frontend component tests
-   - E2E tests
+   -   Frontend component tests
+   -   E2E tests
 
 ### Update Required Checks
 
@@ -394,8 +388,8 @@ curl -X PUT \
 
 **Solution:**
 
-- ✅ **Correct:** Create a feature branch and PR
-- ❌ **Incorrect:** Trying to push directly to main
+-   ✅ **Correct:** Create a feature branch and PR
+-   ❌ **Incorrect:** Trying to push directly to main
 
 ```bash
 # Correct workflow
@@ -417,17 +411,21 @@ git push origin feature/my-feature
 **Solution:**
 
 1. Check workflow file syntax:
+
    ```yaml
    jobs:
      build: # This becomes status check "build"
        name: Build Frontend & Backend
    ```
+
 2. Ensure workflow runs on PR events:
+
    ```yaml
    on:
      pull_request:
        branches: [main]
    ```
+
 3. Push a test commit to trigger the workflow
 
 ### Problem: "Cannot merge: head branch is out of date"
@@ -448,32 +446,32 @@ git push --force-with-lease origin your-branch
 
 ### Weekly Checks
 
-- [ ] Review failed PRs and blocked merges
-- [ ] Update required status checks if workflows change
-- [ ] Verify all team members can create PRs successfully
+-   [ ] Review failed PRs and blocked merges
+-   [ ] Update required status checks if workflows change
+-   [ ] Verify all team members can create PRs successfully
 
 ### Monthly Reviews
 
-- [ ] Audit bypass/override incidents
-- [ ] Review and update CODEOWNERS
-- [ ] Check for outdated status checks
-- [ ] Verify protection rules match security policy
+-   [ ] Audit bypass/override incidents
+-   [ ] Review and update CODEOWNERS
+-   [ ] Check for outdated status checks
+-   [ ] Verify protection rules match security policy
 
 ### Quarterly Tasks
 
-- [ ] Rotate GitHub PAT used for automation
-- [ ] Review branch protection effectiveness
-- [ ] Update protection rules based on incidents
-- [ ] Train new team members on PR workflow
+-   [ ] Rotate GitHub PAT used for automation
+-   [ ] Review branch protection effectiveness
+-   [ ] Update protection rules based on incidents
+-   [ ] Train new team members on PR workflow
 
 ---
 
 ## 📚 Additional Resources
 
-- **GitHub Docs:** https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches
-- **Branch Protection API:** https://docs.github.com/en/rest/branches/branch-protection
-- **CODEOWNERS Syntax:** https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
-- **Status Checks:** https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks
+-   **GitHub Docs:** <https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches>
+-   **Branch Protection API:** <https://docs.github.com/en/rest/branches/branch-protection>
+-   **CODEOWNERS Syntax:** <https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners>
+-   **Status Checks:** <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks>
 
 ---
 

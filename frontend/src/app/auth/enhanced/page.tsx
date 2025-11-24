@@ -1,63 +1,55 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import AuthTabs from "@/components/auth/AuthTabs";
-import RegisterForm from "@/components/auth/RegisterForm";
-import ForgotPasswordModal from "@/components/auth/ForgotPasswordModal";
-import {
-  Wallet,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  AlertCircle,
-  LogIn,
-} from "lucide-react";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import AuthTabs from '@/components/auth/AuthTabs';
+import RegisterForm from '@/components/auth/RegisterForm';
+import ForgotPasswordModal from '@/components/auth/ForgotPasswordModal';
+import { Wallet, Mail, Lock, Eye, EyeOff, AlertCircle, LogIn } from 'lucide-react';
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export default function EnhancedAuthPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"login" | "register">("login");
+  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   // Login form state
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     rememberMe: false,
   });
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [loginError, setLoginError] = useState("");
+  const [loginError, setLoginError] = useState('');
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setLoginData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
-    setLoginError("");
+    setLoginError('');
   };
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!loginData.email || !loginData.password) {
-      setLoginError("Please fill in all fields");
+      setLoginError('Please fill in all fields');
       return;
     }
 
     setIsLoginLoading(true);
-    setLoginError("");
+    setLoginError('');
 
     try {
       const response = await fetch(`${API}/api/auth/login`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email: loginData.email,
@@ -68,27 +60,25 @@ export default function EnhancedAuthPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Login failed");
+        throw new Error(data.error || 'Login failed');
       }
 
       // Store token
       if (data.token) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem('token', data.token);
 
         // Redirect to dashboard
-        router.push("/dashboard");
+        router.push('/dashboard');
       }
     } catch (err) {
-      setLoginError(
-        err instanceof Error ? err.message : "Login failed. Please try again."
-      );
+      setLoginError(err instanceof Error ? err.message : 'Login failed. Please try again.');
     } finally {
       setIsLoginLoading(false);
     }
   };
 
   const handleRegisterSuccess = () => {
-    router.push("/dashboard");
+    router.push('/dashboard');
   };
 
   return (
@@ -113,7 +103,7 @@ export default function EnhancedAuthPage() {
           <AuthTabs activeTab={activeTab} onTabChange={setActiveTab} />
 
           {/* Login Form */}
-          {activeTab === "login" && (
+          {activeTab === 'login' && (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
               {/* Email */}
               <div>
@@ -139,15 +129,13 @@ export default function EnhancedAuthPage() {
 
               {/* Password */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock size={18} className="text-gray-400" />
                   </div>
                   <input
-                    type={showLoginPassword ? "text" : "password"}
+                    type={showLoginPassword ? 'text' : 'password'}
                     name="password"
                     value={loginData.password}
                     onChange={handleLoginChange}
@@ -226,19 +214,14 @@ export default function EnhancedAuthPage() {
           )}
 
           {/* Register Form */}
-          {activeTab === "register" && (
-            <RegisterForm onSuccess={handleRegisterSuccess} />
-          )}
+          {activeTab === 'register' && <RegisterForm onSuccess={handleRegisterSuccess} />}
         </div>
 
         {/* Footer Links */}
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>
-            Need help?{" "}
-            <Link
-              href="/support"
-              className="text-blue-600 hover:underline font-medium"
-            >
+            Need help?{' '}
+            <Link href="/support" className="text-blue-600 hover:underline font-medium">
               Contact Support
             </Link>
           </p>

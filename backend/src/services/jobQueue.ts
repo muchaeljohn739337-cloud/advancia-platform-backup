@@ -18,7 +18,7 @@
 import Bull, { Job, Queue, QueueOptions } from 'bull';
 import Redis from 'ioredis';
 import logger from '../logger';
-import { prisma } from '../prismaClient';
+import prisma from '../prismaClient';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -431,7 +431,7 @@ class JobQueueManager {
   // ==========================================================================
 
   private async updateTransaction(data: any): Promise<any> {
-    return prisma.transaction.update({
+    return prisma.transactions.update({
       where: { id: data.transactionId },
       data: data.updates,
     });
@@ -482,7 +482,7 @@ class JobQueueManager {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - data.daysOld);
 
-    const result = await prisma.auditLog.deleteMany({
+    const result = await prisma.audit_logs.deleteMany({
       where: {
         createdAt: { lt: cutoffDate },
       },
@@ -498,7 +498,7 @@ class JobQueueManager {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - data.daysOld);
 
-    const transactions = await prisma.transaction.findMany({
+    const transactions = await prisma.transactions.findMany({
       where: {
         createdAt: { lt: cutoffDate },
         status: 'completed',

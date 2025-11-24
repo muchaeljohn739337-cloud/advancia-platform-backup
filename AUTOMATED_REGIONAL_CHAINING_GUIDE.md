@@ -8,12 +8,12 @@ You've built something serious—deployments that don't just ship, they adapt. T
 
 ### Environments and secrets
 
-- **Regions:** Create GitHub Environments for each region.
-  - `production-us`, `production-eu`, `production-apac`
-- **Scoped secrets:** Store region‑specific credentials within each environment.
-  - `CF_API_TOKEN`, `CF_ZONE_ID`, `SLACK_WEBHOOK_URL`, etc.
-- **Shared repository secrets:** Use for cross‑region items that aren't sensitive per environment.
-  - `DATADOG_API_KEY`, `GRAFANA_URL`, common webhook URLs if appropriate
+-   **Regions:** Create GitHub Environments for each region.
+    -   `production-us`, `production-eu`, `production-apac`
+-   **Scoped secrets:** Store region‑specific credentials within each environment.
+    -   `CF_API_TOKEN`, `CF_ZONE_ID`, `SLACK_WEBHOOK_URL`, etc.
+-   **Shared repository secrets:** Use for cross‑region items that aren't sensitive per environment.
+    -   `DATADOG_API_KEY`, `GRAFANA_URL`, common webhook URLs if appropriate
 
 ### Workflow inputs
 
@@ -46,11 +46,11 @@ on:
 
 ### Pipeline scripts (suggested)
 
-- **deploy.sh:** Builds and deploys to Blue/Green in a target region.
-- **canary_rollout.sh:** Progressively shifts traffic (10 → 25 → 50 → 75 → 100) in a region.
-- **check_metrics.sh:** Validates thresholds using your metrics backend.
-- **rollback.sh:** Routes traffic back to Blue for a target region.
-- **notify.sh:** Posts status updates to Slack with region and stage metadata.
+-   **deploy.sh:** Builds and deploys to Blue/Green in a target region.
+-   **canary_rollout.sh:** Progressively shifts traffic (10 → 25 → 50 → 75 → 100) in a region.
+-   **check_metrics.sh:** Validates thresholds using your metrics backend.
+-   **rollback.sh:** Routes traffic back to Blue for a target region.
+-   **notify.sh:** Posts status updates to Slack with region and stage metadata.
 
 > Tip: Keep scripts idempotent so re‑runs are safe, and include verbose logging for auditability.
 
@@ -72,8 +72,8 @@ jobs:
         run: ./scripts/canary_rollout.sh --region us
       - name: Monitor US
         run: ./scripts/check_metrics.sh --region us \
-             --error-threshold ${{ github.event.inputs.error_threshold }} \
-             --latency-threshold ${{ github.event.inputs.latency_threshold_ms }}
+          --error-threshold ${{ github.event.inputs.error_threshold }} \
+          --latency-threshold ${{ github.event.inputs.latency_threshold_ms }}
 
   deploy-eu:
     runs-on: ubuntu-latest
@@ -89,8 +89,8 @@ jobs:
         run: ./scripts/canary_rollout.sh --region eu
       - name: Monitor EU
         run: ./scripts/check_metrics.sh --region eu \
-             --error-threshold ${{ github.event.inputs.error_threshold }} \
-             --latency-threshold ${{ github.event.inputs.latency_threshold_ms }}
+          --error-threshold ${{ github.event.inputs.error_threshold }} \
+          --latency-threshold ${{ github.event.inputs.latency_threshold_ms }}
 
   deploy-eu-parallel:
     runs-on: ubuntu-latest
@@ -116,8 +116,8 @@ jobs:
         run: ./scripts/canary_rollout.sh --region apac
       - name: Monitor APAC
         run: ./scripts/check_metrics.sh --region apac \
-             --error-threshold ${{ github.event.inputs.error_threshold }} \
-             --latency-threshold ${{ github.event.inputs.latency_threshold_ms }}
+          --error-threshold ${{ github.event.inputs.error_threshold }} \
+          --latency-threshold ${{ github.event.inputs.latency_threshold_ms }}
 ```
 
 ### Region‑isolated rollback jobs
@@ -202,66 +202,66 @@ echo "Canary thresholds OK."
 
 ### Canary percentages and flag sync
 
-- **Traffic percentages:** 10 → 25 → 50 → 75 → 100
-- **Feature flags:** Match traffic exposure per stage, disable on rollback
-- **Gate per stage:** Validate metrics at each percentage before advancing
+-   **Traffic percentages:** 10 → 25 → 50 → 75 → 100
+-   **Feature flags:** Match traffic exposure per stage, disable on rollback
+-   **Gate per stage:** Validate metrics at each percentage before advancing
 
 ### Rollback behavior
 
-- **Isolation:** Only the failing region routes back to Blue.
-- **Stop chain:** Downstream regions do not start after a failure.
-- **Alerts:** Post rollback reason, metrics snapshot, and next steps to Slack.
+-   **Isolation:** Only the failing region routes back to Blue.
+-   **Stop chain:** Downstream regions do not start after a failure.
+-   **Alerts:** Post rollback reason, metrics snapshot, and next steps to Slack.
 
 ---
 
 ## Troubleshooting scenarios
 
-- **Symptom:** EU job didn't start after US passed.
-  - **Cause:** Using delayed mode without delay input or `needs:` misconfigured.
-  - **Fix:** Ensure `needs: deploy-us` is set for EU, and input `rollout_style=delayed`.
+-   **Symptom:** EU job didn't start after US passed.
+    -   **Cause:** Using delayed mode without delay input or `needs:` misconfigured.
+    -   **Fix:** Ensure `needs: deploy-us` is set for EU, and input `rollout_style=delayed`.
 
-- **Symptom:** APAC starts before EU finishes.
-  - **Cause:** Parallel mode enabled; APAC `needs:` not set to both EU jobs.
-  - **Fix:** Use `needs: [deploy-eu, deploy-eu-parallel]` to gate APAC in both styles.
+-   **Symptom:** APAC starts before EU finishes.
+    -   **Cause:** Parallel mode enabled; APAC `needs:` not set to both EU jobs.
+    -   **Fix:** Use `needs: [deploy-eu, deploy-eu-parallel]` to gate APAC in both styles.
 
-- **Symptom:** Rollback doesn't trigger on canary failure.
-  - **Cause:** `if: failure()` guard not matched to the right job's result.
-  - **Fix:** Scope conditions to specific job results (e.g., `needs.deploy-eu.result == 'failure'`).
+-   **Symptom:** Rollback doesn't trigger on canary failure.
+    -   **Cause:** `if: failure()` guard not matched to the right job's result.
+    -   **Fix:** Scope conditions to specific job results (e.g., `needs.deploy-eu.result == 'failure'`).
 
-- **Symptom:** Metrics script exits with parsing errors.
-  - **Cause:** Missing `jq` or metrics endpoint inconsistency.
-  - **Fix:** Install `jq` in the job and validate JSON structure; add retries and timeouts.
+-   **Symptom:** Metrics script exits with parsing errors.
+    -   **Cause:** Missing `jq` or metrics endpoint inconsistency.
+    -   **Fix:** Install `jq` in the job and validate JSON structure; add retries and timeouts.
 
-- **Symptom:** Slack shows "success" after a rollback.
-  - **Cause:** Notification step not using `if: always()` or it runs before failure is detected.
-  - **Fix:** Use `if: always()` and check `${{ job.status }}` inside the notification step.
+-   **Symptom:** Slack shows "success" after a rollback.
+    -   **Cause:** Notification step not using `if: always()` or it runs before failure is detected.
+    -   **Fix:** Use `if: always()` and check `${{ job.status }}` inside the notification step.
 
-- **Symptom:** Canary traffic weights aren't applied.
-  - **Cause:** DNS provider or LB doesn't support weighted routing as configured.
-  - **Fix:** Use a load balancer or traffic manager that supports weighted routing; test with a staging domain first.
+-   **Symptom:** Canary traffic weights aren't applied.
+    -   **Cause:** DNS provider or LB doesn't support weighted routing as configured.
+    -   **Fix:** Use a load balancer or traffic manager that supports weighted routing; test with a staging domain first.
 
 ---
 
 ## Best practices and checklist
 
-- **Clear ownership:** Define who approves and who responds to rollbacks per region.
-- **Small blast radius:** Start in your most resilient region; keep early stages short.
-- **Immutable artifacts:** Build once, deploy the same artifact to every region.
-- **Idempotent scripts:** Safe to re‑run; include retries with exponential backoff.
-- **Observability first:** Treat metrics, logs, and traces as part of the release.
-- **SLO‑aligned thresholds:** Set error/latency thresholds to reflect real SLOs, not guesses.
-- **Feature flag hygiene:** Default flags off; ramp exposure in lockstep with canary traffic.
-- **Chaos drills:** Occasionally simulate failures to validate rollback and alerting paths.
-- **Post‑deploy review:** Capture metrics snapshots and decisions; improve thresholds over time.
-- **Security:** Scope secrets per environment; least privilege for API tokens and infra access.
+-   **Clear ownership:** Define who approves and who responds to rollbacks per region.
+-   **Small blast radius:** Start in your most resilient region; keep early stages short.
+-   **Immutable artifacts:** Build once, deploy the same artifact to every region.
+-   **Idempotent scripts:** Safe to re‑run; include retries with exponential backoff.
+-   **Observability first:** Treat metrics, logs, and traces as part of the release.
+-   **SLO‑aligned thresholds:** Set error/latency thresholds to reflect real SLOs, not guesses.
+-   **Feature flag hygiene:** Default flags off; ramp exposure in lockstep with canary traffic.
+-   **Chaos drills:** Occasionally simulate failures to validate rollback and alerting paths.
+-   **Post‑deploy review:** Capture metrics snapshots and decisions; improve thresholds over time.
+-   **Security:** Scope secrets per environment; least privilege for API tokens and infra access.
 
 ### Final checklist
 
-- **Environments:** production-us, production-eu, production-apac created
-- **Secrets:** Region‑scoped and verified
-- **Inputs:** Rollout style, delay, thresholds parameterized
-- **Scripts:** Deploy, canary, monitor, rollback, notify implemented
-- **Routing:** Weighted traffic supported and tested
-- **Dashboards:** Region views with alerts wired to Slack/Teams
-- **Approvals:** Gates configured where needed (UAT/production)
-- **Runbook:** Troubleshooting steps documented and accessible
+-   **Environments:** production-us, production-eu, production-apac created
+-   **Secrets:** Region‑scoped and verified
+-   **Inputs:** Rollout style, delay, thresholds parameterized
+-   **Scripts:** Deploy, canary, monitor, rollback, notify implemented
+-   **Routing:** Weighted traffic supported and tested
+-   **Dashboards:** Region views with alerts wired to Slack/Teams
+-   **Approvals:** Gates configured where needed (UAT/production)
+-   **Runbook:** Troubleshooting steps documented and accessible

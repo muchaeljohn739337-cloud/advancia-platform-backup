@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import ApprovalCheck from "@/components/ApprovalCheck";
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
-import BalanceOverview from "@/components/BalanceOverview";
-import QuickActions from "@/components/QuickActions";
-import RecentTransactions from "@/components/RecentTransactions";
+import { useState, useEffect } from 'react';
+import ApprovalCheck from '@/components/ApprovalCheck';
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
+import BalanceOverview from '@/components/BalanceOverview';
+import QuickActions from '@/components/QuickActions';
+import RecentTransactions from '@/components/RecentTransactions';
 
 // Force dynamic rendering and use edge runtime to avoid static generation
 export const dynamic = 'force-dynamic';
 export const runtime = 'edge';
 
 function DashboardPage() {
-  const [userName, setUserName] = useState("User");
+  const [userName, setUserName] = useState('User');
   const [pendingOrders, setPendingOrders] = useState(0);
   const [pendingWithdrawals, setPendingWithdrawals] = useState(0);
 
@@ -23,8 +23,8 @@ function DashboardPage() {
 
   const fetchUserInfo = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       const response = await fetch(`/api/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -32,17 +32,17 @@ function DashboardPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setUserName(data.firstName || data.username || "User");
+        setUserName(data.firstName || data.username || 'User');
       }
     } catch (error) {
-      console.error("Error fetching user info:", error);
+      console.error('Error fetching user info:', error);
     }
   };
 
   const fetchPendingItems = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       // Fetch pending orders
       const ordersResponse = await fetch(`/api/crypto/orders/${userId}`, {
@@ -50,7 +50,7 @@ function DashboardPage() {
       });
       if (ordersResponse.ok) {
         const orders = await ordersResponse.json();
-        const pending = orders.filter((o: { status: string }) => o.status === "PENDING").length;
+        const pending = orders.filter((o: { status: string }) => o.status === 'PENDING').length;
         setPendingOrders(pending);
       }
 
@@ -60,19 +60,21 @@ function DashboardPage() {
       });
       if (withdrawalsResponse.ok) {
         const withdrawals = await withdrawalsResponse.json();
-        const pending = withdrawals.filter((w: { status: string }) => w.status === "PENDING").length;
+        const pending = withdrawals.filter(
+          (w: { status: string }) => w.status === 'PENDING'
+        ).length;
         setPendingWithdrawals(pending);
       }
     } catch (error) {
-      console.error("Error fetching pending items:", error);
+      console.error('Error fetching pending items:', error);
     }
   };
 
   const getCurrentGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
   };
 
   return (
@@ -115,8 +117,8 @@ function DashboardPage() {
                         Pending Crypto Orders
                       </h3>
                       <p className="text-sm text-gray-300 mt-1">
-                        You have {pendingOrders} crypto purchase {pendingOrders === 1 ? "order" : "orders"} awaiting
-                        admin approval.
+                        You have {pendingOrders} crypto purchase{' '}
+                        {pendingOrders === 1 ? 'order' : 'orders'} awaiting admin approval.
                       </p>
                       <a
                         href="/crypto/orders"
@@ -148,11 +150,10 @@ function DashboardPage() {
                       </svg>
                     </div>
                     <div className="ml-3 flex-1">
-                      <h3 className="text-sm font-semibold text-blue-300">
-                        Pending Withdrawals
-                      </h3>
+                      <h3 className="text-sm font-semibold text-blue-300">Pending Withdrawals</h3>
                       <p className="text-sm text-gray-300 mt-1">
-                        You have {pendingWithdrawals} withdrawal {pendingWithdrawals === 1 ? "request" : "requests"} being processed.
+                        You have {pendingWithdrawals} withdrawal{' '}
+                        {pendingWithdrawals === 1 ? 'request' : 'requests'} being processed.
                       </p>
                       <a
                         href="/crypto/withdrawals"
@@ -201,19 +202,22 @@ function DashboardPage() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  Need Help?
-                </h3>
+                <h3 className="text-lg font-semibold text-white mb-2">Need Help?</h3>
                 <p className="text-gray-300 mb-4">
-                  If you have questions about crypto trading, withdrawals, or your account, our support team is here
-                  to help.
+                  If you have questions about crypto trading, withdrawals, or your account, our
+                  support team is here to help.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <a
                     href="/support"
                     className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg transition"
                   >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -227,7 +231,12 @@ function DashboardPage() {
                     href="/faq"
                     className="inline-flex items-center px-4 py-2 border border-purple-500/50 text-gray-200 hover:bg-purple-500/10 rounded-lg transition"
                   >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"

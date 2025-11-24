@@ -1,49 +1,49 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 export default function VerifyOtpPage() {
   const router = useRouter();
-  
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [step, setStep] = useState<"request" | "verify" | "done">("request");
-  const [error, setError] = useState("");
-  const [info, setInfo] = useState("");
+
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [step, setStep] = useState<'request' | 'verify' | 'done'>('request');
+  const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
-  const apiKey = process.env.NEXT_PUBLIC_API_KEY || "";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY || '';
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      const e = params.get("email");
+      const e = params.get('email');
       if (e) setEmail(e);
     } catch {}
   }, []);
 
   async function requestCode(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setInfo("");
+    setError('');
+    setInfo('');
     setLoading(true);
     try {
       const res = await fetch(`${apiUrl}/api/auth/send-otp`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
         },
         body: JSON.stringify({ email }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || "Failed to send code");
-      setInfo("Verification code sent. Check your email.");
-      setStep("verify");
+      if (!res.ok) throw new Error(data?.error || 'Failed to send code');
+      setInfo('Verification code sent. Check your email.');
+      setStep('verify');
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send code");
+      setError(err instanceof Error ? err.message : 'Failed to send code');
     } finally {
       setLoading(false);
     }
@@ -51,31 +51,31 @@ export default function VerifyOtpPage() {
 
   async function verifyCode(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setInfo("");
+    setError('');
+    setInfo('');
     setLoading(true);
     try {
       const res = await fetch(`${apiUrl}/api/auth/verify-otp`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
         },
         body: JSON.stringify({ email, code }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.error || "Invalid or expired code");
+      if (!res.ok) throw new Error(data?.error || 'Invalid or expired code');
 
       // Store token if provided (current backend returns token on success)
       if (data?.token) {
         try {
-          localStorage.setItem("token", data.token);
+          localStorage.setItem('token', data.token);
         } catch {}
       }
 
-      setStep("done");
+      setStep('done');
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Verification failed");
+      setError(err instanceof Error ? err.message : 'Verification failed');
     } finally {
       setLoading(false);
     }
@@ -113,17 +113,13 @@ export default function VerifyOtpPage() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
             Verify your email
           </h1>
-          <p className="text-gray-600">
-            We&apos;ll send a 6-digit code to your email
-          </p>
+          <p className="text-gray-600">We&apos;ll send a 6-digit code to your email</p>
         </div>
 
-        {step === "request" && (
+        {step === 'request' && (
           <form onSubmit={requestCode} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 value={email}
@@ -135,14 +131,10 @@ export default function VerifyOtpPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">
-                {error}
-              </div>
+              <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">{error}</div>
             )}
             {info && (
-              <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm">
-                {info}
-              </div>
+              <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm">{info}</div>
             )}
 
             <button
@@ -150,12 +142,12 @@ export default function VerifyOtpPage() {
               disabled={loading}
               className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-60"
             >
-              {loading ? "Sending..." : "Send Code"}
+              {loading ? 'Sending...' : 'Send Code'}
             </button>
           </form>
         )}
 
-        {step === "verify" && (
+        {step === 'verify' && (
           <form onSubmit={verifyCode} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -164,9 +156,7 @@ export default function VerifyOtpPage() {
               <input
                 type="text"
                 value={code}
-                onChange={(e) =>
-                  setCode(e.target.value.replace(/[^0-9]/g, "").slice(0, 6))
-                }
+                onChange={(e) => setCode(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
                 inputMode="numeric"
                 pattern="[0-9]{6}"
                 className="w-full px-4 py-2 tracking-widest text-center text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -176,9 +166,7 @@ export default function VerifyOtpPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">
-                {error}
-              </div>
+              <div className="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm">{error}</div>
             )}
 
             <div className="flex gap-2">
@@ -195,21 +183,16 @@ export default function VerifyOtpPage() {
                 disabled={loading}
                 className="w-1/2 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-60"
               >
-                {loading ? "Verifying..." : "Verify"}
+                {loading ? 'Verifying...' : 'Verify'}
               </button>
             </div>
           </form>
         )}
 
-        {step === "done" && (
+        {step === 'done' && (
           <div className="text-center space-y-4">
             <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
-              <svg
-                className="w-10 h-10"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -218,16 +201,13 @@ export default function VerifyOtpPage() {
                 />
               </svg>
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Email Verified
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-900">Email Verified</h2>
             <p className="text-gray-600">
-              Your email has been verified. If this is a new account, please
-              wait for an admin to approve your registration. We&apos;ll notify you
-              by email.
+              Your email has been verified. If this is a new account, please wait for an admin to
+              approve your registration. We&apos;ll notify you by email.
             </p>
             <button
-              onClick={() => router.push("/auth/login")}
+              onClick={() => router.push('/auth/login')}
               className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium"
             >
               Continue to Sign In

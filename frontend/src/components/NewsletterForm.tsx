@@ -1,44 +1,42 @@
-import { useState } from "react";
-import { trackEvent } from "@/lib/marketing";
+import { useState } from 'react';
+import { trackEvent } from '@/lib/marketing';
 
 export default function NewsletterForm() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<null | "sending" | "ok" | "error">(null);
-  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<null | 'sending' | 'ok' | 'error'>(null);
+  const [message, setMessage] = useState('');
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
 
-    setStatus("sending");
-    setMessage("");
+    setStatus('sending');
+    setMessage('');
 
     try {
-      const res = await fetch("/api/marketing/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/marketing/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
       if (res.ok) {
-        setStatus("ok");
-        setMessage(
-          "✅ Thanks for subscribing! Check your email for confirmation."
-        );
-        setEmail("");
+        setStatus('ok');
+        setMessage('✅ Thanks for subscribing! Check your email for confirmation.');
+        setEmail('');
 
         // Track conversion
-        trackEvent("newsletter_signup", "engagement", email.split("@")[1]);
+        trackEvent('newsletter_signup', 'engagement', email.split('@')[1]);
       } else {
         const data = await res.json();
-        setStatus("error");
-        setMessage(data.error || "❌ Subscription failed. Please try again.");
-        trackEvent("newsletter_signup_failed", "engagement", data.error);
+        setStatus('error');
+        setMessage(data.error || '❌ Subscription failed. Please try again.');
+        trackEvent('newsletter_signup_failed', 'engagement', data.error);
       }
     } catch (err) {
-      setStatus("error");
-      setMessage("❌ Network error. Please try again.");
-      console.error("Newsletter signup error:", err);
+      setStatus('error');
+      setMessage('❌ Network error. Please try again.');
+      console.error('Newsletter signup error:', err);
     }
   }
 
@@ -52,31 +50,26 @@ export default function NewsletterForm() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            disabled={status === "sending"}
+            disabled={status === 'sending'}
             className="flex-1 border border-gray-300 p-2 rounded focus:outline-none focus:border-indigo-500 disabled:opacity-50"
           />
           <button
             type="submit"
-            disabled={status === "sending"}
+            disabled={status === 'sending'}
             className="bg-gradient-to-r from-indigo-500 to-pink-500 text-white px-4 py-2 rounded hover:from-indigo-600 hover:to-pink-600 disabled:opacity-50 transition-all"
           >
-            {status === "sending" ? "Sending..." : "Subscribe"}
+            {status === 'sending' ? 'Sending...' : 'Subscribe'}
           </button>
         </div>
 
         {message && (
-          <p
-            className={`text-sm ${
-              status === "ok" ? "text-green-600" : "text-red-600"
-            }`}
-          >
+          <p className={`text-sm ${status === 'ok' ? 'text-green-600' : 'text-red-600'}`}>
             {message}
           </p>
         )}
 
         <p className="text-xs text-gray-500">
-          Get updates on new features, crypto recovery tips, and exclusive
-          rewards.
+          Get updates on new features, crypto recovery tips, and exclusive rewards.
         </p>
       </div>
     </form>
@@ -87,32 +80,32 @@ export default function NewsletterForm() {
  * Compact newsletter signup for footer
  */
 export function FooterNewsletter() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<null | "sending" | "ok" | "error">(null);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<null | 'sending' | 'ok' | 'error'>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
 
-    setStatus("sending");
+    setStatus('sending');
 
     try {
-      const res = await fetch("/api/marketing/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/marketing/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
       if (res.ok) {
-        setStatus("ok");
-        setEmail("");
+        setStatus('ok');
+        setEmail('');
         setTimeout(() => setStatus(null), 3000);
       } else {
-        setStatus("error");
+        setStatus('error');
         setTimeout(() => setStatus(null), 3000);
       }
     } catch {
-      setStatus("error");
+      setStatus('error');
       setTimeout(() => setStatus(null), 3000);
     }
   }
@@ -125,19 +118,17 @@ export function FooterNewsletter() {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        disabled={status === "sending"}
+        disabled={status === 'sending'}
         className="flex-1 px-3 py-1 text-sm border border-gray-300 rounded focus:outline-none disabled:opacity-50"
       />
       <button
         type="submit"
-        disabled={status === "sending" || status === "ok"}
+        disabled={status === 'sending' || status === 'ok'}
         className={`px-3 py-1 text-sm rounded text-white transition-all ${
-          status === "ok"
-            ? "bg-green-500"
-            : "bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+          status === 'ok' ? 'bg-green-500' : 'bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50'
         }`}
       >
-        {status === "sending" ? "..." : status === "ok" ? "✓" : "Subscribe"}
+        {status === 'sending' ? '...' : status === 'ok' ? '✓' : 'Subscribe'}
       </button>
     </form>
   );

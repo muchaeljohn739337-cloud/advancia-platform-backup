@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 interface PaginationControlsProps {
   page: number;
@@ -6,11 +6,7 @@ interface PaginationControlsProps {
   setPage: (page: number) => void;
 }
 
-export default function PaginationControls({
-  page,
-  totalPages,
-  setPage,
-}: PaginationControlsProps) {
+export default function PaginationControls({ page, totalPages, setPage }: PaginationControlsProps) {
   return (
     <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700">
       <div className="text-sm text-gray-600 dark:text-gray-300">

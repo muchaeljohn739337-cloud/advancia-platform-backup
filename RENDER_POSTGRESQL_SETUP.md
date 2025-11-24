@@ -4,16 +4,15 @@
 
 ### Step 1: Create Database on Render
 
-1. **Go to**: https://dashboard.render.com/new/database
+1. **Go to**: <https://dashboard.render.com/new/database>
 2. **Fill in**:
-
-   - Name: `advancia-db`
-   - Database: `advancia_db`
-   - User: (auto-generated)
-   - Region: **Oregon (US West)** ← Recommended
-   - PostgreSQL Version: **16**
-   - Datadog API Key: (leave empty)
-   - Plan: **Starter** ($7/month) or **Free** (90 days)
+   -   Name: `advancia-db`
+   -   Database: `advancia_db`
+   -   User: (auto-generated)
+   -   Region: **Oregon (US West)** ← Recommended
+   -   PostgreSQL Version: **16**
+   -   Datadog API Key: (leave empty)
+   -   Plan: **Starter** ($7/month) or **Free** (90 days)
 
 3. **Click**: "Create Database"
 
@@ -38,9 +37,11 @@ postgresql://advancia_db_user:xxx@dpg-xxx-a.oregon-postgres.render.com/advancia_
 1. Go to your backend web service
 2. Navigate to **Environment** tab
 3. Add variable:
+
    ```
    DATABASE_URL=postgresql://advancia_db_user:xxx@dpg-xxx-a.oregon-postgres.render.com/advancia_db
    ```
+
 4. Click "Save Changes" (auto-redeploys)
 
 #### Option B: If Backend is on Digital Ocean
@@ -166,32 +167,32 @@ curl http://localhost:4000/api/health
 
 ### Free Plan ($0/month - 90 days)
 
-- ✅ 1 GB storage
-- ✅ SSL encryption
-- ✅ Shared CPU
-- ❌ No backups
-- ❌ Expires after 90 days
-- 📊 Perfect for: Testing, development
+-   ✅ 1 GB storage
+-   ✅ SSL encryption
+-   ✅ Shared CPU
+-   ❌ No backups
+-   ❌ Expires after 90 days
+-   📊 Perfect for: Testing, development
 
 ### Starter Plan ($7/month)
 
-- ✅ 10 GB storage
-- ✅ SSL encryption
-- ✅ Shared CPU
-- ✅ **Daily automatic backups**
-- ✅ **No expiry**
-- ✅ 99.9% uptime SLA
-- 📊 Perfect for: Production, small to medium apps
+-   ✅ 10 GB storage
+-   ✅ SSL encryption
+-   ✅ Shared CPU
+-   ✅ **Daily automatic backups**
+-   ✅ **No expiry**
+-   ✅ 99.9% uptime SLA
+-   📊 Perfect for: Production, small to medium apps
 
 ### Pro Plan ($21/month)
 
-- ✅ 100 GB storage
-- ✅ SSL encryption
-- ✅ Dedicated CPU
-- ✅ **Daily automatic backups**
-- ✅ Point-in-time recovery
-- ✅ 99.99% uptime SLA
-- 📊 Perfect for: High-traffic production apps
+-   ✅ 100 GB storage
+-   ✅ SSL encryption
+-   ✅ Dedicated CPU
+-   ✅ **Daily automatic backups**
+-   ✅ Point-in-time recovery
+-   ✅ 99.99% uptime SLA
+-   📊 Perfect for: High-traffic production apps
 
 ---
 
@@ -251,9 +252,9 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO analytics_us
 
 ### Automatic Backups (Starter/Pro plans)
 
-- **Frequency**: Daily at 2 AM UTC
-- **Retention**: 7 days (Starter), 30 days (Pro)
-- **Location**: Same region as database
+-   **Frequency**: Daily at 2 AM UTC
+-   **Retention**: 7 days (Starter), 30 days (Pro)
+-   **Location**: Same region as database
 
 ### Manual Backup
 
@@ -284,10 +285,10 @@ psql "postgresql://user:pass@host/db" < backup.sql
 
 Render Dashboard → Your Database:
 
-- **Connections**: Current active connections
-- **Storage**: Used/total storage
-- **CPU/Memory**: Resource usage
-- **Queries**: Slow queries log
+-   **Connections**: Current active connections
+-   **Storage**: Used/total storage
+-   **CPU/Memory**: Resource usage
+-   **Queries**: Slow queries log
 
 ### Enable Query Logging
 
@@ -411,23 +412,23 @@ pg_restore --no-acl --no-owner -d "postgresql://user:pass@host.render.com/db" la
 
 ## 📚 Resources
 
-- **Render PostgreSQL Docs**: https://render.com/docs/databases
-- **Prisma with PostgreSQL**: https://www.prisma.io/docs/concepts/database-connectors/postgresql
-- **PostgreSQL Documentation**: https://www.postgresql.org/docs/
-- **Connection Pooling**: https://render.com/docs/connection-pooling
+-   **Render PostgreSQL Docs**: <https://render.com/docs/databases>
+-   **Prisma with PostgreSQL**: <https://www.prisma.io/docs/concepts/database-connectors/postgresql>
+-   **PostgreSQL Documentation**: <https://www.postgresql.org/docs/>
+-   **Connection Pooling**: <https://render.com/docs/connection-pooling>
 
 ---
 
 ## ✅ Setup Checklist
 
-- [ ] Render account created
-- [ ] PostgreSQL database created (Free or Starter)
-- [ ] Connection string copied
-- [ ] Backend `DATABASE_URL` updated
-- [ ] Prisma migrations run (`npx prisma migrate deploy`)
-- [ ] Database connection tested
-- [ ] Automatic backups enabled (Starter/Pro plans)
-- [ ] SSL/TLS verified
-- [ ] Monitoring dashboard reviewed
+-   [ ] Render account created
+-   [ ] PostgreSQL database created (Free or Starter)
+-   [ ] Connection string copied
+-   [ ] Backend `DATABASE_URL` updated
+-   [ ] Prisma migrations run (`npx prisma migrate deploy`)
+-   [ ] Database connection tested
+-   [ ] Automatic backups enabled (Starter/Pro plans)
+-   [ ] SSL/TLS verified
+-   [ ] Monitoring dashboard reviewed
 
 **Your Render PostgreSQL is ready! 🐘**

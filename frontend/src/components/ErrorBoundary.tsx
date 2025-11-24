@@ -1,12 +1,9 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
 type State = { hasError: boolean; error?: Error };
 
-export default class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  State
-> {
+export default class ErrorBoundary extends React.Component<{ children: React.ReactNode }, State> {
   constructor(props: { children: React.ReactNode }) {
     super(props);
     this.state = { hasError: false };
@@ -17,7 +14,7 @@ export default class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("UI Error Caught:", error, errorInfo);
+    console.error('UI Error Caught:', error, errorInfo);
   }
 
   render() {

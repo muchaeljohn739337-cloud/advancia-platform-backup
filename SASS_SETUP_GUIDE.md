@@ -349,14 +349,14 @@ npm run dev:styles
 
 ## ✅ Final Checklist
 
-- [x] Sass installed globally or locally
-- [x] Project structure created (`styles/` folder)
-- [x] Main entry file (`main.scss`) configured
-- [x] npm scripts added to `package.json`
-- [x] Compiled CSS output (`public/css/main.css`)
-- [ ] Sass watcher running in development
-- [ ] Production build tested (minified)
-- [ ] CSS linked in HTML/Next.js app
+-   [x] Sass installed globally or locally
+-   [x] Project structure created (`styles/` folder)
+-   [x] Main entry file (`main.scss`) configured
+-   [x] npm scripts added to `package.json`
+-   [x] Compiled CSS output (`public/css/main.css`)
+-   [ ] Sass watcher running in development
+-   [ ] Production build tested (minified)
+-   [ ] CSS linked in HTML/Next.js app
 
 ---
 

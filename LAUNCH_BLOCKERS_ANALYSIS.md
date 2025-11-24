@@ -16,16 +16,16 @@ These will cause **legal issues, data loss, or complete system failure**. Fix th
 
 **Why This Blocks Launch:**
 
-- You have backups, but can you actually restore them?
-- 60% of companies discover their backups are corrupted DURING a disaster
-- If your database crashes tomorrow, you could lose everything
+-   You have backups, but can you actually restore them?
+-   60% of companies discover their backups are corrupted DURING a disaster
+-   If your database crashes tomorrow, you could lose everything
 
 **Files Found:**
 
-- ✅ Backup script: `scripts/backup_db.sh`
-- ✅ Restore script: `scripts/restore_db.sh`
-- ✅ GitHub Actions backup: `.github/workflows/backup-and-migrate.yml`
-- ❌ **NO TEST RESULTS OR LOGS**
+-   ✅ Backup script: `scripts/backup_db.sh`
+-   ✅ Restore script: `scripts/restore_db.sh`
+-   ✅ GitHub Actions backup: `.github/workflows/backup-and-migrate.yml`
+-   ❌ **NO TEST RESULTS OR LOGS**
 
 **Fix NOW (30 minutes):**
 
@@ -50,10 +50,10 @@ echo "Backup restore test passed on $(Get-Date)" > BACKUP_RESTORE_TEST_LOG.txt
 
 **Acceptance Criteria:**
 
-- [ ] Test restore completes without errors
-- [ ] All tables present in restored database
-- [ ] Record counts match original database
-- [ ] Document results in `BACKUP_RESTORE_TEST_LOG.txt`
+-   [ ] Test restore completes without errors
+-   [ ] All tables present in restored database
+-   [ ] Record counts match original database
+-   [ ] Document results in `BACKUP_RESTORE_TEST_LOG.txt`
 
 ---
 
@@ -63,35 +63,35 @@ echo "Backup restore test passed on $(Get-Date)" > BACKUP_RESTORE_TEST_LOG.txt
 
 **Why This Matters:**
 
-- User sends tokens to wrong address → **NO WAY TO REVERSE**
-- System bug duplicates transaction → **MANUAL DATABASE FIX REQUIRED**
-- Crypto withdrawal fails → **FUNDS STUCK**
+-   User sends tokens to wrong address → **NO WAY TO REVERSE**
+-   System bug duplicates transaction → **MANUAL DATABASE FIX REQUIRED**
+-   Crypto withdrawal fails → **FUNDS STUCK**
 
 **Current Implementation:**
 
-- ✅ Stripe refunds: `backend/src/routes/payments.ts` (L253-307)
-- ✅ Withdrawal rejection refunds: `backend/src/routes/withdrawals.ts` (L372-438)
-- ❌ **NO ROLLBACK for TokenWallet transactions**
-- ❌ **NO ROLLBACK for crypto swaps**
-- ❌ **NO ADMIN OVERRIDE endpoint**
+-   ✅ Stripe refunds: `backend/src/routes/payments.ts` (L253-307)
+-   ✅ Withdrawal rejection refunds: `backend/src/routes/withdrawals.ts` (L372-438)
+-   ❌ **NO ROLLBACK for TokenWallet transactions**
+-   ❌ **NO ROLLBACK for crypto swaps**
+-   ❌ **NO ADMIN OVERRIDE endpoint**
 
 **Impact if NOT Fixed:**
 
-- Every mistake requires direct database access
-- High risk of human error during manual fixes
-- Support tickets will pile up
+-   Every mistake requires direct database access
+-   High risk of human error during manual fixes
+-   Support tickets will pile up
 
 **Fix Later (Can Launch Without This):**
 
-- Implement generic rollback service (2-3 hours)
-- Add admin endpoint `/api/admin/transactions/rollback/:id`
-- Log all rollbacks in AuditLog
+-   Implement generic rollback service (2-3 hours)
+-   Add admin endpoint `/api/admin/transactions/rollback/:id`
+-   Log all rollbacks in AuditLog
 
 **Workaround for Launch:**
 
-- Document manual rollback procedure for admins
-- Create SQL scripts for common rollback scenarios
-- Train support team on database access
+-   Document manual rollback procedure for admins
+-   Create SQL scripts for common rollback scenarios
+-   Train support team on database access
 
 ---
 
@@ -101,28 +101,28 @@ echo "Backup restore test passed on $(Get-Date)" > BACKUP_RESTORE_TEST_LOG.txt
 
 **Why This Matters:**
 
-- Hard to detect balance corruption
-- Difficult to audit for compliance
-- No automatic error detection
+-   Hard to detect balance corruption
+-   Difficult to audit for compliance
+-   No automatic error detection
 
 **Current Implementation:**
 
-- ✅ Transaction records: `backend/prisma/schema.prisma` (Transaction model)
-- ✅ Balance tracking: TokenWallet, User balances
-- ❌ **NO LEDGER_ENTRIES table**
-- ❌ **NO DEBIT/CREDIT VALIDATION**
+-   ✅ Transaction records: `backend/prisma/schema.prisma` (Transaction model)
+-   ✅ Balance tracking: TokenWallet, User balances
+-   ❌ **NO LEDGER_ENTRIES table**
+-   ❌ **NO DEBIT/CREDIT VALIDATION**
 
 **Can You Launch Without This?**
 
-- ✅ **YES** - Single-entry is acceptable for MVP
-- ⚠️ Will need it for Series A funding or regulatory approval
-- ⚠️ Manual reconciliation required weekly
+-   ✅ **YES** - Single-entry is acceptable for MVP
+-   ⚠️ Will need it for Series A funding or regulatory approval
+-   ⚠️ Manual reconciliation required weekly
 
 **Fix Later (3-6 months):**
 
-- Add LedgerEntry model to schema
-- Migrate existing transactions to double-entry
-- Implement nightly balance verification
+-   Add LedgerEntry model to schema
+-   Migrate existing transactions to double-entry
+-   Implement nightly balance verification
 
 ---
 
@@ -136,13 +136,15 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- `backend/prisma/schema.prisma`:
+-   `backend/prisma/schema.prisma`:
+
   ```prisma
   termsAccepted     Boolean   @default(false)
   termsAcceptedAt   DateTime?
   ```
-- Users must accept terms during signup
-- Timestamp recorded for legal compliance
+
+-   Users must accept terms during signup
+-   Timestamp recorded for legal compliance
 
 **No Action Needed** ✅
 
@@ -154,9 +156,9 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- TokenWallet auto-created on first transaction
-- CryptoWallet created per currency
-- Balance tracking for USD, BTC, ETH, USDT
+-   TokenWallet auto-created on first transaction
+-   CryptoWallet created per currency
+-   Balance tracking for USD, BTC, ETH, USDT
 
 **No Action Needed** ✅
 
@@ -168,9 +170,9 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- User model: `usdBalance`, `btcBalance`, `ethBalance`, `usdtBalance`
-- TokenWallet model: `balance`, `lifetimeEarned`
-- Real-time updates via Socket.IO
+-   User model: `usdBalance`, `btcBalance`, `ethBalance`, `usdtBalance`
+-   TokenWallet model: `balance`, `lifetimeEarned`
+-   Real-time updates via Socket.IO
 
 **No Action Needed** ✅
 
@@ -182,9 +184,9 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- Input validation: `backend/src/validation/schemas.ts`
-- Transaction checks: `backend/src/routes/tokens.ts` (balance verification)
-- Duplicate prevention: Unique `orderId` constraints
+-   Input validation: `backend/src/validation/schemas.ts`
+-   Transaction checks: `backend/src/routes/tokens.ts` (balance verification)
+-   Duplicate prevention: Unique `orderId` constraints
 
 **No Action Needed** ✅
 
@@ -196,13 +198,13 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- Endpoint: `GET /api/tokens/history/:userId?limit=20`
-- Stores all transactions in database
+-   Endpoint: `GET /api/tokens/history/:userId?limit=20`
+-   Stores all transactions in database
 
 **Minor Improvement (Later):**
 
-- Add cursor-based pagination for large histories
-- Add date range filters
+-   Add cursor-based pagination for large histories
+-   Add date range filters
 
 ---
 
@@ -212,8 +214,8 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- Unique constraints on `orderId` in Transaction model
-- Idempotency in payment webhooks
+-   Unique constraints on `orderId` in Transaction model
+-   Idempotency in payment webhooks
 
 **No Action Needed** ✅
 
@@ -225,13 +227,13 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- No automated nightly reconciliation
-- No balance verification cron job
+-   No automated nightly reconciliation
+-   No balance verification cron job
 
 **Can Launch Without?** ✅ **YES**
 
-- Manually verify balances weekly
-- Add automation in Month 2
+-   Manually verify balances weekly
+-   Add automation in Month 2
 
 ---
 
@@ -241,10 +243,10 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- View users: `GET /api/users` (admin only)
-- Suspend accounts: `PUT /api/users/:id` (set `active: false`)
-- View logs: `GET /api/admin/logs`
-- Transaction override: Stripe refunds exist, generic rollback pending
+-   View users: `GET /api/users` (admin only)
+-   Suspend accounts: `PUT /api/users/:id` (set `active: false`)
+-   View logs: `GET /api/admin/logs`
+-   Transaction override: Stripe refunds exist, generic rollback pending
 
 **No Action Needed** ✅
 
@@ -256,11 +258,11 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- Error logging: Winston + Sentry
-- Access logging: Morgan middleware
-- Health checks: `/health`, `/api/health`
-- Backups: Daily via GitHub Actions
-- Alerting: Email + Socket.IO notifications
+-   Error logging: Winston + Sentry
+-   Access logging: Morgan middleware
+-   Health checks: `/health`, `/api/health`
+-   Backups: Daily via GitHub Actions
+-   Alerting: Email + Socket.IO notifications
 
 **No Action Needed** ✅
 
@@ -272,10 +274,10 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- Environments: `docker-compose.yml`, `docker-compose.staging.yml`, `docker-compose.prod.yml`
-- Secrets: Encrypted via `scripts/secrets/encrypt-env.ts`
-- Migrations: Prisma migration tracking
-- Rollback: Docker tags + PM2 restart
+-   Environments: `docker-compose.yml`, `docker-compose.staging.yml`, `docker-compose.prod.yml`
+-   Secrets: Encrypted via `scripts/secrets/encrypt-env.ts`
+-   Migrations: Prisma migration tracking
+-   Rollback: Docker tags + PM2 restart
 
 **No Action Needed** ✅
 
@@ -287,11 +289,11 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 **Evidence:**
 
-- Input validation: Zod schemas everywhere
-- Rate limiting: Redis-backed, 5 attempts/15min
-- Anti-spam: Telegram flood control, OTP rate limiting
-- Graceful shutdown: `backend/src/utils/gracefulShutdown.ts`
-- Error boundaries: React error boundaries in frontend
+-   Input validation: Zod schemas everywhere
+-   Rate limiting: Redis-backed, 5 attempts/15min
+-   Anti-spam: Telegram flood control, OTP rate limiting
+-   Graceful shutdown: `backend/src/utils/gracefulShutdown.ts`
+-   Error boundaries: React error boundaries in frontend
 
 **No Action Needed** ✅
 
@@ -320,24 +322,24 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 ### Critical Path (Must Do)
 
-- [ ] **TEST BACKUP RESTORE** (30 min) - BLOCKER
-- [ ] Start Docker services: `docker compose up -d`
-- [ ] Run Prisma migrations: `pnpm exec prisma migrate deploy`
-- [ ] Verify health checks: `curl http://localhost:4000/health`
-- [ ] Test user signup flow end-to-end
-- [ ] Test token purchase + withdrawal flow
-- [ ] Verify admin login + dashboard access
-- [ ] Configure environment variables (production values)
-- [ ] Set up SSL certificates (Cloudflare or Let's Encrypt)
-- [ ] Enable monitoring alerts (Sentry, email)
+-   [ ] **TEST BACKUP RESTORE** (30 min) - BLOCKER
+-   [ ] Start Docker services: `docker compose up -d`
+-   [ ] Run Prisma migrations: `pnpm exec prisma migrate deploy`
+-   [ ] Verify health checks: `curl http://localhost:4000/health`
+-   [ ] Test user signup flow end-to-end
+-   [ ] Test token purchase + withdrawal flow
+-   [ ] Verify admin login + dashboard access
+-   [ ] Configure environment variables (production values)
+-   [ ] Set up SSL certificates (Cloudflare or Let's Encrypt)
+-   [ ] Enable monitoring alerts (Sentry, email)
 
 ### Optional (Can Do After Launch)
 
-- [ ] Add transaction rollback service
-- [ ] Implement nightly reconciliation cron
-- [ ] Set up Metabase analytics dashboard
-- [ ] Create user onboarding tutorial
-- [ ] Add KYC verification flow
+-   [ ] Add transaction rollback service
+-   [ ] Implement nightly reconciliation cron
+-   [ ] Set up Metabase analytics dashboard
+-   [ ] Create user onboarding tutorial
+-   [ ] Add KYC verification flow
 
 ---
 
@@ -409,53 +411,53 @@ These are **nice to have** but won't prevent launch. Add them while users are on
 
 ### Milestone 1: Pre-Launch (24 Hours Before)
 
-- [ ] Test backup restore (BLOCKER)
-- [ ] Verify all environment variables set
-- [ ] Test signup → deposit → withdrawal flow
-- [ ] Verify admin login works
-- [ ] Check SSL certificates configured
-- [ ] Enable Sentry error tracking
-- [ ] Set up uptime monitoring (UptimeRobot or Pingdom)
-- [ ] Test rate limiting (try 10 rapid login attempts)
-- [ ] Verify email notifications work
-- [ ] Test 2FA/TOTP enrollment
+-   [ ] Test backup restore (BLOCKER)
+-   [ ] Verify all environment variables set
+-   [ ] Test signup → deposit → withdrawal flow
+-   [ ] Verify admin login works
+-   [ ] Check SSL certificates configured
+-   [ ] Enable Sentry error tracking
+-   [ ] Set up uptime monitoring (UptimeRobot or Pingdom)
+-   [ ] Test rate limiting (try 10 rapid login attempts)
+-   [ ] Verify email notifications work
+-   [ ] Test 2FA/TOTP enrollment
 
 ### Milestone 2: Launch Day
 
-- [ ] Start production services: `docker compose -f docker-compose.prod.yml up -d`
-- [ ] Run migrations: `pnpm exec prisma migrate deploy`
-- [ ] Smoke test: Create test user, make test transaction
-- [ ] Monitor logs for 1 hour: `docker logs -f advancia-backend`
-- [ ] Check health endpoint every 5 minutes
-- [ ] Announce launch (social media, email list)
-- [ ] Monitor Sentry for errors
-- [ ] Set up on-call rotation
+-   [ ] Start production services: `docker compose -f docker-compose.prod.yml up -d`
+-   [ ] Run migrations: `pnpm exec prisma migrate deploy`
+-   [ ] Smoke test: Create test user, make test transaction
+-   [ ] Monitor logs for 1 hour: `docker logs -f advancia-backend`
+-   [ ] Check health endpoint every 5 minutes
+-   [ ] Announce launch (social media, email list)
+-   [ ] Monitor Sentry for errors
+-   [ ] Set up on-call rotation
 
 ### Milestone 3: Week 1 Operations
 
-- [ ] Daily manual balance reconciliation
-- [ ] Review fraud detection alerts
-- [ ] Check backup completion (view GitHub Actions)
-- [ ] Respond to user support tickets within 24 hours
-- [ ] Monitor transaction success rate (target: >99%)
-- [ ] Track uptime (target: >99.5%)
+-   [ ] Daily manual balance reconciliation
+-   [ ] Review fraud detection alerts
+-   [ ] Check backup completion (view GitHub Actions)
+-   [ ] Respond to user support tickets within 24 hours
+-   [ ] Monitor transaction success rate (target: >99%)
+-   [ ] Track uptime (target: >99.5%)
 
 ### Milestone 4: Month 1 Improvements
 
-- [ ] Implement transaction rollback service
-- [ ] Add nightly reconciliation cron
-- [ ] Migrate 1000+ transactions (if reached)
-- [ ] Review and optimize slow queries
-- [ ] Set up Metabase analytics dashboard
-- [ ] Add user onboarding tutorial
+-   [ ] Implement transaction rollback service
+-   [ ] Add nightly reconciliation cron
+-   [ ] Migrate 1000+ transactions (if reached)
+-   [ ] Review and optimize slow queries
+-   [ ] Set up Metabase analytics dashboard
+-   [ ] Add user onboarding tutorial
 
 ### Milestone 5: Month 3 Stability
 
-- [ ] Implement double-entry accounting
-- [ ] Migrate existing transactions to ledger system
-- [ ] Add advanced analytics
-- [ ] Optimize database indexes
-- [ ] Set up read replica for analytics
+-   [ ] Implement double-entry accounting
+-   [ ] Migrate existing transactions to ledger system
+-   [ ] Add advanced analytics
+-   [ ] Optimize database indexes
+-   [ ] Set up read replica for analytics
 
 ---
 
@@ -568,9 +570,9 @@ DATA FLOW EXAMPLE (User Deposit):
 
 Everything else is either:
 
-- ✅ Already implemented and working
-- ⚠️ Nice-to-have (can add after launch)
-- 🟢 Low risk (won't cause data loss)
+-   ✅ Already implemented and working
+-   ⚠️ Nice-to-have (can add after launch)
+-   🟢 Low risk (won't cause data loss)
 
 ### Proof: Feature Coverage
 

@@ -2,10 +2,10 @@
 
 ## Pre-Setup Verification
 
-- [ ] Have access to DigitalOcean droplet at 157.245.8.131
-- [ ] Can SSH to the droplet
-- [ ] Repository cloned locally on Windows
-- [ ] Can run PowerShell commands locally
+-   [ ] Have access to DigitalOcean droplet at 157.245.8.131
+-   [ ] Can SSH to the droplet
+-   [ ] Repository cloned locally on Windows
+-   [ ] Can run PowerShell commands locally
 
 ---
 
@@ -17,8 +17,8 @@
 ssh root@157.245.8.131
 ```
 
-- [ ] Successfully connected to droplet
-- [ ] Prompt shows: `root@...:~#`
+-   [ ] Successfully connected to droplet
+-   [ ] Prompt shows: `root@...:~#`
 
 ### 1.2 Run Full Setup Command
 
@@ -40,12 +40,12 @@ systemctl restart postgresql
 ss -tlnp | grep postgres
 ```
 
-- [ ] No errors during installation
-- [ ] PostgreSQL service started
-- [ ] Database created
-- [ ] User created with correct permissions
-- [ ] Remote access enabled
-- [ ] Last command shows: `tcp LISTEN 0 244 *:5432 *:*`
+-   [ ] No errors during installation
+-   [ ] PostgreSQL service started
+-   [ ] Database created
+-   [ ] User created with correct permissions
+-   [ ] Remote access enabled
+-   [ ] Last command shows: `tcp LISTEN 0 244 *:5432 *:*`
 
 ### 1.3 Verify Setup on Droplet
 
@@ -53,7 +53,7 @@ ss -tlnp | grep postgres
 sudo -u postgres psql -l | grep advancia_payledger_test
 ```
 
-- [ ] Output shows: `advancia_payledger_test | test_user`
+-   [ ] Output shows: `advancia_payledger_test | test_user`
 
 ---
 
@@ -68,12 +68,12 @@ TEST_DATABASE_URL="postgresql://test_user:test_password_123@157.245.8.131:5432/a
 DATABASE_URL="postgresql://test_user:test_password_123@157.245.8.131:5432/advancia_payledger_test"
 ```
 
-- [ ] TEST_DATABASE_URL has correct IP: 157.245.8.131
-- [ ] DATABASE_URL has correct IP: 157.245.8.131
-- [ ] Both have correct database name: advancia_payledger_test
-- [ ] Both have correct username: test_user
-- [ ] Both have correct password: test_password_123
-- [ ] File saved
+-   [ ] TEST_DATABASE_URL has correct IP: 157.245.8.131
+-   [ ] DATABASE_URL has correct IP: 157.245.8.131
+-   [ ] Both have correct database name: advancia_payledger_test
+-   [ ] Both have correct username: test_user
+-   [ ] Both have correct password: test_password_123
+-   [ ] File saved
 
 ### 2.2 Test Connection (Optional but Recommended)
 
@@ -84,8 +84,8 @@ psql -h 157.245.8.131 -U test_user -d advancia_payledger_test -W
 # Type \q to exit
 ```
 
-- [ ] Successfully connected to database
-- [ ] Can list tables with: `\dt`
+-   [ ] Successfully connected to database
+-   [ ] Can list tables with: `\dt`
 
 ---
 
@@ -97,7 +97,7 @@ psql -h 157.245.8.131 -U test_user -d advancia_payledger_test -W
 cd backend
 ```
 
-- [ ] Current directory is `backend`
+-   [ ] Current directory is `backend`
 
 ### 3.2 Deploy Migrations
 
@@ -105,10 +105,10 @@ cd backend
 npx prisma migrate deploy
 ```
 
-- [ ] No errors during migration
-- [ ] Output shows migrations applied
-- [ ] Database schema is now created
-- [ ] Shows: `All migrations have been successfully applied`
+-   [ ] No errors during migration
+-   [ ] Output shows migrations applied
+-   [ ] Database schema is now created
+-   [ ] Shows: `All migrations have been successfully applied`
 
 ### 3.3 Verify Schema
 
@@ -117,7 +117,7 @@ npx prisma migrate deploy
 npx prisma db pull
 ```
 
-- [ ] Shows successful pull of schema
+-   [ ] Shows successful pull of schema
 
 ---
 
@@ -129,9 +129,9 @@ npx prisma db pull
 npm test
 ```
 
-- [ ] Tests start running
-- [ ] No "Cannot reach database" errors
-- [ ] Tests are connecting to real database
+-   [ ] Tests start running
+-   [ ] No "Cannot reach database" errors
+-   [ ] Tests are connecting to real database
 
 ### 4.2 Wait for Results
 
@@ -148,20 +148,20 @@ Test Suites: 10 passed, 1 skipped, 11 total
 Tests:       130+ passed, 136 total
 ```
 
-- [ ] At least 10 test suites passing
-- [ ] At least 100 tests passing
-- [ ] Fewer than 50 tests failing (if any)
-- [ ] No "database connection" errors
+-   [ ] At least 10 test suites passing
+-   [ ] At least 100 tests passing
+-   [ ] Fewer than 50 tests failing (if any)
+-   [ ] No "database connection" errors
 
 ### 4.3 Final Verification
 
 All these should show as PASSED:
 
-- [ ] `tests/auth.test.ts`
-- [ ] `tests/email.test.ts`
-- [ ] `tests/health.test.ts`
-- [ ] `tests/middleware/auth.middleware.test.ts`
-- [ ] `tests/smoke.test.ts`
+-   [ ] `tests/auth.test.ts`
+-   [ ] `tests/email.test.ts`
+-   [ ] `tests/health.test.ts`
+-   [ ] `tests/middleware/auth.middleware.test.ts`
+-   [ ] `tests/smoke.test.ts`
 
 ---
 
@@ -169,43 +169,43 @@ All these should show as PASSED:
 
 ### If SSH Fails
 
-- [ ] Droplet IP is correct: 157.245.8.131
-- [ ] Computer has internet connection
-- [ ] SSH key has correct permissions: `chmod 600 key.pem`
-- [ ] Try: `ssh -v root@157.245.8.131` (verbose mode)
+-   [ ] Droplet IP is correct: 157.245.8.131
+-   [ ] Computer has internet connection
+-   [ ] SSH key has correct permissions: `chmod 600 key.pem`
+-   [ ] Try: `ssh -v root@157.245.8.131` (verbose mode)
 
 ### If PostgreSQL Installation Fails
 
-- [ ] Droplet has internet access
-- [ ] Ran: `apt update` before `apt install`
-- [ ] No other PostgreSQL instance is running
-- [ ] Droplet has at least 1GB RAM (you have this ✅)
+-   [ ] Droplet has internet access
+-   [ ] Ran: `apt update` before `apt install`
+-   [ ] No other PostgreSQL instance is running
+-   [ ] Droplet has at least 1GB RAM (you have this ✅)
 
 ### If Connection Fails from Windows
 
-- [ ] IP in .env.test is exactly: `157.245.8.131`
-- [ ] Port in .env.test is exactly: `5432`
-- [ ] Database name is exactly: `advancia_payledger_test`
-- [ ] Username is exactly: `test_user`
-- [ ] Password is exactly: `test_password_123`
-- [ ] PostgreSQL is running on droplet: `sudo systemctl status postgresql`
-- [ ] Firewall allows port 5432: `sudo ufw allow 5432/tcp`
+-   [ ] IP in .env.test is exactly: `157.245.8.131`
+-   [ ] Port in .env.test is exactly: `5432`
+-   [ ] Database name is exactly: `advancia_payledger_test`
+-   [ ] Username is exactly: `test_user`
+-   [ ] Password is exactly: `test_password_123`
+-   [ ] PostgreSQL is running on droplet: `sudo systemctl status postgresql`
+-   [ ] Firewall allows port 5432: `sudo ufw allow 5432/tcp`
 
 ### If Migrations Fail
 
-- [ ] Connection string is correct in .env.test
-- [ ] PostgreSQL is running on droplet
-- [ ] Database exists: `sudo -u postgres psql -l | grep advancia_payledger_test`
-- [ ] User has correct permissions (re-run grant commands if needed)
-- [ ] Try: `npx prisma migrate reset --force` (⚠️ deletes all data)
+-   [ ] Connection string is correct in .env.test
+-   [ ] PostgreSQL is running on droplet
+-   [ ] Database exists: `sudo -u postgres psql -l | grep advancia_payledger_test`
+-   [ ] User has correct permissions (re-run grant commands if needed)
+-   [ ] Try: `npx prisma migrate reset --force` (⚠️ deletes all data)
 
 ### If Tests Fail
 
-- [ ] All migrations deployed successfully
-- [ ] Database has tables: `sudo -u postgres psql -d advancia_payledger_test -c "\dt"`
-- [ ] Connection works manually: `psql -h 157.245.8.131 -U test_user -d advancia_payledger_test`
-- [ ] NODE_ENV is not set to "production"
-- [ ] Check individual test: `npm test -- auth.test.ts`
+-   [ ] All migrations deployed successfully
+-   [ ] Database has tables: `sudo -u postgres psql -d advancia_payledger_test -c "\dt"`
+-   [ ] Connection works manually: `psql -h 157.245.8.131 -U test_user -d advancia_payledger_test`
+-   [ ] NODE_ENV is not set to "production"
+-   [ ] Check individual test: `npm test -- auth.test.ts`
 
 ---
 
@@ -213,15 +213,15 @@ All these should show as PASSED:
 
 Once you check all boxes:
 
-- [ ] PostgreSQL installed on droplet
-- [ ] Database and user created
-- [ ] Remote access enabled
-- [ ] .env.test updated with correct IP
-- [ ] Migrations deployed
-- [ ] Tests running and mostly passing
-- [ ] No database connection errors
+-   [ ] PostgreSQL installed on droplet
+-   [ ] Database and user created
+-   [ ] Remote access enabled
+-   [ ] .env.test updated with correct IP
+-   [ ] Migrations deployed
+-   [ ] Tests running and mostly passing
+-   [ ] No database connection errors
 
-## 🎉 YOU'RE DONE!
+## 🎉 YOU'RE DONE
 
 You now have:
 ✅ Fully configured PostgreSQL on DigitalOcean  
@@ -236,12 +236,12 @@ You now have:
 
 Once everything is working:
 
-- [ ] Set up automated backups
-- [ ] Set up GitHub Actions for CI/CD
-- [ ] Create production database (separate from test DB)
-- [ ] Set up monitoring/alerts
-- [ ] Deploy backend to production
-- [ ] Deploy frontend to production
+-   [ ] Set up automated backups
+-   [ ] Set up GitHub Actions for CI/CD
+-   [ ] Create production database (separate from test DB)
+-   [ ] Set up monitoring/alerts
+-   [ ] Deploy backend to production
+-   [ ] Deploy frontend to production
 
 ---
 

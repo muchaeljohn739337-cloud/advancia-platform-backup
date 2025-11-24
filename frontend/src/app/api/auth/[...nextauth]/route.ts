@@ -1,8 +1,8 @@
-import NextAuth, { type NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import type { Session } from "next-auth"
-import type { JWT } from "next-auth/jwt"
-import type { User } from "next-auth"
+import NextAuth, { type NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import type { Session } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
+import type { User } from 'next-auth';
 
 // Get NextAuth secret (supports Base64 encoded)
 function getNextAuthSecret(): string {
@@ -16,10 +16,10 @@ const authOptions: NextAuthOptions = {
   secret: getNextAuthSecret(),
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -34,14 +34,14 @@ const authOptions: NextAuthOptions = {
 
           const response = await fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
-            headers: { 
+            headers: {
               'Content-Type': 'application/json',
-              'x-api-key': apiKey
+              'x-api-key': apiKey,
             },
             body: JSON.stringify({
               email: credentials.email,
-              password: credentials.password
-            })
+              password: credentials.password,
+            }),
           });
 
           if (!response.ok) {
@@ -55,10 +55,11 @@ const authOptions: NextAuthOptions = {
             return {
               id: data.user.id,
               email: data.user.email,
-              name: data.user.firstName && data.user.lastName 
-                ? `${data.user.firstName} ${data.user.lastName}`.trim()
-                : data.user.username || data.user.email,
-              accessToken: data.token
+              name:
+                data.user.firstName && data.user.lastName
+                  ? `${data.user.firstName} ${data.user.lastName}`.trim()
+                  : data.user.username || data.user.email,
+              accessToken: data.token,
             };
           }
 
@@ -67,40 +68,43 @@ const authOptions: NextAuthOptions = {
           console.error('Auth error:', error);
           return null;
         }
-      }
-    })
+      },
+    }),
   ],
   pages: {
-    signIn: "/auth/login",
+    signIn: '/auth/login',
   },
   session: {
-    strategy: "jwt" as const,
+    strategy: 'jwt' as const,
   },
   callbacks: {
     async jwt({ token, user }: { token: JWT; user?: User | null }) {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
         // Store access token from backend
-        const userWithToken = user as User & { accessToken?: string }
+        const userWithToken = user as User & { accessToken?: string };
         if (userWithToken.accessToken) {
-          token.accessToken = userWithToken.accessToken
+          token.accessToken = userWithToken.accessToken;
         }
       }
-      return token
+      return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
-        const userWithId = session.user as typeof session.user & { id?: string; accessToken?: string }
-        userWithId.id = typeof token.id === "string" ? token.id : undefined
+        const userWithId = session.user as typeof session.user & {
+          id?: string;
+          accessToken?: string;
+        };
+        userWithId.id = typeof token.id === 'string' ? token.id : undefined;
         // Include access token in session for API calls
         if (token.accessToken) {
-          userWithId.accessToken = token.accessToken as string
+          userWithId.accessToken = token.accessToken as string;
         }
       }
-      return session
-    }
-  }
-}
+      return session;
+    },
+  },
+};
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

@@ -47,11 +47,11 @@ WHERE email = 'admin@advancia.com';
 
 **Expected Initial State:**
 
-- `failed_attempts`: `0`
-- `locked_until`: `NULL`
-- `last_login_at`: `NULL` (or timestamp of last login)
-- `totp_enabled`: `true`
-- `totp_verified`: `true`
+-   `failed_attempts`: `0`
+-   `locked_until`: `NULL`
+-   `last_login_at`: `NULL` (or timestamp of last login)
+-   `totp_enabled`: `true`
+-   `totp_verified`: `true`
 
 ---
 
@@ -77,11 +77,11 @@ WHERE email = 'admin@advancia.com';
 
 **Expected Progression:**
 
-- After attempt 1: `failed_attempts = 1`, `locked_until = NULL`
-- After attempt 2: `failed_attempts = 2`, `locked_until = NULL`
-- After attempt 3: `failed_attempts = 3`, `locked_until = NULL`
-- After attempt 4: `failed_attempts = 4`, `locked_until = NULL`
-- After attempt 5: `failed_attempts = 5`, `locked_until = NOW() + 15 minutes`
+-   After attempt 1: `failed_attempts = 1`, `locked_until = NULL`
+-   After attempt 2: `failed_attempts = 2`, `locked_until = NULL`
+-   After attempt 3: `failed_attempts = 3`, `locked_until = NULL`
+-   After attempt 4: `failed_attempts = 4`, `locked_until = NULL`
+-   After attempt 5: `failed_attempts = 5`, `locked_until = NOW() + 15 minutes`
 
 ---
 
@@ -102,9 +102,9 @@ WHERE email = 'admin@advancia.com';
 
 **Expected After 5 Failed Attempts:**
 
-- `failed_attempts`: `5`
-- `locked_until`: Timestamp approximately 15 minutes in the future
-- `minutes_remaining`: ~15 (gradually decreases)
+-   `failed_attempts`: `5`
+-   `locked_until`: Timestamp approximately 15 minutes in the future
+-   `minutes_remaining`: ~15 (gradually decreases)
 
 ---
 
@@ -127,9 +127,9 @@ WHERE email = 'admin@advancia.com';
 
 **Expected After Successful Login:**
 
-- `failed_attempts`: `0` (RESET)
-- `locked_until`: `NULL` (CLEARED)
-- `last_login_at`: Recent timestamp (just now)
+-   `failed_attempts`: `0` (RESET)
+-   `locked_until`: `NULL` (CLEARED)
+-   `last_login_at`: Recent timestamp (just now)
 
 ---
 
@@ -149,8 +149,8 @@ WHERE email = 'admin@advancia.com';
 
 **Expected:**
 
-- `total_backup_codes`: `5` (initially)
-- Each code is a bcrypt hash starting with `$2b$12$`
+-   `total_backup_codes`: `5` (initially)
+-   Each code is a bcrypt hash starting with `$2b$12$`
 
 #### After Using One Backup Code
 
@@ -166,8 +166,8 @@ WHERE email = 'admin@advancia.com';
 
 **Expected:**
 
-- `remaining_codes`: `4` (one less)
-- The used code should be removed from the array
+-   `remaining_codes`: `4` (one less)
+-   The used code should be removed from the array
 
 ---
 
@@ -187,10 +187,10 @@ WHERE email = 'admin@advancia.com';
 
 **Expected:**
 
-- `totp_secret`: 32-character base32 string (e.g., `LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3`)
-- `totp_enabled`: `true`
-- `totp_verified`: `true`
-- `secret_length`: `32`
+-   `totp_secret`: 32-character base32 string (e.g., `LBBCQ32QOUZEKZSBNFYD6YRMLZMGYPS3`)
+-   `totp_enabled`: `true`
+-   `totp_verified`: `true`
+-   `secret_length`: `32`
 
 ---
 
@@ -485,5 +485,5 @@ SELECT * FROM user_security_status WHERE email = 'admin@advancia.com';
 
 **Created:** November 14, 2025  
 **Version:** 1.0  
-**Backend:** http://localhost:4000  
+**Backend:** <http://localhost:4000>  
 **Database:** PostgreSQL 15 (advancia)

@@ -53,25 +53,25 @@ chmod +x setup-branch-protection.sh
 
 ### ⚪ Minimal
 
-- No required checks
-- No PR reviews
-- Allows force push
-- **Use for:** Development branches
+-   No required checks
+-   No PR reviews
+-   Allows force push
+-   **Use for:** Development branches
 
 ### 🟡 Standard (Recommended)
 
-- Required checks: build, type-lint, CI
-- 1 PR review required
-- No force push
-- **Use for:** Main production branch
+-   Required checks: build, type-lint, CI
+-   1 PR review required
+-   No force push
+-   **Use for:** Main production branch
 
 ### 🔴 Strict
 
-- Required checks: all tests
-- 2 PR reviews + code owner
-- Enforce for admins
-- Linear history required
-- **Use for:** Critical systems
+-   Required checks: all tests
+-   2 PR reviews + code owner
+-   Enforce for admins
+-   Linear history required
+-   **Use for:** Critical systems
 
 ---
 
@@ -93,7 +93,7 @@ gh pr merge --auto --squash
 
 ## 🔑 Get GitHub Token
 
-1. Go to: https://github.com/settings/tokens
+1. Go to: <https://github.com/settings/tokens>
 2. Click: **Generate new token (classic)**
 3. Name: `Branch Protection Token`
 4. Scopes: ✅ `repo`, ✅ `admin:repo_hook`
@@ -106,11 +106,11 @@ gh pr merge --auto --squash
 
 See [`BRANCH_PROTECTION_GUIDE.md`](BRANCH_PROTECTION_GUIDE.md) for:
 
-- Detailed setup instructions
-- Troubleshooting guide
-- CODEOWNERS configuration
-- Emergency bypass procedures
-- Testing and verification
+-   Detailed setup instructions
+-   Troubleshooting guide
+-   CODEOWNERS configuration
+-   Emergency bypass procedures
+-   Testing and verification
 
 ---
 
@@ -130,11 +130,11 @@ gh api repos/:owner/:repo/branches/main/protection | jq
 
 ## 🚨 Important Notes
 
-- ⚠️ **Never force push to protected branches**
-- ✅ **Always work in feature branches**
-- ✅ **Create PRs for all changes**
-- ✅ **Get required approvals before merging**
-- 🔐 **Keep GitHub tokens secure** (never commit them!)
+-   ⚠️ **Never force push to protected branches**
+-   ✅ **Always work in feature branches**
+-   ✅ **Create PRs for all changes**
+-   ✅ **Get required approvals before merging**
+-   🔐 **Keep GitHub tokens secure** (never commit them!)
 
 ---
 

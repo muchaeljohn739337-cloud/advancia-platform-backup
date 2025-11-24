@@ -20,10 +20,10 @@ async function generateFavicon() {
     writeFileSync("frontend/public/favicon.ico", png32);
 
     console.log(
-      "✅ Generated favicon.ico (PNG format - compatible with modern browsers)"
+      "✅ Generated favicon.ico (PNG format - compatible with modern browsers)",
     );
     console.log(
-      "📝 Note: For legacy IE support, use an online converter to create multi-resolution .ico"
+      "📝 Note: For legacy IE support, use an online converter to create multi-resolution .ico",
     );
     console.log("✨ Favicon generation complete!\n");
   } catch (error) {

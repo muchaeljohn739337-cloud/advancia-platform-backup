@@ -19,27 +19,27 @@ You asked for:
 
 **Trustpilot Widget** (`frontend/src/components/TrustpilotWidget.tsx`)
 
-- Client-side component with Trustpilot script injection
-- Reads `NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID` from env
-- Customizable templates (stars, reviews, etc.)
-- **Important**: Only renders if you provide real Business Unit ID
-- No fake reviews or ratings generated
+-   Client-side component with Trustpilot script injection
+-   Reads `NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID` from env
+-   Customizable templates (stars, reviews, etc.)
+-   **Important**: Only renders if you provide real Business Unit ID
+-   No fake reviews or ratings generated
 
 **Google Verification** (`frontend/src/app/head.tsx`)
 
-- Meta tag for Google Search Console
-- Reads `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` from env
-- Helps Google index and verify your site
+-   Meta tag for Google Search Console
+-   Reads `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` from env
+-   Helps Google index and verify your site
 
 **Schema.org JSON-LD** (`frontend/src/components/OrganizationJsonLd.tsx`)
 
-- Organization structured data for Google
-- Optional AggregateRating (only if you provide ACCURATE values)
-- Injected in global layout (`frontend/src/app/layout.tsx`)
-- Supports:
-  - Organization name, URL, logo
-  - Social media links (`sameAs`)
-  - Verified ratings (MUST be real, never fabricated)
+-   Organization structured data for Google
+-   Optional AggregateRating (only if you provide ACCURATE values)
+-   Injected in global layout (`frontend/src/app/layout.tsx`)
+-   Supports:
+    -   Organization name, URL, logo
+    -   Social media links (`sameAs`)
+    -   Verified ratings (MUST be real, never fabricated)
 
 **Usage**:
 
@@ -61,9 +61,10 @@ NEXT_PUBLIC_RATING_COUNT=1234 // Only if accurate
 
 **News Data** (`frontend/src/lib/news.json`)
 
-- JSON-based news source (no DB changes needed)
-- Easily updatable by engineers
-- Format:
+-   JSON-based news source (no DB changes needed)
+-   Easily updatable by engineers
+-   Format:
+
   ```json
   [
     {
@@ -78,23 +79,23 @@ NEXT_PUBLIC_RATING_COUNT=1234 // Only if accurate
 
 **News Page** (`frontend/src/app/news/page.tsx`)
 
-- Auto-sorted by date (newest first)
-- Server-side rendering (SEO-friendly)
-- Clean, accessible UI
+-   Auto-sorted by date (newest first)
+-   Server-side rendering (SEO-friendly)
+-   Clean, accessible UI
 
 **RSS Feed** (`frontend/src/app/news/rss/route.ts`)
 
-- RSS 2.0 compliant
-- Available at `/news/rss`
-- Google Discover and RSS readers can subscribe
-- Cached for 5 minutes (`s-maxage=300`)
+-   RSS 2.0 compliant
+-   Available at `/news/rss`
+-   Google Discover and RSS readers can subscribe
+-   Cached for 5 minutes (`s-maxage=300`)
 
 **Benefits**:
 
-- Transparent feature updates for users
-- Discoverable by Google News
-- Professional "changelog as a service"
-- No database required
+-   Transparent feature updates for users
+-   Discoverable by Google News
+-   Professional "changelog as a service"
+-   No database required
 
 ---
 
@@ -102,39 +103,39 @@ NEXT_PUBLIC_RATING_COUNT=1234 // Only if accurate
 
 **Backend Protection** (Already Implemented)
 
-- All admin routes require `authenticateToken` + `requireAdmin` middleware
-- Rate limiting: 300 req/min global, 5 req/15min for auth
-- IP reputation tracking with blacklist
-- Fraud detection service
-- Location: `backend/src/middleware/auth.ts`, `backend/src/routes/*`
+-   All admin routes require `authenticateToken` + `requireAdmin` middleware
+-   Rate limiting: 300 req/min global, 5 req/15min for auth
+-   IP reputation tracking with blacklist
+-   Fraud detection service
+-   Location: `backend/src/middleware/auth.ts`, `backend/src/routes/*`
 
 **Frontend Lockdown** (`frontend/middleware.ts`)
 
-- NEW: Optional `NEXT_PUBLIC_LOCKDOWN=true` mode
-- Redirects ALL pages to `/auth/login` except:
-  - `/auth/*`
-  - `/landing`
-  - `/faq`
-  - `/status`
-  - `/news`
-- Use for emergency lockdowns or pre-launch
+-   NEW: Optional `NEXT_PUBLIC_LOCKDOWN=true` mode
+-   Redirects ALL pages to `/auth/login` except:
+    -   `/auth/*`
+    -   `/landing`
+    -   `/faq`
+    -   `/status`
+    -   `/news`
+-   Use for emergency lockdowns or pre-launch
 
 **API Key Enforcement** (Available but optional)
 
-- Backend has `requireApiKey` middleware in place
-- Can enable on any route: `backend/src/middleware/auth.ts` (line 283)
-- Example: `router.post('/login', requireApiKey, strictRateLimiter, ...)`
+-   Backend has `requireApiKey` middleware in place
+-   Can enable on any route: `backend/src/middleware/auth.ts` (line 283)
+-   Example: `router.post('/login', requireApiKey, strictRateLimiter, ...)`
 
 **Telegram Moderation** (`backend/src/routes/telegramWebhook.ts`)
 
-- Auto-deletes ads/links (regex-based)
-- CAPTCHA for new members (inline button verification)
-- Flood control: 8 messages/10s → delete + strike
-- Progressive penalties:
-  - Strike 1: Mute 10 minutes
-  - Strike 2: Mute 24 hours
-  - Strike 3+: Permanent ban
-- Uses Redis (with in-memory fallback)
+-   Auto-deletes ads/links (regex-based)
+-   CAPTCHA for new members (inline button verification)
+-   Flood control: 8 messages/10s → delete + strike
+-   Progressive penalties:
+    -   Strike 1: Mute 10 minutes
+    -   Strike 2: Mute 24 hours
+    -   Strike 3+: Permanent ban
+-   Uses Redis (with in-memory fallback)
 
 ---
 
@@ -142,32 +143,32 @@ NEXT_PUBLIC_RATING_COUNT=1234 // Only if accurate
 
 **Health Checks** (Already Implemented)
 
-- `/health` (root) — instant response
-- `/api/health` — full DB connectivity check
-- Returns:
-  - 200 OK: Healthy (database connected)
-  - 503 Service Unavailable: Unhealthy
-- Location: `backend/src/routes/health.ts`
+-   `/health` (root) — instant response
+-   `/api/health` — full DB connectivity check
+-   Returns:
+    -   200 OK: Healthy (database connected)
+    -   503 Service Unavailable: Unhealthy
+-   Location: `backend/src/routes/health.ts`
 
 **Graceful Shutdown** (`backend/src/utils/gracefulShutdown.ts`)
 
-- Handles: SIGTERM, SIGINT, uncaught exceptions
-- Process:
+-   Handles: SIGTERM, SIGINT, uncaught exceptions
+-   Process:
   1. Stop accepting new connections
   2. Close HTTP server (30s timeout)
   3. Close database connections
   4. Close Redis connections
   5. Exit cleanly
-- **Result**: No abrupt shutdowns, no data loss
+-   **Result**: No abrupt shutdowns, no data loss
 
 **Maintenance Mode Page** (`frontend/src/app/maintenance/page.tsx`)
 
-- Professional animated UI
-- Auto-refresh every 15 seconds
-- Manual "Check Status Now" button
-- Calls `/api/health` to detect restoration
-- Contact information displayed
-- **User Experience**: Transparent, patient, professional
+-   Professional animated UI
+-   Auto-refresh every 15 seconds
+-   Manual "Check Status Now" button
+-   Calls `/api/health` to detect restoration
+-   Contact information displayed
+-   **User Experience**: Transparent, patient, professional
 
 **Maintenance Mode Toggle**:
 
@@ -182,21 +183,21 @@ if (-f /var/www/maintenance.html) { return 503; }
 
 **Redis for Distributed State**
 
-- Rate limiting (persistent across restarts)
-- Session storage
-- Telegram moderation state
-- Price caching
-- Fallback: In-memory if Redis unavailable
-- Location: `backend/src/services/redisClient.ts`
+-   Rate limiting (persistent across restarts)
+-   Session storage
+-   Telegram moderation state
+-   Price caching
+-   Fallback: In-memory if Redis unavailable
+-   Location: `backend/src/services/redisClient.ts`
 
 **Load Balancer Ready**
 
-- Stateless design (JWT-based auth)
-- Redis for shared state
-- Health checks for load balancer
-- CORS configured for multiple origins
-- Trust proxy headers
-- Location: `backend/src/index.ts` (line 102)
+-   Stateless design (JWT-based auth)
+-   Redis for shared state
+-   Health checks for load balancer
+-   CORS configured for multiple origins
+-   Trust proxy headers
+-   Location: `backend/src/index.ts` (line 102)
 
 ---
 
@@ -310,9 +311,9 @@ NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=<google-code>
 
 **Automatic**:
 
-- News page updates at `/news`
-- RSS feed updates at `/news/rss`
-- No deployment needed (static file)
+-   News page updates at `/news`
+-   RSS feed updates at `/news/rss`
+-   No deployment needed (static file)
 
 ### 4. Enable Maintenance Mode
 
@@ -333,10 +334,10 @@ pm2 restart all
 
 **What happens**:
 
-- Users see professional maintenance page
-- Auto-refresh every 15 seconds
-- Engineers fix issues silently
-- Service resumes automatically when healthy
+-   Users see professional maintenance page
+-   Auto-refresh every 15 seconds
+-   Engineers fix issues silently
+-   Service resumes automatically when healthy
 
 ### 5. Set Up Telegram Moderation
 
@@ -369,9 +370,9 @@ Invoke-RestMethod -Method Post `
 **Step 4**: Add bot to group as admin  
 **Step 5**: Moderation is automatic:
 
-- Ads/links deleted
-- New members get CAPTCHA
-- Flood control active (8 msgs/10s)
+-   Ads/links deleted
+-   New members get CAPTCHA
+-   Flood control active (8 msgs/10s)
 
 ---
 
@@ -379,31 +380,31 @@ Invoke-RestMethod -Method Post `
 
 ### Security
 
-- **Bank-grade encryption**: Argon2id passwords, AES-256-GCM data
-- **Multi-layer protection**: Rate limiting at global, route, and IP levels
-- **Zero-trust architecture**: JWT tokens, 2FA, session tracking
-- **Compliance-ready**: HTTPS, secure cookies, GDPR-friendly
+-   **Bank-grade encryption**: Argon2id passwords, AES-256-GCM data
+-   **Multi-layer protection**: Rate limiting at global, route, and IP levels
+-   **Zero-trust architecture**: JWT tokens, 2FA, session tracking
+-   **Compliance-ready**: HTTPS, secure cookies, GDPR-friendly
 
 ### Reliability
 
-- **99.9% uptime design**: Health checks, graceful shutdowns, load balancing
-- **Distributed system**: Redis for shared state, multiple backend instances
-- **Silent engineering**: Sentry alerts engineers, users see maintenance page
-- **No data loss**: Graceful shutdowns, database transactions, backup codes
+-   **99.9% uptime design**: Health checks, graceful shutdowns, load balancing
+-   **Distributed system**: Redis for shared state, multiple backend instances
+-   **Silent engineering**: Sentry alerts engineers, users see maintenance page
+-   **No data loss**: Graceful shutdowns, database transactions, backup codes
 
 ### Transparency
 
-- **Public news feed**: `/news` page + RSS feed
-- **Verified reviews**: Trustpilot widget (real reviews only)
-- **Google certified**: Search Console verification
-- **Professional UX**: Maintenance page, error messages, contact info
+-   **Public news feed**: `/news` page + RSS feed
+-   **Verified reviews**: Trustpilot widget (real reviews only)
+-   **Google certified**: Search Console verification
+-   **Professional UX**: Maintenance page, error messages, contact info
 
 ### Scalability
 
-- **Load balancer ready**: Stateless design, health checks, CORS whitelist
-- **Redis caching**: Price data, rate limits, sessions
-- **PM2 cluster mode**: Multiple workers, auto-restart, zero-downtime
-- **Cloudflare CDN**: Global distribution, DDoS protection, SSL termination
+-   **Load balancer ready**: Stateless design, health checks, CORS whitelist
+-   **Redis caching**: Price data, rate limits, sessions
+-   **PM2 cluster mode**: Multiple workers, auto-restart, zero-downtime
+-   **Cloudflare CDN**: Global distribution, DDoS protection, SSL termination
 
 ---
 
@@ -444,20 +445,20 @@ app.use("/api/admin", adminIpWhitelist, authenticateToken, requireAdmin);
 
 **3. Enable Device Fingerprinting**
 
-- Track browser/device for suspicious logins
-- Alert on new device login
-- Require 2FA for new devices
-- (Requires additional library like `fingerprintjs`)
+-   Track browser/device for suspicious logins
+-   Alert on new device login
+-   Require 2FA for new devices
+-   (Requires additional library like `fingerprintjs`)
 
 ---
 
 ## 📞 Support & Documentation
 
-- **Security Audit**: `SECURITY_AND_HA_STATUS.md` (100/100 score)
-- **Quick Start**: `QUICK_START_SECURITY.md`
-- **Architecture**: `DEPLOYMENT_ARCHITECTURE.md`
-- **API Docs**: `API_REFERENCE.md`
-- **Ops Handbook**: `FOUNDERS_OPS_HANDBOOK.md`
+-   **Security Audit**: `SECURITY_AND_HA_STATUS.md` (100/100 score)
+-   **Quick Start**: `QUICK_START_SECURITY.md`
+-   **Architecture**: `DEPLOYMENT_ARCHITECTURE.md`
+-   **API Docs**: `API_REFERENCE.md`
+-   **Ops Handbook**: `FOUNDERS_OPS_HANDBOOK.md`
 
 ---
 

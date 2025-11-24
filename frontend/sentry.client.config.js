@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from '@sentry/nextjs';
 
 // Only initialize Sentry on the client side in production
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
@@ -27,8 +27,8 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
     ],
 
     // Release tracking
-    release: process.env.npm_package_version || "1.0.0",
+    release: process.env.npm_package_version || '1.0.0',
 
-    environment: "production",
+    environment: 'production',
   });
 }

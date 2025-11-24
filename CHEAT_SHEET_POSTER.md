@@ -69,13 +69,13 @@ make docker-test
 
 ## Essential Files
 
-- `DEVELOPER_ONBOARDING.md` - Complete guide
-- `TEST_DATABASE_SETUP.md` - Database setup
-- `TEST_DATABASE_QUICK_REFERENCE.md` - Quick help
-- `docker-compose.test.yml` - Docker config
-- `Makefile` - All commands
-- `backend/.env.test` - Environment
-- `backend/jest.config.js` - Test config
+-   `DEVELOPER_ONBOARDING.md` - Complete guide
+-   `TEST_DATABASE_SETUP.md` - Database setup
+-   `TEST_DATABASE_QUICK_REFERENCE.md` - Quick help
+-   `docker-compose.test.yml` - Docker config
+-   `Makefile` - All commands
+-   `backend/.env.test` - Environment
+-   `backend/jest.config.js` - Test config
 
 ---
 

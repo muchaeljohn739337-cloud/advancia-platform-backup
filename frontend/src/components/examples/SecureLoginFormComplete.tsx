@@ -10,12 +10,12 @@
  * - Input sanitization
  */
 
-"use client";
+'use client';
 
-import { usePasswordStrength, useSecureForm } from "@/hooks/useSecureForm";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePasswordStrength, useSecureForm } from '@/hooks/useSecureForm';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function SecureLoginForm() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function SecureLoginForm() {
   } = useSecureForm(
     // Submit handler
     async (data) => {
-      const response = await axios.post("/api/auth/login", {
+      const response = await axios.post('/api/auth/login', {
         email: data.email,
         password: data.password,
         _csrf: data._csrf, // CSRF token
@@ -43,7 +43,7 @@ export default function SecureLoginForm() {
     },
     // Options
     {
-      formId: "login-form",
+      formId: 'login-form',
       validationRules: {
         email: {
           required: true,
@@ -54,23 +54,23 @@ export default function SecureLoginForm() {
           minLength: 8,
         },
       },
-      encryptFields: ["password"], // Encrypt password before sending
+      encryptFields: ['password'], // Encrypt password before sending
       enableCSRF: true,
       enableRateLimit: true,
       sanitizeInputs: true,
       onSuccess: (result) => {
         // Store token and redirect
-        localStorage.setItem("token", result.token);
-        router.push("/dashboard");
+        localStorage.setItem('token', result.token);
+        router.push('/dashboard');
       },
       onError: (error) => {
-        console.error("Login failed:", error);
+        console.error('Login failed:', error);
       },
     }
   );
 
   // Password strength indicator
-  const passwordStrength = usePasswordStrength(values.password || "");
+  const passwordStrength = usePasswordStrength(values.password || '');
 
   // Check if rate limited
   const rateLimited = isRateLimited();
@@ -92,9 +92,7 @@ export default function SecureLoginForm() {
       {/* Remaining attempts indicator */}
       {!rateLimited && remainingAttempts < 3 && (
         <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-          <p className="text-yellow-700 text-sm">
-            ⚠️ {remainingAttempts} login attempts remaining
-          </p>
+          <p className="text-yellow-700 text-sm">⚠️ {remainingAttempts} login attempts remaining</p>
         </div>
       )}
 
@@ -108,21 +106,19 @@ export default function SecureLoginForm() {
             type="email"
             id="email"
             name="email"
-            value={values.email || ""}
-            onChange={(e) => handleChange("email", e.target.value, true)}
+            value={values.email || ''}
+            onChange={(e) => handleChange('email', e.target.value, true)}
             className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
               errors.email
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-blue-500"
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:ring-blue-500'
             }`}
             placeholder="you@example.com"
             autoComplete="email"
             disabled={isSubmitting || rateLimited}
             required
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-          )}
+          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
         </div>
 
         {/* Password Field */}
@@ -132,15 +128,15 @@ export default function SecureLoginForm() {
           </label>
           <div className="relative">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               id="password"
               name="password"
-              value={values.password || ""}
-              onChange={(e) => handleChange("password", e.target.value, true)}
+              value={values.password || ''}
+              onChange={(e) => handleChange('password', e.target.value, true)}
               className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
                 errors.password
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-blue-500'
               }`}
               placeholder="••••••••"
               autoComplete="current-password"
@@ -153,12 +149,10 @@ export default function SecureLoginForm() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? '🙈' : '👁️'}
             </button>
           </div>
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-          )}
+          {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
 
           {/* Password strength indicator (for registration) */}
           {values.password && values.password.length > 0 && (
@@ -167,29 +161,27 @@ export default function SecureLoginForm() {
                 <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-300 ${
-                      passwordStrength.strength === "weak"
-                        ? "w-1/3 bg-red-500"
-                        : passwordStrength.strength === "medium"
-                        ? "w-2/3 bg-yellow-500"
-                        : "w-full bg-green-500"
+                      passwordStrength.strength === 'weak'
+                        ? 'w-1/3 bg-red-500'
+                        : passwordStrength.strength === 'medium'
+                          ? 'w-2/3 bg-yellow-500'
+                          : 'w-full bg-green-500'
                     }`}
                   />
                 </div>
                 <span
                   className={`text-xs font-medium ${
-                    passwordStrength.strength === "weak"
-                      ? "text-red-600"
-                      : passwordStrength.strength === "medium"
-                      ? "text-yellow-600"
-                      : "text-green-600"
+                    passwordStrength.strength === 'weak'
+                      ? 'text-red-600'
+                      : passwordStrength.strength === 'medium'
+                        ? 'text-yellow-600'
+                        : 'text-green-600'
                   }`}
                 >
                   {passwordStrength.strength.toUpperCase()}
                 </span>
               </div>
-              <p className="text-xs text-gray-600 mt-1">
-                {passwordStrength.message}
-              </p>
+              <p className="text-xs text-gray-600 mt-1">{passwordStrength.message}</p>
             </div>
           )}
         </div>
@@ -201,16 +193,13 @@ export default function SecureLoginForm() {
               type="checkbox"
               name="rememberMe"
               checked={values.rememberMe || false}
-              onChange={(e) => handleChange("rememberMe", e.target.checked)}
+              onChange={(e) => handleChange('rememberMe', e.target.checked)}
               className="mr-2"
               disabled={isSubmitting || rateLimited}
             />
             <span className="text-sm text-gray-700">Remember me</span>
           </label>
-          <a
-            href="/forgot-password"
-            className="text-sm text-blue-600 hover:underline"
-          >
+          <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
             Forgot password?
           </a>
         </div>
@@ -246,16 +235,14 @@ export default function SecureLoginForm() {
               Logging in...
             </span>
           ) : (
-            "Login"
+            'Login'
           )}
         </button>
       </form>
 
       {/* Security Features Indicator */}
       <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-        <p className="text-sm font-semibold text-green-800 mb-2">
-          🔒 Protected by:
-        </p>
+        <p className="text-sm font-semibold text-green-800 mb-2">🔒 Protected by:</p>
         <ul className="space-y-1 text-xs text-green-700">
           <li>✅ Double-submit prevention</li>
           <li>✅ Real-time input validation</li>
@@ -270,11 +257,8 @@ export default function SecureLoginForm() {
       {/* Register Link */}
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
-          Don't have an account?{" "}
-          <a
-            href="/register"
-            className="text-blue-600 hover:underline font-medium"
-          >
+          Don't have an account?{' '}
+          <a href="/register" className="text-blue-600 hover:underline font-medium">
             Sign up
           </a>
         </p>

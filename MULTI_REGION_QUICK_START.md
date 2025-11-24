@@ -52,6 +52,7 @@ doctl compute droplet create \
 ```
 
 **Get Droplet IPs:**
+
 ```bash
 doctl compute droplet list --format Name,PublicIPv4
 ```
@@ -81,6 +82,7 @@ www.advancia.com → Cloudflare Load Balancer (geo-steering)
 ```
 
 **Create Records via Cloudflare API:**
+
 ```bash
 # See MULTI_REGION_SCRIPTS.md for full script
 ./scripts/cloudflare_global_lb.sh
@@ -91,21 +93,24 @@ www.advancia.com → Cloudflare Load Balancer (geo-steering)
 ### Step 3: Create GitHub Environments (5 min)
 
 **Go to GitHub:**
+
 1. Repository → Settings → Environments
 2. Create `production-us-east`
 3. Create `production-eu-west`
 4. Create `production-apac-se`
 
 **Protection Rules (Per Environment):**
-- ✅ Required reviewers: 2 senior engineers
-- ✅ Wait timer: 5 minutes (production only)
-- ✅ Deployment branches: `main` only
+
+-   ✅ Required reviewers: 2 senior engineers
+-   ✅ Wait timer: 5 minutes (production only)
+-   ✅ Deployment branches: `main` only
 
 ---
 
 ### Step 4: Add Regional Secrets (10 min)
 
 **Option A: PowerShell Script (Recommended)**
+
 ```powershell
 .\scripts\setup_regional_secrets.ps1
 ```
@@ -145,6 +150,7 @@ Inputs:
 ```
 
 **Timeline:**
+
 ```
 00:00 - Deploy US East → Canary 10%→100%
 01:05 - Deploy EU West → Canary 10%→100%
@@ -164,6 +170,7 @@ Inputs:
 ```
 
 **Timeline:**
+
 ```
 00:00 - Deploy all regions simultaneously
 00:45 - All regions live! ✅ (3x faster)
@@ -213,10 +220,11 @@ Inputs:
 ### Grafana Dashboard
 
 **Global Overview:**
-- Traffic distribution by region
-- Regional latency comparison
-- Error rates per region
-- Active deployments status
+
+-   Traffic distribution by region
+-   Regional latency comparison
+-   Error rates per region
+-   Active deployments status
 
 **Access:** `https://grafana.advancia.com/d/multi-region-overview`
 
@@ -227,12 +235,14 @@ Inputs:
 ### Automatic Rollback
 
 **Triggers:**
-- Error rate > regional threshold
-- Latency > acceptable range
-- Health checks fail (2+ consecutive)
-- CPU/Memory critical
+
+-   Error rate > regional threshold
+-   Latency > acceptable range
+-   Health checks fail (2+ consecutive)
+-   CPU/Memory critical
 
 **Action:**
+
 ```bash
 # Automatically executed by GitHub Actions
 - Detect failure in region
@@ -245,6 +255,7 @@ Inputs:
 ### Manual Rollback
 
 **Rollback Single Region:**
+
 ```bash
 # GitHub Actions UI
 Actions → Regional Emergency Rollback → Run workflow
@@ -255,6 +266,7 @@ Inputs:
 ```
 
 **Rollback All Regions:**
+
 ```bash
 # GitHub Actions UI
 Actions → Regional Emergency Rollback → Run workflow
@@ -273,59 +285,68 @@ Inputs:
 ### Strategy 1: Sequential (Recommended)
 
 **Use When:**
-- Major version releases
-- Breaking changes
-- Database migrations
-- First time deploying
+
+-   Major version releases
+-   Breaking changes
+-   Database migrations
+-   First time deploying
 
 **Pros:**
-- Safest approach
-- Regional isolation
-- Easy to stop mid-deployment
-- Clear error attribution
+
+-   Safest approach
+-   Regional isolation
+-   Easy to stop mid-deployment
+-   Clear error attribution
 
 **Cons:**
-- Slower (3+ hours for all regions)
-- Staggered user experience
+
+-   Slower (3+ hours for all regions)
+-   Staggered user experience
 
 ---
 
 ### Strategy 2: Parallel
 
 **Use When:**
-- Minor bug fixes
-- Configuration updates
-- Hotfixes
-- Non-breaking changes
+
+-   Minor bug fixes
+-   Configuration updates
+-   Hotfixes
+-   Non-breaking changes
 
 **Pros:**
-- Fastest (45 minutes)
-- Consistent user experience
-- Less operational overhead
+
+-   Fastest (45 minutes)
+-   Consistent user experience
+-   Less operational overhead
 
 **Cons:**
-- Higher risk
-- Harder to debug failures
-- No regional isolation
+
+-   Higher risk
+-   Harder to debug failures
+-   No regional isolation
 
 ---
 
 ### Strategy 3: Primary-Only
 
 **Use When:**
-- Testing new features
-- Regional compliance requirements
-- Gradual geographic expansion
-- Cost optimization
+
+-   Testing new features
+-   Regional compliance requirements
+-   Gradual geographic expansion
+-   Cost optimization
 
 **Pros:**
-- Minimal risk
-- Lower costs
-- Easy validation
+
+-   Minimal risk
+-   Lower costs
+-   Easy validation
 
 **Cons:**
-- Limited global reach
-- Users in other regions experience latency
+
+-   Limited global reach
+-   Users in other regions experience latency
 
 ---
 
@@ -350,6 +371,7 @@ Inputs:
 ### Manual Failover
 
 **Trigger Regional Failover:**
+
 ```bash
 # Reroute US traffic to EU (emergency)
 curl -X PATCH \
@@ -371,17 +393,18 @@ curl -X PATCH \
 ### Regional Scaling
 
 **Auto-Scale by Traffic:**
+
 ```yaml
 us-east:
   peak_hours: 9am-11pm EST
   min_instances: 2
   max_instances: 10
-  
+
 eu-west:
   peak_hours: 8am-10pm GMT
   min_instances: 2
   max_instances: 8
-  
+
 apac-se:
   peak_hours: 7am-9pm SGT
   min_instances: 1
@@ -389,6 +412,7 @@ apac-se:
 ```
 
 **Estimated Monthly Cost:**
+
 ```
 US East:  $160 (2x $2.50/day droplets + $80 LB)
 EU West:  $160 (2x $2.50/day droplets + $80 LB)
@@ -398,66 +422,71 @@ Total:     $680/month
 ```
 
 **Savings:**
-- Scale down overnight: -30% cost
-- Use spot instances: -40% cost
-- Regional database replication: +$50/month
+
+-   Scale down overnight: -30% cost
+-   Use spot instances: -40% cost
+-   Regional database replication: +$50/month
 
 ---
 
 ## ✅ Verification Checklist
 
 ### Infrastructure
-- [ ] 6 droplets created (2 per region)
-- [ ] Regional load balancers deployed
-- [ ] Regional databases configured
-- [ ] Regional Redis caches setup
-- [ ] SSH keys distributed
+
+-   [ ] 6 droplets created (2 per region)
+-   [ ] Regional load balancers deployed
+-   [ ] Regional databases configured
+-   [ ] Regional Redis caches setup
+-   [ ] SSH keys distributed
 
 ### DNS
-- [ ] Regional DNS records created
-- [ ] Cloudflare Load Balancer configured
-- [ ] Geo-steering rules active
-- [ ] Health checks passing
-- [ ] Failover tested
+
+-   [ ] Regional DNS records created
+-   [ ] Cloudflare Load Balancer configured
+-   [ ] Geo-steering rules active
+-   [ ] Health checks passing
+-   [ ] Failover tested
 
 ### GitHub
-- [ ] 3 regional environments created
-- [ ] 36 regional secrets added (12 per environment)
-- [ ] Multi-region workflow tested
-- [ ] Approval gates configured
-- [ ] Rollback procedures tested
+
+-   [ ] 3 regional environments created
+-   [ ] 36 regional secrets added (12 per environment)
+-   [ ] Multi-region workflow tested
+-   [ ] Approval gates configured
+-   [ ] Rollback procedures tested
 
 ### Monitoring
-- [ ] Regional health checks active
-- [ ] Grafana dashboards deployed
-- [ ] Slack notifications configured
-- [ ] Alert thresholds tuned
-- [ ] Runbooks documented
+
+-   [ ] Regional health checks active
+-   [ ] Grafana dashboards deployed
+-   [ ] Slack notifications configured
+-   [ ] Alert thresholds tuned
+-   [ ] Runbooks documented
 
 ---
 
 ## 🎯 Next Steps
 
 1. **Test Sequential Deployment**
-   - Deploy to US East first
-   - Validate canary rollout
-   - Proceed to EU West
-   - Complete APAC Southeast
+   -   Deploy to US East first
+   -   Validate canary rollout
+   -   Proceed to EU West
+   -   Complete APAC Southeast
 
 2. **Set Up Monitoring**
-   - Configure Grafana dashboards
-   - Set alert thresholds per region
-   - Test Slack notifications
+   -   Configure Grafana dashboards
+   -   Set alert thresholds per region
+   -   Test Slack notifications
 
 3. **Document Runbooks**
-   - Regional incident response
-   - Failover procedures
-   - Cost optimization strategies
+   -   Regional incident response
+   -   Failover procedures
+   -   Cost optimization strategies
 
 4. **Train Team**
-   - Multi-region deployment process
-   - Regional rollback procedures
-   - Global traffic management
+   -   Multi-region deployment process
+   -   Regional rollback procedures
+   -   Global traffic management
 
 ---
 

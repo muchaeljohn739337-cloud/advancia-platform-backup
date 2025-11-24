@@ -8,21 +8,21 @@ Complete guide for cleaning up your Advancia repository, removing junk files, an
 
 ### Problems This Fixes
 
-- ❌ "Too many active changes" warnings in VS Code
-- ❌ Git features disabled due to large changesets
-- ❌ Slow git operations (status, diff, commit)
-- ❌ Bloated repository size
-- ❌ Logs and build artifacts tracked in Git
-- ❌ Secrets accidentally committed
+-   ❌ "Too many active changes" warnings in VS Code
+-   ❌ Git features disabled due to large changesets
+-   ❌ Slow git operations (status, diff, commit)
+-   ❌ Bloated repository size
+-   ❌ Logs and build artifacts tracked in Git
+-   ❌ Secrets accidentally committed
 
 ### Benefits After Cleanup
 
-- ✅ Fast git operations
-- ✅ Full VS Code Git integration re-enabled
-- ✅ Smaller repository size (faster clones)
-- ✅ Clean history without junk files
-- ✅ Better collaboration (teammates clone faster)
-- ✅ CI/CD works reliably
+-   ✅ Fast git operations
+-   ✅ Full VS Code Git integration re-enabled
+-   ✅ Smaller repository size (faster clones)
+-   ✅ Clean history without junk files
+-   ✅ Better collaboration (teammates clone faster)
+-   ✅ CI/CD works reliably
 
 ---
 
@@ -82,9 +82,9 @@ git count-objects -vH
 
 **Expected Issues:**
 
-- Thousands of untracked files (node_modules, logs, build artifacts)
-- Large repo size (>100 MB for small projects)
-- VS Code Git features disabled
+-   Thousands of untracked files (node_modules, logs, build artifacts)
+-   Large repo size (>100 MB for small projects)
+-   VS Code Git features disabled
 
 ---
 
@@ -92,14 +92,14 @@ git count-objects -vH
 
 The repository includes a comprehensive `.gitignore` file that covers:
 
-- Node.js dependencies (`node_modules/`)
-- Build outputs (`dist/`, `build/`, `.next/`)
-- Logs (`*.log`, `logs/`, `backend-watchdog.log`)
-- Environment files (`.env`, `.env.local`)
-- PM2 runtime (`.pm2/`, `dump.pm2`)
-- Status page data (`status.json`)
-- IDE files (`.vscode/`, `.idea/`)
-- OS files (`.DS_Store`, `Thumbs.db`)
+-   Node.js dependencies (`node_modules/`)
+-   Build outputs (`dist/`, `build/`, `.next/`)
+-   Logs (`*.log`, `logs/`, `backend-watchdog.log`)
+-   Environment files (`.env`, `.env.local`)
+-   PM2 runtime (`.pm2/`, `dump.pm2`)
+-   Status page data (`status.json`)
+-   IDE files (`.vscode/`, `.idea/`)
+-   OS files (`.DS_Store`, `Thumbs.db`)
 
 **Verify `.gitignore` exists:**
 
@@ -130,9 +130,9 @@ git commit -m "chore: enforce .gitignore - remove ignored files"
 
 **What This Does:**
 
-- Removes files from Git that are now in `.gitignore`
-- Keeps files on your local disk
-- Updates Git index to respect new rules
+-   Removes files from Git that are now in `.gitignore`
+-   Keeps files on your local disk
+-   Updates Git index to respect new rules
 
 ---
 
@@ -148,8 +148,8 @@ git reflog show --all | wc -l
 
 **What This Does:**
 
-- Removes old references to deleted/changed files
-- Prepares repo for garbage collection
+-   Removes old references to deleted/changed files
+-   Prepares repo for garbage collection
 
 ---
 
@@ -168,15 +168,15 @@ git gc --aggressive --prune=now
 
 **Aggressive GC Comparison:**
 
-- **Basic GC**: Fast (1-2 min), moderate cleanup
-- **Aggressive GC**: Slow (10-30 min), maximum cleanup
+-   **Basic GC**: Fast (1-2 min), moderate cleanup
+-   **Aggressive GC**: Slow (10-30 min), maximum cleanup
 
 **When to Use Aggressive GC:**
 
-- First-time cleanup
-- Repo size >500 MB
-- Before major release
-- Quarterly maintenance
+-   First-time cleanup
+-   Repo size >500 MB
+-   Before major release
+-   Quarterly maintenance
 
 ---
 
@@ -195,10 +195,10 @@ git ls-files -i --exclude-standard | wc -l
 
 **Success Indicators:**
 
-- Repo size reduced by 30-70%
-- Active changes <100 files
-- No ignored files in tracking
-- VS Code Git features work again
+-   Repo size reduced by 30-70%
+-   Active changes <100 files
+-   No ignored files in tracking
+-   VS Code Git features work again
 
 ---
 
@@ -214,9 +214,9 @@ git push --force origin main
 
 **⚠️ Warning:** Force pushing rewrites remote history. Only do this if:
 
-- You're the only developer
-- Or team is aware and synced
-- Or on a personal branch
+-   You're the only developer
+-   Or team is aware and synced
+-   Or on a personal branch
 
 ---
 
@@ -226,9 +226,9 @@ The repository includes `.github/workflows/repo-cleanup.yml` that automatically:
 
 ### When It Runs
 
-- **On push to main** (when `.gitignore` changes)
-- **Weekly schedule** (Sunday at 3 AM UTC)
-- **Manual trigger** (workflow_dispatch)
+-   **On push to main** (when `.gitignore` changes)
+-   **Weekly schedule** (Sunday at 3 AM UTC)
+-   **Manual trigger** (workflow_dispatch)
 
 ### What It Does
 
@@ -364,9 +364,9 @@ du -sh .git
 
 **Healthy Ranges:**
 
-- **Small project** (<10k lines): <10 MB
-- **Medium project** (10k-50k lines): 10-50 MB
-- **Large project** (>50k lines): 50-200 MB
+-   **Small project** (<10k lines): <10 MB
+-   **Medium project** (10k-50k lines): 10-50 MB
+-   **Large project** (>50k lines): 50-200 MB
 
 ---
 
@@ -385,8 +385,8 @@ git status --porcelain | awk '{print $2}' | sed 's/.*\.//' | sort | uniq -c
 
 **Healthy Thresholds:**
 
-- Untracked: <20 files (add to `.gitignore` if more)
-- Modified: <50 files (commit frequently)
+-   Untracked: <20 files (add to `.gitignore` if more)
+-   Modified: <50 files (commit frequently)
 
 ---
 
@@ -408,29 +408,29 @@ git ls-files -i --exclude-standard | wc -l
 
 ### Daily
 
-- ✅ Commit source code frequently
-- ✅ Don't commit logs, builds, or node_modules
-- ✅ Keep `.env` files out of Git
-- ✅ Review `git status` before committing
+-   ✅ Commit source code frequently
+-   ✅ Don't commit logs, builds, or node_modules
+-   ✅ Keep `.env` files out of Git
+-   ✅ Review `git status` before committing
 
 ### Weekly
 
-- ✅ Check repo size: `git count-objects -vH`
-- ✅ Verify `.gitignore` is working
-- ✅ Clean local branches: `git branch -d <branch>`
+-   ✅ Check repo size: `git count-objects -vH`
+-   ✅ Verify `.gitignore` is working
+-   ✅ Clean local branches: `git branch -d <branch>`
 
 ### Monthly
 
-- ✅ Run `git gc --prune=now`
-- ✅ Audit `.gitignore` for new patterns
-- ✅ Check GitHub Actions cleanup logs
+-   ✅ Run `git gc --prune=now`
+-   ✅ Audit `.gitignore` for new patterns
+-   ✅ Check GitHub Actions cleanup logs
 
 ### Quarterly
 
-- ✅ Run aggressive GC: `git gc --aggressive --prune=now`
-- ✅ Review and remove old branches
-- ✅ Audit large files in history
-- ✅ Update `.gitignore` for new dependencies
+-   ✅ Run aggressive GC: `git gc --aggressive --prune=now`
+-   ✅ Review and remove old branches
+-   ✅ Audit large files in history
+-   ✅ Update `.gitignore` for new dependencies
 
 ---
 
@@ -438,21 +438,21 @@ git ls-files -i --exclude-standard | wc -l
 
 Before pushing cleanup changes:
 
-- [ ] No secrets in `.env` (use `.env.example` instead)
-- [ ] No API keys in code (use environment variables)
-- [ ] No credentials in config files
-- [ ] No SSH keys or certificates committed
-- [ ] No database dumps or backups in repo
-- [ ] Verify with: `git log --all --source --full-history --patch -- '**/*.env'`
+-   [ ] No secrets in `.env` (use `.env.example` instead)
+-   [ ] No API keys in code (use environment variables)
+-   [ ] No credentials in config files
+-   [ ] No SSH keys or certificates committed
+-   [ ] No database dumps or backups in repo
+-   [ ] Verify with: `git log --all --source --full-history --patch -- '**/*.env'`
 
 ---
 
 ## 📚 Related Documentation
 
-- [.gitignore](./.gitignore) - Repository ignore rules
-- [cleanup-git.sh](./cleanup-git.sh) - Automated cleanup script
-- [.github/workflows/repo-cleanup.yml](./.github/workflows/repo-cleanup.yml) - Automated GitHub Actions
-- [.github/workflows/deploy-droplet.yml](./.github/workflows/deploy-droplet.yml) - Deployment workflow
+-   [.gitignore](./.gitignore) - Repository ignore rules
+-   [cleanup-git.sh](./cleanup-git.sh) - Automated cleanup script
+-   [.github/workflows/repo-cleanup.yml](./.github/workflows/repo-cleanup.yml) - Automated GitHub Actions
+-   [.github/workflows/deploy-droplet.yml](./.github/workflows/deploy-droplet.yml) - Deployment workflow
 
 ---
 

@@ -1,4 +1,4 @@
-import PaymentButton from "@/components/PaymentButton";
+import PaymentButton from '@/components/PaymentButton';
 
 interface PaymentExampleProps {
   feature: string;
@@ -20,8 +20,7 @@ export default function PaymentExample({
       </h3>
 
       <div className="mb-4 text-sm text-gray-600 text-center">
-        Order ID:{" "}
-        <code className="bg-gray-100 px-2 py-1 rounded">{orderId}</code>
+        Order ID: <code className="bg-gray-100 px-2 py-1 rounded">{orderId}</code>
       </div>
 
       <PaymentButton
@@ -30,10 +29,10 @@ export default function PaymentExample({
         currency={currency}
         description={`${feature} purchase`}
         onSuccess={() => {
-          console.log("Payment initiated successfully");
+          console.log('Payment initiated successfully');
         }}
         onError={(error) => {
-          console.error("Payment error:", error);
+          console.error('Payment error:', error);
         }}
       />
 

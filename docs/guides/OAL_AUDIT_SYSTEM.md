@@ -181,15 +181,7 @@ POST /api/oal/balance-adjustment
 ### Import
 
 ```typescript
-import {
-  createOALLog,
-  updateOALStatus,
-  getOALLogs,
-  getOALLogById,
-  logBalanceAdjustment,
-  logRoleChange,
-  logConfigChange,
-} from "../services/oalService";
+import { createOALLog, updateOALStatus, getOALLogs, getOALLogById, logBalanceAdjustment, logRoleChange, logConfigChange } from "../services/oalService";
 ```
 
 ### Create Custom Log
@@ -429,38 +421,33 @@ npx prisma migrate dev     # Development
 
 ```typescript
 // In your admin balance adjustment endpoint
-router.post(
-  "/admin/users/:userId/adjust-balance",
-  authenticateToken,
-  requireAdmin,
-  async (req, res) => {
-    const { userId } = req.params;
-    const { currency, amount, reason } = req.body;
-    const adminId = req.user.userId;
+router.post("/admin/users/:userId/adjust-balance", authenticateToken, requireAdmin, async (req, res) => {
+  const { userId } = req.params;
+  const { currency, amount, reason } = req.body;
+  const adminId = req.user.userId;
 
-    // 1. Create audit log
-    const log = await logBalanceAdjustment({
-      userId,
-      adminId,
-      currency,
-      delta: amount,
-      reason,
-      location: "admin.api",
-    });
+  // 1. Create audit log
+  const log = await logBalanceAdjustment({
+    userId,
+    adminId,
+    currency,
+    delta: amount,
+    reason,
+    location: "admin.api",
+  });
 
-    // 2. Execute the adjustment
-    await adjustUserBalance(userId, currency, amount);
+  // 2. Execute the adjustment
+  await adjustUserBalance(userId, currency, amount);
 
-    // 3. Approve the log
-    await updateOALStatus({
-      id: log.id,
-      status: "APPROVED",
-      updatedById: adminId,
-    });
+  // 3. Approve the log
+  await updateOALStatus({
+    id: log.id,
+    status: "APPROVED",
+    updatedById: adminId,
+  });
 
-    res.json({ success: true, log });
-  }
-);
+  res.json({ success: true, log });
+});
 ```
 
 ---

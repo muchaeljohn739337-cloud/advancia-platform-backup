@@ -55,12 +55,12 @@ npx prisma reset # Reset database (⚠️ deletes data)
 
 # Test backend health endpoint
 
-Invoke-RestMethod http://localhost:4000/api/health
+Invoke-RestMethod <http://localhost:4000/api/health>
 
 # Test registration endpoint
 
-curl -X POST http://localhost:4000/api/auth/register `    -Headers @{'Content-Type'='application/json'}`
--Body '{"email":"test@example.com","password":"Test123!@#"}'
+curl -X POST <http://localhost:4000/api/auth/register> `-Headers @{'Content-Type'='application/json'}`
+-Body '{"email":"<test@example.com>","password":"Test123!@#"}'
 
 # Check if port is in use
 
@@ -110,9 +110,9 @@ npm install
 npm run dev
 
 Tab 5 - Testing:
-Invoke-RestMethod http://localhost:4000/api/health
+Invoke-RestMethod <http://localhost:4000/api/health>
 
-# Browse to http://localhost:3000 in browser
+# Browse to <http://localhost:3000> in browser
 
 🔧 ENVIRONMENT VARIABLES NEEDED (.env)
 ═══════════════════════════════════════════════════════════════════════════════
@@ -123,8 +123,8 @@ POSTGRES_PASSWORD=YourStrongPassword
 POSTGRES_DB=saas_platform
 JWT_SECRET=YourSecretKeyAt32CharsMinimumLength
 API_KEY=dev-api-key-123
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-BACKEND_URL=http://localhost:4000
+NEXT_PUBLIC_APP_URL=<http://localhost:3000>
+BACKEND_URL=<http://localhost:4000>
 NODE_ENV=development
 
 🆘 TROUBLESHOOTING QUICK REFERENCE
@@ -151,7 +151,7 @@ Problem: Database migration failed
 
 Problem: Health check returns 404
 → Backend not running: npm run dev
-→ Wrong URL: should be http://localhost:4000/api/health
+→ Wrong URL: should be <http://localhost:4000/api/health>
 
 📊 CHECKING SERVICE STATUS
 ═══════════════════════════════════════════════════════════════════════════════
@@ -192,9 +192,9 @@ When something breaks:
 
 1. Read the error message completely
 2. Check the relevant logs:
-   - Backend: npm run dev output
-   - Database: docker compose logs db
-   - Frontend: browser console (F12)
+   -   Backend: npm run dev output
+   -   Database: docker compose logs db
+   -   Frontend: browser console (F12)
 3. Search error in docs (Google the exact error)
 4. Try the fix in TROUBLESHOOTING section
 5. If still stuck, share the full error message

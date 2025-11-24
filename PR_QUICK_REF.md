@@ -86,12 +86,12 @@ Part of #456
 
 ## 🤖 Auto-Checks (Wait for ✅)
 
-- ✅ Linting
-- ✅ Type checking
-- ✅ Build verification
-- ✅ Tests
-- ✅ Security scan
-- ✅ Duplicate detection
+-   ✅ Linting
+-   ✅ Type checking
+-   ✅ Build verification
+-   ✅ Tests
+-   ✅ Security scan
+-   ✅ Duplicate detection
 
 ---
 

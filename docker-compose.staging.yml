@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database - Staging
@@ -58,33 +58,33 @@ services:
       JWT_REFRESH_SECRET: ${STAGING_JWT_REFRESH_SECRET}
       FRONTEND_URL: ${STAGING_FRONTEND_URL:-https://staging.advancia.com}
       API_URL: ${STAGING_API_URL:-https://staging-api.advancia.com}
-      
+
       # Email Configuration
       SMTP_HOST: ${STAGING_SMTP_HOST}
       SMTP_PORT: ${STAGING_SMTP_PORT:-587}
       SMTP_USER: ${STAGING_SMTP_USER}
       SMTP_PASSWORD: ${STAGING_SMTP_PASSWORD}
       SMTP_FROM: ${STAGING_SMTP_FROM:-noreply@staging.advancia.com}
-      
+
       # Monitoring
       SENTRY_DSN: ${STAGING_SENTRY_DSN}
       SENTRY_ENVIRONMENT: staging
-      
+
       # Payment Gateways (Test Mode)
       CRYPTOMUS_API_KEY: ${STAGING_CRYPTOMUS_API_KEY}
       CRYPTOMUS_MERCHANT_ID: ${STAGING_CRYPTOMUS_MERCHANT_ID}
       STRIPE_SECRET_KEY: ${STAGING_STRIPE_SECRET_KEY}
       STRIPE_WEBHOOK_SECRET: ${STAGING_STRIPE_WEBHOOK_SECRET}
-      
+
       # Feature Flags
       ENABLE_2FA: true
       ENABLE_EMAIL_VERIFICATION: true
       ENABLE_RATE_LIMITING: true
-      
+
       # Logging
       LOG_LEVEL: debug
       ENABLE_REQUEST_LOGGING: true
-      
+
     ports:
       - "4001:4001"
     depends_on:
@@ -150,10 +150,10 @@ services:
     image: prom/prometheus:latest
     container_name: advancia-prometheus-staging
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
     ports:
       - "9091:9090"
     volumes:

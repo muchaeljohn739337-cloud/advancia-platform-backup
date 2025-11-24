@@ -1,6 +1,7 @@
 # 🚀 COMPLETE FRONTEND FEATURES - STEP BY STEP GUIDE
 
 ## 🎯 Overview
+
 This guide will help you complete the **Token/Coin System**, **Rewards System**, and **MedBed Health Integration** for your Advancia Pay Ledger platform.
 
 ---
@@ -30,10 +31,10 @@ model TokenWallet {
   lifetimeEarned  Decimal           @db.Decimal(18, 8) @default(0)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-  
+
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions    TokenTransaction[]
-  
+
   @@index([userId])
   @@map("token_wallets")
 }
@@ -49,9 +50,9 @@ model TokenTransaction {
   toAddress   String?     // For transfers
   metadata    Json?
   createdAt   DateTime    @default(now())
-  
+
   wallet      TokenWallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  
+
   @@index([walletId])
   @@index([createdAt])
   @@index([type])
@@ -70,7 +71,7 @@ model Reward {
   expiresAt   DateTime?
   claimedAt   DateTime?
   createdAt   DateTime @default(now())
-  
+
   @@index([userId])
   @@index([status])
   @@index([type])
@@ -89,9 +90,9 @@ model UserTier {
   achievements    Json?    // Array of achievement IDs
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  
+
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId])
   @@index([currentTier])
   @@map("user_tiers")
@@ -112,9 +113,9 @@ model HealthReading {
   metadata        Json?
   recordedAt      DateTime @default(now())
   createdAt       DateTime @default(now())
-  
+
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId])
   @@index([recordedAt])
   @@map("health_readings")
@@ -142,18 +143,18 @@ const router = express.Router();
 router.get("/balance/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    
+
     let wallet = await prisma.tokenWallet.findUnique({
       where: { userId },
     });
-    
+
     // Create wallet if doesn't exist
     if (!wallet) {
       wallet = await prisma.tokenWallet.create({
         data: { userId },
       });
     }
-    
+
     res.json({
       balance: wallet.balance,
       lockedBalance: wallet.lockedBalance,
@@ -171,7 +172,7 @@ router.get("/history/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const limit = parseInt(req.query.limit as string) || 50;
-    
+
     const wallet = await prisma.tokenWallet.findUnique({
       where: { userId },
       include: {
@@ -181,11 +182,11 @@ router.get("/history/:userId", async (req, res) => {
         },
       },
     });
-    
+
     if (!wallet) {
       return res.json({ transactions: [] });
     }
-    
+
     res.json({ transactions: wallet.transactions });
   } catch (error) {
     console.error("Error fetching transaction history:", error);
@@ -197,25 +198,25 @@ router.get("/history/:userId", async (req, res) => {
 router.post("/withdraw", async (req, res) => {
   try {
     const { userId, amount, toAddress } = req.body;
-    
+
     if (!userId || !amount || !toAddress) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    
+
     const wallet = await prisma.tokenWallet.findUnique({
       where: { userId },
     });
-    
+
     if (!wallet) {
       return res.status(404).json({ error: "Wallet not found" });
     }
-    
+
     const withdrawAmount = new Decimal(amount);
-    
+
     if (wallet.balance.lt(withdrawAmount)) {
       return res.status(400).json({ error: "Insufficient balance" });
     }
-    
+
     // Update wallet and create transaction in a transaction
     const result = await prisma.$transaction([
       prisma.tokenWallet.update({
@@ -235,7 +236,7 @@ router.post("/withdraw", async (req, res) => {
         },
       }),
     ]);
-    
+
     res.json({
       success: true,
       newBalance: result[0].balance,
@@ -251,28 +252,28 @@ router.post("/withdraw", async (req, res) => {
 router.post("/cashout", async (req, res) => {
   try {
     const { userId, amount } = req.body;
-    
+
     if (!userId || !amount) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    
+
     const wallet = await prisma.tokenWallet.findUnique({
       where: { userId },
     });
-    
+
     if (!wallet) {
       return res.status(404).json({ error: "Wallet not found" });
     }
-    
+
     const cashoutAmount = new Decimal(amount);
-    
+
     if (wallet.balance.lt(cashoutAmount)) {
       return res.status(400).json({ error: "Insufficient balance" });
     }
-    
+
     // Simulate exchange rate (1 ADVANCIA = $0.10)
     const fiatAmount = cashoutAmount.mul(0.1);
-    
+
     const result = await prisma.$transaction([
       prisma.tokenWallet.update({
         where: { userId },
@@ -291,7 +292,7 @@ router.post("/cashout", async (req, res) => {
         },
       }),
     ]);
-    
+
     res.json({
       success: true,
       tokenAmount: cashoutAmount.toString(),
@@ -308,19 +309,19 @@ router.post("/cashout", async (req, res) => {
 router.post("/award-bonus", async (req, res) => {
   try {
     const { userId, transactionAmount, percentage = 15 } = req.body;
-    
+
     const bonusAmount = new Decimal(transactionAmount).mul(percentage / 100);
-    
+
     let wallet = await prisma.tokenWallet.findUnique({
       where: { userId },
     });
-    
+
     if (!wallet) {
       wallet = await prisma.tokenWallet.create({
         data: { userId },
       });
     }
-    
+
     const result = await prisma.$transaction([
       prisma.tokenWallet.update({
         where: { userId },
@@ -340,7 +341,7 @@ router.post("/award-bonus", async (req, res) => {
         },
       }),
     ]);
-    
+
     res.json({
       success: true,
       bonusAmount: bonusAmount.toString(),
@@ -356,7 +357,7 @@ router.post("/award-bonus", async (req, res) => {
 router.get("/exchange-rate", (req, res) => {
   res.json({
     tokenSymbol: "ADVANCIA",
-    rate: 0.10, // 1 ADVANCIA = $0.10 USD
+    rate: 0.1, // 1 ADVANCIA = $0.10 USD
     lastUpdated: new Date().toISOString(),
   });
 });
@@ -443,9 +444,9 @@ export default function TokenWallet({ userId }: { userId: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, amount, toAddress: address }),
       });
-      
+
       const data = await res.json();
-      
+
       if (data.success) {
         await fetchBalance();
         await fetchTransactions();
@@ -467,9 +468,9 @@ export default function TokenWallet({ userId }: { userId: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, amount }),
       });
-      
+
       const data = await res.json();
-      
+
       if (data.success) {
         await fetchBalance();
         await fetchTransactions();
@@ -544,7 +545,7 @@ export default function TokenWallet({ userId }: { userId: string }) {
       {/* Transaction History */}
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Transactions</h3>
-        
+
         {transactions.length === 0 ? (
           <p className="text-gray-500 text-center py-8">No transactions yet</p>
         ) : (
@@ -626,7 +627,7 @@ function WithdrawModal({ onClose, onSubmit, maxAmount }: any) {
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-2xl font-bold mb-4">Withdraw Tokens</h3>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2">Amount</label>
@@ -695,7 +696,7 @@ function CashoutModal({ onClose, onSubmit, maxAmount }: any) {
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-2xl font-bold mb-4">Cash Out Tokens</h3>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2">Token Amount</label>
@@ -773,16 +774,16 @@ Update the transaction creation to award bonus tokens. In `backend/src/routes/tr
 
 ```typescript
 // After successful credit transaction:
-if (type === 'credit') {
+if (type === "credit") {
   // Award 15% bonus tokens
-  await fetch('http://localhost:4000/api/tokens/award-bonus', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  await fetch("http://localhost:4000/api/tokens/award-bonus", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       userId,
       transactionAmount: amount,
-      percentage: 15
-    })
+      percentage: 15,
+    }),
   });
 }
 ```
@@ -817,6 +818,7 @@ if (type === 'credit') {
 ## 📚 NEXT STEPS
 
 After completing the Token System:
+
 1. Proceed to **Phase 2: Rewards System** (similar process)
 2. Then **Phase 3: MedBed/Health Integration**
 3. Update README with new features

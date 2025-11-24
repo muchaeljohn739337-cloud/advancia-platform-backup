@@ -4,11 +4,11 @@
 
 This system provides enterprise-grade alert policy management with:
 
-- **Database-backed policies** for dynamic configuration
-- **RBAC protection** (SuperAdmin-only editing)
-- **Tamper-evident audit logging** of all policy changes
-- **Multi-channel alerts** (Email, SMS, Slack, Teams, WebSocket, Sentry)
-- **Security hardening** against penetration and cracking
+-   **Database-backed policies** for dynamic configuration
+-   **RBAC protection** (SuperAdmin-only editing)
+-   **Tamper-evident audit logging** of all policy changes
+-   **Multi-channel alerts** (Email, SMS, Slack, Teams, WebSocket, Sentry)
+-   **Security hardening** against penetration and cracking
 
 ---
 
@@ -114,34 +114,34 @@ requireMFA; // Must have MFA enabled + recently verified
 
 Every policy change is logged with:
 
-- **Who**: User ID + email + role
-- **What**: Action (created/updated/deleted/enabled/disabled)
-- **When**: Timestamp (UTC)
-- **Where**: IP address + user agent
-- **Why**: Mandatory reason field
-- **Before/After**: Full JSON snapshots
+-   **Who**: User ID + email + role
+-   **What**: Action (created/updated/deleted/enabled/disabled)
+-   **When**: Timestamp (UTC)
+-   **Where**: IP address + user agent
+-   **Why**: Mandatory reason field
+-   **Before/After**: Full JSON snapshots
 
 ### 4. Transport Security
 
-- **HTTPS only** in production (HSTS header)
-- **CSRF tokens** on all state-changing requests
-- **Secure cookies**: `HttpOnly`, `Secure`, `SameSite=strict`
-- **Security headers**: CSP, X-Frame-Options, X-Content-Type-Options
+-   **HTTPS only** in production (HSTS header)
+-   **CSRF tokens** on all state-changing requests
+-   **Secure cookies**: `HttpOnly`, `Secure`, `SameSite=strict`
+-   **Security headers**: CSP, X-Frame-Options, X-Content-Type-Options
 
 ### 5. Input Validation
 
-- **Zod schemas** for all request bodies
-- **Sanitization** against XSS
-- **SQL injection** prevention via Prisma parameterized queries
-- **Rate limiting** on all admin endpoints
+-   **Zod schemas** for all request bodies
+-   **Sanitization** against XSS
+-   **SQL injection** prevention via Prisma parameterized queries
+-   **Rate limiting** on all admin endpoints
 
 ### 6. Anomaly Detection
 
 Automated detection of:
 
-- **Rapid changes**: >5 edits in 1 hour by same user
-- **Unusual times**: Changes outside 6 AM - 10 PM
-- **Critical actions**: Deletions and disables (Sentry alert)
+-   **Rapid changes**: >5 edits in 1 hour by same user
+-   **Unusual times**: Changes outside 6 AM - 10 PM
+-   **Critical actions**: Deletions and disables (Sentry alert)
 
 ---
 
@@ -270,8 +270,8 @@ CSRF_SECRET=another-strong-secret
 
 Navigate to: `https://your-domain.com/admin/alert-policies`
 
-- **Admins**: Can view policies (read-only)
-- **SuperAdmins**: Can view + edit + enable/disable policies
+-   **Admins**: Can view policies (read-only)
+-   **SuperAdmins**: Can view + edit + enable/disable policies
 
 ---
 
@@ -370,30 +370,30 @@ ORDER BY timestamp DESC;
 
 ## 📋 Checklist for Production
 
-- [ ] **Database**
-  - [ ] Migrations applied (`npx prisma migrate deploy`)
-  - [ ] Initial policies seeded
-  - [ ] Backups configured (daily)
-- [ ] **Authentication**
-  - [ ] MFA enforced for all admin accounts
-  - [ ] Session timeouts configured (60 minutes)
-  - [ ] CSRF tokens enabled
-- [ ] **Authorization**
-  - [ ] RBAC middleware applied to all admin routes
-  - [ ] SuperAdmin accounts limited (≤3)
-  - [ ] Regular access reviews scheduled (quarterly)
-- [ ] **Transport Security**
-  - [ ] HTTPS enforced (HSTS header)
-  - [ ] TLS 1.2+ only
-  - [ ] Security headers configured
-- [ ] **Monitoring**
-  - [ ] Sentry integration tested
-  - [ ] Alert channels verified (email/SMS/Slack/Teams)
-  - [ ] Audit log queries scheduled
-- [ ] **Incident Response**
-  - [ ] Playbook for policy breach documented
-  - [ ] Emergency contacts updated
-  - [ ] Rollback procedure tested
+-   [ ] **Database**
+    -   [ ] Migrations applied (`npx prisma migrate deploy`)
+    -   [ ] Initial policies seeded
+    -   [ ] Backups configured (daily)
+-   [ ] **Authentication**
+    -   [ ] MFA enforced for all admin accounts
+    -   [ ] Session timeouts configured (60 minutes)
+    -   [ ] CSRF tokens enabled
+-   [ ] **Authorization**
+    -   [ ] RBAC middleware applied to all admin routes
+    -   [ ] SuperAdmin accounts limited (≤3)
+    -   [ ] Regular access reviews scheduled (quarterly)
+-   [ ] **Transport Security**
+    -   [ ] HTTPS enforced (HSTS header)
+    -   [ ] TLS 1.2+ only
+    -   [ ] Security headers configured
+-   [ ] **Monitoring**
+    -   [ ] Sentry integration tested
+    -   [ ] Alert channels verified (email/SMS/Slack/Teams)
+    -   [ ] Audit log queries scheduled
+-   [ ] **Incident Response**
+    -   [ ] Playbook for policy breach documented
+    -   [ ] Emergency contacts updated
+    -   [ ] Rollback procedure tested
 
 ---
 
@@ -403,9 +403,9 @@ ORDER BY timestamp DESC;
 
 **Indicators**:
 
-- Audit log shows unexpected policy edit
-- Anomaly detection flags unusual activity
-- Sentry alert for critical policy change
+-   Audit log shows unexpected policy edit
+-   Anomaly detection flags unusual activity
+-   Sentry alert for critical policy change
 
 **Response**:
 
@@ -419,9 +419,9 @@ ORDER BY timestamp DESC;
 
 **Indicators**:
 
-- Multiple failed login attempts
-- Login from unusual IP/location
-- Rapid policy changes by single user
+-   Multiple failed login attempts
+-   Login from unusual IP/location
+-   Rapid policy changes by single user
 
 **Response**:
 
@@ -456,19 +456,19 @@ Quick reference:
 
 You now have:
 
-- ✅ Database-backed alert policies (no redeploys needed)
-- ✅ Visual admin UI for policy management
-- ✅ RBAC protection (SuperAdmin-only edits)
-- ✅ Tamper-evident audit logging
-- ✅ Anomaly detection for suspicious activity
-- ✅ Multi-channel alerts (email/SMS/Slack/Teams/WebSocket/Sentry)
-- ✅ Security hardening against penetration
-- ✅ Production-ready monitoring and incident response
+-   ✅ Database-backed alert policies (no redeploys needed)
+-   ✅ Visual admin UI for policy management
+-   ✅ RBAC protection (SuperAdmin-only edits)
+-   ✅ Tamper-evident audit logging
+-   ✅ Anomaly detection for suspicious activity
+-   ✅ Multi-channel alerts (email/SMS/Slack/Teams/WebSocket/Sentry)
+-   ✅ Security hardening against penetration
+-   ✅ Production-ready monitoring and incident response
 
 ---
 
 ## 🤝 Support
 
-- **Documentation**: See `/docs/alert-system`
-- **Issues**: Open GitHub issue with `[alert-policy]` tag
-- **Security**: Email security@example.com for vulnerabilities
+-   **Documentation**: See `/docs/alert-system`
+-   **Issues**: Open GitHub issue with `[alert-policy]` tag
+-   **Security**: Email <security@example.com> for vulnerabilities

@@ -1255,9 +1255,9 @@ Invoke-WebRequest http://localhost:3000
 
 Understanding this helps you:
 
-- 🐛 Debug issues faster
-- ⚡ Optimize performance
-- 🔒 Secure each layer
-- 🏗️ Design better architecture
+-   🐛 Debug issues faster
+-   ⚡ Optimize performance
+-   🔒 Secure each layer
+-   🏗️ Design better architecture
 
 **Your system is working perfectly across all 7 layers! 🎉**

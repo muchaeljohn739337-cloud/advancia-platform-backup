@@ -1,24 +1,22 @@
-"use client";
+'use client';
 
-import { CheckCircle, Loader, Mail, XCircle } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { CheckCircle, Loader, Mail, XCircle } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 function VerifySignupContent() {
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
-  const [message, setMessage] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [message, setMessage] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    const token = searchParams?.get("token");
+    const token = searchParams?.get('token');
 
     if (!token) {
-      setStatus("error");
-      setMessage("Invalid verification link. No token provided.");
+      setStatus('error');
+      setMessage('Invalid verification link. No token provided.');
       return;
     }
 
@@ -31,38 +29,31 @@ function VerifySignupContent() {
       const data = await res.json();
 
       if (data.success) {
-        setStatus("success");
+        setStatus('success');
         setMessage(data.message);
         setUserEmail(data.email);
       } else {
-        setStatus("error");
-        setMessage(data.error || "Verification failed");
+        setStatus('error');
+        setMessage(data.error || 'Verification failed');
       }
     } catch {
-      setStatus("error");
-      setMessage("Network error. Please try again.");
+      setStatus('error');
+      setMessage('Network error. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-10 max-w-lg w-full">
-        {status === "loading" && (
+        {status === 'loading' && (
           <div className="text-center py-12">
-            <Loader
-              className="animate-spin mx-auto mb-6 text-blue-600"
-              size={64}
-            />
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">
-              Verifying Your Email...
-            </h2>
-            <p className="text-gray-600">
-              Please wait while we verify your account.
-            </p>
+            <Loader className="animate-spin mx-auto mb-6 text-blue-600" size={64} />
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">Verifying Your Email...</h2>
+            <p className="text-gray-600">Please wait while we verify your account.</p>
           </div>
         )}
 
-        {status === "success" && (
+        {status === 'success' && (
           <div className="text-center py-8">
             <div className="bg-gradient-to-br from-green-400 to-emerald-500 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
               <CheckCircle size={56} className="text-white" />
@@ -73,23 +64,17 @@ function VerifySignupContent() {
             </h2>
 
             <p className="text-gray-600 mb-6 text-sm sm:text-base">
-              Your email <strong className="text-green-600">{userEmail}</strong>{" "}
-              has been successfully verified.
+              Your email <strong className="text-green-600">{userEmail}</strong> has been
+              successfully verified.
             </p>
 
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 p-6 rounded-lg mb-6 text-left">
               <div className="flex items-start mb-4">
-                <Mail
-                  size={24}
-                  className="text-yellow-600 mr-3 flex-shrink-0 mt-1"
-                />
+                <Mail size={24} className="text-yellow-600 mr-3 flex-shrink-0 mt-1" />
                 <div>
-                  <p className="font-bold text-gray-800 mb-2">
-                    🎉 Account Pending Admin Approval
-                  </p>
+                  <p className="font-bold text-gray-800 mb-2">🎉 Account Pending Admin Approval</p>
                   <p className="text-sm text-gray-700 mb-4">
-                    Your account has been created and is now waiting for admin
-                    review.
+                    Your account has been created and is now waiting for admin review.
                   </p>
                 </div>
               </div>
@@ -109,8 +94,8 @@ function VerifySignupContent() {
 
                 <div className="bg-blue-100 bg-opacity-50 p-3 rounded">
                   <p className="text-xs font-medium text-blue-800">
-                    💡 <strong>Important:</strong> Save this email -{" "}
-                    <strong>{userEmail}</strong> - you&apos;ll use it to login!
+                    💡 <strong>Important:</strong> Save this email - <strong>{userEmail}</strong> -
+                    you&apos;ll use it to login!
                   </p>
                 </div>
               </div>
@@ -134,7 +119,7 @@ function VerifySignupContent() {
           </div>
         )}
 
-        {status === "error" && (
+        {status === 'error' && (
           <div className="text-center py-8">
             <div className="bg-gradient-to-br from-red-400 to-rose-500 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
               <XCircle size={56} className="text-white" />
@@ -147,9 +132,7 @@ function VerifySignupContent() {
             <p className="text-gray-600 mb-6 text-sm sm:text-base">{message}</p>
 
             <div className="bg-red-50 border border-red-200 rounded-lg p-5 mb-6 text-left">
-              <p className="font-medium text-red-800 mb-3 text-sm">
-                Possible reasons:
-              </p>
+              <p className="font-medium text-red-800 mb-3 text-sm">Possible reasons:</p>
               <ul className="space-y-2 text-xs text-red-700 list-disc list-inside">
                 <li>The verification link has expired (24 hour limit)</li>
                 <li>The link has already been used</li>

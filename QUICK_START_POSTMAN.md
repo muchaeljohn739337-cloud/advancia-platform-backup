@@ -7,8 +7,8 @@
 1. Open Postman
 2. Click **Import** (top left)
 3. Drag these files:
-   - `Advancia_NOWPayments_Integration.postman_collection.json`
-   - `Advancia_Local_Dev.postman_environment.json`
+   -   `Advancia_NOWPayments_Integration.postman_collection.json`
+   -   `Advancia_Local_Dev.postman_environment.json`
 4. Click **Import**
 
 ✅ Collection appears in left sidebar  
@@ -44,8 +44,8 @@ Top-right dropdown → Select **"Advancia - Local Development"**
 **Folder 2: Withdrawal Methods**
 
 1. ▶️ Get Available Payment Providers
-   - Should return Cryptomus + NOWPayments
-   - NOWPayments marked as `recommended: true`
+   -   Should return Cryptomus + NOWPayments
+   -   NOWPayments marked as `recommended: true`
 
 **Folder 3: NOWPayments - Payment Info**
 
@@ -125,27 +125,27 @@ Expected: Batch ID returned, status → processing
 
 ### 1. Withdrawal Form (User)
 
-- Provider selector (radio cards)
-- Currency dropdown
-- Amount input
-- Wallet address input
-- Submit button
+-   Provider selector (radio cards)
+-   Currency dropdown
+-   Amount input
+-   Wallet address input
+-   Submit button
 
 ### 2. Admin Withdrawal List
 
-- Table with filters
-- Status badges
-- Provider badges
-- Approve/Reject actions
-- Batch selection checkboxes
+-   Table with filters
+-   Status badges
+-   Provider badges
+-   Approve/Reject actions
+-   Batch selection checkboxes
 
 ### 3. Batch Processing Panel (Admin)
 
-- Selected withdrawals count
-- Total amount display
-- Merchant balance check
-- Process button
-- Confirmation modal
+-   Selected withdrawals count
+-   Total amount display
+-   Merchant balance check
+-   Process button
+-   Confirmation modal
 
 ---
 
@@ -161,9 +161,9 @@ BACKEND_URL=http://localhost:4000
 
 For production:
 
-- Get production keys from https://account.nowpayments.io/
-- Update BACKEND_URL to your domain
-- Configure IPN webhook URL in NOWPayments dashboard
+-   Get production keys from <https://account.nowpayments.io/>
+-   Update BACKEND_URL to your domain
+-   Configure IPN webhook URL in NOWPayments dashboard
 
 ---
 
@@ -171,36 +171,36 @@ For production:
 
 ### Backend Integration ✅
 
-- [x] Database schema updated (paymentProvider field)
-- [x] API endpoints implemented (11 total)
-- [x] Provider selection logic working
-- [x] Batch processing functional
-- [x] Error handling comprehensive
-- [x] Server shutdown issue fixed
+-   [x] Database schema updated (paymentProvider field)
+-   [x] API endpoints implemented (11 total)
+-   [x] Provider selection logic working
+-   [x] Batch processing functional
+-   [x] Error handling comprehensive
+-   [x] Server shutdown issue fixed
 
 ### Postman Collection ✅
 
-- [x] Collection created (7 folders, 16+ requests)
-- [x] Environment file with variables
-- [x] Auto-token saving on login
-- [x] Test scripts for validation
-- [x] Mock response examples
+-   [x] Collection created (7 folders, 16+ requests)
+-   [x] Environment file with variables
+-   [x] Auto-token saving on login
+-   [x] Test scripts for validation
+-   [x] Mock response examples
 
 ### Documentation ✅
 
-- [x] Integration guide (TEST_NOWPAYMENTS_INTEGRATION.md)
-- [x] Workflow documentation (NOWPAYMENTS_WITHDRAWAL_SYSTEM.md)
-- [x] Server fix guide (SERVER_SHUTDOWN_FIX.md)
-- [x] Admin panel guide (ADMIN_PANEL_NOWPAYMENTS.md)
-- [x] Quick start guide (this file)
+-   [x] Integration guide (TEST_NOWPAYMENTS_INTEGRATION.md)
+-   [x] Workflow documentation (NOWPAYMENTS_WITHDRAWAL_SYSTEM.md)
+-   [x] Server fix guide (SERVER_SHUTDOWN_FIX.md)
+-   [x] Admin panel guide (ADMIN_PANEL_NOWPAYMENTS.md)
+-   [x] Quick start guide (this file)
 
 ### Pending Frontend 🔄
 
-- [ ] Provider selector UI component
-- [ ] Admin withdrawal management page
-- [ ] Batch processing interface
-- [ ] Status tracking display
-- [ ] Balance widget
+-   [ ] Provider selector UI component
+-   [ ] Admin withdrawal management page
+-   [ ] Batch processing interface
+-   [ ] Status tracking display
+-   [ ] Balance widget
 
 ---
 
@@ -234,7 +234,7 @@ Server logs show all requests and errors in real-time.
 
 ---
 
-## 🎉 You're Ready!
+## 🎉 You're Ready
 
 1. ✅ Import Postman collection
 2. ✅ Start backend server

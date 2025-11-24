@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { 
-  Coins, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  History, 
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Coins,
+  ArrowUpRight,
+  ArrowDownLeft,
+  History,
   Wallet,
   TrendingUp,
-  DollarSign
-} from "lucide-react";
+  DollarSign,
+} from 'lucide-react';
 
 interface TokenWallet {
   id: string;
@@ -37,9 +37,9 @@ export default function TokensPage() {
   const [wallet, setWallet] = useState<TokenWallet | null>(null);
   const [transactions, setTransactions] = useState<TokenTransaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [withdrawAddress, setWithdrawAddress] = useState("");
-  const [cashoutAmount, setCashoutAmount] = useState("");
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawAddress, setWithdrawAddress] = useState('');
+  const [cashoutAmount, setCashoutAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
@@ -48,8 +48,8 @@ export default function TokensPage() {
 
   const fetchWalletData = async () => {
     try {
-      const userId = localStorage.getItem("userId") || "demo-user";
-      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem('userId') || 'demo-user';
+      const token = localStorage.getItem('token');
 
       const [walletRes, historyRes] = await Promise.all([
         fetch(`http://localhost:4000/api/tokens/balance/${userId}`, {
@@ -70,7 +70,7 @@ export default function TokensPage() {
         setTransactions(historyData.transactions || []);
       }
     } catch (error) {
-      console.error("Error fetching wallet data:", error);
+      console.error('Error fetching wallet data:', error);
     } finally {
       setLoading(false);
     }
@@ -78,17 +78,17 @@ export default function TokensPage() {
 
   const handleWithdraw = async () => {
     if (!wallet || !withdrawAmount || !withdrawAddress) {
-      alert("Please enter amount and address");
+      alert('Please enter amount and address');
       return;
     }
 
     setIsProcessing(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:4000/api/tokens/withdraw", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:4000/api/tokens/withdraw', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -100,16 +100,16 @@ export default function TokensPage() {
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message || "Withdrawal initiated!");
-        setWithdrawAmount("");
-        setWithdrawAddress("");
+        alert(data.message || 'Withdrawal initiated!');
+        setWithdrawAmount('');
+        setWithdrawAddress('');
         fetchWalletData();
       } else {
-        alert(data.error || "Withdrawal failed");
+        alert(data.error || 'Withdrawal failed');
       }
     } catch (error) {
-      console.error("Withdrawal error:", error);
-      alert("Failed to process withdrawal");
+      console.error('Withdrawal error:', error);
+      alert('Failed to process withdrawal');
     } finally {
       setIsProcessing(false);
     }
@@ -117,17 +117,17 @@ export default function TokensPage() {
 
   const handleCashout = async () => {
     if (!wallet || !cashoutAmount) {
-      alert("Please enter amount to cash out");
+      alert('Please enter amount to cash out');
       return;
     }
 
     setIsProcessing(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:4000/api/tokens/cashout", {
-        method: "POST",
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:4000/api/tokens/cashout', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -139,20 +139,20 @@ export default function TokensPage() {
       const data = await response.json();
       if (response.ok) {
         alert(data.message || `Cashed out $${data.usdReceived}!`);
-        setCashoutAmount("");
+        setCashoutAmount('');
         fetchWalletData();
       } else {
-        alert(data.error || "Cashout failed");
+        alert(data.error || 'Cashout failed');
       }
     } catch (error) {
-      console.error("Cashout error:", error);
-      alert("Failed to process cashout");
+      console.error('Cashout error:', error);
+      alert('Failed to process cashout');
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const conversionRate = 0.10; // 1 token = $0.10
+  const conversionRate = 0.1; // 1 token = $0.10
 
   if (loading) {
     return (
@@ -175,9 +175,7 @@ export default function TokensPage() {
             <Wallet className="w-10 h-10" />
             Token Wallet
           </h1>
-          <p className="text-blue-200">
-            Manage your Advancia tokens and rewards
-          </p>
+          <p className="text-blue-200">Manage your Advancia tokens and rewards</p>
         </motion.div>
 
         {/* Balance Cards */}
@@ -193,10 +191,10 @@ export default function TokensPage() {
               <span className="text-sm opacity-90">Available</span>
             </div>
             <div className="text-4xl font-bold mb-2">
-              {parseFloat(wallet?.balance || "0").toFixed(2)}
+              {parseFloat(wallet?.balance || '0').toFixed(2)}
             </div>
             <div className="text-sm opacity-90">
-              ≈ ${(parseFloat(wallet?.balance || "0") * conversionRate).toFixed(2)} USD
+              ≈ ${(parseFloat(wallet?.balance || '0') * conversionRate).toFixed(2)} USD
             </div>
           </motion.div>
 
@@ -211,7 +209,7 @@ export default function TokensPage() {
               <span className="text-sm opacity-90">Lifetime Earned</span>
             </div>
             <div className="text-4xl font-bold mb-2">
-              {parseFloat(wallet?.lifetimeEarned || "0").toFixed(2)}
+              {parseFloat(wallet?.lifetimeEarned || '0').toFixed(2)}
             </div>
             <div className="text-sm opacity-90">Total tokens earned</div>
           </motion.div>
@@ -227,7 +225,7 @@ export default function TokensPage() {
               <span className="text-sm opacity-90">Locked</span>
             </div>
             <div className="text-4xl font-bold mb-2">
-              {parseFloat(wallet?.lockedBalance || "0").toFixed(2)}
+              {parseFloat(wallet?.lockedBalance || '0').toFixed(2)}
             </div>
             <div className="text-sm opacity-90">Reserved for pending</div>
           </motion.div>
@@ -258,9 +256,7 @@ export default function TokensPage() {
                 />
               </div>
               <div>
-                <label className="block text-blue-200 mb-2 text-sm">
-                  Wallet Address (0x...)
-                </label>
+                <label className="block text-blue-200 mb-2 text-sm">Wallet Address (0x...)</label>
                 <input
                   type="text"
                   value={withdrawAddress}
@@ -274,7 +270,7 @@ export default function TokensPage() {
                 disabled={isProcessing}
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 transition-all"
               >
-                {isProcessing ? "Processing..." : "Withdraw"}
+                {isProcessing ? 'Processing...' : 'Withdraw'}
               </button>
             </div>
           </motion.div>
@@ -292,9 +288,7 @@ export default function TokensPage() {
             </h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-blue-200 mb-2 text-sm">
-                  Token Amount
-                </label>
+                <label className="block text-blue-200 mb-2 text-sm">Token Amount</label>
                 <input
                   type="number"
                   value={cashoutAmount}
@@ -304,7 +298,8 @@ export default function TokensPage() {
                 />
                 {cashoutAmount && (
                   <p className="text-sm text-green-300 mt-2">
-                    You&apos;ll receive: ${(parseFloat(cashoutAmount) * conversionRate).toFixed(2)} USD
+                    You&apos;ll receive: ${(parseFloat(cashoutAmount) * conversionRate).toFixed(2)}{' '}
+                    USD
                   </p>
                 )}
               </div>
@@ -318,7 +313,7 @@ export default function TokensPage() {
                 disabled={isProcessing}
                 className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 transition-all"
               >
-                {isProcessing ? "Processing..." : "Cash Out"}
+                {isProcessing ? 'Processing...' : 'Cash Out'}
               </button>
             </div>
           </motion.div>
@@ -349,9 +344,7 @@ export default function TokensPage() {
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        parseFloat(tx.amount) > 0
-                          ? "bg-green-500/20"
-                          : "bg-red-500/20"
+                        parseFloat(tx.amount) > 0 ? 'bg-green-500/20' : 'bg-red-500/20'
                       }`}
                     >
                       {parseFloat(tx.amount) > 0 ? (
@@ -361,9 +354,7 @@ export default function TokensPage() {
                       )}
                     </div>
                     <div>
-                      <div className="text-white font-medium">
-                        {tx.description || tx.type}
-                      </div>
+                      <div className="text-white font-medium">{tx.description || tx.type}</div>
                       <div className="text-sm text-blue-200">
                         {new Date(tx.createdAt).toLocaleString()}
                       </div>
@@ -372,15 +363,13 @@ export default function TokensPage() {
                   <div className="text-right">
                     <div
                       className={`text-lg font-bold ${
-                        parseFloat(tx.amount) > 0 ? "text-green-400" : "text-red-400"
+                        parseFloat(tx.amount) > 0 ? 'text-green-400' : 'text-red-400'
                       }`}
                     >
-                      {parseFloat(tx.amount) > 0 ? "+" : ""}
+                      {parseFloat(tx.amount) > 0 ? '+' : ''}
                       {parseFloat(tx.amount).toFixed(2)}
                     </div>
-                    <div className="text-sm text-blue-200">
-                      {tx.status.toUpperCase()}
-                    </div>
+                    <div className="text-sm text-blue-200">{tx.status.toUpperCase()}</div>
                   </div>
                 </div>
               ))

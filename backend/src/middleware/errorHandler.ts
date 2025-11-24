@@ -13,7 +13,7 @@ export const errorHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
 ) => {
   // Extract user context from authenticated requests
   const user = (req as any).user;

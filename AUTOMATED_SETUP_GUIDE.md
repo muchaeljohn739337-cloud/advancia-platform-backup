@@ -9,12 +9,14 @@ Two scripts available for GitHub configuration:
 **Script:** `setup-github-config.ps1`
 
 **Features:**
-- Prompts for each secret value
-- Validates GitHub CLI authentication
-- Creates environments
-- Provides detailed setup guides for each service
+
+-   Prompts for each secret value
+-   Validates GitHub CLI authentication
+-   Creates environments
+-   Provides detailed setup guides for each service
 
 **Usage:**
+
 ```powershell
 # Dry run to see what will be configured
 .\setup-github-config.ps1 -DryRun
@@ -38,14 +40,16 @@ Two scripts available for GitHub configuration:
 **Script:** `setup-github-automated.ps1`
 
 **Features:**
-- Reads configuration from `github-config.json`
-- Batch configures all secrets
-- Sets up environment protection rules
-- Configures required reviewers
+
+-   Reads configuration from `github-config.json`
+-   Batch configures all secrets
+-   Sets up environment protection rules
+-   Configures required reviewers
 
 **Usage:**
 
 **Step 1: Edit configuration file**
+
 ```powershell
 # Open the config file
 code github-config.json
@@ -69,6 +73,7 @@ code github-config.json
 ```
 
 **Step 2: Run automated setup**
+
 ```powershell
 # Dry run to preview
 .\setup-github-automated.ps1 -DryRun
@@ -83,15 +88,15 @@ code github-config.json
 
 ## Comparison
 
-| Feature | Interactive | Automated |
-|---------|-------------|-----------|
-| **Setup time** | 15 minutes | 5 minutes |
-| **Configuration** | Manual prompts | JSON file |
-| **Reviewers** | Manual in GitHub UI | Auto-configured |
-| **Protection rules** | Manual in GitHub UI | Auto-configured |
-| **Team use** | One person | Repeatable for all |
-| **Version control** | No | Yes (commit config file) |
-| **Best for** | First-time setup | Team/CI automation |
+| Feature              | Interactive         | Automated                |
+| -------------------- | ------------------- | ------------------------ |
+| **Setup time**       | 15 minutes          | 5 minutes                |
+| **Configuration**    | Manual prompts      | JSON file                |
+| **Reviewers**        | Manual in GitHub UI | Auto-configured          |
+| **Protection rules** | Manual in GitHub UI | Auto-configured          |
+| **Team use**         | One person          | Repeatable for all       |
+| **Version control**  | No                  | Yes (commit config file) |
+| **Best for**         | First-time setup    | Team/CI automation       |
 
 ---
 
@@ -106,17 +111,17 @@ code github-config.json
     "SLACK_WEBHOOK_URL": "Incident alerts (#incidents-deployments)",
     "GLOBAL_SLACK_WEBHOOK": "Success notifications (#deployments)",
     "TEAMS_WEBHOOK_URL": "Microsoft Teams (optional)",
-    
+
     // DigitalOcean Infrastructure
     "DROPLET_IP_GREEN": "New version target",
     "DROPLET_IP_BLUE": "Current production",
     "LB_IP": "Load balancer",
     "DROPLET_USER": "SSH user (usually 'deploy')",
-    
+
     // Monitoring
     "PROMETHEUS_PUSHGATEWAY_URL": "Metrics endpoint",
     "GRAFANA_API_KEY": "Dashboard annotations",
-    
+
     // Cloudflare DNS
     "CF_ZONE_ID": "Zone identifier",
     "CF_API_TOKEN": "API token with DNS edit",
@@ -132,13 +137,14 @@ code github-config.json
   "reviewers": [
     {
       "type": "User",
-      "username": "github-username"  // GitHub username (not display name)
+      "username": "github-username" // GitHub username (not display name)
     }
   ]
 }
 ```
 
 **How to find GitHub usernames:**
+
 ```powershell
 # Your own username
 gh api user | jq -r '.login'
@@ -152,8 +158,8 @@ gh api search/users?q=email:name@company.com | jq -r '.items[0].login'
 ```json
 {
   "protection": {
-    "wait_timer": 0,                    // Minutes to wait before deployment
-    "protected_branches_only": true     // Restrict to main/release/* branches
+    "wait_timer": 0, // Minutes to wait before deployment
+    "protected_branches_only": true // Restrict to main/release/* branches
   }
 }
 ```
@@ -163,6 +169,7 @@ gh api search/users?q=email:name@company.com | jq -r '.items[0].login'
 ## Troubleshooting
 
 ### "gh: command not found"
+
 ```powershell
 # Install GitHub CLI
 winget install GitHub.cli
@@ -171,12 +178,14 @@ winget install GitHub.cli
 ```
 
 ### "Authentication required"
+
 ```powershell
 gh auth login
 # Follow prompts to authenticate
 ```
 
 ### "Failed to set secret"
+
 ```powershell
 # Check permissions
 gh api user | jq -r '.login'
@@ -186,6 +195,7 @@ gh repo view --json permissions
 ```
 
 ### "Config file not found"
+
 ```powershell
 # Script auto-generates template on first run
 .\setup-github-automated.ps1
@@ -195,10 +205,12 @@ code github-config.json
 ```
 
 ### "Placeholder values detected"
+
 The automated script skips secrets with:
-- `YOUR` in the value
-- `your-` prefix
-- `10.0.0.*` IPs
+
+-   `YOUR` in the value
+-   `your-` prefix
+-   `10.0.0.*` IPs
 
 **Solution:** Update `github-config.json` with actual values
 
@@ -209,18 +221,21 @@ The automated script skips secrets with:
 After running either script:
 
 **Check secrets:**
+
 ```powershell
 gh secret list
 # Should show 12 secrets
 ```
 
 **Check environments:**
+
 ```powershell
 gh api repos/OWNER/REPO/environments | jq -r '.environments[].name'
 # Should show: production-us-east, production-eu-west, production-apac-se
 ```
 
 **Verify protection rules:**
+
 ```
 Visit: https://github.com/OWNER/REPO/settings/environments
 Each environment should show:
@@ -233,6 +248,7 @@ Each environment should show:
 ## Next Steps After Configuration
 
 1. **Test deployment:**
+
    ```powershell
    gh workflow run multi-region-deployment-with-monitoring.yml `
      -f regions=us `
@@ -240,6 +256,7 @@ Each environment should show:
    ```
 
 2. **Monitor run:**
+
    ```powershell
    gh run watch
    ```
@@ -247,25 +264,27 @@ Each environment should show:
 3. **Check Slack:** Verify notifications arrive in #deployments
 
 4. **Review docs:**
-   - `DEPLOYMENT_QUICK_REFERENCE.md` - Day-of deployment card
-   - `PRODUCTION_READINESS_CHECKLIST.md` - Pre-deployment validation
+   -   `DEPLOYMENT_QUICK_REFERENCE.md` - Day-of deployment card
+   -   `PRODUCTION_READINESS_CHECKLIST.md` - Pre-deployment validation
 
 ---
 
 ## Security Best Practices
 
 ### DO ✅
-- Store `github-config.json` in **private** location
-- Use `.gitignore` to exclude config file from commits
-- Rotate secrets regularly (every 90 days)
-- Use environment-specific secrets when possible
-- Audit secret access logs monthly
+
+-   Store `github-config.json` in **private** location
+-   Use `.gitignore` to exclude config file from commits
+-   Rotate secrets regularly (every 90 days)
+-   Use environment-specific secrets when possible
+-   Audit secret access logs monthly
 
 ### DON'T ❌
-- Commit `github-config.json` with real secrets to Git
-- Share webhook URLs in public channels
-- Use same secrets across staging and production
-- Grant admin access to service accounts unnecessarily
+
+-   Commit `github-config.json` with real secrets to Git
+-   Share webhook URLs in public channels
+-   Use same secrets across staging and production
+-   Grant admin access to service accounts unnecessarily
 
 ---
 
@@ -301,6 +320,7 @@ Create this as `.github/github-config.template.json` (safe to commit):
 ```
 
 **Team members can then:**
+
 ```powershell
 # Copy template
 cp .github/github-config.template.json github-config.json

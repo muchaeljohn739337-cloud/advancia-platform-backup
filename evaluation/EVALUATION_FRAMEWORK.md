@@ -54,13 +54,7 @@ Each line contains:
   "test_id": "api_001",
   "endpoint": "/api/trust/report",
   "method": "GET",
-  "expected_fields": [
-    "scamAdviserScore",
-    "trustpilotRating",
-    "sslValid",
-    "verifiedBusiness",
-    "status"
-  ],
+  "expected_fields": ["scamAdviserScore", "trustpilotRating", "sslValid", "verifiedBusiness", "status"],
   "expected_status_code": 200
 }
 ```

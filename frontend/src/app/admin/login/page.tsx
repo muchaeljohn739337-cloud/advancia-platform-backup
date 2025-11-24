@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 /**
  * Admin OTP login page
@@ -9,16 +9,16 @@ import { useRouter } from "next/navigation";
  * (tokens don't exist yet). Once logged in, admin pages use adminApi.
  */
 export default function AdminLoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [step, setStep] = useState<"credentials" | "otp">("credentials");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState<'credentials' | 'otp'>('credentials');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
   const [attemptsLeft, setAttemptsLeft] = useState(3);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [rateLimitReset, setRateLimitReset] = useState<Date | null>(null);
@@ -29,19 +29,19 @@ export default function AdminLoginPage() {
     if (isRateLimited) {
       setError(
         `Too many attempts. Please try again ${
-          rateLimitReset ? `at ${rateLimitReset.toLocaleTimeString()}` : "later"
+          rateLimitReset ? `at ${rateLimitReset.toLocaleTimeString()}` : 'later'
         }.`
       );
       return;
     }
 
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/auth/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, phone }),
       });
 
@@ -53,25 +53,25 @@ export default function AdminLoginPage() {
           const resetTime = new Date();
           resetTime.setMinutes(resetTime.getMinutes() + 30);
           setRateLimitReset(resetTime);
-          setError("Too many login attempts. Please try again in 30 minutes.");
+          setError('Too many login attempts. Please try again in 30 minutes.');
           return;
         }
 
         setAttemptsLeft((prev) => Math.max(0, prev - 1));
-        setError(data.error || "Login failed");
+        setError(data.error || 'Login failed');
         return;
       }
 
-      if (data.step === "verify_otp") {
-        setStep("otp");
-        setError(""); // Clear any previous errors
+      if (data.step === 'verify_otp') {
+        setStep('otp');
+        setError(''); // Clear any previous errors
         setAttemptsLeft(3); // Reset attempts for OTP phase
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError("Network error. Please try again.");
+        setError('Network error. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -80,13 +80,13 @@ export default function AdminLoginPage() {
 
   async function handleOtpSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
     try {
       const res = await fetch(`${API_URL}/api/auth/admin/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code: otp }),
       });
 
@@ -98,28 +98,26 @@ export default function AdminLoginPage() {
           const resetTime = new Date();
           resetTime.setMinutes(resetTime.getMinutes() + 30);
           setRateLimitReset(resetTime);
-          setError(
-            "Too many verification attempts. Please try again in 30 minutes."
-          );
+          setError('Too many verification attempts. Please try again in 30 minutes.');
           return;
         }
 
         setAttemptsLeft((prev) => Math.max(0, prev - 1));
-        setError(data.error || "Invalid OTP");
+        setError(data.error || 'Invalid OTP');
         return;
       }
 
       // Store tokens and redirect
-      localStorage.setItem("token", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userRole", "ADMIN");
-      router.push("/admin/sessions");
+      localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', 'ADMIN');
+      router.push('/admin/sessions');
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError("Network error. Please try again.");
+        setError('Network error. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -146,12 +144,12 @@ export default function AdminLoginPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-gray-900">
-            {step === "credentials" ? "Admin Login" : "Verify OTP"}
+            {step === 'credentials' ? 'Admin Login' : 'Verify OTP'}
           </h1>
           <p className="text-gray-600 mt-2">
-            {step === "credentials"
-              ? "Secure administrator access"
-              : "Enter the code sent to your phone"}
+            {step === 'credentials'
+              ? 'Secure administrator access'
+              : 'Enter the code sent to your phone'}
           </p>
         </div>
 
@@ -162,18 +160,16 @@ export default function AdminLoginPage() {
             </div>
             {attemptsLeft < 3 && !isRateLimited && (
               <p className="text-sm text-yellow-600 text-center">
-                {attemptsLeft} attempt{attemptsLeft !== 1 ? "s" : ""} remaining
+                {attemptsLeft} attempt{attemptsLeft !== 1 ? 's' : ''} remaining
               </p>
             )}
           </div>
         )}
 
-        {step === "credentials" ? (
+        {step === 'credentials' ? (
           <form onSubmit={handleCredentialsSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Admin Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Admin Email</label>
               <input
                 type="email"
                 value={email}
@@ -185,9 +181,7 @@ export default function AdminLoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
               <input
                 type="password"
                 value={password}
@@ -200,7 +194,8 @@ export default function AdminLoginPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number <span className="text-gray-400 text-xs">(optional in development)</span>
+                Phone Number{' '}
+                <span className="text-gray-400 text-xs">(optional in development)</span>
               </label>
               <input
                 type="tel"
@@ -219,7 +214,7 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all"
             >
-              {loading ? "Sending OTP..." : "Send OTP"}
+              {loading ? 'Sending OTP...' : 'Send OTP'}
             </button>
           </form>
         ) : (
@@ -233,7 +228,7 @@ export default function AdminLoginPage() {
                 inputMode="numeric"
                 pattern="[0-9]*"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg font-mono tracking-widest"
                 placeholder="123456"
                 maxLength={6}
@@ -247,7 +242,7 @@ export default function AdminLoginPage() {
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={() => setStep("credentials")}
+                onClick={() => setStep('credentials')}
                 className="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 font-medium transition-all"
               >
                 Back
@@ -257,16 +252,14 @@ export default function AdminLoginPage() {
                 disabled={loading}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all"
               >
-                {loading ? "Verifying..." : "Verify OTP"}
+                {loading ? 'Verifying...' : 'Verify OTP'}
               </button>
             </div>
           </form>
         )}
 
         <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-          <p className="text-sm text-gray-500">
-            🔒 Protected by SMS verification
-          </p>
+          <p className="text-sm text-gray-500">🔒 Protected by SMS verification</p>
         </div>
       </div>
     </div>

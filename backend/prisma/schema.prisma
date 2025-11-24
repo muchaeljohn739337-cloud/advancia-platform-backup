@@ -1221,6 +1221,13 @@ model User {
   user_profiles             user_profiles?
   whitelisted_addresses     WhitelistedAddress[]
 
+  // Project Management Relations
+  ownedTeams                Team[]                     @relation("TeamOwner")
+  teamMemberships           TeamMember[]               @relation("TeamMemberships")
+  ownedProjects             Project[]                  @relation("ProjectOwner")
+  assignedTasks             Task[]                     @relation("TaskAssignee")
+  reportedTasks             Task[]                     @relation("TaskReporter")
+
   @@index([email])
   @@index([role])
   @@index([active])
@@ -1328,6 +1335,147 @@ enum Role {
   STAFF
   ADMIN
   SUPERADMIN
+}
+
+enum TeamRole {
+  OWNER
+  ADMIN
+  MANAGER
+  MEMBER
+  VIEWER
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  ownerId     String
+  settings    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  owner       User           @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     TeamMember[]
+  projects    Project[]
+
+  @@index([ownerId])
+  @@index([createdAt])
+  @@map("teams")
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  teamId    String
+  userId    String
+  role      TeamRole @default(MEMBER)
+  joinedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation("TeamMemberships", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@index([role])
+  @@map("team_members")
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  teamId      String
+  ownerId     String
+  status      ProjectStatus @default(PLANNING)
+  startDate   DateTime?
+  endDate     DateTime?
+  settings    Json?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  team        Team          @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  owner       User          @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  milestones  Milestone[]
+
+  @@index([teamId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("projects")
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  projectId   String
+  assigneeId  String?
+  reporterId  String
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  tags        String[]
+  dueDate     DateTime?
+  completedAt DateTime?
+  estimatedHours Float?
+  actualHours Float?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee    User?      @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reporter    User       @relation("TaskReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([assigneeId])
+  @@index([reporterId])
+  @@index([status])
+  @@index([priority])
+  @@index([dueDate])
+  @@index([createdAt])
+  @@map("tasks")
+}
+
+model Milestone {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  projectId   String
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([dueDate])
+  @@index([createdAt])
+  @@map("milestones")
 }
 
 model FailedJob {

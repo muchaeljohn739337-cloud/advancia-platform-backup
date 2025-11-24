@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useState } from 'react';
 
 interface HealthDashboardProps {
   userId: string;
@@ -40,7 +40,7 @@ interface HealthSummary {
 }
 
 interface Alert {
-  type: "warning" | "info";
+  type: 'warning' | 'info';
   metric: string;
   message: string;
   value: string;
@@ -49,42 +49,38 @@ interface Alert {
 
 export default function HealthDashboard({ userId }: HealthDashboardProps) {
   const [summary, setSummary] = useState<HealthSummary | null>(null);
-  const [latestReading, setLatestReading] = useState<HealthReading | null>(
-    null
-  );
+  const [latestReading, setLatestReading] = useState<HealthReading | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddReading, setShowAddReading] = useState(false);
   const [newReading, setNewReading] = useState({
-    heartRate: "",
-    bloodPressureSys: "",
-    bloodPressureDia: "",
-    steps: "",
-    sleepHours: "",
-    weight: "",
-    temperature: "",
-    oxygenLevel: "",
-    mood: "good",
+    heartRate: '',
+    bloodPressureSys: '',
+    bloodPressureDia: '',
+    steps: '',
+    sleepHours: '',
+    weight: '',
+    temperature: '',
+    oxygenLevel: '',
+    mood: 'good',
   });
   const [message, setMessage] = useState<{
-    type: "success" | "error";
+    type: 'success' | 'error';
     text: string;
   } | null>(null);
 
   const fetchSummary = useCallback(async () => {
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/health/summary/${userId}?days=30`
-      );
+      const res = await fetch(`http://localhost:4000/api/health/summary/${userId}?days=30`);
       const data = await res.json();
       // Ensure data is a valid summary object
-      if (data && typeof data === "object" && data.averages) {
+      if (data && typeof data === 'object' && data.averages) {
         setSummary(data);
       } else {
         setSummary(null);
       }
     } catch (error) {
-      console.error("Error fetching summary:", error);
+      console.error('Error fetching summary:', error);
       setSummary(null);
     } finally {
       setLoading(false);
@@ -93,31 +89,27 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
 
   const fetchLatestReading = useCallback(async () => {
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/health/latest/${userId}`
-      );
+      const res = await fetch(`http://localhost:4000/api/health/latest/${userId}`);
       const data = await res.json();
       // Ensure reading exists and has required properties
-      if (data && data.reading && typeof data.reading === "object") {
+      if (data && data.reading && typeof data.reading === 'object') {
         setLatestReading(data.reading);
       } else {
         setLatestReading(null);
       }
     } catch (error) {
-      console.error("Error fetching latest reading:", error);
+      console.error('Error fetching latest reading:', error);
       setLatestReading(null);
     }
   }, [userId]);
 
   const fetchAlerts = useCallback(async () => {
     try {
-      const res = await fetch(
-        `http://localhost:4000/api/health/alerts/${userId}`
-      );
+      const res = await fetch(`http://localhost:4000/api/health/alerts/${userId}`);
       const data = await res.json();
       setAlerts(data.alerts || []);
     } catch (error) {
-      console.error("Error fetching alerts:", error);
+      console.error('Error fetching alerts:', error);
     }
   }, [userId]);
 
@@ -129,9 +121,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
 
   const handleAddReading = async () => {
     try {
-      const res = await fetch("http://localhost:4000/api/health/readings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('http://localhost:4000/api/health/readings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
           heartRate: newReading.heartRate || null,
@@ -143,25 +135,25 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
           temperature: newReading.temperature || null,
           oxygenLevel: newReading.oxygenLevel || null,
           mood: newReading.mood,
-          deviceType: "manual",
+          deviceType: 'manual',
         }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setMessage({ type: "success", text: "Health data recorded!" });
+        setMessage({ type: 'success', text: 'Health data recorded!' });
         setShowAddReading(false);
         setNewReading({
-          heartRate: "",
-          bloodPressureSys: "",
-          bloodPressureDia: "",
-          steps: "",
-          sleepHours: "",
-          weight: "",
-          temperature: "",
-          oxygenLevel: "",
-          mood: "good",
+          heartRate: '',
+          bloodPressureSys: '',
+          bloodPressureDia: '',
+          steps: '',
+          sleepHours: '',
+          weight: '',
+          temperature: '',
+          oxygenLevel: '',
+          mood: 'good',
         });
         fetchSummary();
         fetchLatestReading();
@@ -169,20 +161,20 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
         setTimeout(() => setMessage(null), 3000);
       } else {
         setMessage({
-          type: "error",
-          text: data.error || "Failed to record data",
+          type: 'error',
+          text: data.error || 'Failed to record data',
         });
       }
     } catch (error: unknown) {
-      console.error("Error recording health data:", error);
-      setMessage({ type: "error", text: "Network error" });
+      console.error('Error recording health data:', error);
+      setMessage({ type: 'error', text: 'Network error' });
     }
   };
 
   const getHealthScoreColor = (score: number) => {
-    if (score >= 80) return "from-green-400 to-emerald-600";
-    if (score >= 60) return "from-yellow-400 to-amber-600";
-    return "from-red-400 to-rose-600";
+    if (score >= 80) return 'from-green-400 to-emerald-600';
+    if (score >= 60) return 'from-yellow-400 to-amber-600';
+    return 'from-red-400 to-rose-600';
   };
 
   if (loading) {
@@ -230,9 +222,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             className={`p-4 rounded-xl ${
-              message.type === "success"
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+              message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
             }`}
           >
             {message.text}
@@ -249,9 +239,9 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               className={`p-4 rounded-xl border-l-4 ${
-                alert.type === "warning"
-                  ? "bg-red-50 border-red-500 text-red-800"
-                  : "bg-blue-50 border-blue-500 text-blue-800"
+                alert.type === 'warning'
+                  ? 'bg-red-50 border-red-500 text-red-800'
+                  : 'bg-blue-50 border-blue-500 text-blue-800'
               }`}
             >
               <p className="font-semibold">{alert.message}</p>
@@ -273,9 +263,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">❤️</div>
-              <p className="text-3xl font-bold text-navy">
-                {summary.averages.heartRate}
-              </p>
+              <p className="text-3xl font-bold text-navy">{summary.averages.heartRate}</p>
               <p className="text-sm text-gray-600">Avg Heart Rate</p>
               <p className="text-xs text-gray-400">bpm</p>
             </motion.div>
@@ -289,9 +277,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">🩺</div>
-              <p className="text-3xl font-bold text-navy">
-                {summary.averages.bloodPressure}
-              </p>
+              <p className="text-3xl font-bold text-navy">{summary.averages.bloodPressure}</p>
               <p className="text-sm text-gray-600">Avg Blood Pressure</p>
               <p className="text-xs text-gray-400">mmHg</p>
             </motion.div>
@@ -323,9 +309,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">😴</div>
-              <p className="text-3xl font-bold text-navy">
-                {summary.averages.sleepHours}h
-              </p>
+              <p className="text-3xl font-bold text-navy">{summary.averages.sleepHours}h</p>
               <p className="text-sm text-gray-600">Avg Sleep</p>
               <p className="text-xs text-gray-400">per night</p>
             </motion.div>
@@ -339,9 +323,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">⚖️</div>
-              <p className="text-3xl font-bold text-navy">
-                {summary.averages.weight}
-              </p>
+              <p className="text-3xl font-bold text-navy">{summary.averages.weight}</p>
               <p className="text-sm text-gray-600">Avg Weight</p>
               <p className="text-xs text-gray-400">kg</p>
             </motion.div>
@@ -355,9 +337,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">🫁</div>
-              <p className="text-3xl font-bold text-navy">
-                {summary.averages.oxygenLevel}%
-              </p>
+              <p className="text-3xl font-bold text-navy">{summary.averages.oxygenLevel}%</p>
               <p className="text-sm text-gray-600">Avg Oxygen</p>
               <p className="text-xs text-gray-400">SpO2</p>
             </motion.div>
@@ -371,15 +351,13 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-xl p-6 shadow-lg"
             >
               <div className="text-4xl mb-2">
-                {summary.mostCommonMood === "great"
-                  ? "😄"
-                  : summary.mostCommonMood === "good"
-                  ? "🙂"
-                  : "😐"}
+                {summary.mostCommonMood === 'great'
+                  ? '😄'
+                  : summary.mostCommonMood === 'good'
+                    ? '🙂'
+                    : '😐'}
               </div>
-              <p className="text-3xl font-bold text-navy capitalize">
-                {summary.mostCommonMood}
-              </p>
+              <p className="text-3xl font-bold text-navy capitalize">{summary.mostCommonMood}</p>
               <p className="text-sm text-gray-600">Common Mood</p>
               <p className="text-xs text-gray-400">this month</p>
             </motion.div>
@@ -410,21 +388,17 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
             {latestReading.heartRate && (
               <div className="p-3 bg-red-50 rounded-lg">
                 <p className="text-xs text-gray-600">Heart Rate</p>
+                <p className="text-lg font-bold text-navy">{latestReading.heartRate} bpm</p>
+              </div>
+            )}
+            {latestReading.bloodPressureSys && latestReading.bloodPressureDia && (
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <p className="text-xs text-gray-600">Blood Pressure</p>
                 <p className="text-lg font-bold text-navy">
-                  {latestReading.heartRate} bpm
+                  {latestReading.bloodPressureSys}/{latestReading.bloodPressureDia}
                 </p>
               </div>
             )}
-            {latestReading.bloodPressureSys &&
-              latestReading.bloodPressureDia && (
-                <div className="p-3 bg-blue-50 rounded-lg">
-                  <p className="text-xs text-gray-600">Blood Pressure</p>
-                  <p className="text-lg font-bold text-navy">
-                    {latestReading.bloodPressureSys}/
-                    {latestReading.bloodPressureDia}
-                  </p>
-                </div>
-              )}
             {latestReading.steps && (
               <div className="p-3 bg-green-50 rounded-lg">
                 <p className="text-xs text-gray-600">Steps</p>
@@ -436,9 +410,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
             {latestReading.oxygenLevel && (
               <div className="p-3 bg-cyan-50 rounded-lg">
                 <p className="text-xs text-gray-600">Oxygen Level</p>
-                <p className="text-lg font-bold text-navy">
-                  {latestReading.oxygenLevel}%
-                </p>
+                <p className="text-lg font-bold text-navy">{latestReading.oxygenLevel}%</p>
               </div>
             )}
           </div>
@@ -462,9 +434,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
               className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-bold text-navy mb-6">
-                Add Health Reading
-              </h3>
+              <h3 className="text-2xl font-bold text-navy mb-6">Add Health Reading</h3>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -516,15 +486,11 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Steps
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Steps</label>
                   <input
                     type="number"
                     value={newReading.steps}
-                    onChange={(e) =>
-                      setNewReading({ ...newReading, steps: e.target.value })
-                    }
+                    onChange={(e) => setNewReading({ ...newReading, steps: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="8000"
                   />
@@ -555,9 +521,7 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
                     type="number"
                     step="0.1"
                     value={newReading.weight}
-                    onChange={(e) =>
-                      setNewReading({ ...newReading, weight: e.target.value })
-                    }
+                    onChange={(e) => setNewReading({ ...newReading, weight: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                     placeholder="70.5"
                   />
@@ -598,14 +562,10 @@ export default function HealthDashboard({ userId }: HealthDashboardProps) {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mood
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Mood</label>
                   <select
                     value={newReading.mood}
-                    onChange={(e) =>
-                      setNewReading({ ...newReading, mood: e.target.value })
-                    }
+                    onChange={(e) => setNewReading({ ...newReading, mood: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gold focus:border-transparent"
                   >
                     <option value="great">😄 Great</option>

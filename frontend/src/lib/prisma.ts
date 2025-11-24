@@ -9,11 +9,11 @@ export default null;
 
 // Helper function for API calls
 export async function apiRequest(endpoint: string, options?: RequestInit) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
   const response = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...options?.headers,
     },
   });

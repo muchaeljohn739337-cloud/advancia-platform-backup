@@ -12,24 +12,24 @@ The backend watchdog system has been **enhanced with comprehensive multi-channel
 
 #### 1. **backend-watchdog.ps1** (Enhanced)
 
-- ✅ Added Slack webhook integration
-- ✅ Added SMTP email notifications
-- ✅ Smart alert filtering (emails only for critical issues)
-- ✅ Rich statistics in notifications
-- ✅ Color-coded Slack messages
-- ✅ Detailed email templates
-- ✅ Secure credential handling
-- ✅ Error handling and retry logic
+-   ✅ Added Slack webhook integration
+-   ✅ Added SMTP email notifications
+-   ✅ Smart alert filtering (emails only for critical issues)
+-   ✅ Rich statistics in notifications
+-   ✅ Color-coded Slack messages
+-   ✅ Detailed email templates
+-   ✅ Secure credential handling
+-   ✅ Error handling and retry logic
 
 **New Parameters**:
 
-- `SlackWebhook`: Slack incoming webhook URL
-- `EmailTo`: Recipient email address
-- `SmtpServer`: SMTP server (e.g., smtp.gmail.com)
-- `SmtpPort`: SMTP port (default: 587)
-- `FromEmail`: Sender email address
-- `SmtpUsername`: SMTP authentication username
-- `SmtpPassword`: SMTP authentication password
+-   `SlackWebhook`: Slack incoming webhook URL
+-   `EmailTo`: Recipient email address
+-   `SmtpServer`: SMTP server (e.g., smtp.gmail.com)
+-   `SmtpPort`: SMTP port (default: 587)
+-   `FromEmail`: Sender email address
+-   `SmtpUsername`: SMTP authentication username
+-   `SmtpPassword`: SMTP authentication password
 
 ### New Files
 
@@ -37,54 +37,54 @@ The backend watchdog system has been **enhanced with comprehensive multi-channel
 
 Comprehensive 500+ line guide covering:
 
-- Complete feature documentation
-- Configuration parameters explained
-- Usage examples for all scenarios
-- Slack setup (step-by-step with screenshots descriptions)
-- Email setup for Gmail, Outlook, SendGrid, SES
-- Troubleshooting common issues
-- Security best practices
-- Integration examples (Discord, PagerDuty)
-- Alert level explanations
-- Statistics tracking
+-   Complete feature documentation
+-   Configuration parameters explained
+-   Usage examples for all scenarios
+-   Slack setup (step-by-step with screenshots descriptions)
+-   Email setup for Gmail, Outlook, SendGrid, SES
+-   Troubleshooting common issues
+-   Security best practices
+-   Integration examples (Discord, PagerDuty)
+-   Alert level explanations
+-   Statistics tracking
 
 #### 3. **WATCHDOG_QUICK_START.md** (New)
 
 Quick reference guide with:
 
-- Basic commands (copy-paste ready)
-- 60-second Slack setup
-- 2-minute Gmail setup
-- Common SMTP providers
-- Environment variable templates
-- Alert level table
-- Troubleshooting one-liners
+-   Basic commands (copy-paste ready)
+-   60-second Slack setup
+-   2-minute Gmail setup
+-   Common SMTP providers
+-   Environment variable templates
+-   Alert level table
+-   Troubleshooting one-liners
 
 #### 4. **watchdog-config.template.ps1** (New)
 
 Configuration template file:
 
-- Pre-formatted config hashtable
-- Comments explaining each setting
-- Multiple SMTP provider examples
-- Usage instructions
-- Testing commands
-- Security notes
+-   Pre-formatted config hashtable
+-   Comments explaining each setting
+-   Multiple SMTP provider examples
+-   Usage instructions
+-   Testing commands
+-   Security notes
 
 #### 5. **test-watchdog-notifications.ps1** (New)
 
 Comprehensive test script:
 
-- Test Slack webhooks (4 test scenarios)
-- Test email notifications (3 test scenarios)
-- Validates credentials and connectivity
-- Color-coded test results
-- Detailed error messages
-- Summary statistics
+-   Test Slack webhooks (4 test scenarios)
+-   Test email notifications (3 test scenarios)
+-   Validates credentials and connectivity
+-   Color-coded test results
+-   Detailed error messages
+-   Summary statistics
 
 #### 6. **.gitignore** (Updated)
 
-- Added `watchdog-config.ps1` to prevent credential commits
+-   Added `watchdog-config.ps1` to prevent credential commits
 
 ---
 
@@ -271,17 +271,17 @@ $env:SMTP_PASSWORD = "your-app-password"
 
 ### 3. Gmail Security
 
-- ✅ Enable 2-Factor Authentication
-- ✅ Use App Passwords (never use main password)
-- ✅ Create dedicated email for notifications
-- ✅ Rotate credentials quarterly
+-   ✅ Enable 2-Factor Authentication
+-   ✅ Use App Passwords (never use main password)
+-   ✅ Create dedicated email for notifications
+-   ✅ Rotate credentials quarterly
 
 ### 4. Slack Security
 
-- ✅ Create dedicated #alerts channel
-- ✅ Limit webhook to single channel
-- ✅ Don't commit webhook URLs to git
-- ✅ Rotate webhooks if compromised
+-   ✅ Create dedicated #alerts channel
+-   ✅ Limit webhook to single channel
+-   ✅ Don't commit webhook URLs to git
+-   ✅ Rotate webhooks if compromised
 
 ---
 
@@ -307,33 +307,33 @@ $env:SMTP_PASSWORD = "your-app-password"
 
 **Option A: Slack Only** (Good for team collaboration)
 
-- Quick setup (5 minutes)
-- Real-time alerts in team channel
-- No email configuration needed
+-   Quick setup (5 minutes)
+-   Real-time alerts in team channel
+-   No email configuration needed
 
 **Option B: Email Only** (Good for individual monitoring)
 
-- Works with existing email infrastructure
-- Detailed alert history in inbox
-- No external services needed
+-   Works with existing email infrastructure
+-   Detailed alert history in inbox
+-   No external services needed
 
 **Option C: Both** (Recommended for production)
 
-- Slack for quick awareness
-- Email for critical alerts and audit trail
-- Redundancy if one channel fails
+-   Slack for quick awareness
+-   Email for critical alerts and audit trail
+-   Redundancy if one channel fails
 
 ### 2. Set Up Notifications
 
-#### For Slack:
+#### For Slack
 
-1. Go to https://api.slack.com/messaging/webhooks
+1. Go to <https://api.slack.com/messaging/webhooks>
 2. Create incoming webhook
 3. Select channel (e.g., #backend-alerts)
 4. Copy webhook URL
 5. Test: `.\test-watchdog-notifications.ps1 -TestSlack -SlackWebhook "URL"`
 
-#### For Email (Gmail):
+#### For Email (Gmail)
 
 1. Enable 2FA in Google Account
 2. Generate App Password
@@ -407,46 +407,46 @@ Start-Process powershell -ArgumentList @(
 
 ### Core Functionality
 
-- ✅ Slack webhook integration with rich formatting
-- ✅ SMTP email notifications with detailed templates
-- ✅ Multi-channel alerts (send to both simultaneously)
-- ✅ Smart filtering (emails only for critical issues)
-- ✅ Secure credential handling
-- ✅ Comprehensive error handling
+-   ✅ Slack webhook integration with rich formatting
+-   ✅ SMTP email notifications with detailed templates
+-   ✅ Multi-channel alerts (send to both simultaneously)
+-   ✅ Smart filtering (emails only for critical issues)
+-   ✅ Secure credential handling
+-   ✅ Comprehensive error handling
 
 ### Notification Content
 
-- ✅ Alert level classification (success/info/warning/error/critical)
-- ✅ Color-coded Slack messages (green/blue/yellow/red)
-- ✅ Real-time statistics in every alert
-- ✅ Timestamp and port information
-- ✅ Uptime tracking
-- ✅ Success rate calculation
+-   ✅ Alert level classification (success/info/warning/error/critical)
+-   ✅ Color-coded Slack messages (green/blue/yellow/red)
+-   ✅ Real-time statistics in every alert
+-   ✅ Timestamp and port information
+-   ✅ Uptime tracking
+-   ✅ Success rate calculation
 
 ### Documentation
 
-- ✅ Complete user guide (500+ lines)
-- ✅ Quick reference card
-- ✅ Configuration template
-- ✅ Test script with examples
-- ✅ Security best practices
-- ✅ Troubleshooting guides
+-   ✅ Complete user guide (500+ lines)
+-   ✅ Quick reference card
+-   ✅ Configuration template
+-   ✅ Test script with examples
+-   ✅ Security best practices
+-   ✅ Troubleshooting guides
 
 ### Testing
 
-- ✅ Automated test script for Slack
-- ✅ Automated test script for Email
-- ✅ 7 total test scenarios (4 Slack + 3 Email)
-- ✅ Color-coded test results
-- ✅ Detailed error messages
+-   ✅ Automated test script for Slack
+-   ✅ Automated test script for Email
+-   ✅ 7 total test scenarios (4 Slack + 3 Email)
+-   ✅ Color-coded test results
+-   ✅ Detailed error messages
 
 ### Security
 
-- ✅ Configuration file template
-- ✅ Git ignore for sensitive configs
-- ✅ Environment variable support
-- ✅ App password documentation
-- ✅ Credential rotation guidance
+-   ✅ Configuration file template
+-   ✅ Git ignore for sensitive configs
+-   ✅ Environment variable support
+-   ✅ App password documentation
+-   ✅ Credential rotation guidance
 
 ---
 
@@ -454,15 +454,15 @@ Start-Process powershell -ArgumentList @(
 
 ### Slack Webhooks
 
-- Official docs: https://api.slack.com/messaging/webhooks
-- Message formatting: https://api.slack.com/reference/surfaces/formatting
-- Attachment reference: https://api.slack.com/reference/messaging/attachments
+-   Official docs: <https://api.slack.com/messaging/webhooks>
+-   Message formatting: <https://api.slack.com/reference/surfaces/formatting>
+-   Attachment reference: <https://api.slack.com/reference/messaging/attachments>
 
 ### SMTP Configuration
 
-- Gmail: https://support.google.com/accounts/answer/185833
-- Outlook: https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings
-- SendGrid: https://docs.sendgrid.com/for-developers/sending-email/getting-started-smtp
+-   Gmail: <https://support.google.com/accounts/answer/185833>
+-   Outlook: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings>
+-   SendGrid: <https://docs.sendgrid.com/for-developers/sending-email/getting-started-smtp>
 
 ---
 
@@ -492,25 +492,25 @@ Start-Process powershell -ArgumentList @(
 
 You now have a **production-ready, self-healing backend monitoring system** with:
 
-- 🔔 **Slack alerts** for instant team notifications
-- 📧 **Email alerts** for critical issues and audit trails
-- 📊 **Real-time statistics** in every notification
-- 🧪 **Comprehensive testing** tools
-- 📖 **Complete documentation** (1000+ lines)
-- 🔐 **Security best practices** built-in
-- 🚀 **Easy deployment** with templates
+-   🔔 **Slack alerts** for instant team notifications
+-   📧 **Email alerts** for critical issues and audit trails
+-   📊 **Real-time statistics** in every notification
+-   🧪 **Comprehensive testing** tools
+-   📖 **Complete documentation** (1000+ lines)
+-   🔐 **Security best practices** built-in
+-   🚀 **Easy deployment** with templates
 
 **The watchdog will now alert you immediately whenever:**
 
-- Backend health checks fail
-- Auto-restarts are triggered
-- Restarts succeed (Slack only)
-- Restarts fail (Slack + Email)
+-   Backend health checks fail
+-   Auto-restarts are triggered
+-   Restarts succeed (Slack only)
+-   Restarts fail (Slack + Email)
 
 **Time to implement**:
 
-- Slack only: ~5 minutes
-- Email only: ~10 minutes
-- Both: ~15 minutes
+-   Slack only: ~5 minutes
+-   Email only: ~10 minutes
+-   Both: ~15 minutes
 
 Ready to deploy! 🚀

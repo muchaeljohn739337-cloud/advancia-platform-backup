@@ -133,9 +133,11 @@ npx prisma migrate dev --name init
    ```
 
 3. **Test API with Database:**
+
    ```powershell
    npm run dev
    ```
+
    All transactions will now persist to the database!
 
 ## 📊 Prisma Commands

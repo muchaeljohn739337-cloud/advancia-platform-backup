@@ -21,12 +21,7 @@ function MyFeature() {
       <h2>Purchase Feature</h2>
       <p>Price: $29.99</p>
 
-      <PaymentButton
-        orderId={orderId}
-        amount={29.99}
-        currency="usd"
-        description="Feature purchase"
-      />
+      <PaymentButton orderId={orderId} amount={29.99} currency="usd" description="Feature purchase" />
     </div>
   );
 }
@@ -36,8 +31,8 @@ function MyFeature() {
 
 The system automatically redirects users to:
 
-- **Success**: `/payments/success?orderId=...`
-- **Cancel/Failure**: `/payments/cancel?orderId=...`
+-   **Success**: `/payments/success?orderId=...`
+-   **Cancel/Failure**: `/payments/cancel?orderId=...`
 
 ## 📋 Component API
 
@@ -109,12 +104,7 @@ function TokenPurchase({ tokenAmount, price }) {
       <h3>Buy {tokenAmount} ADVP Tokens</h3>
       <p>Price: ${price}</p>
 
-      <PaymentButton
-        orderId={orderId}
-        amount={price}
-        currency="usd"
-        description={`${tokenAmount} ADVP tokens`}
-      />
+      <PaymentButton orderId={orderId} amount={price} currency="usd" description={`${tokenAmount} ADVP tokens`} />
     </div>
   );
 }
@@ -132,12 +122,7 @@ function CryptoTopup({ amount, currency }) {
         Add {amount} {currency.toUpperCase()}
       </h3>
 
-      <PaymentButton
-        orderId={orderId}
-        amount={amount}
-        currency={currency}
-        description={`${currency.toUpperCase()} top-up`}
-      />
+      <PaymentButton orderId={orderId} amount={amount} currency={currency} description={`${currency.toUpperCase()} top-up`} />
     </div>
   );
 }
@@ -155,12 +140,7 @@ function ServicePurchase({ service }) {
       <p>{service.description}</p>
       <p>Price: ${service.price}</p>
 
-      <PaymentButton
-        orderId={orderId}
-        amount={service.price}
-        currency="usd"
-        description={service.name}
-      />
+      <PaymentButton orderId={orderId} amount={service.price} currency="usd" description={service.name} />
     </div>
   );
 }
@@ -170,10 +150,10 @@ function ServicePurchase({ service }) {
 
 The PaymentButton component includes:
 
-- **Loading states** with spinners
-- **Disabled states** during processing
-- **Responsive design** for mobile/desktop
-- **Provider-specific icons** (💳 for Stripe, ₿ for Crypto)
+-   **Loading states** with spinners
+-   **Disabled states** during processing
+-   **Responsive design** for mobile/desktop
+-   **Provider-specific icons** (💳 for Stripe, ₿ for Crypto)
 
 ## 🔍 Payment Status Checking
 
@@ -230,7 +210,7 @@ Track payment events:
 
 The frontend automatically calls:
 
-- **POST** `/api/payments/create-session`
+-   **POST** `/api/payments/create-session`
 
 With body:
 
@@ -269,11 +249,11 @@ Response:
 
 Your app now supports payments for:
 
-- ✅ Subscriptions
-- ✅ Token purchases
-- ✅ Crypto top-ups
-- ✅ Service bookings
-- ✅ Premium features
-- ✅ Any monetization model
+-   ✅ Subscriptions
+-   ✅ Token purchases
+-   ✅ Crypto top-ups
+-   ✅ Service bookings
+-   ✅ Premium features
+-   ✅ Any monetization model
 
 Just import `PaymentButton` and pass the required props!

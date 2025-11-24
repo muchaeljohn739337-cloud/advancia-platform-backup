@@ -8,12 +8,12 @@ Comprehensive guide for analyzing watchdog logs and generating daily summaries.
 
 `parse-watchdog.ps1` analyzes watchdog logs to provide:
 
-- Daily restart counts
-- Health check statistics
-- Uptime percentages
-- Failure patterns
-- Trend analysis
-- Recommendations
+-   Daily restart counts
+-   Health check statistics
+-   Uptime percentages
+-   Failure patterns
+-   Trend analysis
+-   Recommendations
 
 ---
 
@@ -303,11 +303,11 @@ Register-ScheduledTask -Action $action -Trigger $trigger `
 
 Common failure patterns:
 
-- **Connection**: Database or network issues
-- **Timeout**: Slow responses or deadlocks
-- **Port**: Port conflicts or binding issues
-- **Database**: Query errors or connection pool exhaustion
-- **Other**: Application-level errors
+-   **Connection**: Database or network issues
+-   **Timeout**: Slow responses or deadlocks
+-   **Port**: Port conflicts or binding issues
+-   **Database**: Query errors or connection pool exhaustion
+-   **Other**: Application-level errors
 
 ---
 
@@ -461,33 +461,33 @@ Invoke-RestMethod -Uri "https://api.datadoghq.com/api/v1/series?api_key=$apiKey"
 
 ### 1. Regular Reviews
 
-- Run daily summaries every morning
-- Review weekly trends every Monday
-- Generate monthly reports for stakeholders
+-   Run daily summaries every morning
+-   Review weekly trends every Monday
+-   Generate monthly reports for stakeholders
 
 ### 2. Automated Alerts
 
-- Set up Slack notifications for daily summaries
-- Email alerts for uptime below 95%
-- SMS alerts for critical issues (3+ restarts/day)
+-   Set up Slack notifications for daily summaries
+-   Email alerts for uptime below 95%
+-   SMS alerts for critical issues (3+ restarts/day)
 
 ### 3. Log Retention
 
-- Keep daily logs for 30 days
-- Archive monthly summaries for 1 year
-- Maintain yearly trends indefinitely
+-   Keep daily logs for 30 days
+-   Archive monthly summaries for 1 year
+-   Maintain yearly trends indefinitely
 
 ### 4. Trend Analysis
 
-- Export weekly/monthly CSVs
-- Compare month-over-month metrics
-- Identify seasonal patterns
+-   Export weekly/monthly CSVs
+-   Compare month-over-month metrics
+-   Identify seasonal patterns
 
 ### 5. Documentation
 
-- Document unusual patterns
-- Note infrastructure changes
-- Track correlation with deployments
+-   Document unusual patterns
+-   Note infrastructure changes
+-   Track correlation with deployments
 
 ---
 
@@ -538,20 +538,20 @@ Invoke-RestMethod -Uri "https://api.datadoghq.com/api/v1/series?api_key=$apiKey"
 
 `parse-watchdog.ps1` provides:
 
-- ✅ Daily restart and uptime summaries
-- ✅ Historical trend analysis
-- ✅ Failure pattern detection
-- ✅ CSV export for reporting
-- ✅ Automated recommendations
-- ✅ Detailed failure breakdown
+-   ✅ Daily restart and uptime summaries
+-   ✅ Historical trend analysis
+-   ✅ Failure pattern detection
+-   ✅ CSV export for reporting
+-   ✅ Automated recommendations
+-   ✅ Detailed failure breakdown
 
 **Perfect for**:
 
-- Daily health reviews
-- Weekly team updates
-- Monthly stakeholder reports
-- Incident investigation
-- Performance optimization
-- SLA compliance tracking
+-   Daily health reviews
+-   Weekly team updates
+-   Monthly stakeholder reports
+-   Incident investigation
+-   Performance optimization
+-   SLA compliance tracking
 
 Run it daily, review trends weekly, and act on recommendations promptly for optimal backend health! 🎉

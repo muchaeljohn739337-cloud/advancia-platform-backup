@@ -20,10 +20,10 @@
 
 Your SaaS now has **professional fintech-grade infrastructure** matching:
 
-- Coinbase (crypto payments)
-- Stripe (payment processing)
-- Revolut (fintech banking)
-- PayPal (wallet management)
+-   Coinbase (crypto payments)
+-   Stripe (payment processing)
+-   Revolut (fintech banking)
+-   PayPal (wallet management)
 
 ---
 
@@ -117,11 +117,11 @@ AuditLog (Enhanced)
 
 ### Admin Override System
 
-- Manual fraud alert resolution
-- IP whitelist/blacklist
-- Account unlock
-- Fee rule exceptions
-- KYC manual approval
+-   Manual fraud alert resolution
+-   IP whitelist/blacklist
+-   Account unlock
+-   Fee rule exceptions
+-   KYC manual approval
 
 ---
 
@@ -144,12 +144,12 @@ AuditLog (Enhanced)
 
 ### Revenue Analytics
 
-- Total revenue in USD
-- Breakdown by transaction type
-- Breakdown by currency
-- Top revenue-generating users
-- Date range filtering
-- CSV/JSON export
+-   Total revenue in USD
+-   Breakdown by transaction type
+-   Breakdown by currency
+-   Top revenue-generating users
+-   Date range filtering
+-   CSV/JSON export
 
 ---
 
@@ -167,16 +167,16 @@ AuditLog (Enhanced)
 
 **Level 1 (Basic)**:
 
-- Government-issued ID (front)
-- Selfie holding ID
-- Date of birth
+-   Government-issued ID (front)
+-   Selfie holding ID
+-   Date of birth
 
 **Level 2 (Full)**:
 
-- Government-issued ID (front + back)
-- Selfie holding ID
-- Address proof (utility bill/bank statement)
-- Phone verification
+-   Government-issued ID (front + back)
+-   Selfie holding ID
+-   Address proof (utility bill/bank statement)
+-   Phone verification
 
 ---
 
@@ -336,24 +336,24 @@ curl http://localhost:4000/api/fraud-alerts/stats \
 
 ### High Priority
 
-- [ ] Create REST API routes for new services (30 min)
-- [ ] Integrate fee calculation into existing withdrawal flow (20 min)
-- [ ] Add fraud detection middleware to withdrawal routes (15 min)
-- [ ] Build admin dashboard components (2 hours)
+-   [ ] Create REST API routes for new services (30 min)
+-   [ ] Integrate fee calculation into existing withdrawal flow (20 min)
+-   [ ] Add fraud detection middleware to withdrawal routes (15 min)
+-   [ ] Build admin dashboard components (2 hours)
 
 ### Medium Priority
 
-- [ ] KYC document upload UI (S3 integration)
-- [ ] Email notifications for fraud alerts
-- [ ] WebSocket real-time fraud dashboard
-- [ ] Batch withdrawal processing (cron job)
+-   [ ] KYC document upload UI (S3 integration)
+-   [ ] Email notifications for fraud alerts
+-   [ ] WebSocket real-time fraud dashboard
+-   [ ] Batch withdrawal processing (cron job)
 
 ### Low Priority
 
-- [ ] Machine learning fraud scoring
-- [ ] Telegram admin notifications
-- [ ] Auto-KYC verification (ID.me/Onfido API)
-- [ ] Advanced analytics dashboard
+-   [ ] Machine learning fraud scoring
+-   [ ] Telegram admin notifications
+-   [ ] Auto-KYC verification (ID.me/Onfido API)
+-   [ ] Advanced analytics dashboard
 
 ---
 
@@ -361,17 +361,17 @@ curl http://localhost:4000/api/fraud-alerts/stats \
 
 ### Week 1 Targets
 
-- [ ] 95%+ payment session success rate
-- [ ] <2 hour KYC Level 1 approval time
-- [ ] 0 false positive fraud blocks
-- [ ] $0 in fraudulent withdrawals
+-   [ ] 95%+ payment session success rate
+-   [ ] <2 hour KYC Level 1 approval time
+-   [ ] 0 false positive fraud blocks
+-   [ ] $0 in fraudulent withdrawals
 
 ### Month 1 Targets
 
-- [ ] $10K+ in fee revenue
-- [ ] 50+ users upgraded to KYC Level 1+
-- [ ] <5 fraud alerts per 1000 transactions
-- [ ] 100% audit log coverage
+-   [ ] $10K+ in fee revenue
+-   [ ] 50+ users upgraded to KYC Level 1+
+-   [ ] <5 fraud alerts per 1000 transactions
+-   [ ] 100% audit log coverage
 
 ---
 
@@ -465,23 +465,23 @@ curl http://localhost:4000/api/fraud-alerts/stats \
 
 ### Implementation: **100% COMPLETE**
 
-- ✅ Database schema designed
-- ✅ Core services implemented
-- ✅ Security features active
-- ✅ Automation scripts ready
-- ✅ Documentation complete
+-   ✅ Database schema designed
+-   ✅ Core services implemented
+-   ✅ Security features active
+-   ✅ Automation scripts ready
+-   ✅ Documentation complete
 
 ### Deployment: **READY** (Requires Docker Start)
 
-- ⏳ Docker services need startup
-- ⏳ Database migration pending
-- ⏳ Initial fee rules to be seeded
+-   ⏳ Docker services need startup
+-   ⏳ Database migration pending
+-   ⏳ Initial fee rules to be seeded
 
 ### Integration: **PENDING** (30-60 minutes)
 
-- ⏳ API routes creation
-- ⏳ Middleware integration
-- ⏳ Frontend components
+-   ⏳ API routes creation
+-   ⏳ Middleware integration
+-   ⏳ Frontend components
 
 ---
 

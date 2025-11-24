@@ -424,7 +424,7 @@ export const adminNotificationEmail = (data: {
     high: '#f97316',
     urgent: '#dc2626',
   };
-  
+
   const color = priorityColors[data.priority || 'medium'];
 
   return `
@@ -512,9 +512,13 @@ export const adminNotificationEmail = (data: {
       <div class="message-box">
         <p style="margin: 0; white-space: pre-line;">${data.message}</p>
       </div>
-      ${data.actionUrl && data.actionLabel ? `
+      ${
+        data.actionUrl && data.actionLabel
+          ? `
         <a href="${data.actionUrl}" class="button">${data.actionLabel}</a>
-      ` : ''}
+      `
+          : ''
+      }
       <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
         Timestamp: ${new Date().toLocaleString()}<br>
         This is an automated admin notification from Advancia Pay.

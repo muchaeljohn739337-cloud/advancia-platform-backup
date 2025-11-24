@@ -37,7 +37,7 @@ npm install @sentry/node @sentry/tracing @sentry/profiling-node
 
 ### Step 1: Get Sentry DSN
 
-1. **Create free account**: https://sentry.io/signup/
+1. **Create free account**: <https://sentry.io/signup/>
 2. **Create new project**: Choose "Node.js" platform
 3. **Copy DSN**: Format: `https://xxxxx@o123456.ingest.sentry.io/7654321`
 
@@ -444,7 +444,7 @@ Watchdog monitors /api/health
 └── Restart triggers
 ```
 
-### Layer 3: Sentry (Error Tracking) ← NEW!
+### Layer 3: Sentry (Error Tracking) ← NEW
 
 ```
 Sentry captures errors with context
@@ -654,10 +654,10 @@ Sentry.init({
 
 ## 📞 Resources
 
-- **Sentry Docs**: https://docs.sentry.io/platforms/node/
-- **Alert Rules**: https://docs.sentry.io/product/alerts/
-- **Slack Integration**: https://docs.sentry.io/product/integrations/slack/
-- **Best Practices**: https://docs.sentry.io/product/best-practices/
+- **Sentry Docs**: <https://docs.sentry.io/platforms/node/>
+- **Alert Rules**: <https://docs.sentry.io/product/alerts/>
+- **Slack Integration**: <https://docs.sentry.io/product/integrations/slack/>
+- **Best Practices**: <https://docs.sentry.io/product/best-practices/>
 
 ---
 

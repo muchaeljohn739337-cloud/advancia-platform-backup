@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { ArrowLeft, AlertTriangle, CheckCircle, ExternalLink, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import DashboardRouteGuard from "@/components/DashboardRouteGuard";
-import { ethers } from "ethers";
-import { Toaster, toast } from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { ArrowLeft, AlertTriangle, CheckCircle, ExternalLink, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import DashboardRouteGuard from '@/components/DashboardRouteGuard';
+import { ethers } from 'ethers';
+import { Toaster, toast } from 'react-hot-toast';
 
 interface WithdrawalEstimate {
   gasLimit: number;
@@ -16,32 +16,32 @@ interface WithdrawalEstimate {
 
 export default function EthWithdrawPage() {
   const router = useRouter();
-  
+
   // Form state
-  const [destinationAddress, setDestinationAddress] = useState("");
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
-  
+  const [destinationAddress, setDestinationAddress] = useState('');
+  const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('');
+
   // User data
   const [userBalance, setUserBalance] = useState(0);
   const [ethPrice, setEthPrice] = useState(0);
-  
+
   // UI state
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [estimating, setEstimating] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  
+
   // Validation
-  const [addressError, setAddressError] = useState("");
-  const [amountError, setAmountError] = useState("");
-  
+  const [addressError, setAddressError] = useState('');
+  const [amountError, setAmountError] = useState('');
+
   // Estimate
   const [estimate, setEstimate] = useState<WithdrawalEstimate | null>(null);
-  
+
   // Success
   const [withdrawalSuccess, setWithdrawalSuccess] = useState(false);
-  const [txHash, setTxHash] = useState("");
+  const [txHash, setTxHash] = useState('');
 
   useEffect(() => {
     fetchUserBalance();
@@ -50,8 +50,8 @@ export default function EthWithdrawPage() {
 
   const fetchUserBalance = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
 
       const response = await fetch(`/api/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -61,7 +61,7 @@ export default function EthWithdrawPage() {
         await response.json(); // userData for future use
         // Mock balance for demo - in production, fetch from blockchain
         setUserBalance(2.5); // Demo: 2.5 ETH
-        
+
         // In production, fetch real balance:
         // const userData = await response.json();
         // if (userData.ethWalletAddress) {
@@ -71,7 +71,7 @@ export default function EthWithdrawPage() {
         // }
       }
     } catch (error) {
-      console.error("Error fetching balance:", error);
+      console.error('Error fetching balance:', error);
     } finally {
       setLoading(false);
     }
@@ -80,54 +80,54 @@ export default function EthWithdrawPage() {
   const fetchEthPrice = async () => {
     try {
       const response = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
       );
       const data = await response.json();
       setEthPrice(data.ethereum.usd);
     } catch (error) {
-      console.error("Error fetching ETH price:", error);
+      console.error('Error fetching ETH price:', error);
     }
   };
 
   const validateAddress = (address: string): boolean => {
     if (!address) {
-      setAddressError("Destination address is required");
+      setAddressError('Destination address is required');
       return false;
     }
 
     if (!ethers.isAddress(address)) {
-      setAddressError("Invalid Ethereum address");
+      setAddressError('Invalid Ethereum address');
       return false;
     }
 
-    setAddressError("");
+    setAddressError('');
     return true;
   };
 
   const validateAmount = (value: string): boolean => {
     if (!value) {
-      setAmountError("Amount is required");
+      setAmountError('Amount is required');
       return false;
     }
 
     const numAmount = parseFloat(value);
 
     if (isNaN(numAmount) || numAmount <= 0) {
-      setAmountError("Amount must be greater than 0");
+      setAmountError('Amount must be greater than 0');
       return false;
     }
 
     if (numAmount < 0.001) {
-      setAmountError("Minimum withdrawal is 0.001 ETH");
+      setAmountError('Minimum withdrawal is 0.001 ETH');
       return false;
     }
 
     if (numAmount > userBalance) {
-      setAmountError("Insufficient balance");
+      setAmountError('Insufficient balance');
       return false;
     }
 
-    setAmountError("");
+    setAmountError('');
     return true;
   };
 
@@ -138,10 +138,10 @@ export default function EthWithdrawPage() {
 
     setEstimating(true);
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
       const response = await fetch(`${API_URL}/api/eth/estimate-cost`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           toAddress: destinationAddress,
           amountEth: parseFloat(amount),
@@ -150,22 +150,22 @@ export default function EthWithdrawPage() {
 
       if (!response.ok) {
         const errorBody = await response.json().catch(() => null);
-        const message = errorBody?.error || "Failed to estimate gas cost";
+        const message = errorBody?.error || 'Failed to estimate gas cost';
         throw new Error(message);
       }
 
       const data = await response.json();
-      
+
       setEstimate({
         gasLimit: data.gasLimit,
         gasPriceGwei: data.gasPriceGwei,
         estimatedCostEth: data.estimatedCostEth,
         totalCostEth: parseFloat(amount) + data.estimatedCostEth,
       });
-      toast.success("Gas estimate ready");
+      toast.success('Gas estimate ready');
     } catch (error) {
-      console.error("Error estimating withdrawal:", error);
-      toast.error((error as Error).message || "Failed to estimate gas cost");
+      console.error('Error estimating withdrawal:', error);
+      toast.error((error as Error).message || 'Failed to estimate gas cost');
     } finally {
       setEstimating(false);
     }
@@ -187,14 +187,14 @@ export default function EthWithdrawPage() {
     setShowConfirmation(false);
 
     try {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+      const token = localStorage.getItem('token');
+      const userId = localStorage.getItem('userId');
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
       const response = await fetch(`${API_URL}/api/eth/withdrawal`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
@@ -207,24 +207,24 @@ export default function EthWithdrawPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to submit withdrawal");
+        throw new Error(error.error || 'Failed to submit withdrawal');
       }
 
       const data = await response.json();
-      
+
       // Show success
-      setTxHash(data.txHash || "pending");
+      setTxHash(data.txHash || 'pending');
       setWithdrawalSuccess(true);
-      toast.success("Withdrawal submitted for processing");
-      
+      toast.success('Withdrawal submitted for processing');
+
       // Reset form
-      setDestinationAddress("");
-      setAmount("");
-      setNote("");
+      setDestinationAddress('');
+      setAmount('');
+      setNote('');
       setEstimate(null);
     } catch (error) {
-      console.error("Error submitting withdrawal:", error);
-      toast.error((error as Error).message || "Failed to submit withdrawal");
+      console.error('Error submitting withdrawal:', error);
+      toast.error((error as Error).message || 'Failed to submit withdrawal');
     } finally {
       setSubmitting(false);
     }
@@ -257,16 +257,16 @@ export default function EthWithdrawPage() {
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
               </div>
-              
+
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 Withdrawal Submitted!
               </h2>
-              
+
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Your ETH withdrawal has been submitted and is being processed.
               </p>
 
-              {txHash && txHash !== "pending" && (
+              {txHash && txHash !== 'pending' && (
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-6">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Transaction Hash:</p>
                   <div className="flex items-center justify-center gap-2">
@@ -287,7 +287,7 @@ export default function EthWithdrawPage() {
 
               <div className="space-y-3">
                 <button
-                  onClick={() => router.push("/dashboard")}
+                  onClick={() => router.push('/dashboard')}
                   className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg transition-colors font-medium"
                 >
                   Back to Dashboard
@@ -295,7 +295,7 @@ export default function EthWithdrawPage() {
                 <button
                   onClick={() => {
                     setWithdrawalSuccess(false);
-                    setTxHash("");
+                    setTxHash('');
                   }}
                   className="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg transition-colors font-medium"
                 >
@@ -352,8 +352,8 @@ export default function EthWithdrawPage() {
                       placeholder="0x..."
                       className={`w-full px-4 py-3 rounded-lg border ${
                         addressError
-                          ? "border-red-500 focus:ring-red-500"
-                          : "border-gray-300 dark:border-gray-600 focus:ring-indigo-500"
+                          ? 'border-red-500 focus:ring-red-500'
+                          : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500'
                       } dark:bg-gray-700 dark:text-white focus:ring-2 focus:border-transparent transition-colors`}
                     />
                     {addressError && (
@@ -390,8 +390,8 @@ export default function EthWithdrawPage() {
                         placeholder="0.00"
                         className={`w-full px-4 py-3 rounded-lg border ${
                           amountError
-                            ? "border-red-500 focus:ring-red-500"
-                            : "border-gray-300 dark:border-gray-600 focus:ring-indigo-500"
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500'
                         } dark:bg-gray-700 dark:text-white focus:ring-2 focus:border-transparent transition-colors`}
                       />
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
@@ -434,7 +434,13 @@ export default function EthWithdrawPage() {
                     <button
                       type="button"
                       onClick={estimateWithdrawal}
-                      disabled={estimating || !destinationAddress || !amount || !!addressError || !!amountError}
+                      disabled={
+                        estimating ||
+                        !destinationAddress ||
+                        !amount ||
+                        !!addressError ||
+                        !!amountError
+                      }
                       className="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2"
                     >
                       {estimating ? (
@@ -443,7 +449,7 @@ export default function EthWithdrawPage() {
                           Estimating...
                         </>
                       ) : (
-                        "Estimate Gas Cost"
+                        'Estimate Gas Cost'
                       )}
                     </button>
                   </div>
@@ -474,7 +480,9 @@ export default function EthWithdrawPage() {
                           </span>
                         </div>
                         <div className="pt-2 border-t border-blue-200 dark:border-blue-800 flex justify-between">
-                          <span className="font-semibold text-blue-900 dark:text-blue-100">Total:</span>
+                          <span className="font-semibold text-blue-900 dark:text-blue-100">
+                            Total:
+                          </span>
                           <span className="font-bold text-blue-900 dark:text-blue-100">
                             {estimate.totalCostEth.toFixed(6)} ETH
                           </span>
@@ -503,7 +511,13 @@ export default function EthWithdrawPage() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    disabled={submitting || !destinationAddress || !amount || !!addressError || !!amountError}
+                    disabled={
+                      submitting ||
+                      !destinationAddress ||
+                      !amount ||
+                      !!addressError ||
+                      !!amountError
+                    }
                     className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 dark:disabled:text-gray-500 text-white px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2"
                   >
                     {submitting ? (
@@ -512,7 +526,7 @@ export default function EthWithdrawPage() {
                         Processing...
                       </>
                     ) : (
-                      "Review Withdrawal"
+                      'Review Withdrawal'
                     )}
                   </button>
                 </form>
@@ -548,7 +562,9 @@ export default function EthWithdrawPage() {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Processing Time</p>
-                    <p className="text-base font-medium text-gray-900 dark:text-white">3-5 minutes</p>
+                    <p className="text-base font-medium text-gray-900 dark:text-white">
+                      3-5 minutes
+                    </p>
                   </div>
                 </div>
               </div>
@@ -576,7 +592,7 @@ export default function EthWithdrawPage() {
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
                 Confirm Withdrawal
               </h3>
-              
+
               <div className="space-y-3 mb-6">
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">To Address:</p>
@@ -584,12 +600,10 @@ export default function EthWithdrawPage() {
                     {destinationAddress}
                   </p>
                 </div>
-                
+
                 <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Amount:</p>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white">
-                    {amount} ETH
-                  </p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">{amount} ETH</p>
                   {estimate && (
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       + {estimate.estimatedCostEth.toFixed(6)} ETH gas fee

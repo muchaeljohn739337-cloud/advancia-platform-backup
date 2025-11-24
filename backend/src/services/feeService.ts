@@ -42,7 +42,7 @@ export async function calculateTransactionFee(
 
   // Get active fee configuration
   // Priority: 1) Currency-specific, 2) General (currency=null), ordered by priority desc
-  const feeConfig = await prisma.transactionFee.findFirst({
+  const feeConfig = await prisma.transaction_fees.findFirst({
     where: {
       feeType,
       OR: [{ currency: currency.toUpperCase() }, { currency: null }],
@@ -278,7 +278,7 @@ export async function createFeeRule(params: {
     createdBy,
   } = params;
 
-  const feeRule = await prisma.transactionFee.create({
+  const feeRule = await prisma.transaction_fees.create({
     data: {
       feeType,
       currency: currency ? currency.toUpperCase() : null,
@@ -310,7 +310,7 @@ export async function updateFeeRule(
     description?: string;
   },
 ) {
-  const feeRule = await prisma.transactionFee.update({
+  const feeRule = await prisma.transaction_fees.update({
     where: { id: ruleId },
     data: updates,
   });
@@ -322,7 +322,7 @@ export async function updateFeeRule(
  * Delete fee rule (admin)
  */
 export async function deleteFeeRule(ruleId: string) {
-  await prisma.transactionFee.delete({
+  await prisma.transaction_fees.delete({
     where: { id: ruleId },
   });
 }
@@ -336,7 +336,7 @@ export async function getAllFeeRules(activeOnly: boolean = false) {
     where.active = true;
   }
 
-  return prisma.transactionFee.findMany({
+  return prisma.transaction_fees.findMany({
     where,
     orderBy: [{ feeType: 'asc' }, { currency: 'asc' }, { priority: 'desc' }],
   });
@@ -369,7 +369,7 @@ export async function previewFee(
 
   // Get rule description
   if (fee.appliedRuleId) {
-    const rule = await prisma.transactionFee.findUnique({
+    const rule = await prisma.transaction_fees.findUnique({
       where: { id: fee.appliedRuleId },
       select: { description: true },
     });

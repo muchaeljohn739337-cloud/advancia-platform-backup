@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Dialog, Listbox, Switch, Tab, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Dialog, Listbox, Switch, Tab, Transition } from '@headlessui/react';
+import { Fragment, useState } from 'react';
 
 // ✅ HEADLESS UI EXAMPLE - Accessible components that work perfectly with Tailwind
 // Benefits: Keyboard navigation, ARIA, screen reader support, zero styling conflicts
@@ -9,48 +9,37 @@ import { Fragment, useState } from "react";
 export default function HeadlessUIExample() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCrypto, setSelectedCrypto] = useState({
-    name: "Bitcoin",
-    symbol: "BTC",
+    name: 'Bitcoin',
+    symbol: 'BTC',
   });
   const [notifications, setNotifications] = useState(true);
 
   const cryptoOptions = [
-    { name: "Bitcoin", symbol: "BTC" },
-    { name: "Ethereum", symbol: "ETH" },
-    { name: "Tether", symbol: "USDT" },
-    { name: "USD Coin", symbol: "USDC" },
+    { name: 'Bitcoin', symbol: 'BTC' },
+    { name: 'Ethereum', symbol: 'ETH' },
+    { name: 'Tether', symbol: 'USDT' },
+    { name: 'USD Coin', symbol: 'USDC' },
   ];
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-2">🎯 Headless UI Demo</h1>
-        <div className="badge badge-accent">
-          Accessible + Unstyled Components
-        </div>
+        <div className="badge badge-accent">Accessible + Unstyled Components</div>
       </div>
 
       {/* Modal Example */}
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Dialog/Modal Component</h2>
-          <p className="text-gray-600">
-            Fully accessible modal with focus trapping and backdrop
-          </p>
+          <p className="text-gray-600">Fully accessible modal with focus trapping and backdrop</p>
 
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="btn btn-primary mt-4"
-          >
+          <button onClick={() => setIsModalOpen(true)} className="btn btn-primary mt-4">
             Open Withdrawal Confirmation
           </button>
 
           <Transition appear show={isModalOpen} as={Fragment}>
-            <Dialog
-              as="div"
-              className="relative z-50"
-              onClose={() => setIsModalOpen(false)}
-            >
+            <Dialog as="div" className="relative z-50" onClose={() => setIsModalOpen(false)}>
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -75,17 +64,14 @@ export default function HeadlessUIExample() {
                     leaveTo="opacity-0 scale-95"
                   >
                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                      <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                      >
+                      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                         💸 Confirm Withdrawal
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          You are about to withdraw{" "}
-                          <strong className="text-primary">$5,000 USD</strong>{" "}
-                          to your Ethereum wallet. This action cannot be undone.
+                          You are about to withdraw{' '}
+                          <strong className="text-primary">$5,000 USD</strong> to your Ethereum
+                          wallet. This action cannot be undone.
                         </p>
                         <div className="alert alert-warning mt-4">
                           <svg
@@ -134,15 +120,11 @@ export default function HeadlessUIExample() {
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Listbox/Select Component</h2>
-          <p className="text-gray-600">
-            Accessible dropdown with keyboard navigation
-          </p>
+          <p className="text-gray-600">Accessible dropdown with keyboard navigation</p>
 
           <div className="mt-4">
             <label className="label">
-              <span className="label-text font-semibold">
-                Select Cryptocurrency
-              </span>
+              <span className="label-text font-semibold">Select Cryptocurrency</span>
             </label>
             <Listbox value={selectedCrypto} onChange={setSelectedCrypto}>
               <div className="relative mt-1">
@@ -150,12 +132,7 @@ export default function HeadlessUIExample() {
                   <span>
                     {selectedCrypto.name} ({selectedCrypto.symbol})
                   </span>
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -176,7 +153,7 @@ export default function HeadlessUIExample() {
                         key={idx}
                         className={({ active }) =>
                           `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                            active ? "bg-primary text-white" : "text-gray-900"
+                            active ? 'bg-primary text-white' : 'text-gray-900'
                           }`
                         }
                         value={crypto}
@@ -185,18 +162,14 @@ export default function HeadlessUIExample() {
                           <>
                             <span
                               className={`block truncate ${
-                                selected ? "font-medium" : "font-normal"
+                                selected ? 'font-medium' : 'font-normal'
                               }`}
                             >
                               {crypto.name} ({crypto.symbol})
                             </span>
                             {selected ? (
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                <svg
-                                  className="w-5 h-5"
-                                  fill="currentColor"
-                                  viewBox="0 0 20 20"
-                                >
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                   <path
                                     fillRule="evenodd"
                                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -214,8 +187,7 @@ export default function HeadlessUIExample() {
               </div>
             </Listbox>
             <div className="mt-2 text-sm text-gray-600">
-              Selected:{" "}
-              <span className="badge badge-primary">{selectedCrypto.name}</span>
+              Selected: <span className="badge badge-primary">{selectedCrypto.name}</span>
             </div>
           </div>
         </div>
@@ -231,20 +203,18 @@ export default function HeadlessUIExample() {
             <div className="flex items-center justify-between p-4 bg-base-200 rounded-lg">
               <div>
                 <div className="font-semibold">Push Notifications</div>
-                <div className="text-sm text-gray-600">
-                  Receive alerts for transactions
-                </div>
+                <div className="text-sm text-gray-600">Receive alerts for transactions</div>
               </div>
               <Switch
                 checked={notifications}
                 onChange={setNotifications}
                 className={`${
-                  notifications ? "bg-primary" : "bg-gray-300"
+                  notifications ? 'bg-primary' : 'bg-gray-300'
                 } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2`}
               >
                 <span
                   className={`${
-                    notifications ? "translate-x-6" : "translate-x-1"
+                    notifications ? 'translate-x-6' : 'translate-x-1'
                   } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
                 />
               </Switch>
@@ -268,31 +238,17 @@ export default function HeadlessUIExample() {
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Tab Component</h2>
-          <p className="text-gray-600">
-            Accessible tabs for organizing content
-          </p>
+          <p className="text-gray-600">Accessible tabs for organizing content</p>
 
           <Tab.Group>
             <Tab.List className="tabs tabs-boxed mt-4">
-              <Tab
-                className={({ selected }) =>
-                  `tab ${selected ? "tab-active" : ""}`
-                }
-              >
+              <Tab className={({ selected }) => `tab ${selected ? 'tab-active' : ''}`}>
                 Overview
               </Tab>
-              <Tab
-                className={({ selected }) =>
-                  `tab ${selected ? "tab-active" : ""}`
-                }
-              >
+              <Tab className={({ selected }) => `tab ${selected ? 'tab-active' : ''}`}>
                 Transactions
               </Tab>
-              <Tab
-                className={({ selected }) =>
-                  `tab ${selected ? "tab-active" : ""}`
-                }
-              >
+              <Tab className={({ selected }) => `tab ${selected ? 'tab-active' : ''}`}>
                 Settings
               </Tab>
             </Tab.List>

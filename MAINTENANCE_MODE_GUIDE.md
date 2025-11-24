@@ -18,10 +18,10 @@ Professional maintenance/downtime page with company information, payment partner
 ✅ Support contact information
 ✅ **Company information footer** (like VeePN):
 
-- Payment processing partners (Stripe, Cryptomus)
-- Legal entity: Advancia Technologies LLC
-- Registration details (FinCEN, State licenses)
-- Trust badges (Bank-Level Security, SSL, PCI Compliant)
+-   Payment processing partners (Stripe, Cryptomus)
+-   Legal entity: Advancia Technologies LLC
+-   Registration details (FinCEN, State licenses)
+-   Trust badges (Bank-Level Security, SSL, PCI Compliant)
 
 ### Global Footer Component
 
@@ -75,16 +75,16 @@ Use the provided toggle script:
 
 Choose option:
 
-- `1` - Enable maintenance mode
-- `2` - Disable maintenance mode
+-   `1` - Enable maintenance mode
+-   `2` - Disable maintenance mode
 
 ### Method 3: Middleware Check
 
 The system automatically redirects to `/maintenance` when:
 
-- `MAINTENANCE_MODE=true` in environment
-- Backend health check fails
-- Manual override via admin panel
+-   `MAINTENANCE_MODE=true` in environment
+-   Backend health check fails
+-   Manual override via admin panel
 
 ---
 
@@ -207,38 +207,38 @@ Implemented features similar to VeePN's maintenance/checkout pages:
 
 ### 1. Company Footer
 
-- ✅ Legal entity disclosure
-- ✅ Payment partners listed
-- ✅ Registration numbers shown
-- ✅ Trust badges displayed
+-   ✅ Legal entity disclosure
+-   ✅ Payment partners listed
+-   ✅ Registration numbers shown
+-   ✅ Trust badges displayed
 
 ### 2. Professional Design
 
-- ✅ Animated background gradients
-- ✅ Backdrop blur effects
-- ✅ Smooth animations (Framer Motion)
-- ✅ Responsive layout
+-   ✅ Animated background gradients
+-   ✅ Backdrop blur effects
+-   ✅ Smooth animations (Framer Motion)
+-   ✅ Responsive layout
 
 ### 3. Trust Elements
 
-- ✅ Security badges (SSL, PCI)
-- ✅ Company verification
-- ✅ Contact information
-- ✅ Legal compliance statements
+-   ✅ Security badges (SSL, PCI)
+-   ✅ Company verification
+-   ✅ Contact information
+-   ✅ Legal compliance statements
 
 ---
 
 ## 📦 Files Created/Modified
 
-### New Files:
+### New Files
 
-- ✅ `frontend/src/components/Footer.tsx` - Global footer component
-- ✅ `frontend/src/app/payments/checkout/page.tsx` - VeePN-style checkout
+-   ✅ `frontend/src/components/Footer.tsx` - Global footer component
+-   ✅ `frontend/src/app/payments/checkout/page.tsx` - VeePN-style checkout
 
-### Modified Files:
+### Modified Files
 
-- ✅ `frontend/src/app/maintenance/page.tsx` - Enhanced with company info
-- ✅ `scripts/toggle-maintenance.ps1` - Maintenance mode toggle script
+-   ✅ `frontend/src/app/maintenance/page.tsx` - Enhanced with company info
+-   ✅ `scripts/toggle-maintenance.ps1` - Maintenance mode toggle script
 
 ---
 
@@ -255,9 +255,9 @@ Implemented features similar to VeePN's maintenance/checkout pages:
 
 For questions about maintenance mode:
 
-- **Email**: support@advanciapayledger.com
-- **Docs**: Check this file
-- **Status**: https://status.advanciapayledger.com
+-   **Email**: <support@advanciapayledger.com>
+-   **Docs**: Check this file
+-   **Status**: <https://status.advanciapayledger.com>
 
 ---
 
@@ -265,13 +265,13 @@ For questions about maintenance mode:
 
 Before enabling maintenance mode:
 
-- [ ] Announce maintenance window to users (email/notifications)
-- [ ] Set `MAINTENANCE_MODE=true` in environment
-- [ ] Restart services (PM2/Render)
-- [ ] Verify maintenance page displays correctly
-- [ ] Monitor backend logs for completion
-- [ ] Set `MAINTENANCE_MODE=false` when done
-- [ ] Verify auto-redirect works
+-   [ ] Announce maintenance window to users (email/notifications)
+-   [ ] Set `MAINTENANCE_MODE=true` in environment
+-   [ ] Restart services (PM2/Render)
+-   [ ] Verify maintenance page displays correctly
+-   [ ] Monitor backend logs for completion
+-   [ ] Set `MAINTENANCE_MODE=false` when done
+-   [ ] Verify auto-redirect works
 
 ---
 

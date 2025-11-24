@@ -82,7 +82,7 @@ export const PaymentCreateIntentSchema = z.object({
   amount: z.number().positive(),
   currency: z.string().min(1).optional(),
   description: z.string().max(500).optional(),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
 });
 
 export const PaymentChargeSavedSchema = z.object({

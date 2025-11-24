@@ -137,7 +137,7 @@ process.on("uncaughtException", (err) => {
 
 ## Testing the Fix
 
-### Start Server (Terminal 1):
+### Start Server (Terminal 1)
 
 ```powershell
 cd C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\backend
@@ -155,7 +155,7 @@ You should see:
 ✅ Prisma connected successfully
 ```
 
-### Test Endpoints (Terminal 2 - NEW WINDOW):
+### Test Endpoints (Terminal 2 - NEW WINDOW)
 
 ```powershell
 cd C:\Users\mucha.DESKTOP-H7T9NPM\-modular-saas-platform\backend
@@ -192,7 +192,7 @@ Expected output:
 btc, eth, usdt, trx, ltc, xmr, doge, ada, dot, matic
 ```
 
-### Manual cURL Testing:
+### Manual cURL Testing
 
 ```bash
 # Test withdrawal methods
@@ -245,9 +245,9 @@ curl -X POST http://localhost:4000/api/withdrawals/request \
 
 In **production** (NODE_ENV=production):
 
-- Single SIGINT causes immediate shutdown (no double-press required)
-- Error messages are generic ("Internal server error") instead of detailed
-- Uncaught exceptions exit process for orchestrator restart (PM2, Docker, etc.)
+-   Single SIGINT causes immediate shutdown (no double-press required)
+-   Error messages are generic ("Internal server error") instead of detailed
+-   Uncaught exceptions exit process for orchestrator restart (PM2, Docker, etc.)
 
 ### Recommended Setup
 
@@ -261,10 +261,10 @@ pm2 startup
 
 This ensures:
 
-- Automatic restart on crashes
-- Zero-downtime deployments
-- Log management
-- Process monitoring
+-   Automatic restart on crashes
+-   Zero-downtime deployments
+-   Log management
+-   Process monitoring
 
 ---
 

@@ -37,17 +37,14 @@ Implements #
 ### Key Components
 
 1. **Backend Changes:**
-
    -
    -
 
 2. **Frontend Changes:**
-
    -
    -
 
-3. **Database Changes:**
-   -
+3. ## **Database Changes:**
 
 ### API Changes
 
@@ -74,7 +71,6 @@ GET /api/feature-name/:id
 ### Test Scenarios
 
 1. **Scenario 1:** [Description]
-
    - Input:
    - Expected:
    - Actual:

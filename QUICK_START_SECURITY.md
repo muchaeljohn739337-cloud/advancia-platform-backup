@@ -10,40 +10,40 @@ All security features, authentication, and high-availability mechanisms are **al
 
 ### Authentication
 
-- ✅ Email/password with **Argon2id** hashing (industry best practice)
-- ✅ Email OTP (rate-limited: 5/min)
-- ✅ Password reset with secure tokens (1-hour expiry)
-- ✅ 2FA/TOTP (Google Authenticator compatible)
-- ✅ JWT with 7-day expiration
-- ✅ Refresh token rotation
+-   ✅ Email/password with **Argon2id** hashing (industry best practice)
+-   ✅ Email OTP (rate-limited: 5/min)
+-   ✅ Password reset with secure tokens (1-hour expiry)
+-   ✅ 2FA/TOTP (Google Authenticator compatible)
+-   ✅ JWT with 7-day expiration
+-   ✅ Refresh token rotation
 
 ### Brute-Force Protection
 
-- ✅ Global API rate limit: 300 requests/minute
-- ✅ Login rate limit: 5 attempts/15 minutes (Redis-backed)
-- ✅ OTP rate limit: 5 attempts/minute
-- ✅ Real-time alerts to admins via Socket.IO
+-   ✅ Global API rate limit: 300 requests/minute
+-   ✅ Login rate limit: 5 attempts/15 minutes (Redis-backed)
+-   ✅ OTP rate limit: 5 attempts/minute
+-   ✅ Real-time alerts to admins via Socket.IO
 
 ### HTTPS & Cookies
 
-- ✅ Helmet security headers (CSP, HSTS, X-Frame-Options)
-- ✅ Secure cookies: httpOnly, secure, sameSite
-- ✅ CORS whitelist (no wildcards)
-- ✅ Cloudflare SSL termination
+-   ✅ Helmet security headers (CSP, HSTS, X-Frame-Options)
+-   ✅ Secure cookies: httpOnly, secure, sameSite
+-   ✅ CORS whitelist (no wildcards)
+-   ✅ Cloudflare SSL termination
 
 ### Secrets
 
-- ✅ AES-256-GCM encryption for sensitive data
-- ✅ `.env` files encrypted and excluded from git
-- ✅ JWT secrets validated (minimum 32 characters)
+-   ✅ AES-256-GCM encryption for sensitive data
+-   ✅ `.env` files encrypted and excluded from git
+-   ✅ JWT secrets validated (minimum 32 characters)
 
 ### High Availability
 
-- ✅ Health checks at `/health` and `/api/health`
-- ✅ Graceful shutdown (30s timeout)
-- ✅ Maintenance mode page with auto-refresh
-- ✅ Redis for distributed rate limiting
-- ✅ Socket.IO for real-time monitoring
+-   ✅ Health checks at `/health` and `/api/health`
+-   ✅ Graceful shutdown (30s timeout)
+-   ✅ Maintenance mode page with auto-refresh
+-   ✅ Redis for distributed rate limiting
+-   ✅ Socket.IO for real-time monitoring
 
 ---
 
@@ -152,29 +152,29 @@ curl http://localhost:3000
 
 ### Rate Limiting
 
-- **Where**: `backend/src/middleware/rateLimiterRedis.ts`
-- **What**: Blocks IPs after 5 failed login attempts for 15 minutes
-- **Alerts**: Real-time notifications to admins via Socket.IO
+-   **Where**: `backend/src/middleware/rateLimiterRedis.ts`
+-   **What**: Blocks IPs after 5 failed login attempts for 15 minutes
+-   **Alerts**: Real-time notifications to admins via Socket.IO
 
 ### Password Security
 
-- **Algorithm**: Argon2id (memory-hard, GPU-resistant)
-- **Migration**: Automatically upgrades bcrypt hashes on login
-- **Location**: `backend/src/utils/password.ts`
+-   **Algorithm**: Argon2id (memory-hard, GPU-resistant)
+-   **Migration**: Automatically upgrades bcrypt hashes on login
+-   **Location**: `backend/src/utils/password.ts`
 
 ### Session Management
 
-- **Expiration**: JWT tokens expire after 7 days
-- **Refresh**: Automatic refresh token rotation
-- **Tracking**: Real-time session list in admin dashboard
-- **Invalidation**: Logout immediately revokes tokens
+-   **Expiration**: JWT tokens expire after 7 days
+-   **Refresh**: Automatic refresh token rotation
+-   **Tracking**: Real-time session list in admin dashboard
+-   **Invalidation**: Logout immediately revokes tokens
 
 ### IP Reputation
 
-- **Tracking**: Prisma model `IPReputation` tracks suspicious IPs
-- **Detection**: VPN, proxy, Tor, datacenter detection
-- **Actions**: Automatic blacklisting for high-risk IPs
-- **Location**: `backend/src/services/fraudDetectionService.ts`
+-   **Tracking**: Prisma model `IPReputation` tracks suspicious IPs
+-   **Detection**: VPN, proxy, Tor, datacenter detection
+-   **Actions**: Automatic blacklisting for high-risk IPs
+-   **Location**: `backend/src/services/fraudDetectionService.ts`
 
 ---
 
@@ -210,11 +210,11 @@ if (-f /var/www/maintenance.html) {
 
 ### Maintenance Page Features
 
-- Professional animated UI
-- Auto-countdown timer
-- Manual status check button
-- Contact information
-- Location: `frontend/src/app/maintenance/page.tsx`
+-   Professional animated UI
+-   Auto-countdown timer
+-   Manual status check button
+-   Contact information
+-   Location: `frontend/src/app/maintenance/page.tsx`
 
 ---
 
@@ -250,25 +250,25 @@ if (-f /var/www/maintenance.html) {
 
 ### Real-Time Monitoring
 
-- **Socket.IO Dashboard**: Admins see rate limit events live
-- **Sentry**: All errors logged with stack traces
-- **Health Checks**: Load balancer pings every 30s
-- **PM2**: Process monitoring and auto-restart
+-   **Socket.IO Dashboard**: Admins see rate limit events live
+-   **Sentry**: All errors logged with stack traces
+-   **Health Checks**: Load balancer pings every 30s
+-   **PM2**: Process monitoring and auto-restart
 
 ### What Engineers See
 
-- Failed login attempts (IP, timestamp, count)
-- Rate limit violations (endpoint, IP, threshold)
-- Database connection issues
-- Uncaught exceptions
-- Performance bottlenecks
+-   Failed login attempts (IP, timestamp, count)
+-   Rate limit violations (endpoint, IP, threshold)
+-   Database connection issues
+-   Uncaught exceptions
+-   Performance bottlenecks
 
 ### What Users See
 
-- Professional maintenance page (if down)
-- Generic error messages (in production)
-- No stack traces or sensitive info
-- Contact information for support
+-   Professional maintenance page (if down)
+-   Generic error messages (in production)
+-   No stack traces or sensitive info
+-   Contact information for support
 
 ---
 
@@ -326,10 +326,10 @@ pm2 logs backend --lines 50
 
 ## 📞 Support & Documentation
 
-- **Full Security Audit**: `SECURITY_AND_HA_STATUS.md`
-- **Deployment Guide**: `DEPLOYMENT_ARCHITECTURE.md`
-- **API Reference**: `API_REFERENCE.md`
-- **Founders Ops Handbook**: `FOUNDERS_OPS_HANDBOOK.md`
+-   **Full Security Audit**: `SECURITY_AND_HA_STATUS.md`
+-   **Deployment Guide**: `DEPLOYMENT_ARCHITECTURE.md`
+-   **API Reference**: `API_REFERENCE.md`
+-   **Founders Ops Handbook**: `FOUNDERS_OPS_HANDBOOK.md`
 
 ---
 

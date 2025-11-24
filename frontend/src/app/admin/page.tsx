@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function AdminIndexPage() {
   const router = useRouter();
 
   useEffect(() => {
     // Redirect to sessions page
-    router.push("/admin/sessions");
+    router.push('/admin/sessions');
   }, [router]);
 
   return (

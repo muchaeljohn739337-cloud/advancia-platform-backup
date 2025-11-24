@@ -1,18 +1,14 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, CheckCircle, DollarSign, Loader, X } from "lucide-react";
-import { useState } from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import { AlertCircle, CheckCircle, DollarSign, Loader, X } from 'lucide-react';
+import { useState } from 'react';
 
 interface CashoutModalProps {
   isOpen: boolean;
   onClose: () => void;
   availableBalance: number;
-  onCashout: (
-    amount: number,
-    method: string,
-    accountDetails: string
-  ) => Promise<void>;
+  onCashout: (amount: number, method: string, accountDetails: string) => Promise<void>;
 }
 
 export default function CashoutModal({
@@ -21,35 +17,33 @@ export default function CashoutModal({
   availableBalance,
   onCashout,
 }: CashoutModalProps) {
-  const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState<"bank" | "paypal" | "crypto">("bank");
-  const [accountDetails, setAccountDetails] = useState("");
+  const [amount, setAmount] = useState('');
+  const [method, setMethod] = useState<'bank' | 'paypal' | 'crypto'>('bank');
+  const [accountDetails, setAccountDetails] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const MINIMUM_CASHOUT = 10; // $10 minimum
   const CASHOUT_FEE_PERCENT = 2; // 2% fee
   const TOKEN_TO_USD = 0.1; // 1 token = $0.10
 
-  const usdValue = parseFloat(amount || "0") * TOKEN_TO_USD;
+  const usdValue = parseFloat(amount || '0') * TOKEN_TO_USD;
   const fee = usdValue * (CASHOUT_FEE_PERCENT / 100);
   const youReceive = usdValue - fee;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     const tokenAmount = parseFloat(amount);
 
     if (isNaN(tokenAmount) || tokenAmount <= 0) {
-      setError("Please enter a valid amount");
+      setError('Please enter a valid amount');
       return;
     }
 
     if (tokenAmount > availableBalance) {
-      setError(
-        `Insufficient balance. Available: ${availableBalance.toFixed(2)} tokens`
-      );
+      setError(`Insufficient balance. Available: ${availableBalance.toFixed(2)} tokens`);
       return;
     }
 
@@ -70,11 +64,11 @@ export default function CashoutModal({
     setIsProcessing(true);
     try {
       await onCashout(tokenAmount, method, accountDetails);
-      setAmount("");
-      setAccountDetails("");
+      setAmount('');
+      setAccountDetails('');
       onClose();
     } catch (err: any) {
-      setError(err.message || "Cashout failed. Please try again.");
+      setError(err.message || 'Cashout failed. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -82,14 +76,14 @@ export default function CashoutModal({
 
   const getPlaceholder = () => {
     switch (method) {
-      case "bank":
-        return "Account Number (e.g., 1234567890)";
-      case "paypal":
-        return "PayPal Email (e.g., you@email.com)";
-      case "crypto":
-        return "Wallet Address (e.g., 0x...)";
+      case 'bank':
+        return 'Account Number (e.g., 1234567890)';
+      case 'paypal':
+        return 'PayPal Email (e.g., you@email.com)';
+      case 'crypto':
+        return 'Wallet Address (e.g., 0x...)';
       default:
-        return "Account Details";
+        return 'Account Details';
     }
   };
 
@@ -119,9 +113,7 @@ export default function CashoutModal({
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold">Cash Out</h2>
-                    <p className="text-green-100 text-sm">
-                      Convert tokens to real money
-                    </p>
+                    <p className="text-green-100 text-sm">Convert tokens to real money</p>
                   </div>
                 </div>
                 <button
@@ -137,12 +129,9 @@ export default function CashoutModal({
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               {/* Available Balance */}
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border-2 border-green-200">
-                <p className="text-sm text-green-700 font-semibold mb-1">
-                  Available Balance
-                </p>
+                <p className="text-sm text-green-700 font-semibold mb-1">Available Balance</p>
                 <p className="text-3xl font-bold text-green-900">
-                  {availableBalance.toFixed(2)}{" "}
-                  <span className="text-lg">ADV</span>
+                  {availableBalance.toFixed(2)} <span className="text-lg">ADV</span>
                 </p>
                 <p className="text-sm text-green-600 mt-1">
                   ≈ ${(availableBalance * TOKEN_TO_USD).toFixed(2)} USD
@@ -182,15 +171,15 @@ export default function CashoutModal({
                   Payment Method
                 </label>
                 <div className="grid grid-cols-3 gap-2">
-                  {(["bank", "paypal", "crypto"] as const).map((m) => (
+                  {(['bank', 'paypal', 'crypto'] as const).map((m) => (
                     <button
                       key={m}
                       type="button"
                       onClick={() => setMethod(m)}
                       className={`py-3 px-4 rounded-lg font-semibold capitalize transition-all ${
                         method === m
-                          ? "bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
                       {m}
@@ -202,11 +191,11 @@ export default function CashoutModal({
               {/* Account Details */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  {method === "bank"
-                    ? "Bank Account"
-                    : method === "paypal"
-                    ? "PayPal Email"
-                    : "Crypto Wallet"}
+                  {method === 'bank'
+                    ? 'Bank Account'
+                    : method === 'paypal'
+                      ? 'PayPal Email'
+                      : 'Crypto Wallet'}
                 </label>
                 <input
                   type="text"
@@ -221,7 +210,7 @@ export default function CashoutModal({
               {amount && parseFloat(amount) > 0 && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
+                  animate={{ opacity: 1, height: 'auto' }}
                   className="bg-gray-50 p-4 rounded-xl space-y-2 text-sm"
                 >
                   <div className="flex justify-between">
@@ -232,9 +221,7 @@ export default function CashoutModal({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">USD Value:</span>
-                    <span className="font-semibold text-gray-900">
-                      ${usdValue.toFixed(2)}
-                    </span>
+                    <span className="font-semibold text-gray-900">${usdValue.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-red-600">
                     <span>Processing Fee ({CASHOUT_FEE_PERCENT}%):</span>
@@ -242,9 +229,7 @@ export default function CashoutModal({
                   </div>
                   <div className="border-t-2 border-gray-300 pt-2 flex justify-between text-lg font-bold">
                     <span className="text-green-700">You Receive:</span>
-                    <span className="text-green-700">
-                      ${youReceive.toFixed(2)}
-                    </span>
+                    <span className="text-green-700">${youReceive.toFixed(2)}</span>
                   </div>
                 </motion.div>
               )}

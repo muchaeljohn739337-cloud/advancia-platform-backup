@@ -23,26 +23,26 @@ VAPID_PRIVATE_KEY=5B0_yOZoG3xH7L6kSCDQi5a1uUN_Oy9KvUXyj51fW4s
 
 ### Step 3: Fix Stripe Webhook Secret
 
-#### Current (INVALID):
+#### Current (INVALID)
 
 ```
 STRIPE_WEBHOOK_SECRET=f097258e80bb8dc2e625c5858297ab9a
 ```
 
-#### How to Get Proper Secret:
+#### How to Get Proper Secret
 
-1. Go to: https://dashboard.stripe.com/test/webhooks
+1. Go to: <https://dashboard.stripe.com/test/webhooks>
 2. Click "+ Add endpoint"
 3. Endpoint URL: `https://api.advanciapayledger.com/api/payments/webhook`
 4. Select events:
-   - ✅ payment_intent.succeeded
-   - ✅ payment_intent.payment_failed
-   - ✅ payment_intent.canceled
+   -   ✅ payment_intent.succeeded
+   -   ✅ payment_intent.payment_failed
+   -   ✅ payment_intent.canceled
 5. Click "Add endpoint"
 6. Click "Reveal" to see webhook signing secret (starts with `whsec_...`)
 7. Copy the full secret (looks like: `whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`)
 
-#### Add to Render:
+#### Add to Render
 
 ```bash
 STRIPE_WEBHOOK_SECRET=whsec_[YOUR_ACTUAL_SECRET_HERE]
@@ -60,15 +60,15 @@ SENTRY_DSN=https://[hash]@o[org-id].ingest.sentry.io/[project-id]
 
 ## ✅ Quick Checklist
 
-- [ ] Delete 3 invalid variables (SENTRY_DSN, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)
-- [ ] Add new VAPID_PUBLIC_KEY (from above)
-- [ ] Add new VAPID_PRIVATE_KEY (from above)
-- [ ] Create Stripe webhook endpoint at https://dashboard.stripe.com/test/webhooks
-- [ ] Copy proper STRIPE*WEBHOOK_SECRET (starts with `whsec*`)
-- [ ] Update STRIPE_WEBHOOK_SECRET in Render
-- [ ] Wait for Render auto-redeploy (or manually trigger)
-- [ ] Test: `curl https://api.advanciapayledger.com/api/health`
-- [ ] Expected: `{"status":"healthy","timestamp":"..."}`
+-   [ ] Delete 3 invalid variables (SENTRY_DSN, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY)
+-   [ ] Add new VAPID_PUBLIC_KEY (from above)
+-   [ ] Add new VAPID_PRIVATE_KEY (from above)
+-   [ ] Create Stripe webhook endpoint at <https://dashboard.stripe.com/test/webhooks>
+-   [ ] Copy proper STRIPE*WEBHOOK_SECRET (starts with `whsec*`)
+-   [ ] Update STRIPE_WEBHOOK_SECRET in Render
+-   [ ] Wait for Render auto-redeploy (or manually trigger)
+-   [ ] Test: `curl https://api.advanciapayledger.com/api/health`
+-   [ ] Expected: `{"status":"healthy","timestamp":"..."}`
 
 ---
 
@@ -76,16 +76,16 @@ SENTRY_DSN=https://[hash]@o[org-id].ingest.sentry.io/[project-id]
 
 **502 Bad Gateway** = Backend crashed on startup because:
 
-- Invalid VAPID keys caused `webpush.setVapidDetails()` to throw error
-- Invalid STRIPE_WEBHOOK_SECRET prevents webhook verification
-- Invalid SENTRY_DSN format (optional, but was malformed)
+-   Invalid VAPID keys caused `webpush.setVapidDetails()` to throw error
+-   Invalid STRIPE_WEBHOOK_SECRET prevents webhook verification
+-   Invalid SENTRY_DSN format (optional, but was malformed)
 
 **After Fix**: Backend will start successfully and handle:
 
-- ✅ Stripe payment webhooks
-- ✅ Web push notifications
-- ✅ Real-time Socket.IO events
-- ✅ Cryptomus crypto payments
+-   ✅ Stripe payment webhooks
+-   ✅ Web push notifications
+-   ✅ Real-time Socket.IO events
+-   ✅ Cryptomus crypto payments
 
 ---
 

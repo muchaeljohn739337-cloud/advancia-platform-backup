@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface StatusData {
   version: string;
@@ -70,13 +70,13 @@ export default function StatusPage() {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const response = await fetch("/api/status.json");
-        if (!response.ok) throw new Error("Failed to fetch status");
+        const response = await fetch('/api/status.json');
+        if (!response.ok) throw new Error('Failed to fetch status');
         const data = await response.json();
         setStatus(data);
         setError(null);
       } catch (err) {
-        setError("Unable to load status data");
+        setError('Unable to load status data');
         console.error(err);
       } finally {
         setLoading(false);
@@ -91,40 +91,40 @@ export default function StatusPage() {
 
   const getStatusColor = (statusValue: string) => {
     const colors: Record<string, string> = {
-      operational: "text-green-600",
-      active: "text-green-600",
-      degraded: "text-yellow-600",
-      "partial-outage": "text-orange-600",
-      outage: "text-red-600",
-      maintenance: "text-blue-600",
+      operational: 'text-green-600',
+      active: 'text-green-600',
+      degraded: 'text-yellow-600',
+      'partial-outage': 'text-orange-600',
+      outage: 'text-red-600',
+      maintenance: 'text-blue-600',
     };
-    return colors[statusValue] || "text-gray-600";
+    return colors[statusValue] || 'text-gray-600';
   };
 
   const getStatusIcon = (statusValue: string) => {
     const icons: Record<string, string> = {
-      operational: "🟢",
-      active: "🟢",
-      degraded: "🟡",
-      "partial-outage": "🟠",
-      outage: "🔴",
-      maintenance: "🔵",
+      operational: '🟢',
+      active: '🟢',
+      degraded: '🟡',
+      'partial-outage': '🟠',
+      outage: '🔴',
+      maintenance: '🔵',
     };
-    return icons[statusValue] || "⚪";
+    return icons[statusValue] || '⚪';
   };
 
   const getSeverityColor = (severity: string) => {
     const colors: Record<string, string> = {
-      outage: "bg-red-100 text-red-800 border-red-200",
-      degraded: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      "partial-outage": "bg-orange-100 text-orange-800 border-orange-200",
-      investigating: "bg-blue-100 text-blue-800 border-blue-200",
+      outage: 'bg-red-100 text-red-800 border-red-200',
+      degraded: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      'partial-outage': 'bg-orange-100 text-orange-800 border-orange-200',
+      investigating: 'bg-blue-100 text-blue-800 border-blue-200',
     };
-    return colors[severity] || "bg-gray-100 text-gray-800 border-gray-200";
+    return colors[severity] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
   const formatDuration = (seconds: number | null) => {
-    if (!seconds) return "Ongoing";
+    if (!seconds) return 'Ongoing';
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes} minutes`;
     const hours = Math.floor(minutes / 60);
@@ -138,14 +138,12 @@ export default function StatusPage() {
     const diffMs = now.getTime() - then.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return "just now";
-    if (diffMins < 60)
-      return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24)
-      return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
     const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   };
 
   if (loading) {
@@ -183,25 +181,15 @@ export default function StatusPage() {
           <h1 className="text-5xl font-bold text-gray-900 mb-3 flex items-center justify-center gap-3">
             🏢 Advancia Status
           </h1>
-          <p className="text-lg text-gray-600">
-            Real-time system health and uptime transparency
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Last updated: {timeAgo(status.lastUpdated)}
-          </p>
+          <p className="text-lg text-gray-600">Real-time system health and uptime transparency</p>
+          <p className="text-sm text-gray-500 mt-2">Last updated: {timeAgo(status.lastUpdated)}</p>
         </div>
 
         {/* Overall Status */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8 border-2 border-gray-200">
           <div className="text-center">
-            <div className="text-7xl mb-4 animate-pulse">
-              {getStatusIcon(status.overallStatus)}
-            </div>
-            <h2
-              className={`text-4xl font-bold ${getStatusColor(
-                status.overallStatus
-              )}`}
-            >
+            <div className="text-7xl mb-4 animate-pulse">{getStatusIcon(status.overallStatus)}</div>
+            <h2 className={`text-4xl font-bold ${getStatusColor(status.overallStatus)}`}>
               {status.statusMessage}
             </h2>
           </div>
@@ -209,9 +197,7 @@ export default function StatusPage() {
 
         {/* Component Status */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
-            Component Status
-          </h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">Component Status</h3>
           <div className="space-y-4">
             {status.components.map((component) => (
               <div
@@ -219,27 +205,17 @@ export default function StatusPage() {
                 className="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:shadow-md transition"
               >
                 <div className="flex items-center space-x-4">
-                  <span className="text-3xl">
-                    {getStatusIcon(component.status)}
-                  </span>
+                  <span className="text-3xl">{getStatusIcon(component.status)}</span>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-lg">
-                      {component.name}
-                    </h4>
-                    <p
-                      className={`text-sm font-medium ${getStatusColor(
-                        component.status
-                      )}`}
-                    >
+                    <h4 className="font-semibold text-gray-900 text-lg">{component.name}</h4>
+                    <p className={`text-sm font-medium ${getStatusColor(component.status)}`}>
                       {component.status.charAt(0).toUpperCase() +
-                        component.status.slice(1).replace("-", " ")}
+                        component.status.slice(1).replace('-', ' ')}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-gray-900">
-                    {component.uptime24h}%
-                  </p>
+                  <p className="text-2xl font-bold text-gray-900">{component.uptime24h}%</p>
                   <p className="text-xs text-gray-500">24h uptime</p>
                 </div>
               </div>
@@ -249,9 +225,7 @@ export default function StatusPage() {
 
         {/* Uptime Metrics */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">
-            Uptime Metrics
-          </h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">Uptime Metrics</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {status.components[0] && (
               <>
@@ -287,9 +261,7 @@ export default function StatusPage() {
         {/* Response Time */}
         {status.components[0]?.responseTime && (
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Response Time (Last 24h)
-            </h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Response Time (Last 24h)</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <p className="text-4xl font-bold text-gray-900">
@@ -322,16 +294,12 @@ export default function StatusPage() {
         {/* Recent Incidents */}
         {status.incidents.length > 0 && (
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              Recent Incidents
-            </h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Recent Incidents</h3>
             <div className="space-y-4">
               {status.incidents.map((incident) => (
                 <div
                   key={incident.id}
-                  className={`p-5 rounded-lg border-2 ${getSeverityColor(
-                    incident.severity
-                  )}`}
+                  className={`p-5 rounded-lg border-2 ${getSeverityColor(incident.severity)}`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
@@ -352,9 +320,7 @@ export default function StatusPage() {
                       Duration: {formatDuration(incident.duration)}
                     </span>
                     {incident.impactedUsers && (
-                      <span className="font-medium">
-                        Users affected: {incident.impactedUsers}
-                      </span>
+                      <span className="font-medium">Users affected: {incident.impactedUsers}</span>
                     )}
                   </div>
                   {incident.resolution && (
@@ -370,22 +336,16 @@ export default function StatusPage() {
 
         {/* Scheduled Maintenance */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            Scheduled Maintenance
-          </h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">Scheduled Maintenance</h3>
           <div className="text-center py-8 text-gray-500">
             <p className="text-lg">✓ No scheduled maintenance at this time</p>
-            <p className="text-sm mt-2">
-              We'll notify you in advance of any planned downtime
-            </p>
+            <p className="text-sm mt-2">We'll notify you in advance of any planned downtime</p>
           </div>
         </div>
 
         {/* Subscribe */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg p-8 border border-blue-200">
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">
-            Subscribe to Updates
-          </h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-3">Subscribe to Updates</h3>
           <p className="text-gray-600 mb-6">
             Get notified about incidents, maintenance, and system updates
           </p>
@@ -408,9 +368,7 @@ export default function StatusPage() {
         {/* Footer */}
         <div className="text-center mt-8 text-gray-500 text-sm">
           <p>Powered by Advancia Monitoring System</p>
-          <p className="mt-1">
-            Updated every 5 minutes • Data retention: 90 days
-          </p>
+          <p className="mt-1">Updated every 5 minutes • Data retention: 90 days</p>
         </div>
       </div>
     </div>

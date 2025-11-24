@@ -1,12 +1,7 @@
-"use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  TouchButton,
-  MobileCard,
-  BottomSheet,
-  MobileInput,
-} from "@/components/mobile";
+'use client';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { TouchButton, MobileCard, BottomSheet, MobileInput } from '@/components/mobile';
 import {
   Save,
   Mail,
@@ -20,27 +15,27 @@ import {
   User,
   Phone,
   MapPin,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function MobileComponentsDemo() {
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const handleSaveDemo = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      alert("Demo save completed!");
+      alert('Demo save completed!');
     }, 2000);
   };
 
   const handleEmailValidation = () => {
-    if (!email.includes("@")) {
-      setEmailError("Please enter a valid email address");
+    if (!email.includes('@')) {
+      setEmailError('Please enter a valid email address');
     } else {
-      setEmailError("");
+      setEmailError('');
       alert(`Email validated: ${email}`);
     }
   };
@@ -49,10 +44,7 @@ export default function MobileComponentsDemo() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Mobile Components Demo
           </h1>
@@ -99,9 +91,7 @@ export default function MobileComponentsDemo() {
               </div>
 
               <div>
-                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
-                  Sizes
-                </h3>
+                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">Sizes</h3>
                 <div className="space-y-3">
                   <TouchButton size="sm" icon={User} fullWidth>
                     Small (44px min)
@@ -119,9 +109,7 @@ export default function MobileComponentsDemo() {
               </div>
 
               <div>
-                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
-                  States
-                </h3>
+                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">States</h3>
                 <div className="space-y-3">
                   <TouchButton
                     variant="primary"
@@ -130,14 +118,9 @@ export default function MobileComponentsDemo() {
                     loading={loading}
                     onClick={handleSaveDemo}
                   >
-                    {loading ? "Processing..." : "Click to Test Loading"}
+                    {loading ? 'Processing...' : 'Click to Test Loading'}
                   </TouchButton>
-                  <TouchButton
-                    variant="secondary"
-                    icon={Lock}
-                    fullWidth
-                    disabled
-                  >
+                  <TouchButton variant="secondary" icon={Lock} fullWidth disabled>
                     Disabled Button
                   </TouchButton>
                 </div>
@@ -148,20 +131,10 @@ export default function MobileComponentsDemo() {
                   Icon Positions
                 </h3>
                 <div className="space-y-3">
-                  <TouchButton
-                    variant="primary"
-                    icon={Mail}
-                    iconPosition="left"
-                    fullWidth
-                  >
+                  <TouchButton variant="primary" icon={Mail} iconPosition="left" fullWidth>
                     Icon Left
                   </TouchButton>
-                  <TouchButton
-                    variant="primary"
-                    icon={Mail}
-                    iconPosition="right"
-                    fullWidth
-                  >
+                  <TouchButton variant="primary" icon={Mail} iconPosition="right" fullWidth>
                     Icon Right
                   </TouchButton>
                 </div>
@@ -234,8 +207,8 @@ export default function MobileComponentsDemo() {
           >
             <div className="space-y-3">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Click the button below to open a bottom sheet modal. You can
-                drag it down to dismiss!
+                Click the button below to open a bottom sheet modal. You can drag it down to
+                dismiss!
               </p>
 
               <TouchButton
@@ -261,11 +234,10 @@ export default function MobileComponentsDemo() {
               subtitle="Account protection"
               icon={Shield}
               headerGradient="from-red-500 to-orange-600"
-              onClick={() => alert("Security card clicked!")}
+              onClick={() => alert('Security card clicked!')}
             >
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Click this card to interact. Cards can have onClick handlers for
-                navigation.
+                Click this card to interact. Cards can have onClick handlers for navigation.
               </p>
             </MobileCard>
 
@@ -274,11 +246,10 @@ export default function MobileComponentsDemo() {
               subtitle="Stay updated"
               icon={Bell}
               headerGradient="from-indigo-500 to-purple-600"
-              onClick={() => alert("Notifications card clicked!")}
+              onClick={() => alert('Notifications card clicked!')}
             >
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                This card demonstrates hover and active states optimized for
-                touch.
+                This card demonstrates hover and active states optimized for touch.
               </p>
             </MobileCard>
           </motion.div>
@@ -296,16 +267,13 @@ export default function MobileComponentsDemo() {
             </h3>
             <div className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
               <p>
-                📱 <strong>Mobile (&lt; 640px)</strong>: Single column, 48px+
-                touch targets
+                📱 <strong>Mobile (&lt; 640px)</strong>: Single column, 48px+ touch targets
               </p>
               <p>
-                📱 <strong>Tablet (640-1024px)</strong>: Two columns, optimized
-                spacing
+                📱 <strong>Tablet (640-1024px)</strong>: Two columns, optimized spacing
               </p>
               <p>
-                🖥️ <strong>Desktop (&gt; 1024px)</strong>: Multi-column,
-                enhanced interactions
+                🖥️ <strong>Desktop (&gt; 1024px)</strong>: Multi-column, enhanced interactions
               </p>
             </div>
           </motion.div>
@@ -322,8 +290,8 @@ export default function MobileComponentsDemo() {
       >
         <div className="space-y-4">
           <p className="text-gray-600 dark:text-gray-400">
-            This is a bottom sheet component with drag-to-dismiss functionality.
-            Try dragging it down to close!
+            This is a bottom sheet component with drag-to-dismiss functionality. Try dragging it
+            down to close!
           </p>
 
           <MobileInput
@@ -348,17 +316,13 @@ export default function MobileComponentsDemo() {
               icon={Save}
               fullWidth
               onClick={() => {
-                alert("Saved from bottom sheet!");
+                alert('Saved from bottom sheet!');
                 setShowBottomSheet(false);
               }}
             >
               Save Changes
             </TouchButton>
-            <TouchButton
-              variant="ghost"
-              fullWidth
-              onClick={() => setShowBottomSheet(false)}
-            >
+            <TouchButton variant="ghost" fullWidth onClick={() => setShowBottomSheet(false)}>
               Cancel
             </TouchButton>
           </div>

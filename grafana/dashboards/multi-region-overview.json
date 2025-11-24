@@ -13,7 +13,7 @@
         "id": 1,
         "title": "🌍 Global Traffic Distribution",
         "type": "geomap",
-        "gridPos": {"x": 0, "y": 0, "w": 24, "h": 8},
+        "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 },
         "targets": [
           {
             "expr": "sum by (region) (rate(http_requests_total[5m]))",
@@ -33,12 +33,12 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "green"},
-                {"value": 1000, "color": "yellow"},
-                {"value": 5000, "color": "red"}
+                { "value": null, "color": "green" },
+                { "value": 1000, "color": "yellow" },
+                { "value": 5000, "color": "red" }
               ]
             },
-            "color": {"mode": "thresholds"},
+            "color": { "mode": "thresholds" },
             "unit": "reqps"
           }
         }
@@ -47,7 +47,7 @@
         "id": 2,
         "title": "Error Rate by Region",
         "type": "timeseries",
-        "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+        "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "error_rate_percent{region=\"us-east\"}",
@@ -74,23 +74,23 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "green"},
-                {"value": 0.5, "color": "yellow"},
-                {"value": 1.0, "color": "red"}
+                { "value": null, "color": "green" },
+                { "value": 0.5, "color": "yellow" },
+                { "value": 1.0, "color": "red" }
               ]
             }
           }
         },
         "options": {
-          "legend": {"displayMode": "table", "placement": "bottom"},
-          "tooltip": {"mode": "multi"}
+          "legend": { "displayMode": "table", "placement": "bottom" },
+          "tooltip": { "mode": "multi" }
         }
       },
       {
         "id": 3,
         "title": "P95 Latency by Region",
         "type": "timeseries",
-        "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+        "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
         "targets": [
           {
             "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{region=\"us-east\"}[5m])) * 1000",
@@ -111,9 +111,9 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "green"},
-                {"value": 300, "color": "yellow"},
-                {"value": 500, "color": "red"}
+                { "value": null, "color": "green" },
+                { "value": 300, "color": "yellow" },
+                { "value": 500, "color": "red" }
               ]
             }
           }
@@ -123,7 +123,7 @@
         "id": 4,
         "title": "🔄 Deployment Status - US East",
         "type": "stat",
-        "gridPos": {"x": 0, "y": 16, "w": 8, "h": 6},
+        "gridPos": { "x": 0, "y": 16, "w": 8, "h": 6 },
         "targets": [
           {
             "expr": "traffic_distribution_percent{region=\"us-east\",environment=\"green\"}",
@@ -137,13 +137,13 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "color": {"mode": "thresholds"},
+            "color": { "mode": "thresholds" },
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "blue"},
-                {"value": 50, "color": "yellow"},
-                {"value": 100, "color": "green"}
+                { "value": null, "color": "blue" },
+                { "value": 50, "color": "yellow" },
+                { "value": 100, "color": "green" }
               ]
             }
           }
@@ -158,7 +158,7 @@
         "id": 5,
         "title": "🔄 Deployment Status - EU West",
         "type": "stat",
-        "gridPos": {"x": 8, "y": 16, "w": 8, "h": 6},
+        "gridPos": { "x": 8, "y": 16, "w": 8, "h": 6 },
         "targets": [
           {
             "expr": "traffic_distribution_percent{region=\"eu-west\",environment=\"green\"}",
@@ -172,13 +172,13 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "color": {"mode": "thresholds"},
+            "color": { "mode": "thresholds" },
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "blue"},
-                {"value": 50, "color": "yellow"},
-                {"value": 100, "color": "green"}
+                { "value": null, "color": "blue" },
+                { "value": 50, "color": "yellow" },
+                { "value": 100, "color": "green" }
               ]
             }
           }
@@ -188,7 +188,7 @@
         "id": 6,
         "title": "🔄 Deployment Status - APAC Southeast",
         "type": "stat",
-        "gridPos": {"x": 16, "y": 16, "w": 8, "h": 6},
+        "gridPos": { "x": 16, "y": 16, "w": 8, "h": 6 },
         "targets": [
           {
             "expr": "traffic_distribution_percent{region=\"apac-se\",environment=\"green\"}",
@@ -202,13 +202,13 @@
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
-            "color": {"mode": "thresholds"},
+            "color": { "mode": "thresholds" },
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "blue"},
-                {"value": 50, "color": "yellow"},
-                {"value": 100, "color": "green"}
+                { "value": null, "color": "blue" },
+                { "value": 50, "color": "yellow" },
+                { "value": 100, "color": "green" }
               ]
             }
           }
@@ -218,7 +218,7 @@
         "id": 7,
         "title": "CPU Usage by Region",
         "type": "gauge",
-        "gridPos": {"x": 0, "y": 22, "w": 12, "h": 6},
+        "gridPos": { "x": 0, "y": 22, "w": 12, "h": 6 },
         "targets": [
           {
             "expr": "system_cpu_usage_percent{region=\"us-east\",droplet=\"green\"}",
@@ -241,9 +241,9 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "green"},
-                {"value": 70, "color": "yellow"},
-                {"value": 85, "color": "red"}
+                { "value": null, "color": "green" },
+                { "value": 70, "color": "yellow" },
+                { "value": 85, "color": "red" }
               ]
             }
           }
@@ -253,7 +253,7 @@
         "id": 8,
         "title": "Memory Usage by Region",
         "type": "gauge",
-        "gridPos": {"x": 12, "y": 22, "w": 12, "h": 6},
+        "gridPos": { "x": 12, "y": 22, "w": 12, "h": 6 },
         "targets": [
           {
             "expr": "system_memory_usage_percent{region=\"us-east\",droplet=\"green\"}",
@@ -276,9 +276,9 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"value": null, "color": "green"},
-                {"value": 80, "color": "yellow"},
-                {"value": 90, "color": "red"}
+                { "value": null, "color": "green" },
+                { "value": 80, "color": "yellow" },
+                { "value": 90, "color": "red" }
               ]
             }
           }
@@ -288,7 +288,7 @@
         "id": 9,
         "title": "Request Rate by Region",
         "type": "graph",
-        "gridPos": {"x": 0, "y": 28, "w": 24, "h": 8},
+        "gridPos": { "x": 0, "y": 28, "w": 24, "h": 8 },
         "targets": [
           {
             "expr": "rate(http_requests_total{region=\"us-east\"}[5m])",
@@ -308,13 +308,19 @@
             "unit": "reqps"
           }
         },
-        "legend": {"show": true, "alignAsTable": true, "avg": true, "current": true, "max": true}
+        "legend": {
+          "show": true,
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "max": true
+        }
       },
       {
         "id": 10,
         "title": "Canary Deployment Progress",
         "type": "timeseries",
-        "gridPos": {"x": 0, "y": 36, "w": 24, "h": 8},
+        "gridPos": { "x": 0, "y": 36, "w": 24, "h": 8 },
         "targets": [
           {
             "expr": "deployment_traffic_percent{region=\"us-east\",environment=\"green\"}",
@@ -335,13 +341,17 @@
             "min": 0,
             "max": 100,
             "custom": {
-              "stacking": {"mode": "none"},
+              "stacking": { "mode": "none" },
               "fillOpacity": 20
             }
           }
         },
         "options": {
-          "legend": {"displayMode": "table", "placement": "right", "showLegend": true}
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          }
         }
       }
     ]

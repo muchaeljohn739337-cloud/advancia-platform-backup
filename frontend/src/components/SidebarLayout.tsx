@@ -1,5 +1,5 @@
-"use client";
-import { AnimatePresence, motion } from "framer-motion";
+'use client';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Activity,
   Banknote,
@@ -7,6 +7,7 @@ import {
   Book,
   ChevronRight,
   DollarSign,
+  FolderOpen,
   Globe,
   Grid3x3,
   Home,
@@ -19,14 +20,15 @@ import {
   Shield,
   ShieldAlert,
   User,
+  Users,
   Wallet,
   X,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useMemo, useState } from "react";
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
 type SessionUser = {
   id?: string;
@@ -43,11 +45,7 @@ interface NavLinkProps {
   onClick?: () => void;
 }
 
-export default function SidebarLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SidebarLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const sessionUser = session?.user as SessionUser | undefined;
   const pathname = usePathname();
@@ -55,48 +53,50 @@ export default function SidebarLayout({
 
   const userRole = sessionUser?.role || sessionUser?.email;
   const isAdmin =
-    userRole === "admin" ||
-    sessionUser?.email === "admin@advancia.com" ||
-    sessionUser?.email?.includes("admin");
+    userRole === 'admin' ||
+    sessionUser?.email === 'admin@advancia.com' ||
+    sessionUser?.email?.includes('admin');
 
   const displayName = useMemo(() => {
     if (sessionUser?.name && sessionUser.name.trim().length > 0) {
       return sessionUser.name;
     }
     if (sessionUser?.email) {
-      return sessionUser.email.split("@")[0];
+      return sessionUser.email.split('@')[0];
     }
-    return "Guest";
+    return 'Guest';
   }, [sessionUser?.name, sessionUser?.email]);
 
   const initials = useMemo(() => {
     const parts = displayName.split(/\s+/).filter(Boolean);
-    if (!parts.length) return "";
-    const primary = parts[0]?.[0] ?? "";
-    const secondary =
-      parts.length > 1 ? parts[parts.length - 1]?.[0] ?? "" : "";
+    if (!parts.length) return '';
+    const primary = parts[0]?.[0] ?? '';
+    const secondary = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
     return `${primary}${secondary}`.toUpperCase();
   }, [displayName]);
 
   const navItems = [
-    { href: "/", label: "Dashboard", icon: Home },
-    { href: "/analytics", label: "Analytics", icon: BarChart3 },
-    { href: "/assets", label: "My Assets", icon: Wallet },
-    { href: "/eth/transactions", label: "ETH Activity", icon: Activity },
-    { href: "/loans", label: "Loans", icon: Banknote },
-    { href: "/features", label: "Features", icon: Grid3x3 },
+    { href: '/', label: 'Dashboard', icon: Home },
+    { href: '/analytics', label: 'Analytics', icon: BarChart3 },
+    { href: '/assets', label: 'My Assets', icon: Wallet },
+    { href: '/eth/transactions', label: 'ETH Activity', icon: Activity },
+    { href: '/loans', label: 'Loans', icon: Banknote },
+    // Project Management Section
+    { href: '/dashboard/teams', label: 'Teams', icon: Users },
+    { href: '/dashboard/projects', label: 'Projects', icon: FolderOpen },
+    { href: '/features', label: 'Features', icon: Grid3x3 },
     {
-      href: "/security/breach-alert",
-      label: "Breach Alert",
+      href: '/security/breach-alert',
+      label: 'Breach Alert',
       icon: ShieldAlert,
     },
-    { href: "/security/ip-protection", label: "IP Protection", icon: Globe },
-    { href: "/support", label: "Support", icon: MessageCircle },
-    { href: "/about", label: "About", icon: Info },
-    { href: "/pricing", label: "Pricing", icon: DollarSign },
-    { href: "/docs", label: "Docs", icon: Book },
-    { href: "/settings", label: "Settings", icon: Settings },
-    { href: "/profile", label: "Profile", icon: User },
+    { href: '/security/ip-protection', label: 'IP Protection', icon: Globe },
+    { href: '/support', label: 'Support', icon: MessageCircle },
+    { href: '/about', label: 'About', icon: Info },
+    { href: '/pricing', label: 'Pricing', icon: DollarSign },
+    { href: '/docs', label: 'Docs', icon: Book },
+    { href: '/settings', label: 'Settings', icon: Settings },
+    { href: '/profile', label: 'Profile', icon: User },
   ];
 
   const NavLink = ({ href, label, icon: Icon, onClick }: NavLinkProps) => {
@@ -110,15 +110,15 @@ export default function SidebarLayout({
           transition-all duration-300 ease-out
           ${
             isActive
-              ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/30"
-              : "text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-700"
+              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/30'
+              : 'text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-700'
           }
           active:scale-95 touch-manipulation
         `}
       >
         <Icon
           className={`h-5 w-5 shrink-0 transition-transform group-hover:scale-110 ${
-            isActive ? "text-white" : ""
+            isActive ? 'text-white' : ''
           }`}
         />
         <span className="font-medium truncate">{label}</span>
@@ -145,11 +145,7 @@ export default function SidebarLayout({
             className="p-2.5 rounded-xl hover:bg-gray-100 active:scale-95 transition-all touch-manipulation"
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </div>
@@ -166,10 +162,10 @@ export default function SidebarLayout({
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.aside
-              initial={{ x: "-100%" }}
+              initial={{ x: '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="lg:hidden fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 shadow-2xl flex flex-col"
             >
               <div className="p-6 border-b">
@@ -183,11 +179,7 @@ export default function SidebarLayout({
 
               <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                 {navItems.map((item) => (
-                  <NavLink
-                    key={item.href}
-                    {...item}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  />
+                  <NavLink key={item.href} {...item} onClick={() => setIsMobileMenuOpen(false)} />
                 ))}
 
                 {isAdmin && (
@@ -198,9 +190,9 @@ export default function SidebarLayout({
                       group flex items-center gap-3 px-4 py-3.5 rounded-xl
                       border-2 border-red-200 mt-4
                       ${
-                        pathname === "/admin"
-                          ? "bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg"
-                          : "text-red-600 hover:bg-red-50"
+                        pathname === '/admin'
+                          ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg'
+                          : 'text-red-600 hover:bg-red-50'
                       }
                       transition-all active:scale-95 touch-manipulation
                     `}
@@ -223,17 +215,13 @@ export default function SidebarLayout({
                     />
                   ) : (
                     <div className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                      {initials || "U"}
+                      {initials || 'U'}
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">
-                      {displayName}
-                    </p>
+                    <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
                     {sessionUser?.email && (
-                      <p className="text-xs text-gray-500 truncate">
-                        {sessionUser.email}
-                      </p>
+                      <p className="text-xs text-gray-500 truncate">{sessionUser.email}</p>
                     )}
                   </div>
                 </div>
@@ -273,9 +261,9 @@ export default function SidebarLayout({
                 group flex items-center gap-3 px-4 py-3.5 rounded-xl
                 border-2 border-red-200 mt-4
                 ${
-                  pathname === "/admin"
-                    ? "bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg"
-                    : "text-red-600 hover:bg-red-50"
+                  pathname === '/admin'
+                    ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-lg'
+                    : 'text-red-600 hover:bg-red-50'
                 }
                 transition-all active:scale-95
               `}
@@ -298,17 +286,13 @@ export default function SidebarLayout({
               />
             ) : (
               <div className="h-12 w-12 shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                {initials || "U"}
+                {initials || 'U'}
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-900 truncate">
-                {displayName}
-              </p>
+              <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
               {sessionUser?.email && (
-                <p className="text-xs text-gray-500 truncate">
-                  {sessionUser.email}
-                </p>
+                <p className="text-xs text-gray-500 truncate">{sessionUser.email}</p>
               )}
             </div>
           </div>

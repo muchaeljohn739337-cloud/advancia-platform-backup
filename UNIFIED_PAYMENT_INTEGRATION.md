@@ -70,13 +70,7 @@ window.location.href = redirectUrl; // Redirect user to payment
 Clean, reusable functions for payment processing:
 
 ```javascript
-import {
-  recordTransaction,
-  creditAdminWallet,
-  creditUserCryptoWallet,
-  creditUserUsdBalance,
-  emitPaymentNotification,
-} from "../services/transactionService.js";
+import { recordTransaction, creditAdminWallet, creditUserCryptoWallet, creditUserUsdBalance, emitPaymentNotification } from "../services/transactionService.js";
 
 // In webhook handlers
 await recordTransaction({
@@ -100,20 +94,20 @@ emitPaymentNotification(userId, {
 
 ### Stripe Webhook (`/api/stripe/webhook`)
 
-- Verifies signature
-- Records transaction
-- Credits admin wallet
-- Credits user USD balance
-- Emits real-time notification
+-   Verifies signature
+-   Records transaction
+-   Credits admin wallet
+-   Credits user USD balance
+-   Emits real-time notification
 
 ### Cryptomus Webhook (`/api/cryptomus/webhook`)
 
-- Verifies HMAC signature
-- Updates crypto payment status
-- Records transaction
-- Credits admin wallet
-- Credits user crypto wallet
-- Emits real-time notification
+-   Verifies HMAC signature
+-   Updates crypto payment status
+-   Records transaction
+-   Credits admin wallet
+-   Credits user crypto wallet
+-   Emits real-time notification
 
 ## 📱 Frontend Integration
 
@@ -140,8 +134,8 @@ const checkPaymentStatus = async (orderId) => {
 
 ### Success/Cancel Pages
 
-- **Success**: `/payments/success?orderId=...&session_id=...`
-- **Cancel**: `/payments/cancel?orderId=...`
+-   **Success**: `/payments/success?orderId=...&session_id=...`
+-   **Cancel**: `/payments/cancel?orderId=...`
 
 ## 🧪 Testing
 
@@ -166,18 +160,18 @@ node testUnifiedWebhook.js
 
 ## 🔒 Security
 
-- **Signature Verification**: All webhooks verify cryptographic signatures
-- **Order ID Validation**: Prevents duplicate processing
-- **User Authentication**: Payment creation requires auth
-- **Amount Validation**: Server-side amount validation
+-   **Signature Verification**: All webhooks verify cryptographic signatures
+-   **Order ID Validation**: Prevents duplicate processing
+-   **User Authentication**: Payment creation requires auth
+-   **Amount Validation**: Server-side amount validation
 
 ## 📈 Benefits
 
-- **Consistency**: All features use same payment flow
-- **Flexibility**: Easy to add new payment providers
-- **Maintainability**: Centralized payment logic
-- **Reliability**: Comprehensive error handling and logging
-- **User Experience**: Unified payment flow across features
+-   **Consistency**: All features use same payment flow
+-   **Flexibility**: Easy to add new payment providers
+-   **Maintainability**: Centralized payment logic
+-   **Reliability**: Comprehensive error handling and logging
+-   **User Experience**: Unified payment flow across features
 
 ## 🚀 Adding New Payment Features
 

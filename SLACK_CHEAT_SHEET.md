@@ -23,8 +23,8 @@
 
 # ✅ Outcome
 
-- Easy to paste into Slack with emoji bullets.
-- Compact formatting makes it scannable at a glance.
-- Covers **setup, testing, dev, and alerts** in one snippet.
+-   Easy to paste into Slack with emoji bullets.
+-   Compact formatting makes it scannable at a glance.
+-   Covers **setup, testing, dev, and alerts** in one snippet.
 
 ---

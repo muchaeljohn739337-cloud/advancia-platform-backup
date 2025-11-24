@@ -48,24 +48,28 @@ export function captureException(error: Error, context?: any): void {
     Sentry.captureException(error, {
       tags: {
         component: 'frontend',
-        ...context?.tags
+        ...context?.tags,
       },
-      extra: context?.extra
+      extra: context?.extra,
     });
   } else {
     console.error('Error (Sentry disabled):', error);
   }
 }
 
-export function captureMessage(message: string, level: Sentry.SeverityLevel = 'info', context?: any): void {
+export function captureMessage(
+  message: string,
+  level: Sentry.SeverityLevel = 'info',
+  context?: any
+): void {
   if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
     Sentry.captureMessage(message, {
       level,
       tags: {
         component: 'frontend',
-        ...context?.tags
+        ...context?.tags,
       },
-      extra: context?.extra
+      extra: context?.extra,
     });
   } else {
     console.log(`Message (Sentry disabled):`, message);
@@ -78,7 +82,7 @@ export function setUser(user: { id: string; email?: string; role?: string } | nu
       Sentry.setUser({
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
       });
     } else {
       Sentry.setUser(null);
@@ -95,11 +99,7 @@ export function addBreadcrumb(message: string, category?: string, level?: Sentry
       message,
       category: category || 'custom',
       level: level || 'info',
-      timestamp: Date.now() / 1000
+      timestamp: Date.now() / 1000,
     });
   }
 }
-
-
-
-

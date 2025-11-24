@@ -68,34 +68,19 @@ curl http://localhost:4000/api/trustpilot/stats
 ### Homepage Hero (Quote)
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="quote"
-  height={240}
-  width="100%"
-  theme="dark"
-/>
+<TrustpilotWidgetEmbedded template="quote" height={240} width="100%" theme="dark" />
 ```
 
 ### Reviews Section (Carousel)
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="carousel"
-  height={350}
-  width="100%"
-  stars="5"
-/>
+<TrustpilotWidgetEmbedded template="carousel" height={350} width="100%" stars="5" />
 ```
 
 ### Your Custom Template
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="custom"
-  customTemplateId="0bff66558872c58ed5b8b7942acc34d9"
-  height={300}
-  width="100%"
-/>
+<TrustpilotWidgetEmbedded template="custom" customTemplateId="0bff66558872c58ed5b8b7942acc34d9" height={300} width="100%" />
 ```
 
 ### Custom Reviews Component
@@ -108,7 +93,7 @@ curl http://localhost:4000/api/trustpilot/stats
 
 ## 🔑 Get Credentials
 
-1. **Login**: https://businessapp.b2b.trustpilot.com/
+1. **Login**: <https://businessapp.b2b.trustpilot.com/>
 2. **Navigate**: Integrations → API
 3. **Create**: New API key
 4. **Copy**: API Key + Business Unit ID
@@ -119,15 +104,15 @@ curl http://localhost:4000/api/trustpilot/stats
 
 **Public:**
 
-- `GET /api/trustpilot/reviews` - Published reviews
-- `GET /api/trustpilot/stats` - Statistics
+-   `GET /api/trustpilot/reviews` - Published reviews
+-   `GET /api/trustpilot/stats` - Statistics
 
 **Admin:**
 
-- `POST /api/trustpilot/sync` - Manual sync
-- `GET /api/trustpilot/admin/all` - All reviews
-- `PATCH /api/trustpilot/admin/:id/publish` - Publish/unpublish
-- `DELETE /api/trustpilot/admin/:id` - Delete
+-   `POST /api/trustpilot/sync` - Manual sync
+-   `GET /api/trustpilot/admin/all` - All reviews
+-   `PATCH /api/trustpilot/admin/:id/publish` - Publish/unpublish
+-   `DELETE /api/trustpilot/admin/:id` - Delete
 
 ---
 
@@ -135,35 +120,35 @@ curl http://localhost:4000/api/trustpilot/stats
 
 ### Backend
 
-- `backend/src/jobs/trustpilotCollector.ts` - Collection service
-- `backend/src/routes/trustpilot.ts` - API routes
-- `backend/prisma/schema.prisma` - Added TrustpilotReview model
+-   `backend/src/jobs/trustpilotCollector.ts` - Collection service
+-   `backend/src/routes/trustpilot.ts` - API routes
+-   `backend/prisma/schema.prisma` - Added TrustpilotReview model
 
 ### Frontend
 
-- `frontend/src/components/TrustpilotWidget.tsx` - Basic widget
-- `frontend/src/components/TrustpilotWidgetEmbedded.tsx` - Advanced widget
-- `frontend/src/components/TrustpilotWidgetShowcase.tsx` - Widget gallery
-- `frontend/src/components/TrustpilotReviews.tsx` - Custom display
+-   `frontend/src/components/TrustpilotWidget.tsx` - Basic widget
+-   `frontend/src/components/TrustpilotWidgetEmbedded.tsx` - Advanced widget
+-   `frontend/src/components/TrustpilotWidgetShowcase.tsx` - Widget gallery
+-   `frontend/src/components/TrustpilotReviews.tsx` - Custom display
 
 ### Documentation
 
-- `TRUSTPILOT_AUTOMATION_GUIDE.md` - Complete guide
-- `TRUSTPILOT_WIDGET_TEMPLATES.md` - Widget reference
-- `TRUSTPILOT_IMPLEMENTATION_SUMMARY.md` - Implementation details
-- `TRUSTPILOT_SETUP_CHECKLIST.md` - Step-by-step setup
-- `TRUSTPILOT_WORKFLOW_DIAGRAM.md` - Architecture diagrams
+-   `TRUSTPILOT_AUTOMATION_GUIDE.md` - Complete guide
+-   `TRUSTPILOT_WIDGET_TEMPLATES.md` - Widget reference
+-   `TRUSTPILOT_IMPLEMENTATION_SUMMARY.md` - Implementation details
+-   `TRUSTPILOT_SETUP_CHECKLIST.md` - Step-by-step setup
+-   `TRUSTPILOT_WORKFLOW_DIAGRAM.md` - Architecture diagrams
 
 ---
 
 ## ✅ Verification Checklist
 
-- [ ] Dependencies installed
-- [ ] Database migration completed
-- [ ] Environment variables configured
-- [ ] Backend starts without errors
-- [ ] Stats endpoint returns data: `curl http://localhost:4000/api/trustpilot/stats`
-- [ ] Frontend displays widgets correctly
+-   [ ] Dependencies installed
+-   [ ] Database migration completed
+-   [ ] Environment variables configured
+-   [ ] Backend starts without errors
+-   [ ] Stats endpoint returns data: `curl http://localhost:4000/api/trustpilot/stats`
+-   [ ] Frontend displays widgets correctly
 
 ---
 
@@ -179,28 +164,28 @@ npm install
 
 ### Reviews not syncing
 
-- Check API credentials in `.env`
-- Verify Business Unit ID is correct
-- Check backend logs: `tail -f backend/logs/combined.log`
+-   Check API credentials in `.env`
+-   Verify Business Unit ID is correct
+-   Check backend logs: `tail -f backend/logs/combined.log`
 
 ### Widgets not showing
 
-- Verify `NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID` is set
-- Clear browser cache
-- Check browser console for errors
+-   Verify `NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID` is set
+-   Clear browser cache
+-   Check browser console for errors
 
 ---
 
 ## 📚 Full Documentation
 
-- **Setup Guide**: `TRUSTPILOT_AUTOMATION_GUIDE.md`
-- **Widget Reference**: `TRUSTPILOT_WIDGET_TEMPLATES.md`
-- **Setup Checklist**: `TRUSTPILOT_SETUP_CHECKLIST.md`
-- **Architecture**: `TRUSTPILOT_WORKFLOW_DIAGRAM.md`
+-   **Setup Guide**: `TRUSTPILOT_AUTOMATION_GUIDE.md`
+-   **Widget Reference**: `TRUSTPILOT_WIDGET_TEMPLATES.md`
+-   **Setup Checklist**: `TRUSTPILOT_SETUP_CHECKLIST.md`
+-   **Architecture**: `TRUSTPILOT_WORKFLOW_DIAGRAM.md`
 
 ---
 
-## 🎉 You're Ready!
+## 🎉 You're Ready
 
 Your Trustpilot automation is complete and production-ready:
 

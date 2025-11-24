@@ -1,6 +1,6 @@
-"use client";
-import { motion } from "framer-motion";
-import DashboardRouteGuard from "./DashboardRouteGuard";
+'use client';
+import { motion } from 'framer-motion';
+import DashboardRouteGuard from './DashboardRouteGuard';
 
 export default function MedbedSection() {
   return (
@@ -8,7 +8,9 @@ export default function MedbedSection() {
       <section id="medbed" className="py-20 bg-gradient-to-r from-blue-50 to-teal-50">
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold text-blue-700">Health Insights</h2>
-          <p className="text-gray-600">View heart-rate and wellness analytics from connected devices.</p>
+          <p className="text-gray-600">
+            View heart-rate and wellness analytics from connected devices.
+          </p>
         </div>
 
         <motion.div

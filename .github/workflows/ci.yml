@@ -6,9 +6,14 @@ on:
       - "**"
   pull_request:
 
+env:
+  NODE_VERSION: "22"
+  DATABASE_URL: "postgresql://test_user:test_password@localhost:5432/test_db"
+  NODE_ENV: test
+
 jobs:
-  build-and-test:
-    name: Build and Test (backend + frontend)
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,42 +22,165 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Backend - Install deps
-        working-directory: backend
-        run: pnpm install --no-frozen-lockfile
+      - name: Run ESLint
+        run: npm run lint:check
 
-      - name: Backend - Build
-        working-directory: backend
-        run: npm run build
+      - name: Run Prettier check
+        run: npx prettier --check .
 
-      - name: Backend - Unit tests
-        working-directory: backend
+      - name: Run TypeScript check
+        run: npm run type-check
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup database
         run: |
-          if npm run -s test -- --ci; then
-            echo "Tests passed"
-          else
-            echo "Tests failed"; exit 1
-          fi
+          cd backend
+          npx prisma migrate deploy
+          npx prisma generate
 
-      - name: Frontend - Install deps (if present)
-        working-directory: frontend
-        run: |
-          if [ -f package.json ]; then
-            pnpm install --no-frozen-lockfile
-          else
-            echo "No frontend/package.json; skipping install"
-          fi
+      - name: Run unit tests
+        run: npm run test:unit
 
-      - name: Frontend - Build (if present)
-        working-directory: frontend
+      - name: Run integration tests
+        run: npm run test:integration
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: |
+            backend/coverage/
+            frontend/coverage/
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build backend
+        run: npm run build:backend
+
+      - name: Build frontend
+        run: npm run build:frontend
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            backend/dist/
+            frontend/.next/
+
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Setup database
         run: |
-          if [ -f package.json ]; then
-            npm run build --if-present
-          else
-            echo "No frontend/package.json; skipping build"
-          fi
+          cd backend
+          npx prisma migrate deploy
+          npx prisma generate
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Start application
+        run: |
+          npm run dev:backend &
+          npm run dev:frontend &
+          sleep 30
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-test-results
+          path: |
+            frontend/test-results/
+            frontend/playwright-report/

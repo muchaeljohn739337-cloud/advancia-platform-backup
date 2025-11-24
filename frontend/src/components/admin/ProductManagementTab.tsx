@@ -1,83 +1,80 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 
 const ProductManagementTab = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("created_date");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('created_date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
   // Mock product data - replace with actual API calls
   const products = useMemo(
     () => [
       {
         id: 1,
-        name: "Recovery Session Package",
-        description:
-          "Comprehensive recovery session with advanced therapeutic protocols.",
-        category: "recovery_packages",
+        name: 'Recovery Session Package',
+        description: 'Comprehensive recovery session with advanced therapeutic protocols.',
+        category: 'recovery_packages',
         price: 299.99,
-        status: "active",
+        status: 'active',
         inventory: 15,
         likes: 234,
         sales: 89,
-        createdDate: "2024-08-15",
-        lastUpdated: "2024-10-01",
+        createdDate: '2024-08-15',
+        lastUpdated: '2024-10-01',
       },
       {
         id: 2,
-        name: "Enhancement Program",
-        description:
-          "Advanced enhancement program for optimal wellness and performance.",
-        category: "enhancement_programs",
+        name: 'Enhancement Program',
+        description: 'Advanced enhancement program for optimal wellness and performance.',
+        category: 'enhancement_programs',
         price: 499.99,
-        status: "active",
+        status: 'active',
         inventory: 32,
         likes: 156,
         sales: 145,
-        createdDate: "2024-07-22",
-        lastUpdated: "2024-09-28",
+        createdDate: '2024-07-22',
+        lastUpdated: '2024-09-28',
       },
       {
         id: 3,
-        name: "Diagnostic Package",
-        description:
-          "Comprehensive diagnostic assessment with detailed analysis.",
-        category: "diagnostic_services",
+        name: 'Diagnostic Package',
+        description: 'Comprehensive diagnostic assessment with detailed analysis.',
+        category: 'diagnostic_services',
         price: 199.99,
-        status: "active",
+        status: 'active',
         inventory: 8,
         likes: 98,
         sales: 67,
-        createdDate: "2024-09-05",
-        lastUpdated: "2024-10-02",
+        createdDate: '2024-09-05',
+        lastUpdated: '2024-10-02',
       },
     ],
     []
   );
 
   const categoryOptions = [
-    { value: "all", label: "All Categories" },
-    { value: "recovery_packages", label: "Recovery Packages" },
-    { value: "enhancement_programs", label: "Enhancement Programs" },
-    { value: "diagnostic_services", label: "Diagnostic Services" },
+    { value: 'all', label: 'All Categories' },
+    { value: 'recovery_packages', label: 'Recovery Packages' },
+    { value: 'enhancement_programs', label: 'Enhancement Programs' },
+    { value: 'diagnostic_services', label: 'Diagnostic Services' },
   ];
 
   const statusOptions = [
-    { value: "all", label: "All Status" },
-    { value: "active", label: "Active" },
-    { value: "draft", label: "Draft" },
-    { value: "inactive", label: "Inactive" },
+    { value: 'all', label: 'All Status' },
+    { value: 'active', label: 'Active' },
+    { value: 'draft', label: 'Draft' },
+    { value: 'inactive', label: 'Inactive' },
   ];
 
   const sortOptions = [
-    { value: "created_date", label: "Created Date" },
-    { value: "name", label: "Name" },
-    { value: "price", label: "Price" },
-    { value: "sales", label: "Sales" },
-    { value: "likes", label: "Likes" },
+    { value: 'created_date', label: 'Created Date' },
+    { value: 'name', label: 'Name' },
+    { value: 'price', label: 'Price' },
+    { value: 'sales', label: 'Sales' },
+    { value: 'likes', label: 'Likes' },
   ];
 
   const filteredAndSortedProducts = useMemo(() => {
@@ -85,27 +82,21 @@ const ProductManagementTab = () => {
       const matchesSearch =
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory =
-        categoryFilter === "all" || product.category === categoryFilter;
-      const matchesStatus =
-        statusFilter === "all" || product.status === statusFilter;
+      const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
+      const matchesStatus = statusFilter === 'all' || product.status === statusFilter;
       return matchesSearch && matchesCategory && matchesStatus;
     });
 
     return filtered.sort((a, b) => {
-      let aValue: string | number | Date = a[sortBy as keyof typeof a] as
-        | string
-        | number;
-      let bValue: string | number | Date = b[sortBy as keyof typeof b] as
-        | string
-        | number;
+      let aValue: string | number | Date = a[sortBy as keyof typeof a] as string | number;
+      let bValue: string | number | Date = b[sortBy as keyof typeof b] as string | number;
 
-      if (sortBy === "created_date" || sortBy === "lastUpdated") {
+      if (sortBy === 'created_date' || sortBy === 'lastUpdated') {
         aValue = new Date(aValue as string);
         bValue = new Date(bValue as string);
       }
 
-      if (sortOrder === "asc") {
+      if (sortOrder === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -115,18 +106,14 @@ const ProductManagementTab = () => {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      active: { color: "bg-green-100 text-green-800", label: "Active" },
-      draft: { color: "bg-yellow-100 text-yellow-800", label: "Draft" },
-      inactive: { color: "bg-gray-100 text-gray-800", label: "Inactive" },
+      active: { color: 'bg-green-100 text-green-800', label: 'Active' },
+      draft: { color: 'bg-yellow-100 text-yellow-800', label: 'Draft' },
+      inactive: { color: 'bg-gray-100 text-gray-800', label: 'Inactive' },
     };
 
-    const config =
-      statusConfig[status as keyof typeof statusConfig] ||
-      statusConfig.inactive;
+    const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.inactive;
     return (
-      <span
-        className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}
-      >
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
         {config.label}
       </span>
     );
@@ -134,9 +121,9 @@ const ProductManagementTab = () => {
 
   const getCategoryLabel = (category: string) => {
     const categoryMap: Record<string, string> = {
-      recovery_packages: "Recovery Packages",
-      enhancement_programs: "Enhancement Programs",
-      diagnostic_services: "Diagnostic Services",
+      recovery_packages: 'Recovery Packages',
+      enhancement_programs: 'Enhancement Programs',
+      diagnostic_services: 'Diagnostic Services',
     };
     return categoryMap[category] || category;
   };
@@ -161,12 +148,8 @@ const ProductManagementTab = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">
-            Product Management
-          </h2>
-          <p className="text-gray-600">
-            Manage products, pricing, and inventory
-          </p>
+          <h2 className="text-2xl font-semibold text-gray-900">Product Management</h2>
+          <p className="text-gray-600">Manage products, pricing, and inventory</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -225,11 +208,11 @@ const ProductManagementTab = () => {
             ))}
           </select>
           <button
-            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
             className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-            title={`Sort ${sortOrder === "asc" ? "ascending" : "descending"}`}
+            title={`Sort ${sortOrder === 'asc' ? 'ascending' : 'descending'}`}
           >
-            {sortOrder === "asc" ? "↑" : "↓"}
+            {sortOrder === 'asc' ? '↑' : '↓'}
           </button>
         </div>
       </div>
@@ -240,49 +223,24 @@ const ProductManagementTab = () => {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Product
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Category
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Price
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Status
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Inventory
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Likes
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Sales
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Updated
-                </th>
-                <th className="text-left p-4 font-medium text-gray-900">
-                  Actions
-                </th>
+                <th className="text-left p-4 font-medium text-gray-900">Product</th>
+                <th className="text-left p-4 font-medium text-gray-900">Category</th>
+                <th className="text-left p-4 font-medium text-gray-900">Price</th>
+                <th className="text-left p-4 font-medium text-gray-900">Status</th>
+                <th className="text-left p-4 font-medium text-gray-900">Inventory</th>
+                <th className="text-left p-4 font-medium text-gray-900">Likes</th>
+                <th className="text-left p-4 font-medium text-gray-900">Sales</th>
+                <th className="text-left p-4 font-medium text-gray-900">Updated</th>
+                <th className="text-left p-4 font-medium text-gray-900">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredAndSortedProducts.map((product) => (
-                <tr
-                  key={product.id}
-                  className="border-t border-gray-200 hover:bg-gray-50"
-                >
+                <tr key={product.id} className="border-t border-gray-200 hover:bg-gray-50">
                   <td className="p-4">
                     <div className="max-w-xs">
-                      <p className="font-medium text-gray-900 truncate">
-                        {product.name}
-                      </p>
-                      <p className="text-sm text-gray-600 line-clamp-2">
-                        {product.description}
-                      </p>
+                      <p className="font-medium text-gray-900 truncate">{product.name}</p>
+                      <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
                     </div>
                   </td>
                   <td className="p-4 text-sm text-gray-600">
@@ -295,9 +253,7 @@ const ProductManagementTab = () => {
                   <td className="p-4">
                     <span
                       className={`text-sm ${
-                        product.inventory < 10
-                          ? "text-yellow-600"
-                          : "text-gray-900"
+                        product.inventory < 10 ? 'text-yellow-600' : 'text-gray-900'
                       }`}
                     >
                       {product.inventory}
@@ -321,17 +277,13 @@ const ProductManagementTab = () => {
                         onClick={() =>
                           handleStatusChange(
                             product.id,
-                            product.status === "active" ? "inactive" : "active"
+                            product.status === 'active' ? 'inactive' : 'active'
                           )
                         }
                         className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50"
-                        title={
-                          product.status === "active"
-                            ? "Deactivate"
-                            : "Activate"
-                        }
+                        title={product.status === 'active' ? 'Deactivate' : 'Activate'}
                       >
-                        {product.status === "active" ? "Hide" : "Show"}
+                        {product.status === 'active' ? 'Hide' : 'Show'}
                       </button>
                       <button
                         onClick={() => handleDeleteProduct(product.id)}
@@ -352,39 +304,28 @@ const ProductManagementTab = () => {
       {/* Mobile Cards */}
       <div className="lg:hidden space-y-4">
         {filteredAndSortedProducts.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white rounded-lg border border-gray-200 p-4"
-          >
+          <div key={product.id} className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="flex gap-4 mb-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-medium text-gray-900 truncate">
-                    {product.name}
-                  </h3>
+                  <h3 className="font-medium text-gray-900 truncate">{product.name}</h3>
                   {getStatusBadge(product.status)}
                 </div>
-                <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-                  {product.description}
-                </p>
-                <p className="text-sm text-gray-600">
-                  {getCategoryLabel(product.category)}
-                </p>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-2">{product.description}</p>
+                <p className="text-sm text-gray-600">{getCategoryLabel(product.category)}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <p className="text-xs text-gray-600">Price</p>
-                <p className="font-mono text-sm text-gray-900">
-                  ${product.price.toLocaleString()}
-                </p>
+                <p className="font-mono text-sm text-gray-900">${product.price.toLocaleString()}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-600">Inventory</p>
                 <p
                   className={`text-sm ${
-                    product.inventory < 10 ? "text-yellow-600" : "text-gray-900"
+                    product.inventory < 10 ? 'text-yellow-600' : 'text-gray-900'
                   }`}
                 >
                   {product.inventory} units
@@ -411,12 +352,12 @@ const ProductManagementTab = () => {
                 onClick={() =>
                   handleStatusChange(
                     product.id,
-                    product.status === "active" ? "inactive" : "active"
+                    product.status === 'active' ? 'inactive' : 'active'
                   )
                 }
                 className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50"
               >
-                {product.status === "active" ? "Hide" : "Show"}
+                {product.status === 'active' ? 'Hide' : 'Show'}
               </button>
               <button
                 onClick={() => handleDeleteProduct(product.id)}
@@ -435,16 +376,14 @@ const ProductManagementTab = () => {
           <div className="flex items-center gap-2 mb-2">
             <span className="text-sm text-gray-600">Total Products</span>
           </div>
-          <p className="text-2xl font-semibold text-gray-900">
-            {products.length}
-          </p>
+          <p className="text-2xl font-semibold text-gray-900">{products.length}</p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-sm text-gray-600">Active Products</span>
           </div>
           <p className="text-2xl font-semibold text-gray-900">
-            {products.filter((p) => p.status === "active").length}
+            {products.filter((p) => p.status === 'active').length}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -452,9 +391,7 @@ const ProductManagementTab = () => {
             <span className="text-sm text-gray-600">Total Sales</span>
           </div>
           <p className="text-2xl font-semibold text-gray-900">
-            {products
-              .reduce((sum, product) => sum + product.sales, 0)
-              .toLocaleString()}
+            {products.reduce((sum, product) => sum + product.sales, 0).toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -462,9 +399,7 @@ const ProductManagementTab = () => {
             <span className="text-sm text-gray-600">Total Likes</span>
           </div>
           <p className="text-2xl font-semibold text-gray-900">
-            {products
-              .reduce((sum, product) => sum + product.likes, 0)
-              .toLocaleString()}
+            {products.reduce((sum, product) => sum + product.likes, 0).toLocaleString()}
           </p>
         </div>
       </div>

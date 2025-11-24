@@ -18,9 +18,9 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 
 **Features**:
 
-- Compact star rating
-- Small footprint (24px height)
-- Perfect for tight spaces
+-   Compact star rating
+-   Small footprint (24px height)
+-   Perfect for tight spaces
 
 ---
 
@@ -38,9 +38,9 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 
 **Features**:
 
-- Minimal size
-- Shows review count
-- Great for mobile
+-   Minimal size
+-   Shows review count
+-   Great for mobile
 
 ---
 
@@ -53,19 +53,14 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 **Usage**:
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="quote"
-  height={240}
-  width="100%"
-  theme="dark"
-/>
+<TrustpilotWidgetEmbedded template="quote" height={240} width="100%" theme="dark" />
 ```
 
 **Features**:
 
-- Shows single featured review
-- Large, prominent display
-- Great for social proof
+-   Shows single featured review
+-   Large, prominent display
+-   Great for social proof
 
 ---
 
@@ -78,20 +73,15 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 **Usage**:
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="carousel"
-  height={350}
-  width="100%"
-  stars="5"
-/>
+<TrustpilotWidgetEmbedded template="carousel" height={350} width="100%" stars="5" />
 ```
 
 **Features**:
 
-- Rotating reviews
-- Auto-play option
-- Eye-catching animation
-- Shows only 5-star reviews
+-   Rotating reviews
+-   Auto-play option
+-   Eye-catching animation
+-   Shows only 5-star reviews
 
 ---
 
@@ -109,9 +99,9 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 
 **Features**:
 
-- Vertical list of reviews
-- Scrollable
-- Shows multiple reviews at once
+-   Vertical list of reviews
+-   Scrollable
+-   Shows multiple reviews at once
 
 ---
 
@@ -129,9 +119,9 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 
 **Features**:
 
-- Multiple columns
-- Responsive layout
-- Shows many reviews
+-   Multiple columns
+-   Responsive layout
+-   Shows many reviews
 
 ---
 
@@ -144,19 +134,14 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 **Usage**:
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="custom"
-  customTemplateId="74ecde4d46d4b399c7295cf599d2886b"
-  height={300}
-  width="100%"
-/>
+<TrustpilotWidgetEmbedded template="custom" customTemplateId="74ecde4d46d4b399c7295cf599d2886b" height={300} width="100%" />
 ```
 
 **Features**:
 
-- Your custom Trustpilot widget design
-- Fully customizable in Trustpilot portal
-- Use any template ID
+-   Your custom Trustpilot widget design
+-   Fully customizable in Trustpilot portal
+-   Use any template ID
 
 ---
 
@@ -164,14 +149,7 @@ Your custom template IDs: `0bff66558872c58ed5b8b7942acc34d9`, `74ecde4d46d4b399c
 
 ```tsx
 type Props = {
-  template?:
-    | "mini"
-    | "micro"
-    | "carousel"
-    | "list"
-    | "grid"
-    | "quote"
-    | "custom";
+  template?: "mini" | "micro" | "carousel" | "list" | "grid" | "quote" | "custom";
   customTemplateId?: string; // For custom templates
   height?: number | string; // e.g., 240, "auto"
   width?: number | string; // e.g., "100%", 300
@@ -202,12 +180,7 @@ type Props = {
 ### Navigation/Header
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="mini"
-  height={24}
-  width={150}
-  theme="dark"
-/>
+<TrustpilotWidgetEmbedded template="mini" height={24} width={150} theme="dark" />
 ```
 
 ### Product/Service Page
@@ -241,23 +214,13 @@ type Props = {
 ### Dark Theme (for dark backgrounds)
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="carousel"
-  theme="dark"
-  height={350}
-  width="100%"
-/>
+<TrustpilotWidgetEmbedded template="carousel" theme="dark" height={350} width="100%" />
 ```
 
 ### Light Theme (for light backgrounds)
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="carousel"
-  theme="light"
-  height={350}
-  width="100%"
-/>
+<TrustpilotWidgetEmbedded template="carousel" theme="light" height={350} width="100%" />
 ```
 
 ---
@@ -267,12 +230,7 @@ type Props = {
 ### Show only 5-star reviews
 
 ```tsx
-<TrustpilotWidgetEmbedded
-  template="carousel"
-  stars="5"
-  height={350}
-  width="100%"
-/>
+<TrustpilotWidgetEmbedded template="carousel" stars="5" height={350} width="100%" />
 ```
 
 ### Show only 5-star reviews (recommended)
@@ -326,56 +284,29 @@ export default function HomePage() {
       {/* Header - Mini widget */}
       <header className="py-4 px-6 flex justify-between items-center">
         <div className="logo">Your Logo</div>
-        <TrustpilotWidgetEmbedded
-          template="mini"
-          height={24}
-          width={150}
-          theme="dark"
-        />
+        <TrustpilotWidgetEmbedded template="mini" height={24} width={150} theme="dark" />
       </header>
 
       {/* Hero - Quote widget */}
       <section className="container mx-auto py-12 px-4">
         <h1 className="text-5xl font-bold mb-8">Welcome</h1>
-        <TrustpilotWidgetEmbedded
-          template="quote"
-          height={240}
-          width="100%"
-          theme="dark"
-        />
+        <TrustpilotWidgetEmbedded template="quote" height={240} width="100%" theme="dark" />
       </section>
 
       {/* Reviews - Carousel */}
       <section className="container mx-auto py-12 px-4">
         <h2 className="text-3xl font-bold mb-6">What Our Customers Say</h2>
-        <TrustpilotWidgetEmbedded
-          template="carousel"
-          height={350}
-          width="100%"
-          stars="5"
-          theme="dark"
-        />
+        <TrustpilotWidgetEmbedded template="carousel" height={350} width="100%" stars="5" theme="dark" />
       </section>
 
       {/* Custom widget */}
       <section className="container mx-auto py-12 px-4">
-        <TrustpilotWidgetEmbedded
-          template="custom"
-          customTemplateId="0bff66558872c58ed5b8b7942acc34d9"
-          height={300}
-          width="100%"
-          theme="dark"
-        />
+        <TrustpilotWidgetEmbedded template="custom" customTemplateId="0bff66558872c58ed5b8b7942acc34d9" height={300} width="100%" theme="dark" />
       </section>
 
       {/* Footer - Mini widget */}
       <footer className="py-6 px-4 text-center">
-        <TrustpilotWidgetEmbedded
-          template="mini"
-          height={24}
-          width={150}
-          theme="dark"
-        />
+        <TrustpilotWidgetEmbedded template="mini" height={24} width={150} theme="dark" />
       </footer>
     </div>
   );
@@ -404,10 +335,10 @@ export default function WidgetTestPage() {
 
 Navigate to `/widget-test` (or whatever route you create) to see:
 
-- All 7 widget templates
-- Live examples
-- Copy-paste ready code
-- Recommended use cases
+-   All 7 widget templates
+-   Live examples
+-   Copy-paste ready code
+-   Recommended use cases
 
 ---
 
@@ -427,8 +358,8 @@ Example embed code from Trustpilot:
 
 Your custom IDs:
 
-- `0bff66558872c58ed5b8b7942acc34d9`
-- `74ecde4d46d4b399c7295cf599d2886b`
+-   `0bff66558872c58ed5b8b7942acc34d9`
+-   `74ecde4d46d4b399c7295cf599d2886b`
 
 ---
 

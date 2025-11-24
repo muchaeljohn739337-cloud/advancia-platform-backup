@@ -10,8 +10,8 @@
  * - Input sanitization
  */
 
-import CryptoJS from "crypto-js";
-import { InputSecurity } from "./security";
+import CryptoJS from 'crypto-js';
+import { InputSecurity } from './security';
 
 // ============================================
 // 1. FORM SUBMIT PROTECTION
@@ -28,14 +28,14 @@ export class FormSubmitProtection {
   static canSubmit(formId: string): boolean {
     // Check if already submitting
     if (this.submittingForms.has(formId)) {
-      console.warn("Form is already being submitted:", formId);
+      console.warn('Form is already being submitted:', formId);
       return false;
     }
 
     // Check rate limiting
     const lastSubmit = this.submitTimestamps.get(formId);
     if (lastSubmit && Date.now() - lastSubmit < this.MIN_SUBMIT_INTERVAL) {
-      console.warn("Form submitted too quickly:", formId);
+      console.warn('Form submitted too quickly:', formId);
       return false;
     }
 
@@ -92,18 +92,14 @@ export class FormValidator {
   /**
    * Validate single field
    */
-  static validateField(
-    name: string,
-    value: any,
-    rules: ValidationRule
-  ): string | null {
+  static validateField(name: string, value: any, rules: ValidationRule): string | null {
     // Required check
-    if (rules.required && (!value || value.toString().trim() === "")) {
+    if (rules.required && (!value || value.toString().trim() === '')) {
       return `${name} is required`;
     }
 
     // Skip other checks if empty and not required
-    if (!value || value.toString().trim() === "") {
+    if (!value || value.toString().trim() === '') {
       return null;
     }
 
@@ -140,9 +136,8 @@ export class FormValidator {
     }
 
     // Numeric min/max
-    if (typeof value === "number" || !isNaN(parseFloat(stringValue))) {
-      const numValue =
-        typeof value === "number" ? value : parseFloat(stringValue);
+    if (typeof value === 'number' || !isNaN(parseFloat(stringValue))) {
+      const numValue = typeof value === 'number' ? value : parseFloat(stringValue);
 
       if (rules.min !== undefined && numValue < rules.min) {
         return `${name} must be at least ${rules.min}`;
@@ -159,7 +154,7 @@ export class FormValidator {
       if (result === false) {
         return `${name} is invalid`;
       }
-      if (typeof result === "string") {
+      if (typeof result === 'string') {
         return result;
       }
     }
@@ -205,7 +200,7 @@ export class FormValidator {
   private static isValidURL(url: string): boolean {
     try {
       const parsed = new URL(url);
-      return parsed.protocol === "http:" || parsed.protocol === "https:";
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
     } catch {
       return false;
     }
@@ -216,7 +211,7 @@ export class FormValidator {
    */
   private static isValidPhone(phone: string): boolean {
     // Remove all non-digit characters
-    const digits = phone.replace(/\D/g, "");
+    const digits = phone.replace(/\D/g, '');
     // Check if it's between 10-15 digits
     return digits.length >= 10 && digits.length <= 15;
   }
@@ -226,14 +221,14 @@ export class FormValidator {
    */
   static validatePassword(password: string): {
     valid: boolean;
-    strength: "weak" | "medium" | "strong";
+    strength: 'weak' | 'medium' | 'strong';
     message: string;
   } {
     if (password.length < 8) {
       return {
         valid: false,
-        strength: "weak",
-        message: "Password must be at least 8 characters",
+        strength: 'weak',
+        message: 'Password must be at least 8 characters',
       };
     }
 
@@ -254,24 +249,23 @@ export class FormValidator {
     if (strength < 2) {
       return {
         valid: false,
-        strength: "weak",
-        message:
-          "Password is too weak. Use a mix of letters, numbers, and symbols",
+        strength: 'weak',
+        message: 'Password is too weak. Use a mix of letters, numbers, and symbols',
       };
     }
 
     if (strength < 3) {
       return {
         valid: true,
-        strength: "medium",
-        message: "Password strength is medium",
+        strength: 'medium',
+        message: 'Password strength is medium',
       };
     }
 
     return {
       valid: true,
-      strength: "strong",
-      message: "Password is strong",
+      strength: 'strong',
+      message: 'Password is strong',
     };
   }
 }
@@ -282,8 +276,7 @@ export class FormValidator {
 
 export class FieldEncryption {
   private static readonly ENCRYPTION_KEY =
-    process.env.NEXT_PUBLIC_FORM_ENCRYPTION_KEY ||
-    "advancia-default-key-change-in-production";
+    process.env.NEXT_PUBLIC_FORM_ENCRYPTION_KEY || 'advancia-default-key-change-in-production';
 
   /**
    * Encrypt sensitive field data
@@ -292,7 +285,7 @@ export class FieldEncryption {
     try {
       return CryptoJS.AES.encrypt(data, this.ENCRYPTION_KEY).toString();
     } catch (error) {
-      console.error("Encryption failed:", error);
+      console.error('Encryption failed:', error);
       return data;
     }
   }
@@ -305,7 +298,7 @@ export class FieldEncryption {
       const bytes = CryptoJS.AES.decrypt(encryptedData, this.ENCRYPTION_KEY);
       return bytes.toString(CryptoJS.enc.Utf8);
     } catch (error) {
-      console.error("Decryption failed:", error);
+      console.error('Decryption failed:', error);
       return encryptedData;
     }
   }
@@ -313,10 +306,7 @@ export class FieldEncryption {
   /**
    * Encrypt specific form fields
    */
-  static encryptFields(
-    data: Record<string, any>,
-    fieldsToEncrypt: string[]
-  ): Record<string, any> {
+  static encryptFields(data: Record<string, any>, fieldsToEncrypt: string[]): Record<string, any> {
     const encrypted = { ...data };
 
     for (const field of fieldsToEncrypt) {
@@ -341,7 +331,7 @@ export class FieldEncryption {
 // ============================================
 
 export class CSRFProtection {
-  private static readonly TOKEN_KEY = "__csrf_token";
+  private static readonly TOKEN_KEY = '__csrf_token';
   private static readonly TOKEN_EXPIRY = 3600000; // 1 hour
 
   /**
@@ -393,12 +383,10 @@ export class CSRFProtection {
   /**
    * Add CSRF token to headers
    */
-  static addToHeaders(
-    headers: Record<string, string> = {}
-  ): Record<string, string> {
+  static addToHeaders(headers: Record<string, string> = {}): Record<string, string> {
     return {
       ...headers,
-      "X-CSRF-Token": this.getToken(),
+      'X-CSRF-Token': this.getToken(),
     };
   }
 }
@@ -420,9 +408,7 @@ export class FormRateLimiter {
     const attempts = this.attempts.get(formId) || [];
 
     // Remove old attempts outside time window
-    const recentAttempts = attempts.filter(
-      (timestamp) => now - timestamp < this.TIME_WINDOW
-    );
+    const recentAttempts = attempts.filter((timestamp) => now - timestamp < this.TIME_WINDOW);
 
     this.attempts.set(formId, recentAttempts);
 
@@ -451,9 +437,7 @@ export class FormRateLimiter {
   static getRemainingAttempts(formId: string): number {
     const now = Date.now();
     const attempts = this.attempts.get(formId) || [];
-    const recentAttempts = attempts.filter(
-      (timestamp) => now - timestamp < this.TIME_WINDOW
-    );
+    const recentAttempts = attempts.filter((timestamp) => now - timestamp < this.TIME_WINDOW);
 
     return Math.max(0, this.MAX_ATTEMPTS - recentAttempts.length);
   }
@@ -501,18 +485,13 @@ export class SecureFormHandler {
       if (!FormSubmitProtection.canSubmit(this.config.formId)) {
         return {
           success: false,
-          message: "Please wait before submitting again",
+          message: 'Please wait before submitting again',
         };
       }
 
       // 2. Check rate limiting
-      if (
-        this.config.enableRateLimit &&
-        FormRateLimiter.isRateLimited(this.config.formId)
-      ) {
-        const remaining = FormRateLimiter.getRemainingAttempts(
-          this.config.formId
-        );
+      if (this.config.enableRateLimit && FormRateLimiter.isRateLimited(this.config.formId)) {
+        const remaining = FormRateLimiter.getRemainingAttempts(this.config.formId);
         return {
           success: false,
           message: `Too many attempts. Please try again later. (${remaining} attempts remaining)`,
@@ -527,25 +506,19 @@ export class SecureFormHandler {
 
       // 4. Validate form
       if (this.config.validationRules) {
-        const validation = FormValidator.validate(
-          processedData,
-          this.config.validationRules
-        );
+        const validation = FormValidator.validate(processedData, this.config.validationRules);
         if (!validation.valid) {
           return {
             success: false,
             errors: validation.errors,
-            message: "Please fix the errors in the form",
+            message: 'Please fix the errors in the form',
           };
         }
       }
 
       // 5. Encrypt sensitive fields
       if (this.config.encryptFields && this.config.encryptFields.length > 0) {
-        processedData = FieldEncryption.encryptFields(
-          processedData,
-          this.config.encryptFields
-        );
+        processedData = FieldEncryption.encryptFields(processedData, this.config.encryptFields);
       }
 
       // 6. Add CSRF token
@@ -581,7 +554,7 @@ export class SecureFormHandler {
 
       return {
         success: false,
-        message: error.message || "An error occurred while submitting the form",
+        message: error.message || 'An error occurred while submitting the form',
       };
     } finally {
       // Always end submit state
@@ -596,9 +569,9 @@ export class SecureFormHandler {
     const sanitized: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(data)) {
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         sanitized[key] = InputSecurity.sanitizeInput(value);
-      } else if (typeof value === "object" && value !== null) {
+      } else if (typeof value === 'object' && value !== null) {
         sanitized[key] = this.sanitizeFormData(value);
       } else {
         sanitized[key] = value;
@@ -625,7 +598,7 @@ export const FormSecurityUtils = {
   /**
    * Generate secure form ID
    */
-  generateFormId(prefix: string = "form"): string {
+  generateFormId(prefix: string = 'form'): string {
     return `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   },
 
@@ -633,17 +606,17 @@ export const FormSecurityUtils = {
    * Prevent autocomplete on sensitive fields
    */
   disableAutocomplete(element: HTMLInputElement): void {
-    element.setAttribute("autocomplete", "off");
-    element.setAttribute("data-form-type", "other");
+    element.setAttribute('autocomplete', 'off');
+    element.setAttribute('data-form-type', 'other');
   },
 
   /**
    * Clear form data from memory
    */
   clearFormData(formElement: HTMLFormElement): void {
-    const inputs = formElement.querySelectorAll("input, textarea");
+    const inputs = formElement.querySelectorAll('input, textarea');
     inputs.forEach((input) => {
-      (input as HTMLInputElement).value = "";
+      (input as HTMLInputElement).value = '';
     });
   },
 
@@ -657,7 +630,7 @@ export const FormSecurityUtils = {
   ): boolean {
     for (const field of protectedFields) {
       if (originalData[field] !== currentData[field]) {
-        console.warn("Form tampering detected on field:", field);
+        console.warn('Form tampering detected on field:', field);
         return true;
       }
     }

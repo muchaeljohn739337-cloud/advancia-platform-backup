@@ -11,7 +11,6 @@
 ### Main Testing Documents
 
 1. **UAT_TEST_PLAN.md** - Complete testing plan with all test cases
-
    - Scope & objectives
    - 4 new API endpoints
    - 3 frontend components
@@ -19,7 +18,6 @@
    - End-to-end flows
 
 2. **UAT_EXECUTION_GUIDE.md** - Step-by-step testing procedures
-
    - Quick start (5 min health check)
    - Day 1-5 test schedules
    - Failure procedures
@@ -27,7 +25,6 @@
    - Rollback procedures
 
 3. **FRONTEND_COMPONENT_UAT_CHECKLIST.md** - Detailed frontend test checklist
-
    - TokenWallet component tests
    - RewardsDashboard component tests
    - MedBeds component tests
@@ -36,7 +33,6 @@
    - Accessibility testing
 
 4. **Advancia_PAY_UAT_API_Tests.postman_collection.json** - Postman API test collection
-
    - Ready-to-import collection
    - All 4 new endpoints
    - Positive & negative test cases
@@ -71,19 +67,16 @@
 ### Creating Test Accounts
 
 1. **Admin Account** (for full access):
-
    - Email: `admin@advancia.pay`
    - Password: [Provided separately]
    - Role: Super Admin
 
 2. **Test User 1** (standard user):
-
    - Email: `user1@advancia.pay`
    - Password: [Provided separately]
    - Tokens: 1000 (for testing)
 
 3. **Test User 2** (standard user):
-
    - Email: `user2@advancia.pay`
    - Password: [Provided separately]
    - Tokens: 500 (for testing)
@@ -125,13 +118,11 @@ curl -X POST https://api.advancia.pay/api/auth/register \
 ### Required Tools
 
 1. **Postman** (API Testing)
-
    - Download: https://www.postman.com/downloads/
    - Import collection: `Advancia_PAY_UAT_API_Tests.postman_collection.json`
    - Set up variables for your environment
 
 2. **Browser Developer Tools** (Already available)
-
    - Chrome DevTools: F12 or Ctrl+Shift+I
    - Firefox Developer: F12
    - Safari Web Inspector: Cmd+Option+I
@@ -522,21 +513,18 @@ Attendees: [Names]
 ### For QA Testers
 
 1. **Understanding API Requests**
-
    - What is REST API?
    - HTTP methods: GET, POST, PUT, DELETE
    - Request headers and body
    - Response codes and format
 
 2. **Using Postman**
-
    - Variables and environment setup
    - Writing pre-request scripts
    - Testing response data
    - Batch running requests
 
 3. **Browser Developer Tools**
-
    - Network tab: monitor API calls
    - Console tab: see errors
    - WebSocket tab: monitor real-time

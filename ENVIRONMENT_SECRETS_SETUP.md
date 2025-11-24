@@ -7,9 +7,10 @@ Complete guide for organizing GitHub Secrets by environment (Staging, UAT, Produ
 ## 📋 Overview
 
 This setup ensures your pipeline automatically uses the correct credentials based on deployment environment:
-- **Staging** → `staging` branch
-- **UAT** → `uat` branch  
-- **Production** → `main` branch
+
+-   **Staging** → `staging` branch
+-   **UAT** → `uat` branch
+-   **Production** → `main` branch
 
 ---
 
@@ -19,49 +20,49 @@ Go to: **Settings → Secrets and variables → Actions → New repository secre
 
 ### 🟢 Staging Environment
 
-| Secret Name | Description | Example Value |
-|-------------|-------------|---------------|
-| `STAGING_CF_ZONE_ID` | Cloudflare zone ID for staging | `a1b2c3d4e5f6g7h8...` |
-| `STAGING_CF_API_TOKEN` | Cloudflare API token (staging) | `a1b2c3d4e5f6...` |
-| `STAGING_CF_RECORD_ID_API` | DNS record ID for api-staging | `1a2b3c4d5e6f...` |
-| `STAGING_CF_RECORD_ID_WWW` | DNS record ID for www-staging | `9z8y7x6w5v4u...` |
-| `STAGING_DROPLET_IP` | DigitalOcean staging server IP | `164.90.XXX.XXX` |
-| `STAGING_DROPLET_USER` | SSH user for staging | `root` or `deploy` |
-| `STAGING_DROPLET_SSH_KEY` | Private SSH key for staging | Full private key |
-| `STAGING_SLACK_WEBHOOK` | Slack webhook for staging alerts | `https://hooks.slack.com/...` |
-| `STAGING_DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@...` |
-| `STAGING_REDIS_URL` | Redis connection string | `redis://...` |
+| Secret Name                | Description                      | Example Value                 |
+| -------------------------- | -------------------------------- | ----------------------------- |
+| `STAGING_CF_ZONE_ID`       | Cloudflare zone ID for staging   | `a1b2c3d4e5f6g7h8...`         |
+| `STAGING_CF_API_TOKEN`     | Cloudflare API token (staging)   | `a1b2c3d4e5f6...`             |
+| `STAGING_CF_RECORD_ID_API` | DNS record ID for api-staging    | `1a2b3c4d5e6f...`             |
+| `STAGING_CF_RECORD_ID_WWW` | DNS record ID for www-staging    | `9z8y7x6w5v4u...`             |
+| `STAGING_DROPLET_IP`       | DigitalOcean staging server IP   | `164.90.XXX.XXX`              |
+| `STAGING_DROPLET_USER`     | SSH user for staging             | `root` or `deploy`            |
+| `STAGING_DROPLET_SSH_KEY`  | Private SSH key for staging      | Full private key              |
+| `STAGING_SLACK_WEBHOOK`    | Slack webhook for staging alerts | `https://hooks.slack.com/...` |
+| `STAGING_DATABASE_URL`     | PostgreSQL connection string     | `postgresql://user:pass@...`  |
+| `STAGING_REDIS_URL`        | Redis connection string          | `redis://...`                 |
 
 ### 🟡 UAT Environment
 
-| Secret Name | Description | Example Value |
-|-------------|-------------|---------------|
-| `UAT_CF_ZONE_ID` | Cloudflare zone ID for UAT | `a1b2c3d4e5f6g7h8...` |
-| `UAT_CF_API_TOKEN` | Cloudflare API token (UAT) | `a1b2c3d4e5f6...` |
-| `UAT_CF_RECORD_ID_API` | DNS record ID for api-uat | `1a2b3c4d5e6f...` |
-| `UAT_CF_RECORD_ID_WWW` | DNS record ID for www-uat | `9z8y7x6w5v4u...` |
-| `UAT_DROPLET_IP` | DigitalOcean UAT server IP | `167.71.XXX.XXX` |
-| `UAT_DROPLET_USER` | SSH user for UAT | `root` or `deploy` |
-| `UAT_DROPLET_SSH_KEY` | Private SSH key for UAT | Full private key |
-| `UAT_SLACK_WEBHOOK` | Slack webhook for UAT alerts | `https://hooks.slack.com/...` |
-| `UAT_DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@...` |
-| `UAT_REDIS_URL` | Redis connection string | `redis://...` |
+| Secret Name            | Description                  | Example Value                 |
+| ---------------------- | ---------------------------- | ----------------------------- |
+| `UAT_CF_ZONE_ID`       | Cloudflare zone ID for UAT   | `a1b2c3d4e5f6g7h8...`         |
+| `UAT_CF_API_TOKEN`     | Cloudflare API token (UAT)   | `a1b2c3d4e5f6...`             |
+| `UAT_CF_RECORD_ID_API` | DNS record ID for api-uat    | `1a2b3c4d5e6f...`             |
+| `UAT_CF_RECORD_ID_WWW` | DNS record ID for www-uat    | `9z8y7x6w5v4u...`             |
+| `UAT_DROPLET_IP`       | DigitalOcean UAT server IP   | `167.71.XXX.XXX`              |
+| `UAT_DROPLET_USER`     | SSH user for UAT             | `root` or `deploy`            |
+| `UAT_DROPLET_SSH_KEY`  | Private SSH key for UAT      | Full private key              |
+| `UAT_SLACK_WEBHOOK`    | Slack webhook for UAT alerts | `https://hooks.slack.com/...` |
+| `UAT_DATABASE_URL`     | PostgreSQL connection string | `postgresql://user:pass@...`  |
+| `UAT_REDIS_URL`        | Redis connection string      | `redis://...`                 |
 
 ### 🔴 Production Environment
 
-| Secret Name | Description | Example Value |
-|-------------|-------------|---------------|
-| `PROD_CF_ZONE_ID` | Cloudflare zone ID for production | `a1b2c3d4e5f6g7h8...` |
-| `PROD_CF_API_TOKEN` | Cloudflare API token (production) | `a1b2c3d4e5f6...` |
-| `PROD_CF_RECORD_ID_API` | DNS record ID for api.advancia.com | `1a2b3c4d5e6f...` |
-| `PROD_CF_RECORD_ID_WWW` | DNS record ID for www.advancia.com | `9z8y7x6w5v4u...` |
-| `PROD_DROPLET_IP_BLUE` | Blue environment server IP | `164.90.XXX.XXX` |
-| `PROD_DROPLET_IP_GREEN` | Green environment server IP | `167.71.XXX.XXX` |
-| `PROD_DROPLET_USER` | SSH user for production | `root` or `deploy` |
-| `PROD_DROPLET_SSH_KEY` | Private SSH key for production | Full private key |
-| `PROD_SLACK_WEBHOOK` | Slack webhook for production alerts | `https://hooks.slack.com/...` |
-| `PROD_DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@...` |
-| `PROD_REDIS_URL` | Redis connection string | `redis://...` |
+| Secret Name             | Description                         | Example Value                 |
+| ----------------------- | ----------------------------------- | ----------------------------- |
+| `PROD_CF_ZONE_ID`       | Cloudflare zone ID for production   | `a1b2c3d4e5f6g7h8...`         |
+| `PROD_CF_API_TOKEN`     | Cloudflare API token (production)   | `a1b2c3d4e5f6...`             |
+| `PROD_CF_RECORD_ID_API` | DNS record ID for api.advancia.com  | `1a2b3c4d5e6f...`             |
+| `PROD_CF_RECORD_ID_WWW` | DNS record ID for <www.advancia.com>  | `9z8y7x6w5v4u...`             |
+| `PROD_DROPLET_IP_BLUE`  | Blue environment server IP          | `164.90.XXX.XXX`              |
+| `PROD_DROPLET_IP_GREEN` | Green environment server IP         | `167.71.XXX.XXX`              |
+| `PROD_DROPLET_USER`     | SSH user for production             | `root` or `deploy`            |
+| `PROD_DROPLET_SSH_KEY`  | Private SSH key for production      | Full private key              |
+| `PROD_SLACK_WEBHOOK`    | Slack webhook for production alerts | `https://hooks.slack.com/...` |
+| `PROD_DATABASE_URL`     | PostgreSQL connection string        | `postgresql://user:pass@...`  |
+| `PROD_REDIS_URL`        | Redis connection string             | `redis://...`                 |
 
 ---
 
@@ -135,14 +136,14 @@ jobs:
 - name: Update Cloudflare DNS
   run: |
     echo "Updating DNS for $ENVIRONMENT environment..."
-    
+
     # Update API subdomain
     curl -X PATCH \
       "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_API" \
       -H "Authorization: Bearer $CF_API_TOKEN" \
       -H "Content-Type: application/json" \
       --data "{\"type\":\"A\",\"name\":\"api-$ENVIRONMENT.advancia.com\",\"content\":\"$DROPLET_IP\",\"ttl\":120,\"proxied\":true}"
-    
+
     # Update WWW subdomain
     curl -X PATCH \
       "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$CF_RECORD_ID_WWW" \
@@ -185,7 +186,7 @@ jobs:
     STATUS="${{ job.status }}"
     COLOR="good"
     [[ "$STATUS" == "failure" ]] && COLOR="danger"
-    
+
     curl -X POST $SLACK_WEBHOOK \
       -H 'Content-Type: application/json' \
       -d '{
@@ -203,6 +204,7 @@ jobs:
 ## 🛠️ Quick Setup Scripts
 
 ### PowerShell: Add All Staging Secrets
+
 ```powershell
 # Save as add-staging-secrets.ps1
 
@@ -233,6 +235,7 @@ Write-Host "https://github.com/muchaeljohn739337-cloud/-modular-saas-platform/se
 ```
 
 ### Get Cloudflare Record IDs by Environment
+
 ```powershell
 # Save as get-cf-records-all.ps1
 
@@ -276,57 +279,62 @@ Write-Host $wwwRecord.result[0].id -ForegroundColor White
 
 ## 📊 Environment Matrix
 
-| Environment | Branch | Domain Pattern | Server Count | DNS TTL |
-|-------------|--------|----------------|--------------|---------|
-| **Staging** | `staging` | `*-staging.advancia.com` | 1 | 120s |
-| **UAT** | `uat` | `*-uat.advancia.com` | 1 | 300s |
-| **Production** | `main` | `*.advancia.com` | 2 (Blue/Green) | 60s |
+| Environment    | Branch    | Domain Pattern           | Server Count   | DNS TTL |
+| -------------- | --------- | ------------------------ | -------------- | ------- |
+| **Staging**    | `staging` | `*-staging.advancia.com` | 1              | 120s    |
+| **UAT**        | `uat`     | `*-uat.advancia.com`     | 1              | 300s    |
+| **Production** | `main`    | `*.advancia.com`         | 2 (Blue/Green) | 60s     |
 
 ---
 
 ## ✅ Verification Checklist
 
 ### Staging
-- [ ] Added all 10 staging secrets
-- [ ] Created staging branch: `git checkout -b staging`
-- [ ] Tested staging deployment workflow
-- [ ] Verified DNS updates to `-staging` subdomain
-- [ ] Confirmed Slack notifications work
+
+-   [ ] Added all 10 staging secrets
+-   [ ] Created staging branch: `git checkout -b staging`
+-   [ ] Tested staging deployment workflow
+-   [ ] Verified DNS updates to `-staging` subdomain
+-   [ ] Confirmed Slack notifications work
 
 ### UAT
-- [ ] Added all 10 UAT secrets
-- [ ] Created UAT branch: `git checkout -b uat`
-- [ ] Tested UAT deployment workflow
-- [ ] Verified DNS updates to `-uat` subdomain
-- [ ] Confirmed Slack notifications work
+
+-   [ ] Added all 10 UAT secrets
+-   [ ] Created UAT branch: `git checkout -b uat`
+-   [ ] Tested UAT deployment workflow
+-   [ ] Verified DNS updates to `-uat` subdomain
+-   [ ] Confirmed Slack notifications work
 
 ### Production
-- [ ] Added all 11 production secrets
-- [ ] Set up Blue and Green droplets
-- [ ] Tested blue/green deployment workflow
-- [ ] Verified DNS switching works
-- [ ] Tested emergency rollback
-- [ ] Confirmed production Slack notifications
+
+-   [ ] Added all 11 production secrets
+-   [ ] Set up Blue and Green droplets
+-   [ ] Tested blue/green deployment workflow
+-   [ ] Verified DNS switching works
+-   [ ] Tested emergency rollback
+-   [ ] Confirmed production Slack notifications
 
 ---
 
 ## 🔒 Security Best Practices
 
 ### ✅ Do's
-- ✅ Use **separate API tokens** for each environment
-- ✅ Use **different SSH keys** per environment
-- ✅ Set up **separate Slack channels** (e.g., #staging-deploys, #prod-deploys)
-- ✅ Use **environment-specific databases** (never share prod data)
-- ✅ Rotate secrets every **90 days**
-- ✅ Test in **staging → UAT → production** order
+
+-   ✅ Use **separate API tokens** for each environment
+-   ✅ Use **different SSH keys** per environment
+-   ✅ Set up **separate Slack channels** (e.g., #staging-deploys, #prod-deploys)
+-   ✅ Use **environment-specific databases** (never share prod data)
+-   ✅ Rotate secrets every **90 days**
+-   ✅ Test in **staging → UAT → production** order
 
 ### ❌ Don'ts
-- ❌ Never use production secrets in staging/UAT
-- ❌ Don't commit `.env` files to git
-- ❌ Never share secrets via email/Slack
-- ❌ Don't use admin-level API tokens
-- ❌ Never skip UAT testing
-- ❌ Don't deploy to production on Fridays 😉
+
+-   ❌ Never use production secrets in staging/UAT
+-   ❌ Don't commit `.env` files to git
+-   ❌ Never share secrets via email/Slack
+-   ❌ Don't use admin-level API tokens
+-   ❌ Never skip UAT testing
+-   ❌ Don't deploy to production on Fridays 😉
 
 ---
 
@@ -365,29 +373,36 @@ advancia.com goes live! 🎉
 ## 📞 Troubleshooting
 
 ### Issue: Wrong environment detected
+
 **Solution**: Check branch name matches exactly (`staging`, `uat`, or `main`)
 
 ### Issue: Secrets not loading
+
 **Checklist**:
-- [ ] Secret name has correct prefix (STAGING_, UAT_, PROD_)
-- [ ] Secret is added to repository (not environment)
-- [ ] Branch trigger includes your branch name
-- [ ] Workflow has permission to read secrets
+
+-   [ ] Secret name has correct prefix (STAGING*, UAT*, PROD\_)
+-   [ ] Secret is added to repository (not environment)
+-   [ ] Branch trigger includes your branch name
+-   [ ] Workflow has permission to read secrets
 
 ### Issue: DNS not updating
+
 **Checklist**:
-- [ ] CF_ZONE_ID is correct for domain
-- [ ] CF_API_TOKEN has "Edit DNS" permission
-- [ ] CF_RECORD_ID is correct for specific subdomain
-- [ ] DNS record exists in Cloudflare dashboard
+
+-   [ ] CF_ZONE_ID is correct for domain
+-   [ ] CF_API_TOKEN has "Edit DNS" permission
+-   [ ] CF_RECORD_ID is correct for specific subdomain
+-   [ ] DNS record exists in Cloudflare dashboard
 
 ### Issue: SSH connection fails
+
 **Checklist**:
-- [ ] SSH key is complete (including header/footer)
-- [ ] SSH key has no passphrase
-- [ ] DROPLET_IP is correct
-- [ ] DROPLET_USER has access
-- [ ] Server allows key-based auth
+
+-   [ ] SSH key is complete (including header/footer)
+-   [ ] SSH key has no passphrase
+-   [ ] DROPLET_IP is correct
+-   [ ] DROPLET_USER has access
+-   [ ] Server allows key-based auth
 
 ---
 
