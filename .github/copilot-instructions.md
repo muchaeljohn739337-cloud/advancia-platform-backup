@@ -1,5 +1,6 @@
 ---
-applyTo: '**'
+Last Updated: 2025-11-30
+applyTo: "**"
 ---
 
 ## Advancia Pay Ledger — AI agent working guide
